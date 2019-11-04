@@ -1,0 +1,24 @@
+# Dependency directory
+node_modules
+package-lock.json
+
+# Build directories
+public
+
+#build tools
+.travis.yml
+.jenkins.yml
+.codeclimate.yml
+
+#linters
+.jscsrc
+.jshintrc
+.eslintrc
+.babelrc
+.eslintignore
+.gitattributes
+.sass-lint.yml
+
+#editor settings
+.idea
+.editorconfig

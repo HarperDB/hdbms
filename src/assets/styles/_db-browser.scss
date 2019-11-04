@@ -1,0 +1,63 @@
+.db-browser {
+  padding-bottom: 10px;
+
+  .card-body {
+    padding: 0 15px;
+
+    .item-row {
+      border-bottom: 1px solid $color__purple;
+      padding-top: 12px;
+      padding-bottom: 12px;
+
+      &.form {
+        padding-top: 7px;
+        padding-bottom: 6px;
+
+        .input-holder {
+          padding: 0 6px;
+        }
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .input-holder {
+        width: 100%;
+
+        &.table {
+          width: 50%;
+        }
+
+        input {
+          border-color: transparent;
+          background: rgba(255, 255, 255, 0.3);
+          color: $color__black;
+
+          &.is-invalid {
+            border-color: $color__danger;
+          }
+        }
+      }
+
+      .add-item {
+        width: 25px;
+        padding-left: 0;
+      }
+    }
+
+    .item-action {
+      width: 25px;
+      padding: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      float: right;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .fa-sm {
+    font-size:0.63rem;
+  }
+}

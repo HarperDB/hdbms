@@ -1,0 +1,20 @@
+// color palette
+$color__black: #373737;
+$color__darkgrey: #696969;
+$color__grey: #bcbcbc;
+$color__lightgrey: #ddd;
+$color__white: #fefefe;
+
+$color__primary: #0280c4;
+$color__success: #13c664;
+$color__warning: #ffa500;
+$color__danger: #ea4c89;
+$color__info: #3360b3;
+$color__darkpurple: #312556;
+$color__purple: #403b8a;
+$color__lightpurple: #7a3a87;
+
+$gradient-purple-magenta: linear-gradient(45deg, $color__darkpurple, $color__purple, $color__lightpurple);
+
+$fa-font-path: "/fonts";
+$border-radius-base: 0;

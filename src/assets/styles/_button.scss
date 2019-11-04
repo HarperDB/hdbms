@@ -1,0 +1,32 @@
+.btn{
+  height: 35px !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+
+  &.btn-grey {
+    line-height: 1!important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+    height: 36px;
+    color: $color__white !important;
+    border-color: $color__darkgrey !important;
+    background-color: $color__darkgrey !important;
+  }
+
+  &.btn-purple {
+    line-height: 1!important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+    height: 36px;
+    color: $color__white !important;
+    border-color: $color__purple !important;
+    background-color: $color__purple !important;
+  }
+
+  &.btn-outline-purple {
+    line-height: 1!important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+    height: 36px;
+    color: $color__purple !important;
+    border-color: $color__purple !important;
+    background-color: transparent !important;
+  }
+}

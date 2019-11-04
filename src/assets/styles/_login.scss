@@ -1,0 +1,18 @@
+#login-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  width: 100%;
+  max-width: 250px;
+
+  #login-logo {
+    margin: 0 auto 20px auto;
+    height:100px;
+    width:80px;
+    background-image:url('/images/logo_vertical_white.png');
+    background-repeat:no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
+}
