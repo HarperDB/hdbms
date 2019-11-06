@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
-import useReactRouter from 'use-react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { HarperDBContext } from '../providers/harperdb';
 import DataTable from '../components/browse/datatable';
@@ -8,7 +8,8 @@ import EntityManager from '../components/browse/entityManager';
 import JSONViewer from '../components/browse/jsonviewer';
 
 export default () => {
-  const { history, match: { params: { schema, table, action } } } = useReactRouter();
+  const history = useHistory();
+  const { schema, table, action } = useParams();
   const { structure, updateDB } = useContext(HarperDBContext);
 
   const schemas = structure && Object.keys(structure);
@@ -17,8 +18,6 @@ export default () => {
 
   useEffect(() => {
     switch (true) {
-      case (schema && !schemas):
-        break;
       case (!schemas && history.location.pathname !== '/browse'):
         history.push('/browse');
         break;

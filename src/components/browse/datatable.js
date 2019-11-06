@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
 import ReactTable from 'react-table';
-import useReactRouter from 'use-react-router';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory, useParams } from 'react-router';
 
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { HarperDBContext } from '../../providers/harperdb';
 
 export default ({ dataTableColumns, hashAttribute, update }) => {
   const { queryTableData, structure } = useContext(HarperDBContext);
-  const { history, match: { params: { schema, table } } } = useReactRouter();
+  const history = useHistory();
+  const { schema, table } = useParams();
 
   const [tableData, setTableData] = useState([]);
   const [pages, setTotalPages] = useState(-1);

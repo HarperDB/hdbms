@@ -5,9 +5,10 @@ import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import '../app.scss';
 import routes from './routes';
 import { HarperDBContext } from '../providers/harperdb';
+import Login from '../pages/login';
 
 export default () => {
-  const { structure, setAuthorization } = useContext(HarperDBContext);
+  const { structure, setAuthorization, authError } = useContext(HarperDBContext);
   const [navOpen, toggleNav] = useState(false);
 
   return (
@@ -22,23 +23,30 @@ export default () => {
             <Nav className="ml-auto" navbar>
               {routes.map((route) => route.label && (
                 <NavItem key={route.path}>
-                  <NavLink onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
+                  <NavLink exact onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
                 </NavItem>
               ))}
               <NavItem>
-                <NavLink onClick={() => setAuthorization(false)} exact to="/">Log Out</NavLink>
+                <NavLink exact onClick={() => setAuthorization(false)} to="/">Log Out</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
       )}
       <div id="app-container">
-        <Switch>
-          {routes.map((route) => (
-            <Route key={route.path} exact component={route.component} path={route.path} />
-          ))}
-          <Redirect to="/" />
-        </Switch>
+        { structure ? (
+          <Switch>
+            {routes.map((route) => (
+              <Route key={route.path} component={route.component} path={route.path} />
+            ))}
+            <Redirect to={structure ? '/browse' : '/'} />
+          </Switch>
+        ) : (
+          <Login
+            setAuthorization={setAuthorization}
+            authError={authError}
+          />
+        )}
       </div>
       <div id="app-bg" />
     </>

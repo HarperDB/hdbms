@@ -2,14 +2,15 @@ import React, { useState, useContext } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
-import useReactRouter from 'use-react-router';
+import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
 export default ({ newEntityColumns, hashAttribute }) => {
   const { queryHarperDB } = useContext(HarperDBContext);
-  const { history, match: { params: { schema, table, hash, action } } } = useReactRouter();
+  const history = useHistory();
+  const { schema, table, hash, action } = useParams();
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {

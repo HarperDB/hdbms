@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Form, Input, Button } from '@nio/ui-kit';
-import useReactRouter from 'use-react-router';
+import { useHistory } from 'react-router-dom';
+import useAsyncEffect from 'use-async-effect';
 
-import { HarperDBContext } from '../providers/harperdb';
-
-export default () => {
-  const { history } = useReactRouter();
-  const { setAuthorization, authError, structure } = useContext(HarperDBContext);
+export default ({ setAuthorization, authError }) => {
+  const history = useHistory();
   const [formValue, setFormValue] = useState({});
 
   const setFieldValue = (name, value) => {
@@ -16,14 +14,11 @@ export default () => {
 
   const submitLogin = async (e) => {
     e.preventDefault();
-    setAuthorization(`Basic ${btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`)}`);
+    setAuthorization(btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`));
   };
 
-  useEffect(() => {
-    if (structure && !authError) {
-      history.push('/browse');
-    }
-  }, [structure]);
+  let redirectTimeout = false;
+  useAsyncEffect(() => redirectTimeout = setTimeout(() => history.push('/'), 100), () => clearTimeout(redirectTimeout), []);
 
   return (
     <div id="login-form">

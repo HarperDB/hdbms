@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
-import useReactRouter from 'use-react-router';
+import { useHistory } from 'react-router';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, update }) => {
   const { queryHarperDB } = useContext(HarperDBContext);
-  const { history } = useReactRouter();
+  const history = useHistory();
 
   const [entityName, setEntityName] = useState(false);
   const [nameError, toggleNameError] = useState(false);

@@ -17,7 +17,7 @@ export const HarperDBProvider = ({ children }) => {
     const { protocol, hostname } = window.location;
     const url = `${protocol}//${hostname}:9925`;
     const body = JSON.stringify(operation);
-    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization } });
+    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization: `Basic ${Authorization}` } });
     return response.json();
   };
 
@@ -39,14 +39,19 @@ export const HarperDBProvider = ({ children }) => {
   };
 
   useAsyncEffect(async () => {
-    if (!Authorization) return setStructure(false);
+    setAuthError(false);
+    if (!Authorization) {
+      setStructure(false);
+      return false;
+    }
 
     const dbStructure = {};
     const dbResponse = await queryHarperDB({ operation: 'describe_all' });
 
     if (dbResponse.error) {
       setAuthorization(false);
-      return setAuthError(dbResponse.error);
+      setAuthError(dbResponse.error);
+      return false;
     }
 
     Object.keys(dbResponse).map((schema) => {

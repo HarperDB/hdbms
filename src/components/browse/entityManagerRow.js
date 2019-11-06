@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
-import useReactRouter from 'use-react-router';
+import { useHistory, useParams } from 'react-router';
+
 import { HarperDBContext } from '../../providers/harperdb';
 
 export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, update }) => {
-  const { history, match: { params: { schema, table } } } = useReactRouter();
   const { queryHarperDB } = useContext(HarperDBContext);
-
+  const history = useHistory();
+  const { schema, table } = useParams();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
 
   const handleDropItem = async () => {
