@@ -1,21 +1,21 @@
 // color palette
-$color__black: #373737;
-$color__darkgrey: #696969;
-$color__grey: #bcbcbc;
-$color__lightgrey: #ddd;
-$color__white: #fefefe;
+$color-black: #373737;
+$color-darkgrey: #696969;
+$color-grey: #bcbcbc;
+$color-lightgrey: #ddd;
+$color-white: #fefefe;
 
-$color__primary: #0280c4;
-$color__success: #13c664;
-$color__warning: #ffa500;
-$color__danger: #ea4c89;
-$color__info: #3360b3;
-$color__darkpurple: #312556;
-$color__purple: #403b8a;
-$color__lightpurple: #7a3a87;
+$color-primary: #0280c4;
+$color-success: #13c664;
+$color-warning: #ffa500;
+$color-danger: #ea4c89;
+$color-info: #3360b3;
+$color-darkpurple: #312556;
+$color-purple: #403b8a;
+$color-lightpurple: #7a3a87;
 
-$gradient-purple-magenta: linear-gradient(45deg, $color__darkpurple, $color__purple, $color__lightpurple);
-$grey-overlay: rgba(0, 0, 0, 0.3);
+$gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
+$grey-overlay: rgba(0, 0, 0, .3);
 
-$fa-font-path: "/fonts";
+$fa-font-path: '/fonts';
 $border-radius-base: 0;

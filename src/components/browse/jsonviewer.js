@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
@@ -16,7 +16,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
     if (action === 'edit') {
       const rowData = await queryHarperDB({
         operation: 'sql',
-        sql: `SELECT * FROM ${schema}.${table} WHERE ${hashAttribute} = '${hash}'`
+        sql: `SELECT * FROM ${schema}.${table} WHERE ${hashAttribute} = '${hash}'`,
       });
       setRowValue(rowData[0]);
     } else {

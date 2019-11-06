@@ -1,8 +1,8 @@
-body{
-  min-width:320px;
+body {
+  min-width: 320px;
   overflow-x: hidden;
 
-  .loader{
+  .loader {
     background: transparent;
   }
 
@@ -15,15 +15,15 @@ body{
     right: 0;
     bottom: 0;
     z-index: -1;
-    background: $gradient-purple-magenta!important;
+    background: $gradient-purple-magenta !important;
   }
 
   #app {
-    min-width:320px;
+    min-width: 320px;
 
-    #app-container{
-      min-width:320px;
-      margin-top:70px;
+    #app-container {
+      min-width: 320px;
+      margin-top: 70px;
       padding: 2rem;
       height: calc(100vh - 70px);
       @media screen and (max-width: 991px) {
@@ -32,61 +32,68 @@ body{
     }
 
     #app-nav {
-      min-width:320px;
-      background: rgba(0, 0, 0, 0.3)!important;
-      padding: 0.5rem 2rem;
+      min-width: 320px;
+      background: rgba(0, 0, 0, .3) !important;
+      padding: .5rem 2rem;
       position: fixed;
 
       @media screen and (max-width: 991px) {
-        padding: 0.5rem 1rem;
+        padding: .5rem 1rem;
       }
 
       #logo {
-        height:30px;
-        width:126px;
-        background-image:url('/images/logo.png');
-        background-repeat:no-repeat;
+        height: 30px;
+        width: 126px;
+        background-image: url('/images/logo.png');
+        background-repeat: no-repeat;
         background-position: top left;
         background-size: contain;
       }
 
-      .collapse:not(.show){
-        .nav-item {
-          margin-left: 1.5rem;
-          .nav-link,
-          a {
-            color:$color__grey!important;
-            padding: 0!important;
-            &.active,
-            &:hover {
-              color: $color__white!important;
+      .collapse {
+        &:not(.show) {
+          .nav-item {
+            margin-left: 1.5rem;
+
+            .nav-link,
+            a {
+              color: $color-grey !important;
+              padding: 0 !important;
+
+              &.active,
+              &:hover {
+                color: $color-white !important;
+              }
             }
           }
         }
-      }
 
-      .collapse.show,
-      .collapsing {
-        left: 0;
-        right: 0;
-        margin:0;
-        top:70px;
-        background: $color__white;
+        &.show,
+        .collapsing {
+          left: 0;
+          right: 0;
+          margin: 0;
+          top: 70px;
+          background: $color-white;
 
-        .navbar-nav {
-          padding: 0;
-          .nav-item {
-            margin-left: 0;
-            text-align:center;
-            .nav-link,
-            a {
-              display:block;
-              color: $color__grey !important;
-              padding: 1rem 0 !important;
-              border-bottom: 1px solid $color__lightgrey;
-              &.active,
-              &:hover {
-                color: $color__purple !important;
+          .navbar-nav {
+            padding: 0;
+
+            .nav-item {
+              margin-left: 0;
+              text-align: center;
+
+              .nav-link,
+              a {
+                display: block;
+                color: $color-grey !important;
+                padding: 1rem 0 !important;
+                border-bottom: 1px solid $color-lightgrey;
+
+                &.active,
+                &:hover {
+                  color: $color-purple !important;
+                }
               }
             }
           }

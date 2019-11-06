@@ -5,7 +5,7 @@
     padding: 0 15px;
 
     .item-row {
-      border-bottom: 1px solid $color__purple;
+      border-bottom: 1px solid $color-purple;
       padding-top: 12px;
       padding-bottom: 6px;
       height: 49px;
@@ -20,7 +20,7 @@
       }
 
       &:last-child {
-        border-bottom: none;
+        border-bottom: 0;
       }
 
       .input-holder {
@@ -30,11 +30,11 @@
 
         input {
           border-color: transparent;
-          background: rgba(255, 255, 255, 0.3);
-          color: $color__black;
+          background: rgba(255, 255, 255, .3);
+          color: $color-black;
 
           &.is-invalid {
-            border-color: $color__danger;
+            border-color: $color-danger;
           }
 
           &.table {
@@ -53,6 +53,6 @@
   }
 
   .fa-sm {
-    font-size:0.8rem;
+    font-size: .8rem;
   }
 }

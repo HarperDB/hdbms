@@ -1,7 +1,7 @@
-.btn{
+.btn {
   border-radius: 6px !important;
   box-shadow: none !important;
-  line-height: 1!important;
+  line-height: 1 !important;
 
   &.round {
     padding: 0;
@@ -10,20 +10,20 @@
   }
 
   &.btn-grey {
-    color: $color__white !important;
-    border: none !important;
+    color: $color-white !important;
+    border: 0 !important;
     background-color: $grey-overlay !important;
   }
 
   &.btn-purple {
-    color: $color__white !important;
-    border: none !important;
-    background-color: $color__purple !important;
+    color: $color-white !important;
+    border: 0 !important;
+    background-color: $color-purple !important;
   }
 
   &.btn-outline-purple {
-    color: $color__purple !important;
-    border-color: $color__purple !important;
+    color: $color-purple !important;
+    border-color: $color-purple !important;
     background-color: transparent !important;
   }
 }

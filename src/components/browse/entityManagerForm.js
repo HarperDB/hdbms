@@ -4,7 +4,7 @@ import useReactRouter from 'use-react-router';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
-export default ({ items, itemType, activeSchema, toggleDropItem, isDropping, toggleCreate, isCreating, baseUrl, update }) => {
+export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, update }) => {
   const { queryHarperDB } = useContext(HarperDBContext);
   const { history } = useReactRouter();
 
