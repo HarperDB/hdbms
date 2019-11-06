@@ -1,50 +1,77 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Loader } from '@nio/ui-kit';
+import React, { useState, useContext } from 'react';
 import ReactTable from 'react-table';
-import { withRouter } from 'react-router-dom';
+import useReactRouter from 'use-react-router';
+import useAsyncEffect from 'use-async-effect';
 
+import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { HarperDBContext } from '../../providers/harperdb';
-import queryTableData from '../../util/queryTableData';
 
-export default withRouter(({ history, activeSchema, activeTable, showFiltering, onFilteredChange, filtered, pageSize, onPageSizeChange, page, onPageChange }) => {
-  const { db, connection } = useContext(HarperDBContext);
+export default ({ dataTableColumns, hashAttribute, update }) => {
+  const { queryTableData, structure } = useContext(HarperDBContext);
+  const { history, match: { params: { schema, table } } } = useReactRouter();
 
-  const [tableData, setTableData] = useState(false);
+  const [tableData, setTableData] = useState([]);
   const [pages, setTotalPages] = useState(-1);
-  const [sorted, onSortedChange] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [columns, setColumns] = useState([]);
+  const [filtered, onFilteredChange] = useState([]);
+  const [sorted, onSortedChange] = useState([{ id: hashAttribute, desc: false }]);
+  const [pageSize, onPageSizeChange] = useState(20);
+  const [page, onPageChange] = useState(0);
+  const [showFilter, toggleShowFilter] = useState(false);
 
-  useEffect(() => {
-    const fetchData = () => queryTableData(db, connection, activeSchema, activeTable, setLoading, setTotalPages, pageSize, page, setTableData, onSortedChange, setColumns, filtered, sorted);
+  useAsyncEffect(async () => {
+    setLoading(true);
+    const { newData, newTotalPages } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
+    setTableData(newData);
+    setTotalPages(newTotalPages);
+    setLoading(false);
+  }, [table, pageSize, page, filtered, sorted, structure]);
 
-    if (activeSchema && activeTable) {
-      fetchData();
-    } else {
-      setTableData(false);
-    }
-  }, [activeTable, pageSize, page, sorted, filtered, db]);
+  const handleFilterClick = () => {
+    if (showFilter) onFilteredChange([]);
+    toggleShowFilter(!showFilter);
+  };
 
-  return db && tableData ? (
-    <ReactTable
-      manual
-      loading={loading}
-      data={tableData}
-      columns={columns}
-      filterable={showFiltering}
-      filtered={filtered}
-      pages={pages}
-      page={page}
-      sorted={sorted}
-      defaultPageSize={pageSize}
-      pageSize={pageSize}
-      onPageSizeChange={onPageSizeChange}
-      onPageChange={onPageChange}
-      onSortedChange={onSortedChange}
-      onFilteredChange={onFilteredChange}
-      getTdProps={(state, rowInfo) => ({ onClick: () => history.push(`/browse/${activeSchema}/${activeTable}/edit/${rowInfo.original[db[activeSchema][activeTable].hash_attribute]}`) })}
-    />
-  ) : (
-    <Loader />
+  const handleRefreshClick = () => update(Date.now());
+
+  const handleNewRecordClick = () => history.push(`/browse/${schema}/${table}/add`);
+
+  const handleRowClick = (newActiveRecord) => history.push(`/browse/${schema}/${table}/edit/${newActiveRecord[hashAttribute]}`);
+
+  return (
+    <>
+      <Row>
+        <Col>
+          <span className="text-bold text-white mb-2">{schema} {table && '>'} {table}&nbsp;</span>
+        </Col>
+        <Col className="text-right">
+          <i className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />
+          <i className="fa fa-search text-white mr-2" onClick={handleFilterClick} />
+          <i className="fa fa-plus text-white" onClick={handleNewRecordClick} />
+        </Col>
+      </Row>
+      <Card className="mb-3 mt-2">
+        <CardBody>
+          <ReactTable
+            manual
+            loading={loading}
+            data={tableData}
+            pages={pages}
+            columns={dataTableColumns}
+            filterable={showFilter}
+            filtered={filtered}
+            onFilteredChange={onFilteredChange}
+            page={page}
+            onPageChange={onPageChange}
+            sorted={sorted}
+            onSortedChange={onSortedChange}
+            defaultPageSize={pageSize}
+            pageSize={pageSize}
+            onPageSizeChange={onPageSizeChange}
+            getTdProps={(state, rowInfo) => ({ onClick: () => handleRowClick(rowInfo.original) })}
+          />
+        </CardBody>
+      </Card>
+    </>
   );
-});
+};

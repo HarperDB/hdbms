@@ -1,6 +1,8 @@
 .card {
-  background: rgba(255,255,255, 0.6) !important;
+  background: rgba(255,255,255, 0.7) !important;
   color: $color__black;
 
-
+  &.dark {
+    background: rgba(255,255,255, 0.2) !important;
+  }
 }

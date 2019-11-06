@@ -1,46 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import createPersistedState from 'use-persisted-state';
+import useAsyncEffect from 'use-async-effect';
 
-import queryHarperDB from '../util/queryHarperDB';
-import processDBResponse from '../util/processDBResponse';
+import handleCellValues from '../util/handleCellValues';
 
 const useConnectionState = createPersistedState('connection');
-
 export const HarperDBContext = React.createContext();
 
 export const HarperDBProvider = ({ children }) => {
-  const [db, setDB] = useState(false);
-  const [error, setError] = useState(false);
-  const [lastUpdate, refreshDB] = useState(false);
-  const [connection, setConnection] = useConnectionState(false);
+  const [Authorization, setAuthorization] = useConnectionState(false);
+  const [structure, setStructure] = useState(false);
+  const [lastUpdate, updateDB] = useState(false);
+  const [authError, setAuthError] = useState(false);
 
-  useEffect(() => {
-    const getDBConfig = async () => {
-      let dbResponse = false;
+  const queryHarperDB = async (operation) => {
+    const { protocol, hostname } = window.location;
+    const url = `${protocol}//${hostname}:9925`;
+    const body = JSON.stringify(operation);
+    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization } });
+    return response.json();
+  };
 
-      try {
-        dbResponse = await queryHarperDB(connection, { operation: 'describe_all' });
+  const queryTableData = async ({ schema, table, pageSize, page, filtered, sorted }) => {
+    let countSQL = `SELECT count(*) FROM ${schema}.${table} `;
+    if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
 
-        if (!dbResponse.error) {
-          const dbStructure = processDBResponse(dbResponse);
-          setDB(dbStructure);
-        } else {
-          setError(dbResponse.error);
-        }
-      } catch (e) {
-        setError(e.error);
-      }
-    };
+    const recordCountResult = await queryHarperDB({ operation: 'sql', sql: countSQL });
+    const newTotalPages = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)'] && Math.ceil(recordCountResult[0]['COUNT(*)'] / pageSize);
 
-    if (connection) {
-      getDBConfig();
-    } else {
-      setDB(false);
+    let sql = `SELECT * FROM ${schema}.${table} `;
+    if (filtered.length) sql += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (sorted.length) sql += `ORDER BY ${sorted[0].id} ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+    sql += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
+
+    const newData = await queryHarperDB({ operation: 'sql', sql });
+
+    return { newData, newTotalPages };
+  };
+
+  useAsyncEffect(async () => {
+    if (!Authorization) return setStructure(false);
+
+    const dbStructure = {};
+    const dbResponse = await queryHarperDB({ operation: 'describe_all' });
+
+    if (dbResponse.error) {
+      setAuthorization(false);
+      return setAuthError(dbResponse.error);
     }
-  }, [connection, lastUpdate]);
+
+    Object.keys(dbResponse).map((schema) => {
+      dbStructure[schema] = {};
+      return Object.keys(dbResponse[schema]).map((table) => {
+        const thisTable = dbResponse[schema][table];
+        const attributes = thisTable.attributes.filter((a) => a.attribute !== thisTable.hash_attribute).map((a) => a.attribute).sort();
+        const orderedColumns = [thisTable.hash_attribute, ...attributes];
+
+        dbStructure[schema][table] = {
+          hashAttribute: thisTable.hash_attribute,
+          newEntityColumns: {},
+          dataTableColumns: orderedColumns.map((k) => ({
+            Header: k.replace(/__/g, ''),
+            accessor: k,
+            Cell: (props) => handleCellValues(props.value),
+          })),
+        };
+        // generate new entity columns
+        return attributes.map((c) => dbStructure[schema][table].newEntityColumns[c] = null);
+      });
+    });
+
+    return setStructure(dbStructure);
+  }, [Authorization, lastUpdate]);
 
   return (
-    <HarperDBContext.Provider value={{ db, error, connection, setConnection, refreshDB }}>
+    <HarperDBContext.Provider value={{ setAuthorization, authError, structure, updateDB, queryHarperDB, queryTableData }}>
       {children}
     </HarperDBContext.Provider>
   );

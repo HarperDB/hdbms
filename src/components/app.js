@@ -1,23 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { Navbar, NavbarToggler, Nav, NavItem, Collapse, Loader } from '@nio/ui-kit';
-import { NavLink, Route, Switch } from 'react-router-dom';
+import { Navbar, NavbarToggler, Nav, NavItem, Collapse } from '@nio/ui-kit';
+import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 
 import '../app.scss';
 import routes from './routes';
 import { HarperDBContext } from '../providers/harperdb';
-import Login from '../pages/login';
 
 export default () => {
-  const { db, connection, setConnection } = useContext(HarperDBContext);
+  const { structure, setAuthorization } = useContext(HarperDBContext);
   const [navOpen, toggleNav] = useState(false);
-
-  const logOut = () => {
-    setConnection(false);
-  };
 
   return (
     <>
-      { connection && db && (
+      { structure && (
         <Navbar id="app-nav" dark fixed="top" expand="md">
           <div className="navbar-brand">
             <NavLink to="/"><div id="logo" /></NavLink>
@@ -31,24 +26,19 @@ export default () => {
                 </NavItem>
               ))}
               <NavItem>
-                <NavLink onClick={logOut} exact to="/">Log Out</NavLink>
+                <NavLink onClick={() => setAuthorization(false)} exact to="/">Log Out</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
       )}
       <div id="app-container">
-        { !connection && !db ? (
-          <Login />
-        ) : !db ? (
-          <Loader />
-        ) : (
-          <Switch>
-            {routes.map((route) => (
-              <Route key={route.path} exact component={route.component} path={route.path} />
-            ))}
-          </Switch>
-        )}
+        <Switch>
+          {routes.map((route) => (
+            <Route key={route.path} exact component={route.component} path={route.path} />
+          ))}
+          <Redirect to="/" />
+        </Switch>
       </div>
       <div id="app-bg" />
     </>

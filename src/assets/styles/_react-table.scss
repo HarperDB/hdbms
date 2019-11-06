@@ -46,6 +46,12 @@
     select {
       height: 30px;
     }
+
+    .-btn,
+    .-btn:hover {
+      background: $color__purple !important;
+      color: $color__white !important;
+    }
   }
 
   .rt-noData {

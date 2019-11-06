@@ -7,7 +7,8 @@
     .item-row {
       border-bottom: 1px solid $color__purple;
       padding-top: 12px;
-      padding-bottom: 12px;
+      padding-bottom: 6px;
+      height: 49px;
 
       &.form {
         padding-top: 7px;
@@ -24,10 +25,8 @@
 
       .input-holder {
         width: 100%;
-
-        &.table {
-          width: 50%;
-        }
+        flex-grow: 1;
+        flex-shrink: 0;
 
         input {
           border-color: transparent;
@@ -37,27 +36,23 @@
           &.is-invalid {
             border-color: $color__danger;
           }
+
+          &.table {
+            width: 50%;
+          }
         }
       }
 
-      .add-item {
-        width: 25px;
+      .item-action {
+        min-width: 80px;
         padding-left: 0;
+        flex-grow: 0;
+        flex-shrink: 1;
       }
-    }
-
-    .item-action {
-      width: 25px;
-      padding: 0;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      float: right;
-      outline: none !important;
-      box-shadow: none !important;
     }
   }
 
   .fa-sm {
-    font-size:0.63rem;
+    font-size:0.8rem;
   }
 }

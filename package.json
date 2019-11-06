@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js",
     "start": "webpack-dev-server --mode development --config webpack.dev.js",
-    "lint": "eslint --fix components && eslint --fix pages && eslint --fix providers && sass-lint --verbose"
+    "lint": "eslint --fix src && sass-lint --verbose"
   },
   "author": "harperdb",
   "license": "Apache-2.0",
@@ -22,7 +22,9 @@
     "react-router-dom": "^5.1.2",
     "react-table": "^6.10.3",
     "socketcluster-client": "^14.3.1",
-    "use-persisted-state": "^0.3.0"
+    "use-async-effect": "^2.2.1",
+    "use-persisted-state": "^0.3.0",
+    "use-react-router": "^1.0.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
@@ -34,6 +36,7 @@
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/runtime": "^7.6.3",
+    "@babel/types": "^7.7.1",
     "autoprefixer": "^9.7.1",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
