@@ -1,36 +1,40 @@
-# HarperDB UI Scaffold
-The easiest way to create a harperdb-powered UI is to start with our. It gets you up and running in minutes.
+# HarperDB Management Studio (HDBMS)
+The easiest way to engage with HarperDB.
 
 
 ## What’s in the box
 
-- Third party software (click to review each library's licensing)
-    - [ReactJS](https://reactjs.org/) site scaffold
-    - [react-router](https://reacttraining.com/react-router/) for navigation
-    - [webpack 4](https://webpack.js.org/) module bundling and development webserver
-
-If you’re at all familiar with React, this simple example covers most of what you need to know to get started.
+- [ReactJS](https://reactjs.org/) site scaffold
+- [react-router](https://reacttraining.com/react-router/) for navigation
+- [webpack 4](https://webpack.js.org/) module bundling and development webserver
 
 
-## Hello world
+## Getting Started
 
-Follow these steps to create a simple UI to interact with your HarperDB instance.
-
-1. In your terminal, clone the UI scaffold, enter the directory, and install dependencies.
+1. In your terminal, clone the Studio repo, enter the directory, and install dependencies.
     ```
-    git clone https://github.com/harperdb/ui-scaffold.git my-project
+    git clone https://github.com/harperdb/hdbms.git hdbms
     cd my-project
     npm i -s
     ```
-
-1. In the root of the project, rename `config.js.example` to `config.js`, and fill out the details for your HarperDB instance.
 
 1. Start the project.
     ```
     npm start
     ```
 
-1. Visit the project at https://0.0.0.0:3000.
-    - The development web server uses a self-signed certificate, and you may see a warning about the site being insecure. In your local development environment, it is safe to click "Advanced" > "proceed to site anyway."
+1. Visit the project at http://localhost:3000.
 
-You’ll see a simple UI with the result of a `describe_all` operation.
+1. Log in using the username and password you provided when installing HarperDB.
+
+- **This version of HarperDB Studio assumes you're running HarperDB on the same computer as the studio, and on port 9925.**
+
+## What's next?
+
+Once you're logged in, you'll be able to add and delete schemas and tables, view and edit table data, and... well, that's about it for v1.
+
+Future additions will include:
+
+- Log into, manage, and store multiple instances of HarperDB
+- Register HarperDB to an Enterprise License
+- Configure data replication between instances and perfect your data fabric 
