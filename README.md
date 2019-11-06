@@ -1,6 +1,10 @@
 # HarperDB Management Studio (HDBMS)
 The easiest way to engage with HarperDB.
 
+## Prerequisites
+
+- [HarperDB](https://products.harperdb.io/download) installed and running
+- [npm](https://www.npmjs.com/get-npm), which you already have if you've installed HarperDB
 
 ## What’s in the box
 
