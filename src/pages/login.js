@@ -29,7 +29,7 @@ export default () => {
 
   return (
     <div id="login-form">
-      <div id="login-logo" />
+      <div id="login-logo" title="HarperDB Logo" />
       <Card className="mb-3 mt-2 dark">
         <CardBody>
           { showForm ? (
@@ -39,7 +39,8 @@ export default () => {
                 className="mb-2 text-center"
                 type="text"
                 name="HDB_CONNECTION"
-                placeholder="harperdb url"
+                title="Instance URL. example: http://mydomain:9925"
+                placeholder="url: http://mydomain:9925"
                 defaultValue={defaultHDBConnection}
               />
               <Input
@@ -47,6 +48,7 @@ export default () => {
                 className="mb-2 text-center"
                 type="text"
                 name="HDB_USER"
+                title="Instance Username"
                 placeholder="username"
               />
               <Input
@@ -54,26 +56,27 @@ export default () => {
                 className="mb-4 text-center"
                 type="password"
                 name="HDB_PASS"
+                title="Instance Password"
                 placeholder="password"
               />
-              <Button block color="black">Log Into HarperDB</Button>
+              <Button title="Log Into HarperDB" block color="black">Log Into HarperDB</Button>
               {!!instances.length && (
-                <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(false)}>choose existing instance</Button>
+                <Button block title="Choose Existing Instance" className="mt-3 text-white" color="link" onClick={() => setShowForm(false)}>choose existing instance</Button>
               )}
             </Form>
           ) : (
             <>
               <Dropdown isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
-                <DropdownToggle caret color="black">
+                <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
                   choose existing instance
                 </DropdownToggle>
                 <DropdownMenu>
                   {instances.map((i) => (
-                    <DropdownItem key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                    <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
-              <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(true)}>add new instance</Button>
+              <Button block title="Add New Instance" className="mt-3 text-white" color="link" onClick={() => setShowForm(true)}>add new instance</Button>
             </>
           )}
         </CardBody>

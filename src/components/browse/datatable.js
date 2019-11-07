@@ -57,9 +57,9 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
           <span className="text-bold text-white">{schema} {table && `> ${table} > `} {totalRecords ? `${totalRecords} records` : 'loading'}&nbsp;</span>
         </Col>
         <Col className="text-right">
-          <i className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />
-          <i className="fa fa-search text-white mr-2" onClick={handleFilterClick} />
-          <i className="fa fa-plus text-white" onClick={handleNewRecordClick} />
+          <i title={`Refresh table ${table}`} className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />
+          <i title={`Filter table ${table}`} className="fa fa-search text-white mr-2" onClick={handleFilterClick} />
+          <i title={`Add new record to table ${table}`} className="fa fa-plus text-white" onClick={handleNewRecordClick} />
         </Col>
       </Row>
       <Card className="mb-3 mt-2">

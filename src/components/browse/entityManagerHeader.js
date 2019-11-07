@@ -8,8 +8,8 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
     </Col>
     { items && items.length ? (
       <Col className="text-right">
-        <i className="fa fa-minus text-white mr-2" onClick={() => { toggleDropItem(!isDropping); toggleCreate(false); }} />
-        <i className="fa fa-plus text-white" onClick={() => { toggleCreate(!isCreating); toggleDropItem(false); }} />
+        <i title={`Remove ${itemType}s`} className="fa fa-minus text-white mr-2" onClick={() => { toggleDropItem(!isDropping); toggleCreate(false); }} />
+        <i title={`Add ${itemType}`} className="fa fa-plus text-white" onClick={() => { toggleCreate(!isCreating); toggleDropItem(false); }} />
       </Col>
     ) : null}
   </Row>

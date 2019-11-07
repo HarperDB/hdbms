@@ -51,6 +51,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
             <Button
               color="danger"
               className="round mr-1"
+              title={`Confirm drop ${itemType} ${item}`}
               onClick={confirmItemForDrop}
             >
               <i className="fa fa-check text-white" />
@@ -58,6 +59,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
             <Button
               color="grey"
               className="round"
+              title={`Cancel drop ${itemType} ${item}`}
               onClick={cancelConfirmDrop}
             >
               <i className="fa fa-times text-white" />
@@ -67,6 +69,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
           <Button
             color="danger"
             className="round"
+            title={`Drop ${itemType} ${item}`}
             onClick={selectItemForDrop}
           >
             <i className="fa fa-minus text-white" />
@@ -75,6 +78,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
           <Button
             color="grey"
             className="round"
+            title={`Viewing ${itemType} ${item}`}
           >
             <i className="fa fa-chevron-right" />
           </Button>
@@ -82,6 +86,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
           <Button
             color="link"
             className="round"
+            title={`View ${itemType} ${item}`}
           />
         )}
       </Col>

@@ -15,21 +15,21 @@ export default () => {
   return (
     <Navbar id="app-nav" dark fixed="top" expand="md">
       <div className="navbar-brand">
-        <NavLink to="/"><div id="logo" /></NavLink>
+        <div id="logo" title="HarperDB Logo" />
       </div>
       <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
       <Collapse isOpen={navOpen} navbar>
         <Nav className="ml-auto" navbar>
           {activeInstance && (
             <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
-              <DropdownToggle caret color="black">
+              <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
                 {activeInstance.url}
               </DropdownToggle>
               <DropdownMenu>
                 {instances.filter((i) => !i.active).map((i) => (
-                  <DropdownItem key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                  <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
                 ))}
-                <DropdownItem onClick={() => setAuthorization(false)}>Add New Instance</DropdownItem>
+                <DropdownItem title="Add New Instance" onClick={() => setAuthorization(false)}>Add New Instance</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
@@ -39,7 +39,9 @@ export default () => {
             </NavItem>
           ))}
           <NavItem>
-            <NavLink exact onClick={() => setAuthorization(false)} to="/">Log Out</NavLink>
+            <NavLink title="Log Out" exact onClick={() => setAuthorization(false)} to="/">
+              <i className="fa fa-sign-out fa-lg" />
+            </NavLink>
           </NavItem>
         </Nav>
       </Collapse>
