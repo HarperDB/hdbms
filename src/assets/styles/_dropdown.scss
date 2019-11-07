@@ -5,6 +5,14 @@
     width: 250px;
   }
 
+  span {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: 15px;
+    white-space: nowrap;
+  }
+
   .dropdown-menu {
     width: 100%;
     border-radius: 6px;
@@ -20,6 +28,10 @@
       background-color: $color-black !important;
       border-radius: 6px;
 
+      span {
+        padding-right: 0;
+      }
+
       &:last-child {
         border-bottom: 0;
       }
@@ -32,14 +44,17 @@
   }
 
   .dropdown-toggle {
-    padding-right: 1rem;
     padding-left: 1.5rem;
     width: 100%;
     text-align: left;
+    position: relative;
 
     &::after {
-      margin-top: 6px;
-      float: right;
+      position: absolute;
+      top: 15px;
+      right: 15px;
     }
   }
+
+
 }

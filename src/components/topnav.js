@@ -23,11 +23,13 @@ export default () => {
           {activeInstance && (
             <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
               <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
-                {activeInstance.url}
+                <span>{activeInstance.url}</span>
               </DropdownToggle>
               <DropdownMenu>
                 {instances.filter((i) => !i.active).map((i) => (
-                  <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                  <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>
+                    <span>{i.url}</span>
+                  </DropdownItem>
                 ))}
                 <DropdownItem title="Add New Instance" onClick={() => setAuthorization(false)}>Add New Instance</DropdownItem>
               </DropdownMenu>

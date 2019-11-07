@@ -87,11 +87,13 @@ export default () => {
             <>
               <Dropdown isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
                 <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
-                  choose existing instance
+                  <span>choose existing instance</span>
                 </DropdownToggle>
                 <DropdownMenu>
                   {instances.map((i) => (
-                    <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                    <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>
+                      <span>{i.url}</span>
+                    </DropdownItem>
                   ))}
                 </DropdownMenu>
               </Dropdown>
