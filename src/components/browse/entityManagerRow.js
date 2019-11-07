@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 
-import { HarperDBContext } from '../../../providers/harperdb';
+import { HarperDBContext } from '../../providers/harperdb';
 
 export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, update }) => {
   const { queryHarperDB } = useContext(HarperDBContext);

@@ -15,7 +15,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'hdb.min.js',
+    filename: '[chunkhash].min.js',
     publicPath: '/',
   },
 
@@ -41,7 +41,7 @@ module.exports = {
         useShortDoctype: true,
       },
     }),
-    new ExtractTextPlugin('hdb.min.css'),
+    new ExtractTextPlugin('[chunkhash].min.css'),
     new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },

@@ -6,10 +6,6 @@ body {
     background: transparent;
   }
 
-  hr {
-    margin: 2rem 0;
-  }
-
   #app-bg {
     height: 100vh;
     width: 100vw;
@@ -27,21 +23,19 @@ body {
 
     #app-container {
       min-width: 320px;
-      margin-top: 100px;
+      margin-top: 70px;
       padding: 2rem;
-      height: calc(100vh - 120px);
+      height: calc(100vh - 70px);
       @media screen and (max-width: 991px) {
-        padding: 2rem 1rem;
+        padding: 1rem;
       }
     }
 
-    #app-nav,
-    #app-subnav {
+    #app-nav {
       min-width: 320px;
-      background: $dark-grey-overlay !important;
+      background: rgba(0, 0, 0, .3) !important;
       padding: .5rem 2rem;
       position: fixed;
-      box-shadow: 0 4px 2px -2px rgba(0,0,0,.2);
 
       @media screen and (max-width: 991px) {
         padding: .5rem 1rem;
@@ -56,60 +50,31 @@ body {
         background-size: contain;
       }
 
-      .nav-item {
-        margin-left: 1.5rem;
-        display:inline-block;
-
-        .nav-link,
-        a {
-          color: $color-lightgrey !important;
-          padding: 0;
-
-          &.active,
-          &:hover {
-            color: $color-white !important;
-          }
-        }
-      }
-
-      .collapsing {
-        left: 0;
-        right: 0;
-        margin: 0;
-        top: 70px !important;
-        background: $dark-grey-overlay !important;
-        text-align: center !important;
-        border: 0;
-        padding-top: .5rem;
-        padding-bottom: .5rem;
-
-        .navbar-nav {
-          padding: 0;
-
+      .collapse {
+        &:not(.show) {
           .nav-item {
-            margin-left: 0;
-            text-align: center;
+            margin-left: 1.5rem;
 
             .nav-link,
             a {
-              display: block;
-              padding: .5rem 0 !important;
+              color: $color-grey !important;
+              padding: 0 !important;
+
+              &.active,
+              &:hover {
+                color: $color-white !important;
+              }
             }
           }
         }
-      }
 
-      .collapse {
-        &.show {
+        &.show,
+        .collapsing {
           left: 0;
           right: 0;
           margin: 0;
-          top: 70px !important;
-          background: $dark-grey-overlay !important;
-          text-align: center !important;
-          border: 0;
-          padding-top: .5rem;
-          padding-bottom: .5rem;
+          top: 70px;
+          background: $color-white;
 
           .navbar-nav {
             padding: 0;
@@ -121,38 +86,19 @@ body {
               .nav-link,
               a {
                 display: block;
-                padding: .5rem 0 !important;
+                color: $color-grey !important;
+                padding: 1rem 0 !important;
+                border-bottom: 1px solid $color-lightgrey;
+
+                &.active,
+                &:hover {
+                  color: $color-purple !important;
+                }
               }
             }
           }
         }
       }
-    }
-
-    #app-subnav {
-
-      height: 110px;
-      background: $grey-overlay !important;
-      padding: 65px 2rem 0;
-      box-shadow: none;
-
-      @media screen and (max-width: 991px) {
-        padding: 65px 1rem 0;
-      }
-
-      .collapsing {
-        top: 71px !important;
-        padding-top: .5rem;
-        padding-bottom: .5rem;
-      }
-      .collapse {
-        &.show {
-          top: 71px !important;
-          padding-top: .5rem;
-          padding-bottom: .5rem;
-        }
-      }
-
     }
   }
 }

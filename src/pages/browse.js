@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { HarperDBContext } from '../../providers/harperdb';
-import DataTable from '../../components/instance/browse/datatable';
-import EntityManager from '../../components/instance/browse/entityManager';
-import JSONViewer from '../../components/instance/browse/jsonviewer';
+import { HarperDBContext } from '../providers/harperdb';
+import DataTable from '../components/browse/datatable';
+import EntityManager from '../components/browse/entityManager';
+import JSONViewer from '../components/browse/jsonviewer';
 
 export default () => {
   const history = useHistory();
@@ -18,22 +18,21 @@ export default () => {
 
   useEffect(() => {
     switch (true) {
-      case (!schemas && history.location.pathname !== '/instances/default/browse'):
-        history.push('/instances/default/browse');
+      case (!schemas && history.location.pathname !== '/browse'):
+        history.push('/browse');
         break;
       case (schemas && schemas.length && !schema):
       case (schemas && schemas.length && schema && !schemas.includes(schema)):
-        history.push(`/instances/default/browse/${schemas[0]}`);
+        history.push(`/browse/${schemas[0]}`);
         break;
       case (tables && tables.length && !table):
       case (tables && tables.length && table && !tables.includes(table)):
-        history.push(`/instances/default/browse/${schema}/${tables[0]}`);
+        history.push(`/browse/${schema}/${tables[0]}`);
         break;
       default:
         break;
     }
   }, [schema, schemas, table, tables]);
-
 
   return (
     <Row>
