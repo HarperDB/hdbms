@@ -18,13 +18,15 @@ export default ({ dataTableColumns, hashAttribute, update }) => {
   const [sorted, onSortedChange] = useState([{ id: hashAttribute, desc: false }]);
   const [pageSize, onPageSizeChange] = useState(20);
   const [page, onPageChange] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [showFilter, toggleShowFilter] = useState(false);
 
   useAsyncEffect(async () => {
     setLoading(true);
-    const { newData, newTotalPages } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
+    const { newData, newTotalPages, newTotalRecords } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
     setTableData(newData);
     setTotalPages(newTotalPages);
+    setTotalRecords(newTotalRecords);
     setLoading(false);
   }, [table, pageSize, page, filtered, sorted, structure]);
 
@@ -42,8 +44,8 @@ export default ({ dataTableColumns, hashAttribute, update }) => {
   return (
     <>
       <Row>
-        <Col>
-          <span className="text-bold text-white mb-2">{schema} {table && '>'} {table}&nbsp;</span>
+        <Col className="text-nowrap">
+          <span className="text-bold text-white">{schema} {table && `> ${table} > ${totalRecords} records`}&nbsp;</span>
         </Col>
         <Col className="text-right">
           <i className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />

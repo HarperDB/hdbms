@@ -1,7 +1,7 @@
-import Browse from '../pages/browse';
-import Clustering from '../pages/clustering';
-import Configuration from '../pages/configuration';
-import Enterprise from '../pages/enterprise';
+import Browse from '../pages/instance/browse';
+import Clustering from '../pages/instance/clustering';
+import Configuration from '../pages/instance/configuration';
+import Enterprise from '../pages/instance/enterprise';
 
 export default [
   { component: Browse, link: '/browse', path: '/browse/:schema?/:table?/:action?/:hash?', label: 'Browse' },

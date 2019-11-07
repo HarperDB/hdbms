@@ -3,9 +3,10 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const postCssFlexbugFixes = require('postcss-flexbugs-fixes');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const cssNano = require('cssnano');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
@@ -15,7 +16,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'public'),
-    filename: '[chunkhash].min.js',
+    filename: 'hdb.js',
     publicPath: '/',
   },
 
@@ -23,8 +24,9 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html'),
-      favicon: path.join(__dirname, 'src/favicon.png'),
+      favicon: path.join(__dirname, 'src/assets/images/favicon.png'),
       inject: 'body',
+      inlineSource: '.(js|css)$',
       minify: {
         caseSensitive: true,
         collapseInlineTagWhitespace: true,
@@ -41,7 +43,8 @@ module.exports = {
         useShortDoctype: true,
       },
     }),
-    new ExtractTextPlugin('[chunkhash].min.css'),
+    new HtmlWebpackInlineSourcePlugin(),
+    new ExtractTextPlugin('hdb.css'),
     new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },

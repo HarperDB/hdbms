@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { HarperDBContext } from '../providers/harperdb';
-import DataTable from '../components/browse/datatable';
-import EntityManager from '../components/browse/entityManager';
-import JSONViewer from '../components/browse/jsonviewer';
+import { HarperDBContext } from '../../providers/harperdb';
+import DataTable from '../../components/browse/datatable';
+import EntityManager from '../../components/browse/entityManager';
+import JSONViewer from '../../components/browse/jsonviewer';
 
 export default () => {
   const history = useHistory();

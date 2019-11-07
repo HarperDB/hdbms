@@ -26,7 +26,8 @@ export const HarperDBProvider = ({ children }) => {
     if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
 
     const recordCountResult = await queryHarperDB({ operation: 'sql', sql: countSQL });
-    const newTotalPages = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)'] && Math.ceil(recordCountResult[0]['COUNT(*)'] / pageSize);
+    const newTotalRecords = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)']
+    const newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
 
     let sql = `SELECT * FROM ${schema}.${table} `;
     if (filtered.length) sql += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
@@ -35,7 +36,7 @@ export const HarperDBProvider = ({ children }) => {
 
     const newData = await queryHarperDB({ operation: 'sql', sql });
 
-    return { newData, newTotalPages };
+    return { newData, newTotalPages, newTotalRecords };
   };
 
   useAsyncEffect(async () => {
