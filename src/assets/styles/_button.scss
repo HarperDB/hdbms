@@ -9,6 +9,10 @@
     height: 25px;
   }
 
+  &.btn-link {
+    padding: 0;
+  }
+
   &.btn-grey {
     color: $color-white !important;
     border: 0 !important;
@@ -18,7 +22,7 @@
   &.btn-black {
     color: $color-white !important;
     border: 0 !important;
-    background-color: $black-overlay !important;
+    background-color: $color-black !important;
   }
 
   &.btn-purple {

@@ -4,7 +4,7 @@
   left: 50%;
   transform: translate(-50%, -60%);
   width: 100%;
-  max-width: 250px;
+  max-width: 270px;
 
   #login-logo {
     margin: 0 auto 20px;
@@ -14,5 +14,17 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+  }
+
+  input,
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    border: 0 !important;
+    background: $color-black !important;
+    color: $color-white !important;
+    -webkit-box-shadow: 0 0 0 30px $color-black inset !important;
+    -webkit-text-fill-color: $color-white !important;
   }
 }

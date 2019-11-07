@@ -8,9 +8,10 @@ import { HarperDBContext } from '../providers/harperdb';
 import Login from '../pages/login';
 
 export default () => {
-  const { structure, setAuthorization, authError } = useContext(HarperDBContext);
+  const { structure, setAuthorization, instances } = useContext(HarperDBContext);
   const [navOpen, toggleNav] = useState(false);
   const [dropdownOpen, setDropDownOpen] = useState(false);
+  const activeInstance = instances.find((i) => i.active);
 
   return (
     <>
@@ -22,18 +23,18 @@ export default () => {
           <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
           <Collapse isOpen={navOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
-                <DropdownToggle caret color="black">
-                  default
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem>joyluck-club</DropdownItem>
-                  <DropdownItem>angry-panther</DropdownItem>
-                  <DropdownItem>junkie-hoodlum</DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>add new instance</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              {activeInstance && (
+                <Dropdown nav isOpen={dropdownOpen} toggle={() => instances.length !== 1 && setDropDownOpen(!dropdownOpen)}>
+                  <DropdownToggle caret color="black">
+                    {activeInstance.url}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {instances.filter((i) => !i.active).map((i) => (
+                      <DropdownItem key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              )}
               {routes.map((route) => route.label && (
                 <NavItem key={route.path}>
                   <NavLink exact onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
@@ -55,10 +56,7 @@ export default () => {
             <Redirect to={structure ? '/browse' : '/'} />
           </Switch>
         ) : (
-          <Login
-            setAuthorization={setAuthorization}
-            authError={authError}
-          />
+          <Login />
         )}
       </div>
       <div id="app-bg" />

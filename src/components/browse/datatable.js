@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import ReactTable from 'react-table';
-import useAsyncEffect from 'use-async-effect';
 import { useHistory, useParams } from 'react-router';
+import useAsyncEffect from 'use-async-effect';
 
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { HarperDBContext } from '../../providers/harperdb';
 
-export default ({ dataTableColumns, hashAttribute, update }) => {
+export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, filtered, onSortedChange, sorted, onPageChange, page }) => {
   const { queryTableData, structure } = useContext(HarperDBContext);
   const history = useHistory();
   const { schema, table } = useParams();
@@ -14,21 +14,30 @@ export default ({ dataTableColumns, hashAttribute, update }) => {
   const [tableData, setTableData] = useState([]);
   const [pages, setTotalPages] = useState(-1);
   const [loading, setLoading] = useState(true);
-  const [filtered, onFilteredChange] = useState([]);
-  const [sorted, onSortedChange] = useState([{ id: hashAttribute, desc: false }]);
   const [pageSize, onPageSizeChange] = useState(20);
-  const [page, onPageChange] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(false);
   const [showFilter, toggleShowFilter] = useState(false);
 
-  useAsyncEffect(async () => {
+  const loadNewData = async () => {
     setLoading(true);
     const { newData, newTotalPages, newTotalRecords } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
     setTableData(newData);
     setTotalPages(newTotalPages);
-    setTotalRecords(newTotalRecords);
+    setTotalRecords(newTotalRecords.toString());
     setLoading(false);
-  }, [table, pageSize, page, filtered, sorted, structure]);
+  };
+
+  let tableChangeTimeout = false;
+  useAsyncEffect(
+    () => {
+      clearTimeout(tableChangeTimeout);
+      tableChangeTimeout = setTimeout(() => loadNewData(), 0);
+    },
+    () => clearTimeout(tableChangeTimeout),
+    [sorted, table, pageSize, page, filtered, structure],
+  );
+
+  useEffect(() => setTotalRecords(false), [table]);
 
   const handleFilterClick = () => {
     if (showFilter) onFilteredChange([]);
@@ -45,7 +54,7 @@ export default ({ dataTableColumns, hashAttribute, update }) => {
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-bold text-white">{schema} {table && `> ${table} > ${totalRecords} records`}&nbsp;</span>
+          <span className="text-bold text-white">{schema} {table && `> ${table} > `} {totalRecords ? `${totalRecords} records` : 'loading'}&nbsp;</span>
         </Col>
         <Col className="text-right">
           <i className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />

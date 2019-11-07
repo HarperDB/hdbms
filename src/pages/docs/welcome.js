@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Button, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
 export default () => (
   <Card className="mb-3 mt-2">

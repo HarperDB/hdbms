@@ -2,13 +2,13 @@
 
   .nav-item {
     margin-left: 1.5rem;
-    display:inline-block;
+    display: inline-block;
 
     .nav-link,
     a {
-      display:inline-block;
+      display: inline-block;
       color: $color-lightgrey !important;
-      padding: 5px 0 0 0 !important;
+      padding: 5px 0 0 !important;
 
       &.active,
       &:hover {

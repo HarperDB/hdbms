@@ -5,42 +5,44 @@ import useAsyncEffect from 'use-async-effect';
 import handleCellValues from '../util/handleCellValues';
 
 const useConnectionState = createPersistedState('connection');
+const useInstanceState = createPersistedState('instances');
 export const HarperDBContext = React.createContext();
 
 export const HarperDBProvider = ({ children }) => {
   const [Authorization, setAuthorization] = useConnectionState(false);
+  const [instances, setInstances] = useInstanceState([]);
   const [structure, setStructure] = useState(false);
   const [lastUpdate, updateDB] = useState(false);
   const [authError, setAuthError] = useState(false);
 
   const queryHarperDB = async (operation) => {
-    const { protocol, hostname } = window.location;
-    const url = `${protocol}//${hostname}:9925`;
+    const { url, auth } = Authorization;
     const body = JSON.stringify(operation);
-    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization: `Basic ${Authorization}` } });
+    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization: `Basic ${auth}` } });
     return response.json();
   };
 
   const queryTableData = async ({ schema, table, pageSize, page, filtered, sorted }) => {
+    if (!sorted.length) return false;
+
     let countSQL = `SELECT count(*) FROM ${schema}.${table} `;
     if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
 
     const recordCountResult = await queryHarperDB({ operation: 'sql', sql: countSQL });
-    const newTotalRecords = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)']
+    const newTotalRecords = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)'];
     const newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
 
-    let sql = `SELECT * FROM ${schema}.${table} `;
-    if (filtered.length) sql += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
-    if (sorted.length) sql += `ORDER BY ${sorted[0].id} ${sorted[0].desc ? 'DESC' : 'ASC'}`;
-    sql += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
+    let dataSQL = `SELECT * FROM ${schema}.${table} `;
+    if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (sorted.length) dataSQL += `ORDER BY ${sorted[0].id} ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+    dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
 
-    const newData = await queryHarperDB({ operation: 'sql', sql });
+    const newData = await queryHarperDB({ operation: 'sql', sql: dataSQL });
 
     return { newData, newTotalPages, newTotalRecords };
   };
 
   useAsyncEffect(async () => {
-    setAuthError(false);
     if (!Authorization) {
       setStructure(false);
       return false;
@@ -50,10 +52,18 @@ export const HarperDBProvider = ({ children }) => {
     const dbResponse = await queryHarperDB({ operation: 'describe_all' });
 
     if (dbResponse.error) {
-      setAuthorization(false);
       setAuthError(dbResponse.error);
+      setAuthorization(false);
       return false;
     }
+
+    setInstances(instances.map((i) => { i.active = false; return i; }));
+
+    const existingAuthObjectIndex = instances.findIndex((i) => i.auth === Authorization.auth || i.url === Authorization.url);
+    if (existingAuthObjectIndex !== -1) {
+      instances.splice(existingAuthObjectIndex, 1);
+    }
+    setInstances([...instances, { ...Authorization, active: true }]);
 
     Object.keys(dbResponse).map((schema) => {
       dbStructure[schema] = {};
@@ -80,7 +90,7 @@ export const HarperDBProvider = ({ children }) => {
   }, [Authorization, lastUpdate]);
 
   return (
-    <HarperDBContext.Provider value={{ setAuthorization, authError, structure, updateDB, queryHarperDB, queryTableData }}>
+    <HarperDBContext.Provider value={{ setAuthorization, Authorization, authError, setAuthError, structure, updateDB, instances, queryHarperDB, queryTableData }}>
       {children}
     </HarperDBContext.Provider>
   );

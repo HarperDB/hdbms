@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -11,10 +11,21 @@ export default () => {
   const history = useHistory();
   const { schema, table, action } = useParams();
   const { structure, updateDB } = useContext(HarperDBContext);
+  const [filtered, onFilteredChange] = useState([]);
+  const [sorted, onSortedChange] = useState([]);
+  const [page, onPageChange] = useState(0);
 
   const schemas = structure && Object.keys(structure);
   const tables = structure && schemas && structure[schema] && Object.keys(structure[schema]);
   const activeTable = structure && schemas && structure[schema] && tables && structure[schema][table] && structure[schema][table];
+
+  useEffect(() => {
+    if (activeTable) {
+      onFilteredChange([]);
+      onSortedChange([{ id: activeTable.hashAttribute, desc: false }]);
+      onPageChange(0);
+    }
+  }, [activeTable]);
 
   useEffect(() => {
     switch (true) {
@@ -63,6 +74,12 @@ export default () => {
             dataTableColumns={activeTable.dataTableColumns}
             hashAttribute={activeTable.hashAttribute}
             update={updateDB}
+            onFilteredChange={onFilteredChange}
+            filtered={filtered}
+            onSortedChange={onSortedChange}
+            sorted={sorted}
+            onPageChange={onPageChange}
+            page={page}
           />
         ) : (
           <>

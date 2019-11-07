@@ -1,5 +1,5 @@
 // color palette
-$color-black: #373737;
+$color-black: #212121;
 $color-darkgrey: #696969;
 $color-grey: #bcbcbc;
 $color-lightgrey: #ddd;
@@ -15,6 +15,7 @@ $color-purple: #403b8a;
 $color-lightpurple: #7a3a87;
 
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
+$white-overlay: rgba(255, 255, 255, .3);
 $grey-overlay: rgba(0, 0, 0, .3);
 $dark-grey-overlay: rgba(0, 0, 0, .5);
 $black-overlay: rgba(0, 0, 0, .7);

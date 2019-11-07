@@ -1,47 +1,79 @@
-import React, { useState } from 'react';
-import { Card, CardBody, Form, Input, Button } from '@nio/ui-kit';
+import React, { useState, useContext } from 'react';
+import { Card, CardBody, Form, Input, Button, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from '@nio/ui-kit';
 import { useHistory } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+import { HarperDBContext } from '../providers/harperdb';
 
-export default ({ setAuthorization, authError }) => {
+export default () => {
+  const { setAuthorization, authError, setAuthError, instances } = useContext(HarperDBContext);
   const history = useHistory();
-  const [formValue, setFormValue] = useState({});
+
+  const defaultHDBConnection = `${window.location.protocol}//${window.location.hostname}:9925`;
+  const [formValue, setFormValue] = useState({ HDB_CONNECTION: defaultHDBConnection });
+  const [showForm, setShowForm] = useState(!instances.length);
+  const [dropdownOpen, setDropDownOpen] = useState(false);
 
   const setFieldValue = (name, value) => {
     formValue[name] = value;
     setFormValue(formValue);
+    setAuthError(false);
   };
 
-  const submitLogin = async (e) => {
+  const submitLogin = (e) => {
     e.preventDefault();
-    setAuthorization(btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`));
+    setAuthorization({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION });
   };
 
   let redirectTimeout = false;
-  useAsyncEffect(() => redirectTimeout = setTimeout(() => history.push('/'), 100), () => clearTimeout(redirectTimeout), []);
+  useAsyncEffect(() => { redirectTimeout = setTimeout(() => history.push('/'), 100); setAuthError(false); }, () => clearTimeout(redirectTimeout), []);
 
   return (
     <div id="login-form">
       <div id="login-logo" />
       <Card className="mb-3 mt-2 dark">
-        <CardBody onSubmit={submitLogin}>
-          <Form>
-            <Input
-              onChange={(e) => setFieldValue('HDB_USER', e.target.value)}
-              className="mb-2 text-center"
-              type="text"
-              name="HDB_USER"
-              placeholder="username"
-            />
-            <Input
-              onChange={(e) => setFieldValue('HDB_PASS', e.target.value)}
-              className="mb-4 text-center"
-              type="password"
-              name="HDB_PASS"
-              placeholder="password"
-            />
-            <Button block color="success">Log Into HarperDB</Button>
-          </Form>
+        <CardBody>
+          { showForm ? (
+            <Form onSubmit={submitLogin}>
+              <Input
+                onChange={(e) => setFieldValue('HDB_CONNECTION', e.target.value)}
+                className="mb-2 text-center"
+                type="text"
+                name="HDB_CONNECTION"
+                placeholder="harperdb url"
+                defaultValue={defaultHDBConnection}
+              />
+              <Input
+                onChange={(e) => setFieldValue('HDB_USER', e.target.value)}
+                className="mb-2 text-center"
+                type="text"
+                name="HDB_USER"
+                placeholder="username"
+              />
+              <Input
+                onChange={(e) => setFieldValue('HDB_PASS', e.target.value)}
+                className="mb-4 text-center"
+                type="password"
+                name="HDB_PASS"
+                placeholder="password"
+              />
+              <Button block color="black">Log Into HarperDB</Button>
+              <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(false)}>choose existing instance</Button>
+            </Form>
+          ) : (
+            <>
+              <Dropdown isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
+                <DropdownToggle caret color="black">
+                  choose existing instance
+                </DropdownToggle>
+                <DropdownMenu>
+                  {instances.map((i) => (
+                    <DropdownItem key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>{i.url}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+              <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(true)}>add new instance</Button>
+            </>
+          )}
         </CardBody>
       </Card>
       <div className="text-white text-center text-smaller">{authError}&nbsp;</div>

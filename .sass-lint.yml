@@ -25,7 +25,7 @@ rules:
   no-css-comments: 1
   no-debug: 1
   no-disallowed-properties: 1
-  no-duplicate-properties: 1
+  no-duplicate-properties: 0
   no-empty-rulesets: 1
   no-extends: 1
   no-ids: 0
@@ -46,12 +46,12 @@ rules:
 
   # Nesting
   declarations-before-nesting: 1
-  force-attribute-nesting: 1
-  force-element-nesting: 1
-  force-pseudo-nesting: 1
+  force-attribute-nesting: 0
+  force-element-nesting: 0
+  force-pseudo-nesting: 0
 
   # Name Formats
-  class-name-format: 1
+  class-name-format: 0
   function-name-format: 1
   id-name-format: 1
   mixin-name-format: 1

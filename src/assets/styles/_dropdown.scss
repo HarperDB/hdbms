@@ -1,17 +1,30 @@
 .dropdown {
-  width: 170px;
+  width: 100%;
+
+  &.nav-item {
+    width: 250px;
+  }
 
   .dropdown-menu {
     width: 100%;
-    border-radius: 0 0 6px 6px;
-    background-color: $black-overlay !important;
+    border-radius: 6px;
+    background-color: $color-black !important;
     z-index: 9999;
+    margin: 0;
+    padding: 0;
 
     .dropdown-item {
-      color: $color-lightgrey;
+      color: $color-white;
+      border-bottom: 1px solid $white-overlay;
+      padding: .5rem 1.5rem;
+      background-color: $color-black !important;
+
+      &:last-child {
+        border-bottom: 0;
+      }
 
       &:hover {
-        background: transparent;
+        background-color: $color-black !important;
         color: $color-white;
       }
     }
@@ -23,7 +36,7 @@
     width: 100%;
     text-align: left;
 
-    &:after {
+    &::after {
       margin-top: 6px;
       float: right;
     }
