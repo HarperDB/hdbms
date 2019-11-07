@@ -5,6 +5,8 @@
   transform: translate(-50%, -60%);
   width: 100%;
   max-width: 270px;
+  height: auto;
+  overflow: visible;
 
   #login-logo {
     margin: 0 auto 20px;
@@ -31,5 +33,16 @@
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: $color-grey !important;
     opacity: 0.5; /* Firefox */
+  }
+
+  #login-error {
+    height: 40px;
+    line-height: 1.2 !important;
+
+    .btn {
+      &:hover {
+        color: $color-white !important;
+      }
+    }
   }
 }

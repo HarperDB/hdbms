@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Card, CardBody, Form, Input, Button, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from '@nio/ui-kit';
 import { useHistory } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
-const urlRegex = require('url-regex');
+import urlRegex from 'url-regex';
 
 import { HarperDBContext } from '../providers/harperdb';
 
@@ -14,26 +14,34 @@ export default () => {
   const [showForm, setShowForm] = useState(!instances.length);
   const [dropdownOpen, setDropDownOpen] = useState(false);
   const [formError, setFormError] = useState(false);
+  const [httpsError, setHttpsError] = useState(false);
 
-  const setFieldValue = (name, value) => {
-    formValue[name] = value;
-    setFormValue(formValue);
-    setAuthError(false);
-    setFormError(false);
-  };
-
-  const submitLogin = (e) => {
-    e.preventDefault();
+  const validateFields = () => {
     if (!formValue.HDB_USER || !formValue.HDB_PASS || !formValue.HDB_CONNECTION) {
-      setFormError('All fileds must be completed.');
+      setFormError('All fields must be completed.');
       return false;
     }
     if (!urlRegex().test(formValue.HDB_CONNECTION)) {
       setFormError('You must enter a valid URL');
       return false;
     }
+    if (formValue.HDB_CONNECTION.indexOf('http:') !== -1 && window.location.protocol === 'https:') {
+      setHttpsError(true);
+      return false;
+    }
+    return true;
+  };
 
-    setAuthorization({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION });
+  const setFieldValue = (name, value) => {
+    formValue[name] = value;
+    setFormValue(formValue);
+    setAuthError(false);
+    return setFormError(false);
+  };
+
+  const submitLogin = (e) => {
+    e.preventDefault();
+    return validateFields() ? setAuthorization({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION }) : false;
   };
 
   let redirectTimeout = false;
@@ -48,7 +56,7 @@ export default () => {
             <Form onSubmit={submitLogin}>
               <Input
                 onChange={(e) => setFieldValue('HDB_CONNECTION', e.target.value)}
-                className={`mb-2 text-center`}
+                className="mb-2 text-center"
                 type="text"
                 name="HDB_CONNECTION"
                 title="Instance URL. example: http://localhost:9925"
@@ -92,7 +100,15 @@ export default () => {
           )}
         </CardBody>
       </Card>
-      <div className="text-white text-center text-smaller">{formError || authError}&nbsp;</div>
+      <div id="login-error" className="text-small text-white text-center">
+        {httpsError && (
+          <div>
+            Browsers usually deny access from https URLs to http URLs for security purposes.<br /><br />
+            <Button block color="danger" className="text-white" href={`http://${window.location.host}`}>Switch to the http Studio</Button>
+          </div>
+        )}
+        {formError || authError}&nbsp;
+      </div>
     </div>
   );
 };
