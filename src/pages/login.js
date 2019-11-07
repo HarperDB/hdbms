@@ -57,7 +57,9 @@ export default () => {
                 placeholder="password"
               />
               <Button block color="black">Log Into HarperDB</Button>
-              <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(false)}>choose existing instance</Button>
+              {!!instances.length && (
+                <Button block className="mt-3 text-white" color="link" onClick={() => setShowForm(false)}>choose existing instance</Button>
+              )}
             </Form>
           ) : (
             <>
