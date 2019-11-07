@@ -2,10 +2,6 @@ body {
   min-width: 320px;
   overflow-x: hidden;
 
-  .loader {
-    background: transparent;
-  }
-
   #app-bg {
     height: 100vh;
     width: 100vw;
@@ -48,56 +44,6 @@ body {
         background-repeat: no-repeat;
         background-position: top left;
         background-size: contain;
-      }
-
-      .collapse {
-        &:not(.show) {
-          .nav-item {
-            margin-left: 1.5rem;
-
-            .nav-link,
-            a {
-              color: $color-grey !important;
-              padding: 0 !important;
-
-              &.active,
-              &:hover {
-                color: $color-white !important;
-              }
-            }
-          }
-        }
-
-        &.show,
-        .collapsing {
-          left: 0;
-          right: 0;
-          margin: 0;
-          top: 70px;
-          background: $color-white;
-
-          .navbar-nav {
-            padding: 0;
-
-            .nav-item {
-              margin-left: 0;
-              text-align: center;
-
-              .nav-link,
-              a {
-                display: block;
-                color: $color-grey !important;
-                padding: 1rem 0 !important;
-                border-bottom: 1px solid $color-lightgrey;
-
-                &.active,
-                &:hover {
-                  color: $color-purple !important;
-                }
-              }
-            }
-          }
-        }
       }
     }
   }

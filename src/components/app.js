@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Navbar, NavbarToggler, Nav, NavItem, Collapse } from '@nio/ui-kit';
+import { Navbar, NavbarToggler, Nav, NavItem, Collapse, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from '@nio/ui-kit';
 import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 
 import '../app.scss';
@@ -10,6 +10,7 @@ import Login from '../pages/login';
 export default () => {
   const { structure, setAuthorization, authError } = useContext(HarperDBContext);
   const [navOpen, toggleNav] = useState(false);
+  const [dropdownOpen, setDropDownOpen] = useState(false);
 
   return (
     <>
@@ -21,6 +22,18 @@ export default () => {
           <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
           <Collapse isOpen={navOpen} navbar>
             <Nav className="ml-auto" navbar>
+              <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
+                <DropdownToggle caret color="black">
+                  default
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem>joyluck-club</DropdownItem>
+                  <DropdownItem>angry-panther</DropdownItem>
+                  <DropdownItem>junkie-hoodlum</DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>add new instance</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
               {routes.map((route) => route.label && (
                 <NavItem key={route.path}>
                   <NavLink exact onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>

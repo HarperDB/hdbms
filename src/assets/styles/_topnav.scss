@@ -1,0 +1,49 @@
+#app-nav {
+
+  .nav-item {
+    margin-left: 1.5rem;
+    display:inline-block;
+
+    .nav-link,
+    a {
+      display:inline-block;
+      color: $color-lightgrey !important;
+      padding: 5px 0 0 0 !important;
+
+      &.active,
+      &:hover {
+        color: $color-white !important;
+      }
+    }
+  }
+
+  .collapse.show,
+  .collapsing {
+    left: 0;
+    right: 0;
+    margin: 0;
+    top: 70px !important;
+    background: $color-white;
+    text-align: center !important;
+    border: 0;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+
+    .navbar-nav {
+      padding: 0;
+
+      .nav-item {
+        margin-left: 0;
+        text-align: center;
+
+        .nav-link,
+        a {
+          display: block;
+          padding: .5rem 0 !important;
+        }
+      }
+    }
+  }
+}
+
+

@@ -1,11 +1,14 @@
 {
   "name": "harperdb-studio",
   "version": "2.0.0",
-  "description": "A scaffold for a harperdb-powered UI",
-  "deploymentUrl": "ui-scaffold.demo.harperdb.io",
+  "description": "A UI for HarperDB",
+  "deploymentUrl": "studio.harperdb.io",
   "private": true,
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.js",
+    "clean": "rm -rf /Users/jrepp/Developer/harperdb/harperdb/docs/*",
+    "transfer": "cp -r ./public/* /Users/jrepp/Developer/harperdb/harperdb/docs/",
+    "tohdb": "npm run build && npm run clean && npm run transfer",
     "start": "webpack-dev-server --mode development --config webpack.dev.js",
     "lint": "eslint --fix src && sass-lint --verbose"
   },

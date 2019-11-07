@@ -15,6 +15,12 @@
     background-color: $grey-overlay !important;
   }
 
+  &.btn-black {
+    color: $color-white !important;
+    border: 0 !important;
+    background-color: $black-overlay !important;
+  }
+
   &.btn-purple {
     color: $color-white !important;
     border: 0 !important;
@@ -24,6 +30,6 @@
   &.btn-outline-purple {
     color: $color-purple !important;
     border-color: $color-purple !important;
-    background-color: transparent !important;
+    background-color: $color-white !important;
   }
 }

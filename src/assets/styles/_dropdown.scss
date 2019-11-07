@@ -1,0 +1,31 @@
+.dropdown {
+  width: 170px;
+
+  .dropdown-menu {
+    width: 100%;
+    border-radius: 0 0 6px 6px;
+    background-color: $black-overlay !important;
+    z-index: 9999;
+
+    .dropdown-item {
+      color: $color-lightgrey;
+
+      &:hover {
+        background: transparent;
+        color: $color-white;
+      }
+    }
+  }
+
+  .dropdown-toggle {
+    padding-right: 1rem;
+    padding-left: 1.5rem;
+    width: 100%;
+    text-align: left;
+
+    &:after {
+      margin-top: 6px;
+      float: right;
+    }
+  }
+}
