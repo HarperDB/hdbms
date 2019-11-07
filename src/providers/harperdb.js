@@ -75,12 +75,9 @@ export const HarperDBProvider = ({ children }) => {
         dbStructure[schema][table] = {
           hashAttribute: thisTable.hash_attribute,
           newEntityColumns: {},
-          dataTableColumns: orderedColumns.map((k) => ({
-            Header: k.replace(/__/g, ''),
-            accessor: k,
-            Cell: (props) => handleCellValues(props.value),
-          })),
+          dataTableColumns: orderedColumns.map((k) => ({ Header: k.replace(/__/g, ''), accessor: k, Cell: (props) => handleCellValues(props.value) })),
         };
+
         // generate new entity columns
         return attributes.map((c) => dbStructure[schema][table].newEntityColumns[c] = null);
       });

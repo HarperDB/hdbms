@@ -38,6 +38,19 @@ export default ({ newEntityColumns, hashAttribute }) => {
     return history.push(`/browse/${schema}/${table}`);
   };
 
+  const deleteRecord = async (e) => {
+    e.preventDefault();
+    if (!action) return false;
+
+    await queryHarperDB({
+      operation: 'delete',
+      schema,
+      table,
+      hash_values: [hash],
+    });
+    return history.push(`/browse/${schema}/${table}`);
+  };
+
   return (
     <>
       <span className="text-bold text-white mb-2">{schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}&nbsp;</span>
@@ -62,11 +75,16 @@ export default ({ newEntityColumns, hashAttribute }) => {
             />
             <hr />
             <Row>
-              <Col sm="6" className="mb-2">
-                <Button block color="purple" outline onClick={() => history.push(`/browse/${schema}/${table}`)}>Cancel</Button>
+              <Col className="mb-2">
+                <Button block color="black" onClick={() => history.push(`/browse/${schema}/${table}`)}>Cancel</Button>
               </Col>
-              <Col sm="6">
-                <Button block color="purple">{action === 'edit' ? 'Update' : 'Add New' }</Button>
+              {action !== 'add' && (
+                <Col className="mb-2">
+                  <Button block color="danger" onClick={deleteRecord}>Delete</Button>
+                </Col>
+              )}
+              <Col>
+                <Button block color="success">{action === 'edit' ? 'Update' : 'Add New' }</Button>
               </Col>
             </Row>
           </Form>
