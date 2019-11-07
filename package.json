@@ -26,6 +26,7 @@
     "react-router-dom": "^5.1.2",
     "react-table": "^6.10.3",
     "socketcluster-client": "^14.3.1",
+    "url-regex": "^5.0.0",
     "use-async-effect": "^2.2.1",
     "use-persisted-state": "^0.3.0",
     "use-react-router": "^1.0.7"

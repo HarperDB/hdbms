@@ -27,4 +27,9 @@
     -webkit-box-shadow: 0 0 0 30px $color-black inset !important;
     -webkit-text-fill-color: $color-white !important;
   }
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $color-grey !important;
+    opacity: 0.5; /* Firefox */
+  }
 }

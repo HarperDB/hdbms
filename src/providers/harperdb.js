@@ -18,23 +18,27 @@ export const HarperDBProvider = ({ children }) => {
   const queryHarperDB = async (operation) => {
     const { url, auth } = Authorization;
     const body = JSON.stringify(operation);
-    const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization: `Basic ${auth}` } });
-    return response.json();
+    try {
+      const response = await fetch(url, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Authorization: `Basic ${auth}` } });
+      return response.json();
+    } catch {
+      return { error: 'Could not connect to that URL' };
+    }
   };
 
   const queryTableData = async ({ schema, table, pageSize, page, filtered, sorted }) => {
     if (!sorted.length) return false;
 
     let countSQL = `SELECT count(*) FROM ${schema}.${table} `;
-    if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
 
     const recordCountResult = await queryHarperDB({ operation: 'sql', sql: countSQL });
     const newTotalRecords = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)'];
     const newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
 
     let dataSQL = `SELECT * FROM ${schema}.${table} `;
-    if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` ${f.id} LIKE '%${f.value}%'`).join(' AND ')} `;
-    if (sorted.length) dataSQL += `ORDER BY ${sorted[0].id} ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+    if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
     dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
 
     const newData = await queryHarperDB({ operation: 'sql', sql: dataSQL });

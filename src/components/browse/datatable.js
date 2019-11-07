@@ -20,6 +20,7 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
 
   const loadNewData = async () => {
     setLoading(true);
+    setTotalRecords('loading');
     const { newData, newTotalPages, newTotalRecords } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
     setTableData(newData);
     setTotalPages(newTotalPages);
@@ -54,7 +55,7 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-bold text-white">{schema} {table && `> ${table} > `} {totalRecords ? `${totalRecords} records` : 'loading'}&nbsp;</span>
+          <span className="text-bold text-white">{schema} {table && `> ${table} > `} {totalRecords && `${totalRecords} record${totalRecords !== '1' ? 's' : ''}`}&nbsp;</span>
         </Col>
         <Col className="text-right">
           <i title={`Refresh table ${table}`} className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />

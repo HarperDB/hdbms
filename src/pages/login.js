@@ -2,25 +2,37 @@ import React, { useState, useContext } from 'react';
 import { Card, CardBody, Form, Input, Button, DropdownToggle, DropdownMenu, DropdownItem, Dropdown } from '@nio/ui-kit';
 import { useHistory } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+const urlRegex = require('url-regex');
+
 import { HarperDBContext } from '../providers/harperdb';
 
 export default () => {
   const { setAuthorization, authError, setAuthError, instances } = useContext(HarperDBContext);
   const history = useHistory();
 
-  const defaultHDBConnection = `${window.location.protocol}//${window.location.hostname}:9925`;
-  const [formValue, setFormValue] = useState({ HDB_CONNECTION: defaultHDBConnection });
+  const [formValue, setFormValue] = useState({});
   const [showForm, setShowForm] = useState(!instances.length);
   const [dropdownOpen, setDropDownOpen] = useState(false);
+  const [formError, setFormError] = useState(false);
 
   const setFieldValue = (name, value) => {
     formValue[name] = value;
     setFormValue(formValue);
     setAuthError(false);
+    setFormError(false);
   };
 
   const submitLogin = (e) => {
     e.preventDefault();
+    if (!formValue.HDB_USER || !formValue.HDB_PASS || !formValue.HDB_CONNECTION) {
+      setFormError('All fileds must be completed.');
+      return false;
+    }
+    if (!urlRegex().test(formValue.HDB_CONNECTION)) {
+      setFormError('You must enter a valid URL');
+      return false;
+    }
+
     setAuthorization({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION });
   };
 
@@ -36,12 +48,11 @@ export default () => {
             <Form onSubmit={submitLogin}>
               <Input
                 onChange={(e) => setFieldValue('HDB_CONNECTION', e.target.value)}
-                className="mb-2 text-center"
+                className={`mb-2 text-center`}
                 type="text"
                 name="HDB_CONNECTION"
-                title="Instance URL. example: http://mydomain:9925"
-                placeholder="url: http://mydomain:9925"
-                defaultValue={defaultHDBConnection}
+                title="Instance URL. example: http://localhost:9925"
+                placeholder="URL: http://localhost:9925"
               />
               <Input
                 onChange={(e) => setFieldValue('HDB_USER', e.target.value)}
@@ -49,7 +60,7 @@ export default () => {
                 type="text"
                 name="HDB_USER"
                 title="Instance Username"
-                placeholder="username"
+                placeholder="Instance Username"
               />
               <Input
                 onChange={(e) => setFieldValue('HDB_PASS', e.target.value)}
@@ -57,7 +68,7 @@ export default () => {
                 type="password"
                 name="HDB_PASS"
                 title="Instance Password"
-                placeholder="password"
+                placeholder="Instance Password"
               />
               <Button title="Log Into HarperDB" block color="black">Log Into HarperDB</Button>
               {!!instances.length && (
@@ -81,7 +92,7 @@ export default () => {
           )}
         </CardBody>
       </Card>
-      <div className="text-white text-center text-smaller">{authError}&nbsp;</div>
+      <div className="text-white text-center text-smaller">{formError || authError}&nbsp;</div>
     </div>
   );
 };

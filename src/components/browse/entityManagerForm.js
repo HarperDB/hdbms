@@ -81,7 +81,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
             <i className="fa fa-check text-white" />
           </Button>
           <Button
-            color="grey"
+            color="black"
             className="round"
             onClick={() => toggleCreate(false)}
           >
