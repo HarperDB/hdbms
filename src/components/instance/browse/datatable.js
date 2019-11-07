@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory, useParams } from 'react-router';
 
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
-import { HarperDBContext } from '../../providers/harperdb';
+import { HarperDBContext } from '../../../providers/harperdb';
 
 export default ({ dataTableColumns, hashAttribute, update }) => {
   const { queryTableData, structure } = useContext(HarperDBContext);
@@ -35,9 +35,9 @@ export default ({ dataTableColumns, hashAttribute, update }) => {
 
   const handleRefreshClick = () => update(Date.now());
 
-  const handleNewRecordClick = () => history.push(`/browse/${schema}/${table}/add`);
+  const handleNewRecordClick = () => history.push(`/instances/default/browse/${schema}/${table}/add`);
 
-  const handleRowClick = (newActiveRecord) => history.push(`/browse/${schema}/${table}/edit/${newActiveRecord[hashAttribute]}`);
+  const handleRowClick = (newActiveRecord) => history.push(`/instances/default/browse/${schema}/${table}/edit/${newActiveRecord[hashAttribute]}`);
 
   return (
     <>

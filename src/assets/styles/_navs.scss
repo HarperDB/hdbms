@@ -1,0 +1,55 @@
+#app-nav {
+  z-index: 99999;
+
+  .nav-link,
+  a {
+    display:inline-block;
+    color: $color-lightgrey !important;
+    padding: 5px 0 0 0 !important;
+
+    &.active,
+    &:hover {
+      color: $color-white !important;
+    }
+  }
+
+
+  .dropdown {
+    z-index: 99999;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    border-radius: 0 0 6px 6px;
+    background-color: $black-overlay !important;
+    z-index: 9999;
+
+    .dropdown-item {
+      color: $color-lightgrey;
+
+      &:hover {
+        background: transparent;
+        color: $color-white;
+      }
+    }
+  }
+
+  .dropdown-toggle {
+    padding-right: 1rem;
+
+    &:after {
+      margin-left: 1rem;
+    }
+  }
+
+}
+#app-subnav {
+  .navbar-toggler {
+    z-index: 999;
+    width: 20px;
+    height: 15px;
+  }
+
+}
+
+

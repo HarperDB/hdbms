@@ -5,7 +5,7 @@ import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
-import { HarperDBContext } from '../../providers/harperdb';
+import { HarperDBContext } from '../../../providers/harperdb';
 
 export default ({ newEntityColumns, hashAttribute }) => {
   const { queryHarperDB } = useContext(HarperDBContext);
@@ -35,7 +35,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
       table,
       records: [rowValue],
     });
-    return history.push(`/browse/${schema}/${table}`);
+    return history.push(`/instances/default/browse/${schema}/${table}`);
   };
 
   return (
@@ -63,7 +63,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
             <hr />
             <Row>
               <Col sm="6" className="mb-2">
-                <Button block color="purple" outline onClick={() => history.push(`/browse/${schema}/${table}`)}>Cancel</Button>
+                <Button block color="purple" outline onClick={() => history.push(`/instances/default/browse/${schema}/${table}`)}>Cancel</Button>
               </Col>
               <Col sm="6">
                 <Button block color="purple">{action === 'edit' ? 'Update' : 'Add New' }</Button>

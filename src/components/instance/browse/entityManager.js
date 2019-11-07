@@ -9,13 +9,13 @@ export default ({ items, activeItem, activeSchema = false, update }) => {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
-  const baseUrl = activeSchema ? `/browse/${activeSchema}` : '/browse';
+  const baseUrl = activeSchema ? `/instances/default/browse/${activeSchema}` : '/instances/default/browse';
   const itemType = activeSchema ? 'table' : 'schema';
 
-  useEffect(() => {
+  /*useEffect(() => {
     toggleCreate();
     toggleDropItem();
-  }, [activeItem, activeSchema, items]);
+  }, [activeItem, activeSchema, items]);*/
 
   return (
     <div className="db-browser">

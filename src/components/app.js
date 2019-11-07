@@ -1,53 +1,33 @@
-import React, { useState, useContext } from 'react';
-import { Navbar, NavbarToggler, Nav, NavItem, Collapse } from '@nio/ui-kit';
-import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router';
+import useAsyncEffect from 'use-async-effect';
 
-import '../app.scss';
-import routes from './routes';
 import { HarperDBContext } from '../providers/harperdb';
-import Login from '../pages/login';
+import TopNav from './topnav';
+import Routes from '../routes';
+import '../app.scss';
 
 export default () => {
-  const { structure, setAuthorization, authError } = useContext(HarperDBContext);
-  const [navOpen, toggleNav] = useState(false);
+  const { structure } = useContext(HarperDBContext);
+  const history = useHistory();
+
+  let redirectTimeout = false;
+  useAsyncEffect(() => {
+    redirectTimeout = setTimeout(() => {
+      if (!!structure && history.location.pathname === '/') {
+        history.push('/instances');
+      } else if (structure && history.location.pathname !== '/') {
+        history.push('/');
+      }
+    }, 100);
+  },
+  () => clearTimeout(redirectTimeout),
+  [structure]);
 
   return (
     <>
-      { structure && (
-        <Navbar id="app-nav" dark fixed="top" expand="md">
-          <div className="navbar-brand">
-            <NavLink to="/"><div id="logo" /></NavLink>
-          </div>
-          <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
-          <Collapse isOpen={navOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              {routes.map((route) => route.label && (
-                <NavItem key={route.path}>
-                  <NavLink exact onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
-                </NavItem>
-              ))}
-              <NavItem>
-                <NavLink exact onClick={() => setAuthorization(false)} to="/">Log Out</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      )}
-      <div id="app-container">
-        { structure ? (
-          <Switch>
-            {routes.map((route) => (
-              <Route key={route.path} component={route.component} path={route.path} />
-            ))}
-            <Redirect to={structure ? '/browse' : '/'} />
-          </Switch>
-        ) : (
-          <Login
-            setAuthorization={setAuthorization}
-            authError={authError}
-          />
-        )}
-      </div>
+      <TopNav />
+      <Routes />
       <div id="app-bg" />
     </>
   );

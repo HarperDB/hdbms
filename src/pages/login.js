@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Card, CardBody, Form, Input, Button } from '@nio/ui-kit';
-import { useHistory } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
+import { useLocation } from 'react-router-dom';
 
-export default ({ setAuthorization, authError }) => {
-  const history = useHistory();
+import { HarperDBContext } from '../providers/harperdb';
+
+export default () => {
+  const { authError, setAuthorization } = useContext(HarperDBContext);
+  const location = useLocation();
+  const [errorMessage, setErrorMessage] = useState(false);
   const [formValue, setFormValue] = useState({});
 
   const setFieldValue = (name, value) => {
@@ -17,8 +20,13 @@ export default ({ setAuthorization, authError }) => {
     setAuthorization(btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`));
   };
 
-  let redirectTimeout = false;
-  useAsyncEffect(() => redirectTimeout = setTimeout(() => history.push('/'), 100), () => clearTimeout(redirectTimeout), []);
+  useEffect(() => {
+    if (location && location.state && location.state.error) {
+      setErrorMessage(location.state.error);
+    } else if (authError) {
+      setErrorMessage(authError);
+    }
+  });
 
   return (
     <div id="login-form">
@@ -44,7 +52,7 @@ export default ({ setAuthorization, authError }) => {
           </Form>
         </CardBody>
       </Card>
-      <div className="text-white text-center text-smaller">{authError}&nbsp;</div>
+      <div className="text-white text-center text-smaller">{errorMessage}&nbsp;</div>
     </div>
   );
 };
