@@ -39,6 +39,11 @@
     }
   }
 
+  .rt-tbody {
+    .rt-td {
+      overflow: visible;
+    }
+  }
   .-pagination {
     border-top: 1px solid rgba(0, 0, 0, .05);
     box-shadow: none;
@@ -63,4 +68,24 @@
   .rt-noData {
     display: none;
   }
+
+  .text-renderer {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .image-renderer {
+    position: relative;
+
+    .preview-image {
+      max-height: 150px;
+      max-width: 150px;
+      width: auto;
+      position: absolute;
+      left: 25px;
+      box-shadow: 0 0 3px $black-overlay;
+      border-radius: 6px;
+    }
+  }
+
 }

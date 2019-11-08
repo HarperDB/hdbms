@@ -6,6 +6,7 @@ import { HarperDBContext } from '../../providers/harperdb';
 import DataTable from '../../components/browse/datatable';
 import EntityManager from '../../components/browse/entityManager';
 import JSONViewer from '../../components/browse/jsonviewer';
+import CSVUploader from '../../components/browse/csvuploader';
 
 export default () => {
   const history = useHistory();
@@ -63,7 +64,11 @@ export default () => {
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        { schema && table && action && activeTable ? (
+        { schema && table && action === 'csv' && activeTable ? (
+          <CSVUploader
+            update={updateDB}
+          />
+        ) : schema && table && action && activeTable ? (
           <JSONViewer
             newEntityColumns={activeTable.newEntityColumns}
             hashAttribute={activeTable.hashAttribute}
