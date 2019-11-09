@@ -56,7 +56,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
         <Col className="input-holder">
           <Input
             invalid={nameError}
-            onChange={(e) => { toggleNameError(false); setEntityName(e.target.value); }}
+            onChange={(e) => { toggleNameError(false); setEntityName(e.target.value.toString()); }}
             type="text"
             name="name"
             placeholder="name"
@@ -66,7 +66,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           <Col className="input-holder">
             <Input
               invalid={hashError}
-              onChange={(e) => { toggleHashError(false); setHashAttribute(e.target.value); }}
+              onChange={(e) => { toggleHashError(false); setHashAttribute(e.target.value.toString()); }}
               type="test"
               name="hash_attribute"
               placeholder="hash attr."

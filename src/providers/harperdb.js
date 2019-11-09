@@ -29,19 +29,28 @@ export const HarperDBProvider = ({ children }) => {
   const queryTableData = async ({ schema, table, pageSize, page, filtered, sorted }) => {
     if (!sorted.length) return false;
 
-    let countSQL = `SELECT count(*) FROM ${schema}.${table} `;
-    if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+    let newTotalPages = 1;
+    let newTotalRecords = 0;
+    let newData = [];
 
-    const recordCountResult = await queryHarperDB({ operation: 'sql', sql: countSQL });
-    const newTotalRecords = recordCountResult && recordCountResult[0] && recordCountResult[0]['COUNT(*)'];
-    const newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
+    try {
+      let countSQL = `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `;
+      if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+      [{ newTotalRecords }] = await queryHarperDB({ operation: 'sql', sql: countSQL });
+      newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
+    } catch (e) {
+      console.log('Failed to get row count');
+    }
 
-    let dataSQL = `SELECT * FROM ${schema}.${table} `;
-    if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-    if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
-    dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
-
-    const newData = await queryHarperDB({ operation: 'sql', sql: dataSQL });
+    try {
+      let dataSQL = `SELECT * FROM ${schema}.${table} `;
+      if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+      if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+      dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
+      newData = await queryHarperDB({ operation: 'sql', sql: dataSQL });
+    } catch (e) {
+      console.log('Failed to get table data');
+    }
 
     return { newData, newTotalPages, newTotalRecords };
   };

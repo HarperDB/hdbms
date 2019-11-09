@@ -1,14 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { HarperDBContext } from '../../providers/harperdb';
-import isImage from '../../util/isImage';
+import commaNumbers from '../../util/commaNumbers';
 
 export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, filtered, onSortedChange, sorted, onPageChange, page }) => {
-  const { queryTableData, structure } = useContext(HarperDBContext);
+  const { queryTableData, queryHarperDB, structure } = useContext(HarperDBContext);
   const history = useHistory();
   const { schema, table } = useParams();
 
@@ -16,34 +16,21 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
   const [pages, setTotalPages] = useState(-1);
   const [loading, setLoading] = useState(true);
   const [pageSize, onPageSizeChange] = useState(20);
-  const [totalRecords, setTotalRecords] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [showFilter, toggleShowFilter] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState();
 
-  const loadNewData = async () => {
-    setLoading(true);
-    setTotalRecords('loading');
+  const dataRefreshInterval = 3000;
+  let dataRefreshTimeout = false;
+  let tableChangeTimeout = false;
+
+  const loadNewData = async (showSpinner = true) => {
+    setLoading(showSpinner);
     const { newData, newTotalPages, newTotalRecords } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
     if (newData) setTableData(newData);
     if (newTotalPages) setTotalPages(newTotalPages);
-    if (newTotalRecords) setTotalRecords(newTotalRecords.toString());
+    setTotalRecords(newTotalRecords);
     setLoading(false);
-  };
-
-  let tableChangeTimeout = false;
-  useAsyncEffect(
-    () => {
-      clearTimeout(tableChangeTimeout);
-      tableChangeTimeout = setTimeout(() => loadNewData(), 0);
-    },
-    () => clearTimeout(tableChangeTimeout),
-    [sorted, table, pageSize, page, filtered, structure],
-  );
-
-  useEffect(() => setTotalRecords(false), [table]);
-
-  const handleFilterClick = () => {
-    if (showFilter) onFilteredChange([]);
-    toggleShowFilter(!showFilter);
   };
 
   const handleRefreshClick = () => update(Date.now());
@@ -54,11 +41,46 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
 
   const handleRowClick = (newActiveRecord) => history.push(`/browse/${schema}/${table}/edit/${newActiveRecord[hashAttribute]}`);
 
+  const handleFilterClick = () => { if (showFilter) onFilteredChange([]); toggleShowFilter(!showFilter); };
+
+  useAsyncEffect(
+    () => {
+      clearTimeout(tableChangeTimeout);
+      tableChangeTimeout = setTimeout(() => loadNewData(), 0);
+    },
+    () => {
+      clearTimeout(tableChangeTimeout);
+    },
+    [sorted, table, pageSize, page, filtered, structure],
+  );
+
+  useAsyncEffect(
+    async () => {
+      clearTimeout(dataRefreshTimeout);
+      const [{ newTotalRecords }] = await queryHarperDB({ operation: 'sql', sql: `SELECT count(*) as newTotalRecords FROM ${schema}.${table} ` });
+      if (newTotalRecords !== totalRecords) {
+        loadNewData(false);
+        setTimeout(() => update(), 100);
+      }
+      dataRefreshTimeout = setTimeout(() => setLastUpdate(Date.now()), dataRefreshInterval);
+    },
+    () => clearTimeout(dataRefreshTimeout),
+    [lastUpdate],
+  );
+
   return (
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-bold text-white">{schema} {table && `> ${table} > `} {totalRecords && `${totalRecords.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} record${totalRecords !== '1' ? 's' : ''}`}&nbsp;</span>
+          <span className="text-bold text-white">
+            <span>{schema} </span>
+            <span>{table && `> ${table} > `} </span>
+            {loading ? (
+              <i className="fa fa-spinner fa-spin text-white" />
+            ) : (
+              <span>{commaNumbers(totalRecords)} record{totalRecords !== 1 ? 's' : ''}</span>
+            )}
+          </span>
         </Col>
         <Col className="text-right">
           <i title={`Refresh table ${table}`} className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />
@@ -71,7 +93,6 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
         <CardBody>
           <ReactTable
             manual
-            loading={loading}
             data={tableData}
             pages={pages}
             columns={dataTableColumns}

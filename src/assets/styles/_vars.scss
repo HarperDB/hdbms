@@ -15,10 +15,12 @@ $color-purple: #403b8a;
 $color-lightpurple: #7a3a87;
 
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
-$white-overlay: rgba(255, 255, 255, .3);
-$grey-overlay: rgba(0, 0, 0, .3);
+$white-overlay: rgba(255, 255, 255, .2);
+$light-white-overlay: rgba(255, 255, 255, .7);
+
+$grey-overlay: rgba(0, 0, 0, .2);
 $dark-grey-overlay: rgba(0, 0, 0, .5);
-$black-overlay: rgba(0, 0, 0, .7);
+$black-overlay: rgba(0, 0, 0, .8);
 
 $fa-font-path: '/fonts';
 $border-radius-base: 0;
