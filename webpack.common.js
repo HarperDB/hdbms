@@ -27,7 +27,7 @@ module.exports = {
       favicon: path.join(__dirname, 'src/assets/images/favicon.png'),
       inject: 'body',
       inlineSource: '.(js|css)$',
-      minify: {
+      /*minify: {
         caseSensitive: true,
         collapseInlineTagWhitespace: true,
         collapseWhitespace: true,
@@ -41,7 +41,7 @@ module.exports = {
         removeStyleLinkTypeAttributes: true,
         trimCustomFragments: true,
         useShortDoctype: true,
-      },
+      },*/
     }),
     new HtmlWebpackInlineSourcePlugin(),
     new ExtractTextPlugin('hdb.css'),

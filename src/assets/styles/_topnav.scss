@@ -3,6 +3,11 @@
   .nav-item {
     margin-left: 1.5rem;
     display: inline-block;
+    white-space: nowrap;
+
+    @media screen and (max-width: 991px) {
+      width: 100%;
+    }
 
     .nav-link,
     a {
@@ -15,6 +20,12 @@
         color: $color-white !important;
       }
     }
+
+    .nav-divider {
+      display: inline-block;
+      color: $color-lightgrey !important;
+      padding: 5px 0 0 !important;
+    }
   }
 
   .collapse.show,
@@ -23,7 +34,7 @@
     right: 0;
     margin: 0;
     top: 70px !important;
-    background: $color-white;
+    background: $black-overlay;
     text-align: center !important;
     border: 0;
     padding-top: .5rem;
@@ -35,11 +46,27 @@
       .nav-item {
         margin-left: 0;
         text-align: center;
+        border-bottom: 1px solid $white-overlay;
+
+        &:last-child {
+          border-bottom: 0;
+        }
 
         .nav-link,
+        .nav-divider,
         a {
           display: block;
           padding: .5rem 0 !important;
+        }
+
+        .btn {
+          margin: 5px auto;
+          max-width: 250px;
+        }
+
+        .dropdown-menu {
+          margin: 0 auto;
+          max-width: 250px;
         }
       }
     }

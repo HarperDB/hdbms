@@ -11,7 +11,7 @@ import CSVUploader from '../../components/browse/csvuploader';
 export default () => {
   const history = useHistory();
   const { schema, table, action } = useParams();
-  const { structure, updateDB } = useContext(HarperDBContext);
+  const { structure } = useContext(HarperDBContext);
   const [filtered, onFilteredChange] = useState([]);
   const [sorted, onSortedChange] = useState([]);
   const [page, onPageChange] = useState(0);
@@ -52,33 +52,27 @@ export default () => {
         <EntityManager
           activeItem={schema}
           items={schemas}
-          update={updateDB}
         />
         { schema && (
           <EntityManager
             activeItem={table}
             items={tables}
             activeSchema={schema}
-            update={updateDB}
           />
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
         { schema && table && action === 'csv' && activeTable ? (
-          <CSVUploader
-            update={updateDB}
-          />
+          <CSVUploader />
         ) : schema && table && action && activeTable ? (
           <JSONViewer
             newEntityColumns={activeTable.newEntityColumns}
             hashAttribute={activeTable.hashAttribute}
-            update={updateDB}
           />
         ) : schema && table && activeTable ? (
           <DataTable
             dataTableColumns={activeTable.dataTableColumns}
             hashAttribute={activeTable.hashAttribute}
-            update={updateDB}
             onFilteredChange={onFilteredChange}
             filtered={filtered}
             onSortedChange={onSortedChange}

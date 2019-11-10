@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
-export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, update }) => {
-  const { queryHarperDB } = useContext(HarperDBContext);
+export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
+  const { queryHarperDB, refreshInstance } = useContext(HarperDBContext);
   const history = useHistory();
 
   const [entityName, setEntityName] = useState(false);
@@ -44,7 +44,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     setHashAttribute();
     toggleNameError();
     toggleHashError();
-    update(Date.now());
+    refreshInstance();
     return setTimeout(() => history.push(`${baseUrl}/${entityName}`), 100);
   };
 

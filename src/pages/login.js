@@ -7,7 +7,7 @@ import urlRegex from 'url-regex';
 import { HarperDBContext } from '../providers/harperdb';
 
 export default () => {
-  const { setAuthorization, authError, setAuthError, instances } = useContext(HarperDBContext);
+  const { login, authError, setAuthError, instances } = useContext(HarperDBContext);
   const history = useHistory();
 
   const [formValue, setFormValue] = useState({});
@@ -21,10 +21,12 @@ export default () => {
       setFormError('All fields must be completed.');
       return false;
     }
+    /*
     if (!urlRegex().test(formValue.HDB_CONNECTION)) {
       setFormError('You must enter a valid URL');
       return false;
     }
+    */
     if (formValue.HDB_CONNECTION.indexOf('http:') !== -1 && window.location.protocol === 'https:') {
       setHttpsError(true);
       return false;
@@ -41,7 +43,7 @@ export default () => {
 
   const submitLogin = (e) => {
     e.preventDefault();
-    return validateFields() ? setAuthorization({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION }) : false;
+    return validateFields() ? login({ auth: btoa(`${formValue.HDB_USER}:${formValue.HDB_PASS}`), url: formValue.HDB_CONNECTION }) : false;
   };
 
   let redirectTimeout = false;
@@ -91,7 +93,7 @@ export default () => {
                 </DropdownToggle>
                 <DropdownMenu>
                   {instances.map((i) => (
-                    <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>
+                    <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => login(i)}>
                       <span>{i.url}</span>
                     </DropdownItem>
                   ))}

@@ -7,7 +7,7 @@ import routes from './routes';
 import { HarperDBContext } from '../providers/harperdb';
 
 export default () => {
-  const { setAuthorization, instances } = useContext(HarperDBContext);
+  const { login, logout, instances } = useContext(HarperDBContext);
   const [navOpen, toggleNav] = useState(false);
   const [dropdownOpen, setDropDownOpen] = useState(false);
   const activeInstance = instances.find((i) => i.active);
@@ -20,6 +20,14 @@ export default () => {
       <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
       <Collapse isOpen={navOpen} navbar>
         <Nav className="ml-auto" navbar>
+          {instances && (
+            <NavItem>
+              <NavLink onClick={() => toggleNav(false)} to="/fabric">Manage Data Fabric</NavLink>
+            </NavItem>
+          )}
+          <NavItem className="d-none d-md-block">
+            <span className="nav-divider">|</span>
+          </NavItem>
           {activeInstance && (
             <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
               <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
@@ -27,21 +35,21 @@ export default () => {
               </DropdownToggle>
               <DropdownMenu>
                 {instances.filter((i) => !i.active).map((i) => (
-                  <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => setAuthorization(i)}>
+                  <DropdownItem title={`Choose Instance ${i.url}`} key={JSON.stringify(i)} onClick={() => login(i)}>
                     <span>{i.url}</span>
                   </DropdownItem>
                 ))}
-                <DropdownItem title="Add New Instance" onClick={() => setAuthorization(false)}>Add New Instance</DropdownItem>
+                <DropdownItem title="Add New Instance" onClick={() => logout()}>Add New Instance</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           )}
           {routes.map((route) => route.label && (
             <NavItem key={route.path}>
-              <NavLink exact onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
+              <NavLink onClick={() => toggleNav(false)} to={route.link || route.path}>{route.label}</NavLink>
             </NavItem>
           ))}
           <NavItem>
-            <NavLink title="Log Out" exact onClick={() => setAuthorization(false)} to="/">
+            <NavLink title="Log Out" exact onClick={() => logout()} to="/">
               <i className="fa fa-sign-out fa-lg" />
             </NavLink>
           </NavItem>

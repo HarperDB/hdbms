@@ -6,6 +6,7 @@
   },
   "rules": {
     "camelcase": 0,
+    "array-callback-return": 0,
     "react/require-extension": 0,
     "react/jsx-filename-extension": 0,
     "jsx-a11y/href-no-hash": 0,
@@ -26,6 +27,7 @@
     "react/state-in-constructor": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/anchor-is-valid": 0,
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "max-lines": ["warn", {"max": 100, "skipComments": false}]
   }
 }

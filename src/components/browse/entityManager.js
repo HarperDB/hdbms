@@ -5,7 +5,7 @@ import EntityManagerForm from './entityManagerForm';
 import EntityManagerRow from './entityManagerRow';
 import EntityManagerHeader from './entityManagerHeader';
 
-export default ({ items, activeItem, activeSchema = false, update }) => {
+export default ({ items, activeItem, activeSchema = false }) => {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -39,7 +39,6 @@ export default ({ items, activeItem, activeSchema = false, update }) => {
               isDropping={isDropping}
               toggleDropItem={toggleDropItem}
               activeSchema={activeSchema}
-              update={update}
             />
           )) : (
             null
@@ -54,7 +53,6 @@ export default ({ items, activeItem, activeSchema = false, update }) => {
               toggleDropItem={toggleDropItem}
               isCreating={isCreating}
               toggleCreate={toggleCreate}
-              update={update}
             />
           )}
         </CardBody>

@@ -1,0 +1,38 @@
+#fabric {
+  height: 100%;
+  background-color: $light-white-overlay !important;
+  background-size: 50px 50px;
+  border-radius: 6px;
+  position:relative;
+  overflow: hidden;
+
+  .fabric-node {
+    text-align: center;
+
+    .node-scroller {
+      max-height: 75px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+  }
+
+  .label-content {
+    padding: 5px 10px;
+    background: cornflowerblue;
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+
+}
+
+#fabric-editor.modal-dialog {
+  max-width: 800px !important;
+
+}
+

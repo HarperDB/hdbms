@@ -4,8 +4,8 @@ import { useHistory, useParams } from 'react-router';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
-export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, update }) => {
-  const { queryHarperDB } = useContext(HarperDBContext);
+export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
+  const { queryHarperDB, refreshInstance } = useContext(HarperDBContext);
   const history = useHistory();
   const { schema, table } = useParams();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -23,7 +23,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
     }
 
     await queryHarperDB(operation);
-    update(Date.now());
+    refreshInstance();
 
     return ((itemType === 'schema' && item === schema) || (itemType === 'table' && item === table)) ? setTimeout(() => history.push(baseUrl), 100) : false;
   };

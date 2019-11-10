@@ -2,13 +2,13 @@ import React, { useState, useContext } from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
-
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+
 import { HarperDBContext } from '../../providers/harperdb';
 import commaNumbers from '../../util/commaNumbers';
 
-export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, filtered, onSortedChange, sorted, onPageChange, page }) => {
-  const { queryTableData, queryHarperDB, structure } = useContext(HarperDBContext);
+export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, onSortedChange, sorted, onPageChange, page }) => {
+  const { queryHarperDB, refreshInstance, structure } = useContext(HarperDBContext);
   const history = useHistory();
   const { schema, table } = useParams();
 
@@ -18,6 +18,7 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
   const [pageSize, onPageSizeChange] = useState(20);
   const [totalRecords, setTotalRecords] = useState(0);
   const [showFilter, toggleShowFilter] = useState(false);
+  const [autoRefresh, toggleAutoRefresh] = useState(false);
   const [lastUpdate, setLastUpdate] = useState();
 
   const dataRefreshInterval = 3000;
@@ -26,14 +27,39 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
 
   const loadNewData = async (showSpinner = true) => {
     setLoading(showSpinner);
-    const { newData, newTotalPages, newTotalRecords } = await queryTableData({ schema, table, pageSize, page, filtered, sorted });
+
+    if (!sorted.length) return false;
+
+    let newTotalPages = 1;
+    let newTotalRecords = 0;
+    let newData = [];
+
+    try {
+      let countSQL = `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `;
+      if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+      [{ newTotalRecords }] = await queryHarperDB({ operation: 'sql', sql: countSQL });
+      newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
+    } catch (e) {
+      // console.log('Failed to get row count');
+    }
+
+    try {
+      let dataSQL = `SELECT * FROM ${schema}.${table} `;
+      if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+      if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+      dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
+      newData = await queryHarperDB({ operation: 'sql', sql: dataSQL });
+    } catch (e) {
+      // console.log('Failed to get table data');
+    }
+
     if (newData) setTableData(newData);
     if (newTotalPages) setTotalPages(newTotalPages);
     setTotalRecords(newTotalRecords);
-    setLoading(false);
+    return setLoading(false);
   };
 
-  const handleRefreshClick = () => update(Date.now());
+  const handleRefreshClick = () => refreshInstance();
 
   const handleNewRecordClick = () => history.push(`/browse/${schema}/${table}/add`);
 
@@ -54,18 +80,24 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
     [sorted, table, pageSize, page, filtered, structure],
   );
 
+
   useAsyncEffect(
     async () => {
-      clearTimeout(dataRefreshTimeout);
-      const [{ newTotalRecords }] = await queryHarperDB({ operation: 'sql', sql: `SELECT count(*) as newTotalRecords FROM ${schema}.${table} ` });
-      if (newTotalRecords !== totalRecords) {
-        loadNewData(false);
-        setTimeout(() => update(), 100);
+      if (autoRefresh) {
+        clearTimeout(dataRefreshTimeout);
+        const [{ newTotalRecords }] = await queryHarperDB({
+          operation: 'sql',
+          sql: `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `,
+        });
+        if (newTotalRecords !== totalRecords) {
+          loadNewData(false);
+          setTimeout(() => refreshInstance(), 100);
+        }
+        dataRefreshTimeout = setTimeout(() => setLastUpdate(Date.now()), dataRefreshInterval);
       }
-      dataRefreshTimeout = setTimeout(() => setLastUpdate(Date.now()), dataRefreshInterval);
     },
     () => clearTimeout(dataRefreshTimeout),
-    [lastUpdate],
+    [lastUpdate, autoRefresh],
   );
 
   return (
@@ -82,11 +114,14 @@ export default ({ dataTableColumns, hashAttribute, update, onFilteredChange, fil
             )}
           </span>
         </Col>
-        <Col className="text-right">
-          <i title={`Refresh table ${table}`} className="fa fa-refresh text-white mr-2" onClick={handleRefreshClick} />
-          <i title={`Filter table ${table}`} className="fa fa-search text-white mr-2" onClick={handleFilterClick} />
-          <i title={`Add new record to table ${table}`} className="fa fa-plus text-white mr-2" onClick={handleNewRecordClick} />
-          <i title={`Bulk Upload CSV to ${table}`} className="fa fa-file-text-o text-white" onClick={handleCSVUploadClick} />
+        <Col className="text-right text-white">
+          <i title={`Refresh table ${table}`} className="fa fa-refresh mr-2" onClick={handleRefreshClick} />
+          <span className="mr-2">auto</span>
+          <i title="Turn on autofresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => toggleAutoRefresh(!autoRefresh)} />
+          <span className="mx-3 text">|</span>
+          <i title={`Filter table ${table}`} className="fa fa-search mr-2" onClick={handleFilterClick} />
+          <i title={`Add new record to table ${table}`} className="fa fa-plus mr-2" onClick={handleNewRecordClick} />
+          <i title={`Bulk Upload CSV to ${table}`} className="fa fa-file-text-o" onClick={handleCSVUploadClick} />
         </Col>
       </Row>
       <Card className="mb-3 mt-2">

@@ -7,8 +7,8 @@ import useAsyncEffect from 'use-async-effect';
 
 import { HarperDBContext } from '../../providers/harperdb';
 
-export default ({ newEntityColumns, hashAttribute, update }) => {
-  const { queryHarperDB } = useContext(HarperDBContext);
+export default ({ newEntityColumns, hashAttribute }) => {
+  const { queryHarperDB, refreshInstance } = useContext(HarperDBContext);
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
   const [rowValue, setRowValue] = useState({});
@@ -35,7 +35,7 @@ export default ({ newEntityColumns, hashAttribute, update }) => {
       table,
       records: [rowValue],
     });
-    update();
+    refreshInstance();
     return history.push(`/browse/${schema}/${table}`);
   };
 
@@ -49,7 +49,7 @@ export default ({ newEntityColumns, hashAttribute, update }) => {
       table,
       hash_values: [hash],
     });
-    update();
+    refreshInstance();
     return history.push(`/browse/${schema}/${table}`);
   };
 
