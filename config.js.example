@@ -1,8 +1,0 @@
-export default {
-  HDB_HOST: 'your-harperdb-url.com',
-  HDB_PORT: 9925,
-  HDB_SSL: true,
-  HDB_USER: 'HDB_ADMIN',
-  HDB_PASS: 'your-harperdb-pasword',
-};
-
