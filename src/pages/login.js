@@ -21,12 +21,10 @@ export default () => {
       setFormError('All fields must be completed.');
       return false;
     }
-    /*
     if (!urlRegex().test(formValue.HDB_CONNECTION)) {
       setFormError('You must enter a valid URL');
       return false;
     }
-    */
     if (formValue.HDB_CONNECTION.indexOf('http:') !== -1 && window.location.protocol === 'https:') {
       setHttpsError(true);
       return false;

@@ -16,8 +16,11 @@ export default ({ newEntityColumns, hashAttribute }) => {
   useAsyncEffect(async () => {
     if (action === 'edit') {
       const rowData = await queryHarperDB({
-        operation: 'sql',
-        sql: `SELECT * FROM ${schema}.${table} WHERE ${hashAttribute} = '${hash}'`,
+        operation: 'search_by_hash',
+        schema,
+        table,
+        hash_values: [hash],
+        get_attributes: ['*'],
       });
       setRowValue(rowData[0]);
     } else {

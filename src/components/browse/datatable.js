@@ -80,7 +80,6 @@ export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, o
     [sorted, table, pageSize, page, filtered, structure],
   );
 
-
   useAsyncEffect(
     async () => {
       if (autoRefresh) {
@@ -119,8 +118,8 @@ export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, o
           <span className="mr-2">auto</span>
           <i title="Turn on autofresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => toggleAutoRefresh(!autoRefresh)} />
           <span className="mx-3 text">|</span>
-          <i title={`Filter table ${table}`} className="fa fa-search mr-2" onClick={handleFilterClick} />
-          <i title={`Add new record to table ${table}`} className="fa fa-plus mr-2" onClick={handleNewRecordClick} />
+          <i title={`Filter table ${table}`} className="fa fa-search mr-3" onClick={handleFilterClick} />
+          <i title={`Add new record to table ${table}`} className="fa fa-plus mr-3" onClick={handleNewRecordClick} />
           <i title={`Bulk Upload CSV to ${table}`} className="fa fa-file-text-o" onClick={handleCSVUploadClick} />
         </Col>
       </Row>
