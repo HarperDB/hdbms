@@ -20,6 +20,7 @@ export default () => {
       <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
       <Collapse isOpen={navOpen} navbar>
         <Nav className="ml-auto" navbar>
+          {/*
           {instances && (
             <NavItem>
               <NavLink onClick={() => toggleNav(false)} to="/fabric">Manage Data Fabric</NavLink>
@@ -28,6 +29,7 @@ export default () => {
           <NavItem className="d-none d-md-block">
             <span className="nav-divider">|</span>
           </NavItem>
+          */}
           {activeInstance && (
             <Dropdown nav isOpen={dropdownOpen} toggle={() => setDropDownOpen(!dropdownOpen)}>
               <DropdownToggle title="Choose an Existing Instance Dropdown" caret color="black">
