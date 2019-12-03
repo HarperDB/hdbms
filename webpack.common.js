@@ -111,6 +111,13 @@ module.exports = {
           use: ['css-loader', 'less-loader'],
         }),
       },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: { name: 'processCSV.worker.js' },
+        },
+      },
     ],
   },
 };

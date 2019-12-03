@@ -4,10 +4,11 @@ import { useHistory, useParams } from 'react-router';
 import CSVReader from 'react-csv-reader';
 import useAsyncEffect from 'use-async-effect';
 
-// eslint-disable-next-line import/no-webpack-loader-syntax,import/no-unresolved
-import Worker from 'worker-loader!../../util/processCSV.worker';
 import { HarperDBContext } from '../../providers/harperdb';
 import commaNumbers from '../../util/commaNumbers';
+import Worker from '../../util/processCSV.worker';
+
+const worker = new Worker();
 
 export default () => {
   const { queryHarperDB, refreshInstance } = useContext(HarperDBContext);
@@ -58,7 +59,7 @@ export default () => {
   const processData = (data) => {
     setStatus('processing');
     setNewRecordCount(data.length - 1);
-    const worker = new Worker();
+
     worker.postMessage(data);
     worker.addEventListener('message', (event) => {
       setProcessedData(event.data);

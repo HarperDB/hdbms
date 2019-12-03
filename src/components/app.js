@@ -21,7 +21,7 @@ export default () => {
             {routes.map((route) => (
               <Route key={route.path} component={route.component} path={route.path} />
             ))}
-            <Redirect to={structure ? '/browse' : '/'} />
+            <Redirect to="/browse" />
           </Switch>
         ) : (
           <Login />
