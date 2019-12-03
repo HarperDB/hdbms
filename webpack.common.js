@@ -30,7 +30,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html'),
-      favicon: path.join(__dirname, 'src/assets/images/favicon.png'),
       inject: 'body',
       inlineSource: '.(js|css)$',
     }),
