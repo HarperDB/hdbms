@@ -3,10 +3,11 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const postCssFlexbugFixes = require('postcss-flexbugs-fixes');
+const TerserPlugin = require('terser-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const cssNano = require('cssnano');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
@@ -20,6 +21,11 @@ module.exports = {
     publicPath: '/',
   },
 
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
+
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
@@ -27,25 +33,15 @@ module.exports = {
       favicon: path.join(__dirname, 'src/assets/images/favicon.png'),
       inject: 'body',
       inlineSource: '.(js|css)$',
-      /*minify: {
-        caseSensitive: true,
-        collapseInlineTagWhitespace: true,
-        collapseWhitespace: true,
-        minifyJS: true,
-        keepClosingSlash: true,
-        collapseBooleanAttributes: true,
-        removeComments: true,
-        removeOptionalTags: true,
-        removeRedundantAttributes: true,
-        removeScriptTypeAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        trimCustomFragments: true,
-        useShortDoctype: true,
-      },*/
     }),
     new HtmlWebpackInlineSourcePlugin(),
     new ExtractTextPlugin('hdb.css'),
-    new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true }),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: cssNano,
+      cssProcessorOptions: { discardComments: { removeAll: true } },
+      canPrint: true,
+    }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },
       { from: path.join(__dirname, '/src/assets/fonts/'), to: 'fonts/' },
