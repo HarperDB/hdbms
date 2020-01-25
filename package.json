@@ -11,7 +11,8 @@
     "transfer": "cp -r ./public/* /Users/jrepp/Developer/harperdb/harperdb/docs/",
     "tohdb": "npm run build && npm run clean-source && npm run clean-destination && npm run transfer",
     "start": "webpack-dev-server --mode development --config webpack.dev.js",
-    "lint": "eslint --fix src && sass-lint --verbose"
+    "lint": "eslint --fix src && sass-lint --verbose",
+    "deploy": "npm run build && npm run clean-source && scp -r ./public/* ubuntu@fcfleet.demo.harperdb.io:/home/ubuntu/sites/studio-stage"
   },
   "author": "harperdb",
   "license": "Apache-2.0",
