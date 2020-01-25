@@ -1,33 +1,16 @@
-import React, { useContext } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 
-import '../app.scss';
-import routes from './routes';
-import { HarperDBContext } from '../providers/harperdb';
-import Login from '../pages/login';
-import TopNav from './topnav';
+import Instances from './instances';
+import Instance from './instance';
+import Login from './login';
 
-export default () => {
-  const { structure } = useContext(HarperDBContext);
-
-  return (
-    <>
-      { structure && (
-        <TopNav />
-      )}
-      <div id="app-container">
-        { structure ? (
-          <Switch>
-            {routes.map((route) => (
-              <Route key={route.path} component={route.component} path={route.path} />
-            ))}
-            <Redirect to="/browse" />
-          </Switch>
-        ) : (
-          <Login />
-        )}
-      </div>
-      <div id="app-bg" />
-    </>
-  );
-};
+export default () => (
+  <div id="app-container">
+    <Switch>
+      <Route component={Instance} path="/instances/:instance_id" />
+      <Route component={Instances} path="/instances" />
+      <Route component={Login} exact path="/" />
+    </Switch>
+  </div>
+);

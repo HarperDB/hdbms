@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const autoprefixer = require('autoprefixer');
+
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const postCssFlexbugFixes = require('postcss-flexbugs-fixes');
 const TerserPlugin = require('terser-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
@@ -23,7 +23,10 @@ module.exports = {
 
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimizer: [
+      new TerserPlugin(),
+      new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true })
+    ],
   },
 
   plugins: [
@@ -34,13 +37,7 @@ module.exports = {
       inlineSource: '.(js|css)$',
     }),
     new HtmlWebpackInlineSourcePlugin(),
-    new ExtractTextPlugin('hdb.css'),
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.css$/g,
-      cssProcessor: cssNano,
-      cssProcessorOptions: { discardComments: { removeAll: true } },
-      canPrint: true,
-    }),
+    new MiniCssExtractPlugin({ filename: 'hdb.css' }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },
       { from: path.join(__dirname, '/src/assets/fonts/'), to: 'fonts/' },
@@ -76,39 +73,32 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 1,
-              },
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
             },
-            {
-              loader: 'postcss-loader',
-              options: {
-                ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-                plugins: () => [
-                  postCssFlexbugFixes,
-                  autoprefixer({
-                    flexbox: 'no-2009',
-                  }),
-                ],
-              },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
             },
-            {
-              loader: 'sass-loader',
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+              plugins: () => [
+                postCssFlexbugFixes,
+              ],
             },
-          ],
-        }),
-      },
-      {
-        test: /\.less$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'less-loader'],
-        }),
+          },
+          {
+            loader: 'sass-loader',
+          },
+        ],
       },
       {
         test: /\.worker\.js$/,

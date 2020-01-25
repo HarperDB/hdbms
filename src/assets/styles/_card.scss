@@ -5,4 +5,35 @@
   &.dark {
     background: $white-overlay !important;
   }
+
+  .card-body {
+    padding: 15px;
+
+    .scrollable {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 75px;
+    }
+  }
+
+  &.instance {
+    height: 140px;
+    cursor: pointer;
+
+    input,
+    .btn {
+      border-color: transparent;
+    }
+    input {
+      background: $color-white;
+    }
+    .btn {
+      white-space: nowrap;
+    }
+    &.error {
+      input {
+        border-color: $color-danger;
+      }
+    }
+  }
 }
