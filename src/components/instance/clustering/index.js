@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { Code, Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
+import { Code, Row, Col } from '@nio/ui-kit';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import stringify from 'json-stringify-pretty-compact';
-import { useAlert } from 'react-alert';
 
 import EntityManager from '../shared/entityManager';
 import useLMS from '../../../stores/lmsData';

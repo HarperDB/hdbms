@@ -13,10 +13,10 @@ export default ({ id, name }) => {
           <hr />
           <Row>
             <Col xs="6" className="pr-1">
-              <Button onClick={() => alert.success('add method to toggle pub here')} block color="purple" className="px-2">Pub</Button>
+              <Button onClick={() => alert.success(`toggle pub for ${id}`)} block color="purple" className="px-2">Pub</Button>
             </Col>
             <Col xs="6" className="pl-1">
-              <Button onClick={() => alert.success('add method to toggle sub here')} block color="purple" className="px-2">Sub</Button>
+              <Button onClick={() => alert.success(`toggle sub for ${id}`)} block color="purple" className="px-2">Sub</Button>
             </Col>
           </Row>
         </CardBody>

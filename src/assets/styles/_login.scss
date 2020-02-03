@@ -30,9 +30,9 @@
     -webkit-text-fill-color: $color-white !important;
   }
 
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  ::placeholder {
     color: $color-grey !important;
-    opacity: 0.5; /* Firefox */
+    opacity: .5;
   }
 
   #login-error {

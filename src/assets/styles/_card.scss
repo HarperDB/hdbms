@@ -24,12 +24,15 @@
     .btn {
       border-color: transparent;
     }
+
     input {
       background: $color-white;
     }
+
     .btn {
       white-space: nowrap;
     }
+
     &.error {
       input {
         border-color: $color-danger;

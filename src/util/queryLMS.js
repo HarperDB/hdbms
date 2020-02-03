@@ -1,5 +1,6 @@
 import instances from '../../mock_data/LMS_API.instances.json';
 
+// eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, method, payload, auth }) => {
   /*
   const request = await fetch(

@@ -8,7 +8,7 @@ import EntityManager from '../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
 
-export default ({ auth, structure, network, refreshInstance }) => {
+export default ({ auth, structure, refreshInstance }) => {
   const history = useHistory();
   const { instance_id, schema, table, action } = useParams();
 
