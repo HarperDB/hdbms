@@ -1,0 +1,26 @@
+.alert {
+  padding: 13px;
+  border-radius: 6px;
+  width: 300px;
+  margin-top: 5px;
+  z-index: 9999;
+
+  .message {
+    padding-top: 7px;
+    white-space: nowrap;
+    text-overflow: clip;
+    overflow: hidden;
+  }
+
+  &.success {
+    background-color: $color-success;
+  }
+
+  &.info {
+    background-color: $dark-grey-overlay;
+  }
+
+  &.error {
+    background-color: $color-danger;
+  }
+}

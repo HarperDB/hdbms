@@ -3,8 +3,8 @@ import createPersistedState from 'use-persisted-state';
 import useAsyncEffect from 'use-async-effect';
 
 import updateInstanceStates from '../util/updateInstanceStates';
-import generateActiveInstanceStructure from '../util/generateActiveInstanceStructure';
-import getInstancesNetworkStatuses from '../util/getInstancesNetworkStatuses';
+import getInstanceDataStructure from '../util/getInstanceDataStructure';
+import getInstanceClusterStatus from '../util/getInstanceClusterStatus';
 
 const useInstanceState = createPersistedState('instances');
 export const HarperDBContext = React.createContext();
@@ -34,7 +34,7 @@ export const HarperDBProvider = ({ children }) => {
     }
 
     setInstances(updateInstanceStates(instances, authObject));
-    return setStructure(generateActiveInstanceStructure(dbResponse));
+    return setStructure(getInstanceDataStructure(dbResponse));
   };
 
   const logout = () => {
@@ -42,11 +42,11 @@ export const HarperDBProvider = ({ children }) => {
     setInstances(instances.map((i) => { i.active = false; return i; }));
   };
 
-  const refreshNetwork = async () => setInstances(await getInstancesNetworkStatuses(instances, queryHarperDB));
+  const refreshNetwork = async () => setInstances(await getInstanceClusterStatus(instances, queryHarperDB));
 
   const refreshInstance = async () => {
     const dbResponse = await queryHarperDB({ operation: 'describe_all' });
-    setStructure(generateActiveInstanceStructure(dbResponse));
+    setStructure(getInstanceClusterStatus(dbResponse));
   };
 
   useAsyncEffect(async () => {

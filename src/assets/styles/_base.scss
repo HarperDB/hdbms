@@ -32,6 +32,7 @@ body {
       background: rgba(0, 0, 0, .3) !important;
       padding: .5rem 2rem;
       position: fixed;
+      z-index: 99 !important;
 
       @media screen and (max-width: 991px) {
         padding: .5rem 1rem;

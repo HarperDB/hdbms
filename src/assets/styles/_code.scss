@@ -16,3 +16,9 @@ pre {
     }
   }
 }
+
+.code-holder {
+  max-height: calc(100vh - 220px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}

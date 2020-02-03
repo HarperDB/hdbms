@@ -1,0 +1,51 @@
+[
+  {
+    "id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
+    "name": "Cluster Demo 1",
+    "url": "dev.harperdb.io",
+    "port": 9931,
+    "is_ssl": false
+  },
+  {
+    "id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
+    "name": "Cluster Demo 2",
+    "url": "dev.harperdb.io",
+    "port": 9932,
+    "is_ssl": false
+  },
+  {
+    "id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
+    "name": "Cluster Demo 3",
+    "url": "dev.harperdb.io",
+    "port": 9933,
+    "is_ssl": false
+  },
+  {
+    "id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
+    "name": "Cluster Demo 4",
+    "url": "dev.harperdb.io",
+    "port": 9934,
+    "is_ssl": false
+  },
+  {
+    "id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
+    "name": "Cluster Demo 5",
+    "url": "dev.harperdb.io",
+    "port": 9935,
+    "is_ssl": false
+  },
+  {
+    "id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
+    "name": "Cluster Demo 6",
+    "url": "dev.harperdb.io",
+    "port": 9936,
+    "is_ssl": false
+  },
+  {
+    "id": "8291c224-6911-4155-b5a9-34559e5a45ff",
+    "name": "Cluster Demo 7",
+    "url": "dev.harperdb.io",
+    "port": 9937,
+    "is_ssl": false
+  }
+]
