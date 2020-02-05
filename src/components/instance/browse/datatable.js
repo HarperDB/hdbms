@@ -29,6 +29,7 @@ export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, o
 
     if (!sorted.length) return false;
 
+    let fetchError = false;
     let newTotalPages = 1;
     let newTotalRecords = 0;
     let newData = [];
@@ -39,7 +40,8 @@ export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, o
       [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth);
       newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
     } catch (e) {
-      // console.log('Failed to get row count');
+      console.log('Failed to get row count');
+      fetchError = true;
     }
 
     try {
@@ -49,7 +51,15 @@ export default ({ dataTableColumns, hashAttribute, onFilteredChange, filtered, o
       dataSQL += ` LIMIT ${(page * pageSize) + pageSize} OFFSET ${page * pageSize}`;
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth);
     } catch (e) {
-      // console.log('Failed to get table data');
+      console.log('Failed to get table data');
+      fetchError = true;
+    }
+
+    if (fetchError) {
+      setTableData([]);
+      setTotalPages(1);
+      setTotalRecords(0);
+      return setLoading(false);
     }
 
     if (newData) setTableData(newData);
