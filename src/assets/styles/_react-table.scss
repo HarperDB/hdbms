@@ -42,6 +42,7 @@
   .rt-tbody {
     .rt-td {
       overflow: visible;
+      font-family: Roboto, Helvetica, Arial, SansSerif !important;
     }
   }
 
@@ -50,19 +51,21 @@
     box-shadow: none;
     padding-top: 1rem;
 
-    input,
-    select {
-      height: 30px;
-    }
-
     .-btn {
       background: $color-purple !important;
       color: $color-white !important;
+      font-family: $font-family-sans;
+      font-weight: $font-weight-light;
 
       &:hover {
         background: $color-purple !important;
         color: $color-white !important;
       }
+    }
+
+    .-pageInfo,
+    .-pageSizeOptions {
+      margin: 0 10px;
     }
   }
 
@@ -73,6 +76,14 @@
   .text-renderer {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  input,
+  select {
+    height: 33px !important;
+    color: $color-white;
+    border: 0 !important;
+    box-shadow: none;
   }
 
   .image-renderer {

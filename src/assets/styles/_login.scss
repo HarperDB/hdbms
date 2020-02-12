@@ -18,21 +18,17 @@
     background-size: cover;
   }
 
-  input,
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    border: 0 !important;
-    background: $color-black !important;
+  input {
+    text-align: center !important;
+    background: $white-overlay !important;
     color: $color-white !important;
-    -webkit-box-shadow: 0 0 0 30px $color-black inset !important;
-    -webkit-text-fill-color: $color-white !important;
-  }
 
-  ::placeholder {
-    color: $color-grey !important;
-    opacity: .5;
+    &::placeholder {
+      text-align: center !important;
+      color: $grey-overlay !important;
+      font-family: $font-family-sans;
+      font-weight: $font-weight-light;
+    }
   }
 
   #login-error {

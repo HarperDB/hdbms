@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-export default ({ id, name, url, port, is_ssl, flipCard, setAuth, hasAuth }) => {
+export default ({ id, name, host, port, is_ssl, flipCard, setAuth, hasAuth }) => {
   const history = useHistory();
   const alert = useAlert();
 
@@ -26,7 +26,7 @@ export default ({ id, name, url, port, is_ssl, flipCard, setAuth, hasAuth }) => 
         <div className="scrollable">
           <Row className="text-smaller text-nowrap text-darkgrey overflow-hidden">
             <Col xs="3">URL</Col>
-            <Col xs="9">http{is_ssl && 's'}://{url}:{port}</Col>
+            <Col xs="9">http{is_ssl && 's'}://{host}:{port}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">TYPE</Col>
             <Col xs="9">local</Col>

@@ -27,6 +27,7 @@
     "react-router-dom": "^5.1.2",
     "react-table": "^6.11.5",
     "use-async-effect": "^2.2.2",
+    "use-interval": "^1.2.1",
     "use-persisted-state": "^0.3.0",
     "worker-loader": "^2.0.0"
   },
@@ -50,6 +51,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "file-loader": "^5.0.2",
     "html-loader": "^0.5.5",
     "html-webpack-inline-source-plugin": "0.0.10",
@@ -63,8 +65,8 @@
     "sass-lint": "^1.13.1",
     "sass-loader": "^8.0.2",
     "terser-webpack-plugin": "^2.3.4",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   }

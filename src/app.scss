@@ -1,18 +1,28 @@
+// external resources
 @import '~@nio/ui-kit/dist/nio';
 @import '~react-table/react-table';
+
+// core styles
 @import './assets/styles/vars';
-@import '~font-awesome/scss/font-awesome';
 @import './assets/styles/base';
+@import './assets/styles/typography';
+
+// global styles
+@import './assets/styles/forms';
 @import './assets/styles/alert';
 @import './assets/styles/divider';
-@import './assets/styles/typography';
-@import './assets/styles/react-table';
 @import './assets/styles/card';
-@import './assets/styles/db-browser';
-@import './assets/styles/login';
 @import './assets/styles/button';
 @import './assets/styles/dropdown';
 @import './assets/styles/code';
+
+// component styles
 @import './assets/styles/topnav';
+@import './assets/styles/db-browser';
+@import './assets/styles/react-table';
+@import './assets/styles/login';
 @import './assets/styles/csv-input';
+@import './assets/styles/clustering';
+
+@import '~font-awesome/scss/font-awesome';
 

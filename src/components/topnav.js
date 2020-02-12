@@ -3,15 +3,15 @@ import { Navbar, NavbarToggler, Nav, NavItem, Collapse, NavLink as DumbLink } fr
 import { useParams, useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
-import routes from './instance/routes';
 import useLMS from '../stores/lmsData';
 import defaultLMSData from '../util/defaultLMSData';
 
-export default () => {
+export default ({ routes = false }) => {
   const { instance_id } = useParams();
   const history = useHistory();
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
   const [navOpen, toggleNav] = useState(false);
+  const thisInstance = lmsData && lmsData.instances.find((i) => i.id === instance_id);
 
   return (
     <Navbar id="app-nav" dark fixed="top" expand="md">
@@ -21,7 +21,7 @@ export default () => {
       <NavbarToggler right onClick={() => toggleNav(!navOpen)} isOpen={navOpen} />
       <Collapse isOpen={navOpen} navbar>
         <Nav className="ml-auto" navbar>
-          {instance_id && lmsData.instances.length && (
+          {routes && (
             <>
               <NavItem>
                 <NavLink onClick={() => toggleNav(false)} exact to="/instances">All Instances</NavLink>
@@ -30,7 +30,7 @@ export default () => {
                 <span className="nav-divider">&gt;</span>
               </NavItem>
               <NavItem>
-                <span className="nav-divider">{lmsData.instances.find((i) => i.id === instance_id).name}</span>
+                <span className="nav-divider">{thisInstance && thisInstance.name}</span>
               </NavItem>
               <NavItem className="d-none d-md-block">
                 <span className="nav-divider">&gt;</span>

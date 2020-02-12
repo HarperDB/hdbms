@@ -1,6 +1,7 @@
 .card {
   background: $light-white-overlay !important;
   color: $color-black;
+  border-radius: 4px !important;
 
   &.dark {
     background: $white-overlay !important;
@@ -19,19 +20,6 @@
   &.instance {
     height: 140px;
     cursor: pointer;
-
-    input,
-    .btn {
-      border-color: transparent;
-    }
-
-    input {
-      background: $color-white;
-    }
-
-    .btn {
-      white-space: nowrap;
-    }
 
     &.error {
       input {

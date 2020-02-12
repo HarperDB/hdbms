@@ -25,7 +25,7 @@ export default ({ id, host, port, is_ssl, setAuth, flipCard, flipState }) => {
 
   return (
     <Card className={`instance ${formData.error ? 'error' : ''}`}>
-      {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
+      {flipState && (
         <CardBody>
           <Input
             onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}

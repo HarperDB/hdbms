@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 
-import queryInstance from '../../../util/queryInstance';
+import queryInstance from '../../util/queryInstance';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, auth, refreshInstance }) => {
   const history = useHistory();
@@ -47,7 +47,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     return setTimeout(() => history.push(`${baseUrl}/${entityName}`), 100);
   };
 
-  useEffect(() => toggleDropItem(), []);
+  useEffect(() => toggleDropItem(), [toggleDropItem]);
 
   return (
     <Form onSubmit={createItem}>

@@ -1,6 +1,6 @@
 export default async (operation, auth) => {
   const request = await fetch(
-    `${auth.is_ssl ? 'https://' : 'http://'}${auth.url}:${auth.port}`,
+    `${auth.is_ssl ? 'https://' : 'http://'}${auth.host}:${auth.port}`,
     {
       method: 'POST',
       body: JSON.stringify(operation),

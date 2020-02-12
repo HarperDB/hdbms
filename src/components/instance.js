@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 
-import TopNav from '../topnav';
+import TopNav from './topnav';
 import routes from './routes';
-import useLMS from '../../stores/lmsData';
-import useInstanceAuth from '../../stores/instanceAuths';
-import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
+import useLMS from '../stores/lmsData';
+import useInstanceAuth from '../stores/instanceAuths';
+import buildActiveInstanceObject from '../util/buildActiveInstanceObject';
 
 export default () => {
   const { instance_id } = useParams();
@@ -26,7 +26,7 @@ export default () => {
 
   return (
     <>
-      <TopNav />
+      <TopNav routes={routes} />
       <Switch>
         {routes.map((route) => {
           const ThisRouteComponent = route.component;

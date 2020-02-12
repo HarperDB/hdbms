@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -12,21 +12,9 @@ export default ({ auth, structure, refreshInstance }) => {
   const history = useHistory();
   const { instance_id, schema, table, action } = useParams();
 
-  const [filtered, onFilteredChange] = useState([]);
-  const [sorted, onSortedChange] = useState([]);
-  const [page, onPageChange] = useState(0);
-
-  const schemas = structure && Object.keys(structure);
-  const tables = structure && schemas && structure[schema] && Object.keys(structure[schema]);
+  const schemas = structure && Object.keys(structure).sort();
+  const tables = structure && schemas && structure[schema] && Object.keys(structure[schema]).sort();
   const activeTable = structure && schemas && structure[schema] && tables && structure[schema][table] && structure[schema][table];
-
-  useEffect(() => {
-    if (activeTable) {
-      onFilteredChange([]);
-      onSortedChange([{ id: activeTable.hashAttribute, desc: false }]);
-      onPageChange(0);
-    }
-  }, [activeTable]);
 
   useEffect(() => {
     switch (true) {
@@ -44,9 +32,9 @@ export default ({ auth, structure, refreshInstance }) => {
       default:
         break;
     }
-  }, [schema, schemas, table, tables]);
+  }, [schema, table, schemas, tables, history, instance_id]);
 
-  return (
+  return structure ? (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager
@@ -88,14 +76,7 @@ export default ({ auth, structure, refreshInstance }) => {
           />
         ) : schema && table && activeTable ? (
           <DataTable
-            dataTableColumns={activeTable.dataTableColumns}
-            hashAttribute={activeTable.hashAttribute}
-            onFilteredChange={onFilteredChange}
-            filtered={filtered}
-            onSortedChange={onSortedChange}
-            sorted={sorted}
-            onPageChange={onPageChange}
-            page={page}
+            activeTable={activeTable}
             auth={auth}
             instance_id={instance_id}
             refreshInstance={refreshInstance}
@@ -113,5 +94,7 @@ export default ({ auth, structure, refreshInstance }) => {
         )}
       </Col>
     </Row>
+  ) : (
+    <i className="fa fa-spinner fa-spin text-white" />
   );
 };

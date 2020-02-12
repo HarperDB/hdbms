@@ -1,0 +1,28 @@
+input,
+select,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  border: 0 !important;
+  background: $white-overlay !important;
+  color: $color-black !important;
+  font-family: $font-family-sans;
+  font-weight: $font-weight-light;
+  font-size: $font-size-root;
+  outline: none !important;
+  border-color: transparent;
+  border-radius: 4px !important;
+  height: 33px !important;
+  box-shadow: none !important;
+  text-align: left !important;
+
+  &::placeholder {
+    text-align: left !important;
+    color: $color-darkgrey !important;
+    font-family: $font-family-sans;
+    font-weight: $font-weight-light;
+  }
+}
+
+

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 
 import useLMS from '../stores/lmsData';
 import queryLMS from '../util/queryLMS';
-import defaultFormData from '../util/defaultFormData';
+import defaultFormData from '../util/defaultInstanceFormData';
 import defaultLMSData from '../util/defaultLMSData';
 
 export default () => {
@@ -14,18 +14,24 @@ export default () => {
   const history = useHistory();
 
   useAsyncEffect(async () => {
-    if (formData.submitted) {
-      const instances = await queryLMS({
-        endpoint: 'getInstances',
-        method: 'GET',
-        auth: lmsData.auth,
-      });
-      if (instances.error) {
-        updateForm({ ...formData, error: instances.error, submitted: false });
-        setLMSData(defaultLMSData);
+    const { submitted, user, pass } = formData;
+
+    if (submitted) {
+      if (user !== 'admin' && pass !== 'Abc1234!') {
+        updateForm({ ...formData, error: 'unknown user or password', submitted: false });
       } else {
-        setLMSData({ auth: { user: formData.user, pass: formData.pass }, instances });
-        history.push('/instances');
+        const instances = await queryLMS({
+          endpoint: 'getInstances',
+          method: 'GET',
+          auth: lmsData.auth,
+        });
+        if (instances.error) {
+          updateForm({ ...formData, error: instances.error, submitted: false });
+          setLMSData(defaultLMSData);
+        } else {
+          setLMSData({ auth: { user: formData.user, pass: formData.pass }, instances });
+          history.push('/instances');
+        }
       }
     }
   }, [formData]);
@@ -45,25 +51,23 @@ export default () => {
             onChange={(e) => updateForm({ ...formData, user: e.target.value })}
             className="mb-2 text-center"
             type="text"
-            name="LMS_USER"
-            title="Username"
-            placeholder="Username"
+            title="username"
+            placeholder="username"
           />
           <Input
             onChange={(e) => updateForm({ ...formData, pass: e.target.value })}
             className="mb-4 text-center"
             type="password"
-            name="LMS_PASS"
-            title="Password"
-            placeholder="Password"
+            title="password"
+            placeholder="password"
           />
           <Button
             onClick={() => updateForm({ ...formData, submitted: true })}
             title="Log Into My Account"
             block
-            color="black"
+            color="purple"
           >
-            Log Into My Account
+            Log In
           </Button>
         </CardBody>
       </Card>

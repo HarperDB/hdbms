@@ -4,9 +4,9 @@ import { useHistory, useParams } from 'react-router';
 import CSVReader from 'react-csv-reader';
 import useAsyncEffect from 'use-async-effect';
 
-import queryInstance from '../../../util/queryInstance';
-import commaNumbers from '../../../util/commaNumbers';
-import Worker from '../../../util/processCSV.worker';
+import queryInstance from '../../util/queryInstance';
+import commaNumbers from '../../util/commaNumbers';
+import Worker from '../../util/processCSV.worker';
 
 const worker = new Worker();
 
@@ -41,7 +41,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
       return setTimeout(() => validateData(), 1000);
     }
 
-    refreshInstance();
+    refreshInstance(Date.now());
 
     return setTimeout(() => {
       setStatus(false);

@@ -3,7 +3,7 @@ import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
 
-import defaultFormData from '../../util/defaultFormData';
+import defaultFormData from '../../util/defaultInstanceFormData';
 import useLMS from '../../stores/lmsData';
 import defaultLMSData from '../../util/defaultLMSData';
 import queryLMS from '../../util/queryLMS';
