@@ -17,7 +17,8 @@
     }
   }
 
-  &.instance {
+  &.instance,
+  &.manage {
     height: 140px;
     cursor: pointer;
 
@@ -30,6 +31,21 @@
     &.error {
       input {
         border-color: $color-danger;
+      }
+    }
+  }
+
+  &.manage {
+    height: 49px;
+    margin-bottom: 1px;
+
+    .card-body {
+      padding-top: 7px;
+      padding-bottom: 0;
+
+      .instance-name {
+        line-height: 1;
+        padding-top: 3px;
       }
     }
   }

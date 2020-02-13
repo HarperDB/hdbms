@@ -7,7 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import EntityManager from '../shared/entityManager';
 import useLMS from '../../stores/lmsData';
-import ClusterCard from './manage_clusterCard';
+import ClusterCard from './clusterCard';
 import useInstanceAuth from '../../stores/instanceAuths';
 
 export default ({ auth, network, refreshInstance, structure }) => {
@@ -86,11 +86,13 @@ export default ({ auth, network, refreshInstance, structure }) => {
             />
           ))}
         </Row>
+        {/*
         <div className="code-holder">
           <Code>
             {stringify(network.outbound_connections, { maxLength: 20 })}
           </Code>
         </div>
+        */}
       </Col>
     </Row>
   );
