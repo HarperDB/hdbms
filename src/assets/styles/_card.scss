@@ -21,6 +21,12 @@
     height: 140px;
     cursor: pointer;
 
+    .instance-name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
     &.error {
       input {
         border-color: $color-danger;

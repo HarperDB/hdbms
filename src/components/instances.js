@@ -21,8 +21,8 @@ export default () => {
             <InstanceCard
               key={i.id}
               {...i}
-              hasAuth={instanceAuths[i.id] && instanceAuths[i.id].user && instanceAuths[i.id].pass}
-              setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: { user, pass } })}
+              hasAuth={instanceAuths[i.id]}
+              setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
             />
           ))}
         </Row>

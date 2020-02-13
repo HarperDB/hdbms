@@ -68,27 +68,23 @@ export default ({ auth, network, refreshInstance, structure }) => {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
         <div className="text-white mb-3">
-          {schema} &gt; {table} &gt; data replication
+          {schema} &gt; {table}
         </div>
         <Row>
-          {lmsData.instances.filter((i) => i.id !== instance_id).map((i) => {
-            const connection = network && network.outbound_connections.find((n) => n.node_name === i.node_name);
-            const pub = schema && table && connection && connection.subscriptions && connection.subscriptions.find((s) => s.channel === `${schema}:${table}` && s.publish);
-            const sub = schema && table && connection && connection.subscriptions && connection.subscriptions.find((s) => s.channel === `${schema}:${table}` && s.subscribe);
-            return (
-              <ClusterCard
-                key={i.id}
-                {...i}
-                connection={connection}
-                pub={pub}
-                sub={sub}
-                refreshInstance={refreshInstance}
-                auth={auth}
-                hasAuth={instanceAuths[i.id] && instanceAuths[i.id].user && instanceAuths[i.id].pass}
-                setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: { user, pass } })}
-              />
-            );
-          })}
+          {lmsData.instances.filter((i) => i.id !== instance_id).map((i) => (
+            <ClusterCard
+              key={i.id}
+              {...i}
+              connection={network && network.outbound_connections.find((n) => n.name === i.id)}
+              clusterPort={12345} /* TODO: use a new getter to get this value */
+              schema={schema}
+              table={table}
+              refreshInstance={refreshInstance}
+              auth={auth}
+              instanceAuth={instanceAuths[i.id]}
+              setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: { user, pass } })}
+            />
+          ))}
         </Row>
         <div className="code-holder">
           <Code>

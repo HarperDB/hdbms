@@ -11,7 +11,7 @@ export default ({ id, name, host, port, is_ssl, flipCard, setAuth, hasAuth }) =>
     <Card className="instance" onClick={() => (hasAuth ? history.push(`/instances/${id}/browse`) : alert.error('You must log in first.') && flipCard())}>
       <CardBody>
         <Row>
-          <Col xs="10">
+          <Col xs="10" className="instance-name">
             {name}
           </Col>
           <Col xs="2" className="text-right">

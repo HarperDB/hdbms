@@ -1,66 +1,66 @@
 [
   {
     "id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "name": "Local Instance",
+    "name": "3f6c9e35f6a84fb7b09f8b3e7d4e20df",
     "host": "localhost",
     "port": 9925,
-    "node_name": "3f6c9e35f6a84fb7b09f8b3e7d4e20df",
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
-    "name": "Cluster Demo 1",
-    "host": "dev.harperdb.io",
-    "port": 9931,
-    "node_name": "ClusterDemoA1",
+    "name": "ClusterDemoA1",
+    "host": "ClusterDemoA1",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
-    "name": "Cluster Demo 2",
-    "host": "dev.harperdb.io",
-    "port": 9932,
-    "node_name": "ClusterDemoA2",
+    "name": "ClusterDemoA2",
+    "host": "ClusterDemoA2",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
-    "name": "Cluster Demo 3",
-    "host": "dev.harperdb.io",
-    "port": 9933,
-    "node_name": "ClusterDemoA3",
+    "name": "ClusterDemoA3",
+    "host": "ClusterDemoA3",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
-    "name": "Cluster Demo 4",
-    "host": "dev.harperdb.io",
-    "port": 9934,
-    "node_name": "ClusterDemoA4",
+    "name": "ClusterDemoA4",
+    "host": "ClusterDemoA4",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
-    "name": "Cluster Demo 5",
-    "host": "dev.harperdb.io",
-    "port": 9935,
-    "node_name": "ClusterDemoA5",
+    "name": "ClusterDemoA5",
+    "host": "ClusterDemoA5",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
-    "name": "Cluster Demo 6",
-    "host": "dev.harperdb.io",
-    "port": 9936,
-    "node_name": "ClusterDemoA6",
+    "name": "ClusterDemoA6",
+    "host": "ClusterDemoA6",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   },
   {
     "id": "8291c224-6911-4155-b5a9-34559e5a45ff",
-    "name": "Cluster Demo 7",
-    "host": "dev.harperdb.io",
-    "port": 9937,
-    "node_name": "ClusterDemoA7",
+    "name": "ClusterDemoA7",
+    "host": "ClusterDemoA7",
+    "port": 9925,
+    "cluster_port": 12345,
     "is_ssl": false
   }
 ]
