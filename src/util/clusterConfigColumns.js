@@ -6,7 +6,7 @@ import updateInstanceSubscription from './updateInstanceSubscription';
 
 export default ({ auth, refreshInstance }) => [{
   Header: 'name',
-  accessor: 'name',
+  accessor: 'instance_name',
   style: { paddingTop: 10 },
 }, {
   Header: 'url',

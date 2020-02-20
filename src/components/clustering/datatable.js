@@ -19,9 +19,9 @@ export default ({ instances, network, schema, table, auth, refreshInstance }) =>
         const publish = channelSubscription && channelSubscription.publish;
         const subscribe = channelSubscription && channelSubscription.subscribe;
         const clusterPort = 12345;
-        const { id, name, is_ssl, host, port } = i;
+        const { id, instance_name, is_ssl, host, port } = i;
         const url = `http${is_ssl ? 's' : ''}://${host}:${port}`;
-        return { id, name, is_ssl, host, port, url, clusterPort, publish, subscribe, connection, channel, subscriptions };
+        return { id, instance_name, is_ssl, host, port, url, clusterPort, publish, subscribe, connection, channel, subscriptions };
       });
       setTableData({ ...tableData, data: newTableData });
       setTableState({ ...tableState, filtered: [], sorted: [{ id: 'name', desc: false }], page: 0 });

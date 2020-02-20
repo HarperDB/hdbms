@@ -30,7 +30,7 @@ export default ({ routes = false }) => {
                 <span className="nav-divider">&gt;</span>
               </NavItem>
               <NavItem>
-                <span className="nav-divider">{thisInstance && thisInstance.name}</span>
+                <span className="nav-divider">{thisInstance && thisInstance.instance_name}</span>
               </NavItem>
               <NavItem className="d-none d-md-block">
                 <span className="nav-divider">&gt;</span>

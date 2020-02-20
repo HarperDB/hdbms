@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-export default ({ id, name, host, port, is_ssl, flipCard, setAuth, hasAuth }) => {
+export default ({ id, instance_name, host, port, is_ssl, flipCard, setAuth, hasAuth }) => {
   const history = useHistory();
   const alert = useAlert();
 
@@ -12,7 +12,7 @@ export default ({ id, name, host, port, is_ssl, flipCard, setAuth, hasAuth }) =>
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
-            {name}
+            {instance_name}
           </Col>
           <Col xs="2" className="text-right">
             {hasAuth ? (
