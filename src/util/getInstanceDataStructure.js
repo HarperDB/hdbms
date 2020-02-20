@@ -16,6 +16,7 @@ export default (dbResponse) => {
         dataTableColumns: orderedColumns.map((k) => ({
           Header: k.replace(/__/g, ''),
           accessor: k,
+          style: { height: 29, paddingTop: 10 },
           Cell: (props) => handleCellValues(props.value),
         })),
       };

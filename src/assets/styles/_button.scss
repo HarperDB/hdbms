@@ -15,6 +15,12 @@
     height: 25px !important;
   }
 
+  &.connect {
+    padding: 0 !important;
+    height: 25px !important;
+    font-size: 12px;
+  }
+
   &.btn-link {
     padding: 0;
   }
@@ -48,6 +54,10 @@
     border-color: $color-purple !important;
     background-color: $color-white !important;
   }
+}
+
+.btn-group {
+  width: 100%;
 }
 
 .btn-group>.btn-group:not(:last-child)>.btn,

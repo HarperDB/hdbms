@@ -16,7 +16,6 @@ render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
-      <div id="app-bg" />
     </Provider>
   ),
   document.getElementById('app'),

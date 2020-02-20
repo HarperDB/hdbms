@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 
 import useLMS from '../stores/lmsData';
 import queryLMS from '../util/queryLMS';
-import defaultFormData from '../util/defaultInstanceFormData';
+import defaultFormData from '../util/defaultAuthFormData';
 import defaultLMSData from '../util/defaultLMSData';
 
 export default () => {
@@ -23,7 +23,7 @@ export default () => {
         const instances = await queryLMS({
           endpoint: 'getInstances',
           method: 'GET',
-          auth: lmsData.auth,
+          auth: { user: formData.user, pass: formData.pass },
         });
         if (instances.error) {
           updateForm({ ...formData, error: instances.error, submitted: false });
@@ -37,7 +37,7 @@ export default () => {
   }, [formData]);
 
   useAsyncEffect(() => {
-    if (lmsData.auth.user && lmsData.auth.pass && !formData.submitted) {
+    if (lmsData?.auth?.user && lmsData?.auth?.pass && !formData.submitted) {
       updateForm({ user: lmsData.auth.user, pass: lmsData.auth.pass, submitted: true, error: false });
     }
   }, [lmsData]);

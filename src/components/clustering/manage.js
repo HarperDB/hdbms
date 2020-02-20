@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Code, Row, Col } from '@nio/ui-kit';
+import { Row, Col } from '@nio/ui-kit';
 import { useParams } from 'react-router-dom';
-import stringify from 'json-stringify-pretty-compact';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import EntityManager from '../shared/entityManager';
 import useLMS from '../../stores/lmsData';
 import ClusterCard from './clusterCard';
+import DataTable from './datatable';
 import useInstanceAuth from '../../stores/instanceAuths';
+import setStructureEntities from '../../util/setStructureEntities';
+import handleSchemaTableRedirect from '../../util/handleSchemaTableRedirect';
+import defaultTableState from '../../util/defaultTableState';
 
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();
@@ -16,32 +19,15 @@ export default ({ auth, network, refreshInstance, structure }) => {
   const { instance_id, schema, table } = useParams();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const [entities, setEntities] = useState({ schemas: [], tables: [] });
+  const [tableState, setTableState] = useState(defaultTableState);
 
   useAsyncEffect(() => {
-    if (structure) {
-      const newSchemas = structure && Object.keys(structure);
-      const newTables = structure && newSchemas && structure[schema] && Object.keys(structure[schema]);
-      setEntities({ schemas: newSchemas, tables: newTables });
-    }
-  }, [structure, schema]);
+    handleSchemaTableRedirect({ entities, instance_id, schema, table, history, targetPath: '/clustering' });
+  }, [schema, table, entities]);
 
   useAsyncEffect(() => {
-    switch (true) {
-      case (!entities.schemas && history.location.pathname !== '/clustering'):
-        history.push(`/instances/${instance_id}/clustering`);
-        break;
-      case (entities.schemas && entities.schemas.length && !schema):
-      case (entities.schemas && entities.schemas.length && schema && !entities.schemas.includes(schema)):
-        history.push(`/instances/${instance_id}/clustering/${entities.schemas[0]}`);
-        break;
-      case (entities.tables && entities.tables.length && !table):
-      case (entities.tables && entities.tables.length && table && !entities.tables.includes(table)):
-        history.push(`/instances/${instance_id}/clustering/${schema}/${entities.tables[0]}`);
-        break;
-      default:
-        break;
-    }
-  }, [schema, entities, table]);
+    if (structure) setEntities(setStructureEntities({ structure, schema, table }));
+  }, [structure, schema, table]);
 
   return (
     <Row id="clustering">
@@ -67,6 +53,16 @@ export default ({ auth, network, refreshInstance, structure }) => {
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
+        <DataTable
+          instances={lmsData.instances.filter((i) => i.id !== instance_id)}
+          network={network}
+          schema={schema}
+          table={table}
+          auth={auth}
+          instance_id={instance_id}
+          refreshInstance={refreshInstance}
+        />
+        {/*
         <div className="text-white mb-3">
           {schema} &gt; {table}
         </div>
@@ -76,7 +72,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
               key={i.id}
               {...i}
               connection={network && network.outbound_connections.find((n) => n.name === i.id)}
-              clusterPort={12345} /* TODO: use a new getter to get this value */
+              clusterPort={12345}
               schema={schema}
               table={table}
               refreshInstance={refreshInstance}
@@ -86,7 +82,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
             />
           ))}
         </Row>
-        {/*
+
         <div className="code-holder">
           <Code>
             {stringify(network.outbound_connections, { maxLength: 20 })}

@@ -4,7 +4,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  border: 0 !important;
+  border: 1px solid $grey-overlay;
   background: $white-overlay !important;
   color: $color-black !important;
   font-family: $font-family-sans;
@@ -24,5 +24,26 @@ input:-webkit-autofill:active {
     font-weight: $font-weight-light;
   }
 }
+
+
+
+
+
+.nio-check-mark:before {
+  content: "\f00c";
+}
+
+.nio:before {
+  font-family: 'FontAwesome'!important;
+  font-style: normal;
+  font-weight: 400!important;
+  font-variant: normal;
+  text-transform: none;
+  vertical-align: top;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
 
 

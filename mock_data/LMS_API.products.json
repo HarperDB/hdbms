@@ -1,0 +1,26 @@
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "stripe_product_id": "product_1",
+    "instance_ram": 1,
+    "instance_disk_space_gigs": 100,
+    "cloud_aws_instance_type": "AWS-Instance-Type-1",
+    "cloud_price_monthly": 0,
+    "cloud_price_annual": 0,
+    "local_price_monthly": 0,
+    "local_price_annual": 0,
+    "is_active": true
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+    "stripe_product_id": "product_2",
+    "instance_ram": 2,
+    "instance_disk_space_gigs": 100,
+    "cloud_aws_instance_type": "AWS-Instance-Type-2",
+    "cloud_price_monthly": 19.99,
+    "cloud_price_annual": 199.99,
+    "local_price_monthly": 9.99,
+    "local_price_annual": 99.99,
+    "is_active": true
+  }
+]
