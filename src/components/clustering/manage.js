@@ -6,20 +6,15 @@ import useAsyncEffect from 'use-async-effect';
 
 import EntityManager from '../shared/entityManager';
 import useLMS from '../../stores/lmsData';
-import ClusterCard from './clusterCard';
 import DataTable from './datatable';
-import useInstanceAuth from '../../stores/instanceAuths';
 import setStructureEntities from '../../util/setStructureEntities';
 import handleSchemaTableRedirect from '../../util/handleSchemaTableRedirect';
-import defaultTableState from '../../util/defaultTableState';
 
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();
   const [lmsData] = useLMS({ auth: false, instances: [] });
   const { instance_id, schema, table } = useParams();
-  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const [entities, setEntities] = useState({ schemas: [], tables: [] });
-  const [tableState, setTableState] = useState(defaultTableState);
 
   useAsyncEffect(() => {
     handleSchemaTableRedirect({ entities, instance_id, schema, table, history, targetPath: '/clustering' });
@@ -62,33 +57,6 @@ export default ({ auth, network, refreshInstance, structure }) => {
           instance_id={instance_id}
           refreshInstance={refreshInstance}
         />
-        {/*
-        <div className="text-white mb-3">
-          {schema} &gt; {table}
-        </div>
-        <Row>
-          {lmsData.instances.filter((i) => i.id !== instance_id).map((i) => (
-            <ClusterCard
-              key={i.id}
-              {...i}
-              connection={network && network.outbound_connections.find((n) => n.name === i.id)}
-              clusterPort={12345}
-              schema={schema}
-              table={table}
-              refreshInstance={refreshInstance}
-              auth={auth}
-              instanceAuth={instanceAuths[i.id]}
-              setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: { user, pass } })}
-            />
-          ))}
-        </Row>
-
-        <div className="code-holder">
-          <Code>
-            {stringify(network.outbound_connections, { maxLength: 20 })}
-          </Code>
-        </div>
-        */}
       </Col>
     </Row>
   );

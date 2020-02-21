@@ -1,1 +1,1 @@
-export default { auth: false, instances: [] };
+export default { auth: false, instances: [], currentUser: false };

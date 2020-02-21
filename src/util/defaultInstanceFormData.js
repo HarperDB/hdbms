@@ -1,11 +1,9 @@
 export default {
   submitted: false,
   error: false,
-  user: false,
-  pass: false,
-  stripe_product_id: false,
-  instance_name: false,
-  instance_region: false,
+  instance_name: '',
+  user: '',
+  pass: '',
   is_ssl: false,
   is_local: false,
 };

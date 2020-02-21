@@ -15,7 +15,7 @@ export default () => {
           </CardBody>
         </Card>
       </Col>
-      <NewInstanceModal showForm={showForm} setShowForm={setShowForm} />
+      {showForm && (<NewInstanceModal setShowForm={setShowForm} />)}
     </>
   );
 };

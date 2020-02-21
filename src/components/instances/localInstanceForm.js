@@ -1,150 +1,139 @@
 import React, { useState } from 'react';
-import { Col, Input, Row, RadioCheckbox, Button } from '@nio/ui-kit';
-import { useAlert } from 'react-alert';
+import { Col, Input, Row, RadioCheckbox, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import defaultInstanceFormData from '../../util/defaultInstanceFormData';
-import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/defaultLMSData';
-import queryLMS from '../../util/queryLMS';
 
-export default ({ instanceType, products, setShowForm }) => {
-  const [lmsData] = useLMS(defaultLMSData);
-  const alert = useAlert();
+export default ({ products, setInstanceDetails, needsCard }) => {
   const [formData, updateForm] = useState(defaultInstanceFormData);
 
   useAsyncEffect(async () => {
     if (formData.submitted) {
-      formData.is_local = instanceType === 'local';
-
-      console.log(formData);
-      return false;
-
-      const newInstance = await queryLMS({
-        endpoint: 'addInstance',
-        method: 'POST',
-        payload: formData,
-        auth: lmsData.auth,
-      });
-      if (newInstance.error) {
-        alert.error(newInstance.error);
-        updateForm({ ...formData, error: newInstance.error, submitted: false });
-      } else {
-        updateForm(defaultInstanceFormData);
-      }
+      formData.is_local = true;
+      setInstanceDetails(formData);
     }
   }, [formData]);
 
+  useAsyncEffect(() => {
+    if (products) {
+      updateForm({ ...formData, stripe_product_id: products[0].value });
+    }
+  }, [products]);
+
   return (
-    <div className="pt-2">
-      <div className="new-instance-label">Instance Type</div>
-      <div className="fieldset">
-        <RadioCheckbox
-          className="radio-button"
-          type="radio"
-          onChange={(value) => console.log(value)}
-          options={products}
-          defaultValue={products[0]}
-        />
-      </div>
-
-      <div className="new-instance-label">Instance Details</div>
-      <div className="fieldset">
-        <Row>
-          <Col xs="4" className="pt-2">
-            Host
-          </Col>
-          <Col xs="8">
+    <>
+      <Card>
+        <CardBody>
+          <div className="new-instance-label">Instance Name</div>
+          <div className="fieldset">
             <Input
-              onChange={(e) => updateForm({ ...formData, host: e.target.value, error: false })}
-              className="text-center"
+              onChange={(e) => updateForm({ ...formData, instance_name: e.target.value, error: false })}
               type="text"
-              title="host"
+              title="instance_name"
+              value={formData.instance_name}
             />
-          </Col>
-        </Row>
-        <hr className="my-1" />
-        <Row>
-          <Col xs="4" className="pt-2">
-            Port
-          </Col>
-          <Col xs="8">
-            <Input
-              onChange={(e) => updateForm({ ...formData, port: e.target.value, error: false })}
-              className="text-center"
-              type="number"
-              title="port"
-            />
-          </Col>
-        </Row>
-        <hr className="my-1" />
-        <Row className="mt-1">
-          <Col xs="4" className="pt-2">
-            SSL
-          </Col>
-          <Col xs="8" className="pt-1">
+          </div>
+
+
+          <div className="new-instance-label">Admin Credentials</div>
+          <div className="fieldset">
+            <Row>
+              <Col xs="4" className="pt-2">
+                Username
+              </Col>
+              <Col xs="8">
+                <Input
+                  onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}
+                  type="text"
+                  title="username"
+                  value={formData.user}
+                />
+              </Col>
+            </Row>
+            <hr className="my-1" />
+            <Row>
+              <Col xs="4" className="pt-2">
+                Password
+              </Col>
+              <Col xs="8">
+                <Input
+                  onChange={(e) => updateForm({ ...formData, pass: e.target.value, error: false })}
+                  type="password"
+                  title="password"
+                  value={formData.pass}
+                />
+              </Col>
+            </Row>
+          </div>
+
+          <div className="new-instance-label">Instance Type</div>
+          <div className="fieldset">
             <RadioCheckbox
-              type="checkbox"
-              onChange={(value) => updateForm({ ...formData, is_ssl: value || false, error: false })}
-              options={{ label: '', value: true }}
+              className="radio-button"
+              type="radio"
+              onChange={(value) => updateForm({ ...formData, stripe_product_id: value })}
+              options={products}
+              value={formData.stripe_product_id || ''}
+              defaultValue={products[0]}
             />
-          </Col>
-        </Row>
-      </div>
+          </div>
 
-      <div className="new-instance-label">Admin Credentials</div>
-      <div className="fieldset">
-        <Row>
-          <Col xs="4" className="pt-2">
-            Username
-          </Col>
-          <Col xs="8">
-            <Input
-              onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}
-              className="text-center"
-              type="text"
-              title="username"
-            />
-          </Col>
-        </Row>
-        <hr className="my-1" />
-        <Row>
-          <Col xs="4" className="pt-2">
-            Password
-          </Col>
-          <Col xs="8">
-            <Input
-              onChange={(e) => updateForm({ ...formData, pass: e.target.value, error: false })}
-              className="text-center"
-              type="password"
-              title="password"
-            />
-          </Col>
-        </Row>
-      </div>
-      <hr />
-      <Row>
-        <Col xs="6" className="pr-1">
-          <Button
-            onClick={() => { updateForm(defaultInstanceFormData); setShowForm(false); }}
-            title="Cancel"
-            block
-            color="grey"
-          >
-            Cancel
-          </Button>
-        </Col>
-        <Col xs="6" className="pl-1">
-          <Button
-            onClick={() => updateForm({ ...formData, submitted: true, error: false })}
-            title="Add Instance"
-            block
-            color="purple"
-          >
-            Add Instance
-          </Button>
-        </Col>
-      </Row>
-    </div>
+          <div className="new-instance-label">Instance Details</div>
+          <div className="fieldset">
+            <Row>
+              <Col xs="4" className="pt-2">
+                Host
+              </Col>
+              <Col xs="8">
+                <Input
+                  onChange={(e) => updateForm({ ...formData, host: e.target.value, error: false })}
+                  type="text"
+                  title="host"
+                  value={formData.host || ''}
+                />
+              </Col>
+            </Row>
+            <hr className="my-1" />
+            <Row>
+              <Col xs="4" className="pt-2">
+                Port
+              </Col>
+              <Col xs="8">
+                <Input
+                  onChange={(e) => updateForm({ ...formData, port: e.target.value, error: false })}
+                  type="number"
+                  title="port"
+                  value={formData.port || ''}
+                />
+              </Col>
+            </Row>
+            <hr className="my-1" />
+            <Row className="mt-1">
+              <Col xs="4" className="pt-2">
+                SSL
+              </Col>
+              <Col xs="8" className="pt-1">
+                <RadioCheckbox
+                  type="checkbox"
+                  onChange={(value) => updateForm({ ...formData, is_ssl: value || false, error: false })}
+                  options={{ label: '', value: true }}
+                  value={formData.is_ssl}
+                />
+              </Col>
+            </Row>
+          </div>
+
+        </CardBody>
+      </Card>
+      <Button
+        onClick={() => updateForm({ ...formData, submitted: true, error: false })}
+        title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
+        block
+        className="mt-3"
+        color="purple"
+      >
+        Next Step: {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
+      </Button>
+    </>
   );
 };

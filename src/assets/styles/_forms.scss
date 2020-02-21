@@ -15,7 +15,6 @@ input:-webkit-autofill:active {
   border-radius: 4px !important;
   height: 33px !important;
   box-shadow: none !important;
-  text-align: left !important;
 
   &::placeholder {
     text-align: left !important;
@@ -23,11 +22,13 @@ input:-webkit-autofill:active {
     font-family: $font-family-sans;
     font-weight: $font-weight-light;
   }
+
+  &.text-center {
+    &::placeholder {
+      text-align: center !important;
+    }
+  }
 }
-
-
-
-
 
 .nio-check-mark:before {
   content: "\f00c";

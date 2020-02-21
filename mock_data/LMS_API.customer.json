@@ -1,0 +1,47 @@
+{
+  "id": "guid",
+  "name": "customer name",
+  "customer_hubspot_id": "guid",
+  "stripe_customer_object": {
+    "balance": 0,
+    "delinquent": true,
+    "discount": {},
+    "id": "string",
+    "sources": {
+      "data": []
+    },
+    "subscriptions": {
+      "data": [
+        {
+          "billing_cycle_anchor": 0,
+          "billing_thresholds": {},
+          "cancel_at": 0,
+          "cancel_at_period_end": true,
+          "canceled_at": 0,
+          "created": 0,
+          "current_period_end": 0,
+          "current_period_start": 0,
+          "customer": "string",
+          "default_payment_method": "string",
+          "default_source": "string",
+          "discount": {},
+          "ended_at": 0,
+          "id": "string",
+          "items": {
+            "data": [
+              {}
+            ]
+          },
+          "latest_invoice": {},
+          "metadata": {},
+          "next_pending_invoice_item_invoice": 0,
+          "plan": "string",
+          "quantity": 0,
+          "schedule": {},
+          "start_date": 0,
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

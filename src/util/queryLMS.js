@@ -1,6 +1,8 @@
 import instances from '../../mock_data/LMS_API.instances.json';
 import products from '../../mock_data/LMS_API.products.json';
 import regions from '../../mock_data/LMS_API.aws_regions.json';
+import customer from '../../mock_data/LMS_API.customer.json';
+import user from '../../mock_data/LMS_API.user.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
@@ -19,13 +21,21 @@ export default async ({ endpoint, payload, auth }) => {
   return request.json();
   */
 
+  console.log('Calling API', endpoint);
+
   switch (endpoint) {
+    case 'getUser':
+      return user;
+    case 'getCustomer':
+      return customer;
     case 'getInstances':
       return instances;
     case 'getProducts':
       return products;
     case 'getRegions':
       return regions;
+    case 'addInstance':
+      return { result: true, message: "Instance <is being created | added>", instance_id: 'guid' };
     default:
       return { error: 'unknown endpoint' };
   }

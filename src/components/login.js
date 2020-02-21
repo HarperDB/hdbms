@@ -20,16 +20,16 @@ export default () => {
       if (user !== 'admin' && pass !== 'Abc1234!') {
         updateForm({ ...formData, error: 'unknown user or password', submitted: false });
       } else {
-        const instances = await queryLMS({
-          endpoint: 'getInstances',
-          method: 'GET',
+        const currentUser = await queryLMS({
+          endpoint: 'getUser',
+          method: 'POST',
           auth: { user: formData.user, pass: formData.pass },
         });
-        if (instances.error) {
-          updateForm({ ...formData, error: instances.error, submitted: false });
+        if (currentUser.error) {
+          updateForm({ ...formData, error: currentUser.error, submitted: false });
           setLMSData(defaultLMSData);
         } else {
-          setLMSData({ auth: { user: formData.user, pass: formData.pass }, instances });
+          setLMSData({ ...lmsData, auth: { user: formData.user, pass: formData.pass }, currentUser });
           history.push('/instances');
         }
       }

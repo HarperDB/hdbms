@@ -32,7 +32,7 @@ export default ({ instances, network, schema, table, auth, refreshInstance }) =>
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-bold text-white">
+          <span className="text-white">
             <span>{schema}&nbsp;&gt;&nbsp;{table}</span>
           </span>
         </Col>

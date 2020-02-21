@@ -48,7 +48,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-bold text-white">
+          <span className="text-white">
             <span>{schema}&nbsp;</span>
             <span>{table && `> ${table} > `} </span>
             <span>{commaNumbers(tableState.totalRecords)} record{tableState.totalRecords !== 1 ? 's' : ''}</span>

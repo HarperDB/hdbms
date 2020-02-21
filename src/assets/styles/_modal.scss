@@ -1,12 +1,11 @@
 #new-instance-modal {
-  .modal-footer {
-    display: block !important;
-  }
-
   .new-instance-label {
     font-weight: 700;
-    margin-top: 20px;
     margin-bottom: 5px;
+  }
+
+  .instance-form-card {
+    background: $light-grey-overlay;
   }
 
   .radio-button > div {
@@ -20,11 +19,15 @@
   }
 
   .fieldset {
-    border: 1px solid $light-grey-overlay;
-    padding: 5px 15px;
-    border-radius: 4px;
+    border-top: 1px solid $light-grey-overlay;
+    padding: 5px 0;
     max-height: 124px;
+    margin-bottom: 25px;
     overflow-x: hidden;
     overflow-y: auto;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
