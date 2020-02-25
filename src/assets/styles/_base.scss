@@ -1,5 +1,7 @@
+$minWidth: 314px;
+
 body {
-  min-width: 320px;
+  min-width: $minWidth;
   overflow-x: hidden;
 
   #app-bg {
@@ -15,27 +17,33 @@ body {
   }
 
   #app {
-    min-width: 320px;
+    min-width: $minWidth;
 
     #app-container {
-      min-width: 320px;
-      margin-top: 70px;
-      padding: 2rem;
-      height: calc(100vh - 70px);
+      min-width: $minWidth;
+      margin-top: 135px;
+      padding: 0 2rem;
+      height: calc(100vh - 135px);
       @media screen and (max-width: 991px) {
-        padding: 1rem;
+        padding: 0 1rem;
+      }
+
+      &.instances {
+        margin-top: 100px;
+        height: calc(100vh - 100px);
       }
     }
 
     #app-nav {
-      min-width: 320px;
-      background: $dark-grey-overlay !important;
-      padding: .5rem 2rem;
+      min-width: $minWidth;
+      background: $black-overlay !important;
+      padding: 0 2rem;
       position: fixed;
       z-index: 99 !important;
+      height: 60px;
 
       @media screen and (max-width: 991px) {
-        padding: .5rem 1rem;
+        padding: 0 1rem;
       }
 
       #logo {
@@ -45,6 +53,72 @@ body {
         background-repeat: no-repeat;
         background-position: top left;
         background-size: contain;
+      }
+      .nav-item {
+        margin-left: 1.5rem;
+      }
+    }
+
+    #app-subnav {
+      width: 100%;
+      min-width: $minWidth;
+      background: $dark-grey-overlay !important;
+      padding: 0 2rem;
+      position: fixed;
+      z-index: 98 !important;
+      height: 40px;
+      top: 60px !important;
+      text-align: center;
+
+      .navbar-nav {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        justify-content: center;
+
+        .nav-item {
+          padding: 0 10px;
+
+          &:first-child {
+            padding-left: 0;
+          }
+
+          &:last-child {
+            padding-right: 0;
+          }
+        }
+      }
+
+      .nav-link,
+      a {
+        padding: 0 !important;
+      }
+
+      @media screen and (max-width: 991px) {
+        padding: 0 1rem;
+      }
+    }
+
+    .nav-item {
+      display: inline-block;
+      white-space: nowrap;
+
+      .nav-link,
+      a {
+        display: inline-block;
+        color: $light-white-overlay !important;
+        padding: 5px 0 0 !important;
+
+        &.active,
+        &:hover {
+          color: $color-white !important;
+        }
+      }
+
+      .nav-divider {
+        display: inline-block;
+        color: $color-lightgrey !important;
+        padding: 5px 0 0 !important;
       }
     }
   }

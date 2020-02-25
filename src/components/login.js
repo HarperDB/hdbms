@@ -4,9 +4,10 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
 import useLMS from '../stores/lmsData';
-import queryLMS from '../util/queryLMS';
-import defaultFormData from '../util/defaultAuthFormData';
-import defaultLMSData from '../util/defaultLMSData';
+import getUser from '../util/lms/getUser';
+import getCustomer from '../util/lms/getCustomer';
+import defaultFormData from '../util/state/defaultAuthFormData';
+import defaultLMSData from '../util/state/defaultLMSData';
 
 export default () => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
@@ -20,16 +21,14 @@ export default () => {
       if (user !== 'admin' && pass !== 'Abc1234!') {
         updateForm({ ...formData, error: 'unknown user or password', submitted: false });
       } else {
-        const currentUser = await queryLMS({
-          endpoint: 'getUser',
-          method: 'POST',
-          auth: { user: formData.user, pass: formData.pass },
-        });
+        const currentUser = await getUser({ auth: { user: formData.user, pass: formData.pass } });
+
         if (currentUser.error) {
           updateForm({ ...formData, error: currentUser.error, submitted: false });
           setLMSData(defaultLMSData);
         } else {
-          setLMSData({ ...lmsData, auth: { user: formData.user, pass: formData.pass }, currentUser });
+          const customer = await getCustomer({ auth: { user: formData.user, pass: formData.pass } });
+          setLMSData({ ...lmsData, auth: { user: formData.user, pass: formData.pass }, currentUser, customer });
           history.push('/instances');
         }
       }

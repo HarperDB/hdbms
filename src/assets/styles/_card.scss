@@ -1,11 +1,7 @@
 .card {
-  background: $light-white-overlay !important;
+  background: $color-white !important;
   color: $color-black;
   border-radius: 4px !important;
-
-  &.dark {
-    background: $white-overlay !important;
-  }
 
   .card-body {
     padding: 15px;

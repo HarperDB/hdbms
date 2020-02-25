@@ -3,12 +3,12 @@ import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/defaultLMSData';
-import getInstancePrice from '../../util/getInstancePrice';
-import getProductsAndRegions from '../../util/getProductsAndRegions';
-import customerHasChargeableCard from '../../util/customerHasChargeableCard';
-import getCustomer from '../../util/getCustomer';
-import addInstance from '../../util/addInstance';
+import defaultLMSData from '../../util/state/defaultLMSData';
+import getInstancePrice from '../../util/instance/getInstancePrice';
+import getProductsAndRegions from '../../util/lms/getProductsAndRegions';
+import customerHasChargeableCard from '../../util/stripe/customerHasChargeableCard';
+import getCustomer from '../../util/lms/getCustomer';
+import addInstance from '../../util/lms/addInstance';
 
 import LocalInstanceForm from './localInstanceForm';
 import CloudInstanceForm from './cloudInstanceForm';

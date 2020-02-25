@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Col, Input, Row, RadioCheckbox, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import defaultInstanceFormData from '../../util/defaultInstanceFormData';
+import defaultInstanceFormData from '../../util/state/defaultInstanceFormData';
 
 export default ({ products, setInstanceDetails, needsCard }) => {
   const [formData, updateForm] = useState(defaultInstanceFormData);

@@ -5,7 +5,7 @@ import { positions, Provider } from 'react-alert';
 import { Elements } from '@stripe/react-stripe-js';
 
 import './util/textDecoderPolyfill';
-import stripePromise from './util/stripePromise';
+import stripePromise from './util/stripe/stripePromise';
 import AlertTemplate from './components/shared/alert';
 import App from './components/app';
 import './app.scss';

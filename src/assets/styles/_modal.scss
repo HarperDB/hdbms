@@ -4,9 +4,18 @@
     margin-bottom: 5px;
   }
 
-  .instance-form-card {
-    background: $light-grey-overlay;
+  .instance-form-card-holder {
+    .instance-form-card-body {
+      background: $light-grey-overlay;
+    }
+
+    &:first-child{
+      @media screen and (max-width: 991px) {
+        margin-bottom: 1rem;
+      }
+    }
   }
+
 
   .radio-button > div {
     border-bottom: 1px solid $light-grey-overlay;
@@ -21,7 +30,7 @@
   .fieldset {
     border-top: 1px solid $light-grey-overlay;
     padding: 5px 0;
-    max-height: 124px;
+    max-height: 129px;
     margin-bottom: 25px;
     overflow-x: hidden;
     overflow-y: auto;

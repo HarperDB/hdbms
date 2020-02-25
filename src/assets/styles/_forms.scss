@@ -1,24 +1,28 @@
 input,
 select,
+textarea,
+.stripe-input-holder,
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  border: 1px solid $grey-overlay;
-  background: $white-overlay !important;
-  color: $color-black !important;
+  border: 1px solid $color-lightgrey!important;
+  background: $light-white-overlay !important;
+  color: $color-black;
   font-family: $font-family-sans;
   font-weight: $font-weight-light;
   font-size: $font-size-root;
   outline: none !important;
-  border-color: transparent;
   border-radius: 4px !important;
-  height: 33px !important;
+  height: 36px !important;
   box-shadow: none !important;
+  -webkit-text-fill-color: $color-black !important;
+  -webkit-box-shadow: 0 0 0 1000px $light-white-overlay inset;
+  transition: background-color 5000s ease-in-out 0s;
 
   &::placeholder {
     text-align: left !important;
-    color: $color-darkgrey !important;
+    color: $color-grey !important;
     font-family: $font-family-sans;
     font-weight: $font-weight-light;
   }
@@ -28,6 +32,19 @@ input:-webkit-autofill:active {
       text-align: center !important;
     }
   }
+}
+
+textarea {
+  height: auto !important;
+}
+
+.form-control {
+  box-shadow: none !important;
+}
+
+.stripe-input-holder {
+  padding: 8px 12px 0 12px;
+  text-align: left;
 }
 
 .nio-check-mark:before {

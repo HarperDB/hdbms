@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
-import queryInstance from '../../util/queryInstance';
-import defaultFormData from '../../util/defaultAuthFormData';
+import queryInstance from '../../util/instance/_queryInstance';
+import defaultFormData from '../../util/state/defaultAuthFormData';
 
 export default ({ id, host, port, is_ssl, setAuth, flipCard, flipState }) => {
   const alert = useAlert();
