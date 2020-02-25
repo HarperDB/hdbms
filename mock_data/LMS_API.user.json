@@ -1,7 +1,7 @@
 {
-  "id": "guid",
-  "firstname": "Jaxon",
-  "lastname": "Repp",
-  "email": "jaxon@harperdb.io",
-  "customer_id": "guid"
+  "id": "user-id-guid1",
+  "firstname": "First1",
+  "lastname": "Last1",
+  "email": "user1@harperdb.io",
+  "customer_id": "customer-id-guid"
 }

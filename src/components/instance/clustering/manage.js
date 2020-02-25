@@ -7,12 +7,13 @@ import useAsyncEffect from 'use-async-effect';
 import EntityManager from '../../shared/entityManager';
 import useLMS from '../../../stores/lmsData';
 import DataTable from './datatable';
-import setStructureEntities from '../../../util/instance/setStructureEntities';
+import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
+import defaultLMSData from '../../../util/state/defaultLMSData';
 
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();
-  const [lmsData] = useLMS({ auth: false, instances: [] });
+  const [lmsData] = useLMS(defaultLMSData);
   const { instance_id, schema, table } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [] });
 
@@ -21,7 +22,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
   }, [schema, table, entities]);
 
   useAsyncEffect(() => {
-    if (structure) setEntities(setStructureEntities({ structure, schema, table }));
+    if (structure) setEntities(buildInstanceStructure({ structure, schema, table }));
   }, [structure, schema, table]);
 
   return (

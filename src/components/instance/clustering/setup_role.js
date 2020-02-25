@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 
-import createClusterUserRole from '../../../util/instance/createClusterUserRole';
+import createClusterUserRole from '../../../api/instance/createClusterUserRole';
 
 export default ({ auth, clusterRole, refreshInstance }) => (clusterRole ? (
   <Row className="config-row">

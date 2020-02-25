@@ -62,6 +62,40 @@ textarea {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.radio-button > div {
+  border-bottom: 1px solid $light-grey-overlay;
+  padding: 8px 0;
+  white-space: nowrap;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+  }
+}
+
+.radio-checkbox-label {
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+.new-instance-label {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.fieldset {
+  border-top: 1px solid $light-grey-overlay;
+  padding: 5px 0;
+  max-height: 129px;
+  margin-bottom: 25px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 
 
 

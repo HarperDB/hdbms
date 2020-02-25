@@ -6,7 +6,7 @@ import useInterval from 'use-interval';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 
 import commaNumbers from '../../../util/format/commaNumbers';
-import getTableData from '../../../util/instance/getTableData';
+import getTableData from '../../../api/instance/getTableData';
 import defaultTableState from '../../../util/state/defaultTableState';
 
 const dataRefreshInterval = 3000;

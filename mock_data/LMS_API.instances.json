@@ -8,11 +8,11 @@
     "is_ssl": false,
     "is_local": true,
     "status": "ready",
-    "instance_region": "us-east",
-    "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
-    "elastic_ip_address": "172.168.2.12",
+    "instance_region": null,
+    "domain_name": null,
+    "elastic_ip_address": null,
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
@@ -27,7 +27,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
@@ -42,7 +42,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
@@ -57,7 +57,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
@@ -72,7 +72,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
@@ -87,7 +87,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
@@ -102,7 +102,7 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   },
   {
     "id": "8291c224-6911-4155-b5a9-34559e5a45ff",
@@ -117,6 +117,6 @@
     "domain_name": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_123412341234"
+    "stripe_product_id": "product_1"
   }
 ]

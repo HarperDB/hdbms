@@ -5,7 +5,7 @@ import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
-import queryInstance from '../../../util/instance/_queryInstance';
+import queryInstance from '../../../api/queryInstance';
 
 export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance, auth }) => {
   const history = useHistory();

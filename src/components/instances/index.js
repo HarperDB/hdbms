@@ -8,7 +8,9 @@ import InstanceCard from './instanceCard';
 import NewInstanceCard from './newInstanceCard';
 import useLMS from '../../stores/lmsData';
 import defaultLMSData from '../../util/state/defaultLMSData';
-import getInstances from '../../util/lms/getInstances';
+import getInstances from '../../api/lms/getInstances';
+import getLicenses from '../../api/lms/getLicenses';
+import getProducts from '../../api/lms/getProducts';
 
 export default () => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -16,7 +18,9 @@ export default () => {
 
   useAsyncEffect(async () => {
     const instances = await getInstances({ auth: lmsData.auth });
-    setLMSData({ ...lmsData, instances });
+    const licenses = await getLicenses({ auth: lmsData.auth });
+    const products = await getProducts({ auth: lmsData.auth });
+    setLMSData({ ...lmsData, instances, licenses, products });
   }, []);
 
   return (

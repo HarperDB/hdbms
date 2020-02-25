@@ -6,18 +6,27 @@ import SubNav from './subnav';
 import routes from '../../routes/instance';
 import useLMS from '../../stores/lmsData';
 import useInstanceAuth from '../../stores/instanceAuths';
-import buildActiveInstanceObject from '../../util/instance/buildActiveInstanceObject';
+import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
+import defaultLMSData from '../../util/state/defaultLMSData';
+import defaultActiveInstance from '../../util/state/defaultActiveInstance';
+import getInstances from '../../api/lms/getInstances';
+import getLicenses from '../../api/lms/getLicenses';
+import getProducts from '../../api/lms/getProducts';
 
 export default () => {
   const { instance_id } = useParams();
-  const [lmsData] = useLMS({ auth: false, instances: [] });
+  const [lmsData, setLMSData] = useLMS(defaultLMSData);
   const [instanceAuths] = useInstanceAuth({});
-  const [activeInstance, setActiveInstance] = useState({ auth: false, structure: false, network: false });
-  const [lastUpdate, refreshInstance] = useState({ auth: false, structure: false, network: false });
+  const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
+  const [lastUpdate, refreshInstance] = useState(false);
 
   useAsyncEffect(async () => {
     if (instance_id) {
-      const activeInstanceObject = await buildActiveInstanceObject({ instance_id, instanceAuths, lmsData });
+      const instances = await getInstances({ auth: lmsData.auth });
+      const licenses = await getLicenses({ auth: lmsData.auth });
+      const products = await getProducts({ auth: lmsData.auth });
+      setLMSData({ ...lmsData, instances, licenses, products });
+      const activeInstanceObject = await buildActiveInstanceObject({ instance_id, instanceAuths, lmsData: { ...lmsData, instances, licenses, products } });
       if (!activeInstanceObject.error) {
         setActiveInstance(activeInstanceObject);
       }

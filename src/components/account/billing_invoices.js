@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import getCustomerInvoices from '../../util/lms/getCustomerInvoices';
+import getInvoices from '../../api/lms/getInvoices';
 import useLMS from '../../stores/lmsData';
 import defaultLMSData from '../../util/state/defaultLMSData';
 
@@ -11,7 +11,7 @@ export default () => {
   const [customerInvoices, setCustomerInvoices] = useState([]);
 
   useAsyncEffect(async () => {
-    const newCustomerInvoices = await getCustomerInvoices({ auth: lmsData.auth });
+    const newCustomerInvoices = await getInvoices({ auth: lmsData.auth });
     setCustomerInvoices(newCustomerInvoices);
   }, []);
 

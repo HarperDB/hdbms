@@ -1,42 +1,18 @@
 #new-instance-modal {
-  .new-instance-label {
-    font-weight: 700;
-    margin-bottom: 5px;
-  }
-
   .instance-form-card-holder {
-    .instance-form-card-body {
-      background: $light-grey-overlay;
+
+    .card {
+      box-shadow: none !important;
+
+      .instance-form-card-body {
+        background: $light-grey-overlay;
+      }
     }
 
     &:first-child{
       @media screen and (max-width: 991px) {
         margin-bottom: 1rem;
       }
-    }
-  }
-
-
-  .radio-button > div {
-    border-bottom: 1px solid $light-grey-overlay;
-    padding: 8px 0;
-
-    &:last-child {
-      border-bottom: none;
-      padding-bottom: 4px;
-    }
-  }
-
-  .fieldset {
-    border-top: 1px solid $light-grey-overlay;
-    padding: 5px 0;
-    max-height: 129px;
-    margin-bottom: 25px;
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    &:last-child {
-      margin-bottom: 0;
     }
   }
 }

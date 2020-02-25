@@ -8,7 +8,7 @@ import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
-import setStructureEntities from '../../../util/instance/setStructureEntities';
+import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
 
 export default ({ auth, structure, refreshInstance }) => {
@@ -21,7 +21,7 @@ export default ({ auth, structure, refreshInstance }) => {
   }, [schema, table, entities]);
 
   useAsyncEffect(() => {
-    if (structure) setEntities(setStructureEntities({ structure, schema, table }));
+    if (structure) setEntities(buildInstanceStructure({ structure, schema, table }));
   }, [structure, schema, table]);
 
   return structure ? (

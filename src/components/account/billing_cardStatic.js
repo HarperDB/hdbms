@@ -3,7 +3,7 @@ import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useAlert } from 'react-alert';
 
-import removePaymentMethod from '../../util/lms/removePaymentMethod';
+import removePaymentMethod from '../../api/lms/removePaymentMethod';
 
 export default ({ customerId, customerCard, customerStripeId, setEditingCard, auth }) => {
   const [removing, setRemoving] = useState(false);

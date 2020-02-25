@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
 import defaultFormData from '../../../util/state/defaultClusterFormData';
-import createClusterUser from '../../../util/instance/createClusterUser';
+import createClusterUser from '../../../api/instance/createClusterUser';
 
 export default ({ clusterUser, clusterRole, auth, refreshInstance }) => {
   const alert = useAlert();

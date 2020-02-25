@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 
-import queryInstance from '../../util/instance/_queryInstance';
+import queryInstance from '../../api/queryInstance';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, auth, refreshInstance }) => {
   const history = useHistory();

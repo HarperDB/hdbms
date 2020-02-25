@@ -1,5 +1,5 @@
 {
-  "id": "guid",
+  "id": "customer-guid-1",
   "name": "customer name",
   "customer_hubspot_id": "guid",
   "stripe_customer_object": {

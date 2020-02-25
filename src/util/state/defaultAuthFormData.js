@@ -1,1 +1,6 @@
-export default { submitted: false, error: false, user: false, pass: false };
+export default {
+  submitted: false,
+  error: false,
+  user: false,
+  pass: false,
+};

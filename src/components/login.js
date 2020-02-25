@@ -4,8 +4,8 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
 import useLMS from '../stores/lmsData';
-import getUser from '../util/lms/getUser';
-import getCustomer from '../util/lms/getCustomer';
+import getUser from '../api/lms/getUser';
+import getCustomer from '../api/lms/getCustomer';
 import defaultFormData from '../util/state/defaultAuthFormData';
 import defaultLMSData from '../util/state/defaultLMSData';
 
@@ -22,7 +22,6 @@ export default () => {
         updateForm({ ...formData, error: 'unknown user or password', submitted: false });
       } else {
         const currentUser = await getUser({ auth: { user: formData.user, pass: formData.pass } });
-
         if (currentUser.error) {
           updateForm({ ...formData, error: currentUser.error, submitted: false });
           setLMSData(defaultLMSData);
@@ -44,7 +43,7 @@ export default () => {
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
-      <Card className="mb-3 mt-2 dark">
+      <Card className="mb-3 mt-2">
         <CardBody>
           <Input
             onChange={(e) => updateForm({ ...formData, user: e.target.value })}

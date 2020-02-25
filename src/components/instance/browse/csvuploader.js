@@ -4,8 +4,8 @@ import { useHistory, useParams } from 'react-router';
 import CSVReader from 'react-csv-reader';
 import useAsyncEffect from 'use-async-effect';
 
-import getTotalRecords from '../../../util/instance/getTotalRecords';
-import csvDataLoad from '../../../util/instance/csvDataLoad';
+import getTotalRecords from '../../../api/instance/getTotalRecords';
+import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/format/commaNumbers';
 import Worker from '../../../util/processCSV.worker';
 

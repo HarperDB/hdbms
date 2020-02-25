@@ -4,11 +4,12 @@ import useAsyncEffect from 'use-async-effect';
 
 import useLMS from '../../stores/lmsData';
 import defaultLMSData from '../../util/state/defaultLMSData';
-import getInstancePrice from '../../util/instance/getInstancePrice';
-import getProductsAndRegions from '../../util/lms/getProductsAndRegions';
+import getInstancePrice from '../../util/stripe/getInstancePrice';
+import getProducts from '../../api/lms/getProducts';
+import getRegions from '../../api/lms/getRegions';
 import customerHasChargeableCard from '../../util/stripe/customerHasChargeableCard';
-import getCustomer from '../../util/lms/getCustomer';
-import addInstance from '../../util/lms/addInstance';
+import getCustomer from '../../api/lms/getCustomer';
+import addInstance from '../../api/lms/addInstance';
 
 import LocalInstanceForm from './localInstanceForm';
 import CloudInstanceForm from './cloudInstanceForm';
@@ -19,6 +20,7 @@ import ConfirmOrderForm from './confirmOrderForm';
 export default ({ setShowForm }) => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
   const [products, setProducts] = useState(false);
+  const [regions, setRegions] = useState(false);
   const [purchaseStep, setPurchaseStep] = useState('Select Instance Type');
   const [instanceType, setInstanceType] = useState(false);
   const [instancePrice, setInstancePrice] = useState(false);
@@ -30,8 +32,10 @@ export default ({ setShowForm }) => {
   const instanceSpecs = products && products.raw.find((t) => t.stripe_product_id === instanceDetails.stripe_product_id);
 
   useAsyncEffect(async () => {
-    const productsAndRegions = await getProductsAndRegions({ auth: lmsData.auth });
-    setProducts(productsAndRegions);
+    const newProducts = await getProducts({ auth: lmsData.auth });
+    setProducts(newProducts);
+    const newRegions = await getRegions({ auth: lmsData.auth });
+    setRegions(newRegions);
     const customer = await getCustomer({ auth: lmsData.auth });
     setLMSData({ ...lmsData, customer });
   }, []);
@@ -85,7 +89,7 @@ export default ({ setShowForm }) => {
         ) : purchaseStep === 'Instance Details' && instanceType === 'cloud' ? (
           <CloudInstanceForm
             products={products.cloud}
-            regions={products.regions}
+            regions={regions}
             setInstanceDetails={setInstanceDetails}
             needsCard={needsCard}
           />

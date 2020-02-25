@@ -18,10 +18,16 @@
     background-size: cover;
   }
 
+  .card {
+    background: $white-overlay !important;
+    box-shadow: none !important;
+  }
+
   input {
     text-align: center !important;
     background: $white-overlay !important;
     color: $color-white !important;
+    border: none !important;
 
     &::placeholder {
       text-align: center !important;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Loader, Input } from '@nio/ui-kit';
+import { Button, Row, Col, Input } from '@nio/ui-kit';
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 
 import cardOptions from '../../util/stripe/cardOptions';
 import useLMS from '../../stores/lmsData';
 import defaultLMSData from '../../util/state/defaultLMSData';
-import addPaymentMethod from '../../util/lms/addPaymentMethod';
-import getCustomer from '../../util/lms/getCustomer';
+import addPaymentMethod from '../../api/lms/addPaymentMethod';
+import getCustomer from '../../api/lms/getCustomer';
 
 export default ({ setEditingCard, customerCard }) => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
@@ -36,7 +36,6 @@ export default ({ setEditingCard, customerCard }) => {
 
       const payload = await stripe.createPaymentMethod(newCardObject);
 
-      console.log(payload);
       if (payload.error) {
         setError(payload.error);
       } else {

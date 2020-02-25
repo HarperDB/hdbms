@@ -15,8 +15,8 @@ $color-purple: #403b8a;
 $color-lightpurple: #7a3a87;
 
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
-$white-overlay: rgba(255, 255, 255, .3);
-$light-white-overlay: rgba(255, 255, 255, .7);
+$white-overlay: rgba(255, 255, 255, .5);
+$light-white-overlay: rgba(255, 255, 255, .9);
 
 $light-grey-overlay: rgba(0, 0, 0, .05);
 $grey-overlay: rgba(0, 0, 0, .5);

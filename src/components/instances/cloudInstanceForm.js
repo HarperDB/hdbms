@@ -86,6 +86,18 @@ export default ({ products, regions, setInstanceDetails, needsCard }) => {
               defaultValue={regions[0]}
             />
           </div>
+
+          <div className="new-instance-label">Instance Cost</div>
+          <div className="fieldset">
+            <RadioCheckbox
+              className="radio-button"
+              type="radio"
+              onChange={(value) => updateForm({ ...formData, stripe_product_id: value })}
+              options={products}
+              value={formData.stripe_product_id || ''}
+              defaultValue={products[0]}
+            />
+          </div>
         </CardBody>
       </Card>
       <Button
