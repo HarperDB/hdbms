@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 
-import ProfileForm from './profile_profile';
-import PasswordForm from './profile_password';
+import ProfileForm from './profile';
+import PasswordForm from './password';
 
 export default () => (
   <Row>

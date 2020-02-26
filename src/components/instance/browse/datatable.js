@@ -5,9 +5,9 @@ import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 
-import commaNumbers from '../../../util/format/commaNumbers';
+import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
-import defaultTableState from '../../../util/state/defaultTableState';
+import defaultTableState from '../../../state/defaults/defaultTableState';
 
 const dataRefreshInterval = 3000;
 let tableChangeTimeout = false;
@@ -65,7 +65,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <ReactTable
             manual
             data={tableState.tableData}

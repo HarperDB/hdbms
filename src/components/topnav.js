@@ -3,8 +3,8 @@ import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
-import useLMS from '../stores/lmsData';
-import defaultLMSData from '../util/state/defaultLMSData';
+import useLMS from '../state/lmsData';
+import defaultLMSData from '../state/defaults/defaultLMSData';
 
 export default () => {
   const history = useHistory();

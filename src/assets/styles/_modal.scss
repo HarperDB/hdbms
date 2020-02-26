@@ -1,13 +1,14 @@
 #new-instance-modal {
-  .instance-form-card-holder {
 
-    .card {
-      box-shadow: none !important;
+  .card {
+    box-shadow: none !important;
 
-      .instance-form-card-body {
-        background: $light-grey-overlay;
-      }
+    .instance-form-card-body {
+      background: $light-grey-overlay;
     }
+  }
+
+  .instance-form-card-holder {
 
     &:first-child{
       @media screen and (max-width: 991px) {

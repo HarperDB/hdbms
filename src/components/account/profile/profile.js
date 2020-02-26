@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import defaultProfileFormData from '../../util/state/defaultProfileFormData';
+import defaultProfileFormData from '../../../state/defaults/defaultProfileFormData';
 
 export default () => {
   const [profileForm, updateProfileForm] = useState(defaultProfileFormData);

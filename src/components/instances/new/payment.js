@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Button, Card, CardBody } from '@nio/ui-kit';
 
-import cardOptions from '../../util/stripe/cardOptions';
+import cardOptions from '../../../util/stripe/cardOptions';
 
 export default ({ setPaymentInfo, instancePrice, instanceInterval }) => {
   const stripe = useStripe();

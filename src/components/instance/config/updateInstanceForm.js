@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, RadioCheckbox } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import useLMS from '../../../stores/lmsData';
+import useLMS from '../../../state/lmsData';
 import updateInstance from '../../../api/lms/updateInstance';
 import updateLicense from '../../../api/lms/updateLicense';
 import setLicense from '../../../api/instance/setLicense';
-import defaultLMSData from '../../../util/state/defaultLMSData';
-import defaultInstanceFormData from '../../../util/state/defaultInstanceFormData';
+import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import defaultInstanceFormData from '../../../state/defaults/defaultInstanceFormData';
 
 export default ({ instanceAuth, details, refreshInstance }) => {
   const [{ auth, products }] = useLMS(defaultLMSData);

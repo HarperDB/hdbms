@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/state/defaultLMSData';
-import getInstancePrice from '../../util/stripe/getInstancePrice';
-import getProducts from '../../api/lms/getProducts';
-import getRegions from '../../api/lms/getRegions';
-import customerHasChargeableCard from '../../util/stripe/customerHasChargeableCard';
-import getCustomer from '../../api/lms/getCustomer';
-import addInstance from '../../api/lms/addInstance';
+import useLMS from '../../../state/lmsData';
+import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import getInstancePrice from '../../../util/stripe/getInstancePrice';
+import getProducts from '../../../api/lms/getProducts';
+import getRegions from '../../../api/lms/getRegions';
+import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
+import getCustomer from '../../../api/lms/getCustomer';
+import addInstance from '../../../api/lms/addInstance';
 
-import LocalInstanceForm from './localInstanceForm';
-import CloudInstanceForm from './cloudInstanceForm';
-import InstanceTypeForm from './instanceTypeForm';
-import CustomerPaymentForm from './customerPaymentForm';
-import ConfirmOrderForm from './confirmOrderForm';
+import LocalInstanceForm from './local';
+import CloudInstanceForm from './cloud';
+import InstanceTypeForm from './type';
+import CustomerPaymentForm from './payment';
+import ConfirmOrderForm from './confirm';
 
 export default ({ setShowForm }) => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
@@ -49,7 +49,6 @@ export default ({ setShowForm }) => {
       const selectedInstancePrice = getInstancePrice({ products: products.raw, instanceDetails });
       setInstancePrice(selectedInstancePrice);
       if (selectedInstancePrice && !hasCard) {
-        // this costs money, so check if they have a payment form
         setPurchaseStep('Payment Details');
       } else {
         setPurchaseStep('Confirm Instance Details');

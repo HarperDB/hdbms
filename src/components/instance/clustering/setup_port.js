@@ -3,7 +3,7 @@ import { Row, Col, Button, Input } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
-import defaultFormData from '../../../util/state/defaultClusterFormData';
+import defaultFormData from '../../../state/defaults/defaultClusterFormData';
 
 export default ({ port, setPort }) => {
   const alert = useAlert();

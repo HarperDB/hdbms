@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import DataTable from './users_datatable';
-import AddUserForm from './users_add';
-import getUsers from '../../api/lms/getUsers';
-import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/state/defaultLMSData';
-import customerUserColumns from '../../util/datatable/customerUserColumns';
+import DataTable from './datatable';
+import AddUserForm from './add';
+import getUsers from '../../../api/lms/getUsers';
+import useLMS from '../../../state/lmsData';
+import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import customerUserColumns from '../../../util/datatable/customerUserColumns';
 
 export default () => {
   const [{ auth, customer }] = useLMS(defaultLMSData);

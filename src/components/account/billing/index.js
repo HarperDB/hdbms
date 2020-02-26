@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 
-import customerHasChargeableCard from '../../util/stripe/customerHasChargeableCard';
-import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/state/defaultLMSData';
-import StaticCard from './billing_cardStatic';
-import EditCard from './billing_cardEdit';
-import Invoices from './billing_invoices';
+import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
+import useLMS from '../../../state/lmsData';
+import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import StaticCard from './cardStatic';
+import EditCard from './cardEdit';
+import Invoices from './invoices';
 
 export default () => {
   const [lmsData] = useLMS(defaultLMSData);

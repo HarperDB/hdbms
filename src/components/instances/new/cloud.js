@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Input, Row, RadioCheckbox, Button, Card, CardBody } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 
-import defaultInstanceFormData from '../../util/state/defaultInstanceFormData';
+import defaultInstanceFormData from '../../../state/defaults/defaultInstanceFormData';
 
-export default ({ products, setInstanceDetails, needsCard }) => {
+export default ({ products, regions, setInstanceDetails, needsCard }) => {
   const [formData, updateForm] = useState(defaultInstanceFormData);
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (formData.submitted) {
-      formData.is_local = true;
+      formData.is_local = false;
+      formData.is_ssl = true;
       setInstanceDetails(formData);
     }
   }, [formData]);
 
-  useAsyncEffect(() => {
-    if (products) {
-      updateForm({ ...formData, stripe_product_id: products[0].value });
-    }
-  }, [products]);
+  useEffect(() => {
+    updateForm({ ...formData, stripe_product_id: products[0].value, instance_region: regions[0].value });
+  }, []);
 
   return (
     <>
@@ -33,7 +31,6 @@ export default ({ products, setInstanceDetails, needsCard }) => {
               value={formData.instance_name}
             />
           </div>
-
 
           <div className="new-instance-label">Admin Credentials</div>
           <div className="fieldset">
@@ -78,49 +75,16 @@ export default ({ products, setInstanceDetails, needsCard }) => {
             />
           </div>
 
-          <div className="new-instance-label">Instance Details</div>
+          <div className="new-instance-label">Instance Region (scroll for more)</div>
           <div className="fieldset">
-            <Row>
-              <Col xs="4" className="pt-2">
-                Host
-              </Col>
-              <Col xs="8">
-                <Input
-                  onChange={(e) => updateForm({ ...formData, host: e.target.value, error: false })}
-                  type="text"
-                  title="host"
-                  value={formData.host || ''}
-                />
-              </Col>
-            </Row>
-            <hr className="my-1" />
-            <Row>
-              <Col xs="4" className="pt-2">
-                Port
-              </Col>
-              <Col xs="8">
-                <Input
-                  onChange={(e) => updateForm({ ...formData, port: e.target.value, error: false })}
-                  type="number"
-                  title="port"
-                  value={formData.port || ''}
-                />
-              </Col>
-            </Row>
-            <hr className="my-1" />
-            <Row className="mt-1">
-              <Col xs="4" className="pt-2">
-                SSL
-              </Col>
-              <Col xs="8" className="pt-1">
-                <RadioCheckbox
-                  type="checkbox"
-                  onChange={(value) => updateForm({ ...formData, is_ssl: value || false, error: false })}
-                  options={{ label: '', value: true }}
-                  value={formData.is_ssl}
-                />
-              </Col>
-            </Row>
+            <RadioCheckbox
+              className="radio-button"
+              type="radio"
+              onChange={(value) => updateForm({ ...formData, instance_region: value })}
+              options={regions}
+              value={formData.instance_region || ''}
+              defaultValue={regions[0]}
+            />
           </div>
 
         </CardBody>

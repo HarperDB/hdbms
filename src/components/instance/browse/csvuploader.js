@@ -6,7 +6,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import getTotalRecords from '../../../api/instance/getTotalRecords';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
-import commaNumbers from '../../../util/format/commaNumbers';
+import commaNumbers from '../../../util/commaNumbers';
 import Worker from '../../../util/processCSV.worker';
 
 const worker = new Worker();

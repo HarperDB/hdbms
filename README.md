@@ -18,19 +18,17 @@ Follow these steps to create a simple UI to interact with your HarperDB instance
 
 1. In your terminal, clone the UI scaffold, enter the directory, and install dependencies.
     ```
-    git clone https://github.com/harperdb/ui-scaffold.git my-project
-    cd my-project
+    git clone https://github.com/harperdb/hdbms.git
+    cd hdbms
     npm i -s
     ```
-
-1. In the root of the project, rename `config.js.example` to `config.js`, and fill out the details for your HarperDB instance.
 
 1. Start the project.
     ```
     npm start
     ```
 
-1. Visit the project at https://0.0.0.0:3000.
+1. Visit the project at http://localhost:3000.
     - The development web server uses a self-signed certificate, and you may see a warning about the site being insecure. In your local development environment, it is safe to click "Advanced" > "proceed to site anyway."
 
-You’ll see a simple UI with the result of a `describe_all` operation.
+1. Log into the mock instances with admin/Abc1234!

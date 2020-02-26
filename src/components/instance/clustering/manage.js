@@ -5,11 +5,11 @@ import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import EntityManager from '../../shared/entityManager';
-import useLMS from '../../../stores/lmsData';
+import useLMS from '../../../state/lmsData';
 import DataTable from './datatable';
 import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
-import defaultLMSData from '../../../util/state/defaultLMSData';
+import defaultLMSData from '../../../state/defaults/defaultLMSData';
 
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();

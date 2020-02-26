@@ -2,12 +2,11 @@ import React from 'react';
 import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import TopNav from '../topnav';
-import useInstanceAuth from '../../stores/instanceAuths';
-import InstanceCard from './instanceCard';
-import NewInstanceCard from './newInstanceCard';
-import useLMS from '../../stores/lmsData';
-import defaultLMSData from '../../util/state/defaultLMSData';
+import useInstanceAuth from '../../state/instanceAuths';
+import InstanceCard from './list/instanceCard';
+import NewInstanceCard from './list/newInstanceCard';
+import useLMS from '../../state/lmsData';
+import defaultLMSData from '../../state/defaults/defaultLMSData';
 import getInstances from '../../api/lms/getInstances';
 import getLicenses from '../../api/lms/getLicenses';
 import getProducts from '../../api/lms/getProducts';
@@ -24,19 +23,16 @@ export default () => {
   }, []);
 
   return (
-    <>
-      <TopNav />
-      <Row>
-        <NewInstanceCard />
-        {lmsData.instances.map((i) => (
-          <InstanceCard
-            key={i.id}
-            {...i}
-            hasAuth={instanceAuths[i.id]}
-            setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
-          />
-        ))}
-      </Row>
-    </>
+    <Row>
+      <NewInstanceCard />
+      {lmsData.instances.map((i) => (
+        <InstanceCard
+          key={i.id}
+          {...i}
+          hasAuth={instanceAuths[i.id]}
+          setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
+        />
+      ))}
+    </Row>
   );
 };

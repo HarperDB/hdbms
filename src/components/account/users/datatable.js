@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 
-import defaultTableState from '../../util/state/defaultTableState';
+import defaultTableState from '../../../state/defaults/defaultTableState';
 
 export default ({ tableData }) => {
   const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'lastname', desc: false }] });

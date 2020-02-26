@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import routes from '../../routes/account';
-import SubNav from './subnav';
+import routes from './routes';
+import SubNav from '../shared/subnav';
 
 export default () => (
   <>

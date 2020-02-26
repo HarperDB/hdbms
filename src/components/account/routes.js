@@ -1,6 +1,6 @@
-import Profile from '../components/account/profile';
-import Users from '../components/account/users';
-import Billing from '../components/account/billing';
+import Profile from './profile';
+import Users from './users';
+import Billing from './billing';
 
 export default [
   { component: Profile, path: '/account/profile', link: 'profile', icon: 'user' },
