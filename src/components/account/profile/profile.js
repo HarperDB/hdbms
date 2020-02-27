@@ -61,19 +61,24 @@ export default () => {
         </Col>
       </Row>
       <hr />
+      <Row>
+        <Col xs="6" />
+        <Col md="6" xs="12">
+          <Button
+            color="success"
+            block
+            onClick={() => updateProfileForm({ ...profileForm, submitted: true, error: false })}
+          >
+            Save Profile
+          </Button>
+        </Col>
+      </Row>
       {profileForm.error && (
         <div className="text-danger text-small text-center text-italic">
-          {profileForm.error}
           <hr />
+          {profileForm.error}
         </div>
       )}
-      <Button
-        color="success"
-        block
-        onClick={() => updateProfileForm({ ...profileForm, submitted: true, error: false })}
-      >
-        Save Profile
-      </Button>
     </>
   );
 };

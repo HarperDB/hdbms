@@ -66,7 +66,7 @@ export default ({ setLastUpdate, customerId }) => {
             block
             onClick={() => updateUserForm({ ...userForm, submitted: true, error: false })}
           >
-            Save Profile
+            Add User
           </Button>
           {userForm.error && (
             <div className="text-danger text-small text-center text-italic">

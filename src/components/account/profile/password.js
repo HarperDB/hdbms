@@ -58,19 +58,24 @@ export default () => {
         </Col>
       </Row>
       <hr />
+      <Row>
+        <Col xs="6" />
+        <Col md="6" xs="12" className="text-sm-right text-center">
+          <Button
+            color="success"
+            block
+            onClick={() => updatePasswordForm({ ...passwordForm, submitted: true, error: false })}
+          >
+            Update Password
+          </Button>
+        </Col>
+      </Row>
       {passwordForm.error && (
         <div className="text-danger text-small text-center text-italic">
-          {passwordForm.error}
           <hr />
+          {passwordForm.error}
         </div>
       )}
-      <Button
-        color="success"
-        block
-        onClick={() => updatePasswordForm({ ...passwordForm, submitted: true, error: false })}
-      >
-        Update Password
-      </Button>
     </>
   );
 };
