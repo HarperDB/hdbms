@@ -31,7 +31,7 @@ export default ({ setLastUpdate, customerId }) => {
 
   return (
     <>
-      <span className="text-white mb-2">add user</span>
+      <span className="text-white mb-2 floating-card-header">add user</span>
       <Card className="my-3">
         <CardBody>
           <Input

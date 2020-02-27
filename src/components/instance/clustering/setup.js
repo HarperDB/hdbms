@@ -14,7 +14,7 @@ export default ({ auth, network, refreshInstance }) => {
   return (
     <Row id="clustering">
       <Col xl="3" lg="4" md="5" xs="12">
-        <span className="text-white mb-2">clustering</span>
+        <span className="text-white mb-2 floating-card-header">clustering</span>
         <Card className="my-3">
           <CardBody>
             HarperDB allows you to replicate data between one or more instances. We call this feature &quot;clustering&quot;.
@@ -26,7 +26,7 @@ export default ({ auth, network, refreshInstance }) => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        <span className="text-white mb-2">follow the steps below to enable clustering for this instance.</span>
+        <span className="text-white mb-2 floating-card-header">follow the steps below to enable clustering for this instance.</span>
         <Card className="my-3">
           <CardBody className="py-0">
             <Role

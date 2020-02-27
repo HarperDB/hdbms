@@ -12,7 +12,7 @@
   },
   {
     "license_id": "license-guid-1",
-    "instance_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
+    "instance_id": "4f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
     "customer_id": "customer-id-guid",
     "stripe_product_id": "product_1",
     "version": "2.0.14-BETA",

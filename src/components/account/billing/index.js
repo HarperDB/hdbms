@@ -16,7 +16,7 @@ export default () => {
   return (
     <Row>
       <Col md="6" className="mb-4">
-        <span className="text-white mb-2">card</span>
+        <span className="text-white mb-2 floating-card-header">card</span>
         <Card className="my-3">
           <CardBody>
             {(editingCard || !customerCard) ? (
@@ -37,7 +37,7 @@ export default () => {
         </Card>
       </Col>
       <Col md="6" className="mb-4">
-        <span className="text-white mb-2">invoices</span>
+        <span className="text-white mb-2 floating-card-header">invoices</span>
         <Card className="my-3">
           <CardBody>
             <Invoices />

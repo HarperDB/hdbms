@@ -76,7 +76,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
 
   return (
     <>
-      <span className="text-white mb-2">{schema} &gt; {table} &gt; csv upload</span>
+      <span className="text-white mb-2 floating-card-header">{schema} &gt; {table} &gt; csv upload</span>
       <Card className="my-3">
         <CardBody>
           <Card id="csv-uploader" className="mb-4 mt-2 dark">

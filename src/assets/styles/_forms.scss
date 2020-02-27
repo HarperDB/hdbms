@@ -13,10 +13,8 @@ input:-webkit-autofill:active {
   font-weight: $font-weight-light;
   font-size: $font-size-root;
   outline: none !important;
-  border-radius: 4px !important;
-  height: 36px !important;
+  border-radius: 4px;
   box-shadow: none !important;
-  -webkit-text-fill-color: $color-black !important;
   -webkit-box-shadow: 0 0 0 1000px $light-white-overlay inset;
   transition: none;
 
@@ -31,6 +29,84 @@ input:-webkit-autofill:active {
     &::placeholder {
       text-align: center !important;
     }
+  }
+
+  &.outline{
+    &-dark {
+      border-color: transparent !important;
+      background: $faint-white-overlay !important;
+      color: $color-white !important;
+      width: 100%;
+      max-width: 280px;
+      &::placeholder {
+        color: $white-overlay !important;
+      }
+    }
+  }
+}
+
+.instance-toggle-holder {
+  padding-top: 6px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 170px;
+
+  @media screen and (max-width: 575px) {
+    width: 160px !important;
+  }
+
+  .react-toggle-track {
+    background-color: $light-grey-overlay !important;
+
+    .react-toggle-track-x,
+    .react-toggle-track-check {
+      font-weight: 100 !important;
+
+      @media screen and (max-width: 575px) {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
+  .react-toggle-thumb {
+    &:after {
+      position: absolute;
+      top: 3px;
+      left: 0;
+      right: 0;
+      font-size: 14px;
+      content: "\f00d";
+      font-family: 'FontAwesome'!important;
+      color: $color-danger;
+    }
+  }
+  .react-toggle--checked {
+    .react-toggle-track {
+      background-color: $faint-white-overlay !important;
+    }
+    .react-toggle-thumb {
+      &:after {
+        content: "\f00c";
+        color: $color-success;
+      }
+    }
+  }
+}
+
+.instance-filter-holder {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  overflow: hidden;
+  margin-left: 15px;
+
+  .clear-filter {
+    background: none !important;
+    border: none !important;
+    position: absolute;
+    right: 8px;
+    top: 0;
   }
 }
 
@@ -63,7 +139,7 @@ textarea {
 }
 
 .radio-button > div {
-  border-bottom: 1px solid $light-grey-overlay;
+  border-bottom: 1px solid $lighter-grey-overlay;
   padding: 8px 0;
   white-space: nowrap;
 
@@ -84,7 +160,7 @@ textarea {
 }
 
 .fieldset {
-  border-top: 1px solid $light-grey-overlay;
+  border-top: 1px solid $lighter-grey-overlay;
   padding: 5px 0;
   max-height: 129px;
   margin-bottom: 25px;

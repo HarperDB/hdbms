@@ -4,7 +4,7 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 export default () => (
   <Row>
     <Col>
-      <span className="text-white mb-2">roles</span>
+      <span className="text-white mb-2 floating-card-header">roles</span>
       <Card className="my-3">
         <CardBody>
           content here

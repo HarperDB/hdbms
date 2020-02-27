@@ -37,7 +37,7 @@ export default ({ instanceAuth, details, refreshInstance }) => {
 
   return (
     <>
-      <span className="text-white mb-2">resize instance</span>
+      <span className="text-white mb-2 floating-card-header">resize instance</span>
       <Card className="my-3">
         <CardBody>
           {products && defaultValue ? (

@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-export default ({ id, instance_name, host, port, is_ssl, flipCard, setAuth, hasAuth }) => {
+export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, setAuth, hasAuth }) => {
   const history = useHistory();
   const alert = useAlert();
 
@@ -29,7 +29,7 @@ export default ({ id, instance_name, host, port, is_ssl, flipCard, setAuth, hasA
             <Col xs="9">http{is_ssl && 's'}://{host}:{port}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">TYPE</Col>
-            <Col xs="9">local</Col>
+            <Col xs="9">{is_local ? 'Local' : 'HarperDB Cloud'}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">LICENSE</Col>
             <Col xs="9">free</Col>

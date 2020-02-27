@@ -11,10 +11,12 @@ export default ({ tableData }) => {
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-white">existing users</span>
+          <span className="text-white mb-2 floating-card-header">existing users</span>
         </Col>
         <Col className="text-right text-white text-nowrap">
-          <i title="Filter Users" className="fa fa-search mr-3" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
+          <a onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}>
+            <i title="Filter Users" className="fa fa-search mr-3 floating-card-header" />
+          </a>
         </Col>
       </Row>
       <Card className="my-3">

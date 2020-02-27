@@ -48,7 +48,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
           />
         )}
       </Col>
-      <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
+      <Col xl="9" lg="8" md="7" xs="12">
         <DataTable
           instances={lmsData.instances.filter((i) => i.id !== instance_id)}
           network={network}

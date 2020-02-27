@@ -27,38 +27,30 @@ export default ({ auth, structure, refreshInstance }) => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        { schema && table && !entities.activeTable ? (
-          <i className="fa fa-spinner fa-spin text-white" />
-        ) : (
-          <>
-            <EntityManager
-              activeItem={schema}
-              items={entities.schemas}
-              auth={auth}
-              refreshInstance={refreshInstance}
-              baseUrl={`/instances/${instance_id}/browse`}
-              itemType="schema"
-              showForm
-            />
-            { schema && (
-              <EntityManager
-                activeItem={table}
-                items={entities.tables}
-                activeSchema={schema}
-                baseUrl={`/instances/${instance_id}/browse/${schema}`}
-                itemType="table"
-                auth={auth}
-                refreshInstance={refreshInstance}
-                showForm
-              />
-            )}
-          </>
+        <EntityManager
+          activeItem={schema}
+          items={entities.schemas}
+          auth={auth}
+          refreshInstance={refreshInstance}
+          baseUrl={`/instances/${instance_id}/browse`}
+          itemType="schema"
+          showForm
+        />
+        { schema && (
+          <EntityManager
+            activeItem={table}
+            items={entities.tables}
+            activeSchema={schema}
+            baseUrl={`/instances/${instance_id}/browse/${schema}`}
+            itemType="table"
+            auth={auth}
+            refreshInstance={refreshInstance}
+            showForm
+          />
         )}
       </Col>
-      <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        { schema && table && !entities.activeTable ? (
-          <i className="fa fa-spinner fa-spin text-white" />
-        ) : schema && table && action === 'csv' && entities.activeTable ? (
+      <Col xl="9" lg="8" md="7" xs="12">
+        { schema && table && action === 'csv' && entities.activeTable ? (
           <CSVUploader
             auth={auth}
             instance_id={instance_id}

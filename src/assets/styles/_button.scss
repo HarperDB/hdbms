@@ -1,5 +1,5 @@
 .btn {
-  border-radius: 4px !important;
+  border-radius: 4px;
   box-shadow: none !important;
   line-height: 1 !important;
   transition: none !important;
@@ -7,7 +7,6 @@
   padding-right: 5px;
   font-family: $font-family-sans;
   font-weight: $font-weight-light;
-  height: 33px !important;
 
   &.round {
     padding: 0;
@@ -53,6 +52,17 @@
     color: $color-purple !important;
     border-color: $color-purple !important;
     background-color: $color-white !important;
+  }
+
+  &.btn-filter {
+    border-color: transparent !important;
+    background: $faint-white-overlay !important;
+    color: $white-overlay !important;
+
+    &.active {
+      background: $white-overlay !important;
+      color: $color-white !important;
+    }
   }
 }
 

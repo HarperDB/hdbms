@@ -57,7 +57,7 @@ export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance,
 
   return (
     <>
-      <span className="text-white mb-2">{schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}&nbsp;</span>
+      <span className="text-white mb-2 floating-card-header">{schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}&nbsp;</span>
       <Card className="my-3">
         <CardBody>
           <Form onSubmit={submitRecord}>

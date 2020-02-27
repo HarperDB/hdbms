@@ -24,13 +24,10 @@ body {
       margin-top: 135px;
       padding: 0 2rem;
       height: calc(100vh - 135px);
+      transition: all 250ms;
+
       @media screen and (max-width: 991px) {
         padding: 0 1rem;
-      }
-
-      &.instances {
-        margin-top: 100px;
-        height: calc(100vh - 100px);
       }
     }
 
@@ -41,7 +38,6 @@ body {
       position: fixed;
       z-index: 99 !important;
       height: 60px;
-      box-shadow: 0 0 5px $dark-grey-overlay;
 
       @media screen and (max-width: 991px) {
         padding: 0 1rem;
@@ -63,19 +59,15 @@ body {
     #app-subnav {
       width: 100%;
       min-width: $minWidth;
-      background: $grey-overlay !important;
-      box-shadow: 0 0 5px $dark-grey-overlay;
-      padding: 0 2rem;
+      background: $light-grey-overlay !important;
+      padding: 5px 2rem;
       position: fixed;
       z-index: 98 !important;
-      height: 40px;
-      top: 20px !important;
+      height: 50px;
+      top: 60px !important;
       text-align: center;
       transition: top 250ms;
-
-      &.show {
-        top: 60px !important;
-      }
+      box-shadow: inset 0 10px 5px -10px $grey-overlay, inset 0 -10px 5px -10px $grey-overlay;
 
       .navbar-nav {
         width: 100%;
@@ -121,6 +113,8 @@ body {
         display: inline-block;
         color: $white-overlay !important;
         padding: 5px 0 0 !important;
+        text-shadow: 0 2px 3px $grey-overlay;
+        transition: color 250ms;
 
         &.active,
         &:hover {
