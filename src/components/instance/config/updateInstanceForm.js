@@ -21,9 +21,8 @@ export default ({ instanceAuth, details, refreshInstance }) => {
       const { instance_id, customer_id, license_id, fingerprint } = details;
 
       const newLicense = await updateLicense({ auth, payload: { license_id, stripe_product_id, instance_id, customer_id, fingerprint } });
-      const licenseApplied = await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
-      const newInstance = await updateInstance({ auth, payload: { stripe_product_id, instance_id, customer_id, instance_name } });
-      console.log(newLicense, licenseApplied, newInstance);
+      await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
+      await updateInstance({ auth, payload: { stripe_product_id, instance_id, customer_id, instance_name } });
       updateForm({ ...formData, submitted: false });
       refreshInstance(Date.now());
     }

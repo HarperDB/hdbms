@@ -14,4 +14,4 @@ export default ({ entities, instance_id, schema, table, history, targetPath }) =
     default:
       break;
   }
-}
+};

@@ -8,10 +8,7 @@ export default ({ port, username, instanceId, auth, refreshInstance }) => {
   const [submitted, setSubmitted] = useState(false);
 
   useAsyncEffect(async () => {
-    if (submitted) {
-      const result = await configureCluster({ port, username, instanceId, auth, refreshInstance });
-      console.log(result);
-    }
+    if (submitted) await configureCluster({ port, username, instanceId, auth, refreshInstance });
   }, [submitted]);
 
   return (

@@ -1,7 +1,7 @@
-$minWidth: 314px;
+$min-width: 314px;
 
 body {
-  min-width: $minWidth;
+  min-width: $min-width;
   overflow-x: hidden;
 
   #app-bg {
@@ -17,10 +17,10 @@ body {
   }
 
   #app {
-    min-width: $minWidth;
+    min-width: $min-width;
 
     #app-container {
-      min-width: $minWidth;
+      min-width: $min-width;
       margin-top: 135px;
       padding: 0 2rem;
       height: calc(100vh - 135px);
@@ -32,7 +32,7 @@ body {
     }
 
     #app-nav {
-      min-width: $minWidth;
+      min-width: $min-width;
       background: $gradient-purple-magenta !important;
       padding: 0 2rem;
       position: fixed;
@@ -51,6 +51,7 @@ body {
         background-position: top left;
         background-size: contain;
       }
+
       .nav-item {
         margin-left: 1.5rem;
       }
@@ -58,7 +59,7 @@ body {
 
     #app-subnav {
       width: 100%;
-      min-width: $minWidth;
+      min-width: $min-width;
       background: $light-grey-overlay !important;
       padding: 5px 2rem;
       position: fixed;
@@ -80,7 +81,7 @@ body {
 
           @media screen and (max-width: 991px) {
             padding: 0 5px;
-            font-size: 0.875rem;
+            font-size: .875rem;
           }
 
 

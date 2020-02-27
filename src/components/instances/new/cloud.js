@@ -12,7 +12,7 @@ export default ({ products, regions, setInstanceDetails, needsCard }) => {
       formData.is_ssl = true;
       setInstanceDetails(formData);
     }
-  }, [formData]);
+  }, [formData, setInstanceDetails]);
 
   useEffect(() => {
     updateForm({ ...formData, stripe_product_id: products[0].value, instance_region: regions[0].value });

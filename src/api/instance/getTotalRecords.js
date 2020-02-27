@@ -5,7 +5,7 @@ export default async ({ schema, table, auth }) => {
   try {
     [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: `SELECT count(*) as newTotalRecords FROM ${schema}.${table} ` }, auth);
   } catch (e) {
-    console.log('Failed to get row count');
+    // console.log('Failed to get row count');
   }
   return newTotalRecords;
 };

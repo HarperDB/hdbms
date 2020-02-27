@@ -10,7 +10,7 @@
   "rules": {
     "strict": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": 0,
     "camelcase": 0,
     "array-callback-return": 0,
     "react/require-extension": 0,

@@ -27,7 +27,7 @@
     .rt-td,
     .rt-th {
       text-align: left !important;
-      border-right: none !important;
+      border-right: 0 !important;
 
       &.-sort-desc {
         box-shadow: inset 0 -2px 0 0 $color-black;
@@ -87,6 +87,7 @@
         .-pageInfo {
           margin-left: 0;
         }
+
         .-pageSizeOptions {
           margin-right: 0;
         }

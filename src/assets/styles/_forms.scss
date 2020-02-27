@@ -6,7 +6,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  border: 1px solid $color-lightgrey!important;
+  border: 1px solid $color-lightgrey !important;
   background: $light-white-overlay !important;
   color: $color-black;
   font-family: $font-family-sans;
@@ -31,13 +31,14 @@ input:-webkit-autofill:active {
     }
   }
 
-  &.outline{
+  &.outline {
     &-dark {
       border-color: transparent !important;
       background: $faint-white-overlay !important;
       color: $color-white !important;
       width: 100%;
       max-width: 280px;
+
       &::placeholder {
         color: $white-overlay !important;
       }
@@ -64,30 +65,32 @@ input:-webkit-autofill:active {
       font-weight: 100 !important;
 
       @media screen and (max-width: 575px) {
-        font-size: 0.75rem !important;
+        font-size: .75rem !important;
       }
     }
   }
 
   .react-toggle-thumb {
-    &:after {
+    &::after {
       position: absolute;
       top: 3px;
       left: 0;
       right: 0;
       font-size: 14px;
-      content: "\f00d";
-      font-family: 'FontAwesome'!important;
+      content: '\f00d';
+      font-family: 'FontAwesome' !important;
       color: $color-danger;
     }
   }
+
   .react-toggle--checked {
     .react-toggle-track {
       background-color: $faint-white-overlay !important;
     }
+
     .react-toggle-thumb {
-      &:after {
-        content: "\f00c";
+      &::after {
+        content: '\f00c';
         color: $color-success;
       }
     }
@@ -103,7 +106,7 @@ input:-webkit-autofill:active {
 
   .clear-filter {
     background: none !important;
-    border: none !important;
+    border: 0 !important;
     position: absolute;
     right: 8px;
     top: 0;
@@ -119,18 +122,18 @@ textarea {
 }
 
 .stripe-input-holder {
-  padding: 8px 12px 0 12px;
+  padding: 8px 12px 0;
   text-align: left;
 }
 
-.nio-check-mark:before {
-  content: "\f00c";
+.nio-check-mark::before {
+  content: '\f00c';
 }
 
-.nio:before {
-  font-family: 'FontAwesome'!important;
+.nio::before {
+  font-family: 'FontAwesome' !important;
   font-style: normal;
-  font-weight: 400!important;
+  font-weight: 400 !important;
   font-variant: normal;
   text-transform: none;
   vertical-align: top;
@@ -144,7 +147,7 @@ textarea {
   white-space: nowrap;
 
   &:last-child {
-    border-bottom: none;
+    border-bottom: 0;
     padding-bottom: 4px;
   }
 }

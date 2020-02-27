@@ -14,7 +14,7 @@ export default async ({ schema, table, tableState, auth }) => {
     [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth);
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / tableState.pageSize);
   } catch (e) {
-    console.log('Failed to get row count');
+    // console.log('Failed to get row count');
     fetchError = true;
   }
 
@@ -25,7 +25,7 @@ export default async ({ schema, table, tableState, auth }) => {
     dataSQL += ` LIMIT ${(tableState.page * tableState.pageSize) + tableState.pageSize} OFFSET ${tableState.page * tableState.pageSize}`;
     newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth);
   } catch (e) {
-    console.log('Failed to get table data');
+    // console.log('Failed to get table data');
     fetchError = true;
   }
 
