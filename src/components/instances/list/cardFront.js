@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, setAuth, hasAuth }) => {
+export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, setAuth, hasAuth, compute, storage }) => {
   const history = useHistory();
   const alert = useAlert();
 
@@ -24,18 +24,18 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
         </Row>
         <hr className="mt-3 mb-1" />
         <div className="scrollable">
-          <Row className="text-smaller text-nowrap text-darkgrey overflow-hidden">
+          <Row className="text-smaller text-nowrap text-darkgrey">
             <Col xs="3">URL</Col>
             <Col xs="9">http{is_ssl && 's'}://{host}:{port}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">TYPE</Col>
             <Col xs="9">{is_local ? 'Local' : 'HarperDB Cloud'}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
-            <Col xs="3">LICENSE</Col>
-            <Col xs="9">free</Col>
-            <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">RAM</Col>
-            <Col xs="9">1GB</Col>
+            <Col xs="9">{compute ? compute.ram : <i className="fa fa-spinner fa-spin text-purple" />}</Col>
+            <Col xs="12"><hr className="my-1" /></Col>
+            <Col xs="3">STORAGE</Col>
+            <Col xs="9">{storage? storage.disk_space : <i className="fa fa-spinner fa-spin text-purple" />}</Col>
           </Row>
         </div>
       </CardBody>

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Button, Row, Col, Input } from '@nio/ui-kit';
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
+import { useLocation, useHistory } from 'react-router-dom';
+import queryString from 'query-string'
 
 import cardOptions from '../../../util/stripe/cardOptions';
-import useLMS from '../../../state/lmsData';
+import useLMS from '../../../state/stores/lmsData';
 import defaultLMSData from '../../../state/defaults/defaultLMSData';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
@@ -13,27 +15,20 @@ export default ({ setEditingCard, customerCard }) => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
-  const stripe = useStripe();
-  const elements = useElements();
-
   const [error, setError] = useState(null);
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const stripe = useStripe();
+  const elements = useElements();
+  const location = useLocation();
+  const history = useHistory();
+  const { returnURL } = queryString.parse(location.search);
+
 
   useAsyncEffect(async () => {
     if (cardSubmitted && stripe && elements) {
       if (cardComplete) setProcessing(true);
-
-      const newCardObject = {
-        type: 'card',
-        card: elements.getElement(CardNumberElement),
-        billing_details: {
-          address: {
-            postal_code: postalCode,
-          },
-        },
-      };
-
+      const newCardObject = { type: 'card', card: elements.getElement(CardNumberElement), billing_details: { address: { postal_code: postalCode } } };
       const payload = await stripe.createPaymentMethod(newCardObject);
 
       if (payload.error) {
@@ -43,6 +38,9 @@ export default ({ setEditingCard, customerCard }) => {
         const customer = await getCustomer({ auth: lmsData.auth });
         setLMSData({ ...lmsData, customer });
         setEditingCard(false);
+        if (returnURL) {
+          setTimeout(() => history.push(returnURL), 100);
+        }
       }
       setCardSubmitted(false);
       setProcessing(false);

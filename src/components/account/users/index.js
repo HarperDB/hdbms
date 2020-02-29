@@ -5,7 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import DataTable from './datatable';
 import AddUserForm from './add';
 import getUsers from '../../../api/lms/getUsers';
-import useLMS from '../../../state/lmsData';
+import useLMS from '../../../state/stores/lmsData';
 import defaultLMSData from '../../../state/defaults/defaultLMSData';
 import customerUserColumns from '../../../util/datatable/customerUserColumns';
 

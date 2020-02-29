@@ -13,7 +13,7 @@ input:-webkit-autofill:active {
   font-weight: $font-weight-light;
   font-size: $font-size-root;
   outline: none !important;
-  border-radius: 4px;
+  border-radius: 4px !important;
   box-shadow: none !important;
   -webkit-box-shadow: 0 0 0 1000px $light-white-overlay inset;
   transition: none;
@@ -124,6 +124,7 @@ textarea {
 .stripe-input-holder {
   padding: 8px 12px 0;
   text-align: left;
+  height: 36px;
 }
 
 .nio-check-mark::before {
@@ -165,14 +166,25 @@ textarea {
 .fieldset {
   border-top: 1px solid $lighter-grey-overlay;
   padding: 5px 0;
-  max-height: 129px;
+  max-height: 131px;
   margin-bottom: 25px;
   overflow-x: hidden;
   overflow-y: auto;
 
+  &.full-height {
+    max-height: none;
+  }
+
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+#__lpform_input_idx_0,
+#__lpform_input_idx_0_numspan,
+#__lpform_input_idx_1,
+#__lpform_input_idx_1_numspan {
+  display: none;
 }
 
 

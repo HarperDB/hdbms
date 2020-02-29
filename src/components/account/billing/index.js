@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import useLMS from '../../../state/lmsData';
+import useLMS from '../../../state/stores/lmsData';
 import defaultLMSData from '../../../state/defaults/defaultLMSData';
 import StaticCard from './cardStatic';
 import EditCard from './cardEdit';

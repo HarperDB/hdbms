@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import useInstanceAuth from '../../state/instanceAuths';
+import useInstanceAuth from '../../state/stores/instanceAuths';
 import InstanceCard from './list/instanceCard';
 import NewInstanceCard from './list/newInstanceCard';
-import useLMS from '../../state/lmsData';
+import useLMS from '../../state/stores/lmsData';
 import defaultLMSData from '../../state/defaults/defaultLMSData';
 import getInstances from '../../api/lms/getInstances';
 import getLicenses from '../../api/lms/getLicenses';
 import getProducts from '../../api/lms/getProducts';
+import getRegions from '../../api/lms/getRegions';
 import filterInstances from '../../util/filterInstances';
-import SubNav from '../shared/subnav';
+import SubNav from '../navs/subnav';
 
 export default () => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -25,7 +26,8 @@ export default () => {
     const instances = await getInstances({ auth: lmsData.auth });
     const licenses = await getLicenses({ auth: lmsData.auth });
     const products = await getProducts({ auth: lmsData.auth });
-    setLMSData({ ...lmsData, instances, licenses, products });
+    const regions = await getRegions({ auth: lmsData.auth });
+    setLMSData({ ...lmsData, instances, licenses, products, regions });
   }, []);
 
   useAsyncEffect(() => {
@@ -50,6 +52,8 @@ export default () => {
           <InstanceCard
             key={i.id}
             {...i}
+            compute={lmsData.products && lmsData.products[i.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === i.stripe_plan_id)}
+            storage={i.is_local ? { disk_space: 'n/a' } : lmsData.products && lmsData.products.cloudStorage.find((p) => p.value === i.storage_qty_gb)}
             hasAuth={instanceAuths[i.id]}
             setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
           />

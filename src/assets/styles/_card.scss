@@ -15,7 +15,7 @@
     .scrollable {
       overflow-x: hidden;
       overflow-y: auto;
-      height: 75px;
+      height: 77px;
     }
   }
 
@@ -50,5 +50,13 @@
         padding-top: 3px;
       }
     }
+  }
+
+  &.no-shadow {
+    box-shadow: none;
+  }
+
+  &.no-background {
+    background: none !important;
   }
 }

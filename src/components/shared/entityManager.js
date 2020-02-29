@@ -40,9 +40,7 @@ export default ({ items, activeItem, activeSchema = false, auth, refreshInstance
               auth={auth}
               refreshInstance={refreshInstance}
             />
-          )) : (
-            null
-          )}
+          )) : null}
           {((items && !items.length) || isCreating) && (
             <EntityManagerForm
               items={items}

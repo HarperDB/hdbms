@@ -60,7 +60,7 @@ body {
     #app-subnav {
       width: 100%;
       min-width: $min-width;
-      background: $light-grey-overlay !important;
+      background: $dark-grey-overlay !important;
       padding: 5px 2rem;
       position: fixed;
       z-index: 98 !important;
@@ -68,7 +68,7 @@ body {
       top: 60px !important;
       text-align: center;
       transition: top 250ms;
-      box-shadow: inset 0 10px 5px -10px $grey-overlay, inset 0 -10px 5px -10px $grey-overlay;
+      box-shadow: inset 0 10px 5px -10px $color-black, inset 0 -10px 5px -10px $color-black;
 
       .navbar-nav {
         width: 100%;

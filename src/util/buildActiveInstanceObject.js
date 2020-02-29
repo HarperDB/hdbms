@@ -7,7 +7,8 @@ export default async ({ instance_id, instanceAuths, lmsData }) => {
   const auth = { ...instanceAuths[instance_id], host: thisInstance.host, port: thisInstance.port, is_ssl: thisInstance.is_ssl };
   const instance = await queryInstance({ operation: 'describe_all' }, auth);
   const license = lmsData.licenses.find((l) => l.instance_id === instance_id);
-  const product = lmsData.products.raw.find((p) => p.stripe_product_id === thisInstance.stripe_product_id);
+  const product = lmsData.products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
+  const storage = thisInstance.is_local ? null : lmsData.products.cloudStorage.find((p) => p.value === thisInstance.storage_qty_gb);
 
   if (instance.error) {
     return instance;
@@ -15,5 +16,5 @@ export default async ({ instance_id, instanceAuths, lmsData }) => {
   const structure = browseTableColumns(instance);
   const network = await clusterStatus(auth);
 
-  return { auth, structure, network, details: { ...license, ...product, ...thisInstance } };
+  return { auth, structure, network, details: { ...license, ...product, ...storage, ...thisInstance } };
 };

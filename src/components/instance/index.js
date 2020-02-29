@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 
-import SubNav from '../shared/subnav';
+import SubNav from '../navs/subnav';
 import routes from './routes';
-import useLMS from '../../state/lmsData';
-import useInstanceAuth from '../../state/instanceAuths';
+import useLMS from '../../state/stores/lmsData';
+import useInstanceAuth from '../../state/stores/instanceAuths';
 import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
 import defaultLMSData from '../../state/defaults/defaultLMSData';
 import defaultActiveInstance from '../../state/defaults/defaultActiveInstance';

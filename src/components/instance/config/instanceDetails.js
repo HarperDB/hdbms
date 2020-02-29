@@ -1,115 +1,103 @@
 import React from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
-export default ({ details }) => (
-  <>
-    <span className="text-white mb-2 floating-card-header">instance details</span>
+export default ({ details: { instance_name, is_local, host, port, is_ssl, instance_region, disk_space }, activeCompute, activeStorage }) => {
+  let totalPrice = 0;
+  if (activeCompute.price !== 'FREE') totalPrice += parseFloat(activeCompute.price);
+  if (activeStorage.price !== 'FREE') totalPrice += parseFloat(activeStorage.price);
+
+  return (
     <Card className="my-3">
       <CardBody>
-        { details ? (
-          <>
+        <Card className="no-shadow no-background">
+          <CardBody>
             <Row>
-              <Col xs="6">
-                HarperDB Cloud<sup>&reg;</sup>
-              </Col>
-              <Col md="6" xs="12">
-                {details.is_local ? 'no' : 'yes'}
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col xs="6">
-                Product ID
-              </Col>
-              <Col md="6" xs="12">
-                {details.stripe_product_id}
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col xs="6">
-                Instance Status
-              </Col>
-              <Col md="6" xs="12">
-                {details.status}
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col xs="6">
+              <Col xs="7">
                 Instance Name
               </Col>
-              <Col md="6" xs="12">
-                {details.instance_name}
+              <Col xs="5" className="text-right">
+                {instance_name}
               </Col>
             </Row>
             <hr />
-            <Row>
-              <Col xs="6">
-                Instance URL
-              </Col>
-              <Col md="6" xs="12">
-                {`http${details.domain_name || details.is_ssl ? 's' : ''}://${details.domain_name || details.host}:${details.port}`}
-              </Col>
-            </Row>
-            {details.instance_region && (
+            {is_local ? (
               <>
-                <hr />
                 <Row>
-                  <Col xs="6">
-                    AWS Region
+                  <Col xs="7">
+                    Host
                   </Col>
-                  <Col md="6" xs="12">
-                    {details.instance_region}
+                  <Col xs="5" className="text-right">
+                    {host}
                   </Col>
                 </Row>
+                <hr />
+                <Row>
+                  <Col xs="7">
+                    Port
+                  </Col>
+                  <Col xs="5" className="text-right">
+                    {port}
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col xs="7">
+                    Uses SSL
+                  </Col>
+                  <Col xs="5" className="text-right">
+                    {is_ssl.toString()}
+                  </Col>
+                </Row>
+                <hr />
+              </>
+            ) : (
+              <>
+                <Row>
+                  <Col xs="7">
+                    Instance Region
+                  </Col>
+                  <Col xs="5" className="text-right">
+                    {instance_region}
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col xs="4">
+                    Instance Storage
+                  </Col>
+                  <Col xs="4" className="text-right">
+                    {disk_space}
+                  </Col>
+                  <Col xs="4" className="text-right">
+                    {activeStorage.price === 'FREE' ? 'FREE' : `$${activeStorage.price}/${activeStorage.interval}`}
+                  </Col>
+                </Row>
+                <hr />
               </>
             )}
-            <hr />
             <Row>
-              <Col xs="6">
-                RAM Allotment
+              <Col xs="4">
+                Instance RAM
               </Col>
-              <Col md="6" xs="12">
-                {details.instance_ram}GB
+              <Col xs="4" className="text-right">
+                {activeCompute.ram}
+              </Col>
+              <Col xs="4" className="text-right">
+                {activeCompute.price === 'FREE' ? 'FREE' : `$${activeCompute.price}/${activeCompute.interval}`}
               </Col>
             </Row>
             <hr />
             <Row>
-              <Col xs="6">
-                Disk Space
+              <Col xs="7">
+                <b>Instance Total Price</b>
               </Col>
-              <Col md="6" xs="12">
-                {details.instance_disk_space_gigs}GB
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col xs="6">
-                Cost
-              </Col>
-              <Col md="6" xs="12">
-                ${details.is_local ? `${details.local_price_annual}/year` : `${details.cloud_price_monthly}/month`}
+              <Col xs="5" className="text-right">
+                <b>{totalPrice ? `$${totalPrice.toFixed(2)}/${activeCompute.interval}` : 'FREE'}</b>
               </Col>
             </Row>
-            {details.local_price_annual ? (
-              <>
-                <hr />
-                <Row>
-                  <Col xs="6">
-                    Next Charge Date
-                  </Col>
-                  <Col md="6" xs="12">
-                    {details.exp_date ? new Date(details.exp_date).toLocaleDateString() : ''}
-                  </Col>
-                </Row>
-              </>
-            ) : null}
-          </>
-        ) : (
-          <i className="fa fa-spinner fa-spin text-purple" />
-        )}
+          </CardBody>
+        </Card>
       </CardBody>
     </Card>
-  </>
-);
+  );
+};

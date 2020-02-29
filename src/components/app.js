@@ -5,7 +5,7 @@ import Instances from './instances';
 import Instance from './instance';
 import Login from './login';
 import Account from './account';
-import TopNav from './topnav';
+import TopNav from './navs/topnav';
 
 export default () => (
   <div id="app-container">

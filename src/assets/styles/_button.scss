@@ -26,25 +26,25 @@
 
   &.btn-grey {
     color: $color-white !important;
-    border: 0 !important;
+    border-color: $grey-overlay !important;
     background-color: $grey-overlay !important;
   }
 
   &.btn-black {
     color: $color-white !important;
-    border: 0 !important;
+    border-color: $color-black !important;
     background-color: $color-black !important;
   }
 
   &.btn-purple {
     color: $color-white !important;
-    border: 0 !important;
+    border-color: $color-purple !important;
     background-color: $color-purple !important;
   }
 
   &.btn-darkpurple {
     color: $color-white !important;
-    border: 0 !important;
+    border-color: $color-darkpurple !important;
     background-color: $color-darkpurple !important;
   }
 

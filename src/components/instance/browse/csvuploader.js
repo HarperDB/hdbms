@@ -26,13 +26,8 @@ export default ({ refreshInstance, instance_id, auth }) => {
     setStatus('validating');
     const validatedCount = await getTotalRecords({ schema, table, auth });
     setValidatedRecordCount(validatedCount);
-
-    if (validatedCount < (newRecordCount + initialRecordCount)) {
-      return setTimeout(() => validateData(), 1000);
-    }
-
+    if (validatedCount < (newRecordCount + initialRecordCount)) return setTimeout(() => validateData(), 1000);
     refreshInstance(Date.now());
-
     return setTimeout(() => {
       setStatus(false);
       history.push(`/instances/${instance_id}/browse/${schema}/${table}`);
@@ -42,7 +37,6 @@ export default ({ refreshInstance, instance_id, auth }) => {
   // insert the processed data into HarperDB
   const insertData = async () => {
     if (!processedData) return false;
-
     setStatus('inserting');
     await csvDataLoad({ schema, table, data: processedData, auth });
     setProcessedData(false);
@@ -53,7 +47,6 @@ export default ({ refreshInstance, instance_id, auth }) => {
   const processData = (data) => {
     setStatus('processing');
     setNewRecordCount(data.length - 1);
-
     worker.postMessage(data);
     worker.addEventListener('message', (event) => {
       setProcessedData(event.data);

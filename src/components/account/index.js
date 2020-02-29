@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import routes from './routes';
-import SubNav from '../shared/subnav';
+import SubNav from '../navs/subnav';
 
 export default () => (
   <>

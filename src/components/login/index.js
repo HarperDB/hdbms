@@ -3,15 +3,15 @@ import { Card, CardBody, Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
-import useLMS from '../state/lmsData';
-import getUser from '../api/lms/getUser';
-import getCustomer from '../api/lms/getCustomer';
-import defaultFormData from '../state/defaults/defaultAuthFormData';
-import defaultLMSData from '../state/defaults/defaultLMSData';
+import useLMS from '../../state/stores/lmsData';
+import getUser from '../../api/lms/getUser';
+import getCustomer from '../../api/lms/getCustomer';
+import defaultAuthFormData from '../../state/defaults/defaultAuthFormData';
+import defaultLMSData from '../../state/defaults/defaultLMSData';
 
 export default () => {
   const [lmsData, setLMSData] = useLMS(defaultLMSData);
-  const [formData, updateForm] = useState(defaultFormData);
+  const [formData, updateForm] = useState(defaultAuthFormData);
   const history = useHistory();
 
   useAsyncEffect(async () => {

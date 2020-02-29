@@ -12,7 +12,11 @@
     "domain_name": null,
     "elastic_ip_address": null,
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_GoB3yLzygPeGMu",
+    "stripe_plan_id": "plan_GoB4aP5U6PuR6u",
+    "stripe_storage_product_id": null,
+    "stripe_storage_plan_id": null,
+    "storage_qty_gb": null
   },
   {
     "id": "4f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
@@ -23,11 +27,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "4f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "plan_GoB54KxG5JRkwm",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 10
   },
   {
     "id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
@@ -38,11 +46,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "cee98941-8975-44d6-88e6-9a1a4fa02b25.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "2GB_Beta",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 100
   },
   {
     "id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
@@ -53,11 +65,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "4GB_Beta",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 250
   },
   {
     "id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
@@ -68,11 +84,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "7a60b51d-7983-4659-a34b-cfb578a4db54.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "8GB_Beta",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 500
   },
   {
     "id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
@@ -83,11 +103,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "f0d29404-9fb1-4d66-ab98-41f05e1ac665.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "4GB_Beta",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 1000
   },
   {
     "id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
@@ -98,11 +122,15 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "2GB_Beta",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 500
   },
   {
     "id": "8291c224-6911-4155-b5a9-34559e5a45ff",
@@ -113,10 +141,14 @@
     "is_ssl": false,
     "is_local": false,
     "status": "ready",
-    "instance_region": "us-east",
+    "instance_region": "us-east-1",
     "domain_name": "8291c224-6911-4155-b5a9-34559e5a45ff.cloud.harperdb.io",
     "elastic_ip_address": "172.168.2.12",
     "customer_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "product_1"
+    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+    "stripe_plan_id": "plan_GoB54KxG5JRkwm",
+    "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
+    "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
+    "storage_qty_gb": 250
   }
 ]
