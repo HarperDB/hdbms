@@ -18,21 +18,23 @@
     background-size: cover;
   }
 
-  input,
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    border: 0 !important;
-    background: $color-black !important;
-    color: $color-white !important;
-    -webkit-box-shadow: 0 0 0 30px $color-black inset !important;
-    -webkit-text-fill-color: $color-white !important;
+  .card {
+    background: $white-overlay !important;
+    box-shadow: none !important;
   }
 
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: $color-grey !important;
-    opacity: 0.5; /* Firefox */
+  input {
+    text-align: center !important;
+    background: $white-overlay !important;
+    color: $color-black !important;
+    border: 0 !important;
+
+    &::placeholder {
+      text-align: center !important;
+      color: $grey-overlay !important;
+      font-family: $font-family-sans;
+      font-weight: $font-weight-light;
+    }
   }
 
   #login-error {

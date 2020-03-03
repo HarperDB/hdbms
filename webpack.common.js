@@ -7,7 +7,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const cssNano = require('cssnano');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
@@ -17,7 +16,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'hdb.js',
+    filename: '[contenthash].js',
     publicPath: '/',
   },
 
@@ -36,8 +35,7 @@ module.exports = {
       inject: 'body',
       inlineSource: '.(js|css)$',
     }),
-    new HtmlWebpackInlineSourcePlugin(),
-    new MiniCssExtractPlugin({ filename: 'hdb.css' }),
+    new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },
       { from: path.join(__dirname, '/src/assets/fonts/'), to: 'fonts/' },

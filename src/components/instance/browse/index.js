@@ -1,57 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
+import useAsyncEffect from 'use-async-effect';
 
 import DataTable from './datatable';
-import EntityManager from '../shared/entityManager';
+import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
+import buildInstanceStructure from '../../../util/buildInstanceStructure';
+import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
 
-export default ({ auth, structure, network, refreshInstance }) => {
+export default ({ auth, structure, refreshInstance }) => {
   const history = useHistory();
   const { instance_id, schema, table, action } = useParams();
+  const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
 
-  const [filtered, onFilteredChange] = useState([]);
-  const [sorted, onSortedChange] = useState([]);
-  const [page, onPageChange] = useState(0);
+  useAsyncEffect(() => {
+    handleSchemaTableRedirect({ entities, instance_id, schema, table, history, targetPath: '/browse' });
+  }, [schema, table, entities]);
 
-  const schemas = structure && Object.keys(structure);
-  const tables = structure && schemas && structure[schema] && Object.keys(structure[schema]);
-  const activeTable = structure && schemas && structure[schema] && tables && structure[schema][table] && structure[schema][table];
-
-  useEffect(() => {
-    if (activeTable) {
-      onFilteredChange([]);
-      onSortedChange([{ id: activeTable.hashAttribute, desc: false }]);
-      onPageChange(0);
-    }
-  }, [activeTable]);
-
-  useEffect(() => {
-    switch (true) {
-      case (!schemas && history.location.pathname !== '/browse'):
-        history.push(`/instances/${instance_id}/browse`);
-        break;
-      case (schemas && schemas.length && !schema):
-      case (schemas && schemas.length && schema && !schemas.includes(schema)):
-        history.push(`/instances/${instance_id}/browse/${schemas[0]}`);
-        break;
-      case (tables && tables.length && !table):
-      case (tables && tables.length && table && !tables.includes(table)):
-        history.push(`/instances/${instance_id}/browse/${schema}/${tables[0]}`);
-        break;
-      default:
-        break;
-    }
-  }, [schema, schemas, table, tables]);
+  useAsyncEffect(() => {
+    if (structure) setEntities(buildInstanceStructure({ structure, schema, table }));
+  }, [structure, schema, table]);
 
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager
           activeItem={schema}
-          items={schemas}
+          items={entities.schemas}
           auth={auth}
           refreshInstance={refreshInstance}
           baseUrl={`/instances/${instance_id}/browse`}
@@ -61,7 +39,7 @@ export default ({ auth, structure, network, refreshInstance }) => {
         { schema && (
           <EntityManager
             activeItem={table}
-            items={tables}
+            items={entities.tables}
             activeSchema={schema}
             baseUrl={`/instances/${instance_id}/browse/${schema}`}
             itemType="table"
@@ -71,31 +49,24 @@ export default ({ auth, structure, network, refreshInstance }) => {
           />
         )}
       </Col>
-      <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        { schema && table && action === 'csv' && activeTable ? (
+      <Col xl="9" lg="8" md="7" xs="12">
+        { schema && table && action === 'csv' && entities.activeTable ? (
           <CSVUploader
             auth={auth}
             instance_id={instance_id}
             refreshInstance={refreshInstance}
           />
-        ) : schema && table && action && activeTable ? (
+        ) : schema && table && action && entities.activeTable ? (
           <JSONViewer
-            newEntityColumns={activeTable.newEntityColumns}
-            hashAttribute={activeTable.hashAttribute}
+            newEntityColumns={entities.activeTable.newEntityColumns}
+            hashAttribute={entities.activeTable.hashAttribute}
             auth={auth}
             instance_id={instance_id}
             refreshInstance={refreshInstance}
           />
-        ) : schema && table && activeTable ? (
+        ) : schema && table && entities.activeTable ? (
           <DataTable
-            dataTableColumns={activeTable.dataTableColumns}
-            hashAttribute={activeTable.hashAttribute}
-            onFilteredChange={onFilteredChange}
-            filtered={filtered}
-            onSortedChange={onSortedChange}
-            sorted={sorted}
-            onPageChange={onPageChange}
-            page={page}
+            activeTable={entities.activeTable}
             auth={auth}
             instance_id={instance_id}
             refreshInstance={refreshInstance}
@@ -106,7 +77,7 @@ export default ({ auth, structure, network, refreshInstance }) => {
             <span className="mb-2">&nbsp;</span>
             <Card className="mb-3 mt-2 py-5">
               <CardBody>
-                <div className="text-center">Please {(schema && tables && !tables.length) || !schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}</div>
+                <div className="text-center">Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}</div>
               </CardBody>
             </Card>
           </>

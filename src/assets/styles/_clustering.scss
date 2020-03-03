@@ -1,0 +1,36 @@
+#clustering {
+  .cluster-system {
+    border-bottom: 1px solid $color-lightgrey;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+
+  .cluster-form {
+    &.error {
+      input {
+        border-color: $color-danger;
+      }
+    }
+
+    .form-cell {
+      width: 20%;
+    }
+  }
+
+  .config-row {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $color-grey;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    .text {
+      padding-top: 10px;
+      height: 36px;
+    }
+  }
+}
+
+

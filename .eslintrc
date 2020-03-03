@@ -4,7 +4,13 @@
   "env": {
     "browser": true
   },
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
+    "strict": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": 0,
     "camelcase": 0,
     "array-callback-return": 0,
     "react/require-extension": 0,
@@ -28,6 +34,6 @@
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "no-param-reassign": 0,
-    "max-lines": ["warn", {"max": 100, "skipComments": false}]
+    "max-lines": ["warn", {"max": 135, "skipComments": false}]
   }
 }

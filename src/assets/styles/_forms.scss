@@ -1,0 +1,205 @@
+input,
+select,
+textarea,
+.stripe-input-holder,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  border: 1px solid $color-lightgrey !important;
+  background: $light-white-overlay !important;
+  color: $color-black;
+  font-family: $font-family-sans;
+  font-weight: $font-weight-light;
+  font-size: $font-size-root;
+  outline: none !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: 0 0 0 1000px $light-white-overlay inset;
+  transition: none;
+
+  &::placeholder {
+    text-align: left !important;
+    color: $color-grey !important;
+    font-family: $font-family-sans;
+    font-weight: $font-weight-light;
+  }
+
+  &.text-center {
+    &::placeholder {
+      text-align: center !important;
+    }
+  }
+
+  &.outline {
+    &-dark {
+      border-color: transparent !important;
+      background: $faint-white-overlay !important;
+      color: $color-white !important;
+      width: 100%;
+      max-width: 280px;
+
+      &::placeholder {
+        color: $white-overlay !important;
+      }
+    }
+  }
+}
+
+.instance-toggle-holder {
+  padding-top: 6px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 170px;
+  font-size: 12px;
+
+  @media screen and (max-width: 575px) {
+    width: 160px !important;
+  }
+
+  .react-toggle-track {
+    background-color: $light-grey-overlay !important;
+
+    .react-toggle-track-x,
+    .react-toggle-track-check {
+      font-weight: 100 !important;
+
+      @media screen and (max-width: 575px) {
+        font-size: .75rem !important;
+      }
+    }
+  }
+
+  .react-toggle-thumb {
+    &::after {
+      position: absolute;
+      top: 3px;
+      left: 0;
+      right: 0;
+      font-size: 14px;
+      content: '\f00d';
+      font-family: 'FontAwesome' !important;
+      color: $color-danger;
+    }
+  }
+
+  .react-toggle--checked {
+    .react-toggle-track {
+      background-color: $faint-white-overlay !important;
+    }
+
+    .react-toggle-thumb {
+      &::after {
+        content: '\f00c';
+        color: $color-success;
+      }
+    }
+  }
+}
+
+.instance-filter-holder {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  overflow: hidden;
+  margin-left: 15px;
+
+  .clear-filter {
+    background: none !important;
+    border: 0 !important;
+    position: absolute;
+    right: 8px;
+    top: 0;
+  }
+}
+
+textarea {
+  height: auto !important;
+}
+
+.form-control {
+  box-shadow: none !important;
+}
+
+.stripe-input-holder {
+  padding: 8px 12px 0;
+  text-align: left;
+  height: 36px;
+}
+
+.nio-check-mark::before {
+  content: '\f00c';
+}
+
+.nio::before {
+  font-family: 'FontAwesome' !important;
+  font-style: normal;
+  font-weight: 400 !important;
+  font-variant: normal;
+  text-transform: none;
+  vertical-align: top;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.radio-button > div {
+  border-bottom: 1px solid $lighter-grey-overlay;
+  padding: 8px 0;
+  white-space: nowrap;
+
+  &:last-child {
+    border-bottom: 0;
+    padding-bottom: 4px;
+  }
+}
+
+.radio-checkbox-label {
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+.fieldset-label {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.fieldset {
+  border-top: 1px solid $lighter-grey-overlay;
+  padding: 5px 0;
+  max-height: 131px;
+  margin-bottom: 25px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &.full-height {
+    max-height: none;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#__lpform_input_idx_0,
+#__lpform_input_idx_0_numspan,
+#__lpform_input_idx_1,
+#__lpform_input_idx_1_numspan {
+  display: none;
+}
+
+#add-customer-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+

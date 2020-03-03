@@ -1,0 +1,19 @@
+#new-instance-modal {
+
+  .card {
+    box-shadow: none !important;
+
+    .instance-form-card-body {
+      background: $lighter-grey-overlay;
+    }
+  }
+
+  .instance-form-card-holder {
+
+    &:first-child {
+      @media screen and (max-width: 991px) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

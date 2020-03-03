@@ -5,7 +5,7 @@ import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
-import queryInstance from '../../../util/queryInstance';
+import queryInstance from '../../../api/queryInstance';
 
 export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance, auth }) => {
   const history = useHistory();
@@ -57,7 +57,7 @@ export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance,
 
   return (
     <>
-      <span className="text-bold text-white mb-2">{schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}&nbsp;</span>
+      <span className="text-white mb-2 floating-card-header">{schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}&nbsp;</span>
       <Card className="my-3">
         <CardBody>
           <Form onSubmit={submitRecord}>

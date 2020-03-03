@@ -1,15 +1,21 @@
 .alert {
   padding: 13px;
   border-radius: 6px;
-  width: 300px;
   margin-top: 5px;
   z-index: 9999;
+  display: flex;
+
+  .icon {
+    width: 40px;
+    flex-grow: 0;
+  }
 
   .message {
     padding-top: 7px;
     white-space: nowrap;
     text-overflow: clip;
     overflow: hidden;
+    flex-grow: 1;
   }
 
   &.success {

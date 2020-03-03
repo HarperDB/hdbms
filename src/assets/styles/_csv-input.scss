@@ -1,4 +1,4 @@
-#csv-uploader{
+#csv-uploader {
   position: relative;
   height: 300px;
   border: 0;
@@ -9,7 +9,8 @@
     width: 100%;
     text-align: center;
 
-    .clear-files {
+    .clear-files,
+    .browse-files {
       z-index: 99999;
     }
   }
@@ -26,6 +27,7 @@
       top: -30px;
       width:  100%;
       height: 330px;
+      background: none !important;
     }
   }
 

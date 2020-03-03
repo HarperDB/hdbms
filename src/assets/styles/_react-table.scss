@@ -7,12 +7,12 @@
   .rt-thead {
     &.-header {
       border-top: 1px solid rgba(0, 0, 0, .05) !important;
+      font-weight: 700;
     }
 
     &.-filters {
       input {
-        background: rgba(0, 0, 0, .2);
-        border: 0;
+        background: rgba(0, 0, 0, .2) !important;
       }
     }
   }
@@ -28,6 +28,7 @@
     .rt-td,
     .rt-th {
       text-align: left !important;
+      border-right: 0 !important;
 
       &.-sort-desc {
         box-shadow: inset 0 -2px 0 0 $color-black;
@@ -42,25 +43,55 @@
   .rt-tbody {
     .rt-td {
       overflow: visible;
+      font-family: Roboto, Helvetica, Arial, SansSerif !important;
     }
   }
+
   .-pagination {
     border-top: 1px solid rgba(0, 0, 0, .05);
     box-shadow: none;
     padding-top: 1rem;
 
-    input,
-    select {
-      height: 30px;
-    }
-
     .-btn {
       background: $color-purple !important;
       color: $color-white !important;
+      font-family: $font-family-sans;
+      font-weight: $font-weight-light;
+      min-width: 100px;
+      height: 33px;
+      margin-top: 3px;
 
       &:hover {
         background: $color-purple !important;
         color: $color-white !important;
+      }
+    }
+
+    .-previous,
+    .-next {
+      flex: 0 1;
+    }
+
+    .-center {
+      flex: none;
+    }
+
+    .-previous,
+    .-center,
+    .-next {
+      @media screen and (max-width: 905px) {
+        display: block;
+        width: 100%;
+        flex: none;
+        margin-bottom: 5px;
+
+        .-pageInfo {
+          margin-left: 0;
+        }
+
+        .-pageSizeOptions {
+          margin-right: 0;
+        }
       }
     }
   }
@@ -72,6 +103,14 @@
   .text-renderer {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  input,
+  select {
+    height: 33px !important;
+    color: $color-white;
+    border: 0 !important;
+    box-shadow: none;
   }
 
   .image-renderer {
@@ -88,4 +127,8 @@
     }
   }
 
+}
+
+.react-table-holder {
+  min-height: 714px;
 }

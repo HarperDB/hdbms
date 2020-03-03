@@ -1,10 +1,13 @@
+.floating-card-header {
+  text-shadow: 0 2px 3px $grey-overlay;
+  color: $color-white !important;
+}
+
 .card {
   background: $light-white-overlay !important;
   color: $color-black;
-
-  &.dark {
-    background: $white-overlay !important;
-  }
+  border-radius: 4px !important;
+  box-shadow: 0 0 5px $dark-grey-overlay;
 
   .card-body {
     padding: 15px;
@@ -12,28 +15,32 @@
     .scrollable {
       overflow-x: hidden;
       overflow-y: auto;
-      height: 75px;
+      height: 77px;
     }
   }
 
   &.instance {
-    height: 140px;
+    height: 150px;
     cursor: pointer;
 
-    input,
-    .btn {
-      border-color: transparent;
-    }
-    input {
-      background: $color-white;
-    }
-    .btn {
+    .instance-name {
       white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
+
     &.error {
       input {
         border-color: $color-danger;
       }
     }
+  }
+
+  &.no-shadow {
+    box-shadow: none;
+  }
+
+  &.no-background {
+    background: none !important;
   }
 }

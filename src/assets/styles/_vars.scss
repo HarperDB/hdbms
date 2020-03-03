@@ -15,12 +15,35 @@ $color-purple: #403b8a;
 $color-lightpurple: #7a3a87;
 
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
-$white-overlay: rgba(255, 255, 255, .2);
-$light-white-overlay: rgba(255, 255, 255, .7);
+$faint-white-overlay: rgba(255, 255, 255, .1);
+$white-overlay: rgba(255, 255, 255, .5);
+$light-white-overlay: rgba(255, 255, 255, .9);
 
-$grey-overlay: rgba(0, 0, 0, .2);
-$dark-grey-overlay: rgba(0, 0, 0, .5);
-$black-overlay: rgba(0, 0, 0, .8);
+$lighter-grey-overlay: rgba(0, 0, 0, .05);
+$light-grey-overlay: rgba(0, 0, 0, .3);
+$grey-overlay: rgba(0, 0, 0, .5);
+$dark-grey-overlay: rgba(0, 0, 0, .7);
+$black-overlay: rgba(0, 0, 0, .9);
 
 $fa-font-path: '/fonts';
 $border-radius-base: 6px;
+
+$font-family-sans: 'Raleway', Helvetica-Neue, Helvetica, Verdana, Sans-Serif !important;
+
+$font-size-root: 15px !important;
+$font-size-h1: calc(3vw + 3vh) !important;
+$font-size-h1-max: 65px !important;
+$font-size-h2: calc(2.5vw + 2.5vh) !important;
+$font-size-h2-max: 54px !important;
+$font-size-h3: calc(2vw + 2vh) !important;
+$font-size-h3-max: 43px !important;
+$font-size-h4: calc(1.5vw + 1.5vh) !important;
+$font-size-h4-max: 32px !important;
+$font-size-h5: 1.5rem !important;
+$font-size-h5-max: 1.5rem !important;
+$font-size-h6: 1.25rem !important;
+$font-size-h6-max: 1.25rem !important;
+
+$font-weight-light: 100 !important;
+$font-weight-bold: 700 !important;
+$font-line-height: 1.2 !important;

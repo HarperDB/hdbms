@@ -4,7 +4,8 @@ import { useHistory, useParams } from 'react-router';
 import CSVReader from 'react-csv-reader';
 import useAsyncEffect from 'use-async-effect';
 
-import queryInstance from '../../../util/queryInstance';
+import getTotalRecords from '../../../api/instance/getTotalRecords';
+import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
 import Worker from '../../../util/processCSV.worker';
 
@@ -20,24 +21,13 @@ export default ({ refreshInstance, instance_id, auth }) => {
   const [initialRecordCount, setInitialRecordCount] = useState(0);
   const [fileError, setFileError] = useState(false);
 
-  // get the current record count of the table
-  const getCurrentRecordCount = async () => {
-    const [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: `SELECT count(*) as newTotalRecords FROM ${schema}.${table} ` }, auth);
-    return newTotalRecords;
-  };
-
   // query the table to determine if all the records have been processed.
   const validateData = async () => {
     setStatus('validating');
-    const validatedCount = await getCurrentRecordCount();
+    const validatedCount = await getTotalRecords({ schema, table, auth });
     setValidatedRecordCount(validatedCount);
-
-    if (validatedCount < (newRecordCount + initialRecordCount)) {
-      return setTimeout(() => validateData(), 1000);
-    }
-
-    refreshInstance();
-
+    if (validatedCount < (newRecordCount + initialRecordCount)) return setTimeout(() => validateData(), 1000);
+    refreshInstance(Date.now());
     return setTimeout(() => {
       setStatus(false);
       history.push(`/instances/${instance_id}/browse/${schema}/${table}`);
@@ -47,9 +37,8 @@ export default ({ refreshInstance, instance_id, auth }) => {
   // insert the processed data into HarperDB
   const insertData = async () => {
     if (!processedData) return false;
-
     setStatus('inserting');
-    await queryInstance({ operation: 'csv_data_load', action: 'insert', schema, table, data: processedData }, auth);
+    await csvDataLoad({ schema, table, data: processedData, auth });
     setProcessedData(false);
     return setTimeout(() => validateData(), 1000);
   };
@@ -58,7 +47,6 @@ export default ({ refreshInstance, instance_id, auth }) => {
   const processData = (data) => {
     setStatus('processing');
     setNewRecordCount(data.length - 1);
-
     worker.postMessage(data);
     worker.addEventListener('message', (event) => {
       setProcessedData(event.data);
@@ -77,14 +65,14 @@ export default ({ refreshInstance, instance_id, auth }) => {
     history.push(`/instances/${instance_id}/browse/${schema}/${table}`);
   };
 
-  useAsyncEffect(async () => setInitialRecordCount(await getCurrentRecordCount()), []);
+  useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth })), []);
 
   return (
     <>
-      <span className="text-bold text-white mb-2">{schema} &gt; {table} &gt; csv upload</span>
+      <span className="text-white mb-2 floating-card-header">{schema} &gt; {table} &gt; csv upload</span>
       <Card className="my-3">
         <CardBody>
-          <Card id="csv-uploader" className="mb-4 mt-2 dark">
+          <Card id="csv-uploader" className="mb-4 mt-2 no-shadow">
             <div id="csv-message">
               {status === 'validating' ? (
                 <div className="text-purple text-center">validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records</div>
@@ -93,14 +81,17 @@ export default ({ refreshInstance, instance_id, auth }) => {
               ) : status === 'processed' ? (
                 <div className="text-purple text-center">
                   successfully prepared {commaNumbers(newRecordCount)} records<br />
-                  <Button color="purple" className="mt-2 clear-files" onClick={handleClear}>replace file</Button>
+                  <Button color="purple" className="mt-3 px-5 clear-files" onClick={handleClear}>replace file</Button>
                 </div>
               ) : status === 'processing' ? (
                 <div className="text-purple text-center">pre-processing {commaNumbers(newRecordCount)} records</div>
               ) : fileError ? (
                 <div className="text-danger text-center">{fileError}</div>
               ) : (
-                <div className="text-center">Click to select or drag and drop a .csv file to insert into {schema}.{table}</div>
+                <div className="text-center">
+                  Click to select or drag and drop a .csv file to insert into {schema}.{table}<br />
+                  <Button color="purple" className="mt-3 px-5 browse-files">browse files</Button>
+                </div>
               )}
             </div>
             { !status && (
