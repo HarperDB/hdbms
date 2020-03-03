@@ -121,7 +121,7 @@ export default () => {
             block
             onClick={() => setFormState({ submitted: true, error: false })}
           >
-            Sign Up For HarperDB Cloud <sup>&reg;</sup>
+            Create A Free HarperDB Studio Account
           </Button>
           {formState.error && (
             <div className="text-danger text-small text-center text-italic">
