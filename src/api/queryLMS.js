@@ -9,20 +9,11 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
-  if ((auth.user !== 'test@harperdb.io' || auth.pass !== 'a') && (auth.user !== 'david@harperdb.io' || auth.pass !== 'harperdb')) {
-    return {
-      body: {
-        result: false,
-        message: 'unknown user or password',
-      },
-    };
-  }
-
-  const completedEndpoints = ['addCustomer'];
+  const completedEndpoints = ['addCustomer', 'getUser'];
 
   if (completedEndpoints.includes(endpoint)) {
     const request = await fetch(
-      `https://api.harperdbcloudservices.com/Prod/${endpoint}`,
+      `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Dev/${endpoint}`,
       {
         method: 'POST',
         body: JSON.stringify(payload),

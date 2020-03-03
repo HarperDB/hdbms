@@ -9,4 +9,4 @@ export default async ({ auth, payload: { license_id, instance_id, customer_id, s
   });
 
   return response.body;
-}
+};
