@@ -14,7 +14,7 @@ export default ({ auth, customer_id, setLastUpdate }) => [{
   accessor: 'firstname',
   style: { paddingTop: 10 },
 }, {
-  Header: 'email',
+  Header: 'email address',
   accessor: 'email',
   style: { paddingTop: 10 },
 }, {
@@ -22,7 +22,7 @@ export default ({ auth, customer_id, setLastUpdate }) => [{
   Cell: ({
     original: { user_id },
   }) => (
-    <Button color="danger" className="connect" block onClick={() => removeUser({ auth, user_id, customer_id, setLastUpdate })}>delete</Button>),
+    <Button color="danger" className="connect" block onClick={() => removeUser({ auth, payload: { user_id, customer_id, setLastUpdate } })}>delete</Button>),
   width: 80,
   style: toggleCellPadding,
 }];

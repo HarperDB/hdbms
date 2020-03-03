@@ -9,22 +9,42 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
-  /*
-  const request = await fetch(
-    `https://api.harperdb.io/v1/${endpoint}`,
-    {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+  if ((auth.user !== 'test@harperdb.io' || auth.pass !== 'a') && (auth.user !== 'david@harperdb.io' || auth.pass !== 'harperdb')) {
+    return {
+      body: {
+        result: false,
+        message: 'unknown user or password',
       },
-    },
-  );
-  return request.json();
-  */
+    };
+  }
 
-  console.log('Calling API', endpoint);
+  const completedEndpoints = ['addCustomer'];
+
+  if (completedEndpoints.includes(endpoint)) {
+    const request = await fetch(
+      `https://api.harperdbcloudservices.com/Prod/${endpoint}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+        },
+      },
+    );
+    const response = await request.json();
+
+    if (response.errorType) {
+      const errorObject = JSON.parse(response.errorMessage);
+      return {
+        body: {
+          result: false,
+          message: errorObject.errorMessage,
+        },
+      };
+    }
+    return response;
+  }
 
   switch (endpoint) {
     case 'getProducts':
@@ -44,24 +64,24 @@ export default async ({ endpoint, payload, auth }) => {
     case 'getInvoices':
       return invoices;
     case 'addLicense':
-      return { result: true, message: 'Created license', key: '78rfh334ofholhfdoeh3f48hfq', company: 'customer-guid-1' };
+      return { statusCode: 200, body: { result: true, message: 'Created license', key: '78rfh334ofholhfdoeh3f48hfq', company: 'customer-guid-1' } };
     case 'updateLicense':
-      return { result: true, message: 'Updated license', key: '78rfh334ofholhfdoeh3f48hfq', company: 'customer-guid-1' };
+      return { statusCode: 200, body: { result: true, message: 'Updated license', key: '78rfh334ofholhfdoeh3f48hfq', company: 'customer-guid-1' } };
     case 'addTCAcceptance':
-      return { result: true, message: 'Received Terms and Conditions acceptance' };
+      return { statusCode: 200, body: { result: true, message: 'Received Terms and Conditions acceptance' } };
     case 'addPaymentMethod':
-      return { result: true, message: 'Payment method added to account' };
+      return { statusCode: 200, body: { result: true, message: 'Payment method added to account' } };
     case 'removePaymentMethod':
-      return { result: true, message: 'Payment method removed from account' };
+      return { statusCode: 200, body: { result: true, message: 'Payment method removed from account' } };
     case 'removeUser':
-      return { result: true, message: 'User removed from account' };
+      return { statusCode: 200, body: { result: true, message: 'User removed from account' } };
     case 'updateInstance':
-      return { result: true, message: 'Instance is being updated' };
+      return { statusCode: 200, body: { result: true, message: 'Instance is being updated' } };
     case 'addInstance':
-      return { result: true, message: 'Instance is being created||added', instance_id: 'instance-guid-1' };
+      return { statusCode: 200, body: { result: true, message: 'Instance is being created||added', instance_id: 'instance-guid-1' } };
     case 'addUser':
-      return { result: true, message: 'User created successfully', user_id: 'user-guid-6' };
+      return { statusCode: 200, body: { result: true, message: 'User created successfully', user_id: 'user-guid-6' } };
     default:
-      return { error: 'unknown endpoint' };
+      return { statusCode: 404, body: { error: 'unknown endpoint' } };
   }
 };

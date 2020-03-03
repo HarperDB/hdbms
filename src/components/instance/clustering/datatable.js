@@ -24,7 +24,7 @@ export default ({ instances, network, schema, table, auth, refreshInstance }) =>
         return { id, instance_name, is_ssl, host, port, url, clusterPort, publish, subscribe, connection, channel, subscriptions };
       });
       setTableData({ ...tableData, data: newTableData });
-      setTableState({ ...tableState, filtered: [], sorted: [{ id: 'name', desc: false }], page: 0 });
+      setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });
     }
   }, [table]);
 

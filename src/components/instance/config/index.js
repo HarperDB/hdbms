@@ -1,11 +1,11 @@
 import React from 'react';
 
 import UpdateInstanceForm from './updateInstanceForm';
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ auth, details, refreshInstance }) => {
-  const [{ products }] = useLMS(defaultLMSData);
+  const [{ products }] = useApp(defaultAppData);
 
   return (
     <>

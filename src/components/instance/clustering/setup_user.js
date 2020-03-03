@@ -8,7 +8,7 @@ import createClusterUser from '../../../api/instance/createClusterUser';
 
 export default ({ clusterUser, clusterRole, auth, refreshInstance }) => {
   const alert = useAlert();
-  const [userFormData, updateUserForm] = useState({ ...defaultFormData });
+  const [userFormData, updateUserForm] = useState(defaultFormData);
 
   useAsyncEffect(async () => {
     const { submitted, username, password } = userFormData;

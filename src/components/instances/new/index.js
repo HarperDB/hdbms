@@ -1,30 +1,26 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import getCustomer from '../../../api/lms/getCustomer';
-
 import steps from '../../../util/addInstanceSteps';
+
 import InstanceTypeForm from './type';
 import InstanceMetadataForm from './meta';
 import LocalInstanceForm from './local';
 import CloudInstanceForm from './cloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ setShowForm }) => {
-  const [lmsData, setLMSData] = useLMS(defaultLMSData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [appData] = useApp(defaultAppData);
   const [purchaseStep, setPurchaseStep] = useState('type');
   const [newInstance, setNewInstance] = useState({});
-  const hasCard = customerHasChargeableCard(lmsData.customer);
-
-  useAsyncEffect(async () => {
-    const customer = await getCustomer({ auth: lmsData.auth });
-    setLMSData({ ...lmsData, customer });
-  }, []);
+  const hasCard = customerHasChargeableCard(appData.customer);
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={() => setShowForm(false)}>
@@ -32,7 +28,7 @@ export default ({ setShowForm }) => {
         {steps[purchaseStep].label}
       </ModalHeader>
       <ModalBody>
-        {!lmsData.products ? (
+        {!appData.products ? (
           <Loader />
         ) : purchaseStep === 'type' ? (
           <InstanceTypeForm
@@ -48,7 +44,7 @@ export default ({ setShowForm }) => {
           />
         ) : purchaseStep === 'details_local' ? (
           <LocalInstanceForm
-            products={lmsData.products.localCompute}
+            products={appData.products.localCompute}
             hasCard={hasCard}
             newInstance={newInstance}
             setNewInstance={setNewInstance}
@@ -56,9 +52,9 @@ export default ({ setShowForm }) => {
           />
         ) : purchaseStep === 'details_cloud' ? (
           <CloudInstanceForm
-            products={lmsData.products.cloudCompute}
-            storage={lmsData.products.cloudStorage}
-            regions={lmsData.regions}
+            products={appData.products.cloudCompute}
+            storage={appData.products.cloudStorage}
+            regions={appData.regions}
             hasCard={hasCard}
             newInstance={newInstance}
             setNewInstance={setNewInstance}
@@ -66,17 +62,19 @@ export default ({ setShowForm }) => {
           />
         ) : purchaseStep === 'payment' ? (
           <CustomerPaymentForm
+            lmsAuth={lmsAuth}
             hasCard={hasCard}
             newInstance={newInstance}
-            computeProduct={lmsData.products[newInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
-            storageProduct={newInstance.is_local ? { price: 'FREE' } : lmsData.products.cloudStorage.find((p) => p.value === newInstance.storage_qty_gb)}
+            computeProduct={appData.products[newInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
+            storageProduct={newInstance.is_local ? { price: 'FREE' } : appData.products.cloudStorage.find((p) => p.value === newInstance.storage_qty_gb)}
             setPurchaseStep={setPurchaseStep}
           />
         ) : purchaseStep === 'confirm' ? (
           <ConfirmOrderForm
+            lmsAuth={lmsAuth}
             newInstance={newInstance}
-            computeProduct={lmsData.products[newInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
-            storageProduct={newInstance.is_local ? { price: 'FREE' } : lmsData.products.cloudStorage.find((p) => p.value === newInstance.storage_qty_gb)}
+            computeProduct={appData.products[newInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
+            storageProduct={newInstance.is_local ? { price: 'FREE' } : appData.products.cloudStorage.find((p) => p.value === newInstance.storage_qty_gb)}
             setShowForm={setShowForm}
             setPurchaseStep={setPurchaseStep}
           />

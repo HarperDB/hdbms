@@ -1,73 +1,52 @@
 {
-  "id": "customer-guid-1",
-  "name": "customer name",
-  "customer_hubspot_id": "guid",
-  "stripe_customer_object": {
-    "balance": 0,
-    "delinquent": true,
-    "discount": {},
-    "id": "string",
-    "sources": {
-      "data": [
-        {
-          "id": "card_1GFpVMDzYFZjJeDRi5I0el9T",
-          "object": "card",
-          "address_city": null,
-          "address_country": null,
-          "address_line1": null,
-          "address_line1_check": null,
-          "address_line2": null,
-          "address_state": null,
-          "address_zip": "80209",
-          "address_zip_check": null,
-          "brand": "Visa",
-          "country": "US",
-          "customer": "cus_GnQM9k8y55BtWs",
-          "cvc_check": null,
-          "dynamic_last4": null,
-          "exp_month": 8,
-          "exp_year": 2021,
-          "fingerprint": "ICvbhEovZZAH4OJf",
-          "funding": "credit",
-          "last4": "4242",
-          "metadata": {},
-          "name": "Test Name",
-          "tokenization_method": null
-        }
-      ]
-    },
-    "subscriptions": {
-      "data": [
-        {
-          "billing_cycle_anchor": 0,
-          "billing_thresholds": {},
-          "cancel_at": 0,
-          "cancel_at_period_end": true,
-          "canceled_at": 0,
-          "created": 0,
-          "current_period_end": 0,
-          "current_period_start": 0,
-          "customer": "string",
-          "default_payment_method": "string",
-          "default_source": "string",
-          "discount": {},
-          "ended_at": 0,
-          "id": "string",
-          "items": {
-            "data": [
-              {}
-            ]
-          },
-          "latest_invoice": {},
-          "metadata": {},
-          "next_pending_invoice_item_invoice": 0,
-          "plan": "string",
-          "quantity": 0,
-          "schedule": {},
-          "start_date": 0,
-          "status": "active"
-        }
-      ]
+  "statusCode": 200,
+  "body": {
+    "id": "customer-guid-1",
+    "name": "customer name",
+    "customer_hubspot_id": "guid",
+    "stripe_customer_object": {
+      "balance": 0,
+      "delinquent": true,
+      "discount": {},
+      "id": "string",
+      "sources": {
+        "data": [
+
+        ]
+      },
+      "subscriptions": {
+        "data": [
+          {
+            "billing_cycle_anchor": 0,
+            "billing_thresholds": {},
+            "cancel_at": 0,
+            "cancel_at_period_end": true,
+            "canceled_at": 0,
+            "created": 0,
+            "current_period_end": 0,
+            "current_period_start": 0,
+            "customer": "string",
+            "default_payment_method": "string",
+            "default_source": "string",
+            "discount": {},
+            "ended_at": 0,
+            "id": "string",
+            "items": {
+              "data": [
+                {}
+              ]
+            },
+            "latest_invoice": {},
+            "metadata": {},
+            "next_pending_invoice_item_invoice": 0,
+            "plan": "string",
+            "quantity": 0,
+            "schedule": {},
+            "start_date": 0,
+            "status": "active"
+          }
+        ]
+      }
     }
   }
 }

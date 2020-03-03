@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Col } from '@nio/ui-kit';
 
-import NewInstanceModal from '../new/modal';
+import NewInstanceModal from '../new';
 
 export default () => {
   const [showForm, setShowForm] = useState(false);

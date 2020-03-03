@@ -7,7 +7,7 @@ import defaultFormData from '../../../state/defaults/defaultClusterFormData';
 
 export default ({ port, setPort }) => {
   const alert = useAlert();
-  const [portFormData, updatePortForm] = useState({ ...defaultFormData });
+  const [portFormData, updatePortForm] = useState(defaultFormData);
 
   useAsyncEffect(async () => {
     const { submitted, newPort } = portFormData;

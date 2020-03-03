@@ -22,16 +22,16 @@ const buildRadioSelectStorageOptions = (size, { tiers, interval }) => {
   };
 };
 
-export default async ({ auth }) => {
-  const newProducts = await queryLMS({
+export default async () => {
+  const response = await queryLMS({
     endpoint: 'getProducts',
     method: 'POST',
-    auth,
+    auth: { user: 'harperdb', pass: 'harperdb' },
   });
 
-  const localComputeOptions = newProducts.body.find((p) => p.name === 'HarperDB Local Annual');
-  const cloudComputeOptions = newProducts.body.find((p) => p.name === 'HarperDB Cloud Beta');
-  const cloudStoragePlans = newProducts.body.find((p) => p.name === 'HarperDB Cloud Storage');
+  const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
+  const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Beta');
+  const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
   const cloudStorageOptions = [10, 100, 250, 500, 1000];
 
   const cloudStorage = cloudStorageOptions.map((size) => buildRadioSelectStorageOptions(size, cloudStoragePlans.plans[0]));

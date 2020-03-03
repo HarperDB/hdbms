@@ -5,15 +5,15 @@ import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import EntityManager from '../../shared/entityManager';
-import useLMS from '../../../state/stores/lmsData';
 import DataTable from './datatable';
 import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();
-  const [lmsData] = useLMS(defaultLMSData);
+  const [appData] = useApp(defaultAppData);
   const { instance_id, schema, table } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [] });
 
@@ -50,7 +50,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <DataTable
-          instances={lmsData.instances.filter((i) => i.id !== instance_id)}
+          instances={appData.instances.filter((i) => i.id !== instance_id)}
           network={network}
           schema={schema}
           table={table}

@@ -37,7 +37,7 @@ export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
     <>
       <Card>
         <CardBody>
-          <div className="new-instance-label">Instance Name</div>
+          <div className="fieldset-label">Instance Name</div>
           <div className="fieldset">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
@@ -54,7 +54,7 @@ export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
             </Row>
           </div>
 
-          <div className="new-instance-label">Admin Credentials</div>
+          <div className="fieldset-label">Admin Credentials</div>
           <div className="fieldset">
             <Row>
               <Col xs="4" className="pt-2">
@@ -87,7 +87,7 @@ export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
 
           {newInstance.is_local && (
             <>
-              <div className="new-instance-label">Instance Details</div>
+              <div className="fieldset-label">Instance Details</div>
               <div className="fieldset">
                 <Row>
                   <Col xs="4" className="pt-2">
@@ -162,7 +162,7 @@ export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
         </Col>
       </Row>
       {formState.error && (
-        <div className="text-danger text-center">
+        <div className="text-danger text-small text-center">
           <hr />
           {formState.error}
         </div>

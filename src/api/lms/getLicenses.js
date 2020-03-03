@@ -1,7 +1,11 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth }) => queryLMS({
-  endpoint: 'getLicenses',
-  method: 'POST',
-  auth,
-});
+export default async ({ auth }) => {
+  const response = await queryLMS({
+    endpoint: 'getLicenses',
+    method: 'POST',
+    auth,
+  });
+
+  return response.body;
+};

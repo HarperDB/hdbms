@@ -6,11 +6,11 @@ import useAsyncEffect from 'use-async-effect';
 import cardOptions from '../../../util/stripe/cardOptions';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurchaseStep }) => {
-  const [lmsData, setLMSData] = useLMS(defaultLMSData);
+export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurchaseStep, lmsAuth }) => {
+  const [appData, setAppData] = useApp(defaultAppData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
   const [error, setError] = useState(null);
@@ -30,9 +30,10 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
         setError(payload.error);
         setProcessing(false);
       } else {
-        await addPaymentMethod({ payment_method_id: payload.paymentMethod.id, stripe_customer_id: lmsData.customer.stripe_customer_object.id, auth: lmsData.auth });
-        const customer = await getCustomer({ auth: lmsData.auth });
-        setLMSData({ ...lmsData, customer });
+        console.log(lmsAuth);
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
+        const customer = await getCustomer({ auth: lmsAuth });
+        setAppData({ ...appData, customer });
         setProcessing(false);
         setAddedCard(true);
       }
@@ -43,7 +44,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
   return (
     <Card>
       <CardBody>
-        <div className="new-instance-label">Credit Card Details</div>
+        <div className="fieldset-label">Credit Card Details</div>
         <div className="fieldset full-height pt-3">
           {addedCard || hasCard ? (
             <>
@@ -158,7 +159,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
                 </Col>
               </Row>
               {error && (
-                <div className="text-danger text-center">
+                <div className="text-danger text-small text-center">
                   <hr className="mt-2" />
                   {error.message}
                 </div>

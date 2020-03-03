@@ -52,6 +52,7 @@ input:-webkit-autofill:active {
   overflow: hidden;
   display: inline-block;
   width: 170px;
+  font-size: 12px;
 
   @media screen and (max-width: 575px) {
     width: 160px !important;
@@ -158,8 +159,9 @@ textarea {
   overflow-x: hidden;
 }
 
-.new-instance-label {
+.fieldset-label {
   font-weight: 700;
+  font-size: 12px;
   margin-bottom: 5px;
 }
 
@@ -185,6 +187,17 @@ textarea {
 #__lpform_input_idx_1,
 #__lpform_input_idx_1_numspan {
   display: none;
+}
+
+#add-customer-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
 }
 
 

@@ -26,7 +26,7 @@ export default ({ products, hasCard, newInstance, setNewInstance, setPurchaseSte
     <>
       <Card>
         <CardBody>
-          <div className="new-instance-label">Instance Type</div>
+          <div className="fieldset-label">Instance Type</div>
           <div className="fieldset full-height">
             <RadioCheckbox
               className="radio-button"
@@ -65,7 +65,7 @@ export default ({ products, hasCard, newInstance, setNewInstance, setPurchaseSte
         </Col>
       </Row>
       {formState.error && (
-        <div className="text-danger text-center">
+        <div className="text-danger text-small text-center">
           <hr />
           {formState.error}
         </div>

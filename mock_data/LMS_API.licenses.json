@@ -1,98 +1,101 @@
-[
-  {
-    "license_id": "license-guid-0",
-    "instance_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_GoB3yLzygPeGMu",
-    "stripe_plan_id": "plan_GoB4aP5U6PuR6u"
-  },
-  {
-    "license_id": "license-guid-1",
-    "instance_id": "4f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "plan_GoB54KxG5JRkwm"
-  },
-  {
-    "license_id": "license-guid-2",
-    "instance_id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "2GB_Beta"
-  },
-  {
-    "license_id": "license-guid-3",
-    "instance_id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "4GB_Beta"
-  },
-  {
-    "license_id": "license-guid-4",
-    "instance_id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "8GB_Beta"
-  },
-  {
-    "license_id": "license-guid-5",
-    "instance_id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "4GB_Beta"
-  },
-  {
-    "license_id": "license-guid-6",
-    "instance_id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "2GB_Beta"
-  },
-  {
-    "license_id": "license-guid-7",
-    "instance_id": "8291c224-6911-4155-b5a9-34559e5a45ff",
-    "customer_id": "customer-id-guid",
-    "version": "2.0.14-BETA",
-    "exp_date": 1582669908353,
-    "storage_type": "LMDB",
-    "ram_allocation": 1,
-    "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
-    "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
-    "stripe_plan_id": "plan_GoB54KxG5JRkwm"
-  }
-]
+{
+  "statusCode": 200,
+  "body": [
+    {
+      "license_id": "license-guid-0",
+      "instance_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_GoB3yLzygPeGMu",
+      "stripe_plan_id": "plan_GoB4aP5U6PuR6u"
+    },
+    {
+      "license_id": "license-guid-1",
+      "instance_id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "plan_GoB54KxG5JRkwm"
+    },
+    {
+      "license_id": "license-guid-2",
+      "instance_id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "2GB_Beta"
+    },
+    {
+      "license_id": "license-guid-3",
+      "instance_id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "4GB_Beta"
+    },
+    {
+      "license_id": "license-guid-4",
+      "instance_id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "8GB_Beta"
+    },
+    {
+      "license_id": "license-guid-5",
+      "instance_id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "4GB_Beta"
+    },
+    {
+      "license_id": "license-guid-6",
+      "instance_id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "2GB_Beta"
+    },
+    {
+      "license_id": "license-guid-7",
+      "instance_id": "8291c224-6911-4155-b5a9-34559e5a45ff",
+      "customer_id": "customer-id-guid",
+      "version": "2.0.14-BETA",
+      "exp_date": 1582669908353,
+      "storage_type": "LMDB",
+      "ram_allocation": 1,
+      "fingerprint": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20df",
+      "stripe_product_id": "prod_Gh1XXQx6J8YaJl",
+      "stripe_plan_id": "plan_GoB54KxG5JRkwm"
+    }
+  ]
+}

@@ -6,13 +6,16 @@ import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string'
 
 import cardOptions from '../../../util/stripe/cardOptions';
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ setEditingCard, customerCard }) => {
-  const [lmsData, setLMSData] = useLMS(defaultLMSData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [appData, setAppData] = useApp(defaultAppData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
   const [error, setError] = useState(null);
@@ -34,9 +37,9 @@ export default ({ setEditingCard, customerCard }) => {
       if (payload.error) {
         setError(payload.error);
       } else {
-        await addPaymentMethod({ payment_method_id: payload.paymentMethod.id, stripe_customer_id: lmsData.customer.stripe_customer_object.id, auth: lmsData.auth });
-        const customer = await getCustomer({ auth: lmsData.auth });
-        setLMSData({ ...lmsData, customer });
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
+        const customer = await getCustomer({ auth: lmsAuth });
+        setAppData({ ...appData, customer });
         setEditingCard(false);
         if (returnURL) {
           setTimeout(() => history.push(returnURL), 100);
@@ -119,7 +122,7 @@ export default ({ setEditingCard, customerCard }) => {
         </Row>
       )}
       {error && (
-        <div className="text-danger text-center">
+        <div className="text-danger text-small text-center">
           <hr className="mt-2" />
           {error.message}
         </div>

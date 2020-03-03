@@ -34,7 +34,7 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
     <>
       <Card>
         <CardBody>
-          <div className="new-instance-label">Storage Size (scroll for more)</div>
+          <div className="fieldset-label">Storage Size (scroll for more)</div>
           <div className="fieldset">
             <RadioCheckbox
               id="storage_qty_gb"
@@ -47,7 +47,7 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
             />
           </div>
 
-          <div className="new-instance-label">Instance RAM (scroll for more)</div>
+          <div className="fieldset-label">Instance RAM (scroll for more)</div>
           <div className="fieldset">
             <RadioCheckbox
               id="stripe_plan_id"
@@ -60,7 +60,7 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
             />
           </div>
 
-          <div className="new-instance-label">Instance Region (scroll for more)</div>
+          <div className="fieldset-label">Instance Region (scroll for more)</div>
           <div className="fieldset">
             <RadioCheckbox
               id="instance_region"
@@ -100,7 +100,7 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
         </Col>
       </Row>
       {formState.error && (
-        <div className="text-danger text-center">
+        <div className="text-danger text-small text-center">
           <hr />
           {formState.error}
         </div>

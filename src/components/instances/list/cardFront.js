@@ -22,7 +22,7 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
             )}
           </Col>
         </Row>
-        <hr className="mt-3 mb-1" />
+        <hr className="mt-4 mb-1" />
         <div className="scrollable">
           <Row className="text-smaller text-nowrap text-darkgrey">
             <Col xs="3">URL</Col>
@@ -35,7 +35,8 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
             <Col xs="9">{compute ? compute.ram : <i className="fa fa-spinner fa-spin text-purple" />}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">STORAGE</Col>
-            <Col xs="9">{storage? storage.disk_space : <i className="fa fa-spinner fa-spin text-purple" />}</Col>
+            <Col xs="9">{storage ? storage.disk_space : 'n/a'}</Col>
+            <Col xs="12"><hr className="mt-1 mb-0" /></Col>
           </Row>
         </div>
       </CardBody>

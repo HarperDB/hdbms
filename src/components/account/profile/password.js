@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Row, Col, Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import defaultProfileFormData from '../../../state/defaults/defaultProfileFormData';
+import defaultPasswordFormData from '../../../state/defaults/defaultPasswordFormData';
 
 export default () => {
-  const [passwordForm, updatePasswordForm] = useState(defaultProfileFormData);
+  const [passwordForm, updatePasswordForm] = useState(defaultPasswordFormData);
 
   useAsyncEffect(async () => {
     if (passwordForm.submitted) {

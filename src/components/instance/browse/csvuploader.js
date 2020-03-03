@@ -72,7 +72,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
       <span className="text-white mb-2 floating-card-header">{schema} &gt; {table} &gt; csv upload</span>
       <Card className="my-3">
         <CardBody>
-          <Card id="csv-uploader" className="mb-4 mt-2 dark">
+          <Card id="csv-uploader" className="mb-4 mt-2 no-shadow">
             <div id="csv-message">
               {status === 'validating' ? (
                 <div className="text-purple text-center">validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records</div>
@@ -81,14 +81,17 @@ export default ({ refreshInstance, instance_id, auth }) => {
               ) : status === 'processed' ? (
                 <div className="text-purple text-center">
                   successfully prepared {commaNumbers(newRecordCount)} records<br />
-                  <Button color="purple" className="mt-2 clear-files" onClick={handleClear}>replace file</Button>
+                  <Button color="purple" className="mt-3 px-5 clear-files" onClick={handleClear}>replace file</Button>
                 </div>
               ) : status === 'processing' ? (
                 <div className="text-purple text-center">pre-processing {commaNumbers(newRecordCount)} records</div>
               ) : fileError ? (
                 <div className="text-danger text-center">{fileError}</div>
               ) : (
-                <div className="text-center">Click to select or drag and drop a .csv file to insert into {schema}.{table}</div>
+                <div className="text-center">
+                  Click to select or drag and drop a .csv file to insert into {schema}.{table}<br />
+                  <Button color="purple" className="mt-3 px-5 browse-files">browse files</Button>
+                </div>
               )}
             </div>
             { !status && (

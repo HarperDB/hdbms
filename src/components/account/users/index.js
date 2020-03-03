@@ -2,20 +2,25 @@ import React, { useState } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
+import useLMS from '../../../state/stores/lmsAuth';
+
 import DataTable from './datatable';
 import AddUserForm from './add';
 import getUsers from '../../../api/lms/getUsers';
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import customerUserColumns from '../../../util/datatable/customerUserColumns';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default () => {
-  const [{ auth, customer }] = useLMS(defaultLMSData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [{ customer }] = useApp(defaultAppData);
   const [lastUpdate, setLastUpdate] = useState(false);
-  const [tableData, setTableData] = useState({ data: [], columns: customerUserColumns({ auth, setLastUpdate, customer_id: customer?.id }) });
+  const [tableData, setTableData] = useState({ data: [], columns: customerUserColumns({ auth: lmsAuth, setLastUpdate, customer_id: customer?.id }) });
 
   useAsyncEffect(async () => {
-    const newTableData = await getUsers({ auth });
+    const newTableData = await getUsers({ auth: lmsAuth });
     setTableData({ ...tableData, data: newTableData });
   }, [lastUpdate]);
 

@@ -1,1 +1,1 @@
-export default { profileError: '', passwordError: '', oldPasswordError: false, newPasswordError: false, verifyPasswordError: false };
+export default { firstname: '', lastname: '', email: '', submitted: false, error: false };

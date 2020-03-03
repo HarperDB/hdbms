@@ -3,9 +3,12 @@ import { Col, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import addInstance from '../../../api/lms/addInstance';
+import useInstanceAuth from '../../../state/stores/instanceAuths';
 
-export default ({ newInstance, computeProduct, storageProduct, setShowForm, setPurchaseStep }) => {
+export default ({ newInstance, computeProduct, storageProduct, setShowForm, setPurchaseStep, lmsAuth }) => {
   const [formData, updateForm] = useState({ submitted: false, error: false });
+  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
+
   let totalPrice = 0;
   if (computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
   if (storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
@@ -13,12 +16,15 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
   useAsyncEffect(async () => {
     const { submitted } = formData;
     if (submitted) {
-      console.log(newInstance);
+      const newInstanceAuth = { user: newInstance.user, pass: newInstance.pass };
+      delete newInstance.user;
+      delete newInstance.pass;
 
-      const response = await addInstance(newInstance);
+      const response = await addInstance({ auth: lmsAuth, payload: { ...newInstance } });
       if (response.result) {
+        setInstanceAuths({ ...instanceAuths, [response.instance_id]: newInstanceAuth });
         updateForm({ submitted: false, error: false });
-        setShowForm(false);
+        setTimeout(() => setShowForm(false), 0);
       } else {
         updateForm({ submitted: false, error: response.message });
       }

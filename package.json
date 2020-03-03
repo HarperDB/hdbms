@@ -19,7 +19,7 @@
     "@stripe/stripe-js": "^1.0.2",
     "font-awesome": "^4.7.0",
     "json-stringify-pretty-compact": "^2.0.0",
-    "query-string": "^6.11.0",
+    "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-alert": "^6.0.0",
     "react-card-flip": "^1.0.10",
@@ -70,7 +70,7 @@
     "sass-lint": "^1.13.1",
     "sass-loader": "^8.0.2",
     "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.41.6",
+    "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"

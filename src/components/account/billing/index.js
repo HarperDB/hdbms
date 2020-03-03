@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import useLMS from '../../../state/stores/lmsData';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import StaticCard from './cardStatic';
 import EditCard from './cardEdit';
 import Invoices from './invoices';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default () => {
-  const [lmsData] = useLMS(defaultLMSData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [appData] = useApp(defaultAppData);
   const [editingCard, setEditingCard] = useState(false);
-  const customerCard = customerHasChargeableCard(lmsData.customer);
+  const customerCard = customerHasChargeableCard(appData.customer);
 
   return (
     <Row>
@@ -26,11 +29,11 @@ export default () => {
               />
             ) : (
               <StaticCard
-                customerId={lmsData.customer.id}
-                customerStripeId={lmsData.customer.stripe_customer_object.id}
+                customerId={appData.customer.id}
+                customerStripeId={appData.customer.stripe_customer_object.id}
                 customerCard={customerCard}
                 setEditingCard={setEditingCard}
-                auth={lmsData.auth}
+                auth={lmsAuth}
               />
             )}
           </CardBody>

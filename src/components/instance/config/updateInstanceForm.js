@@ -3,20 +3,22 @@ import { Button, Card, CardBody, Col, Input, RadioCheckbox, Row } from '@nio/ui-
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
-import useLMS from '../../../state/stores/lmsData';
+import useLMS from '../../../state/stores/lmsAuth';
 import updateInstance from '../../../api/lms/updateInstance';
 import updateLicense from '../../../api/lms/updateLicense';
 import setLicense from '../../../api/instance/setLicense';
-import defaultLMSData from '../../../state/defaults/defaultLMSData';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ instanceAuth, details, refreshInstance, computeProducts, storageProducts }) => {
-  const [{ auth, customer, regions }] = useLMS(defaultLMSData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [{ customer }] = useApp(defaultAppData);
   const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ instance_name: details.instance_name, stripe_plan_id: details.stripe_plan_id, storage_qty_gb: details.storage_qty_gb });
   const hasCard = customerHasChargeableCard(customer);
-  const thisRegion = details.instance_region && regions && regions.find((r) => r.value === details.instance_region);
 
   let totalPrice = 0;
   const newComputePrice = computeProducts.find((p) => p.value === formData.stripe_plan_id);
@@ -34,9 +36,9 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
     if (submitted) {
       const { stripe_product_id, instance_name, instance_id, customer_id, license_id, fingerprint, storage_qty_gb } = formData;
 
-      const newLicense = await updateLicense({ auth, payload: { license_id, stripe_product_id, instance_id, customer_id, fingerprint } });
+      const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, instance_id, customer_id, fingerprint } });
       await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
-      await updateInstance({ auth, payload: { stripe_product_id, instance_id, customer_id, instance_name, storage_qty_gb } });
+      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, instance_id, customer_id, instance_name, storage_qty_gb } });
       setFormState({ submitted: false });
       refreshInstance(Date.now());
     }
@@ -45,7 +47,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
   return (
     <Card className="my-3">
       <CardBody>
-        <div className="new-instance-label">Instance Name</div>
+        <div className="fieldset-label">Instance Name</div>
         <div className="fieldset">
           <Input
             onChange={(e) => updateForm({ ...formData, instance_name: e.target.value, error: false })}
@@ -55,18 +57,18 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
           />
         </div>
 
-        {thisRegion && (
+        {details.region && (
           <>
-            <div className="new-instance-label">Instance Region (no modification)</div>
+            <div className="fieldset-label">Instance Region (no modification)</div>
             <div className="fieldset">
-              {thisRegion.label}
+              {details.region.label}
             </div>
           </>
         )}
 
         {storageProducts && (
           <>
-            <div className="new-instance-label">Storage Size</div>
+            <div className="fieldset-label">Storage Size</div>
             <div className="fieldset full-height">
               <RadioCheckbox
                 id="storage_qty_gb"
@@ -75,13 +77,13 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
                 onChange={(value) => updateForm({ ...formData, storage_qty_gb: value })}
                 options={storageProducts}
                 value={formData.storage_qty_gb}
-                defaultValue={details.storage_qty_gb ? storageProducts.find((p) => p.value === details.storage_qty_gb) : storageProducts[0]}
+                defaultValue={details.storage}
               />
             </div>
           </>
         )}
 
-        <div className="new-instance-label">Instance Type</div>
+        <div className="fieldset-label">Instance Type</div>
         <div className="fieldset full-height">
           {computeProducts && (
             <RadioCheckbox
@@ -91,7 +93,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
               onChange={(value) => updateForm({ ...formData, stripe_plan_id: value })}
               options={computeProducts}
               value={formData.stripe_plan_id}
-              defaultValue={details.stripe_plan_id ? computeProducts.find((p) => p.value === details.stripe_plan_id) : computeProducts[0]}
+              defaultValue={details.compute}
             />
           )}
         </div>
@@ -103,7 +105,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
             <b>{!hasChanged ? 'Current' : 'New'} Price</b>
           </Col>
           <Col xs="7" className="text-right text-nowrap">
-            <b>${totalPrice.toFixed(2)}/{computeProducts[0].interval}</b>
+            <b>${totalPrice.toFixed(2)}/{details.compute.interval}</b>
           </Col>
         </Row>
 

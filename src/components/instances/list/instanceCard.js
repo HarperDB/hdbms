@@ -7,7 +7,6 @@ import CardBack from './cardBack';
 
 export default (props) => {
   const [flipState, setFlipState] = useState(false);
-
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <ReactCardFlip isFlipped={flipState}>

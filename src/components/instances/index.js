@@ -3,38 +3,44 @@ import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import useInstanceAuth from '../../state/stores/instanceAuths';
+import useApp from '../../state/stores/appData';
+import useLMS from '../../state/stores/lmsAuth';
+
+import defaultAppData from '../../state/defaults/defaultAppData';
+import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
+
 import InstanceCard from './list/instanceCard';
 import NewInstanceCard from './list/newInstanceCard';
-import useLMS from '../../state/stores/lmsData';
-import defaultLMSData from '../../state/defaults/defaultLMSData';
-import getInstances from '../../api/lms/getInstances';
-import getLicenses from '../../api/lms/getLicenses';
-import getProducts from '../../api/lms/getProducts';
-import getRegions from '../../api/lms/getRegions';
-import filterInstances from '../../util/filterInstances';
 import SubNav from '../navs/subnav';
 
+import getInstances from '../../api/lms/getInstances';
+import getLicenses from '../../api/lms/getLicenses';
+import filterInstances from '../../util/filterInstances';
+import getCustomer from '../../api/lms/getCustomer';
+import getProducts from '../../api/lms/getProducts';
+import getRegions from '../../api/lms/getRegions';
+
 export default () => {
+  const [lmsAuth] = useLMS(defaultLMSAuth);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
-  const [lmsData, setLMSData] = useLMS(defaultLMSData);
+  const [appData, setAppData] = useApp(defaultAppData);
   const [search, setSearch] = useState('');
   const [local, setLocal] = useState(true);
   const [cloud, setCloud] = useState(true);
   const [filteredInstances, setFilteredInstances] = useState([]);
 
-  useAsyncEffect(async () => {
-    const instances = await getInstances({ auth: lmsData.auth });
-    const licenses = await getLicenses({ auth: lmsData.auth });
-    const products = await getProducts({ auth: lmsData.auth });
-    const regions = await getRegions({ auth: lmsData.auth });
-    setLMSData({ ...lmsData, instances, licenses, products, regions });
-  }, []);
-
   useAsyncEffect(() => {
-    if (lmsData.instances.length) {
-      setFilteredInstances(filterInstances({ local, cloud, search, instances: lmsData.instances }));
-    }
-  }, [search, local, cloud, lmsData.instances]);
+    setFilteredInstances(filterInstances({ local, cloud, search, instances: appData.instances }));
+  }, [search, local, cloud, appData.instances]);
+
+  useAsyncEffect(async () => {
+    const products = await getProducts();
+    const regions = await getRegions();
+    const customer = await getCustomer({ auth: lmsAuth });
+    const licenses = await getLicenses({ auth: lmsAuth });
+    const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
+    setAppData({ ...appData, customer, products, regions, instances, licenses });
+  }, []);
 
   return (
     <>
@@ -48,13 +54,11 @@ export default () => {
       />
       <Row>
         <NewInstanceCard />
-        {filteredInstances.map((i) => (
+        {filteredInstances?.map((i) => (
           <InstanceCard
             key={i.id}
             {...i}
-            compute={lmsData.products && lmsData.products[i.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === i.stripe_plan_id)}
-            storage={i.is_local ? { disk_space: 'n/a' } : lmsData.products && lmsData.products.cloudStorage.find((p) => p.value === i.storage_qty_gb)}
-            hasAuth={instanceAuths[i.id]}
+            hasAuth={instanceAuths && instanceAuths[i.id]}
             setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
           />
         ))}
