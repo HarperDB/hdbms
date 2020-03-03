@@ -8,5 +8,5 @@ export default async ({ auth, payload: { instance_id, customer_id, stripe_produc
     auth,
   });
 
-  return response.body
+  return response.body;
 };

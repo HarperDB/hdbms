@@ -1,14 +1,12 @@
 import queryLMS from '../queryLMS';
 
-const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram } }) => {
-  return {
-    price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
-    ram: instance_ram,
-    interval,
-    label: `${instance_ram} RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
-    value: id,
-  };
-};
+const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram } }) => ({
+  price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
+  ram: instance_ram,
+  interval,
+  label: `${instance_ram} RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
+  value: id,
+});
 
 const buildRadioSelectStorageOptions = (size, { tiers, interval }) => {
   const pricingTier = tiers.find((p) => (p.up_to && size <= p.up_to) || !p.up_to);

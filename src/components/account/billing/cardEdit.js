@@ -3,7 +3,7 @@ import { Button, Row, Col, Input } from '@nio/ui-kit';
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useLocation, useHistory } from 'react-router-dom';
-import queryString from 'query-string'
+import queryString from 'query-string';
 
 import cardOptions from '../../../util/stripe/cardOptions';
 import useLMS from '../../../state/stores/lmsAuth';
