@@ -35,106 +35,102 @@ export default () => {
 
   return (
     <div id="add-customer-background">
-      <Card className="no-shadow">
-        <CardBody>
-          {formState.success ? (
-            <div className="p-4 text-center">
-              <h5>Success!</h5>
-              <hr />
-              <i className="fa fa-2x fa-thumbs-up text-purple" />
-              <hr className="mb-4" />
-              Check your email for your username and password.
-            </div>
-          ) : formState.submitted ? (
-            <div className="p-4 text-center">
-              <h5>Submitting</h5>
-              <hr />
-              <i className="fa fa-2x fa-spinner fa-spin text-purple" />
-              <hr className="mb-4" />
-              The office dogs are setting up your account.
-            </div>
-          ) : (
-            <>
-              <div className="fieldset-label">first name</div>
-              <div className="fieldset full-height">
-                <Input
-                  type="text"
-                  className="mb-0 text-center"
-                  name="firstname"
-                  value={formData.firstname}
-                  onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
-                />
-              </div>
+      {formState.success ? (
+        <div className="p-4 text-center">
+          <h5>Success!</h5>
+          <hr />
+          <i className="fa fa-2x fa-thumbs-up text-purple" />
+          <hr className="mb-4" />
+          Check your email for your username and password.
+        </div>
+      ) : formState.submitted ? (
+        <div className="p-4 text-center">
+          <h5>Submitting</h5>
+          <hr />
+          <i className="fa fa-2x fa-spinner fa-spin text-purple" />
+          <hr className="mb-4" />
+          The office dogs are setting up your account.
+        </div>
+      ) : (
+        <>
+          <div className="fieldset-label">first name</div>
+          <div className="fieldset full-height">
+            <Input
+              type="text"
+              className="mb-0 text-center"
+              name="firstname"
+              value={formData.firstname}
+              onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
+            />
+          </div>
 
-              <div className="fieldset-label">last name</div>
-              <div className="fieldset full-height">
-                <Input
-                  type="text"
-                  className="mb-0 text-center"
-                  name="lastname"
-                  value={formData.lastname}
-                  onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
-                />
-              </div>
+          <div className="fieldset-label">last name</div>
+          <div className="fieldset full-height">
+            <Input
+              type="text"
+              className="mb-0 text-center"
+              name="lastname"
+              value={formData.lastname}
+              onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
+            />
+          </div>
 
-              <div className="fieldset-label">email address</div>
-              <div className="fieldset full-height">
-                <Input
-                  type="text"
-                  className="mb-0 text-center"
-                  name="email"
-                  value={formData.email}
-                  onChange={(e) => updateForm({ ...formData, email: e.target.value, error: false })}
-                />
-              </div>
+          <div className="fieldset-label">email address</div>
+          <div className="fieldset full-height">
+            <Input
+              type="text"
+              className="mb-0 text-center"
+              name="email"
+              value={formData.email}
+              onChange={(e) => updateForm({ ...formData, email: e.target.value, error: false })}
+            />
+          </div>
 
-              <div className="fieldset-label">company</div>
-              <div className="fieldset full-height">
+          <div className="fieldset-label">company</div>
+          <div className="fieldset full-height">
+            <Input
+              type="text"
+              className="mb-0 text-center"
+              name="company"
+              value={formData.company}
+              onChange={(e) => updateForm({ ...formData, company: e.target.value, error: false })}
+            />
+          </div>
+
+          <div className="fieldset-label">subdomain</div>
+          <div className="fieldset full-height">
+            <Row noGutters>
+              <Col xs="8">
                 <Input
                   type="text"
                   className="mb-0 text-center"
                   name="company"
-                  value={formData.company}
-                  onChange={(e) => updateForm({ ...formData, company: e.target.value, error: false })}
+                  value={formData.subdomain}
+                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
                 />
-              </div>
+              </Col>
+              <Col xs="4" className="pt-2 pl-1 text-nowrap">
+                .harperdbcloud.com
+              </Col>
+            </Row>
 
-              <div className="fieldset-label">subdomain</div>
-              <div className="fieldset full-height">
-                <Row noGutters>
-                  <Col xs="8">
-                    <Input
-                      type="text"
-                      className="mb-0 text-center"
-                      name="company"
-                      value={formData.subdomain}
-                      onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
-                    />
-                  </Col>
-                  <Col xs="4" className="pt-2 pl-1 text-nowrap">
-                    .harperdbcloud.com
-                  </Col>
-                </Row>
+          </div>
 
-              </div>
-
-              <Button
-                color="success"
-                block
-                onClick={() => setFormState({ submitted: true, error: false })}
-              >
-                Sign Up For HarperDB Cloud <sup>&reg;</sup>
-              </Button>
-              {formState.error && (
-                <div className="text-danger text-small text-center text-italic">
-                  <hr />
-                  {formState.error}
-                </div>
-              )}
-            </>
+          <Button
+            color="success"
+            block
+            onClick={() => setFormState({ submitted: true, error: false })}
+          >
+            Sign Up For HarperDB Cloud <sup>&reg;</sup>
+          </Button>
+          {formState.error && (
+            <div className="text-danger text-small text-center text-italic">
+              <hr />
+              {formState.error}
+            </div>
           )}
-        </CardBody>
-      </Card>
+        </>
+      )}
     </div>
   );
 };

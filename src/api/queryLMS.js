@@ -9,33 +9,46 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
-  const completedEndpoints = ['addCustomer', 'getUser'];
+  const completedEndpoints = ['getUser', 'addCustomer'];
 
   if (completedEndpoints.includes(endpoint)) {
-    const request = await fetch(
-      `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Dev/${endpoint}`,
-      {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
-        },
-      },
-    );
-    const response = await request.json();
+    console.log('Querying LMS Live API', endpoint);
 
-    if (response.errorType) {
-      const errorObject = JSON.parse(response.errorMessage);
+    try {
+      const request = await fetch(
+        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Dev/${endpoint}`,
+        {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+          },
+        },
+      );
+      const response = await request.json();
+
+      if (response.errorType) {
+        const errorObject = JSON.parse(response.errorMessage);
+        return {
+          body: {
+            result: false,
+            message: errorObject.errorMessage,
+          },
+        };
+      }
+      return response;
+    } catch (e) {
       return {
         body: {
           result: false,
-          message: errorObject.errorMessage,
+          message: e.toString(),
         },
       };
     }
-    return response;
   }
+
+  console.log('Querying LMS Mock API', endpoint);
 
   switch (endpoint) {
     case 'getProducts':
