@@ -16,7 +16,7 @@ export default async ({ endpoint, payload, auth }) => {
 
     try {
       const request = await fetch(
-        `https://api.harperdbcloudservices.com/prod/${endpoint}`, // `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/dev/${endpoint}`,
+        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/prod/${endpoint}`, // `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/dev/${endpoint}`,
         {
           method: 'POST',
           body: JSON.stringify(payload),
