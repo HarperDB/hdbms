@@ -1,11 +1,11 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { firstname, lastname, email, company, subdomain } }) => {
+export default async ({ payload: { firstname, lastname, email, company, subdomain } }) => {
   const response = await queryLMS({
     endpoint: 'addCustomer',
     method: 'POST',
     payload: { firstname, lastname, email, company, subdomain },
-    auth,
+    auth: { user: 'david@harperdb.io', pass: 'harperdb' },
   });
 
   return response.body;

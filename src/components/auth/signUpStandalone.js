@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Input, Button, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
@@ -21,7 +21,7 @@ export default () => {
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ auth: { user: 'david@harperdb.io', pass: 'harperdb' }, payload: { firstname, lastname, email, company, subdomain } });
+        const response = await addCustomer({ payload: { firstname, lastname, email, company, subdomain } });
         if (response.result) {
           updateForm({ firstname: '', lastname: '', email: '', company: '', subdomain: '' });
           setFormState({ submitted: false, error: false, success: true });
@@ -32,6 +32,8 @@ export default () => {
       }
     }
   }, [formState]);
+
+  useAsyncEffect(() => setFormState({ error: false, submitted: false }), [formData]);
 
   return (
     <div id="add-customer-background">
@@ -61,6 +63,7 @@ export default () => {
               name="firstname"
               value={formData.firstname}
               onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -72,6 +75,7 @@ export default () => {
               name="lastname"
               value={formData.lastname}
               onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -83,6 +87,7 @@ export default () => {
               name="email"
               value={formData.email}
               onChange={(e) => updateForm({ ...formData, email: e.target.value, error: false })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -94,6 +99,7 @@ export default () => {
               name="company"
               value={formData.company}
               onChange={(e) => updateForm({ ...formData, company: e.target.value, error: false })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -107,6 +113,7 @@ export default () => {
                   name="company"
                   value={formData.subdomain}
                   onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
+                  disabled={formState.submitted}
                 />
               </Col>
               <Col xs="4" className="pt-2 pl-1 text-nowrap">
@@ -120,8 +127,9 @@ export default () => {
             color="success"
             block
             onClick={() => setFormState({ submitted: true, error: false })}
+            disabled={formState.submitted}
           >
-            Create A Free HarperDB Account
+            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Create A Free HarperDB Account</span>}
           </Button>
           {formState.error && (
             <div className="text-danger text-small text-center text-italic">

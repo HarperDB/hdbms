@@ -13,7 +13,7 @@ export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
   const [, setAppData] = useApp(defaultAppData);
 
-  return lmsAuth.user ? (
+  return lmsAuth.email ? (
     <Navbar id="app-nav" dark fixed="top" expand="xs">
       <div className="navbar-brand">
         <div id="logo" title="HarperDB Logo" />
@@ -30,7 +30,7 @@ export default () => {
           </NavLink>
         </NavItem>
         <NavItem>
-          <DumbLink title="Log Out" onClick={() => { setLMSAuth(defaultLMSAuth); setAppData(defaultAppData); setTimeout(() => history.push('/'), 0); }}>
+          <DumbLink title="Log Out" onClick={() => { setLMSAuth(defaultLMSAuth); setAppData(defaultAppData); setTimeout(() => history.push('/sign-in'), 0); }}>
             <i className="fa fa-sign-out fa-lg d-sm-none d-inline-block" /><i className="fa fa-sign-out d-none d-sm-inline-block" />&nbsp;<span className="d-none d-sm-inline-block">Log Out</span>
           </DumbLink>
         </NavItem>

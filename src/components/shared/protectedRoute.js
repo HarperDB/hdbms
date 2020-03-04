@@ -6,7 +6,7 @@ import TopNav from '../navs/topnav';
 
 export default ({ component, path }) => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  return lmsAuth.user && lmsAuth.pass ? (
+  return lmsAuth.email && lmsAuth.pass ? (
     <>
       <TopNav />
       <Route path={path} component={component} />

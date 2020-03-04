@@ -29,8 +29,8 @@ export default () => {
     if (instance_id) {
       const products = await getProducts();
       const regions = await getRegions();
-      const customer = await getCustomer({ auth: lmsAuth });
-      const licenses = await getLicenses({ auth: lmsAuth });
+      const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
+      const licenses = await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
       const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
       const newAppData = { ...appData, customer, products, regions, instances, licenses };
       setAppData(newAppData);

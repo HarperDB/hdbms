@@ -3,6 +3,7 @@ $color-black: #212121;
 $color-darkgrey: #696969;
 $color-grey: #bcbcbc;
 $color-lightgrey: #ddd;
+$color-lightergrey: #efefef;
 $color-white: #fefefe;
 
 $color-primary: #0280c4;
@@ -19,7 +20,7 @@ $faint-white-overlay: rgba(255, 255, 255, .1);
 $white-overlay: rgba(255, 255, 255, .5);
 $light-white-overlay: rgba(255, 255, 255, .9);
 
-$lighter-grey-overlay: rgba(0, 0, 0, .05);
+$lighter-grey-overlay: rgba(0, 0, 0, .15);
 $light-grey-overlay: rgba(0, 0, 0, .3);
 $grey-overlay: rgba(0, 0, 0, .5);
 $dark-grey-overlay: rgba(0, 0, 0, .7);

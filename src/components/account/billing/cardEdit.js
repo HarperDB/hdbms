@@ -38,7 +38,7 @@ export default ({ setEditingCard, customerCard }) => {
         setError(payload.error);
       } else {
         await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
-        const customer = await getCustomer({ auth: lmsAuth });
+        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
         setAppData({ ...appData, customer });
         setEditingCard(false);
         if (returnURL) {

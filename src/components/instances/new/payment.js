@@ -30,9 +30,8 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
         setError(payload.error);
         setProcessing(false);
       } else {
-        console.log(lmsAuth);
         await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
-        const customer = await getCustomer({ auth: lmsAuth });
+        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
         setAppData({ ...appData, customer });
         setProcessing(false);
         setAddedCard(true);

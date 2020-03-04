@@ -144,7 +144,7 @@ textarea {
 }
 
 .radio-button > div {
-  border-bottom: 1px solid $lighter-grey-overlay;
+  border-bottom: 1px solid $color-lightergrey;
   padding: 8px 0;
   white-space: nowrap;
 
@@ -166,7 +166,7 @@ textarea {
 }
 
 .fieldset {
-  border-top: 1px solid $lighter-grey-overlay;
+  border-top: 1px solid $color-lightergrey;
   padding: 5px 0;
   max-height: 131px;
   margin-bottom: 25px;
@@ -182,13 +182,6 @@ textarea {
   }
 }
 
-#__lpform_input_idx_0,
-#__lpform_input_idx_0_numspan,
-#__lpform_input_idx_1,
-#__lpform_input_idx_1_numspan {
-  display: none;
-}
-
 #add-customer-background {
   position: absolute;
   top: 0;
@@ -199,6 +192,16 @@ textarea {
   height: 100%;
   width: 100%;
 }
+
+#instances {
+  #__lpform_input_idx_0,
+  #__lpform_input_idx_0_numspan,
+  #__lpform_input_idx_1,
+  #__lpform_input_idx_1_numspan {
+    display: none;
+  }
+}
+
 
 
 

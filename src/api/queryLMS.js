@@ -9,20 +9,20 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
-  const completedEndpoints = ['getUser', 'addCustomer'];
+  const completedEndpoints = ['getUser', 'addCustomer', 'getCustomer', 'updatePassword', 'getProducts', 'getRegions', 'addPaymentMethod']; // , 'getLicenses'
 
   if (completedEndpoints.includes(endpoint)) {
     console.log('Querying LMS Live API', endpoint);
 
     try {
       const request = await fetch(
-        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/prod/${endpoint}`, // `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/dev/${endpoint}`,
+        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Prod/${endpoint}`, // `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/dev/${endpoint}`,
         {
           method: 'POST',
           body: JSON.stringify(payload),
           headers: {
             'Content-Type': 'application/json',
-            authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+            authorization: `Basic ${btoa(`${auth.email}:${auth.pass}`)}`,
           },
         },
       );
@@ -67,6 +67,8 @@ export default async ({ endpoint, payload, auth }) => {
       return licenses;
     case 'getInvoices':
       return invoices;
+    case 'addCustomer':
+      return { statusCode: 200, body: { result: true, customer_id: 15932301, user_id: '1f312c71-6577-40ae-b874-1b9a4787ed66' } };
     case 'addLicense':
       return { statusCode: 200, body: { result: true, message: 'Created license', key: '78rfh334ofholhfdoeh3f48hfq', company: 'customer-guid-1' } };
     case 'updateLicense':
@@ -85,6 +87,10 @@ export default async ({ endpoint, payload, auth }) => {
       return { statusCode: 200, body: { result: true, message: 'Instance is being created||added', instance_id: 'instance-guid-1' } };
     case 'addUser':
       return { statusCode: 200, body: { result: true, message: 'User created successfully', user_id: 'user-guid-6' } };
+    case 'resetPassword':
+      return { statusCode: 200, body: { result: true, message: 'If an account with that email exists, you will receive a password reset email shortly.' } };
+    case 'updatePassword':
+      return { statusCode: 200, body: { result: true, message: 'Password successfully updated.' } };
     default:
       return { statusCode: 404, body: { error: 'unknown endpoint' } };
   }

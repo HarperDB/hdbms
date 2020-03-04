@@ -1,12 +1,28 @@
 #login-form {
   position: absolute;
-  top: 50%;
+  top: 25%;
   left: 50%;
-  transform: translate(-50%, -60%);
+  transform: translateX(-50%);
   width: 100%;
   max-width: 270px;
   height: auto;
   overflow: visible;
+
+  &.sign-up {
+    .card {
+      min-height: 173px !important;
+    }
+    .subdomain-label {
+      font-size: .75rem;
+      line-height: 1.7;
+    }
+  }
+
+  &.forgot-password {
+    .card {
+      min-height: 129px !important;
+    }
+  }
 
   #login-logo {
     margin: 0 auto 20px;
@@ -19,32 +35,34 @@
   }
 
   .card {
-    background: $white-overlay !important;
+    background: $faint-white-overlay !important;
     box-shadow: none !important;
   }
 
-  input {
+  input,
+  input:-webkit-autofill,
+  input:-webkit-autofill:active,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:hover {
     text-align: center !important;
-    background: $white-overlay !important;
-    color: $color-black !important;
+    background: $lighter-grey-overlay !important;
+    color: $color-white !important;
     border: 0 !important;
+    box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
 
     &::placeholder {
       text-align: center !important;
-      color: $grey-overlay !important;
+      color: $white-overlay !important;
       font-family: $font-family-sans;
       font-weight: $font-weight-light;
     }
   }
 
-  #login-error {
-    height: 40px;
-    line-height: 1.2 !important;
+  .login-nav-link {
+    color: $white-overlay !important;
 
-    .btn {
-      &:hover {
-        color: $color-white !important;
-      }
+    &:hover {
+      color: $color-white !important;
     }
   }
 }
