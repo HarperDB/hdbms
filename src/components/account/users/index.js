@@ -15,12 +15,13 @@ import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [appData] = useApp(defaultAppData);
   const [{ customer }] = useApp(defaultAppData);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [tableData, setTableData] = useState({ data: [], columns: customerUserColumns({ auth: lmsAuth, setLastUpdate, customer_id: customer?.id }) });
 
   useAsyncEffect(async () => {
-    const newTableData = await getUsers({ auth: lmsAuth });
+    const newTableData = await getUsers({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
     setTableData({ ...tableData, data: newTableData });
   }, [lastUpdate]);
 

@@ -8,7 +8,8 @@
   height: auto;
   overflow: visible;
 
-  &.sign-up {
+  &.sign-up,
+  &.sign-in {
     .card {
       min-height: 173px !important;
     }

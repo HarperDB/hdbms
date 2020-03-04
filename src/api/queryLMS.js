@@ -9,14 +9,36 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 
 // eslint-disable-next-line no-unused-vars
 export default async ({ endpoint, payload, auth }) => {
-  const completedEndpoints = ['getUser', 'addCustomer', 'getCustomer', 'updatePassword', 'getProducts', 'getRegions', 'addPaymentMethod']; // , 'getLicenses'
+  const completedEndpoints = [
+    'addCustomer',
+    //'addInstance',
+    //'addLicense',
+    'addPaymentMethod',
+    'addTCAcceptance',
+    'addUser',
+    'getCustomer',
+    //'getInstances',
+    //'getInvoices',
+    'getLicenses',
+    'getProducts',
+    'getRegions',
+    'getUser',
+    'getUsers',
+    //'removeInstance',
+    'removePaymentMethod',
+    'removeUser',
+    'resetPassword',
+    //'updateInstance',
+    //'updateLicense',
+    'updatePassword',
+  ];
 
   if (completedEndpoints.includes(endpoint)) {
     console.log('Querying LMS Live API', endpoint);
 
     try {
       const request = await fetch(
-        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Prod/${endpoint}`, // `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/dev/${endpoint}`,
+        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Prod/${endpoint}`,
         {
           method: 'POST',
           body: JSON.stringify(payload),

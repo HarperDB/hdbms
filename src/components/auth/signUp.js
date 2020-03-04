@@ -36,15 +36,28 @@ export default () => {
   return (
     <div id="login-form" className="sign-up">
       <div id="login-logo" title="HarperDB Logo" />
-      <Card className="mb-3 mt-2">
-        <CardBody>
-          {formState.success ? (
+      {formState.success ? (
+        <Card className="mb-3 mt-2">
+          <CardBody>
             <div className="text-center text-white pt-4">
               <b>Success!</b><br /><br />
               Check your email for your username and password.
             </div>
-          ) : (
-            <>
+          </CardBody>
+        </Card>
+      ) : formState.submitted ? (
+        <Card className="mb-3 mt-2">
+          <CardBody>
+            <div className="text-white text-center pt-4">
+              <b>Creating Your Account</b><br /><br />
+              <i className="fa fa-spinner fa-spin text-white" />
+            </div>
+          </CardBody>
+        </Card>
+      ) : (
+        <>
+          <Card className="mb-3 mt-2">
+            <CardBody>
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 className="mb-2 text-center"
@@ -111,23 +124,23 @@ export default () => {
               >
                 {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
               </Button>
-            </>
+            </CardBody>
+          </Card>
+          {formState.error ? (
+            <div className="text-small text-white text-center">
+              {formState.error}&nbsp;
+            </div>
+          ) : (
+            <Row className="text-small">
+              <Col xs="6" className="text-nowrap">
+                <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+              </Col>
+              <Col xs="6" className="text-nowrap text-right">
+                <NavLink to="/forgot-password" className="login-nav-link">Forgot Password</NavLink>
+              </Col>
+            </Row>
           )}
-        </CardBody>
-      </Card>
-      {formState.error ? (
-        <div className="text-small text-white text-center">
-          {formState.error}&nbsp;
-        </div>
-      ) : (
-        <Row className="text-small">
-          <Col xs="6" className="text-nowrap">
-            <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
-          </Col>
-          <Col xs="6" className="text-nowrap text-right">
-            <NavLink to="/forgot-password" className="login-nav-link">Forgot Password</NavLink>
-          </Col>
-        </Row>
+        </>
       )}
     </div>
   );

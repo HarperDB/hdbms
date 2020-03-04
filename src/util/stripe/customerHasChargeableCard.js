@@ -1,1 +1,1 @@
-export default (customer) => customer?.stripe_customer_object?.sources?.data?.[0];
+export default (customer) => customer?.stripe_payment_methods?.[0];

@@ -30,7 +30,7 @@ export default () => {
             ) : (
               <StaticCard
                 customerId={appData.customer.id}
-                customerStripeId={appData.customer.stripe_customer_object.id}
+                customerStripeId={appData.customer.stripe_customer_id}
                 customerCard={customerCard}
                 setEditingCard={setEditingCard}
                 auth={lmsAuth}

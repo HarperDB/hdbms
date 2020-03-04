@@ -30,7 +30,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
         setError(payload.error);
         setProcessing(false);
       } else {
-        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_id } });
         const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
         setAppData({ ...appData, customer });
         setProcessing(false);

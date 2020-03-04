@@ -37,7 +37,7 @@ export default ({ setEditingCard, customerCard }) => {
       if (payload.error) {
         setError(payload.error);
       } else {
-        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_object.id } });
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_id } });
         const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
         setAppData({ ...appData, customer });
         setEditingCard(false);
@@ -111,13 +111,17 @@ export default ({ setEditingCard, customerCard }) => {
             <Button disabled={processing} onClick={() => setEditingCard(false)} block color="danger" className="mb-2">Cancel</Button>
           </Col>
           <Col sm="6">
-            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">Save New Card</Button>
+            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">
+              {processing ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Save New Card</span>}
+            </Button>
           </Col>
         </Row>
       ) : (
         <Row>
           <Col sm="12">
-            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">Add Card To Account</Button>
+            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">
+              {processing ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add Card To Account</span>}
+            </Button>
           </Col>
         </Row>
       )}
