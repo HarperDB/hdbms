@@ -4,7 +4,7 @@
     "id": "customer-guid-1",
     "name": "customer name",
     "customer_hubspot_id": "guid",
-    "stripe_customer_id": "string",
+    "stripe_id": "string",
     "stripe_payment_methods": [
       {
         "id": "pm_1GJ5Ro2eZvKYlo2C28JN4mxF",

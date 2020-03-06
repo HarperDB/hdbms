@@ -1,11 +1,9 @@
 import React from 'react';
 import { Button } from '@nio/ui-kit';
 
-import removeUser from '../../api/lms/removeUser';
-
 const toggleCellPadding = { paddingTop: 3, paddingBottom: 0, paddingLeft: 0, paddingRight: 2 };
 
-export default ({ auth, customer_id, setLastUpdate }) => [{
+export default ({ current_user_id, setUserToRemove }) => [{
   Header: 'last name',
   accessor: 'lastname',
   style: { paddingTop: 10 },
@@ -21,8 +19,7 @@ export default ({ auth, customer_id, setLastUpdate }) => [{
   Header: '',
   Cell: ({
     original: { user_id },
-  }) => (
-    <Button color="danger" className="connect" block onClick={() => removeUser({ auth, payload: { user_id, customer_id, setLastUpdate } })}>delete</Button>),
+  }) => current_user_id !== user_id && (<Button color="danger" className="connect" block onClick={() => setUserToRemove(user_id)}>delete</Button>),
   width: 80,
   style: toggleCellPadding,
 }];

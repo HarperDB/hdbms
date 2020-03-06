@@ -4,37 +4,23 @@ import useAsyncEffect from 'use-async-effect';
 
 import SubNav from '../navs/subnav';
 import routes from './routes';
-import useLMS from '../../state/stores/lmsAuth';
 import useInstanceAuth from '../../state/stores/instanceAuths';
 import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
-import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
 import defaultActiveInstance from '../../state/defaults/defaultActiveInstance';
-import getInstances from '../../api/lms/getInstances';
-import getLicenses from '../../api/lms/getLicenses';
 import useApp from '../../state/stores/appData';
 import defaultAppData from '../../state/defaults/defaultAppData';
-import getProducts from '../../api/lms/getProducts';
-import getRegions from '../../api/lms/getRegions';
-import getCustomer from '../../api/lms/getCustomer';
+
 
 export default () => {
   const { instance_id } = useParams();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [appData, setAppData] = useApp(defaultAppData);
+  const [appData] = useApp(defaultAppData);
   const [instanceAuths] = useInstanceAuth({});
   const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
   const [lastUpdate, refreshInstance] = useState(false);
 
   useAsyncEffect(async () => {
     if (instance_id) {
-      const products = await getProducts();
-      const regions = await getRegions();
-      const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
-      const licenses = await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
-      const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
-      const newAppData = { ...appData, customer, products, regions, instances, licenses };
-      setAppData(newAppData);
-      const activeInstanceObject = await buildActiveInstanceObject({ instance_id, instanceAuths, appData: newAppData });
+      const activeInstanceObject = await buildActiveInstanceObject({ instance_id, instanceAuths, appData });
       if (!activeInstanceObject.error) {
         setActiveInstance(activeInstanceObject);
       }

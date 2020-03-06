@@ -1,11 +1,56 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
+import useAsyncEffect from 'use-async-effect';
+import { useAlert } from 'react-alert';
 
 import defaultTableState from '../../../state/defaults/defaultTableState';
+import customerUserColumns from '../../../util/datatable/customerUserColumns';
+import getUsers from '../../../api/lms/getUsers';
+import removeUser from '../../../api/lms/removeUser';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ tableData }) => {
+export default ({ lastUpdate, setLastUpdate }) => {
+  const alert = useAlert();
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [{ customer, user }] = useApp(defaultAppData);
   const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'lastname', desc: false }] });
+  const [userToRemove, setUserToRemove] = useState(false);
+  const [tableData, setTableData] = useState({ loading: false, data: [], columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: user.user_id }) });
+
+  useAsyncEffect(() => {
+    if (user) {
+      setTableData({ ...tableData, columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: user.user_id }) });
+    }
+  }, [user]);
+
+  useAsyncEffect(async () => {
+    if (customer) {
+      setTableData({ ...tableData, loading: true });
+      const response = await getUsers({ auth: lmsAuth, payload: { customer_id: customer.customer_id } });
+      if (response.result === false) {
+        alert.error(response.message);
+        setTableData({ ...tableData, loading: false });
+      } else {
+        setTableData({ ...tableData, data: response, loading: false });
+      }
+    }
+  }, [lastUpdate, customer]);
+
+  useAsyncEffect(async () => {
+    if (userToRemove && userToRemove !== user.user_id) {
+      const response = await removeUser({ auth: lmsAuth, payload: { user_id: userToRemove, customer_id: customer.customer_id } });
+      if (response.result === false) {
+        alert.error(response.message);
+      } else {
+        setLastUpdate(Date.now());
+      }
+      setUserToRemove(false);
+    }
+  }, [userToRemove]);
 
   return (
     <>
@@ -14,9 +59,8 @@ export default ({ tableData }) => {
           <span className="text-white mb-2 floating-card-header">existing users</span>
         </Col>
         <Col className="text-right text-white text-nowrap">
-          <a onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}>
-            <i title="Filter Users" className="fa fa-search mr-3 floating-card-header" />
-          </a>
+          <i title="Refresh Users" className={`floating-card-header fa  mr-3 ${tableData.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
+          <i title="Filter Users" className="fa fa-search floating-card-header" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
         </Col>
       </Row>
       <Card className="my-3">

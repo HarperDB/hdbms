@@ -38,5 +38,6 @@ export default async ({ schema, table, tableState, auth }) => {
   if (newData) result.tableData = newData;
   if (newTotalPages) result.totalPages = newTotalPages;
   result.totalRecords = newTotalRecords;
+
   return result;
 };

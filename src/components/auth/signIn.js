@@ -39,7 +39,7 @@ export default () => {
           setLMSAuth({ email, pass });
           setAppData({ ...appData, user: response });
           if (response.update_password) {
-            history.push('/instances'); //history.push('/update-password');
+            history.push('/instances'); // history.push('/update-password');
           } else {
             history.push('/instances');
           }

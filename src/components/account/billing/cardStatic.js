@@ -4,38 +4,36 @@ import { Row, Col, Button } from '@nio/ui-kit';
 import { useAlert } from 'react-alert';
 
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
-export default ({ customerId, customerCard, customerStripeId, setEditingCard, auth }) => {
-  const [removing, setRemoving] = useState(false);
+export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCode, cardLast4, cardExp }) => {
   const alert = useAlert();
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [formState, setFormState] = useState({ submitted: false, error: false });
 
   useAsyncEffect(async () => {
-    if (removing) {
-      const response = await removePaymentMethod({
-        auth,
-        payload: {
-          customer_id: customerId,
-          stripe_card_id: customerCard.id,
-          customer_stripe_id: customerStripeId,
-        },
-      });
-      setRemoving(false);
+    const { submitted } = formState;
+    if (submitted) {
+      const response = await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
       if (response.result) {
+        setLastUpdate(Date.now());
         alert.success(response.message);
+        setFormState({ error: false, submitted: false });
       } else {
-        alert.error(response.message);
+        setFormState({ error: response.message, submitted: false });
       }
     }
-  }, [removing]);
+  }, [formState]);
 
-  return (
-    <div>
+  return cardId ? (
+    <>
       <Row className="standardHeight">
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           card number
         </Col>
         <Col md="6" xs="12">
-          <div className="stripe-input-holder">**** **** **** {customerCard.last4}</div>
+          <div className="fake-input">**** **** **** {cardLast4}</div>
         </Col>
       </Row>
       <hr />
@@ -44,7 +42,7 @@ export default ({ customerId, customerCard, customerStripeId, setEditingCard, au
           expiration
         </Col>
         <Col md="6" xs="12">
-          <div className="stripe-input-holder">{customerCard.exp_month} / {customerCard.exp_year}</div>
+          <div className="fake-input">{cardExp}</div>
         </Col>
       </Row>
       <hr />
@@ -53,7 +51,7 @@ export default ({ customerId, customerCard, customerStripeId, setEditingCard, au
           cvcc
         </Col>
         <Col md="6" xs="12">
-          <div className="stripe-input-holder">***</div>
+          <div className="fake-input">***</div>
         </Col>
       </Row>
       <hr />
@@ -62,7 +60,7 @@ export default ({ customerId, customerCard, customerStripeId, setEditingCard, au
           billing postal code
         </Col>
         <Col md="6" xs="12">
-          <div className="stripe-input-holder">{customerCard.address_zip}</div>
+          <div className="fake-input">{cardPostalCode}</div>
         </Col>
       </Row>
       <hr />
@@ -75,13 +73,21 @@ export default ({ customerId, customerCard, customerStripeId, setEditingCard, au
             block
             color="danger"
             className="mb-2"
-            disabled={removing}
-            onClick={() => setRemoving(true)}
+            onClick={() => setFormState({ submitted: true, error: false })}
+            disabled={formState.submitted}
           >
-            Remove Card
+            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove Card</span>}
           </Button>
         </Col>
       </Row>
-    </div>
+      {formState.error && (
+        <div className="text-danger text-small text-center text-italic">
+          <hr />
+          {formState.error}
+        </div>
+      )}
+    </>
+  ) : (
+    <i className="fa fa-spinner fa-spin text-purple" />
   );
 };

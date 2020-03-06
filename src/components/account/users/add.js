@@ -4,33 +4,38 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
 import addUser from '../../../api/lms/addUser';
-import defaultUserFormData from '../../../state/defaults/defaultUserFormData';
 import isEmail from '../../../util/isEmail';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ setLastUpdate, customerId }) => {
-  const [lmsAuth] = useLMS(defaultLMSAuth);
+export default ({ setLastUpdate }) => {
   const alert = useAlert();
-  const [userForm, updateUserForm] = useState(defaultUserFormData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [{ customer }] = useApp(defaultAppData);
+  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '' });
 
   useAsyncEffect(async () => {
-    if (userForm.submitted) {
-      userForm.customer_id = customerId;
-      if (!userForm.customer_id || !userForm.firstname || !userForm.lastname || !isEmail(userForm.email)) {
-        updateUserForm({ ...userForm, submitted: false, error: 'All fields must be filled out' });
+    const { firstname, lastname, email } = formData;
+    const { submitted } = formState;
+    if (submitted) {
+      if (!firstname || !lastname || !isEmail(email)) {
+        setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else {
-        const response = await addUser({ auth: lmsAuth, payload: userForm });
+        const response = await addUser({ auth: lmsAuth, payload: { ...formData, customer_id: customer.customer_id } });
         if (response.result) {
-          updateUserForm(defaultUserFormData);
           setLastUpdate(Date.now());
           alert.success(response.message);
+          updateForm({ firstname: '', lastname: '', email: '' });
+          setFormState({ submitted: false, error: false });
         } else {
-          alert.error(response.message);
+          setFormState({ submitted: false, error: response.message });
         }
       }
     }
-  }, [userForm]);
+  }, [formState]);
 
   return (
     <>
@@ -43,8 +48,9 @@ export default ({ setLastUpdate, customerId }) => {
               type="text"
               className="mb-0 text-center"
               name="first name"
-              value={userForm.firstname}
-              onChange={(e) => updateUserForm({ ...userForm, firstname: e.target.value, error: false })}
+              value={formData.firstname}
+              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -54,8 +60,9 @@ export default ({ setLastUpdate, customerId }) => {
               type="text"
               className="mb-0 text-center"
               name="lastname"
-              value={userForm.lastname}
-              onChange={(e) => updateUserForm({ ...userForm, lastname: e.target.value, error: false })}
+              value={formData.lastname}
+              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+              disabled={formState.submitted}
             />
           </div>
 
@@ -65,22 +72,24 @@ export default ({ setLastUpdate, customerId }) => {
               type="text"
               className="mb-0 text-center"
               name="email"
-              value={userForm.email}
-              onChange={(e) => updateUserForm({ ...userForm, email: e.target.value, error: false })}
+              value={formData.email}
+              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+              disabled={formState.submitted}
             />
           </div>
 
           <Button
-            color="success"
+            color="purple"
             block
-            onClick={() => updateUserForm({ ...userForm, submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true, error: false })}
+            disabled={formState.submitted}
           >
-            Add User
+            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add User</span>}
           </Button>
-          {userForm.error && (
+          {formData.error && (
             <div className="text-danger text-small text-center text-italic">
               <hr />
-              {userForm.error}
+              {formData.error}
             </div>
           )}
         </CardBody>

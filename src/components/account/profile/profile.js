@@ -1,18 +1,43 @@
 import React, { useState } from 'react';
 import { Row, Col, Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useAlert } from 'react-alert';
 
-import defaultProfileFormData from '../../../state/defaults/defaultProfileFormData';
+import updateUser from '../../../api/lms/updateUser';
+import useApp from '../../../state/stores/appData';
+import defaultAppData from '../../../state/defaults/defaultAppData';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import getUser from '../../../api/lms/getUser';
 
 export default () => {
-  const [profileForm, updateProfileForm] = useState(defaultProfileFormData);
+  const alert = useAlert();
+  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const [appData, setAppData] = useApp(defaultAppData);
+  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [formData, updateForm] = useState({ firstname: appData.user.firstname, lastname: appData.user.lastname, customer_id: appData.customer.customer_id, user_id: appData.user.user_id });
 
   useAsyncEffect(async () => {
-    if (profileForm.submitted) {
-      console.log(profileForm);
-      // await updateProfile(profileForm);
+    const { firstname, lastname, customer_id, user_id } = formData;
+    const { submitted } = formState;
+    if (submitted) {
+      if (!firstname || !lastname) {
+        setFormState({ error: 'all fields are required', submitted: false });
+      } else {
+        const response = await updateUser({ auth: lmsAuth, payload: { firstname, lastname, customer_id, user_id } });
+        if (response.result === false) {
+          setFormState({ error: response.message, submitted: false });
+        } else {
+          const user = await getUser({ auth: lmsAuth, payload: { email: appData.user.email } });
+          setAppData({ ...appData, user });
+          setFormState({ error: false, submitted: false });
+          alert.success(response.message);
+        }
+      }
     }
-  }, [profileForm]);
+  }, [formState]);
+
+  useAsyncEffect(() => setFormState({ error: false, submitted: false }), [formData]);
 
   return (
     <>
@@ -24,9 +49,11 @@ export default () => {
           <Input
             type="text"
             className="mb-0 text-center"
-            name="first name"
+            name="fname"
             placeholder="first name"
-            onChange={(e) => updateProfileForm({ ...profileForm, firstname: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
+            value={formData.firstname}
+            disabled={formState.submitted}
           />
         </Col>
       </Row>
@@ -39,9 +66,11 @@ export default () => {
           <Input
             type="text"
             className="mb-0 text-center"
-            name="lastname"
+            name="lname"
             placeholder="last name"
-            onChange={(e) => updateProfileForm({ ...profileForm, lastname: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
+            value={formData.lastname}
+            disabled={formState.submitted}
           />
         </Col>
       </Row>
@@ -51,13 +80,7 @@ export default () => {
           email address
         </Col>
         <Col md="6" xs="12">
-          <Input
-            type="text"
-            className="mb-0 text-center"
-            name="email"
-            placeholder="email address"
-            onChange={(e) => updateProfileForm({ ...profileForm, email: e.target.value, error: false })}
-          />
+          <div className="fake-input">{appData.user.email}</div>
         </Col>
       </Row>
       <hr />
@@ -65,18 +88,19 @@ export default () => {
         <Col xs="6" />
         <Col md="6" xs="12">
           <Button
-            color="success"
+            color="purple"
             block
-            onClick={() => updateProfileForm({ ...profileForm, submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true, error: false })}
+            disabled={formState.submitted}
           >
-            Save Profile
+            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Save Profile</span>}
           </Button>
         </Col>
       </Row>
-      {profileForm.error && (
+      {formState.error && (
         <div className="text-danger text-small text-center text-italic">
           <hr />
-          {profileForm.error}
+          {formState.error}
         </div>
       )}
     </>

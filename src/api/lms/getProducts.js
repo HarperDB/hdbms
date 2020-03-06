@@ -27,6 +27,14 @@ export default async () => {
     auth: { user: 'harperdb', pass: 'harperdb' },
   });
 
+  if (!Array.isArray(response.body)) {
+    return {
+      cloudStorage: [],
+      cloudCompute: [],
+      localCompute: [],
+    };
+  }
+
   const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
   const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Beta');
   const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');

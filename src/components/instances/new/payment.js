@@ -30,7 +30,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
         setError(payload.error);
         setProcessing(false);
       } else {
-        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_id } });
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: appData.customer.stripe_id } });
         const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
         setAppData({ ...appData, customer });
         setProcessing(false);
@@ -85,7 +85,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
                   card number
                 </Col>
                 <Col md="6" xs="12" className="text-md-right text-center">
-                  <div className="stripe-input-holder">
+                  <div className="fake-input">
                     <CardNumberElement
                       options={cardOptions}
                       onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
@@ -99,7 +99,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
                   expiration
                 </Col>
                 <Col md="6" xs="12" className="text-md-right text-center">
-                  <div className="stripe-input-holder">
+                  <div className="fake-input">
                     <CardExpiryElement
                       options={cardOptions}
                       onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
@@ -113,7 +113,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
                   cvcc
                 </Col>
                 <Col md="6" xs="12" className="text-md-right text-center">
-                  <div className="stripe-input-holder">
+                  <div className="fake-input">
                     <CardCvcElement
                       options={cardOptions}
                       onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}

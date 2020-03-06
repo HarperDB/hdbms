@@ -26,7 +26,7 @@ export default ({ instances, network, schema, table, auth, refreshInstance }) =>
       setTableData({ ...tableData, data: newTableData });
       setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });
     }
-  }, [table]);
+  }, [table, network]);
 
   return (
     <>

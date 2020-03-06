@@ -48,20 +48,20 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
     <>
       <Row>
         <Col className="text-nowrap">
-          <span className="text-white">
+          <span className="text-white floating-card-header">
             <span>{schema}&nbsp;</span>
             <span>{table && `> ${table} > `} </span>
             <span>{commaNumbers(tableState.totalRecords)} record{tableState.totalRecords !== 1 ? 's' : ''}</span>
           </span>
         </Col>
         <Col className="text-right text-white text-nowrap">
-          <i title={`Refresh table ${table}`} className={`fa  mr-2 ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => refreshInstance(Date.now())} />
+          <i title={`Refresh table ${table}`} className={`fa floating-card-header mr-2 ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => refreshInstance(Date.now())} />
           <span className="mr-2">auto</span>
-          <i title="Turn on autofresh" className={`fa fa-lg fa-toggle-${tableState.autoRefresh ? 'on' : 'off'}`} onClick={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh, lastUpdate: Date.now() })} />
+          <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${tableState.autoRefresh ? 'on' : 'off'}`} onClick={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh, lastUpdate: Date.now() })} />
           <span className="mx-3 text">|</span>
-          <i title={`Filter table ${table}`} className="fa fa-search mr-3" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
-          <i title={`Add new record to table ${table}`} className="fa fa-plus mr-3" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/add`)} />
-          <i title={`Bulk Upload CSV to ${table}`} className="fa fa-file-text-o" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/csv`)} />
+          <i title={`Filter table ${table}`} className="floating-card-header fa fa-search mr-3" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
+          <i title={`Add new record to table ${table}`} className="floating-card-header fa fa-plus mr-3" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/add`)} />
+          <i title={`Bulk Upload CSV to ${table}`} className="floating-card-header fa fa-file-text-o" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/csv`)} />
         </Col>
       </Row>
       <Card className="my-3">
@@ -69,7 +69,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
           <ReactTable
             manual
             data={tableState.tableData}
-            pages={tableState.pages}
+            pages={tableState.totalPages}
             columns={dataTableColumns}
             hashAttribute={hashAttribute}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}

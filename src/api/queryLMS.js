@@ -11,26 +11,27 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 export default async ({ endpoint, payload, auth }) => {
   const completedEndpoints = [
     'addCustomer',
-    //'addInstance',
-    //'addLicense',
+    // 'addInstance',
+    // 'addLicense',
     'addPaymentMethod',
     'addTCAcceptance',
     'addUser',
     'getCustomer',
-    //'getInstances',
-    //'getInvoices',
+    // 'getInstances',
+    // 'getInvoices',
     'getLicenses',
     'getProducts',
     'getRegions',
     'getUser',
     'getUsers',
-    //'removeInstance',
+    // 'removeInstance',
     'removePaymentMethod',
     'removeUser',
     'resetPassword',
-    //'updateInstance',
-    //'updateLicense',
+    // 'updateInstance',
+    // 'updateLicense',
     'updatePassword',
+    'updateUser',
   ];
 
   if (completedEndpoints.includes(endpoint)) {
@@ -50,7 +51,7 @@ export default async ({ endpoint, payload, auth }) => {
       );
       const response = await request.json();
 
-      if (response.errorType) {
+      if (response.errorType || response.errorMessage) {
         const errorObject = JSON.parse(response.errorMessage);
         return {
           body: {

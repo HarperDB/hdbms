@@ -13,6 +13,16 @@ export default ({ deleteUser }) => [{
   accessor: 'role.role',
   style: { paddingTop: 10 },
 }, {
+  Header: 'cluster user',
+  accessor: 'role.permission.cluster_user',
+  style: { paddingTop: 10 },
+  Cell: ({ original: { role: { permission: { cluster_user } } } }) => (cluster_user ? 'yes' : 'no'),
+}, {
+  Header: 'super user',
+  accessor: 'role.permission.super_user',
+  style: { paddingTop: 10 },
+  Cell: ({ original: { role: { permission: { super_user } } } }) => (super_user ? 'yes' : 'no'),
+}, {
   Header: '',
   Cell: ({
     original: { username },

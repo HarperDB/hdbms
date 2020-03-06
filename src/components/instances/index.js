@@ -24,23 +24,31 @@ export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const [appData, setAppData] = useApp(defaultAppData);
+  const [products, setProducts] = useState(false);
+  const [regions, setRegions] = useState(false);
+  const [customer, setCustomer] = useState(false);
+  const [licenses, setLicenses] = useState(false);
   const [search, setSearch] = useState('');
   const [local, setLocal] = useState(true);
   const [cloud, setCloud] = useState(true);
-  const [filteredInstances, setFilteredInstances] = useState([]);
+  const [filteredInstances, setFilteredInstances] = useState(false);
 
   useAsyncEffect(() => {
-    setFilteredInstances(filterInstances({ local, cloud, search, instances: appData.instances }));
+    const newFilteredInstances = filterInstances({ local, cloud, search, instances: appData.instances });
+    setFilteredInstances(newFilteredInstances);
   }, [search, local, cloud, appData.instances]);
 
+  useAsyncEffect(async () => setProducts(await getProducts()), []);
+  useAsyncEffect(async () => setRegions(await getRegions()), []);
+  useAsyncEffect(async () => setCustomer(await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } })), []);
+  useAsyncEffect(async () => setLicenses(await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } })), []);
+
   useAsyncEffect(async () => {
-    const products = await getProducts();
-    const regions = await getRegions();
-    const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
-    const licenses = await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
-    const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
-    setAppData({ ...appData, customer, products, regions, instances, licenses });
-  }, []);
+    if (products && regions && licenses && customer) {
+      const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
+      setAppData({ ...appData, products, regions, licenses, customer, instances });
+    }
+  }, [products, regions, licenses, customer]);
 
   return (
     <div id="instances">
@@ -54,14 +62,14 @@ export default () => {
       />
       <Row>
         <NewInstanceCard />
-        {filteredInstances?.map((i) => (
+        {filteredInstances ? filteredInstances.map((i) => (
           <InstanceCard
             key={i.id}
             {...i}
             hasAuth={instanceAuths && instanceAuths[i.id]}
             setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
           />
-        ))}
+        )) : null}
       </Row>
     </div>
   );

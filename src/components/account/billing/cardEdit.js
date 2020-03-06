@@ -4,29 +4,27 @@ import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useS
 import useAsyncEffect from 'use-async-effect';
 import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
+import { useAlert } from 'react-alert';
 
 import cardOptions from '../../../util/stripe/cardOptions';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
-import getCustomer from '../../../api/lms/getCustomer';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
+import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 
-export default ({ setEditingCard, customerCard }) => {
+export default ({ setEditingCard, cardId, stripeId, setLastUpdate }) => {
+  const alert = useAlert();
+  const stripe = useStripe();
+  const elements = useElements();
+  const location = useLocation();
+  const history = useHistory();
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [appData, setAppData] = useApp(defaultAppData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
   const [error, setError] = useState(null);
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const stripe = useStripe();
-  const elements = useElements();
-  const location = useLocation();
-  const history = useHistory();
   const { returnURL } = queryString.parse(location.search);
-
 
   useAsyncEffect(async () => {
     if (cardSubmitted && stripe && elements) {
@@ -37,12 +35,19 @@ export default ({ setEditingCard, customerCard }) => {
       if (payload.error) {
         setError(payload.error);
       } else {
-        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_customer_id: appData.customer.stripe_customer_id } });
-        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
-        setAppData({ ...appData, customer });
-        setEditingCard(false);
-        if (returnURL) {
-          setTimeout(() => history.push(returnURL), 100);
+        if (cardId) {
+          await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
+        }
+        const response = await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: stripeId } });
+        if (response.result) {
+          setLastUpdate(Date.now());
+          setEditingCard(false);
+          alert.success(response.message);
+          if (returnURL) {
+            setTimeout(() => history.push(returnURL), 100);
+          }
+        } else {
+          setError({ message: response.message });
         }
       }
       setCardSubmitted(false);
@@ -57,7 +62,7 @@ export default ({ setEditingCard, customerCard }) => {
           card number
         </Col>
         <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="stripe-input-holder">
+          <div className="fake-input">
             <CardNumberElement
               options={cardOptions}
               onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
@@ -71,7 +76,7 @@ export default ({ setEditingCard, customerCard }) => {
           expiration
         </Col>
         <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="stripe-input-holder">
+          <div className="fake-input">
             <CardExpiryElement
               options={cardOptions}
               onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
@@ -85,7 +90,7 @@ export default ({ setEditingCard, customerCard }) => {
           cvcc
         </Col>
         <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="stripe-input-holder">
+          <div className="fake-input">
             <CardCvcElement
               options={cardOptions}
               onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
@@ -105,7 +110,7 @@ export default ({ setEditingCard, customerCard }) => {
         </Col>
       </Row>
       <hr />
-      {customerCard ? (
+      {cardId ? (
         <Row>
           <Col sm="6">
             <Button disabled={processing} onClick={() => setEditingCard(false)} block color="danger" className="mb-2">Cancel</Button>

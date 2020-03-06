@@ -6,13 +6,13 @@
 
   .rt-thead {
     &.-header {
-      border-top: 1px solid rgba(0, 0, 0, .05) !important;
+      border-top: 1px solid $lighter-grey-overlay !important;
       font-weight: 700;
     }
 
     &.-filters {
       input {
-        background: rgba(0, 0, 0, .2) !important;
+        background: $lighter-grey-overlay !important;
       }
     }
   }
@@ -22,7 +22,7 @@
     &.-header,
     .rt-tr-group {
       box-shadow: none !important;
-      border-bottom: 1px solid rgba(0, 0, 0, .05);
+      border-bottom: 1px solid $lighter-grey-overlay;
     }
 
     .rt-td,
@@ -48,7 +48,7 @@
   }
 
   .-pagination {
-    border-top: 1px solid rgba(0, 0, 0, .05);
+    border-top: 1px solid $lighter-grey-overlay;
     box-shadow: none;
     padding-top: 1rem;
 
@@ -108,7 +108,7 @@
   input,
   select {
     height: 33px !important;
-    color: $color-white;
+    color: $color-black;
     border: 0 !important;
     box-shadow: none;
   }

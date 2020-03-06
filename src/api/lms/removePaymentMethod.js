@@ -1,10 +1,10 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { customer_id, stripe_card_id, customer_stripe_id } }) => {
+export default async ({ auth, payload: { payment_method_id, stripe_id } }) => {
   const response = await queryLMS({
     endpoint: 'removePaymentMethod',
     method: 'POST',
-    payload: { customer_id, stripe_card_id, customer_stripe_id },
+    payload: { payment_method_id, stripe_id },
     auth,
   });
 

@@ -1,11 +1,7 @@
 input,
 select,
 textarea,
-.stripe-input-holder,
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+.fake-input {
   border: 1px solid $color-lightgrey !important;
   background: $light-white-overlay !important;
   color: $color-black;
@@ -15,7 +11,6 @@ input:-webkit-autofill:active {
   outline: none !important;
   border-radius: 4px !important;
   box-shadow: none !important;
-  -webkit-box-shadow: 0 0 0 1000px $light-white-overlay inset;
   transition: none;
 
   &::placeholder {
@@ -122,10 +117,14 @@ textarea {
   box-shadow: none !important;
 }
 
-.stripe-input-holder {
+.fake-input {
   padding: 8px 12px 0;
   text-align: left;
   height: 36px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: not-allowed;
 }
 
 .nio-check-mark::before {
