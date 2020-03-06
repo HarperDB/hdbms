@@ -60,8 +60,8 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
           <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${tableState.autoRefresh ? 'on' : 'off'}`} onClick={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh, lastUpdate: Date.now() })} />
           <span className="mx-3 text">|</span>
           <i title={`Filter table ${table}`} className="floating-card-header fa fa-search mr-3" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
-          <i title={`Add new record to table ${table}`} className="floating-card-header fa fa-plus mr-3" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/add`)} />
-          <i title={`Bulk Upload CSV to ${table}`} className="floating-card-header fa fa-file-text-o" onClick={() => history.push(`/instances/${instance_id}/browse/${schema}/${table}/csv`)} />
+          <i title={`Add new record to table ${table}`} className="floating-card-header fa fa-plus mr-3" onClick={() => history.push(`/instance/${instance_id}/browse/${schema}/${table}/add`)} />
+          <i title={`Bulk Upload CSV to ${table}`} className="floating-card-header fa fa-file-text-o" onClick={() => history.push(`/instance/${instance_id}/browse/${schema}/${table}/csv`)} />
         </Col>
       </Row>
       <Card className="my-3">
@@ -82,7 +82,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, instan
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-            getTrProps={(state, rowInfo) => ({ onClick: () => history.push(`/instances/${instance_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`) })}
+            getTrProps={(state, rowInfo) => ({ onClick: () => history.push(`/instance/${instance_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`) })}
           />
         </CardBody>
       </Card>

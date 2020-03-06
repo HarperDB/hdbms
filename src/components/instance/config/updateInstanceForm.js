@@ -17,7 +17,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
   const [{ customer }] = useApp(defaultAppData);
   const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ instance_name: details.instance_name, stripe_plan_id: details.stripe_plan_id, storage_qty_gb: details.storage_qty_gb });
+  const [formData, updateForm] = useState({ instance_name: details.instance_name, stripe_plan_id: details.stripe_plan_id, data_volume_size: details.data_volume_size });
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
@@ -25,20 +25,20 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
   if (newComputePrice.price !== 'FREE') totalPrice += parseFloat(newComputePrice.price);
 
   if (storageProducts) {
-    const newStoragePrice = storageProducts.find((p) => p.value === formData.storage_qty_gb);
+    const newStoragePrice = storageProducts.find((p) => p.value === formData.data_volume_size);
     if (newStoragePrice.price !== 'FREE') totalPrice += parseFloat(newStoragePrice.price);
   }
 
-  const hasChanged = details.stripe_plan_id !== formData.stripe_plan_id || details.storage_qty_gb !== formData.storage_qty_gb;
+  const hasChanged = details.stripe_plan_id !== formData.stripe_plan_id || details.data_volume_size !== formData.data_volume_size;
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { stripe_product_id, instance_name, instance_id, customer_id, license_id, fingerprint, storage_qty_gb } = formData;
+      const { stripe_product_id, instance_name, instance_id, customer_id, license_id, fingerprint, data_volume_size } = formData;
 
       const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, instance_id, customer_id, fingerprint } });
       await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
-      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, instance_id, customer_id, instance_name, storage_qty_gb } });
+      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, instance_id, customer_id, instance_name, data_volume_size } });
       setFormState({ submitted: false });
       refreshInstance(Date.now());
     }
@@ -71,12 +71,12 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
             <div className="fieldset-label">Storage Size</div>
             <div className="fieldset full-height">
               <RadioCheckbox
-                id="storage_qty_gb"
+                id="data_volume_size"
                 className="radio-button"
                 type="radio"
-                onChange={(value) => updateForm({ ...formData, storage_qty_gb: value })}
+                onChange={(value) => updateForm({ ...formData, data_volume_size: value })}
                 options={storageProducts}
-                value={formData.storage_qty_gb}
+                value={formData.data_volume_size}
                 defaultValue={details.storage}
               />
             </div>
@@ -113,7 +113,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
 
         {hasChanged && totalPrice && !hasCard ? (
           <Button
-            onClick={() => history.push(`/account/billing?returnURL=/instances/${details.instance_id}/config`)}
+            onClick={() => history.push(`/account/billing?returnURL=/instance/${details.instance_id}/config`)}
             title="Confirm Instance Details"
             block
             disabled={!hasChanged}

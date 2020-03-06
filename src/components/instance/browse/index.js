@@ -32,7 +32,7 @@ export default ({ auth, structure, refreshInstance }) => {
           items={entities.schemas}
           auth={auth}
           refreshInstance={refreshInstance}
-          baseUrl={`/instances/${instance_id}/browse`}
+          baseUrl={`/instance/${instance_id}/browse`}
           itemType="schema"
           showForm
         />
@@ -41,7 +41,7 @@ export default ({ auth, structure, refreshInstance }) => {
             activeItem={table}
             items={entities.tables}
             activeSchema={schema}
-            baseUrl={`/instances/${instance_id}/browse/${schema}`}
+            baseUrl={`/instance/${instance_id}/browse/${schema}`}
             itemType="table"
             auth={auth}
             refreshInstance={refreshInstance}

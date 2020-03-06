@@ -9,19 +9,19 @@ import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [formState, setFormState] = useState({ submitted: false, error: false, success: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', company: '', subdomain: '' });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', company_name: '', subdomain: '' });
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { firstname, lastname, email, company, subdomain } = formData;
+      const { firstname, lastname, email, company_name, subdomain } = formData;
 
-      if (!firstname || !lastname || !email || !company || !subdomain) {
+      if (!firstname || !lastname || !email || !company_name || !subdomain) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ payload: { firstname, lastname, email, company, subdomain } });
+        const response = await addCustomer({ payload: { firstname, lastname, email, company_name, subdomain } });
         if (response.result) {
           setFormState({ submitted: false, error: false, success: true });
         } else {
@@ -92,11 +92,11 @@ export default () => {
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 className="mb-2 text-center"
                 type="text"
-                title="company"
-                placeholder="company"
-                value={formData.company}
+                title="company name"
+                placeholder="company name"
+                value={formData.company_name}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, company: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, company_name: e.target.value, error: false })}
               />
               <Row>
                 <Col xs="6">

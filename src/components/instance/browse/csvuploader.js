@@ -30,7 +30,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
     refreshInstance(Date.now());
     return setTimeout(() => {
       setStatus(false);
-      history.push(`/instances/${instance_id}/browse/${schema}/${table}`);
+      history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
     }, 1000);
   };
 
@@ -62,7 +62,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
   const handleCancel = () => {
     setProcessedData(false);
     setStatus(false);
-    history.push(`/instances/${instance_id}/browse/${schema}/${table}`);
+    history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
   };
 
   useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth })), []);

@@ -1,63 +1,69 @@
 import React, { useState } from 'react';
 import { Col, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
 
 import addInstance from '../../../api/lms/addInstance';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
 
-export default ({ newInstance, computeProduct, storageProduct, setShowForm, setPurchaseStep, lmsAuth }) => {
-  const [formData, updateForm] = useState({ submitted: false, error: false });
+export default ({ newInstance, computeProduct, storageProduct, lmsAuth, closeAndResetModal }) => {
+  const history = useHistory();
+  const [formState, setFormState] = useState({ submitted: false, error: false });
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   let totalPrice = 0;
-  if (computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
-  if (storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
+  if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
+  if (storageProduct && storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
 
   useAsyncEffect(async () => {
-    const { submitted } = formData;
+    const { submitted } = formState;
     if (submitted) {
-      const newInstanceAuth = { user: newInstance.user, pass: newInstance.pass };
-      delete newInstance.user;
-      delete newInstance.pass;
+      const newInstanceObject = { ...newInstance };
+      delete newInstanceObject.user;
+      delete newInstanceObject.pass;
 
-      const response = await addInstance({ auth: lmsAuth, payload: { ...newInstance } });
+      const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
+
+      console.log(response.message);
+
       if (response.result) {
-        setInstanceAuths({ ...instanceAuths, [response.instance_id]: newInstanceAuth });
-        updateForm({ submitted: false, error: false });
-        setTimeout(() => setShowForm(false), 0);
+        return false;
+        setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
+        setFormState({ submitted: false, error: false });
+        setTimeout(() => closeAndResetModal(), 0);
       } else {
-        updateForm({ submitted: false, error: response.message });
+        setFormState({ submitted: false, error: response.message });
       }
     }
-  }, [formData]);
+  }, [formState]);
 
   return (
     <>
       <Card>
         <CardBody>
           <Row>
-            <Col xs="7">
+            <Col xs="4" className="text-nowrap">
               Instance Name
             </Col>
-            <Col xs="5" className="text-right">
+            <Col xs="8" className="text-right text-nowrap">
               {newInstance.instance_name}
             </Col>
           </Row>
           <hr />
           <Row>
-            <Col xs="7">
+            <Col xs="4" className="text-nowrap">
               Admin User
             </Col>
-            <Col xs="5" className="text-right">
+            <Col xs="8" className="text-right text-nowrap">
               {newInstance.user}
             </Col>
           </Row>
           <hr />
           <Row>
-            <Col xs="7">
+            <Col xs="4" className="text-nowrap">
               Admin Password
             </Col>
-            <Col xs="5" className="text-right">
+            <Col xs="8" className="text-right text-nowrap">
               {newInstance.pass}
             </Col>
           </Row>
@@ -65,28 +71,28 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
           {newInstance.is_local ? (
             <>
               <Row>
-                <Col xs="7">
+                <Col xs="4" className="text-nowrap">
                   Host
                 </Col>
-                <Col xs="5" className="text-right">
+                <Col xs="8" className="text-right text-nowrap">
                   {newInstance.host}
                 </Col>
               </Row>
               <hr />
               <Row>
-                <Col xs="7">
+                <Col xs="4" className="text-nowrap">
                   Port
                 </Col>
-                <Col xs="5" className="text-right">
+                <Col xs="8" className="text-right text-nowrap">
                   {newInstance.port}
                 </Col>
               </Row>
               <hr />
               <Row>
-                <Col xs="7">
+                <Col xs="4" className="text-nowrap">
                   Uses SSL
                 </Col>
-                <Col xs="5" className="text-right">
+                <Col xs="8" className="text-right text-nowrap">
                   {newInstance.is_ssl.toString()}
                 </Col>
               </Row>
@@ -95,46 +101,46 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
           ) : (
             <>
               <Row>
-                <Col xs="7">
+                <Col xs="4" className="text-nowrap">
                   Instance Region
                 </Col>
-                <Col xs="5" className="text-right">
+                <Col xs="8" className="text-right text-nowrap">
                   {newInstance.instance_region}
                 </Col>
               </Row>
               <hr />
               <Row>
-                <Col xs="4">
+                <Col xs="6" className="text-nowrap">
                   Instance Storage
                 </Col>
-                <Col xs="4" className="text-right">
-                  {storageProduct.disk_space}
+                <Col xs="2" className="text-right text-nowrap">
+                  {storageProduct && storageProduct.disk_space}
                 </Col>
-                <Col xs="4" className="text-right">
-                  {storageProduct.price === 'FREE' ? 'FREE' : `$${storageProduct.price}/${storageProduct.interval}`}
+                <Col xs="4" className="text-right text-nowrap">
+                  {!storageProduct ? '' : storageProduct.price === 'FREE' ? 'FREE' : `$${storageProduct.price}/${storageProduct.interval}`}
                 </Col>
               </Row>
               <hr />
             </>
           )}
           <Row>
-            <Col xs="4">
+            <Col xs="6" className="text-nowrap">
               Instance RAM
             </Col>
-            <Col xs="4" className="text-right">
-              {computeProduct.ram}
+            <Col xs="2" className="text-right text-nowrap">
+              {computeProduct && computeProduct.ram}
             </Col>
-            <Col xs="4" className="text-right">
-              {computeProduct.price === 'FREE' ? 'FREE' : `$${computeProduct.price}/${computeProduct.interval}`}
+            <Col xs="4" className="text-right text-nowrap">
+              {!computeProduct ? '' : computeProduct.price === 'FREE' ? 'FREE' : `$${computeProduct.price}/${computeProduct.interval}`}
             </Col>
           </Row>
           <hr />
           <Row>
-            <Col xs="7">
+            <Col xs="8" className="text-nowrap">
               <b>Instance Total Price</b>
             </Col>
-            <Col xs="5" className="text-right">
-              <b>{totalPrice ? `$${totalPrice.toFixed(2)}/${computeProduct.interval}` : 'FREE'}</b>
+            <Col xs="4" className="text-right text-nowrap">
+              <b>{totalPrice ? `$${totalPrice.toFixed(2)}/${computeProduct && computeProduct.interval}` : 'FREE'}</b>
             </Col>
           </Row>
 
@@ -143,7 +149,7 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => setPurchaseStep(`details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"
@@ -155,7 +161,7 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => updateForm({ ...formData, submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true, error: false })}
             title="Confirm Instance Details"
             block
             className="mt-3"
@@ -165,6 +171,12 @@ export default ({ newInstance, computeProduct, storageProduct, setShowForm, setP
           </Button>
         </Col>
       </Row>
+      {formState.error && (
+        <div className="text-danger text-small text-center">
+          <hr />
+          {formState.error}
+        </div>
+      )}
     </>
   );
 };

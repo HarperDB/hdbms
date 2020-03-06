@@ -33,7 +33,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
           items={entities.schemas}
           auth={auth}
           refreshInstance={refreshInstance}
-          baseUrl={`/instances/${instance_id}/clustering`}
+          baseUrl={`/instance/${instance_id}/clustering`}
           itemType="schema"
         />
         { schema && (
@@ -41,7 +41,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
             activeItem={table}
             items={entities.tables}
             activeSchema={schema}
-            baseUrl={`/instances/${instance_id}/clustering/${schema}`}
+            baseUrl={`/instance/${instance_id}/clustering/${schema}`}
             itemType="table"
             auth={auth}
             refreshInstance={refreshInstance}

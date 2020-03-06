@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
 
-export default ({ products, storage, regions, hasCard, newInstance, setNewInstance, setPurchaseStep }) => {
+export default ({ products, storage, regions, hasCard, newInstance, setNewInstance }) => {
+  const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({
-    storage_qty_gb: newInstance.storage_qty_gb || storage[0].value,
+    data_volume_size: newInstance.data_volume_size || storage[0].value,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
     instance_region: newInstance.instance_region || regions[0].value,
-    stripe_product_id: 'prod_Gh1XXQx6J8YaJl',
-    stripe_storage_product_id: 'prod_GoUJnVwOYvTjU9',
-    stripe_storage_plan_id: 'plan_GoUmLEBX2KIiaF',
   });
 
-  const computePrice = products && products.find((p) => p.value === formData.stripe_plan_id).price;
-  const storagePrice = storage && storage.find((p) => p.value === formData.storage_qty_gb).price;
+  const computePrice = products && formData.stripe_plan_id ? products.find((p) => p.value === formData.stripe_plan_id).price : 0;
+  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 0;
   const needsCard = products && storage && !hasCard && computePrice && (computePrice !== 'FREE' || storagePrice !== 'FREE');
 
   useAsyncEffect(() => {
     const { submitted } = formState;
-    const { stripe_plan_id, instance_region, storage_qty_gb } = formData;
+    const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
-      if (stripe_plan_id && instance_region && storage_qty_gb) {
+      if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData });
-        setPurchaseStep(needsCard ? 'payment' : 'confirm');
+        history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm');
       } else {
         setFormState({ submitted: false, error: 'All fields must be filled out.' });
       }
@@ -37,13 +36,13 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
           <div className="fieldset-label">Storage Size (scroll for more)</div>
           <div className="fieldset">
             <RadioCheckbox
-              id="storage_qty_gb"
+              id="data_volume_size"
               className="radio-button"
               type="radio"
-              onChange={(value) => updateForm({ ...formData, storage_qty_gb: value })}
+              onChange={(value) => updateForm({ ...formData, data_volume_size: value })}
               options={storage}
-              value={formData.storage_qty_gb}
-              defaultValue={newInstance.storage_qty_gb ? storage.find((p) => p.value === newInstance.storage_qty_gb) : storage[0]}
+              value={formData.data_volume_size}
+              defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
           </div>
 
@@ -77,7 +76,7 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => setPurchaseStep('meta')}
+            onClick={() => history.push('/instances/new/meta_cloud')}
             title="Back to Basic Info"
             block
             className="mt-3"

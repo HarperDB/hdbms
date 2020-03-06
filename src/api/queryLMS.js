@@ -11,7 +11,7 @@ import licenses from '../../mock_data/LMS_API.licenses.json';
 export default async ({ endpoint, payload, auth }) => {
   const completedEndpoints = [
     'addCustomer',
-    // 'addInstance',
+    'addInstance',
     // 'addLicense',
     'addPaymentMethod',
     'addTCAcceptance',

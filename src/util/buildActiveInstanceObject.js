@@ -10,7 +10,7 @@ export default async ({ instance_id, instanceAuths, appData: { products, instanc
   const roles = await queryInstance({ operation: 'list_roles' }, auth);
   const license = licenses.find((l) => l.instance_id === instance_id);
   const product = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
-  const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.storage_qty_gb);
+  const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
 
   if (instance.error) {
     return instance;

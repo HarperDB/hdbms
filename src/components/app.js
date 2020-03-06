@@ -20,9 +20,9 @@ export default () => (
       <Route component={SignUpStandalone} exact path="/sign-up-standalone" />
       <Route component={ForgotPassword} exact path="/forgot-password" />
       <Route component={UpdatePassword} exact path="/update-password" />
-      <ProtectedRoute component={Instance} path="/instances/:instance_id" />
+      <ProtectedRoute component={Instance} path="/instance/:instance_id" />
       <ProtectedRoute component={Account} path="/account/:view?" />
-      <ProtectedRoute component={Instances} path="/instances" />
+      <ProtectedRoute component={Instances} path="/instances/:action?/:purchaseStep?" />
       <Redirect to="/sign-in" />
     </Switch>
   </div>

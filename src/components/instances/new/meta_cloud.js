@@ -1,32 +1,27 @@
 import React, { useState } from 'react';
-import { Col, Input, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
+import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
+import useNewInstance from '../../../state/stores/newInstance';
+import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
+export default () => {
+  const history = useHistory();
+  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({
     instance_name: newInstance.instance_name || '',
     user: newInstance.user || '',
     pass: newInstance.pass || '',
-    host: newInstance.host || '',
-    port: newInstance.port || '',
-    is_ssl: newInstance.is_ssl || false,
   });
 
   useAsyncEffect(() => {
     const { submitted } = formState;
-    const { instance_name, user, pass, host, port, is_ssl } = formData;
+    const { instance_name, user, pass } = formData;
     if (submitted) {
-      if (newInstance.is_local) {
-        if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
-          setNewInstance({ ...newInstance, instance_name, user, pass, host, port, is_ssl });
-          setPurchaseStep('details_local');
-        } else {
-          setFormState({ submitted: false, error: 'All fields must be filled out.' });
-        }
-      } else if ((instance_name.length && user.length && pass.length)) {
+      if ((instance_name.length && user.length && pass.length)) {
         setNewInstance({ ...newInstance, instance_name, user, pass, is_ssl: true });
-        setPurchaseStep('details_cloud');
+        setTimeout(() => history.push('/instances/new/details_cloud'), 0);
       } else {
         setFormState({ submitted: false, error: 'All fields must be filled out.' });
       }
@@ -84,62 +79,12 @@ export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
               </Col>
             </Row>
           </div>
-
-          {newInstance.is_local && (
-            <>
-              <div className="fieldset-label">Instance Details</div>
-              <div className="fieldset">
-                <Row>
-                  <Col xs="4" className="pt-2">
-                    Host
-                  </Col>
-                  <Col xs="8">
-                    <Input
-                      onChange={(e) => updateForm({ ...formData, host: e.target.value, error: false })}
-                      type="text"
-                      title="host"
-                      value={formData.host || ''}
-                    />
-                  </Col>
-                </Row>
-                <hr className="my-1" />
-                <Row>
-                  <Col xs="4" className="pt-2">
-                    Port
-                  </Col>
-                  <Col xs="8">
-                    <Input
-                      onChange={(e) => updateForm({ ...formData, port: e.target.value, error: false })}
-                      type="number"
-                      title="port"
-                      value={formData.port || ''}
-                    />
-                  </Col>
-                </Row>
-                <hr className="my-1" />
-                <Row className="mt-1">
-                  <Col xs="4" className="pt-2">
-                    SSL
-                  </Col>
-                  <Col xs="8" className="pt-1">
-                    <RadioCheckbox
-                      type="checkbox"
-                      onChange={(value) => updateForm({ ...formData, is_ssl: value || false, error: false })}
-                      options={{ label: '', value: true }}
-                      value={formData.is_ssl}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            </>
-          )}
-
         </CardBody>
       </Card>
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => setPurchaseStep('type')}
+            onClick={() => history.push('/instances/new/type')}
             title="Back to Instance Type"
             block
             className="mt-3"

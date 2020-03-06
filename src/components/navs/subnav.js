@@ -46,7 +46,7 @@ export default ({ routes = [], instanceId = false, setSearch = false, search, se
         </>
       ) : routes.map((route) => (
         <NavItem key={route.path}>
-          <NavLink className="text-capitalize" to={instanceId ? `/instances/${instanceId}/${route.link}` : `/account/${route.link}`}>
+          <NavLink className="text-capitalize" to={instanceId ? `/instance/${instanceId}/${route.link}` : `/account/${route.link}`}>
             <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
             {route.link}
           </NavLink>

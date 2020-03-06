@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
 
 import cardOptions from '../../../util/stripe/cardOptions';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
@@ -9,7 +10,8 @@ import getCustomer from '../../../api/lms/getCustomer';
 import useApp from '../../../state/stores/appData';
 import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurchaseStep, lmsAuth }) => {
+export default ({ hasCard, computeProduct, newInstance, storageProduct, lmsAuth }) => {
+  const history = useHistory();
   const [appData, setAppData] = useApp(defaultAppData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
@@ -52,7 +54,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
               <Row>
                 <Col sm="6">
                   <Button
-                    onClick={() => setPurchaseStep(`details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+                    onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
                     title="Back to Instance Details"
                     block
                     color="purple"
@@ -64,7 +66,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
                 <Col sm="6">
                   <Button
                     title="Review Instance Details"
-                    onClick={() => setPurchaseStep('confirm')}
+                    onClick={() => history.push('/instances/new/confirm')}
                     block
                     color="purple"
                     className="mb-2"
@@ -136,7 +138,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, setPurch
               <Row>
                 <Col sm="6">
                   <Button
-                    onClick={() => setPurchaseStep(`details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+                    onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
                     title="Back to Instance Details"
                     block
                     color="purple"

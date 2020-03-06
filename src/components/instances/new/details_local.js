@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
 
-export default ({ products, hasCard, newInstance, setNewInstance, setPurchaseStep }) => {
+export default ({ products, hasCard, newInstance, setNewInstance }) => {
+  const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
 
@@ -15,7 +17,7 @@ export default ({ products, hasCard, newInstance, setNewInstance, setPurchaseSte
     if (submitted) {
       if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
-        setPurchaseStep(needsCard ? 'payment' : 'confirm');
+        history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm');
       } else {
         setFormState({ submitted: false, error: 'All fields must be filled out.' });
       }
@@ -42,7 +44,7 @@ export default ({ products, hasCard, newInstance, setNewInstance, setPurchaseSte
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => setPurchaseStep('meta')}
+            onClick={() => history.push('/instances/new/meta_local')}
             title="Back to Basic Info"
             block
             className="mt-3"

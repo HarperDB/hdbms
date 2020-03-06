@@ -18,7 +18,7 @@
       "stripe_plan_id": "plan_GoB4aP5U6PuR6u",
       "stripe_storage_product_id": null,
       "stripe_storage_plan_id": null,
-      "storage_qty_gb": null
+      "data_volume_size": null
     },
     {
       "id": "3f6c9e35-f6a8-4fb7-b09f-8b3e7d4e20de",
@@ -37,7 +37,7 @@
       "stripe_plan_id": "plan_GoB54KxG5JRkwm",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 10
+      "data_volume_size": 10
     },
     {
       "id": "cee98941-8975-44d6-88e6-9a1a4fa02b25",
@@ -56,7 +56,7 @@
       "stripe_plan_id": "2GB_Beta",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 100
+      "data_volume_size": 100
     },
     {
       "id": "a32b2464-b5ca-4b9d-a10f-c6da23a7dcbe",
@@ -75,7 +75,7 @@
       "stripe_plan_id": "4GB_Beta",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 250
+      "data_volume_size": 250
     },
     {
       "id": "7a60b51d-7983-4659-a34b-cfb578a4db54",
@@ -94,7 +94,7 @@
       "stripe_plan_id": "8GB_Beta",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 500
+      "data_volume_size": 500
     },
     {
       "id": "f0d29404-9fb1-4d66-ab98-41f05e1ac665",
@@ -113,7 +113,7 @@
       "stripe_plan_id": "4GB_Beta",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 1000
+      "data_volume_size": 1000
     },
     {
       "id": "ccf2b958-0b0e-4bf6-a81d-6abee1e4eec5",
@@ -132,7 +132,7 @@
       "stripe_plan_id": "2GB_Beta",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 500
+      "data_volume_size": 500
     },
     {
       "id": "8291c224-6911-4155-b5a9-34559e5a45ff",
@@ -151,7 +151,7 @@
       "stripe_plan_id": "plan_GoB54KxG5JRkwm",
       "stripe_storage_product_id": "prod_GoUJnVwOYvTjU9",
       "stripe_storage_plan_id": "plan_GoUmLEBX2KIiaF",
-      "storage_qty_gb": 250
+      "data_volume_size": 250
     }
   ]
 }

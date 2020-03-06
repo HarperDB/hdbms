@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { useHistory } from 'react-router';
+import useNewInstance from '../../../state/stores/newInstance';
+import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default ({ newInstance, setNewInstance, setPurchaseStep }) => {
-  const [formData, updateForm] = useState({
-    is_local: undefined,
-    storage_qty_gb: false,
-    stripe_plan_id: false,
-    instance_region: false,
-    stripe_product_id: false,
-    stripe_storage_product_id: false,
-    stripe_storage_plan_id: false,
-  });
+export default () => {
+  const history = useHistory();
+  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
-      setNewInstance({ ...newInstance, ...formData });
-      setPurchaseStep('meta');
+      setNewInstance({ ...newInstance, is_local });
+      setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
     }
   }, [formData]);
-
-  useAsyncEffect(() => setNewInstance({ ...formData }), []);
 
   return (
     <Row>

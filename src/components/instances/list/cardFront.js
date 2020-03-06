@@ -8,7 +8,7 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
   const alert = useAlert();
 
   return (
-    <Card className="instance" onClick={() => (hasAuth ? history.push(`/instances/${id}/browse`) : alert.error('You must log in first.') && flipCard())}>
+    <Card className="instance" onClick={() => (hasAuth ? history.push(`/instance/${id}/browse`) : alert.error('You must log in first.') && flipCard())}>
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
