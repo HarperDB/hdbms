@@ -17,7 +17,7 @@ export default async ({ endpoint, payload, auth }) => {
     'addTCAcceptance',
     'addUser',
     'getCustomer',
-    // 'getInstances',
+    'getInstances',
     // 'getInvoices',
     'getLicenses',
     'getProducts',
@@ -57,6 +57,7 @@ export default async ({ endpoint, payload, auth }) => {
           body: {
             result: false,
             message: errorObject.errorMessage,
+            eType: 'returned',
           },
         };
       }
@@ -66,6 +67,7 @@ export default async ({ endpoint, payload, auth }) => {
         body: {
           result: false,
           message: e.toString(),
+          eType: 'catch',
         },
       };
     }

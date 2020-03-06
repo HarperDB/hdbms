@@ -45,7 +45,7 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (products && regions && licenses && customer) {
-      const instances = await getInstances({ auth: lmsAuth, products, regions, licenses });
+      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { products, regions, licenses } });
       setAppData({ ...appData, products, regions, licenses, customer, instances });
     }
   }, [products, regions, licenses, customer]);

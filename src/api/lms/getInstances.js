@@ -1,9 +1,10 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, products, regions, licenses }) => {
+export default async ({ auth, payload: { customer_id }, entities: { products, regions, licenses } }) => {
   const response = await queryLMS({
     endpoint: 'getInstances',
     method: 'POST',
+    payload: { customer_id },
     auth,
   });
 

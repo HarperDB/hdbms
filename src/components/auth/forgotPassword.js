@@ -38,11 +38,12 @@ export default () => {
       <Card className="mb-3 mt-2">
         <CardBody>
           {formState.success ? (
-            <div className="text-white text-center pt-4">
-              {formState.success}
+            <div className="text-center text-white pt-4">
+              <b>Success!</b><br /><br />
+              Check your email. We just sent you a new password.
             </div>
           ) : (
-            <>
+            <div className="pt-4">
               <Input
                 onChange={(e) => updateForm({ ...formData, email: e.target.value })}
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -50,6 +51,7 @@ export default () => {
                 className="mb-4 text-center"
                 type="text"
                 title="email"
+                name="email"
                 placeholder="email address"
               />
               <Button
@@ -61,7 +63,7 @@ export default () => {
               >
                 {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Send Password Reset Email</span>}
               </Button>
-            </>
+            </div>
           )}
         </CardBody>
       </Card>

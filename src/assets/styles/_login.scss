@@ -9,7 +9,8 @@
   overflow: visible;
 
   &.sign-up,
-  &.sign-in {
+  &.sign-in,
+  &.forgot-password {
     .card {
       min-height: 173px !important;
     }
@@ -17,12 +18,6 @@
     .subdomain-label {
       font-size: .75rem;
       line-height: 1.7;
-    }
-  }
-
-  &.forgot-password {
-    .card {
-      min-height: 129px !important;
     }
   }
 
