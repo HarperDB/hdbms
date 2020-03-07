@@ -12,24 +12,24 @@ import defaultAppData from '../../state/defaults/defaultAppData';
 
 
 export default () => {
-  const { instance_id } = useParams();
+  const { compute_stack_id } = useParams();
   const [appData] = useApp(defaultAppData);
   const [instanceAuths] = useInstanceAuth({});
   const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
   const [lastUpdate, refreshInstance] = useState(false);
 
   useAsyncEffect(async () => {
-    if (instance_id) {
-      const activeInstanceObject = await buildActiveInstanceObject({ instance_id, instanceAuths, appData });
+    if (compute_stack_id) {
+      const activeInstanceObject = await buildActiveInstanceObject({ compute_stack_id, instanceAuths, appData });
       if (!activeInstanceObject.error) {
         setActiveInstance(activeInstanceObject);
       }
     }
-  }, [instance_id, lastUpdate]);
+  }, [compute_stack_id, lastUpdate]);
 
   return (
     <>
-      <SubNav routes={routes} instanceId={instance_id} />
+      <SubNav routes={routes} instanceId={compute_stack_id} />
       <Switch>
         {routes.map((route) => {
           const ThisRouteComponent = route.component;

@@ -9,7 +9,7 @@ import Enable from './setup_enable';
 
 export default ({ auth, network, refreshInstance }) => {
   const [port, setPort] = useState(false);
-  const { instance_id } = useParams();
+  const { compute_stack_id } = useParams();
 
   return (
     <Row id="clustering">
@@ -52,7 +52,7 @@ export default ({ auth, network, refreshInstance }) => {
               <Enable
                 port={port}
                 username={network.cluster_user}
-                instanceId={instance_id}
+                instanceId={compute_stack_id}
                 auth={auth}
                 refreshInstance={refreshInstance}
               />

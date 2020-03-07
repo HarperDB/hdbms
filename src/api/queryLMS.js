@@ -39,7 +39,7 @@ export default async ({ endpoint, payload, auth }) => {
 
     try {
       const request = await fetch(
-        `https://poqwe1evwb.execute-api.us-east-2.amazonaws.com/Prod/${endpoint}`,
+        `https://dfu2a1toa9.execute-api.us-west-2.amazonaws.com/Prod/${endpoint}`,
         {
           method: 'POST',
           body: JSON.stringify(payload),
@@ -109,7 +109,7 @@ export default async ({ endpoint, payload, auth }) => {
     case 'updateInstance':
       return { statusCode: 200, body: { result: true, message: 'Instance is being updated' } };
     case 'addInstance':
-      return { statusCode: 200, body: { result: true, message: 'Instance is being created||added', instance_id: 'instance-guid-1' } };
+      return { statusCode: 200, body: { result: true, message: 'Instance is being created||added', compute_stack_id: 'instance-guid-1' } };
     case 'addUser':
       return { statusCode: 200, body: { result: true, message: 'User created successfully', user_id: 'user-guid-6' } };
     case 'resetPassword':

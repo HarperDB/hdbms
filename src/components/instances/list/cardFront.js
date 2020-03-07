@@ -3,12 +3,12 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, setAuth, hasAuth, compute, storage }) => {
+export default ({ compute_stack_id, instance_name, host, port, is_ssl, is_local, flipCard, setAuth, hasAuth, compute, storage }) => {
   const history = useHistory();
   const alert = useAlert();
 
   return (
-    <Card className="instance" onClick={() => (hasAuth ? history.push(`/instance/${id}/browse`) : alert.error('You must log in first.') && flipCard())}>
+    <Card className="instance" onClick={() => (hasAuth ? history.push(`/instance/${compute_stack_id}/browse`) : alert.error('You must log in first.') && flipCard())}>
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
@@ -16,7 +16,7 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
           </Col>
           <Col xs="2" className="text-right">
             {hasAuth ? (
-              <i onClick={(e) => { e.stopPropagation(); setAuth({ id, user: false, pass: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
+              <i onClick={(e) => { e.stopPropagation(); setAuth({ compute_stack_id, user: false, pass: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
             ) : (
               <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
             )}
@@ -25,8 +25,10 @@ export default ({ id, instance_name, host, port, is_ssl, is_local, flipCard, set
         <hr className="mt-4 mb-1" />
         <div className="scrollable">
           <Row className="text-smaller text-nowrap text-darkgrey">
-            <Col xs="3">URL</Col>
-            <Col xs="9">http{is_ssl && 's'}://{host}:{port}</Col>
+            {/*<Col xs="3">URL</Col>
+            <Col xs="9">http{is_ssl && 's'}://{host}:{port}</Col>*/}
+            <Col xs="3">CSID</Col>
+            <Col xs="9">{compute_stack_id}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">TYPE</Col>
             <Col xs="9">{is_local ? 'Local' : 'HarperDB Cloud'}</Col>

@@ -13,6 +13,6 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
     compute: products[i.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === i.stripe_plan_id),
     storage: i.is_local ? false : products.cloudStorage.find((p) => p.value === i.data_volume_size),
     region: i.is_local ? false : regions.find((r) => r.value === i.instance_region),
-    license: Array.isArray(licenses) ? licenses.find((l) => l.instance_id === i.id) : [],
+    license: Array.isArray(licenses) ? licenses.find((l) => l.compute_stack_id === i.id) : [],
   }));
 };

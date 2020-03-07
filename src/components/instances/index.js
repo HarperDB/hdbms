@@ -64,10 +64,10 @@ export default () => {
         <NewInstanceCard />
         {filteredInstances ? filteredInstances.map((i) => (
           <InstanceCard
-            key={i.id}
+            key={i.compute_stack_id}
             {...i}
-            hasAuth={instanceAuths && instanceAuths[i.id]}
-            setAuth={({ id, user, pass }) => setInstanceAuths({ ...instanceAuths, [id]: user && pass ? { user, pass } : false })}
+            hasAuth={instanceAuths && instanceAuths[i.compute_stack_id]}
+            setAuth={({ compute_stack_id, user, pass }) => setInstanceAuths({ ...instanceAuths, [compute_stack_id]: user && pass ? { user, pass } : false })}
           />
         )) : null}
       </Row>

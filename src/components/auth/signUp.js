@@ -9,19 +9,19 @@ import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [formState, setFormState] = useState({ submitted: false, error: false, success: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', company_name: '', subdomain: '' });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { firstname, lastname, email, company_name, subdomain } = formData;
+      const { firstname, lastname, email, customer_name, subdomain } = formData;
 
-      if (!firstname || !lastname || !email || !company_name || !subdomain) {
+      if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ payload: { firstname, lastname, email, company_name, subdomain } });
+        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain } });
         if (response.result) {
           setFormState({ submitted: false, error: false, success: true });
         } else {
@@ -37,18 +37,23 @@ export default () => {
     <div id="login-form" className="sign-up">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.success ? (
-        <Card className="mb-3 mt-2">
-          <CardBody>
-            <div className="text-center text-white pt-4">
-              <b>Success!</b><br /><br />
-              Check your email for your username and password.
-            </div>
-          </CardBody>
-        </Card>
+        <>
+          <Card className="mb-3 mt-2">
+            <CardBody>
+              <div className="text-center text-white pt-4">
+                <b>Success!</b><br /><br />
+                Check your email for your username and password.
+              </div>
+            </CardBody>
+          </Card>
+          <div className="text-center text-small">
+            <NavLink to="/sign-in" className="login-nav-link">Go to Sign In</NavLink>
+          </div>
+        </>
       ) : formState.submitted ? (
         <Card className="mb-3 mt-2">
           <CardBody>
-            <div className="text-white text-center pt-4">
+            <div className="text-white text-center pt-5">
               <b>Creating Your Account</b><br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
             </div>
@@ -94,9 +99,9 @@ export default () => {
                 type="text"
                 title="company name"
                 placeholder="company name"
-                value={formData.company_name}
+                value={formData.customer_name}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, company_name: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, customer_name: e.target.value, error: false })}
               />
               <Row>
                 <Col xs="6">

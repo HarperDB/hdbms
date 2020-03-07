@@ -11,7 +11,7 @@ import Worker from '../../../util/processCSV.worker';
 
 const worker = new Worker();
 
-export default ({ refreshInstance, instance_id, auth }) => {
+export default ({ refreshInstance, compute_stack_id, auth }) => {
   const history = useHistory();
   const { schema, table } = useParams();
   const [status, setStatus] = useState(false);
@@ -30,7 +30,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
     refreshInstance(Date.now());
     return setTimeout(() => {
       setStatus(false);
-      history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
+      history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
     }, 1000);
   };
 
@@ -62,7 +62,7 @@ export default ({ refreshInstance, instance_id, auth }) => {
   const handleCancel = () => {
     setProcessedData(false);
     setStatus(false);
-    history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
+    history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
   useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth })), []);

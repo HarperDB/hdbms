@@ -20,4 +20,7 @@ export default {
   confirm: {
     label: 'Confirm Instance Details',
   },
+  status: {
+    label: 'Adding Your New Instance',
+  },
 };

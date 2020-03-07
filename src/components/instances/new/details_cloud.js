@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import useNewInstance from '../../../state/stores/newInstance';
+import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default ({ products, storage, regions, hasCard, newInstance, setNewInstance }) => {
+export default ({ products, storage, regions, hasCard }) => {
   const history = useHistory();
+  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({
     data_volume_size: newInstance.data_volume_size || storage[0].value,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
     instance_region: newInstance.instance_region || regions[0].value,
+    instance_type: false,
   });
 
-  const computePrice = products && formData.stripe_plan_id ? products.find((p) => p.value === formData.stripe_plan_id).price : 0;
+  const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
+  const computePrice = selectedProduct?.price;
+  const instanceType = selectedProduct?.instance_type;
   const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 0;
   const needsCard = products && storage && !hasCard && computePrice && (computePrice !== 'FREE' || storagePrice !== 'FREE');
 
@@ -21,8 +27,8 @@ export default ({ products, storage, regions, hasCard, newInstance, setNewInstan
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
       if (stripe_plan_id && instance_region && data_volume_size) {
-        setNewInstance({ ...newInstance, ...formData });
-        history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm');
+        setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
+        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {
         setFormState({ submitted: false, error: 'All fields must be filled out.' });
       }

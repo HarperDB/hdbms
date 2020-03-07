@@ -1,8 +1,9 @@
 import queryLMS from '../queryLMS';
 
-const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram } }) => ({
+const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
   ram: instance_ram,
+  instance_type,
   interval,
   label: `${instance_ram} RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
   value: id,

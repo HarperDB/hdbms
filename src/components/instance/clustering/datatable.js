@@ -12,7 +12,7 @@ export default ({ instances, network, schema, table, auth, refreshInstance }) =>
   useEffect(() => {
     if (table) {
       const newTableData = instances.map((i) => {
-        const connection = network && network.outbound_connections.find((n) => n.name === i.id);
+        const connection = network && network.outbound_connections.find((n) => n.name === i.compute_stack_id);
         const subscriptions = schema && table && connection && connection.subscriptions ? connection.subscriptions : [];
         const channel = schema && table && `${schema}:${table}`;
         const channelSubscription = channel && subscriptions.find((s) => s.channel === channel);

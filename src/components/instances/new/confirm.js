@@ -1,41 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Col, Row, Button, Card, CardBody } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
+
 import { useHistory } from 'react-router';
+import useNewInstance from '../../../state/stores/newInstance';
+import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-import addInstance from '../../../api/lms/addInstance';
-import useInstanceAuth from '../../../state/stores/instanceAuths';
-
-export default ({ newInstance, computeProduct, storageProduct, lmsAuth, closeAndResetModal }) => {
+export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();
-  const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
+  const [newInstance] = useNewInstance(defaultNewInstanceData);
 
   let totalPrice = 0;
   if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
   if (storageProduct && storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
-
-  useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const newInstanceObject = { ...newInstance };
-      delete newInstanceObject.user;
-      delete newInstanceObject.pass;
-
-      const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
-
-      console.log(response.message);
-
-      if (response.result) {
-        return false;
-        setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
-        setFormState({ submitted: false, error: false });
-        setTimeout(() => closeAndResetModal(), 0);
-      } else {
-        setFormState({ submitted: false, error: response.message });
-      }
-    }
-  }, [formState]);
 
   return (
     <>
@@ -161,7 +137,7 @@ export default ({ newInstance, computeProduct, storageProduct, lmsAuth, closeAnd
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => history.push('/instances/new/status')}
             title="Confirm Instance Details"
             block
             className="mt-3"
@@ -171,12 +147,6 @@ export default ({ newInstance, computeProduct, storageProduct, lmsAuth, closeAnd
           </Button>
         </Col>
       </Row>
-      {formState.error && (
-        <div className="text-danger text-small text-center">
-          <hr />
-          {formState.error}
-        </div>
-      )}
     </>
   );
 };

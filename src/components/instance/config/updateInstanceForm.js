@@ -34,11 +34,11 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { stripe_product_id, instance_name, instance_id, customer_id, license_id, fingerprint, data_volume_size } = formData;
+      const { stripe_product_id, instance_name, compute_stack_id, customer_id, license_id, fingerprint, data_volume_size } = formData;
 
-      const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, instance_id, customer_id, fingerprint } });
+      const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, compute_stack_id, customer_id, fingerprint } });
       await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
-      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, instance_id, customer_id, instance_name, data_volume_size } });
+      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, compute_stack_id, customer_id, instance_name, data_volume_size } });
       setFormState({ submitted: false });
       refreshInstance(Date.now());
     }
@@ -113,7 +113,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
 
         {hasChanged && totalPrice && !hasCard ? (
           <Button
-            onClick={() => history.push(`/account/billing?returnURL=/instance/${details.instance_id}/config`)}
+            onClick={() => history.push(`/account/billing?returnURL=/instance/${details.compute_stack_id}/config`)}
             title="Confirm Instance Details"
             block
             disabled={!hasChanged}

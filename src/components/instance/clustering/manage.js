@@ -14,11 +14,11 @@ import defaultAppData from '../../../state/defaults/defaultAppData';
 export default ({ auth, network, refreshInstance, structure }) => {
   const history = useHistory();
   const [appData] = useApp(defaultAppData);
-  const { instance_id, schema, table } = useParams();
+  const { compute_stack_id, schema, table } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [] });
 
   useAsyncEffect(() => {
-    handleSchemaTableRedirect({ entities, instance_id, schema, table, history, targetPath: '/clustering' });
+    handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/clustering' });
   }, [schema, table, entities]);
 
   useAsyncEffect(() => {
@@ -33,7 +33,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
           items={entities.schemas}
           auth={auth}
           refreshInstance={refreshInstance}
-          baseUrl={`/instance/${instance_id}/clustering`}
+          baseUrl={`/instance/${compute_stack_id}/clustering`}
           itemType="schema"
         />
         { schema && (
@@ -41,7 +41,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
             activeItem={table}
             items={entities.tables}
             activeSchema={schema}
-            baseUrl={`/instance/${instance_id}/clustering/${schema}`}
+            baseUrl={`/instance/${compute_stack_id}/clustering/${schema}`}
             itemType="table"
             auth={auth}
             refreshInstance={refreshInstance}
@@ -50,12 +50,12 @@ export default ({ auth, network, refreshInstance, structure }) => {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <DataTable
-          instances={appData.instances.filter((i) => i.id !== instance_id)}
+          instances={appData.instances.filter((i) => i.compute_stack_id !== compute_stack_id)}
           network={network}
           schema={schema}
           table={table}
           auth={auth}
-          instance_id={instance_id}
+          compute_stack_id={compute_stack_id}
           refreshInstance={refreshInstance}
         />
       </Col>

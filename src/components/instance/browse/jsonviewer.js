@@ -7,7 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import queryInstance from '../../../api/queryInstance';
 
-export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance, auth }) => {
+export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInstance, auth }) => {
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
   const [rowValue, setRowValue] = useState({});
@@ -38,7 +38,7 @@ export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance,
       records: [rowValue],
     }, auth);
     refreshInstance(Date.now());
-    return history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
+    return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
   const deleteRecord = async (e) => {
@@ -52,7 +52,7 @@ export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance,
       hash_values: [hash],
     }, auth);
     refreshInstance(Date.now());
-    return history.push(`/instance/${instance_id}/browse/${schema}/${table}`);
+    return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
   return (
@@ -80,7 +80,7 @@ export default ({ newEntityColumns, hashAttribute, instance_id, refreshInstance,
             <hr />
             <Row>
               <Col className="mb-2">
-                <Button block color="black" onClick={() => history.push(`/instance/${instance_id}/browse/${schema}/${table}`)}>Cancel</Button>
+                <Button block color="black" onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`)}>Cancel</Button>
               </Col>
               {action !== 'add' && (
                 <Col className="mb-2">

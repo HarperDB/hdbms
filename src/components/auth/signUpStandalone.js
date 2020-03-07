@@ -9,21 +9,21 @@ import addCustomer from '../../api/lms/addCustomer';
 export default () => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', company_name: '', subdomain: '' });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { firstname, lastname, email, company_name, subdomain } = formData;
+      const { firstname, lastname, email, customer_name, subdomain } = formData;
 
-      if (!firstname || !lastname || !email || !company_name || !subdomain) {
+      if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ payload: { firstname, lastname, email, company_name, subdomain } });
+        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain } });
         if (response.result) {
-          updateForm({ firstname: '', lastname: '', email: '', company_name: '', subdomain: '' });
+          updateForm({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
           setFormState({ submitted: false, error: false, success: true });
           alert.success(response.message);
         } else {
@@ -96,9 +96,9 @@ export default () => {
             <Input
               type="text"
               className="mb-0 text-center"
-              name="company_name"
-              value={formData.company_name}
-              onChange={(e) => updateForm({ ...formData, company_name: e.target.value, error: false })}
+              name="customer_name"
+              value={formData.customer_name}
+              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value, error: false })}
               disabled={formState.submitted}
             />
           </div>
@@ -110,7 +110,7 @@ export default () => {
                 <Input
                   type="text"
                   className="mb-0 text-center"
-                  name="company_name"
+                  name="customer_name"
                   value={formData.subdomain}
                   onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
                   disabled={formState.submitted}

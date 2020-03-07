@@ -13,11 +13,11 @@ import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
 
 export default ({ auth, structure, refreshInstance }) => {
   const history = useHistory();
-  const { instance_id, schema, table, action } = useParams();
+  const { compute_stack_id, schema, table, action } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
 
   useAsyncEffect(() => {
-    handleSchemaTableRedirect({ entities, instance_id, schema, table, history, targetPath: '/browse' });
+    handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/browse' });
   }, [schema, table, entities]);
 
   useAsyncEffect(() => {
@@ -32,7 +32,7 @@ export default ({ auth, structure, refreshInstance }) => {
           items={entities.schemas}
           auth={auth}
           refreshInstance={refreshInstance}
-          baseUrl={`/instance/${instance_id}/browse`}
+          baseUrl={`/instance/${compute_stack_id}/browse`}
           itemType="schema"
           showForm
         />
@@ -41,7 +41,7 @@ export default ({ auth, structure, refreshInstance }) => {
             activeItem={table}
             items={entities.tables}
             activeSchema={schema}
-            baseUrl={`/instance/${instance_id}/browse/${schema}`}
+            baseUrl={`/instance/${compute_stack_id}/browse/${schema}`}
             itemType="table"
             auth={auth}
             refreshInstance={refreshInstance}
@@ -53,7 +53,7 @@ export default ({ auth, structure, refreshInstance }) => {
         { schema && table && action === 'csv' && entities.activeTable ? (
           <CSVUploader
             auth={auth}
-            instance_id={instance_id}
+            compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
           />
         ) : schema && table && action && entities.activeTable ? (
@@ -61,14 +61,14 @@ export default ({ auth, structure, refreshInstance }) => {
             newEntityColumns={entities.activeTable.newEntityColumns}
             hashAttribute={entities.activeTable.hashAttribute}
             auth={auth}
-            instance_id={instance_id}
+            compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
           />
         ) : schema && table && entities.activeTable ? (
           <DataTable
             activeTable={entities.activeTable}
             auth={auth}
-            instance_id={instance_id}
+            compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
             structure={structure}
           />

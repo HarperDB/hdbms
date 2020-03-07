@@ -9,9 +9,12 @@ import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
 import useApp from '../../../state/stores/appData';
 import defaultAppData from '../../../state/defaults/defaultAppData';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
-export default ({ hasCard, computeProduct, newInstance, storageProduct, lmsAuth }) => {
+export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
   const history = useHistory();
+  const [lmsAuth] = useLMS(defaultLMSAuth);
   const [appData, setAppData] = useApp(defaultAppData);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
@@ -54,7 +57,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, lmsAuth 
               <Row>
                 <Col sm="6">
                   <Button
-                    onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+                    onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
                     title="Back to Instance Details"
                     block
                     color="purple"
@@ -138,7 +141,7 @@ export default ({ hasCard, computeProduct, newInstance, storageProduct, lmsAuth 
               <Row>
                 <Col sm="6">
                   <Button
-                    onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+                    onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
                     title="Back to Instance Details"
                     block
                     color="purple"

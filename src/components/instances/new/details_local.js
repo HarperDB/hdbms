@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import useNewInstance from '../../../state/stores/newInstance';
+import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default ({ products, hasCard, newInstance, setNewInstance }) => {
+export default ({ products, hasCard }) => {
   const history = useHistory();
+  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
 
