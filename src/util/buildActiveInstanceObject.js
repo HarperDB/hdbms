@@ -18,5 +18,5 @@ export default async ({ compute_stack_id, instanceAuths, appData: { products, in
   const structure = browseTableColumns(instance);
   const network = await clusterStatus(auth);
 
-  return { auth, structure, network, users, roles, details: { ...license, ...product, ...storage, ...thisInstance } };
+  return { auth, structure, network, users, roles, license, details: { ...license, ...product, ...storage, ...thisInstance } };
 };

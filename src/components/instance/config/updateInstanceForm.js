@@ -57,11 +57,11 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
           />
         </div>
 
-        {details.region && (
+        {details.instance_region && (
           <>
             <div className="fieldset-label">Instance Region (no modification)</div>
             <div className="fieldset">
-              {details.region.label}
+              {details.instance_region}
             </div>
           </>
         )}
