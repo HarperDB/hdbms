@@ -36,11 +36,11 @@ export default () => {
           <div className="fieldset">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
-                example: &quot;HDB-1&quot;
+                Example: &quot;edge-1&quot;
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase(), error: false })}
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
