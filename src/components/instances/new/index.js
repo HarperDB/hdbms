@@ -21,9 +21,6 @@ import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
-const getComputeProduct = ({ isLocal, products, stripePlan }) => products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === stripePlan);
-const getStorageProduct = ({ isLocal, products, dataVolumeSize }) => isLocal ? { price: 'FREE' } : products.cloudStorage.find((p) => p.value === dataVolumeSize);
-
 export default () => {
   const history = useHistory();
   const { purchaseStep } = useParams();

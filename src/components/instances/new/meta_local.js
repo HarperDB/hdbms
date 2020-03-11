@@ -25,7 +25,8 @@ export default () => {
     if (submitted) {
       if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
         try {
-          const response = await queryInstance({ operation: 'describe_all' }, { ...formData });
+          const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
+          const response = await queryInstance({ operation: 'describe_all' }, formData, url);
           if (response.error) {
             setFormState({ submitted: false, error: 'The provided credentials cannot log into that instance.' });
           } else {

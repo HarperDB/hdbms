@@ -25,7 +25,6 @@ export default async () => {
   const response = await queryLMS({
     endpoint: 'getProducts',
     method: 'POST',
-    auth: { user: 'harperdb', pass: 'harperdb' },
   });
 
   if (!Array.isArray(response.body)) {

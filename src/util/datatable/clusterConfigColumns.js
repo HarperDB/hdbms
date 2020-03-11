@@ -17,11 +17,11 @@ export default ({ auth, refreshInstance }) => [{
 }, {
   Header: 'publish',
   Cell: ({
-    original: { id, host, port, clusterPort, publish, connection, channel, subscriptions },
+    original: { id, url, host, port, clusterPort, publish, connection, channel, subscriptions },
   }) => (
     connection
-      ? <ToggleButton width={75} checked={publish || false} onChange={() => updateNode({ channel, subscriptions, buttonState: 'togglePublish', id, host, clusterPort, auth, refreshInstance })} />
-      : <Button color="purple" className="connect" block onClick={() => addNode({ id, host, port, clusterPort, auth, refreshInstance })}>connect</Button>),
+      ? <ToggleButton width={75} checked={publish || false} onChange={() => updateNode({ channel, subscriptions, buttonState: 'togglePublish', id, host, clusterPort, auth, url, refreshInstance })} />
+      : <Button color="purple" className="connect" block onClick={() => addNode({ id, host, port, clusterPort, auth, url, refreshInstance })}>connect</Button>),
   width: 80,
   style: toggleCellPadding,
 }, {

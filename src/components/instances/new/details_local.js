@@ -11,7 +11,8 @@ export default ({ products, hasCard }) => {
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
 
-  const computePrice = products && products.find((p) => p.value === formData.stripe_plan_id).price;
+  const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
+  const computePrice = selectedProduct?.price;
   const needsCard = products && !hasCard && computePrice && (computePrice !== 'FREE');
 
   useAsyncEffect(() => {
@@ -20,7 +21,7 @@ export default ({ products, hasCard }) => {
     if (submitted) {
       if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
-        history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm');
+        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {
         setFormState({ submitted: false, error: 'All fields must be filled out.' });
       }

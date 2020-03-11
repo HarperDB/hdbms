@@ -12,7 +12,7 @@ import defaultTableState from '../../../state/defaults/defaultTableState';
 const dataRefreshInterval = 3000;
 let tableChangeTimeout = false;
 
-export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, compute_stack_id, refreshInstance, structure }) => {
+export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, compute_stack_id, refreshInstance, structure, url }) => {
   const history = useHistory();
   const { schema, table } = useParams();
   const [tableState, setTableState] = useState(defaultTableState);
@@ -22,7 +22,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, comput
       clearTimeout(tableChangeTimeout);
       tableChangeTimeout = setTimeout(async () => {
         setTableState({ ...tableState, loading: true });
-        const newData = await getTableData({ schema, table, tableState, auth });
+        const newData = await getTableData({ schema, table, tableState, auth, url });
         setTableState({ ...tableState, tableData: newData.tableData, totalPages: newData.totalPages, totalRecords: newData.totalRecords, loading: false });
       }, 100);
     },

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 
 import queryInstance from '../../api/queryInstance';
 
-export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, auth, refreshInstance }) => {
+export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, auth, refreshInstance, url }) => {
   const history = useHistory();
 
   const [entityName, setEntityName] = useState(false);
@@ -38,7 +38,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth);
+    await queryInstance(operation, auth, url);
     setEntityName();
     setHashAttribute();
     toggleNameError();

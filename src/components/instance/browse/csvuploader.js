@@ -11,7 +11,7 @@ import Worker from '../../../util/processCSV.worker';
 
 const worker = new Worker();
 
-export default ({ refreshInstance, compute_stack_id, auth }) => {
+export default ({ refreshInstance, compute_stack_id, auth, url }) => {
   const history = useHistory();
   const { schema, table } = useParams();
   const [status, setStatus] = useState(false);
@@ -24,7 +24,7 @@ export default ({ refreshInstance, compute_stack_id, auth }) => {
   // query the table to determine if all the records have been processed.
   const validateData = async () => {
     setStatus('validating');
-    const validatedCount = await getTotalRecords({ schema, table, auth });
+    const validatedCount = await getTotalRecords({ schema, table, auth, url });
     setValidatedRecordCount(validatedCount);
     if (validatedCount < (newRecordCount + initialRecordCount)) return setTimeout(() => validateData(), 1000);
     refreshInstance(Date.now());
@@ -38,7 +38,7 @@ export default ({ refreshInstance, compute_stack_id, auth }) => {
   const insertData = async () => {
     if (!processedData) return false;
     setStatus('inserting');
-    await csvDataLoad({ schema, table, data: processedData, auth });
+    await csvDataLoad({ schema, table, data: processedData, auth, url });
     setProcessedData(false);
     return setTimeout(() => validateData(), 1000);
   };
@@ -65,7 +65,7 @@ export default ({ refreshInstance, compute_stack_id, auth }) => {
     history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
-  useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth })), []);
+  useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth, url })), []);
 
   return (
     <>

@@ -26,17 +26,16 @@ export default ({ closeAndResetModal }) => {
     delete newInstanceObject.user;
     delete newInstanceObject.pass;
 
-    console.log('adding instance', newInstanceObject);
-
     const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
+
     if (response.result) {
-      alert.success(response.message.message);
-      setInstanceAuths({ ...instanceAuths, [response.message.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
+      alert.success(response.message);
+      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
       const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { ...appData } });
       setAppData({ ...appData, instances });
       setTimeout(() => closeAndResetModal(), 0);
     } else {
-      setFormState({ submitted: false, error: response.message.message });
+      setFormState({ submitted: false, error: response.message });
     }
   }, []);
 

@@ -5,9 +5,9 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import defaultTableState from '../../../state/defaults/defaultTableState';
 import clusterConfigColumns from '../../../util/datatable/clusterConfigColumns';
 
-export default ({ instances, network, schema, table, auth, refreshInstance }) => {
+export default ({ instances, network, schema, table, auth, url, refreshInstance }) => {
   const [tableState, setTableState] = useState(defaultTableState);
-  const [tableData, setTableData] = useState({ data: [], columns: clusterConfigColumns({ auth, refreshInstance }) });
+  const [tableData, setTableData] = useState({ data: [], columns: clusterConfigColumns({ auth, refreshInstance, url }) });
 
   useEffect(() => {
     if (table) {

@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, refreshInstance }) => {
+export default async ({ auth, refreshInstance, url }) => {
   const query = {
     operation: 'add_role',
     role: 'cluster_user',
@@ -8,7 +8,7 @@ export default async ({ auth, refreshInstance }) => {
       cluster_user: true,
     },
   };
-  const result = await queryInstance(query, auth);
+  const result = await queryInstance(query, auth, url);
   refreshInstance(Date.now());
   return result;
 };

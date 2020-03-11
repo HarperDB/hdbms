@@ -5,13 +5,13 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import defaultAuthFormData from '../../../state/defaults/defaultAuthFormData';
 
-export default ({ id, host, port, is_ssl, setAuth, flipCard, flipState }) => {
+export default ({ id, url, setAuth, flipCard, flipState }) => {
   const alert = useAlert();
   const [formData, updateForm] = useState(defaultAuthFormData);
 
   useAsyncEffect(async () => {
     if (formData.submitted) {
-      const instance = await queryInstance({ operation: 'describe_all' }, { ...formData, host, port, is_ssl });
+      const instance = await queryInstance({ operation: 'describe_all' }, formData, url);
       if (instance.error) {
         alert.error(instance.error);
         updateForm({ ...formData, error: instance.error, submitted: false });

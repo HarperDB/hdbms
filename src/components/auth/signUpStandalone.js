@@ -8,23 +8,24 @@ import addCustomer from '../../api/lms/addCustomer';
 
 export default () => {
   const alert = useAlert();
-  const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
+  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
 
   useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { firstname, lastname, email, customer_name, subdomain } = formData;
+    const { submitted, processing } = formState;
+    if (submitted && !processing) {
+      const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain } });
+        setFormState({ ...formState, processing: true });
+        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result) {
           updateForm({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
-          setFormState({ submitted: false, error: false, success: true });
+          setFormState({ submitted: false, error: false, processing: false, success: true });
           alert.success(response.message);
         } else {
           setFormState({ submitted: false, error: response.message });
@@ -33,11 +34,19 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => setFormState({ error: false, submitted: false }), [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
 
   return (
     <div id="add-customer-background">
-      {formState.success ? (
+      {formState.processing ? (
+        <div className="p-4 text-center">
+          <h5>Creating Account</h5>
+          <hr />
+          <i className="fa fa-2x fa-spinner fa-spin text-purple" />
+          <hr className="mb-4" />
+          The office dogs are typing furiously.
+        </div>
+      ) : formState.success ? (
         <div className="p-4 text-center">
           <h5>Success!</h5>
           <hr />
@@ -45,17 +54,9 @@ export default () => {
           <hr className="mb-4" />
           Check your email for your username and password.
         </div>
-      ) : formState.submitted ? (
-        <div className="p-4 text-center">
-          <h5>Submitting</h5>
-          <hr />
-          <i className="fa fa-2x fa-spinner fa-spin text-purple" />
-          <hr className="mb-4" />
-          The office dogs are setting up your account.
-        </div>
       ) : (
         <>
-          <div className="fieldset-label">first name</div>
+          <div className="fieldset-label">First Name</div>
           <div className="fieldset full-height">
             <Input
               type="text"
@@ -67,7 +68,7 @@ export default () => {
             />
           </div>
 
-          <div className="fieldset-label">last name</div>
+          <div className="fieldset-label">Last Name</div>
           <div className="fieldset full-height">
             <Input
               type="text"
@@ -79,7 +80,7 @@ export default () => {
             />
           </div>
 
-          <div className="fieldset-label">email address</div>
+          <div className="fieldset-label">Email Address</div>
           <div className="fieldset full-height">
             <Input
               type="text"
@@ -91,7 +92,7 @@ export default () => {
             />
           </div>
 
-          <div className="fieldset-label">company</div>
+          <div className="fieldset-label">Company</div>
           <div className="fieldset full-height">
             <Input
               type="text"
@@ -103,7 +104,7 @@ export default () => {
             />
           </div>
 
-          <div className="fieldset-label">subdomain</div>
+          <div className="fieldset-label">Subdomain</div>
           <div className="fieldset full-height">
             <Row noGutters>
               <Col xs="8">
@@ -120,7 +121,18 @@ export default () => {
                 .harperdbcloud.com
               </Col>
             </Row>
+          </div>
 
+          <div className="fieldset-label">Coupon Code (optional)</div>
+          <div className="fieldset full-height">
+            <Input
+              type="text"
+              className="mb-0 text-center"
+              name="coupon_code"
+              value={formData.coupon_code}
+              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value, error: false })}
+              disabled={formState.submitted}
+            />
           </div>
 
           <Button

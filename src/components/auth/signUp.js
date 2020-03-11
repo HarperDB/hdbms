@@ -8,22 +8,24 @@ import addCustomer from '../../api/lms/addCustomer';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
-  const [formState, setFormState] = useState({ submitted: false, error: false, success: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
+  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
+  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
 
   useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { firstname, lastname, email, customer_name, subdomain } = formData;
+    const { submitted, processing } = formState;
+    if (submitted && !processing) {
+      const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ submitted: false, error: 'Please provide a valid email' });
       } else {
-        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain } });
+        setFormState({ ...formState, processing: true });
+        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result) {
-          setFormState({ submitted: false, error: false, success: true });
+          updateForm({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
+          setFormState({ submitted: false, error: false, processing: false, success: true });
         } else {
           setFormState({ submitted: false, error: response.message });
         }
@@ -31,17 +33,27 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => setFormState({ error: false, submitted: false, success: false }), [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
 
   return (
-    <div id="login-form" className="sign-up">
+    <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
-      {formState.success ? (
+      {formState.processing ? (
         <>
-          <Card className="mb-3 mt-2">
+          <Card className="mb-3">
+            <CardBody className="text-white text-center">
+              Creating Your Account<br /><br />
+              <i className="fa fa-spinner fa-spin text-white" />
+            </CardBody>
+          </Card>
+          <div className="text-small text-white text-center">&nbsp;</div>
+        </>
+      ) : formState.success ? (
+        <>
+          <Card className="mb-3">
             <CardBody>
-              <div className="text-center text-white pt-4">
-                <b>Success!</b><br /><br />
+              <div className="text-center text-white">
+                Success!<br /><br />
                 Check your email for your username and password.
               </div>
             </CardBody>
@@ -50,18 +62,9 @@ export default () => {
             <NavLink to="/sign-in" className="login-nav-link">Go to Sign In</NavLink>
           </div>
         </>
-      ) : formState.submitted ? (
-        <Card className="mb-3 mt-2">
-          <CardBody>
-            <div className="text-white text-center pt-5">
-              <b>Creating Your Account</b><br /><br />
-              <i className="fa fa-spinner fa-spin text-white" />
-            </div>
-          </CardBody>
-        </Card>
       ) : (
         <>
-          <Card className="mb-3 mt-2">
+          <Card className="mb-3">
             <CardBody>
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -107,7 +110,7 @@ export default () => {
                 <Col xs="6">
                   <Input
                     onKeyDown={(e) => handleKeydown(e, setFormState)}
-                    className="mb-4 text-center"
+                    className="mb-2 text-center"
                     type="text"
                     title="subdomain"
                     placeholder="subdomain"
@@ -120,14 +123,23 @@ export default () => {
                   .harperdbcloud.com
                 </Col>
               </Row>
-
+              <Input
+                type="text"
+                className="mb-4 text-center"
+                name="coupon_code"
+                title="coupon code"
+                placeholder="coupon code (optional)"
+                value={formData.coupon_code}
+                onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value, error: false })}
+                disabled={formState.submitted}
+              />
               <Button
                 color="purple"
                 block
                 disabled={formState.submitted}
                 onClick={() => setFormState({ submitted: true, error: false })}
               >
-                {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
+                Sign Up For Free
               </Button>
             </CardBody>
           </Card>

@@ -45,7 +45,7 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (products && regions && licenses && customer) {
-      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { products, regions, licenses } });
+      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { customer, products, regions, licenses } });
       setAppData({ ...appData, products, regions, licenses, customer, instances });
     }
   }, [products, regions, licenses, customer]);
@@ -66,6 +66,7 @@ export default () => {
           <InstanceCard
             key={i.compute_stack_id}
             {...i}
+            subdomain={appData.customer.subdomain}
             hasAuth={instanceAuths && instanceAuths[i.compute_stack_id]}
             setAuth={({ compute_stack_id, user, pass }) => setInstanceAuths({ ...instanceAuths, [compute_stack_id]: user && pass ? { user, pass } : false })}
           />

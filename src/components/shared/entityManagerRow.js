@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router';
 
 import queryInstance from '../../api/queryInstance';
 
-export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, auth, refreshInstance }) => {
+export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, auth, url, refreshInstance }) => {
   const history = useHistory();
   const { schema, table } = useParams();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -21,7 +21,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       operation.schema = item;
     }
 
-    await queryInstance(operation, auth);
+    await queryInstance(operation, auth, url);
     refreshInstance(Date.now());
 
     return ((itemType === 'schema' && item === schema) || (itemType === 'table' && item === table)) ? setTimeout(() => history.push(baseUrl), 100) : false;

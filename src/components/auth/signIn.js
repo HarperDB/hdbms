@@ -18,28 +18,30 @@ import handleKeydown from '../../util/handleKeydown';
 export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
   const [appData, setAppData] = useApp(defaultAppData);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
   const [formData, updateForm] = useState(defaultAuthFormData);
   const history = useHistory();
 
   useAsyncEffect(async () => {
-    const { email, pass } = formData;
-    const { submitted } = formState;
-    if (submitted) {
+    const { submitted, processing } = formState;
+    if (submitted && !processing) {
+      const { email, pass } = formData;
+
       if (!isEmail(email)) {
         setFormState({ error: 'invalid email supplied', submitted: false });
       } else if (!email || !pass) {
         setFormState({ error: 'all fields are required', submitted: false });
       } else {
+        setFormState({ ...formState, processing: true });
         const response = await getUser({ auth: { email, pass }, payload: { email } });
         if (response.result === false) {
-          setFormState({ error: response.message, submitted: false });
+          setFormState({ error: 'Invalid Credentials', submitted: false });
           setLMSAuth(defaultLMSAuth);
         } else {
           setLMSAuth({ email, pass });
           setAppData({ ...appData, user: response });
           if (response.update_password) {
-            history.push('/instances'); // history.push('/update-password');
+            history.push('/update-password');
           } else {
             history.push('/instances');
           }
@@ -48,32 +50,33 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => setFormState({ error: false, submitted: false }), [formData]);
+  ///useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
 
   useAsyncEffect(() => {
     const { email, pass } = lmsAuth;
     const { submitted } = formState;
     if (email && pass && !submitted) {
       updateForm({ email, pass });
-      setFormState({ submitted: true, error: false });
+      setFormState({ submitted: true, error: false, processing: false, success: false });
     }
   }, [lmsAuth]);
 
   return (
-    <div id="login-form" className="sign-in">
+    <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
-      {(lmsAuth?.email && lmsAuth?.pass) || formState.submitted ? (
-        <Card className="mb-3 mt-2">
-          <CardBody>
-            <div className="text-white text-center pt-5">
-              <b>Signing In</b><br /><br />
+      {(lmsAuth?.email && lmsAuth?.pass) || formState.processing ? (
+        <>
+          <Card className="mb-3">
+            <CardBody className="text-white text-center">
+              Signing In<br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
-            </div>
-          </CardBody>
-        </Card>
+            </CardBody>
+          </Card>
+          <div className="text-small text-white text-center">&nbsp;</div>
+        </>
       ) : (
         <>
-          <Card className="mb-3 mt-2">
+          <Card className="mb-3">
             <CardBody>
               <Input
                 onChange={(e) => updateForm({ ...formData, email: e.target.value })}
@@ -82,6 +85,7 @@ export default () => {
                 className="mb-2 text-center"
                 type="text"
                 title="email"
+                autoComplete="false"
                 placeholder="email address"
               />
               <Input
@@ -91,6 +95,7 @@ export default () => {
                 className="mb-4 text-center"
                 type="password"
                 title="password"
+                autoComplete="false"
                 placeholder="password"
               />
               <Button
@@ -100,13 +105,13 @@ export default () => {
                 color="purple"
                 disabled={formState.submitted}
               >
-                {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign In</span>}
+                Sign In
               </Button>
             </CardBody>
           </Card>
           {formState.error ? (
             <div className="text-small text-white text-center">
-              {formState.error}&nbsp;
+              {formState.error}
             </div>
           ) : (
             <Row className="text-small">

@@ -36,7 +36,7 @@ export default () => {
           <div className="fieldset">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
-                Example: &quot;edge-1&quot;
+                Example: &quot;cloud-1&quot;
               </Col>
               <Col xs="8">
                 <Input

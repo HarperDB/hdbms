@@ -12,7 +12,7 @@ import customerHasChargeableCard from '../../../util/stripe/customerHasChargeabl
 import useApp from '../../../state/stores/appData';
 import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ instanceAuth, details, refreshInstance, computeProducts, storageProducts }) => {
+export default ({ instanceAuth, details, refreshInstance, computeProducts, storageProducts, url }) => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const [{ customer }] = useApp(defaultAppData);
   const history = useHistory();
@@ -37,7 +37,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
       const { stripe_product_id, instance_name, compute_stack_id, customer_id, license_id, fingerprint, data_volume_size } = formData;
 
       const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, compute_stack_id, customer_id, fingerprint } });
-      await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company });
+      await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company, url });
       await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, compute_stack_id, customer_id, instance_name, data_volume_size } });
       setFormState({ submitted: false });
       refreshInstance(Date.now());

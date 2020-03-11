@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ channel, subscriptions, buttonState, id, host, clusterPort, auth, refreshInstance }) => {
+export default async ({ channel, subscriptions, buttonState, id, host, clusterPort, auth, refreshInstance, url }) => {
   const existingChannelSubscriptionIndex = subscriptions.findIndex((s) => s.channel === channel);
 
   // if we have no subscription for this node, add it to the subscriptions array
@@ -26,7 +26,6 @@ export default async ({ channel, subscriptions, buttonState, id, host, clusterPo
   }
 
   // send the query
-  const operation = { operation: 'update_node', name: id, host, port: clusterPort, subscriptions };
-  await queryInstance(operation, auth);
+  await queryInstance({ operation: 'update_node', name: id, host, port: clusterPort, subscriptions }, auth, url);
   return setTimeout(() => refreshInstance(Date.now()), 100);
 };

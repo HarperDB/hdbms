@@ -1,16 +1,29 @@
-export default async (operation, auth) => {
+export default async (operation, auth, url) => {
   console.log('Querying Instance API', operation.operation);
 
-  const request = await fetch(
-    `${auth.is_ssl ? 'https://' : 'http://'}${auth.host}:${auth.port}`,
-    {
-      method: 'POST',
-      body: JSON.stringify(operation),
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+  try {
+    const request = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify(operation),
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+        },
       },
-    },
-  );
-  return request.json();
+    );
+    if (request.status !== 200) {
+      return {
+        error: true,
+        message: request.status,
+      };
+    }
+    return request.json();
+  } catch (e) {
+    return {
+      error: true,
+      message: e,
+    };
+  }
 };

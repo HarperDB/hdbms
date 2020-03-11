@@ -18,7 +18,7 @@ export default async ({ endpoint, payload, auth }) => {
     'addUser',
     'getCustomer',
     'getInstances',
-    // 'getInvoices',
+    'getInvoices',
     'getLicenses',
     'getProducts',
     'getRegions',
@@ -45,19 +45,18 @@ export default async ({ endpoint, payload, auth }) => {
           body: JSON.stringify(payload),
           headers: {
             'Content-Type': 'application/json',
-            authorization: `Basic ${btoa(`${auth.email}:${auth.pass}`)}`,
+            authorization: auth ? `Basic ${btoa(`${auth.email}:${auth.pass}`)}` : undefined,
           },
         },
       );
       const response = await request.json();
 
-      if (response.errorType || response.errorMessage) {
-        const errorObject = JSON.parse(response.errorMessage);
+      if (response.errorType) {
         return {
           body: {
             result: false,
-            message: errorObject.errorMessage,
-            eType: 'returned',
+            message: response.errorMessage,
+            eType: response.errorType,
           },
         };
       }

@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 import defaultFormData from '../../../state/defaults/defaultClusterFormData';
 import createClusterUser from '../../../api/instance/createClusterUser';
 
-export default ({ clusterUser, clusterRole, auth, refreshInstance }) => {
+export default ({ clusterUser, clusterRole, auth, refreshInstance, url }) => {
   const alert = useAlert();
   const [userFormData, updateUserForm] = useState(defaultFormData);
 
@@ -17,7 +17,7 @@ export default ({ clusterUser, clusterRole, auth, refreshInstance }) => {
         updateUserForm({ ...userFormData, error: true, submitted: false });
         alert.error('All fields are required.');
       } else {
-        const result = await createClusterUser({ username, password, role: clusterRole, auth, refreshInstance });
+        const result = await createClusterUser({ username, password, role: clusterRole, auth, refreshInstance, url });
         if (result.message.indexOf('successfully') === -1) {
           alert.error(result.message);
         }

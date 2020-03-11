@@ -18,6 +18,8 @@ export default () => {
     }
   }, [formData]);
 
+  useAsyncEffect(() => setNewInstance(defaultNewInstanceData), []);
+
   return (
     <Row>
       <Col xs="12" lg="6" className="instance-form-card-holder">

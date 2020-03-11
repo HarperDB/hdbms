@@ -7,7 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import queryInstance from '../../../api/queryInstance';
 
-export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInstance, auth }) => {
+export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInstance, auth, url }) => {
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
   const [rowValue, setRowValue] = useState({});
@@ -20,7 +20,7 @@ export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInst
         table,
         hash_values: [hash],
         get_attributes: ['*'],
-      }, auth);
+      }, auth, url);
       setRowValue(rowData[0]);
     } else {
       setRowValue(newEntityColumns);
@@ -36,7 +36,7 @@ export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInst
       schema,
       table,
       records: [rowValue],
-    }, auth);
+    }, auth, url);
     refreshInstance(Date.now());
     return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
@@ -50,7 +50,7 @@ export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInst
       schema,
       table,
       hash_values: [hash],
-    }, auth);
+    }, auth, url);
     refreshInstance(Date.now());
     return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };

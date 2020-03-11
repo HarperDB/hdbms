@@ -5,7 +5,6 @@ export default async ({ payload: { email } }) => {
     endpoint: 'resetPassword',
     method: 'POST',
     payload: { email },
-    auth: { user: 'david@harperdb.io', pass: 'harperdb' },
   });
   return response.body;
 };

@@ -5,7 +5,7 @@ import { useAlert } from 'react-alert';
 
 import addUser from '../../../api/instance/addUser';
 
-export default ({ auth, roles, users, refreshInstance }) => {
+export default ({ auth, url, roles, users, refreshInstance }) => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ username: '', password: '' });
@@ -22,7 +22,7 @@ export default ({ auth, roles, users, refreshInstance }) => {
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
         setFormState({ submitted: false, error: 'User already exists' });
       } else {
-        const response = await addUser({ auth, role, username, password });
+        const response = await addUser({ auth, role, username, password, url });
         if (response.message.indexOf('successfully') !== -1) {
           updateForm({ username: '', password: '', role: roles[0].id });
           refreshInstance(Date.now());
