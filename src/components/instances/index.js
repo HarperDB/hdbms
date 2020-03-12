@@ -3,10 +3,11 @@ import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
 
-import useInstanceAuth from '../../state/stores/instanceAuths';
 import useApp from '../../state/stores/appData';
 import useLMS from '../../state/stores/lmsAuth';
+import appState from '../../state/stores/appState';
 
 import defaultAppData from '../../state/defaults/defaultAppData';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
@@ -33,22 +34,25 @@ export default () => {
   const [search, setSearch] = useState('');
   const [local, setLocal] = useState(true);
   const [cloud, setCloud] = useState(true);
-  const [filteredInstances, setFilteredInstances] = useState(false);
+  const [filteredInstances, setFilteredInstances] = useState([]);
   const [lastUpdate, setLastUpdate] = useState(false);
+  const currentState = useStoreState(appState);
 
   useAsyncEffect(() => {
-    const newFilteredInstances = filterInstances({ local, cloud, search, instances: appData.instances });
-    setFilteredInstances(newFilteredInstances);
+    if (appData.instances) {
+      const newFilteredInstances = filterInstances({ local, cloud, search, instances: appData.instances });
+      setFilteredInstances(newFilteredInstances);
+    }
   }, [search, local, cloud, appData.instances]);
 
   useAsyncEffect(async () => setProducts(await getProducts()), []);
   useAsyncEffect(async () => setRegions(await getRegions()), []);
-  useAsyncEffect(async () => setCustomer(await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } })), []);
-  useAsyncEffect(async () => setLicenses(await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } })), []);
+  useAsyncEffect(async () => setCustomer(await getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } })), []);
+  useAsyncEffect(async () => setLicenses(await getLicenses({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } })), []);
 
   useAsyncEffect(async () => {
     if (products && regions && licenses && customer && !action) {
-      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { products, regions, licenses } });
+      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id }, entities: { products, regions, licenses } });
       setAppData({ ...appData, products, regions, licenses, customer, instances });
     }
   }, [products, regions, licenses, customer, lastUpdate, action]);

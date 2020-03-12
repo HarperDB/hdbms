@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
-import { useParams } from 'react-router-dom';
 
 import Role from './setup_role';
 import User from './setup_user';
@@ -9,7 +8,6 @@ import Enable from './setup_enable';
 
 export default ({ auth, url, instanceName, network, refreshInstance }) => {
   const [port, setPort] = useState(false);
-  const { compute_stack_id } = useParams();
 
   return (
     <Row id="clustering">

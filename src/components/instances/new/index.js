@@ -20,11 +20,14 @@ import CloudInstanceForm from './details_cloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
 export default () => {
   const history = useHistory();
   const { purchaseStep } = useParams();
   const [appData] = useApp(defaultAppData);
+  const [lmsAuth] = useLMS(defaultLMSAuth);
   const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
 
   const isLocal = newInstance.is_local;
@@ -35,7 +38,7 @@ export default () => {
     setTimeout(() => history.push('/instances'), 100);
   };
 
-  useAsyncEffect(() => setNewInstance({ ...newInstance, customer_id: appData.customer.customer_id }), [purchaseStep]);
+  useAsyncEffect(() => setNewInstance({ ...newInstance, customer_id: lmsAuth.customer_id }), [purchaseStep]);
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>

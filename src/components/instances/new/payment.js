@@ -36,7 +36,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         setProcessing(false);
       } else {
         await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: appData.customer.stripe_id } });
-        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } });
+        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
         setAppData({ ...appData, customer });
         setProcessing(false);
         setAddedCard(true);

@@ -1,4 +1,5 @@
 import queryLMS from '../queryLMS';
+import appState from '../../state/stores/appState';
 
 export default async ({ auth, payload: { customer_id } }) => {
   const response = await queryLMS({
@@ -8,5 +9,12 @@ export default async ({ auth, payload: { customer_id } }) => {
     auth,
   });
 
-  return response.body;
+  let invoices = [];
+
+  if (Array.isArray(response.body)) {
+    invoices = response.body;
+  }
+
+  appState.update((s) => { s.invoices = invoices; });
+  return invoices;
 };

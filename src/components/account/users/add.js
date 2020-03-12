@@ -7,13 +7,10 @@ import addUser from '../../../api/lms/addUser';
 import isEmail from '../../../util/isEmail';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ setLastUpdate }) => {
   const alert = useAlert();
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [{ customer }] = useApp(defaultAppData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '' });
 
@@ -24,7 +21,7 @@ export default ({ setLastUpdate }) => {
       if (!firstname || !lastname || !isEmail(email)) {
         setFormState({ submitted: false, error: 'All fields must be filled out' });
       } else {
-        const response = await addUser({ auth: lmsAuth, payload: { ...formData, customer_id: customer.customer_id } });
+        const response = await addUser({ auth: lmsAuth, payload: { ...formData, customer_id: lmsAuth.customer_id } });
         if (response.result) {
           setLastUpdate(Date.now());
           alert.success(response.message);

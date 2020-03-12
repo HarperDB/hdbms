@@ -19,7 +19,7 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (appData.customer) {
-      const newCustomer = await getCustomer({ auth: lmsAuth, payload: { customer_id: appData.customer.customer_id } });
+      const newCustomer = await getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
       setAppData({ ...appData, customer: newCustomer });
     }
   }, [lastUpdate]);

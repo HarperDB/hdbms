@@ -6,18 +6,15 @@ import { useAlert } from 'react-alert';
 import getInvoices from '../../../api/lms/getInvoices';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [{ customer: { customer_id } }] = useApp(defaultAppData);
   const [customerInvoices, setCustomerInvoices] = useState('loading');
   const alert = useAlert();
 
   useAsyncEffect(async () => {
-    const response = await getInvoices({ auth: lmsAuth, payload: { customer_id } });
-    console.log(response);
+    const response = await getInvoices({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
+
     if (response.result === false) {
       alert.error('Unable to fetch invoices. Please try again later.');
       setCustomerInvoices('error');

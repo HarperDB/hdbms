@@ -10,14 +10,11 @@ import defaultAuthFormData from '../../state/defaults/defaultAuthFormData';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
 
 import getUser from '../../api/lms/getUser';
-import useApp from '../../state/stores/appData';
-import defaultAppData from '../../state/defaults/defaultAppData';
 import isEmail from '../../util/isEmail';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [appData, setAppData] = useApp(defaultAppData);
   const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
   const [formData, updateForm] = useState(defaultAuthFormData);
   const history = useHistory();
@@ -38,13 +35,8 @@ export default () => {
           setFormState({ error: 'Invalid Credentials', submitted: false });
           setLMSAuth(defaultLMSAuth);
         } else {
-          setLMSAuth({ email, pass });
-          setAppData({ ...appData, user: response });
-          if (response.update_password) {
-            history.push('/update-password');
-          } else {
-            history.push('/instances');
-          }
+          setLMSAuth({ ...response, email, pass });
+          setTimeout(() => history.push(response.update_password ? '/update-password' : '/instances'), 100);
         }
       }
     }

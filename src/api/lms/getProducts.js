@@ -1,4 +1,5 @@
 import queryLMS from '../queryLMS';
+import appState from '../../state/stores/appState';
 
 const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
@@ -27,26 +28,29 @@ export default async () => {
     method: 'POST',
   });
 
-  if (!Array.isArray(response.body)) {
-    return {
-      cloudStorage: [],
-      cloudCompute: [],
-      localCompute: [],
+  let products = {
+    cloudStorage: [],
+    cloudCompute: [],
+    localCompute: [],
+  };
+
+  if (Array.isArray(response.body)) {
+    const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
+    const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Beta');
+    const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
+    const cloudStorageOptions = [10, 100, 250, 500, 1000];
+
+    const cloudStorage = cloudStorageOptions.map((size) => buildRadioSelectStorageOptions(size, cloudStoragePlans.plans[0]));
+    const cloudCompute = cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p));
+    const localCompute = localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p));
+
+    products = {
+      cloudStorage,
+      cloudCompute,
+      localCompute,
     };
   }
 
-  const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
-  const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Beta');
-  const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
-  const cloudStorageOptions = [10, 100, 250, 500, 1000];
-
-  const cloudStorage = cloudStorageOptions.map((size) => buildRadioSelectStorageOptions(size, cloudStoragePlans.plans[0]));
-  const cloudCompute = cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p));
-  const localCompute = localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p));
-
-  return {
-    cloudStorage,
-    cloudCompute,
-    localCompute,
-  };
+  appState.update((s) => { s.products = products; });
+  return products;
 };

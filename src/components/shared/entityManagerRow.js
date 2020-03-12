@@ -21,6 +21,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       operation.schema = item;
     }
 
+    console.log(url);
     await queryInstance(operation, auth, url);
     refreshInstance(Date.now());
 

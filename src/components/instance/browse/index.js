@@ -35,6 +35,7 @@ export default ({ auth, structure, url, refreshInstance }) => {
           baseUrl={`/instance/${compute_stack_id}/browse`}
           itemType="schema"
           showForm
+          url={url}
         />
         { schema && (
           <EntityManager
@@ -46,6 +47,7 @@ export default ({ auth, structure, url, refreshInstance }) => {
             auth={auth}
             refreshInstance={refreshInstance}
             showForm
+            url={url}
           />
         )}
       </Col>

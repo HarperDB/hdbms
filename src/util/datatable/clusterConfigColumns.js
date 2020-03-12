@@ -32,7 +32,7 @@ export default ({ auth, refreshInstance, url }) => [{
 }, {
   Header: 'subscribe',
   Cell: ({
-    original: { instance_name, host, clusterPort, subscribe, connection, channel, subscriptions },
+    original: { instance_name, instance_host, clusterPort, subscribe, connection, channel, subscriptions },
   }) => (
     connection
       ? <ToggleButton width={75} checked={subscribe || false} onChange={() => updateNode({ channel, subscriptions, buttonState: 'toggleSubscribe', instance_name, instance_host, clusterPort, auth, url, refreshInstance })} />

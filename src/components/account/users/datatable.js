@@ -10,27 +10,24 @@ import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 
 export default ({ lastUpdate, setLastUpdate }) => {
   const alert = useAlert();
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [{ customer, user }] = useApp(defaultAppData);
   const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'lastname', desc: false }] });
   const [userToRemove, setUserToRemove] = useState(false);
-  const [tableData, setTableData] = useState({ loading: false, data: [], columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: user.user_id }) });
+  const [tableData, setTableData] = useState({ loading: false, data: [], columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: lmsAuth.user_id }) });
 
   useAsyncEffect(() => {
-    if (user) {
-      setTableData({ ...tableData, columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: user.user_id }) });
+    if (lmsAuth.user_id) {
+      setTableData({ ...tableData, columns: customerUserColumns({ setUserToRemove, userToRemove, current_user_id: lmsAuth.user_id }) });
     }
-  }, [user]);
+  }, [lmsAuth.user_id]);
 
   useAsyncEffect(async () => {
-    if (customer) {
+    if (lmsAuth.customer_id) {
       setTableData({ ...tableData, loading: true });
-      const response = await getUsers({ auth: lmsAuth, payload: { customer_id: customer.customer_id } });
+      const response = await getUsers({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
       if (response.result === false) {
         alert.error(response.message);
         setTableData({ ...tableData, loading: false });
@@ -38,11 +35,11 @@ export default ({ lastUpdate, setLastUpdate }) => {
         setTableData({ ...tableData, data: response, loading: false });
       }
     }
-  }, [lastUpdate, customer]);
+  }, [lastUpdate, lmsAuth.customer_id]);
 
   useAsyncEffect(async () => {
-    if (userToRemove && userToRemove !== user.user_id) {
-      const response = await removeUser({ auth: lmsAuth, payload: { user_id: userToRemove, customer_id: customer.customer_id } });
+    if (userToRemove && userToRemove !== lmsAuth.user_id) {
+      const response = await removeUser({ auth: lmsAuth, payload: { user_id: userToRemove, customer_id: lmsAuth.customer_id } });
       if (response.result === false) {
         alert.error(response.message);
       } else {

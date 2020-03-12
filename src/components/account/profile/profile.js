@@ -15,7 +15,7 @@ export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const [appData, setAppData] = useApp(defaultAppData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ firstname: appData.user.firstname, lastname: appData.user.lastname, customer_id: appData.customer.customer_id, user_id: appData.user.user_id });
+  const [formData, updateForm] = useState(lmsAuth);
 
   useAsyncEffect(async () => {
     const { firstname, lastname, customer_id, user_id } = formData;
@@ -28,7 +28,7 @@ export default () => {
         if (response.result === false) {
           setFormState({ error: response.message, submitted: false });
         } else {
-          const user = await getUser({ auth: lmsAuth, payload: { email: appData.user.email } });
+          const user = await getUser({ auth: lmsAuth, payload: { email: lmsAuth.email } });
           setAppData({ ...appData, user });
           setFormState({ error: false, submitted: false });
           alert.success(response.message);

@@ -1,6 +1,6 @@
 import { Store } from 'pullstate';
 
-const UIStore = new Store({
+const appState = new Store({
   user: false,
   customer: false,
   products: false,
@@ -9,4 +9,4 @@ const UIStore = new Store({
   instances: false,
 });
 
-export default UIStore;
+export default appState;

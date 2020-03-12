@@ -5,16 +5,13 @@ import { useAlert } from 'react-alert';
 
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 import updatePassword from '../../../api/lms/updatePassword';
 
 export default () => {
   const alert = useAlert();
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [appData] = useApp(defaultAppData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ oldpassword: '', newpassword: '', newpassword2: '', user_id: appData.user.user_id });
+  const [formData, updateForm] = useState({ oldpassword: '', newpassword: '', newpassword2: '', user_id: lmsAuth.user_id });
 
   useAsyncEffect(async () => {
     const { oldpassword, newpassword, newpassword2, user_id } = formData;

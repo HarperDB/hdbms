@@ -8,12 +8,9 @@ import updatePassword from '../../api/lms/updatePassword';
 import handleKeydown from '../../util/handleKeydown';
 import useLMS from '../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
-import useApp from '../../state/stores/appData';
-import defaultAppData from '../../state/defaults/defaultAppData';
 
 export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [appData] = useApp(defaultAppData);
   const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
   const [formData, updateForm] = useState({ password: false, password2: false });
   const history = useHistory();
@@ -29,7 +26,7 @@ export default () => {
         setFormState({ error: 'passwords must match', submitted: false });
       } else {
         setFormState({ ...formState, processing: true });
-        const response = await updatePassword({ auth: lmsAuth, payload: { email: lmsAuth.email, user_id: appData.user.user_id, password } });
+        const response = await updatePassword({ auth: lmsAuth, payload: { email: lmsAuth.email, user_id: lmsAuth.user_id, password } });
         if (response.result === false) {
           setFormState({ error: response.message, submitted: false, processing: false, success: false });
         } else {
