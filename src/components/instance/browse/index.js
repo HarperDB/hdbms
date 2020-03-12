@@ -11,7 +11,7 @@ import CSVUploader from './csvuploader';
 import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
 
-export default ({ auth, structure, refreshInstance }) => {
+export default ({ auth, structure, url, refreshInstance }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, action } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
@@ -55,6 +55,7 @@ export default ({ auth, structure, refreshInstance }) => {
             auth={auth}
             compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
+            url={url}
           />
         ) : schema && table && action && entities.activeTable ? (
           <JSONViewer
@@ -63,6 +64,7 @@ export default ({ auth, structure, refreshInstance }) => {
             auth={auth}
             compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
+            url={url}
           />
         ) : schema && table && entities.activeTable ? (
           <DataTable
@@ -71,6 +73,7 @@ export default ({ auth, structure, refreshInstance }) => {
             compute_stack_id={compute_stack_id}
             refreshInstance={refreshInstance}
             structure={structure}
+            url={url}
           />
         ) : (
           <>

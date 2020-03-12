@@ -5,25 +5,25 @@ body {
   overflow-x: hidden;
 
   #app-bg {
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
     background: $gradient-purple-magenta !important;
+    bottom: 0;
+    height: 100vh;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    z-index: -1;
   }
 
   #app {
     min-width: $min-width;
 
     #app-container {
-      min-width: $min-width;
-      margin-top: 135px;
-      padding: 0 2rem;
       height: calc(100vh - 135px);
+      margin-top: 135px;
+      min-width: $min-width;
+      padding: 0 2rem;
 
       @media screen and (max-width: 991px) {
         padding: 0 1rem;
@@ -31,24 +31,24 @@ body {
     }
 
     #app-nav {
-      min-width: $min-width;
       background: $gradient-purple-magenta !important;
+      height: 60px;
+      min-width: $min-width;
       padding: 0 2rem;
       position: fixed;
       z-index: 99 !important;
-      height: 60px;
 
       @media screen and (max-width: 991px) {
         padding: 0 1rem;
       }
 
       #logo {
+        background-image: url('/images/logo.png');
+        background-position: top left;
+        background-repeat: no-repeat;
+        background-size: contain;
         height: 30px;
         width: 126px;
-        background-image: url('/images/logo.png');
-        background-repeat: no-repeat;
-        background-position: top left;
-        background-size: contain;
       }
 
       .nav-item {
@@ -57,30 +57,30 @@ body {
     }
 
     #app-subnav {
-      width: 100%;
-      min-width: $min-width;
       background: $dark-grey-overlay !important;
+      box-shadow: inset 0 10px 5px -10px $color-black, inset 0 -10px 5px -10px $color-black;
+      height: 50px;
+      min-width: $min-width;
       padding: 5px 2rem;
       position: fixed;
-      z-index: 98 !important;
-      height: 50px;
-      top: 60px !important;
       text-align: center;
+      top: 60px !important;
       transition: top 250ms;
-      box-shadow: inset 0 10px 5px -10px $color-black, inset 0 -10px 5px -10px $color-black;
+      width: 100%;
+      z-index: 98 !important;
 
       .navbar-nav {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
         justify-content: center;
+        margin: 0 auto;
+        max-width: 400px;
+        width: 100%;
 
         .nav-item {
           padding: 0 10px;
 
           @media screen and (max-width: 991px) {
+            font-size: 0.875rem;
             padding: 0 5px;
-            font-size: .875rem;
           }
 
 
@@ -110,8 +110,8 @@ body {
 
       .nav-link,
       a {
-        display: inline-block;
         color: $white-overlay !important;
+        display: inline-block;
         padding: 5px 0 0 !important;
         text-shadow: 0 2px 3px $grey-overlay;
         transition: color 250ms;
@@ -123,8 +123,8 @@ body {
       }
 
       .nav-divider {
-        display: inline-block;
         color: $color-lightgrey !important;
+        display: inline-block;
         padding: 5px 0 0 !important;
       }
     }

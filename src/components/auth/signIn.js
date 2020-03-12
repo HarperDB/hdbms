@@ -50,7 +50,7 @@ export default () => {
     }
   }, [formState]);
 
-  ///useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  // /useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
 
   useAsyncEffect(() => {
     const { email, pass } = lmsAuth;

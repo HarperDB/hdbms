@@ -13,13 +13,14 @@ export default async (operation, auth, url) => {
         },
       },
     );
+
     if (request.status !== 200) {
       return {
         error: true,
         message: request.status,
       };
     }
-    return request.json();
+    return await request.json();
   } catch (e) {
     return {
       error: true,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import useInterval from 'use-interval';
 
 import useInstanceAuth from '../../state/stores/instanceAuths';
 import useApp from '../../state/stores/appData';
@@ -32,6 +33,7 @@ export default () => {
   const [local, setLocal] = useState(true);
   const [cloud, setCloud] = useState(true);
   const [filteredInstances, setFilteredInstances] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(false);
 
   useAsyncEffect(() => {
     const newFilteredInstances = filterInstances({ local, cloud, search, instances: appData.instances });
@@ -45,10 +47,12 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (products && regions && licenses && customer) {
-      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { customer, products, regions, licenses } });
+      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { products, regions, licenses } });
       setAppData({ ...appData, products, regions, licenses, customer, instances });
     }
-  }, [products, regions, licenses, customer]);
+  }, [products, regions, licenses, customer, lastUpdate]);
+
+  useInterval(() => setLastUpdate(Date.now()), 10000);
 
   return (
     <div id="instances">

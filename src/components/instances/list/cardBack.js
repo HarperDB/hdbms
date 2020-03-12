@@ -5,41 +5,53 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import defaultAuthFormData from '../../../state/defaults/defaultAuthFormData';
 
-export default ({ id, url, setAuth, flipCard, flipState }) => {
+export default ({ compute_stack_id, url, setAuth, flipCard, flipState }) => {
   const alert = useAlert();
+  const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState(defaultAuthFormData);
 
   useAsyncEffect(async () => {
-    if (formData.submitted) {
-      const instance = await queryInstance({ operation: 'describe_all' }, formData, url);
-      if (instance.error) {
-        alert.error(instance.error);
-        updateForm({ ...formData, error: instance.error, submitted: false });
+    const { submitted } = formState;
+    if (submitted) {
+      const { user, pass } = formData;
+      if (!user || !pass) {
+        alert.error('all fields are required');
+        setFormState({ error: true, submitted: false });
       } else {
-        updateForm(defaultAuthFormData);
-        setAuth({ id, user: formData.user, pass: formData.pass });
-        flipCard();
+        const response = await queryInstance({ operation: 'describe_all' }, { user, pass }, url);
+
+        if (response.error) {
+          alert.error(response.message.toString());
+          setFormState({ error: true, submitted: false });
+        } else {
+          updateForm(defaultAuthFormData);
+          setFormState({ error: false, submitted: false });
+          setAuth({ compute_stack_id, user: formData.user, pass: formData.pass });
+          flipCard();
+        }
       }
     }
-  }, [formData]);
+  }, [formState]);
 
   return (
-    <Card className={`instance ${formData.error ? 'error' : ''}`}>
+    <Card className={`instance ${formState.error ? 'error' : ''}`}>
       {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
         <CardBody>
           <Input
-            onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, user: e.target.value })}
             className="text-center mb-1"
             type="text"
             title="username"
             placeholder="user"
+            disabled={formState.submitted}
           />
           <Input
-            onChange={(e) => updateForm({ ...formData, pass: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, pass: e.target.value })}
             className="text-center mb-2"
             type="password"
             title="password"
             placeholder="pass"
+            disabled={formState.submitted}
           />
           <Row noGutters>
             <Col xs="6" className="pr-1">
@@ -48,16 +60,18 @@ export default ({ id, url, setAuth, flipCard, flipState }) => {
                 title="Cancel"
                 block
                 color="grey"
+                disabled={formState.submitted}
               >
                 Cancel
               </Button>
             </Col>
             <Col xs="6" className="pl-1">
               <Button
-                onClick={() => updateForm({ ...formData, submitted: true, error: false })}
+                onClick={() => setFormState({ submitted: true, error: false })}
                 title="Log Into Instance"
                 block
                 color="purple"
+                disabled={formState.submitted}
               >
                 Log In
               </Button>

@@ -16,15 +16,15 @@ $color-purple: #403b8a;
 $color-lightpurple: #7a3a87;
 
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
-$faint-white-overlay: rgba(255, 255, 255, .1);
-$white-overlay: rgba(255, 255, 255, .5);
-$light-white-overlay: rgba(255, 255, 255, .9);
+$faint-white-overlay: rgba(255, 255, 255, 0.1);
+$white-overlay: rgba(255, 255, 255, 0.5);
+$light-white-overlay: rgba(255, 255, 255, 0.9);
 
-$lighter-grey-overlay: rgba(0, 0, 0, .15);
-$light-grey-overlay: rgba(0, 0, 0, .3);
-$grey-overlay: rgba(0, 0, 0, .5);
-$dark-grey-overlay: rgba(0, 0, 0, .7);
-$black-overlay: rgba(0, 0, 0, .9);
+$lighter-grey-overlay: rgba(0, 0, 0, 0.15);
+$light-grey-overlay: rgba(0, 0, 0, 0.3);
+$grey-overlay: rgba(0, 0, 0, 0.5);
+$dark-grey-overlay: rgba(0, 0, 0, 0.7);
+$black-overlay: rgba(0, 0, 0, 0.9);
 
 $fa-font-path: '/fonts';
 $border-radius-base: 6px;

@@ -1,30 +1,30 @@
 .btn {
   border-radius: 4px;
-  line-height: 1 !important;
-  transition: none !important;
-  padding-left: 5px;
-  padding-right: 5px;
+  box-shadow: 1px 1px 4px $lighter-grey-overlay !important;
   font-family: $font-family-sans;
   font-weight: $font-weight-light;
+  line-height: 1 !important;
+  outline: none !important;
+  padding-left: 5px;
+  padding-right: 5px;
   text-transform: lowercase;
-  box-shadow: 1px 1px 4px $lighter-grey-overlay !important;
-  outline: none!important;
+  transition: none !important;
 
   &:active,
   &:hover {
-    outline: none!important;
+    outline: none !important;
   }
 
   &.round {
+    height: 25px !important;
     padding: 0;
     width: 25px !important;
-    height: 25px !important;
   }
 
   &.connect {
-    padding: 0 !important;
-    height: 25px !important;
     font-size: 12px;
+    height: 25px !important;
+    padding: 0 !important;
   }
 
   &.no-shadow {
@@ -36,38 +36,38 @@
   }
 
   &.btn-grey {
-    color: $color-white !important;
-    border-color: $grey-overlay !important;
     background-color: $grey-overlay !important;
+    border-color: $grey-overlay !important;
+    color: $color-white !important;
   }
 
   &.btn-black {
-    color: $color-white !important;
-    border-color: $color-black !important;
     background-color: $color-black !important;
+    border-color: $color-black !important;
+    color: $color-white !important;
   }
 
   &.btn-purple {
-    color: $color-white !important;
-    border-color: $color-purple !important;
     background-color: $color-purple !important;
+    border-color: $color-purple !important;
+    color: $color-white !important;
   }
 
   &.btn-darkpurple {
-    color: $color-white !important;
-    border-color: $color-darkpurple !important;
     background-color: $color-darkpurple !important;
+    border-color: $color-darkpurple !important;
+    color: $color-white !important;
   }
 
   &.btn-outline-purple {
-    color: $color-purple !important;
-    border-color: $color-purple !important;
     background-color: $color-white !important;
+    border-color: $color-purple !important;
+    color: $color-purple !important;
   }
 
   &.btn-filter {
-    border-color: transparent !important;
     background: $faint-white-overlay !important;
+    border-color: transparent !important;
     color: $white-overlay !important;
 
     &.active {
@@ -83,12 +83,12 @@
 
 .btn-group>.btn-group:not(:last-child)>.btn,
 .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
-  border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 .btn-group>.btn-group:not(:first-child)>.btn,
 .btn-group>.btn:not(:first-child) {
-  border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
+  border-top-left-radius: 0 !important;
 }

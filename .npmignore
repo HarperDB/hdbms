@@ -17,7 +17,7 @@ public
 .babelrc
 .eslintignore
 .gitattributes
-.sass-lint.yml
+.stylelintrc.json
 
 #editor settings
 .idea

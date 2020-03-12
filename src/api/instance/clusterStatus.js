@@ -7,12 +7,10 @@ const processConnections = (connections) => (connections ? connections.filter((c
   subscriptions: c.subscriptions,
 })) : []);
 
-export default async (auth, url) => {
+export default async ({ auth, url, users, roles }) => {
   const clusterResponse = await queryInstance({ operation: 'cluster_status' }, auth, url);
-  const instanceRoles = await queryInstance({ operation: 'list_roles' }, auth, url);
-  const cluster_role = instanceRoles.find((r) => r.role === 'cluster_user');
-  const instanceUsers = await queryInstance({ operation: 'list_users' }, auth, url);
-  const cluster_user = cluster_role && instanceUsers.find((u) => u.role.id === cluster_role.id);
+  const cluster_role = roles.find((r) => r.role === 'cluster_user');
+  const cluster_user = cluster_role && users.find((u) => u.role.id === cluster_role.id);
 
   if (clusterResponse.message || !clusterResponse.is_enabled) {
     return {

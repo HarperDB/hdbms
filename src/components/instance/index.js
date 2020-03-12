@@ -13,14 +13,14 @@ import defaultAppData from '../../state/defaults/defaultAppData';
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const [appData] = useApp(defaultAppData);
+  const [{ products, instances, licenses }] = useApp(defaultAppData);
   const [instanceAuths] = useInstanceAuth({});
   const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
   const [lastUpdate, refreshInstance] = useState(false);
 
   useAsyncEffect(async () => {
     if (compute_stack_id) {
-      const activeInstanceObject = await buildActiveInstanceObject({ compute_stack_id, instanceAuths, appData });
+      const activeInstanceObject = await buildActiveInstanceObject({ compute_stack_id, instanceAuths, products, instances, licenses });
       if (!activeInstanceObject.error) {
         setActiveInstance(activeInstanceObject);
       }

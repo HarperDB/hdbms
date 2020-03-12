@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
+import { Input, Button, Card, CardBody, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
@@ -8,7 +8,7 @@ import addUser from '../../../api/instance/addUser';
 export default ({ auth, url, roles, users, refreshInstance }) => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ username: '', password: '' });
+  const [formData, updateForm] = useState({ username: '', password: '', role: false });
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -24,7 +24,7 @@ export default ({ auth, url, roles, users, refreshInstance }) => {
       } else {
         const response = await addUser({ auth, role, username, password, url });
         if (response.message.indexOf('successfully') !== -1) {
-          updateForm({ username: '', password: '', role: roles[0].id });
+          updateForm({ username: '', password: '', role: false });
           refreshInstance(Date.now());
           alert.success(response.message);
         } else {
@@ -35,48 +35,40 @@ export default ({ auth, url, roles, users, refreshInstance }) => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (roles) updateForm({ ...formData, role: roles[0].id }); }, [roles]);
+  useAsyncEffect(() => { if (roles) updateForm({ ...formData, role: false }); }, [roles]);
 
   return (
     <>
       <span className="text-white mb-2 floating-card-header">add user</span>
       <Card className="my-3">
         <CardBody>
-          <div className="fieldset-label">username</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0 text-center"
-              name="username"
-              value={formData.username}
-              onChange={(e) => updateForm({ ...formData, username: e.target.value, error: false })}
-            />
-          </div>
+          <Input
+            type="text"
+            className="mb-2 text-center"
+            name="username"
+            placeholder="username"
+            value={formData.username}
+            onChange={(e) => updateForm({ ...formData, username: e.target.value, error: false })}
+          />
 
-          <div className="fieldset-label">password</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0 text-center"
-              name="password"
-              value={formData.password}
-              onChange={(e) => updateForm({ ...formData, password: e.target.value, error: false })}
-            />
-          </div>
+          <Input
+            type="text"
+            className="mb-2 text-center"
+            name="password"
+            placeholder="password"
+            value={formData.password}
+            onChange={(e) => updateForm({ ...formData, password: e.target.value, error: false })}
+          />
 
-          <div className="fieldset-label">role</div>
-          <div className="fieldset full-height">
-            {roles && (
-              <RadioCheckbox
-                className="radio-button"
-                type="radio"
-                onChange={(value) => updateForm({ ...formData, role: value })}
-                options={roles ? roles.map((r) => ({ label: r.role, value: r.id })) : []}
-                value={formData.role}
-                defaultValue={formData.role}
-              />
-            )}
-          </div>
+          <SelectDropdown
+            className="mb-4 select-dropdown"
+            onChange={({ value }) => updateForm({ ...formData, role: value })}
+            options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
+            value={roles && formData.role && roles.find((r) => r.value === formData.role)}
+            isSearchable={false}
+            isClearable={false}
+            isLoading={!roles}
+          />
 
           <Button
             color="success"

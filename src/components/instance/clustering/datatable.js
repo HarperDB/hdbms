@@ -20,8 +20,8 @@ export default ({ instances, network, schema, table, auth, url, refreshInstance 
         const subscribe = channelSubscription && channelSubscription.subscribe;
         const clusterPort = 12345;
         const { id, instance_name, is_ssl, host, port } = i;
-        const url = `http${is_ssl ? 's' : ''}://${host}:${port}`;
-        return { id, instance_name, is_ssl, host, port, url, clusterPort, publish, subscribe, connection, channel, subscriptions };
+        const instance_url = `http${is_ssl ? 's' : ''}://${host}:${port}`;
+        return { id, instance_name, is_ssl, host, port, url: instance_url, clusterPort, publish, subscribe, connection, channel, subscriptions };
       });
       setTableData({ ...tableData, data: newTableData });
       setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });

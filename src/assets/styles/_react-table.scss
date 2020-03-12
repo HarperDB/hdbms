@@ -1,8 +1,8 @@
 .ReactTable {
   border: 0 !important;
-  line-height: 1 !important;
-  font-size: 12px;
   cursor: pointer;
+  font-size: 12px;
+  line-height: 1 !important;
 
   .rt-thead {
     &.-header {
@@ -21,14 +21,14 @@
   .rt-tbody {
     &.-header,
     .rt-tr-group {
-      box-shadow: none !important;
       border-bottom: 1px solid $lighter-grey-overlay;
+      box-shadow: none !important;
     }
 
     .rt-td,
     .rt-th {
-      text-align: left !important;
       border-right: 0 !important;
+      text-align: left !important;
 
       &.-sort-desc {
         box-shadow: inset 0 -2px 0 0 $color-black;
@@ -42,8 +42,8 @@
 
   .rt-tbody {
     .rt-td {
-      overflow: visible;
       font-family: Roboto, Helvetica, Arial, SansSerif !important;
+      overflow: visible;
     }
   }
 
@@ -57,9 +57,9 @@
       color: $color-white !important;
       font-family: $font-family-sans;
       font-weight: $font-weight-light;
-      min-width: 100px;
       height: 33px;
       margin-top: 3px;
+      min-width: 100px;
 
       &:hover {
         background: $color-purple !important;
@@ -81,9 +81,9 @@
     .-next {
       @media screen and (max-width: 905px) {
         display: block;
-        width: 100%;
         flex: none;
         margin-bottom: 5px;
+        width: 100%;
 
         .-pageInfo {
           margin-left: 0;
@@ -107,23 +107,23 @@
 
   input,
   select {
-    height: 33px !important;
-    color: $color-black;
     border: 0 !important;
     box-shadow: none;
+    color: $color-black;
+    height: 33px !important;
   }
 
   .image-renderer {
     position: relative;
 
     .preview-image {
+      border-radius: 6px;
+      box-shadow: 0 0 3px $black-overlay;
+      left: 25px;
       max-height: 150px;
       max-width: 150px;
-      width: auto;
       position: absolute;
-      left: 25px;
-      box-shadow: 0 0 3px $black-overlay;
-      border-radius: 6px;
+      width: auto;
     }
   }
 

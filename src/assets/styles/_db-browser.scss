@@ -6,13 +6,13 @@
 
     .item-row {
       border-bottom: 1px solid $light-grey-overlay;
-      padding-top: 12px;
-      padding-bottom: 6px;
       height: 49px;
+      padding-bottom: 6px;
+      padding-top: 12px;
 
       &.form {
-        padding-top: 7px;
         padding-bottom: 6px;
+        padding-top: 7px;
 
         .input-holder {
           padding: 0 6px;
@@ -23,14 +23,18 @@
         border-bottom: 0;
       }
 
+      .btn {
+        box-shadow: none !important;
+      }
+
       .input-holder {
-        width: 100%;
         flex-grow: 1;
         flex-shrink: 0;
+        width: 100%;
 
         input {
+          background: rgba(255, 255, 255, 0.3);
           border-color: transparent;
-          background: rgba(255, 255, 255, .3);
           color: $color-black;
 
           &.is-invalid {
@@ -44,15 +48,15 @@
       }
 
       .item-action {
-        min-width: 80px;
-        padding-left: 0;
         flex-grow: 0;
         flex-shrink: 1;
+        min-width: 80px;
+        padding-left: 0;
       }
     }
   }
 
   .fa-sm {
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 }

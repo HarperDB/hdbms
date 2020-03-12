@@ -2,7 +2,7 @@ import queryInstance from '../api/queryInstance';
 import browseTableColumns from './datatable/browseTableColumns';
 import clusterStatus from '../api/instance/clusterStatus';
 
-export default async ({ compute_stack_id, instanceAuths, appData: { products, instances, licenses } }) => {
+export default async ({ compute_stack_id, instanceAuths, products, instances, licenses }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
   const auth = instanceAuths[compute_stack_id];
   const instance = await queryInstance({ operation: 'describe_all' }, auth, thisInstance.url);
@@ -16,7 +16,7 @@ export default async ({ compute_stack_id, instanceAuths, appData: { products, in
     return instance;
   }
   const structure = browseTableColumns(instance);
-  const network = await clusterStatus(auth, thisInstance.url);
+  const network = await clusterStatus({ auth, url: thisInstance.url, users, roles });
 
-  return { auth, structure, network, users, roles, license, details: { ...license, ...product, ...storage, ...thisInstance } };
+  return { auth, structure, network, url: thisInstance.url, users, roles, license, details: { ...license, ...product, ...storage, ...thisInstance } };
 };

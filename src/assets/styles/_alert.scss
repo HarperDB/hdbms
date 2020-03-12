@@ -1,21 +1,21 @@
 .alert {
-  padding: 13px;
   border-radius: 6px;
-  margin-top: 5px;
-  z-index: 9999;
   display: flex;
+  margin-top: 5px;
+  padding: 13px;
+  z-index: 9999;
 
   .icon {
-    width: 40px;
     flex-grow: 0;
+    width: 40px;
   }
 
   .message {
-    padding-top: 7px;
-    white-space: nowrap;
-    text-overflow: clip;
-    overflow: hidden;
     flex-grow: 1;
+    overflow: hidden;
+    padding-top: 7px;
+    text-overflow: clip;
+    white-space: nowrap;
   }
 
   &.success {

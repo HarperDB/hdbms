@@ -1,37 +1,37 @@
 .floating-card-header {
-  text-shadow: 0 2px 3px $grey-overlay;
   color: $color-white !important;
+  text-shadow: 0 2px 3px $grey-overlay;
 }
 
 .card {
   background: $light-white-overlay !important;
-  color: $color-black;
   border-radius: 4px !important;
   box-shadow: 0 0 5px $dark-grey-overlay;
+  color: $color-black;
 
   .card-body {
     padding: 15px;
 
     .scrollable {
+      height: 77px;
       overflow-x: hidden;
       overflow-y: auto;
-      height: 77px;
     }
   }
 
   &.instance {
-    height: 150px;
     cursor: pointer;
+    height: 150px;
 
     .instance-name {
-      white-space: nowrap;
-      text-overflow: ellipsis;
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &.error {
       input {
-        border-color: $color-danger;
+        border-color: $color-danger !important;
       }
     }
   }

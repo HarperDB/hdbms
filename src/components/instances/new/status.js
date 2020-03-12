@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
 import addInstance from '../../../api/lms/addInstance';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
-import getInstances from '../../../api/lms/getInstances';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 import useNewInstance from '../../../state/stores/newInstance';
 import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 import useLMS from '../../../state/stores/lmsAuth';
@@ -18,7 +14,6 @@ export default ({ closeAndResetModal }) => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const [newInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ error: false });
-  const [appData, setAppData] = useApp(defaultAppData);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
@@ -31,8 +26,6 @@ export default ({ closeAndResetModal }) => {
     if (response.result) {
       alert.success(response.message);
       setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
-      const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { ...appData } });
-      setAppData({ ...appData, instances });
       setTimeout(() => closeAndResetModal(), 0);
     } else {
       setFormState({ submitted: false, error: response.message });
