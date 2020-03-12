@@ -15,6 +15,7 @@ export default async (operation, auth, url) => {
     );
 
     if (request.status !== 200) {
+      console.log('status', request.status);
       return {
         error: true,
         message: request.status,
@@ -22,6 +23,7 @@ export default async (operation, auth, url) => {
     }
     return await request.json();
   } catch (e) {
+    console.log('catch', e);
     return {
       error: true,
       message: e,

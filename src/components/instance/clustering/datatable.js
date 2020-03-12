@@ -10,23 +10,24 @@ export default ({ instances, network, schema, table, auth, url, refreshInstance 
   const [tableData, setTableData] = useState({ data: [], columns: clusterConfigColumns({ auth, refreshInstance, url }) });
 
   useEffect(() => {
-    if (table) {
-      const newTableData = instances.map((i) => {
-        const connection = network && network.outbound_connections.find((n) => n.name === i.compute_stack_id);
-        const subscriptions = schema && table && connection && connection.subscriptions ? connection.subscriptions : [];
-        const channel = schema && table && `${schema}:${table}`;
-        const channelSubscription = channel && subscriptions.find((s) => s.channel === channel);
-        const publish = channelSubscription && channelSubscription.publish;
-        const subscribe = channelSubscription && channelSubscription.subscribe;
-        const clusterPort = 12345;
-        const { id, instance_name, is_ssl, host, port } = i;
-        const instance_url = `http${is_ssl ? 's' : ''}://${host}:${port}`;
-        return { id, instance_name, is_ssl, host, port, url: instance_url, clusterPort, publish, subscribe, connection, channel, subscriptions };
-      });
-      setTableData({ ...tableData, data: newTableData });
-      setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });
-    }
+    const newTableData = instances.map((i) => {
+      const connection = network && network.outbound_connections.find((n) => n.name === i.instance_name);
+      const subscriptions = schema && table && connection && connection.subscriptions ? connection.subscriptions : [];
+      const channel = schema && table && `${schema}:${table}`;
+      const channelSubscription = channel && subscriptions.find((s) => s.channel === channel);
+      const publish = channelSubscription && channelSubscription.publish;
+      const subscribe = channelSubscription && channelSubscription.subscribe;
+      const clusterPort = 12345;
+      const { instance_name, ip_address, is_local, host } = i;
+      const instance_status = is_local ? 'OK' : i.status;
+      const instance_host = is_local ? host : ip_address;
+      return { instance_name, instance_url: i.url, instance_status, instance_host, clusterPort, publish, subscribe, connection, channel, subscriptions };
+    });
+    setTableData({ ...tableData, data: newTableData });
+    setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });
   }, [table, network]);
+
+  console.log(tableData);
 
   return (
     <>

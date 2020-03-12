@@ -11,7 +11,7 @@ import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
 import useApp from '../../../state/stores/appData';
 import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ auth, network, refreshInstance, structure }) => {
+export default ({ auth, url, network, refreshInstance, structure }) => {
   const history = useHistory();
   const [appData] = useApp(defaultAppData);
   const { compute_stack_id, schema, table } = useParams();
@@ -55,6 +55,7 @@ export default ({ auth, network, refreshInstance, structure }) => {
           schema={schema}
           table={table}
           auth={auth}
+          url={url}
           compute_stack_id={compute_stack_id}
           refreshInstance={refreshInstance}
         />

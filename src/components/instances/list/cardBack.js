@@ -4,11 +4,13 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import defaultAuthFormData from '../../../state/defaults/defaultAuthFormData';
+import useInstanceAuth from '../../../state/stores/instanceAuths';
 
-export default ({ compute_stack_id, url, setAuth, flipCard, flipState }) => {
+export default ({ compute_stack_id, url, flipCard, flipState }) => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState(defaultAuthFormData);
+  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -26,7 +28,7 @@ export default ({ compute_stack_id, url, setAuth, flipCard, flipState }) => {
         } else {
           updateForm(defaultAuthFormData);
           setFormState({ error: false, submitted: false });
-          setAuth({ compute_stack_id, user: formData.user, pass: formData.pass });
+          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
           flipCard();
         }
       }

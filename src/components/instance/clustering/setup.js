@@ -7,7 +7,7 @@ import User from './setup_user';
 import Port from './setup_port';
 import Enable from './setup_enable';
 
-export default ({ auth, network, refreshInstance }) => {
+export default ({ auth, url, instanceName, network, refreshInstance }) => {
   const [port, setPort] = useState(false);
   const { compute_stack_id } = useParams();
 
@@ -32,6 +32,7 @@ export default ({ auth, network, refreshInstance }) => {
             <Role
               clusterRole={network.cluster_role}
               auth={auth}
+              url={url}
               refreshInstance={refreshInstance}
             />
             {network.cluster_role && (
@@ -39,6 +40,7 @@ export default ({ auth, network, refreshInstance }) => {
                 clusterUser={network.cluster_user}
                 clusterRole={network.cluster_role}
                 auth={auth}
+                url={url}
                 refreshInstance={refreshInstance}
               />
             )}
@@ -52,8 +54,9 @@ export default ({ auth, network, refreshInstance }) => {
               <Enable
                 port={port}
                 username={network.cluster_user}
-                instanceId={compute_stack_id}
+                instanceName={instanceName}
                 auth={auth}
+                url={url}
                 refreshInstance={refreshInstance}
               />
             )}

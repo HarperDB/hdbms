@@ -18,6 +18,7 @@ export default ({ clusterUser, clusterRole, auth, refreshInstance, url }) => {
         alert.error('All fields are required.');
       } else {
         const result = await createClusterUser({ username, password, role: clusterRole, auth, refreshInstance, url });
+        console.log(result);
         if (result.message.indexOf('successfully') === -1) {
           alert.error(result.message);
         }

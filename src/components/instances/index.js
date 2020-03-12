@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
+import { useParams } from 'react-router-dom';
 
 import useInstanceAuth from '../../state/stores/instanceAuths';
 import useApp from '../../state/stores/appData';
@@ -23,8 +24,8 @@ import getRegions from '../../api/lms/getRegions';
 
 export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const [appData, setAppData] = useApp(defaultAppData);
+  const { action } = useParams();
   const [products, setProducts] = useState(false);
   const [regions, setRegions] = useState(false);
   const [customer, setCustomer] = useState(false);
@@ -46,11 +47,11 @@ export default () => {
   useAsyncEffect(async () => setLicenses(await getLicenses({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id } })), []);
 
   useAsyncEffect(async () => {
-    if (products && regions && licenses && customer) {
+    if (products && regions && licenses && customer && !action) {
       const instances = await getInstances({ auth: lmsAuth, payload: { customer_id: appData.user.customer_id }, entities: { products, regions, licenses } });
       setAppData({ ...appData, products, regions, licenses, customer, instances });
     }
-  }, [products, regions, licenses, customer, lastUpdate]);
+  }, [products, regions, licenses, customer, lastUpdate, action]);
 
   useInterval(() => setLastUpdate(Date.now()), 10000);
 
@@ -70,9 +71,6 @@ export default () => {
           <InstanceCard
             key={i.compute_stack_id}
             {...i}
-            subdomain={appData.customer.subdomain}
-            hasAuth={instanceAuths && instanceAuths[i.compute_stack_id]}
-            setAuth={({ compute_stack_id, user, pass }) => setInstanceAuths({ ...instanceAuths, [compute_stack_id]: user && pass ? { user, pass } : false })}
           />
         )) : null}
       </Row>

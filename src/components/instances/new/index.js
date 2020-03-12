@@ -48,9 +48,13 @@ export default () => {
         ) : purchaseStep === 'type' ? (
           <InstanceTypeForm />
         ) : purchaseStep === 'meta_local' ? (
-          <LocalMetadataForm />
+          <LocalMetadataForm
+            instanceNames={appData.instances ? appData.instances.map((i) => i.instance_name) : []}
+          />
         ) : purchaseStep === 'meta_cloud' ? (
-          <CloudMetadataForm />
+          <CloudMetadataForm
+            instanceNames={appData.instances ? appData.instances.map((i) => i.instance_name) : []}
+          />
         ) : purchaseStep === 'details_local' ? (
           <LocalInstanceForm
             products={appData.products.localCompute}

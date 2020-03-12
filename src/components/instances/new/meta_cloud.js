@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
 import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default () => {
+export default ({ instanceNames }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
@@ -19,7 +19,9 @@ export default () => {
     const { submitted } = formState;
     const { instance_name, user, pass } = formData;
     if (submitted) {
-      if ((instance_name.length && user.length && pass.length)) {
+      if (instanceNames.includes(instance_name)) {
+        setFormState({ submitted: false, error: `An instance named "${instance_name}" already exists` });
+      } else if ((instance_name.length && user.length && pass.length)) {
         setNewInstance({ ...newInstance, instance_name, user, pass, is_ssl: true });
         setTimeout(() => history.push('/instances/new/details_cloud'), 0);
       } else {

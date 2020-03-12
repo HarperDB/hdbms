@@ -6,7 +6,7 @@ import queryInstance from '../../../api/queryInstance';
 import useNewInstance from '../../../state/stores/newInstance';
 import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
-export default () => {
+export default ({ instanceNames }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
   const [formState, setFormState] = useState({ submitted: false, error: false });
@@ -23,7 +23,9 @@ export default () => {
     const { submitted } = formState;
     const { instance_name, user, pass, host, port, is_ssl } = formData;
     if (submitted) {
-      if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
+      if (instanceNames.includes(instance_name)) {
+        setFormState({ submitted: false, error: `An instance named "${instance_name}" already exists` });
+      } else if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
         try {
           const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
           const response = await queryInstance({ operation: 'describe_all' }, formData, url);

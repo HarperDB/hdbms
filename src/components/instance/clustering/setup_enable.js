@@ -4,11 +4,11 @@ import useAsyncEffect from 'use-async-effect';
 
 import configureCluster from '../../../api/instance/configureCluster';
 
-export default ({ port, username, instanceId, auth, refreshInstance, url }) => {
+export default ({ port, username, instanceName, auth, refreshInstance, url }) => {
   const [submitted, setSubmitted] = useState(false);
 
   useAsyncEffect(async () => {
-    if (submitted) await configureCluster({ port, username, instanceId, auth, refreshInstance, url });
+    if (submitted) await configureCluster({ port, username, instanceName, auth, refreshInstance, url });
   }, [submitted]);
 
   return (

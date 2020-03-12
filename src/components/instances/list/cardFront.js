@@ -6,12 +6,14 @@ import useAsyncEffect from 'use-async-effect';
 
 import queryInstance from '../../../api/queryInstance';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
+import addUser from '../../../api/instance/addUser';
+import dropUser from '../../../api/instance/dropUser';
 
-export default ({ compute_stack_id, url, status, instance_name, is_local, flipCard, setAuth, hasAuth, compute, storage }) => {
+export default ({ compute_stack_id, instance_id, url, status, instance_name, is_local, flipCard, compute, storage }) => {
   const history = useHistory();
   const alert = useAlert();
-  const [instanceStatus, setInstanceStatus] = useState('');
-  const [instanceAuths] = useInstanceAuth({});
+  const [instanceStatus, setInstanceStatus] = useState('LOADING');
+  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
     if (instanceAuths[compute_stack_id]) {
@@ -21,20 +23,31 @@ export default ({ compute_stack_id, url, status, instance_name, is_local, flipCa
         try {
           const response = await queryInstance({ operation: 'describe_all' }, instanceAuths[compute_stack_id], url);
           if (response.error) {
-            setInstanceStatus('could not connect');
+            if (!is_local) {
+              const roles = await queryInstance({ operation: 'list_roles' }, { user: instance_id, pass: instance_id }, url);
+              const role = roles.find((r) => r.permission.super_user).id;
+              await addUser({ auth: { user: instance_id, pass: instance_id }, role, username: instanceAuths[compute_stack_id].user, password: instanceAuths[compute_stack_id].pass, url });
+              await dropUser({ auth: instanceAuths[compute_stack_id], username: instance_id, url });
+              setInstanceStatus('OK');
+            } else {
+              setInstanceStatus('OK');
+              setInstanceAuths({ ...instanceAuths, [compute_stack_id]: undefined });
+            }
           } else {
             setInstanceStatus('OK');
           }
         } catch (e) {
-          setInstanceStatus('LOADING');
+          setInstanceStatus('COULD NOT CONNECT');
         }
       }
+    } else {
+      setInstanceStatus('OK');
     }
   }, [status]);
 
   const handleClick = () => {
     if (instanceStatus !== 'OK') return alert.error('Instance is not currently available.');
-    if (!hasAuth) return flipCard();
+    if (!instanceAuths[compute_stack_id]) return flipCard();
     return history.push(`/instance/${compute_stack_id}/browse`);
   };
 
@@ -46,12 +59,12 @@ export default ({ compute_stack_id, url, status, instance_name, is_local, flipCa
             {instance_name}
           </Col>
           <Col xs="2" className="text-right">
-            {instanceStatus === 'CREATE_IN_PROGRESS' ? (
+            {['CREATE_IN_PROGRESS', 'LOADING'].includes(instanceStatus) ? (
               <i title="Instance Is Being Created" className="fa fa-spinner fa-spin text-purple" />
-            ) : instanceStatus !== 'OK' ? (
-              <i title="Instance Is Not OK" className="fa fa-exclamation-triangle text-danger" />
-            ) : hasAuth ? (
-              <i onClick={(e) => { e.stopPropagation(); setAuth({ compute_stack_id, user: false, pass: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
+            ) : instanceStatus === 'COULD NOT CONNECT' ? (
+              <i title="Could not connect to instance" className="fa fa-exclamation-triangle text-danger" />
+            ) : instanceAuths[compute_stack_id] ? (
+              <i onClick={(e) => { e.stopPropagation(); setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
             ) : (
               <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
             )}
@@ -61,7 +74,7 @@ export default ({ compute_stack_id, url, status, instance_name, is_local, flipCa
         <div className="scrollable">
           <Row className="text-smaller text-nowrap text-darkgrey">
             <Col xs="3">STATUS</Col>
-            <Col xs="9" className={`text-${instanceStatus !== 'OK' ? 'danger' : 'success'}`}>{instanceStatus && instanceStatus.replace(/_/g, ' ').toUpperCase()}</Col>
+            <Col xs="9" className={`text-${['OK', 'LOADING'].includes(instanceStatus) ? 'success' : 'danger'}`}>{instanceStatus && instanceStatus.replace(/_/g, ' ').toUpperCase()}</Col>
             <Col xs="12"><hr className="my-1" /></Col>
             <Col xs="3">URL</Col>
             <Col xs="9">{url}</Col>
