@@ -13,7 +13,7 @@ export default ({ auth, url, instanceName, network, refreshInstance }) => {
     <Row id="clustering">
       <Col xl="3" lg="4" md="5" xs="12">
         <span className="text-white mb-2 floating-card-header">clustering</span>
-        <Card className="my-3">
+        <Card className="my-3 text-small">
           <CardBody>
             HarperDB allows you to replicate data between one or more instances. We call this feature &quot;clustering&quot;.
             <hr />

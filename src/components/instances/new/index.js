@@ -3,6 +3,7 @@ import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+import { useAlert } from 'react-alert';
 
 import useApp from '../../../state/stores/appData';
 import defaultAppData from '../../../state/defaults/defaultAppData';
@@ -25,6 +26,7 @@ import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
 export default () => {
   const history = useHistory();
+  const alert = useAlert();
   const { purchaseStep } = useParams();
   const [appData] = useApp(defaultAppData);
   const [lmsAuth] = useLMS(defaultLMSAuth);
@@ -34,6 +36,15 @@ export default () => {
   const hasCard = customerHasChargeableCard(appData.customer);
 
   const closeAndResetModal = () => {
+    if (purchaseStep === 'status') {
+      alert.error('Please wait for this window to close automatically');
+    } else {
+      setNewInstance(defaultNewInstanceData);
+      setTimeout(() => history.push('/instances'), 100);
+    }
+  };
+
+  const finishOrder = () => {
     setNewInstance(defaultNewInstanceData);
     setTimeout(() => history.push('/instances'), 100);
   };
@@ -84,7 +95,7 @@ export default () => {
           />
         ) : purchaseStep === 'status' ? (
           <OrderStatus
-            closeAndResetModal={closeAndResetModal}
+            closeAndResetModal={finishOrder}
           />
         ) : null}
       </ModalBody>

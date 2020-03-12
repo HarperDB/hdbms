@@ -15,6 +15,7 @@ import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
 import InstanceCard from './list/instanceCard';
 import NewInstanceCard from './list/newInstanceCard';
 import SubNav from '../navs/subnav';
+import NewInstanceModal from './new';
 
 import getInstances from '../../api/lms/getInstances';
 import getLicenses from '../../api/lms/getLicenses';
@@ -22,6 +23,7 @@ import filterInstances from '../../util/filterInstances';
 import getCustomer from '../../api/lms/getCustomer';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
+
 
 export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
@@ -36,7 +38,7 @@ export default () => {
   const [cloud, setCloud] = useState(true);
   const [filteredInstances, setFilteredInstances] = useState([]);
   const [lastUpdate, setLastUpdate] = useState(false);
-  const currentState = useStoreState(appState);
+  // const currentState = useStoreState(appState);
 
   useAsyncEffect(() => {
     if (appData.instances) {
@@ -78,6 +80,7 @@ export default () => {
           />
         )) : null}
       </Row>
+      {action === 'new' && (<NewInstanceModal />)}
     </div>
   );
 };

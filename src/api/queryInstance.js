@@ -14,13 +14,23 @@ export default async (operation, auth, url) => {
       },
     );
 
+    const response = await request.json();
+
+    if (response.error) {
+      return {
+        error: true,
+        message: response.error,
+      };
+    }
+
     if (request.status !== 200) {
       return {
         error: true,
-        message: request.status,
+        message: `Error of type ${request.status}`,
       };
     }
-    return await request.json();
+
+    return response;
   } catch (e) {
     return {
       error: true,

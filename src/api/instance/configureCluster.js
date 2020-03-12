@@ -9,6 +9,9 @@ export default async ({ instanceName, username, port, auth, refreshInstance, url
     CLUSTERING_USER: username,
   };
   const result = await queryInstance(query, auth, url);
+
+  if (result.error) return result;
+
   await queryInstance({ operation: 'restart', force: 'true' }, auth, url);
   refreshInstance(Date.now());
   return result;

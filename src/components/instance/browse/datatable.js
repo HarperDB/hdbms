@@ -24,7 +24,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, comput
         setTableState({ ...tableState, loading: true });
         const newData = await getTableData({ schema, table, tableState, auth, url });
         setTableState({ ...tableState, tableData: newData.tableData, totalPages: newData.totalPages, totalRecords: newData.totalRecords, loading: false });
-      }, 100);
+      }, 500);
     },
     () => {
       clearTimeout(tableChangeTimeout);
