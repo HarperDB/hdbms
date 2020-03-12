@@ -4,16 +4,13 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
 import updateUser from '../../../api/lms/updateUser';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import getUser from '../../../api/lms/getUser';
 
 export default () => {
   const alert = useAlert();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [appData, setAppData] = useApp(defaultAppData);
+  const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState(lmsAuth);
 
@@ -29,7 +26,7 @@ export default () => {
           setFormState({ error: response.message, submitted: false });
         } else {
           const user = await getUser({ auth: lmsAuth, payload: { email: lmsAuth.email } });
-          setAppData({ ...appData, user });
+          setLMSAuth({ ...lmsAuth, ...user });
           setFormState({ error: false, submitted: false });
           alert.success(response.message);
         }
@@ -80,7 +77,7 @@ export default () => {
           email address
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input">{appData.user.email}</div>
+          <div className="fake-input">{lmsAuth.email}</div>
         </Col>
       </Row>
       <hr />
