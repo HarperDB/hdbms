@@ -39,41 +39,35 @@ export default ({ setLastUpdate }) => {
       <span className="text-white mb-2 floating-card-header">add user</span>
       <Card className="my-3">
         <CardBody>
-          <div className="fieldset-label">first name</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0 text-center"
-              name="first name"
-              value={formData.firstname}
-              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <Input
+            type="text"
+            className="mb-2 text-center"
+            name="first name"
+            placeholder="first name"
+            value={formData.firstname}
+            onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">last name</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0 text-center"
-              name="lastname"
-              value={formData.lastname}
-              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <Input
+            type="text"
+            className="mb-2 text-center"
+            name="lastname"
+            placeholder="last name"
+            value={formData.lastname}
+            onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">email address</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0 text-center"
-              name="email"
-              value={formData.email}
-              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <Input
+            type="text"
+            className="mb-4 text-center"
+            name="email"
+            placeholder="email address"
+            value={formData.email}
+            onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+            disabled={formState.submitted}
+          />
 
           <Button
             color="purple"
