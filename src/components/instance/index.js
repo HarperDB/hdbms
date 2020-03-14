@@ -1,42 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../state/stores/appState';
+import instanceState from '../../state/stores/instanceState';
+import useInstanceAuth from '../../state/stores/instanceAuths';
 
 import SubNav from '../navs/subnav';
 import routes from './routes';
-import useInstanceAuth from '../../state/stores/instanceAuths';
 import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
-import defaultActiveInstance from '../../state/defaults/defaultActiveInstance';
-import useApp from '../../state/stores/appData';
-import defaultAppData from '../../state/defaults/defaultAppData';
-
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const [{ products, instances, licenses }] = useApp(defaultAppData);
   const [instanceAuths] = useInstanceAuth({});
-  const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
-  const [lastUpdate, refreshInstance] = useState(false);
+  const { instances, products, regions, licenses } = useStoreState(appState, (s) => ({
+    products: s.products,
+    regions: s.regions,
+    licenses: s.licenses,
+    instances: s.instances,
+  }));
 
-  useAsyncEffect(async () => {
-    if (compute_stack_id) {
-      const activeInstanceObject = await buildActiveInstanceObject({ compute_stack_id, instanceAuths, products, instances, licenses });
-      if (!activeInstanceObject.error) {
-        setActiveInstance(activeInstanceObject);
+  useEffect(() => {
+    const cancelSub = instanceState.subscribe((s) => s.lastUpdate, () => {
+      if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions && licenses) {
+        const auth = instanceAuths[compute_stack_id];
+        const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
+        const license = licenses.find((l) => l.compute_stack_id === compute_stack_id);
+        const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
+        const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
+        const computeProducts = thisInstance.is_local ? products.localCompute : products.cloudCompute;
+        const storageProducts = thisInstance.is_local ? false : products.cloudStorage;
+
+        buildActiveInstanceObject({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts });
       }
-    }
-  }, [compute_stack_id, lastUpdate]);
+    });
+    return () => cancelSub();
+  }, [instances]);
+
+  useEffect(() => instanceState.update((s) => { s.lastUpdate = Date.now(); }), [compute_stack_id, instances]);
 
   return (
     <>
       <SubNav routes={routes} instanceId={compute_stack_id} />
       <Switch>
-        {routes.map((route) => {
-          const ThisRouteComponent = route.component;
-          return (
-            <Route key={route.path} path={route.path} render={() => <ThisRouteComponent {...activeInstance} refreshInstance={refreshInstance} />} />
-          );
-        })}
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} component={route.component} />
+        ))}
       </Switch>
     </>
   );

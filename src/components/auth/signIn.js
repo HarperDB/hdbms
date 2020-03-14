@@ -5,8 +5,6 @@ import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import useLMS from '../../state/stores/lmsAuth';
-
-import defaultAuthFormData from '../../state/defaults/defaultAuthFormData';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
 
 import getUser from '../../api/lms/getUser';
@@ -16,7 +14,7 @@ import handleKeydown from '../../util/handleKeydown';
 export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
   const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState(defaultAuthFormData);
+  const [formData, updateForm] = useState({ user: false, pass: false });
   const history = useHistory();
 
   useAsyncEffect(async () => {
@@ -42,7 +40,7 @@ export default () => {
     }
   }, [formState]);
 
-  // /useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
 
   useAsyncEffect(() => {
     const { email, pass } = lmsAuth;
@@ -107,14 +105,12 @@ export default () => {
             </div>
           ) : (
             <Row className="text-small">
-              <Col xs="12" className="text-nowrap text-center">
+              <Col xs="6" className="text-nowrap text-center">
                 <NavLink to="/forgot-password" className="login-nav-link">Forgot Password</NavLink>
               </Col>
-              {/*
               <Col xs="6" className="text-nowrap text-right">
                 <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
               </Col>
-              */}
             </Row>
           )}
         </>

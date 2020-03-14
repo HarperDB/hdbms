@@ -4,17 +4,25 @@ import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { useStoreState } from 'pullstate';
 
 import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
 import defaultTableState from '../../../state/defaults/defaultTableState';
+import instanceState from '../../../state/stores/instanceState';
 
 const dataRefreshInterval = 3000;
 let tableChangeTimeout = false;
 
-export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, compute_stack_id, refreshInstance, structure, url }) => {
+export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const history = useHistory();
   const { schema, table } = useParams();
+  const { compute_stack_id, structure, auth, url } = useStoreState(instanceState, (s) => ({
+    compute_stack_id: s.compute_stack_id,
+    structure: s.structure,
+    auth: s.auth,
+    url: s.url,
+  }));
   const [tableState, setTableState] = useState(defaultTableState);
 
   useAsyncEffect(
@@ -55,7 +63,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns }, auth, comput
           </span>
         </Col>
         <Col className="text-right text-white text-nowrap">
-          <i title={`Refresh table ${table}`} className={`fa floating-card-header mr-2 ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => refreshInstance(Date.now())} />
+          <i title={`Refresh table ${table}`} className={`fa floating-card-header mr-2 ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => instanceState.update((s) => { s.lastUpdate = Date.now(); })} />
           <span className="mr-2">auto</span>
           <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${tableState.autoRefresh ? 'on' : 'off'}`} onClick={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh, lastUpdate: Date.now() })} />
           <span className="mx-3 text">|</span>

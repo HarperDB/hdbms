@@ -5,7 +5,7 @@ const common = require('./webpack.common.js');
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = merge(common, {
-  mode: 'production',
+  mode: 'development',
   devServer: {
     host: '0.0.0.0',
     contentBase: path.join(__dirname, 'public'),

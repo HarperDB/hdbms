@@ -5,6 +5,7 @@ import { useAlert } from 'react-alert';
 
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
 import updatePassword from '../../../api/lms/updatePassword';
 
 export default () => {

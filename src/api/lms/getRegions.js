@@ -13,6 +13,5 @@ export default async () => {
     regions = response.body.sort((a, b) => (a.label < b.label ? 1 : -1));
   }
 
-  appState.update((s) => { s.regions = regions; });
-  return regions;
+  return appState.update((s) => { s.regions = regions; });
 };

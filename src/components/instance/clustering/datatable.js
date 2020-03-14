@@ -4,10 +4,11 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 
 import defaultTableState from '../../../state/defaults/defaultTableState';
 import clusterConfigColumns from '../../../util/datatable/clusterConfigColumns';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ instances, network, schema, table, auth, url, refreshInstance }) => {
+export default ({ instances, network, schema, table, auth, url }) => {
   const [tableState, setTableState] = useState(defaultTableState);
-  const [tableData, setTableData] = useState({ data: [], columns: clusterConfigColumns({ auth, refreshInstance, url }) });
+  const [tableData, setTableData] = useState({ data: [], columns: clusterConfigColumns({ auth, refreshInstance: () => instanceState.update((s) => { s.lastUpdate = Date.now(); }), url }) });
 
   useEffect(() => {
     const newTableData = instances.map((i) => {
@@ -26,8 +27,6 @@ export default ({ instances, network, schema, table, auth, url, refreshInstance 
     setTableData({ ...tableData, data: newTableData });
     setTableState({ ...tableState, filtered: [], sorted: [{ id: 'instance_name', desc: false }], page: 0 });
   }, [table, network]);
-
-  console.log(tableData);
 
   return (
     <>

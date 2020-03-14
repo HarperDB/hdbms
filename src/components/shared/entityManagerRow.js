@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
+import { useStoreState } from 'pullstate';
 
 import queryInstance from '../../api/queryInstance';
+import instanceState from '../../state/stores/instanceState';
 
-export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema, auth, url, refreshInstance }) => {
+export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
   const { schema, table } = useParams();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
+  const { auth, url } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+  }));
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;
@@ -21,9 +27,8 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       operation.schema = item;
     }
 
-    console.log(url);
     await queryInstance(operation, auth, url);
-    refreshInstance(Date.now());
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
 
     return ((itemType === 'schema' && item === schema) || (itemType === 'table' && item === table)) ? setTimeout(() => history.push(baseUrl), 100) : false;
   };

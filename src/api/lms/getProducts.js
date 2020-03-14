@@ -51,6 +51,5 @@ export default async () => {
     };
   }
 
-  appState.update((s) => { s.products = products; });
-  return products;
+  return appState.update((s) => { s.products = products; });
 };

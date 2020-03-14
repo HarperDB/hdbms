@@ -4,10 +4,11 @@ import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
-import updatePassword from '../../api/lms/updatePassword';
-import handleKeydown from '../../util/handleKeydown';
 import useLMS from '../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
+
+import updatePassword from '../../api/lms/updatePassword';
+import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);

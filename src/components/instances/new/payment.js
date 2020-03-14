@@ -3,19 +3,20 @@ import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useS
 import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useStoreState } from 'pullstate';
+
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
 
 import cardOptions from '../../../util/stripe/cardOptions';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
 export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
   const history = useHistory();
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [appData, setAppData] = useApp(defaultAppData);
+  const customer = useStoreState(appState, (s) => s.customer);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
   const [error, setError] = useState(null);
@@ -35,9 +36,8 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         setError(payload.error);
         setProcessing(false);
       } else {
-        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: appData.customer.stripe_id } });
-        const customer = await getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
-        setAppData({ ...appData, customer });
+        await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: customer.stripe_id } });
+        await getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
         setProcessing(false);
         setAddedCard(true);
       }

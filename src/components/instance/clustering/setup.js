@@ -6,7 +6,7 @@ import User from './setup_user';
 import Port from './setup_port';
 import Enable from './setup_enable';
 
-export default ({ auth, url, instanceName, network, refreshInstance }) => {
+export default ({ network }) => {
   const [port, setPort] = useState(false);
 
   return (
@@ -27,36 +27,15 @@ export default ({ auth, url, instanceName, network, refreshInstance }) => {
         <span className="text-white mb-2 floating-card-header">follow the steps below to enable clustering for this instance.</span>
         <Card className="my-3">
           <CardBody className="py-0">
-            <Role
-              clusterRole={network.cluster_role}
-              auth={auth}
-              url={url}
-              refreshInstance={refreshInstance}
-            />
-            {network.cluster_role && (
-              <User
-                clusterUser={network.cluster_user}
-                clusterRole={network.cluster_role}
-                auth={auth}
-                url={url}
-                refreshInstance={refreshInstance}
-              />
+            <Role />
+            {network?.cluster_role && (
+              <User />
             )}
-            {network.cluster_user && (
-              <Port
-                port={port}
-                setPort={setPort}
-              />
+            {network?.cluster_user && (
+              <Port port={port} setPort={setPort} />
             )}
             {port && (
-              <Enable
-                port={port}
-                username={network.cluster_user}
-                instanceName={instanceName}
-                auth={auth}
-                url={url}
-                refreshInstance={refreshInstance}
-              />
+              <Enable port={port} />
             )}
           </CardBody>
         </Card>

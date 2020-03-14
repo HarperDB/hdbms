@@ -3,9 +3,10 @@ import { Row, Col, Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
-import updateUser from '../../../api/lms/updateUser';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
+import updateUser from '../../../api/lms/updateUser';
 import getUser from '../../../api/lms/getUser';
 
 export default () => {

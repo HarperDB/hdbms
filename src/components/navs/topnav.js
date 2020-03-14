@@ -5,13 +5,10 @@ import { NavLink } from 'react-router-dom';
 
 import useLMS from '../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
-import useApp from '../../state/stores/appData';
-import defaultAppData from '../../state/defaults/defaultAppData';
 
 export default () => {
   const history = useHistory();
   const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [, setAppData] = useApp(defaultAppData);
 
   return lmsAuth.email ? (
     <Navbar id="app-nav" dark fixed="top" expand="xs">
@@ -30,7 +27,7 @@ export default () => {
           </NavLink>
         </NavItem>
         <NavItem>
-          <DumbLink title="Log Out" onClick={() => { setLMSAuth(defaultLMSAuth); setAppData(defaultAppData); setTimeout(() => history.push('/sign-in'), 0); }}>
+          <DumbLink title="Log Out" onClick={() => { setLMSAuth(defaultLMSAuth); setTimeout(() => history.push('/sign-in'), 0); }}>
             <i className="fa fa-sign-out fa-lg d-sm-none d-inline-block" /><i className="fa fa-sign-out d-none d-sm-inline-block" />&nbsp;<span className="d-none d-sm-inline-block">Log Out</span>
           </DumbLink>
         </NavItem>
