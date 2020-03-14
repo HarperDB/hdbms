@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Input } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
 import createClusterUser from '../../../api/instance/createClusterUser';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ clusterUser, clusterRole, auth, refreshInstance, url }) => {
+export default () => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ username: false, password: false });
+  const { auth, url, cluster_role, cluster_user } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+    cluster_role: s.network?.cluster_role,
+    cluster_user: s.network?.cluster_user,
+  }));
 
-  useAsyncEffect(async () => {
+  useAsyncEffect(() => {
     const { submitted } = formState;
     if (submitted) {
       const { username, password } = formData;
@@ -18,18 +26,15 @@ export default ({ clusterUser, clusterRole, auth, refreshInstance, url }) => {
         updateForm({ ...formData, error: true, submitted: false });
         alert.error('All fields are required.');
       } else {
-        const result = await createClusterUser({ username, password, role: clusterRole, auth, refreshInstance, url });
-        if (result.message.indexOf('successfully') === -1) {
-          alert.error(result.message);
-        }
+        createClusterUser({ username, password, role: cluster_role, auth, url });
       }
     }
   }, [formState]);
 
-  return clusterUser ? (
+  return cluster_user ? (
     <Row className="config-row">
       <Col xs="12" md="3" className="text">Cluster User</Col>
-      <Col xs="12" md="6" className="text">{clusterUser}</Col>
+      <Col xs="12" md="6" className="text">{cluster_user}</Col>
       <Col xs="12" md="3" className="text text-right">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>

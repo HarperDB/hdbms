@@ -19,8 +19,10 @@ export default ({ auth, refreshInstance, url }) => [{
   Cell: ({
     original: { instance_name, instance_host, instance_status, clusterPort, publish, connection, channel, subscriptions },
   }) => (
-    instance_status === 'CREATE_IN_PROGRESS' ? (
-      <div style={{ paddingTop: 5 }}><i className="fa fa-spin fa-spinner text-purple mr-2" />Creating</div>
+    instance_host === 'localhost' ? (
+      <div style={{ paddingTop: 6, paddingLeft: 10 }} className="text-purple text-bold"><i className="fa fa-exclamation-triangle mr-2" />unreachable domain</div>
+    ) : instance_status === 'CREATE_IN_PROGRESS' ? (
+      <div style={{ paddingTop: 6, paddingLeft: 10 }} className="text-purple text-bold"><i className="fa fa-spin fa-spinner mr-2" />creating instance</div>
     ) : connection ? (
       <ToggleButton width={75} checked={publish || false} onChange={() => updateNode({ channel, subscriptions, buttonState: 'togglePublish', instance_name, instance_host, clusterPort, auth, url, refreshInstance })} />
     ) : (

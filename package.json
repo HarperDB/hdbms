@@ -22,7 +22,7 @@
     "react": "^16.13.0",
     "react-alert": "^7.0.0",
     "react-card-flip": "^1.0.10",
-    "react-csv-reader": "^2.0.2",
+    "react-csv-reader": "^2.1.0",
     "react-dom": "^16.13.0",
     "react-json-editor-ajrm": "^2.5.9",
     "react-router": "^5.1.2",

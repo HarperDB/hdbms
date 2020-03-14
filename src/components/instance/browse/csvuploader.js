@@ -34,7 +34,9 @@ export default () => {
     setStatus('validating');
     const validatedCount = await getTotalRecords({ schema, table, auth, url });
     setValidatedRecordCount(validatedCount);
-    if (validatedCount < (newRecordCount + initialRecordCount)) return setTimeout(() => validateData(), 1000);
+    if (validatedCount !== initialRecordCount && validatedCount < (newRecordCount + initialRecordCount)) {
+      return setTimeout(() => validateData(), 1000);
+    }
     instanceState.update((s) => { s.lastUpdate = Date.now(); });
     return setTimeout(() => {
       setStatus(false);

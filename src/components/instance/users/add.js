@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { Input, Button, Card, CardBody, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
 import addUser from '../../../api/instance/addUser';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ auth, url, roles, users, refreshInstance }) => {
+export default () => {
   const alert = useAlert();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ username: '', password: '', role: false });
+  const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+    users: s.users,
+    roles: s.roles,
+  }));
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -25,7 +33,7 @@ export default ({ auth, url, roles, users, refreshInstance }) => {
         const response = await addUser({ auth, role, username, password, url });
         if (response.message.indexOf('successfully') !== -1) {
           updateForm({ username: '', password: '', role: false });
-          refreshInstance(Date.now());
+          instanceState.update((s) => { s.lastUpdate = Date.now(); });
           alert.success(response.message);
         } else {
           alert.error(response.message);

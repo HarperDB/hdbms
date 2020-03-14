@@ -1,11 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
+import { useStoreState } from 'pullstate';
 
 import defaultTableState from '../../../state/defaults/defaultTableState';
+import dropUser from '../../../api/instance/dropUser';
+import instanceState from '../../../state/stores/instanceState';
+import instanceUserColumns from '../../../util/datatable/instanceUserColumns';
 
-export default ({ tableData }) => {
+export default () => {
+  const [tableData, setTableData] = useState({ data: [], columns: [] });
   const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'username', desc: false }] });
+  const { auth, url, users } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+    users: s.users,
+    roles: s.roles,
+  }));
+
+  const deleteUser = async ({ username }) => {
+    const response = await dropUser({ auth, username, url });
+
+    if (response.message.indexOf('successfully') !== -1) {
+      alert.success(response.message);
+      instanceState.update((s) => { s.lastUpdate = Date.now(); });
+    } else {
+      alert.error(response.message);
+    }
+  };
+
+  useEffect(() => {
+    if (users && auth) {
+      setTableData({ data: users, columns: instanceUserColumns({ deleteUser }) });
+    }
+  }, [users, auth]);
 
   return (
     <>

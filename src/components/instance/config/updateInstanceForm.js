@@ -12,10 +12,12 @@ import updateInstance from '../../../api/lms/updateInstance';
 import updateLicense from '../../../api/lms/updateLicense';
 import setLicense from '../../../api/instance/setLicense';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ instanceAuth, compute_stack_id, instance_name, instance_region, storage, compute, stripe_plan_id, data_volume_size, refreshInstance, computeProducts, storageProducts, url }) => {
+export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const customer = useStoreState(appState, (s) => s.customer);
+  const { auth, url, compute_stack_id, instance_name, stripe_plan_id, data_volume_size, computeProducts, storageProducts, instance_region, storage, compute } = useStoreState(instanceState);
   const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
   const [formData, updateForm] = useState({ instance_name, stripe_plan_id, data_volume_size });
@@ -36,10 +38,10 @@ export default ({ instanceAuth, compute_stack_id, instance_name, instance_region
     const { submitted } = formState;
     if (submitted) {
       const { key, company } = await updateLicense({ auth: lmsAuth, payload: formData });
-      await setLicense({ auth: instanceAuth, key, company, url });
+      await setLicense({ auth, key, company, url });
       await updateInstance({ auth: lmsAuth, payload: formData });
       setFormState({ submitted: false });
-      refreshInstance(Date.now());
+      instanceState.update((s) => { s.lastUpdate = Date.now(); });
     }
   }, [formState]);
 

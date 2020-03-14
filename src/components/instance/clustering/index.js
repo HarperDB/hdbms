@@ -14,6 +14,6 @@ export default () => {
   ) : network.is_enabled && network.cluster_user && network.cluster_role ? (
     <Manage />
   ) : (
-    <Setup />
+    <Setup network={network} />
   );
 };

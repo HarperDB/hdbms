@@ -3,31 +3,34 @@ import { Row, Col, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
+import { useStoreState } from 'pullstate';
 
 import configureCluster from '../../../api/instance/configureCluster';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ port, username, instanceName, auth, refreshInstance, url }) => {
+export default ({ port }) => {
   const [submitted, setSubmitted] = useState(false);
   const [tryRefresh, setTryRefresh] = useState(false);
-  const alert = useAlert();
+  const { auth, url, instance_name, cluster_user } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+    instance_name: s.instance_name,
+    cluster_role: s.network?.cluster_role,
+    cluster_user: s.network?.cluster_user,
+  }));
 
   useAsyncEffect(async () => {
     if (submitted) {
-      const response = await configureCluster({ port, username, instanceName, auth, refreshInstance, url });
-      if (response.error) {
-        alert.error(response.message);
-        setSubmitted(false);
-      } else {
-        setTryRefresh(true);
-      }
+      configureCluster({ instance_name, cluster_user, port, auth, url });
+      setTryRefresh(true);
     }
   }, [submitted]);
 
   useInterval(() => {
     if (tryRefresh) {
-      refreshInstance(Date.now());
+      instanceState.update((s) => { s.lastUpdate = Date.now(); });
     }
-  }, 5000);
+  }, 1000);
 
   return (
     <Row className="config-row">

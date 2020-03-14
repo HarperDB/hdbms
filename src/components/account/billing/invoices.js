@@ -15,8 +15,6 @@ export default () => {
 
   useAsyncEffect(() => getInvoices({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } }), []);
 
-  console.log(invoices);
-
   return !invoices ? (
     <div className="py-5 text-center">
       <i className="fa fa-spinner fa-spin text-purple" />
