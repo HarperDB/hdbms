@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
-import addInstance from '../../../api/lms/addInstance';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
 import useNewInstance from '../../../state/stores/newInstance';
 import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
+import addInstance from '../../../api/lms/addInstance';
 
 export default ({ closeAndResetModal }) => {
   const alert = useAlert();

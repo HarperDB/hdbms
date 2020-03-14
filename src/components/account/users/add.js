@@ -3,10 +3,11 @@ import { Input, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
-import addUser from '../../../api/lms/addUser';
-import isEmail from '../../../util/isEmail';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
+import addUser from '../../../api/lms/addUser';
+import isEmail from '../../../util/isEmail';
 
 export default ({ setLastUpdate }) => {
   const alert = useAlert();

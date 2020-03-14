@@ -1,4 +1,5 @@
 import queryLMS from '../queryLMS';
+import appState from '../../state/stores/appState';
 
 export default async ({ auth, payload: { customer_id } }) => {
   const response = await queryLMS({
@@ -8,5 +9,11 @@ export default async ({ auth, payload: { customer_id } }) => {
     auth,
   });
 
-  return response.body;
+  let users = [];
+
+  if (Array.isArray(response.body)) {
+    users = response.body.sort((a, b) => (a.lastname < b.lastname ? 1 : -1));
+  }
+
+  return appState.update((s) => { s.users = users; });
 };

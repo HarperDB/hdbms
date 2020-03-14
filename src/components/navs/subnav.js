@@ -2,10 +2,10 @@ import React from 'react';
 import { Navbar, Nav, NavItem, Input, Button, ToggleButton } from '@nio/ui-kit';
 import { NavLink } from 'react-router-dom';
 
-export default ({ routes = [], instanceId = false, setSearch = false, search, setLocal = false, local, setCloud = false, cloud }) => (
+export default ({ routes = [], instanceId = false, setFilters = false, filters }) => (
   <Navbar id="app-subnav" fixed="top" expand="xs">
     <Nav navbar>
-      {setSearch ? (
+      {setFilters ? (
         <>
           <div className="instance-toggle-holder">
             <ToggleButton
@@ -14,8 +14,8 @@ export default ({ routes = [], instanceId = false, setSearch = false, search, se
                 checked: <div>local</div>,
                 unchecked: <div>local</div>,
               }}
-              checked={local}
-              onChange={(e) => setLocal(e.target.checked)}
+              checked={filters.local}
+              onChange={(e) => setFilters({ ...filters, local: e.target.checked })}
             />
           </div>
           <div className="instance-toggle-holder">
@@ -25,20 +25,20 @@ export default ({ routes = [], instanceId = false, setSearch = false, search, se
                 checked: <div>cloud</div>,
                 unchecked: <div>cloud</div>,
               }}
-              checked={cloud}
-              onChange={(e) => setCloud(e.target.checked)}
+              checked={filters.cloud}
+              onChange={(e) => setFilters({ ...filters, cloud: e.target.checked })}
             />
           </div>
           <div className="instance-filter-holder">
             <Input
               type="text"
               className="outline-dark text-center"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               placeholder="filter instances"
-              value={search}
+              value={filters.search}
             />
-            {search && (
-              <Button className="clear-filter" onClick={() => setSearch('')}>
+            {filters.search && (
+              <Button className="clear-filter" onClick={() => setFilters({ ...filters, search: '' })}>
                 <i className="fa fa-times text-white" />
               </Button>
             )}

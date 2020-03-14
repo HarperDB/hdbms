@@ -15,6 +15,5 @@ export default async ({ auth, payload: { customer_id } }) => {
     licenses = response.body;
   }
 
-  appState.update((s) => { s.licenses = licenses; });
-  return licenses;
+  return appState.update((s) => { s.licenses = licenses; });
 };

@@ -1,48 +1,60 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
-import getInvoices from '../../../api/lms/getInvoices';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
+
+import getInvoices from '../../../api/lms/getInvoices';
 
 export default () => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [customerInvoices, setCustomerInvoices] = useState('loading');
-  const alert = useAlert();
+  const invoices = useStoreState(appState, (s) => s.invoices);
 
-  useAsyncEffect(async () => {
-    const response = await getInvoices({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
+  useAsyncEffect(() => getInvoices({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } }), []);
 
-    if (response.result === false) {
-      alert.error('Unable to fetch invoices. Please try again later.');
-      setCustomerInvoices('error');
-    } else {
-      setCustomerInvoices(response);
-    }
-  }, []);
+  console.log(invoices);
 
-  return customerInvoices === 'loading' ? (
+  return !invoices ? (
     <div className="py-5 text-center">
       <i className="fa fa-spinner fa-spin text-purple" />
     </div>
-  ) : customerInvoices === 'error' ? (
+  ) : !invoices.length ? (
     <div className="py-5 text-center">
       We were unable to fetch your invoices. Please try again later.
     </div>
-  ) : customerInvoices.map((i) => (
-    <Fragment key={i.id}>
+  ) : (
+    <>
       <Row>
-        <Col xs="9" className="text text-nowrap">
-          {new Date(i.created * 1000).toLocaleString()}
+        <Col xs="6" className="text text-bold text-small">
+          date
         </Col>
-        <Col xs="3" className="text-right text text-nowrap">
-          $
-          {(i.total / 100).toFixed(2)}
+        <Col xs="3" className="text-right text-bold text-small">
+          amount
+        </Col>
+        <Col xs="3" className="text-right text-bold text-small">
+          print
         </Col>
       </Row>
-      <hr />
-    </Fragment>
-  ));
+      {invoices.map((i) => (
+        <Fragment key={i.id}>
+          <hr className="mt-2" />
+          <Row className="pb-2">
+            <Col xs="6" className="text text-nowrap">
+              {new Date(i.created * 1000).toLocaleString()}
+            </Col>
+            <Col xs="3" className="text-right text text-nowrap">
+              $
+              {(i.total / 100).toFixed(2)}
+            </Col>
+            <Col xs="3" className="text-right text text-nowrap">
+              <a title="print invoice" href={i.hosted_invoice_url} target="_blank" rel="noopener noreferrer"><i className="fa fa-print text-purple" /></a>
+            </Col>
+          </Row>
+        </Fragment>
+      ))}
+    </>
+  );
 };

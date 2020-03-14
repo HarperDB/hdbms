@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
+import { useStoreState } from 'pullstate';
 
 import queryInstance from '../../api/queryInstance';
+import instanceState from '../../state/stores/instanceState';
 
-export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl, auth, refreshInstance, url }) => {
+export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
+  const { auth, url } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+  }));
 
   const [entityName, setEntityName] = useState(false);
   const [nameError, toggleNameError] = useState(false);
@@ -43,7 +49,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     setHashAttribute();
     toggleNameError();
     toggleHashError();
-    refreshInstance(Date.now());
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
     return setTimeout(() => history.push(`${baseUrl}/${entityName}`), 100);
   };
 

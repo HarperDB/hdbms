@@ -4,12 +4,19 @@ import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Form, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
 import queryInstance from '../../../api/queryInstance';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInstance, auth, url }) => {
+export default ({ newEntityColumns, hashAttribute }) => {
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
+  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
+    compute_stack_id: s.compute_stack_id,
+    auth: s.auth,
+    url: s.url,
+  }));
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {
@@ -37,7 +44,7 @@ export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInst
       table,
       records: [rowValue],
     }, auth, url);
-    refreshInstance(Date.now());
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
     return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
@@ -51,7 +58,7 @@ export default ({ newEntityColumns, hashAttribute, compute_stack_id, refreshInst
       table,
       hash_values: [hash],
     }, auth, url);
-    refreshInstance(Date.now());
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
     return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 

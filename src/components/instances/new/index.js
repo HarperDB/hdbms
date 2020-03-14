@@ -4,9 +4,11 @@ import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
+import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
 import useNewInstance from '../../../state/stores/newInstance';
 import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
@@ -21,19 +23,22 @@ import CloudInstanceForm from './details_cloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 
 export default () => {
   const history = useHistory();
   const alert = useAlert();
   const { purchaseStep } = useParams();
-  const [appData] = useApp(defaultAppData);
   const [lmsAuth] = useLMS(defaultLMSAuth);
   const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
+  const { customer, instances, products, regions } = useStoreState(appState, (s) => ({
+    customer: s.customer,
+    products: s.products,
+    regions: s.regions,
+    instances: s.instances,
+  }));
 
   const isLocal = newInstance.is_local;
-  const hasCard = customerHasChargeableCard(appData.customer);
+  const hasCard = customerHasChargeableCard(customer);
 
   const closeAndResetModal = () => {
     if (purchaseStep === 'status') {
@@ -57,41 +62,41 @@ export default () => {
         {steps[purchaseStep].label}
       </ModalHeader>
       <ModalBody>
-        {!appData.products ? (
+        {!products ? (
           <Loader />
         ) : purchaseStep === 'type' ? (
           <InstanceTypeForm />
         ) : purchaseStep === 'meta_local' ? (
           <LocalMetadataForm
-            instanceNames={appData.instances ? appData.instances.map((i) => i.instance_name) : []}
+            instanceNames={instances ? instances.map((i) => i.instance_name) : []}
           />
         ) : purchaseStep === 'meta_cloud' ? (
           <CloudMetadataForm
-            instanceNames={appData.instances ? appData.instances.map((i) => i.instance_name) : []}
+            instanceNames={instances ? instances.map((i) => i.instance_name) : []}
           />
         ) : purchaseStep === 'details_local' ? (
           <LocalInstanceForm
-            products={appData.products.localCompute}
+            products={products.localCompute}
             hasCard={hasCard}
           />
         ) : purchaseStep === 'details_cloud' ? (
           <CloudInstanceForm
-            products={appData.products.cloudCompute}
-            storage={appData.products.cloudStorage}
-            regions={appData.regions}
+            products={products.cloudCompute}
+            storage={products.cloudStorage}
+            regions={regions}
             hasCard={hasCard}
           />
         ) : purchaseStep === 'payment' ? (
           <CustomerPaymentForm
             hasCard={hasCard}
             isLocal={isLocal}
-            computeProduct={appData.products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
-            storageProduct={isLocal ? { price: 'FREE' } : appData.products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
+            computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
+            storageProduct={isLocal ? { price: 'FREE' } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
           />
         ) : purchaseStep === 'confirm' ? (
           <ConfirmOrderForm
-            computeProduct={appData.products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
-            storageProduct={isLocal ? { price: 'FREE' } : appData.products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
+            computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
+            storageProduct={isLocal ? { price: 'FREE' } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
           />
         ) : purchaseStep === 'status' ? (
           <OrderStatus

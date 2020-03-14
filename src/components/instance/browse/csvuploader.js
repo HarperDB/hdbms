@@ -3,17 +3,25 @@ import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import CSVReader from 'react-csv-reader';
 import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
 import getTotalRecords from '../../../api/instance/getTotalRecords';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
 import Worker from '../../../util/processCSV.worker';
+import instanceState from '../../../state/stores/instanceState';
 
 const worker = new Worker();
 
-export default ({ refreshInstance, compute_stack_id, auth, url }) => {
+export default () => {
   const history = useHistory();
   const { schema, table } = useParams();
+  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
+    compute_stack_id: s.compute_stack_id,
+    auth: s.auth,
+    url: s.url,
+  }));
+
   const [status, setStatus] = useState(false);
   const [processedData, setProcessedData] = useState(false);
   const [newRecordCount, setNewRecordCount] = useState(0);
@@ -27,7 +35,7 @@ export default ({ refreshInstance, compute_stack_id, auth, url }) => {
     const validatedCount = await getTotalRecords({ schema, table, auth, url });
     setValidatedRecordCount(validatedCount);
     if (validatedCount < (newRecordCount + initialRecordCount)) return setTimeout(() => validateData(), 1000);
-    refreshInstance(Date.now());
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
     return setTimeout(() => {
       setStatus(false);
       history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);

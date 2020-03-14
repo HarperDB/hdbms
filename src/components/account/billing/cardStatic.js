@@ -3,9 +3,10 @@ import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useAlert } from 'react-alert';
 
-import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
+import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 
 export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCode, cardLast4, cardExp }) => {
   const alert = useAlert();

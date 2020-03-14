@@ -6,9 +6,10 @@ import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { useAlert } from 'react-alert';
 
-import cardOptions from '../../../util/stripe/cardOptions';
 import useLMS from '../../../state/stores/lmsAuth';
 import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+
+import cardOptions from '../../../util/stripe/cardOptions';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 

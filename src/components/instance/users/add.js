@@ -68,6 +68,7 @@ export default ({ auth, url, roles, users, refreshInstance }) => {
             isSearchable={false}
             isClearable={false}
             isLoading={!roles}
+            placeholder="Select A Role"
           />
 
           <Button

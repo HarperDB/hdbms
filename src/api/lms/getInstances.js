@@ -21,6 +21,5 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
     }));
   }
 
-  appState.update((s) => { s.instances = instances; });
-  return instances;
+  return appState.update((s) => { s.instances = instances; });
 };

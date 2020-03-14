@@ -1,42 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
 import SubNav from '../navs/subnav';
 import routes from './routes';
 import useInstanceAuth from '../../state/stores/instanceAuths';
 import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
-import defaultActiveInstance from '../../state/defaults/defaultActiveInstance';
-import useApp from '../../state/stores/appData';
-import defaultAppData from '../../state/defaults/defaultAppData';
-
+import appState from '../../state/stores/appState';
+import instanceState from '../../state/stores/instanceState';
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const [{ products, instances, licenses }] = useApp(defaultAppData);
   const [instanceAuths] = useInstanceAuth({});
-  const [activeInstance, setActiveInstance] = useState(defaultActiveInstance);
-  const [lastUpdate, refreshInstance] = useState(false);
+  const { products, instances, licenses } = useStoreState(appState, (s) => ({
+    products: s.products,
+    instances: s.instances,
+    licenses: s.licenses,
+  }));
 
-  useAsyncEffect(async () => {
-    if (compute_stack_id) {
-      const activeInstanceObject = await buildActiveInstanceObject({ compute_stack_id, instanceAuths, products, instances, licenses });
-      if (!activeInstanceObject.error) {
-        setActiveInstance(activeInstanceObject);
+  useEffect(() => {
+    const cancelSub = instanceState.subscribe((s) => s.lastUpdate, (u) => {
+      if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id]) {
+        buildActiveInstanceObject({ instanceAuths, compute_stack_id, instances, licenses, products });
       }
-    }
-  }, [compute_stack_id, lastUpdate]);
+    });
+    return () => cancelSub();
+  }, []);
+
+  useEffect(() => instanceState.update((s) => { s.lastUpdate = Date.now(); }), [compute_stack_id]);
 
   return (
     <>
       <SubNav routes={routes} instanceId={compute_stack_id} />
       <Switch>
-        {routes.map((route) => {
-          const ThisRouteComponent = route.component;
-          return (
-            <Route key={route.path} path={route.path} render={() => <ThisRouteComponent {...activeInstance} refreshInstance={refreshInstance} />} />
-          );
-        })}
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} component={route.component} />
+        ))}
       </Switch>
     </>
   );

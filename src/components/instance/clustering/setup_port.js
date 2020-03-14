@@ -3,11 +3,9 @@ import { Row, Col, Button, Input } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 
-import defaultFormData from '../../../state/defaults/defaultClusterFormData';
-
 export default ({ port, setPort }) => {
   const alert = useAlert();
-  const [portFormData, updatePortForm] = useState(defaultFormData);
+  const [portFormData, updatePortForm] = useState({ port: false });
 
   useAsyncEffect(async () => {
     const { submitted, newPort } = portFormData;
@@ -17,7 +15,7 @@ export default ({ port, setPort }) => {
         alert.error('All fields are required.');
       } else {
         setPort(newPort);
-        updatePortForm({ ...defaultFormData });
+        updatePortForm({ port: false });
       }
     }
   }, [portFormData]);

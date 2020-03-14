@@ -2,22 +2,23 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Input, RadioCheckbox, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useStoreState } from 'pullstate';
 
 import useLMS from '../../../state/stores/lmsAuth';
+import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
+
 import updateInstance from '../../../api/lms/updateInstance';
 import updateLicense from '../../../api/lms/updateLicense';
 import setLicense from '../../../api/instance/setLicense';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
 
-export default ({ instanceAuth, details, refreshInstance, computeProducts, storageProducts, url }) => {
+export default ({ instanceAuth, compute_stack_id, instance_name, instance_region, storage, compute, stripe_plan_id, data_volume_size, refreshInstance, computeProducts, storageProducts, url }) => {
   const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [{ customer }] = useApp(defaultAppData);
+  const customer = useStoreState(appState, (s) => s.customer);
   const history = useHistory();
   const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ instance_name: details.instance_name, stripe_plan_id: details.stripe_plan_id, data_volume_size: details.data_volume_size });
+  const [formData, updateForm] = useState({ instance_name, stripe_plan_id, data_volume_size });
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
@@ -29,16 +30,14 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
     if (newStoragePrice.price !== 'FREE') totalPrice += parseFloat(newStoragePrice.price);
   }
 
-  const hasChanged = details.stripe_plan_id !== formData.stripe_plan_id || details.data_volume_size !== formData.data_volume_size;
+  const hasChanged = stripe_plan_id !== formData.stripe_plan_id || data_volume_size !== formData.data_volume_size;
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { stripe_product_id, instance_name, compute_stack_id, customer_id, license_id, fingerprint, data_volume_size } = formData;
-
-      const newLicense = await updateLicense({ auth: lmsAuth, payload: { license_id, stripe_product_id, compute_stack_id, customer_id, fingerprint } });
-      await setLicense({ auth: instanceAuth, key: newLicense.key, company: newLicense.company, url });
-      await updateInstance({ auth: lmsAuth, payload: { stripe_product_id, compute_stack_id, customer_id, instance_name, data_volume_size } });
+      const { key, company } = await updateLicense({ auth: lmsAuth, payload: formData });
+      await setLicense({ auth: instanceAuth, key, company, url });
+      await updateInstance({ auth: lmsAuth, payload: formData });
       setFormState({ submitted: false });
       refreshInstance(Date.now());
     }
@@ -57,11 +56,11 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
           />
         </div>
 
-        {details.instance_region && (
+        {instance_region && (
           <>
             <div className="fieldset-label">Instance Region (no modification)</div>
             <div className="fieldset">
-              {details.instance_region}
+              {instance_region}
             </div>
           </>
         )}
@@ -77,7 +76,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
                 onChange={(value) => updateForm({ ...formData, data_volume_size: value })}
                 options={storageProducts}
                 value={formData.data_volume_size}
-                defaultValue={details.storage}
+                defaultValue={storage}
               />
             </div>
           </>
@@ -93,7 +92,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
               onChange={(value) => updateForm({ ...formData, stripe_plan_id: value })}
               options={computeProducts}
               value={formData.stripe_plan_id}
-              defaultValue={details.compute}
+              defaultValue={compute}
             />
           )}
         </div>
@@ -105,7 +104,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
             <b>{!hasChanged ? 'Current' : 'New'} Price</b>
           </Col>
           <Col xs="7" className="text-right text-nowrap">
-            <b>${totalPrice.toFixed(2)}/{details.compute.interval}</b>
+            <b>${totalPrice.toFixed(2)}/{compute.interval}</b>
           </Col>
         </Row>
 
@@ -113,7 +112,7 @@ export default ({ instanceAuth, details, refreshInstance, computeProducts, stora
 
         {hasChanged && totalPrice && !hasCard ? (
           <Button
-            onClick={() => history.push(`/account/billing?returnURL=/instance/${details.compute_stack_id}/config`)}
+            onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
             title="Confirm Instance Details"
             block
             disabled={!hasChanged}

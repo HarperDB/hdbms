@@ -3,6 +3,7 @@ import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
 import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
@@ -10,11 +11,16 @@ import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
 import buildInstanceStructure from '../../../util/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
+import instanceState from '../../../state/stores/instanceState';
 
-export default ({ auth, structure, url, refreshInstance }) => {
+export default () => {
   const history = useHistory();
-  const { compute_stack_id, schema, table, action } = useParams();
+  const { schema, table, action } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
+  const { compute_stack_id, structure } = useStoreState(instanceState, (s) => ({
+    compute_stack_id: s.compute_stack_id,
+    structure: s.structure,
+  }));
 
   useAsyncEffect(() => {
     handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/browse' });
@@ -30,12 +36,9 @@ export default ({ auth, structure, url, refreshInstance }) => {
         <EntityManager
           activeItem={schema}
           items={entities.schemas}
-          auth={auth}
-          refreshInstance={refreshInstance}
           baseUrl={`/instance/${compute_stack_id}/browse`}
           itemType="schema"
           showForm
-          url={url}
         />
         { schema && (
           <EntityManager
@@ -44,39 +47,17 @@ export default ({ auth, structure, url, refreshInstance }) => {
             activeSchema={schema}
             baseUrl={`/instance/${compute_stack_id}/browse/${schema}`}
             itemType="table"
-            auth={auth}
-            refreshInstance={refreshInstance}
             showForm
-            url={url}
           />
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         { schema && table && action === 'csv' && entities.activeTable ? (
-          <CSVUploader
-            auth={auth}
-            compute_stack_id={compute_stack_id}
-            refreshInstance={refreshInstance}
-            url={url}
-          />
+          <CSVUploader />
         ) : schema && table && action && entities.activeTable ? (
-          <JSONViewer
-            newEntityColumns={entities.activeTable.newEntityColumns}
-            hashAttribute={entities.activeTable.hashAttribute}
-            auth={auth}
-            compute_stack_id={compute_stack_id}
-            refreshInstance={refreshInstance}
-            url={url}
-          />
+          <JSONViewer newEntityColumns={entities.activeTable.newEntityColumns} hashAttribute={entities.activeTable.hashAttribute} />
         ) : schema && table && entities.activeTable ? (
-          <DataTable
-            activeTable={entities.activeTable}
-            auth={auth}
-            compute_stack_id={compute_stack_id}
-            refreshInstance={refreshInstance}
-            structure={structure}
-            url={url}
-          />
+          <DataTable activeTable={entities.activeTable} />
         ) : (
           <>
             <span className="mb-2">&nbsp;</span>

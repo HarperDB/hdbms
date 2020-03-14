@@ -1,22 +1,25 @@
 import React from 'react';
+import { useStoreState } from 'pullstate';
 
 import UpdateInstanceForm from './updateInstanceForm';
-import useApp from '../../../state/stores/appData';
-import defaultAppData from '../../../state/defaults/defaultAppData';
+import instanceState from '../../../state/stores/instanceState';
 
 export default ({ auth, details, refreshInstance }) => {
-  const [{ products }] = useApp(defaultAppData);
+  const { computeProducts, storageProducts } = useStoreState(instanceState, (s) => ({
+    computeProducts: s.computeProducts,
+    storageProducts: s.storageProducts,
+  }));
 
   return (
     <>
       <span className="text-white mb-2 floating-card-header">resize instance</span>
-      {products && details ? (
+      {computeProducts ? (
         <UpdateInstanceForm
           instanceAuth={auth}
           details={details}
           refreshInstance={refreshInstance}
-          computeProducts={details.is_local ? products.localCompute : products.cloudCompute}
-          storageProducts={details.is_local ? false : products.cloudStorage}
+          computeProducts={computeProducts}
+          storageProducts={storageProducts}
         />
       ) : (
         <i className="fa fa-spinner fa-spin text-white" />
