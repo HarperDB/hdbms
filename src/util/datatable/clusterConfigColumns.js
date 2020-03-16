@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, ToggleButton } from '@nio/ui-kit';
 
 import addNode from '../../api/instance/addNode';
+import removeNode from '../../api/instance/removeNode';
 import updateNode from '../../api/instance/updateNode';
 
 const toggleCellPadding = { paddingTop: 3, paddingBottom: 0, paddingLeft: 0, paddingRight: 2 };
@@ -15,9 +16,9 @@ export default ({ auth, refreshInstance, url }) => [{
   accessor: 'instance_url',
   style: { paddingTop: 10 },
 }, {
-  Header: 'publish',
+  Header: 'connection',
   Cell: ({
-    original: { instance_name, instance_host, instance_status, clusterPort, publish, connection, channel, subscriptions },
+    original: { instance_name, instance_host, instance_status, clusterPort, connection },
   }) => (
     instance_host === 'localhost' ? (
       <div style={{ paddingTop: 6, paddingLeft: 10 }} className="text-purple text-bold">
@@ -30,16 +31,33 @@ export default ({ auth, refreshInstance, url }) => [{
         creating instance
       </div>
     ) : connection ? (
+      <div style={{ paddingRight: 10 }}>
+        <Button color="purple" className="connect" block onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+          disconnect
+        </Button>
+      </div>
+    ) : (
+      <div style={{ paddingRight: 10 }}>
+        <Button color="purple" className="connect" block onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+          connect
+        </Button>
+      </div>
+    )
+  ),
+  width: 100,
+  style: toggleCellPadding,
+}, {
+  Header: 'publish',
+  Cell: ({
+    original: { instance_name, instance_host, clusterPort, publish, connection, channel, subscriptions },
+  }) => (
+    connection ? (
       <ToggleButton
         width={75}
         checked={publish || false}
         onChange={() => updateNode({ channel, subscriptions, buttonState: 'togglePublish', instance_name, instance_host, clusterPort, auth, url, refreshInstance })}
       />
-    ) : (
-      <Button color="purple" className="connect" block onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
-        connect
-      </Button>
-    )
+    ) : null
   ),
   width: 80,
   style: toggleCellPadding,

@@ -35,9 +35,9 @@ export default () => {
       }
     });
     return () => cancelSub();
-  }, [instances]);
+  }, []);
 
-  useEffect(() => instanceState.update((s) => { s.lastUpdate = Date.now(); }), [compute_stack_id, instances]);
+  useEffect(() => instanceState.update((s) => { s.lastUpdate = Date.now(); }), [compute_stack_id]);
 
   return (
     <>

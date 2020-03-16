@@ -2,7 +2,6 @@ import registrationInfo from '../../api/instance/registrationInfo';
 import getFingerprint from '../../api/instance/getFingerprint';
 import addLicense from '../../api/lms/addLicense';
 import setLicense from '../../api/instance/setLicense';
-import describeAll from '../../api/instance/describeAll';
 import removeLicense from '../../api/lms/removeLicense';
 import restartInstance from '../../api/instance/restartInstance';
 
