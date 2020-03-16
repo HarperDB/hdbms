@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import queryInstance from '../../../api/queryInstance';
+
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
+
+import queryInstance from '../../../api/queryInstance';
 
 export default ({ instanceNames }) => {
   const history = useHistory();
-  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [newInstance, setNewInstance] = useNewInstance({});
+  const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({
     instance_name: newInstance.instance_name || '',
     user: newInstance.user || '',
@@ -24,22 +25,22 @@ export default ({ instanceNames }) => {
     const { instance_name, user, pass, host, port, is_ssl } = formData;
     if (submitted) {
       if (instanceNames.includes(instance_name)) {
-        setFormState({ submitted: false, error: `An instance named "${instance_name}" already exists` });
+        setFormState({ error: `An instance named "${instance_name}" already exists` });
       } else if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
         try {
           const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
           const response = await queryInstance({ operation: 'describe_all' }, formData, url);
           if (response.error) {
-            setFormState({ submitted: false, error: 'The provided credentials cannot log into that instance.' });
+            setFormState({ error: 'The provided credentials cannot log into that instance.' });
           } else {
             setNewInstance({ ...newInstance, instance_name, user, pass, host, port, is_ssl });
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
         } catch (e) {
-          setFormState({ submitted: false, error: 'We found no HarperDB at that url/port. Is it running?' });
+          setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
         }
       } else {
-        setFormState({ submitted: false, error: 'All fields must be filled out.' });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
@@ -56,7 +57,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase(), error: false })}
+                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase() })}
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
@@ -73,7 +74,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, user: e.target.value })}
                   type="text"
                   title="username"
                   value={formData.user}
@@ -87,7 +88,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, pass: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, pass: e.target.value })}
                   type="password"
                   title="password"
                   value={formData.pass}
@@ -103,7 +104,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, host: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, host: e.target.value })}
                   type="text"
                   title="host"
                   value={formData.host || ''}
@@ -117,7 +118,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, port: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, port: e.target.value })}
                   type="number"
                   title="port"
                   value={formData.port || ''}
@@ -132,7 +133,7 @@ export default ({ instanceNames }) => {
               <Col xs="8" className="pt-1">
                 <RadioCheckbox
                   type="checkbox"
-                  onChange={(value) => updateForm({ ...formData, is_ssl: value || false, error: false })}
+                  onChange={(value) => updateForm({ ...formData, is_ssl: value || false })}
                   options={{ label: '', value: true }}
                   value={formData.is_ssl}
                 />
@@ -156,7 +157,7 @@ export default ({ instanceNames }) => {
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             title="Instance Details"
             block
             className="mt-3"

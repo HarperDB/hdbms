@@ -3,17 +3,19 @@ import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useStoreState } from 'pullstate';
 
-import useLMS from '../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
+import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
+import appState from '../../state/stores/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
-  const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState({ password: false, password2: false });
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
   const history = useHistory();
 
   useAsyncEffect(async () => {
@@ -22,24 +24,25 @@ export default () => {
       const { password, password2 } = formData;
 
       if (!password || !password2) {
-        setFormState({ error: 'all fields are required', submitted: false });
+        setFormState({ error: 'all fields are required' });
       } else if (password !== password2) {
-        setFormState({ error: 'passwords must match', submitted: false });
+        setFormState({ error: 'passwords must match' });
       } else {
         setFormState({ ...formState, processing: true });
-        const response = await updatePassword({ auth: lmsAuth, payload: { email: lmsAuth.email, user_id: lmsAuth.user_id, password } });
+        const response = await updatePassword({ auth: lmsAuth, payload: { ...lmsAuth, password } });
         if (response.result === false) {
-          setFormState({ error: response.message, submitted: false, processing: false, success: false });
+          setFormState({ error: response.message });
         } else {
-          setFormState({ error: false, submitted: false, processing: false, success: false });
-          setLMSAuth({ ...lmsAuth, pass: password });
+          setFormState({});
+          appState.update((s) => { s.auth = { ...lmsAuth, pass: password }; });
+          setPersistedLMSAuth({ ...lmsAuth, pass: password });
           history.push('/sign-in');
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
     <div id="login-form">
@@ -68,7 +71,7 @@ export default () => {
                 placeholder="new password"
               />
               <Input
-                onChange={(e) => updateForm({ ...formData, password2: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, password2: e.target.value })}
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"

@@ -8,8 +8,8 @@ import resetPassword from '../../api/lms/resetPassword';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
-  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState({ email: false });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -17,22 +17,22 @@ export default () => {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({ error: 'invalid email supplied', submitted: false });
+        setFormState({ error: 'invalid email supplied' });
       } else if (!email) {
-        setFormState({ error: 'email is required', submitted: false });
+        setFormState({ error: 'email is required' });
       } else {
         setFormState({ ...formState, processing: true });
         const response = await resetPassword({ payload: { email } });
         if (response.result === false) {
-          setFormState({ error: response.message, submitted: false, success: false });
+          setFormState({ error: response.message });
         } else {
-          setFormState({ success: response.message, error: false, submitted: false });
+          setFormState({ success: response.message });
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
     <div id="login-form">

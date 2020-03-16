@@ -6,14 +6,11 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import steps from '../../../util/addInstanceSteps';
+import steps from '../../../util/instance/addInstanceSteps';
 
 import InstanceTypeForm from './type';
 import CloudMetadataForm from './meta_cloud';
@@ -25,17 +22,18 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const history = useHistory();
-  const alert = useAlert();
-  const { purchaseStep } = useParams();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
-  const { customer, instances, products, regions } = useStoreState(appState, (s) => ({
+  const { auth, customer, instances, products, regions } = useStoreState(appState, (s) => ({
+    auth: s.auth,
     customer: s.customer,
     products: s.products,
     regions: s.regions,
     instances: s.instances,
   }));
+
+  const history = useHistory();
+  const alert = useAlert();
+  const { purchaseStep } = useParams();
+  const [newInstance, setNewInstance] = useNewInstance({});
 
   const isLocal = newInstance.is_local;
   const hasCard = customerHasChargeableCard(customer);
@@ -44,17 +42,17 @@ export default () => {
     if (purchaseStep === 'status') {
       alert.error('Please wait for this window to close automatically');
     } else {
-      setNewInstance(defaultNewInstanceData);
+      setNewInstance({});
       setTimeout(() => history.push('/instances'), 100);
     }
   };
 
   const finishOrder = () => {
-    setNewInstance(defaultNewInstanceData);
+    setNewInstance({});
     setTimeout(() => history.push('/instances'), 100);
   };
 
-  useAsyncEffect(() => setNewInstance({ ...newInstance, customer_id: lmsAuth.customer_id }), [purchaseStep]);
+  useAsyncEffect(() => setNewInstance({ ...newInstance, customer_id: auth.customer_id }), [purchaseStep]);
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>

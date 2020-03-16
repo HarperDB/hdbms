@@ -7,8 +7,8 @@ import { useStoreState } from 'pullstate';
 
 import EntityManager from '../../shared/entityManager';
 import DataTable from './datatable';
-import buildInstanceStructure from '../../../util/buildInstanceStructure';
-import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
+import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
+import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
 import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
 

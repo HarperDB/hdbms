@@ -3,11 +3,10 @@ import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
 export default () => {
   const history = useHistory();
-  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
+  const [newInstance, setNewInstance] = useNewInstance({});
   const [formData, updateForm] = useState({});
 
   useAsyncEffect(() => {
@@ -18,7 +17,7 @@ export default () => {
     }
   }, [formData]);
 
-  useAsyncEffect(() => setNewInstance(defaultNewInstanceData), []);
+  useAsyncEffect(() => setNewInstance({}), []);
 
   return (
     <Row>

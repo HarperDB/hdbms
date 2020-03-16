@@ -8,8 +8,8 @@ import addCustomer from '../../api/lms/addCustomer';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
-  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -17,23 +17,23 @@ export default () => {
       const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({ submitted: false, error: 'All fields must be filled out' });
+        setFormState({ error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
-        setFormState({ submitted: false, error: 'Please provide a valid email' });
+        setFormState({ error: 'Please provide a valid email' });
       } else {
         setFormState({ ...formState, processing: true });
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result) {
-          updateForm({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
-          setFormState({ submitted: false, error: false, processing: false, success: true });
+          updateForm({});
+          setFormState({ success: true });
         } else {
-          setFormState({ submitted: false, error: response.message });
+          setFormState({ error: response.message });
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
     <div id="login-form">
@@ -74,7 +74,7 @@ export default () => {
                 placeholder="first name"
                 value={formData.firstname}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -84,7 +84,7 @@ export default () => {
                 placeholder="last name"
                 value={formData.lastname}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -94,7 +94,7 @@ export default () => {
                 placeholder="email"
                 value={formData.email}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, email: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, email: e.target.value })}
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -104,7 +104,7 @@ export default () => {
                 placeholder="company name"
                 value={formData.customer_name}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, customer_name: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
               />
               <Row>
                 <Col xs="6">
@@ -116,7 +116,7 @@ export default () => {
                     placeholder="subdomain"
                     value={formData.subdomain}
                     disabled={formState.submitted}
-                    onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
+                    onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
                   />
                 </Col>
                 <Col xs="6" className="pt-2 pl-0 text-white text-nowrap subdomain-label">
@@ -130,14 +130,14 @@ export default () => {
                 title="coupon code"
                 placeholder="coupon code (optional)"
                 value={formData.coupon_code}
-                onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value, error: false })}
+                onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
                 disabled={formState.submitted}
               />
               <Button
                 color="purple"
                 block
                 disabled={formState.submitted}
-                onClick={() => setFormState({ submitted: true, error: false })}
+                onClick={() => setFormState({ submitted: true })}
               >
                 Sign Up For Free
               </Button>

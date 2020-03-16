@@ -16,9 +16,8 @@ let tableChangeTimeout = false;
 
 export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const history = useHistory();
-  const { schema, table } = useParams();
-  const { compute_stack_id, structure, auth, url } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
+  const { compute_stack_id, schema, table } = useParams();
+  const { structure, auth, url } = useStoreState(instanceState, (s) => ({
     structure: s.structure,
     auth: s.auth,
     url: s.url,
@@ -55,14 +54,15 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   return (
     <>
       <Row>
-        <Col className="text-nowrap">
+        <Col className="text-nowrap text-left">
           <span className="text-white floating-card-header">
             <span>{schema}&nbsp;</span>
             <span>{table && `> ${table} > `} </span>
             <span>{commaNumbers(tableState.totalRecords)} record{tableState.totalRecords !== 1 ? 's' : ''}</span>
           </span>
         </Col>
-        <Col className="text-right text-white text-nowrap">
+        <Col xs="12" className="d-inline-flex d-md-none mb-2" />
+        <Col className="text-md-right text-white text-nowrap">
           <i title={`Refresh table ${table}`} className={`fa floating-card-header mr-2 ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => instanceState.update((s) => { s.lastUpdate = Date.now(); })} />
           <span className="mr-2">auto</span>
           <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${tableState.autoRefresh ? 'on' : 'off'}`} onClick={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh, lastUpdate: Date.now() })} />

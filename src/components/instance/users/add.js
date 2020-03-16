@@ -8,9 +8,6 @@ import addUser from '../../../api/instance/addUser';
 import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
-  const alert = useAlert();
-  const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ username: '', password: '', role: false });
   const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
     url: s.url,
@@ -18,27 +15,31 @@ export default () => {
     roles: s.roles,
   }));
 
+  const alert = useAlert();
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
+
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
       const { username, password, role } = formData;
 
       if (!username || !role || !password) {
-        setFormState({ submitted: false, error: 'All fields must be filled out' });
+        setFormState({ error: 'All fields must be filled out' });
       } else if (username.indexOf(' ') !== -1) {
-        setFormState({ submitted: false, error: 'Username may not have spaces' });
+        setFormState({ error: 'Username may not have spaces' });
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
-        setFormState({ submitted: false, error: 'User already exists' });
+        setFormState({ error: 'User already exists' });
       } else {
         const response = await addUser({ auth, role, username, password, url });
         if (response.message.indexOf('successfully') !== -1) {
-          updateForm({ username: '', password: '', role: false });
+          updateForm({});
           instanceState.update((s) => { s.lastUpdate = Date.now(); });
           alert.success(response.message);
         } else {
           alert.error(response.message);
         }
-        setFormState({ submitted: false, error: false });
+        setFormState({});
       }
     }
   }, [formState]);
@@ -56,7 +57,7 @@ export default () => {
             name="username"
             placeholder="username"
             value={formData.username}
-            onChange={(e) => updateForm({ ...formData, username: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, username: e.target.value })}
           />
 
           <Input
@@ -65,7 +66,7 @@ export default () => {
             name="password"
             placeholder="password"
             value={formData.password}
-            onChange={(e) => updateForm({ ...formData, password: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, password: e.target.value })}
           />
 
           <SelectDropdown
@@ -82,7 +83,7 @@ export default () => {
           <Button
             color="success"
             block
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
           >
             Add User
           </Button>

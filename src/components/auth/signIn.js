@@ -2,59 +2,61 @@ import React, { useState } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
-import useLMS from '../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../state/defaults/defaultLMSAuth';
+import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
+import appState from '../../state/stores/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../util/isEmail';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
-  const [lmsAuth, setLMSAuth] = useLMS(defaultLMSAuth);
-  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState({ user: false, pass: false });
+  const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
   const history = useHistory();
+  const { search } = useLocation();
+  const { returnURL } = queryString.parse(search);
 
   useAsyncEffect(async () => {
-    const { submitted, processing } = formState;
-    if (submitted && !processing) {
-      const { email, pass } = formData;
-
-      if (!isEmail(email)) {
-        setFormState({ error: 'invalid email supplied', submitted: false });
-      } else if (!email || !pass) {
-        setFormState({ error: 'all fields are required', submitted: false });
+    const { submitted } = formState;
+    if (submitted) {
+      if (!isEmail(formData.email)) {
+        setFormState({ error: 'invalid email supplied' });
+      } else if (!formData.email || !formData.pass) {
+        setFormState({ error: 'all fields are required' });
       } else {
-        setFormState({ ...formState, processing: true });
-        const response = await getUser({ auth: { email, pass }, payload: { email } });
+        const response = await getUser({ auth: { email: formData.email, pass: formData.pass }, payload: { email: formData.email } });
         if (response.result === false) {
-          setFormState({ error: 'Invalid Credentials', submitted: false });
-          setLMSAuth(defaultLMSAuth);
+          setFormState({ error: 'Invalid Credentials' });
+          appState.update((s) => { s.auth = false; });
+          setPersistedLMSAuth({});
         } else {
-          setLMSAuth({ ...response, email, pass });
-          setTimeout(() => history.push(response.update_password ? '/update-password' : '/instances'), 100);
+          appState.update((s) => { s.auth = { ...response, email: formData.email, pass: formData.pass }; });
+          setPersistedLMSAuth({ email: formData.email, pass: formData.pass });
+          setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 1000);
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   useAsyncEffect(() => {
-    const { email, pass } = lmsAuth;
+    const { email, pass } = persistedLMSAuth;
     const { submitted } = formState;
     if (email && pass && !submitted) {
       updateForm({ email, pass });
-      setFormState({ submitted: true, error: false, processing: false, success: false });
+      setFormState({ submitted: true });
     }
-  }, [lmsAuth]);
+  }, [persistedLMSAuth]);
 
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
-      {(lmsAuth?.email && lmsAuth?.pass) || formState.processing ? (
+      {formState.submitted ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">

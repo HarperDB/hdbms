@@ -5,8 +5,6 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 import defaultTableState from '../../../state/defaults/defaultTableState';
 
@@ -15,9 +13,9 @@ import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
 
 export default ({ lastUpdate, setLastUpdate }) => {
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const users = useStoreState(appState, (s) => s.users);
-  const [lmsAuth] = useLMS(defaultLMSAuth);
   const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'lastname', desc: false }] });
   const [userToRemove, setUserToRemove] = useState(false);
 

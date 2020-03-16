@@ -3,51 +3,35 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
-import queryInstance from '../../../api/queryInstance';
+import appState from '../../../state/stores/appState';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
-import addUser from '../../../api/instance/addUser';
-import dropUser from '../../../api/instance/dropUser';
 
-export default ({ compute_stack_id, instance_id, url, status, instance_name, is_local, flipCard, compute, storage }) => {
+import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
+
+export default ({ compute_stack_id, instance_id, url, status, instance_name, is_local, flipCard, compute, storage, license, stripe_product_id }) => {
+  const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
-  const [instanceStatus, setInstanceStatus] = useState('LOADING');
+  const [instanceStatus, setInstanceStatus] = useState({ instance: 'LOADING', instanceError: false, license: '', licenseError: false, clustering: '' });
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
+  const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
 
   useAsyncEffect(async () => {
-    if (instanceAuths[compute_stack_id]) {
-      if (status === 'CREATE_IN_PROGRESS') {
-        setInstanceStatus(status);
-      } else {
-        try {
-          const response = await queryInstance({ operation: 'describe_all' }, instanceAuths[compute_stack_id], url);
-          if (response.error) {
-            if (!is_local) {
-              const roles = await queryInstance({ operation: 'list_roles' }, { user: instance_id, pass: instance_id }, url);
-              const role = roles.find((r) => r.permission.super_user).id;
-              await addUser({ auth: { user: instance_id, pass: instance_id }, role, username: instanceAuths[compute_stack_id].user, password: instanceAuths[compute_stack_id].pass, url });
-              await dropUser({ auth: instanceAuths[compute_stack_id], username: instance_id, url });
-              setInstanceStatus('OK');
-            } else {
-              setInstanceStatus('OK');
-              setInstanceAuths({ ...instanceAuths, [compute_stack_id]: undefined });
-            }
-          } else {
-            setInstanceStatus('OK');
-          }
-        } catch (e) {
-          setInstanceStatus('COULD NOT CONNECT');
-        }
-      }
+    if (!instanceAuth) {
+      setInstanceStatus({ ...instanceStatus, instance: 'PLEASE LOG IN', instanceError: true });
+    } else if (status === 'CREATE_IN_PROGRESS') {
+      setInstanceStatus({ ...instanceStatus, instance: status });
     } else {
-      setInstanceStatus('OK');
+      const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, compute, storage, license, compute_stack_id, stripe_product_id });
+      setInstanceStatus({ ...instanceStatus, ...registrationResult });
     }
-  }, [status]);
+  }, [status, license]);
 
   const handleClick = () => {
-    if (instanceStatus !== 'OK') return alert.error('Instance is not currently available.');
-    if (!instanceAuths[compute_stack_id]) return flipCard();
+    if (instanceStatus.instance !== 'OK') return alert.error('Instance is not currently available.');
+    if (!instanceAuth) return flipCard();
     return history.push(`/instance/${compute_stack_id}/browse`);
   };
 
@@ -59,9 +43,9 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
             {instance_name}
           </Col>
           <Col xs="2" className="text-right">
-            {['CREATE_IN_PROGRESS', 'LOADING'].includes(instanceStatus) ? (
+            {['CREATE_IN_PROGRESS', 'LOADING'].includes(instanceStatus.instance) ? (
               <i title="Instance Is Being Created" className="fa fa-spinner fa-spin text-purple" />
-            ) : instanceStatus === 'COULD NOT CONNECT' ? (
+            ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title="Could not connect to instance" className="fa fa-exclamation-triangle text-danger" />
             ) : instanceAuths[compute_stack_id] ? (
               <i onClick={(e) => { e.stopPropagation(); setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
@@ -71,21 +55,22 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
           </Col>
         </Row>
         <hr className="mt-4 mb-1" />
-        <div className="scrollable">
-          <Row className="text-smaller text-nowrap text-darkgrey">
-            <Col xs="3">STATUS</Col>
-            <Col xs="9" className={`text-${['OK', 'LOADING'].includes(instanceStatus) ? 'success' : 'danger'}`}>{instanceStatus && instanceStatus.replace(/_/g, ' ').toUpperCase()}</Col>
-            <Col xs="12"><hr className="my-1" /></Col>
-            <Col xs="3">URL</Col>
-            <Col xs="9">{url}</Col>
-            <Col xs="12"><hr className="my-1" /></Col>
-            <Col xs="3">TYPE</Col>
-            <Col xs="9">{is_local ? 'Local' : 'HarperDB Cloud'}</Col>
-            <Col xs="12"><hr className="my-1" /></Col>
-            <Col xs="3">LICENSE</Col>
-            <Col xs="9">{compute.ram} RAM {storage && `/ ${storage.disk_space} Storage`}</Col>
-          </Row>
-        </div>
+        <Row className="text-smaller text-nowrap text-darkgrey">
+          <Col xs="3">STATUS</Col>
+          <Col xs="9" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>{instanceStatus.instance?.replace(/_/g, ' ').toUpperCase()}</Col>
+          <Col xs="12"><hr className="my-1" /></Col>
+          <Col xs="3">TYPE</Col>
+          <Col xs="9">{is_local ? 'USER INSTALLED' : 'HARPERDB CLOUD'}</Col>
+          <Col xs="12"><hr className="my-1" /></Col>
+          <Col xs="3">URL</Col>
+          <Col xs="9">{url}</Col>
+          <Col xs="12"><hr className="my-1" /></Col>
+          <Col xs="3">LICENSE</Col>
+          <Col xs="9" className={`text-${instanceStatus.licenseError ? 'danger' : ''}`}>{instanceStatus.license.toUpperCase()}</Col>
+          <Col xs="12"><hr className="my-1" /></Col>
+          <Col xs="3">CLUSTERING</Col>
+          <Col xs="9">{instanceStatus.clustering.toUpperCase()}</Col>
+        </Row>
       </CardBody>
     </Card>
   );

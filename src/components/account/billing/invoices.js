@@ -3,14 +3,12 @@ import { Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 
 import getInvoices from '../../../api/lms/getInvoices';
 
 export default () => {
-  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const invoices = useStoreState(appState, (s) => s.invoices);
 
   useAsyncEffect(() => getInvoices({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } }), []);

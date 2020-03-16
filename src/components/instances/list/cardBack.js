@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 
 import useInstanceAuth from '../../../state/stores/instanceAuths';
 
 import queryInstance from '../../../api/queryInstance';
 
 export default ({ compute_stack_id, url, flipCard, flipState }) => {
-  const alert = useAlert();
-  const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ user: false, pass: false });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
@@ -18,17 +16,15 @@ export default ({ compute_stack_id, url, flipCard, flipState }) => {
     if (submitted) {
       const { user, pass } = formData;
       if (!user || !pass) {
-        alert.error('all fields are required');
-        setFormState({ error: true, submitted: false });
+        setFormState({ error: 'all fields are required' });
       } else {
         const response = await queryInstance({ operation: 'describe_all' }, { user, pass }, url);
 
         if (response.error) {
-          alert.error(response.message.toString());
-          setFormState({ error: true, submitted: false });
+          setFormState({ error: response.message.toString() });
         } else {
-          updateForm({ user: false, pass: false });
-          setFormState({ error: false, submitted: false });
+          updateForm({});
+          setFormState({});
           setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
           flipCard();
         }
@@ -59,7 +55,7 @@ export default ({ compute_stack_id, url, flipCard, flipState }) => {
           <Row noGutters>
             <Col xs="6" className="pr-1">
               <Button
-                onClick={() => { updateForm({ user: false, pass: false }); flipCard(); }}
+                onClick={() => { updateForm({}); flipCard(); }}
                 title="Cancel"
                 block
                 color="grey"
@@ -70,7 +66,7 @@ export default ({ compute_stack_id, url, flipCard, flipState }) => {
             </Col>
             <Col xs="6" className="pl-1">
               <Button
-                onClick={() => setFormState({ submitted: true, error: false })}
+                onClick={() => setFormState({ submitted: true })}
                 title="Log Into Instance"
                 block
                 color="purple"

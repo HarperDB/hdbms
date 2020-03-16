@@ -9,19 +9,9 @@
   box-shadow: 0 0 5px $dark-grey-overlay;
   color: $color-black;
 
-  .card-body {
-    padding: 15px;
-
-    .scrollable {
-      height: 77px;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
-  }
-
   &.instance {
     cursor: pointer;
-    height: 150px;
+    height: 170px;
 
     .instance-name {
       overflow: hidden;

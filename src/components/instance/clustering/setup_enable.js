@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
 import { useStoreState } from 'pullstate';
 
@@ -30,7 +29,7 @@ export default ({ port }) => {
     if (tryRefresh) {
       instanceState.update((s) => { s.lastUpdate = Date.now(); });
     }
-  }, 1000);
+  }, 3000);
 
   return (
     <Row className="config-row">

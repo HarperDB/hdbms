@@ -5,8 +5,6 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 
 import cardOptions from '../../../util/stripe/cardOptions';
@@ -15,7 +13,7 @@ import getCustomer from '../../../api/lms/getCustomer';
 
 export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
   const history = useHistory();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);

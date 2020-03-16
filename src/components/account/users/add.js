@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { Input, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
 
 import addUser from '../../../api/lms/addUser';
 import isEmail from '../../../util/isEmail';
 
 export default ({ setLastUpdate }) => {
+  const auth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '' });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(async () => {
     const { firstname, lastname, email } = formData;
     const { submitted } = formState;
     if (submitted) {
       if (!firstname || !lastname || !isEmail(email)) {
-        setFormState({ submitted: false, error: 'All fields must be filled out' });
+        setFormState({ error: 'All fields must be filled out' });
       } else {
-        const response = await addUser({ auth: lmsAuth, payload: { ...formData, customer_id: lmsAuth.customer_id } });
+        const response = await addUser({ auth, payload: { ...formData, customer_id: auth.customer_id } });
         if (response.result) {
           setLastUpdate(Date.now());
           alert.success(response.message);
-          updateForm({ firstname: '', lastname: '', email: '' });
-          setFormState({ submitted: false, error: false });
+          updateForm({});
+          setFormState({});
         } else {
-          setFormState({ submitted: false, error: response.message });
+          setFormState({ error: response.message });
         }
       }
     }
@@ -45,7 +45,7 @@ export default ({ setLastUpdate }) => {
             className="mb-2 text-center"
             name="first name"
             placeholder="first name"
-            value={formData.firstname}
+            value={formData.firstname || ''}
             onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
             disabled={formState.submitted}
           />
@@ -55,7 +55,7 @@ export default ({ setLastUpdate }) => {
             className="mb-2 text-center"
             name="lastname"
             placeholder="last name"
-            value={formData.lastname}
+            value={formData.lastname || ''}
             onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
             disabled={formState.submitted}
           />
@@ -65,7 +65,7 @@ export default ({ setLastUpdate }) => {
             className="mb-4 text-center"
             name="email"
             placeholder="email address"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={(e) => updateForm({ ...formData, email: e.target.value })}
             disabled={formState.submitted}
           />
@@ -73,7 +73,7 @@ export default ({ setLastUpdate }) => {
           <Button
             color="purple"
             block
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             disabled={formState.submitted}
           >
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add User</span>}

@@ -21,7 +21,7 @@ export default ({ instances, network, schema, table, auth, url }) => {
       const clusterPort = 12345;
       const { instance_name, ip_address, is_local, host } = i;
       const instance_status = is_local ? 'OK' : i.status;
-      const instance_host = is_local ? host : ip_address;
+      const instance_host = host || ip_address;
       return { instance_name, instance_url: i.url, instance_status, instance_host, clusterPort, publish, subscribe, connection, channel, subscriptions };
     });
     setTableData({ ...tableData, data: newTableData });

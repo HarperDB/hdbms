@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Input } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 
 export default ({ port, setPort }) => {
-  const alert = useAlert();
-  const [portFormData, updatePortForm] = useState({ port: false });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(async () => {
-    const { submitted, newPort } = portFormData;
+    const { submitted } = formState;
     if (submitted) {
+      const { newPort } = formData;
       if (!newPort) {
-        updatePortForm({ ...portFormData, error: true, submitted: false });
-        alert.error('All fields are required.');
+        setFormState({ error: 'All fields are required.' });
       } else {
         setPort(newPort);
-        updatePortForm({ port: false });
       }
     }
-  }, [portFormData]);
+  }, [formState]);
 
   return port ? (
     <Row className="config-row">
@@ -29,11 +27,11 @@ export default ({ port, setPort }) => {
       </Col>
     </Row>
   ) : (
-    <Row className={`config-row cluster-form ${portFormData.error ? 'error' : ''}`}>
-      <Col xs="12" md="3" className="text">Choose a Cluster Port</Col>
+    <Row className={`config-row cluster-form ${formState.error ? 'error' : ''}`}>
+      <Col xs="12" md="3" className="text">Cluster Port</Col>
       <Col xs="12" md="3">
         <Input
-          onChange={(e) => updatePortForm({ ...portFormData, newPort: e.target.value, error: false })}
+          onChange={(e) => updateForm({ ...formData, newPort: e.target.value })}
           className="mb-1"
           type="number"
           title="port"
@@ -42,7 +40,7 @@ export default ({ port, setPort }) => {
       </Col>
       <Col xs="12" md="3" />
       <Col xs="12" md="3">
-        <Button color="success" block onClick={() => updatePortForm({ ...portFormData, submitted: true, error: false })}>Set Cluster Port</Button>
+        <Button color="success" block onClick={() => setFormState({ submitted: true })}>Set Cluster Port</Button>
       </Col>
     </Row>
   );

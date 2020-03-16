@@ -4,8 +4,6 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 
 import updateInstance from '../../../api/lms/updateInstance';
@@ -15,11 +13,11 @@ import customerHasChargeableCard from '../../../util/stripe/customerHasChargeabl
 import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
-  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const { auth, url, compute_stack_id, instance_name, stripe_plan_id, data_volume_size, computeProducts, storageProducts, instance_region, storage, compute } = useStoreState(instanceState);
   const history = useHistory();
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({ instance_name, stripe_plan_id, data_volume_size });
   const hasCard = customerHasChargeableCard(customer);
 
@@ -51,7 +49,7 @@ export default () => {
         <div className="fieldset-label">Instance Name</div>
         <div className="fieldset">
           <Input
-            onChange={(e) => updateForm({ ...formData, instance_name: e.target.value, error: false })}
+            onChange={(e) => updateForm({ ...formData, instance_name: e.target.value })}
             type="text"
             title="instance_name"
             value={formData.instance_name}
@@ -125,7 +123,7 @@ export default () => {
           </Button>
         ) : (
           <Button
-            onClick={() => setFormState({ ...formData, submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             title="Confirm Instance Details"
             block
             disabled={!hasChanged}

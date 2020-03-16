@@ -8,7 +8,7 @@ import useInstanceAuth from '../../state/stores/instanceAuths';
 
 import SubNav from '../navs/subnav';
 import routes from './routes';
-import buildActiveInstanceObject from '../../util/buildActiveInstanceObject';
+import buildActiveInstanceObject from '../../util/instance/buildActiveInstanceObject';
 
 export default () => {
   const { compute_stack_id } = useParams();

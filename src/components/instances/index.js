@@ -11,7 +11,7 @@ import NewInstanceCard from './list/newInstanceCard';
 import SubNav from '../navs/subnav';
 import NewInstanceModal from './new';
 
-import filterInstances from '../../util/filterInstances';
+import filterInstances from '../../util/instance/filterInstances';
 
 export default () => {
   const { action } = useParams();
@@ -26,7 +26,7 @@ export default () => {
     }
   }, [filters, instances]);
 
-  useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, 5000);
+  useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, 10000);
 
   return (
     <div id="instances">

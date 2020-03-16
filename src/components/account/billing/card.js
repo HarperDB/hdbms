@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
 import appState from '../../../state/stores/appState';
 
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
@@ -12,13 +10,16 @@ import EditCard from './cardEdit';
 import getCustomer from '../../../api/lms/getCustomer';
 
 export default () => {
-  const [lmsAuth] = useLMS(defaultLMSAuth);
+  const { auth, customer } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    customer: s.customer,
+  }));
+
   const [editingCard, setEditingCard] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(false);
-  const customer = useStoreState(appState, (s) => s.customer);
   const customerCard = customer && customerHasChargeableCard(customer);
 
-  useAsyncEffect(() => getCustomer({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } }), [lastUpdate]);
+  useAsyncEffect(() => getCustomer({ auth, payload: { customer_id: auth.customer_id } }), [lastUpdate]);
 
   return (!editingCard && customerCard) ? (
     <StaticCard

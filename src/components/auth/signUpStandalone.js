@@ -8,8 +8,8 @@ import addCustomer from '../../api/lms/addCustomer';
 
 export default () => {
   const alert = useAlert();
-  const [formState, setFormState] = useState({ submitted: false, error: false, processing: false, success: false });
-  const [formData, updateForm] = useState({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '', coupon_code: '' });
+  const [formState, setFormState] = useState({});
+  const [formData, updateForm] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -17,24 +17,24 @@ export default () => {
       const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({ submitted: false, error: 'All fields must be filled out' });
+        setFormState({ error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
-        setFormState({ submitted: false, error: 'Please provide a valid email' });
+        setFormState({ error: 'Please provide a valid email' });
       } else {
         setFormState({ ...formState, processing: true });
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result) {
-          updateForm({ firstname: '', lastname: '', email: '', customer_name: '', subdomain: '' });
-          setFormState({ submitted: false, error: false, processing: false, success: true });
+          updateForm({});
+          setFormState({ success: true });
           alert.success(response.message);
         } else {
-          setFormState({ submitted: false, error: response.message });
+          setFormState({ error: response.message });
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({ error: false, submitted: false, processing: false, success: false }); } }, [formData]);
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
     <div id="add-customer-background">
@@ -63,7 +63,7 @@ export default () => {
               className="mb-0 text-center"
               name="firstname"
               value={formData.firstname}
-              onChange={(e) => updateForm({ ...formData, firstname: e.target.value, error: false })}
+              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
               disabled={formState.submitted}
             />
           </div>
@@ -75,7 +75,7 @@ export default () => {
               className="mb-0 text-center"
               name="lastname"
               value={formData.lastname}
-              onChange={(e) => updateForm({ ...formData, lastname: e.target.value, error: false })}
+              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
               disabled={formState.submitted}
             />
           </div>
@@ -87,7 +87,7 @@ export default () => {
               className="mb-0 text-center"
               name="email"
               value={formData.email}
-              onChange={(e) => updateForm({ ...formData, email: e.target.value, error: false })}
+              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
               disabled={formState.submitted}
             />
           </div>
@@ -99,7 +99,7 @@ export default () => {
               className="mb-0 text-center"
               name="customer_name"
               value={formData.customer_name}
-              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value, error: false })}
+              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
               disabled={formState.submitted}
             />
           </div>
@@ -113,7 +113,7 @@ export default () => {
                   className="mb-0 text-center"
                   name="customer_name"
                   value={formData.subdomain}
-                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
                   disabled={formState.submitted}
                 />
               </Col>
@@ -130,7 +130,7 @@ export default () => {
               className="mb-0 text-center"
               name="coupon_code"
               value={formData.coupon_code}
-              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value, error: false })}
+              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
               disabled={formState.submitted}
             />
           </div>
@@ -138,7 +138,7 @@ export default () => {
           <Button
             color="success"
             block
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             disabled={formState.submitted}
           >
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Create A Free HarperDB Account</span>}

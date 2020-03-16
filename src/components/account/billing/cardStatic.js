@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useAlert } from 'react-alert';
+import { useStoreState } from 'pullstate';
 
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import appState from '../../../state/stores/appState';
 
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 
 export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCode, cardLast4, cardExp }) => {
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -20,14 +20,14 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
       if (response.result) {
         setLastUpdate(Date.now());
         alert.success(response.message);
-        setFormState({ error: false, submitted: false });
+        setFormState({});
       } else {
-        setFormState({ error: response.message, submitted: false });
+        setFormState({ error: response.message });
       }
     }
   }, [formState]);
 
-  return cardId ? (
+  return (
     <>
       <Row className="standardHeight">
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
@@ -74,7 +74,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
             block
             color="danger"
             className="mb-2"
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             disabled={formState.submitted}
           >
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove Card</span>}
@@ -88,7 +88,5 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
         </div>
       )}
     </>
-  ) : (
-    <i className="fa fa-spinner fa-spin text-purple" />
   );
 };

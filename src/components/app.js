@@ -7,8 +7,8 @@ import SignIn from './auth/signIn';
 import ForgotPassword from './auth/forgotPassword';
 import UpdatePassword from './auth/updatePassword';
 
-import Account from './account';
 import ProtectedRoute from './shared/protectedRoute';
+import Account from './account';
 import Instances from './instances';
 import Instance from './instance';
 

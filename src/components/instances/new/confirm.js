@@ -3,11 +3,10 @@ import { Col, Row, Button, Card, CardBody } from '@nio/ui-kit';
 
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
 export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();
-  const [newInstance] = useNewInstance(defaultNewInstanceData);
+  const [newInstance] = useNewInstance({});
 
   let totalPrice = 0;
   if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);

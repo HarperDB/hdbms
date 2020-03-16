@@ -9,26 +9,31 @@ import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
-import buildInstanceStructure from '../../../util/buildInstanceStructure';
-import handleSchemaTableRedirect from '../../../util/handleSchemaTableRedirect';
+import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
+import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
 import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const history = useHistory();
-  const { schema, table, action } = useParams();
+  const { compute_stack_id, schema, table, action } = useParams();
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
-  const { compute_stack_id, structure } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
+  const { current_compute_stack_id, structure } = useStoreState(instanceState, (s) => ({
+    current_compute_stack_id: s.compute_stack_id,
     structure: s.structure,
   }));
 
   useAsyncEffect(() => {
-    handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/browse' });
-  }, [schema, table, entities]);
+    if (structure && current_compute_stack_id === compute_stack_id) {
+      const newEntities = buildInstanceStructure({ structure, schema, table });
+      setEntities(newEntities);
+    }
+  }, [structure, schema, table, compute_stack_id]);
 
   useAsyncEffect(() => {
-    if (structure) setEntities(buildInstanceStructure({ structure, schema, table }));
-  }, [structure, schema, table]);
+    if (current_compute_stack_id === compute_stack_id) {
+      handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/browse' });
+    }
+  }, [entities]);
 
   return (
     <Row>

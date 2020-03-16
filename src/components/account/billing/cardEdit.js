@@ -5,21 +5,20 @@ import useAsyncEffect from 'use-async-effect';
 import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { useAlert } from 'react-alert';
-
-import useLMS from '../../../state/stores/lmsAuth';
-import defaultLMSAuth from '../../../state/defaults/defaultLMSAuth';
+import { useStoreState } from 'pullstate';
 
 import cardOptions from '../../../util/stripe/cardOptions';
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
+import appState from '../../../state/stores/appState';
 
 export default ({ setEditingCard, cardId, stripeId, setLastUpdate }) => {
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
   const location = useLocation();
   const history = useHistory();
-  const [lmsAuth] = useLMS(defaultLMSAuth);
   const [postalCode, setPostalCode] = useState(false);
   const [cardSubmitted, setCardSubmitted] = useState(false);
   const [error, setError] = useState(null);

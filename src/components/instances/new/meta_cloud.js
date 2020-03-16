@@ -3,12 +3,11 @@ import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
 export default ({ instanceNames }) => {
   const history = useHistory();
-  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [newInstance, setNewInstance] = useNewInstance({});
+  const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({
     instance_name: newInstance.instance_name || '',
     user: newInstance.user || '',
@@ -25,7 +24,7 @@ export default ({ instanceNames }) => {
         setNewInstance({ ...newInstance, instance_name, user, pass, is_ssl: true });
         setTimeout(() => history.push('/instances/new/details_cloud'), 0);
       } else {
-        setFormState({ submitted: false, error: 'All fields must be filled out.' });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
@@ -42,7 +41,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase(), error: false })}
+                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase() })}
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
@@ -59,7 +58,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, user: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, user: e.target.value })}
                   type="text"
                   title="username"
                   value={formData.user}
@@ -73,7 +72,7 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, pass: e.target.value, error: false })}
+                  onChange={(e) => updateForm({ ...formData, pass: e.target.value })}
                   type="password"
                   title="password"
                   value={formData.pass}
@@ -98,7 +97,7 @@ export default ({ instanceNames }) => {
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             title="Instance Details"
             block
             className="mt-3"

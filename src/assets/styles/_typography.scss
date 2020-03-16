@@ -93,17 +93,17 @@ strong {
 }
 
 .text-small {
-  font-size: 80% !important;
+  font-size: $font-size-small;
   line-height: 1 !important;
 }
 
 .text-smaller {
-  font-size: 65% !important;
+  font-size: $font-size-smaller;
   line-height: 1 !important;
 }
 
 .text-smallest {
-  font-size: 50% !important;
+  font-size: $font-size-smallest;
   line-height: 1 !important;
 }
 

@@ -3,12 +3,11 @@ import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
-import defaultNewInstanceData from '../../../state/defaults/defaultNewInstanceData';
 
 export default ({ products, storage, regions, hasCard }) => {
   const history = useHistory();
-  const [newInstance, setNewInstance] = useNewInstance(defaultNewInstanceData);
-  const [formState, setFormState] = useState({ submitted: false, error: false });
+  const [newInstance, setNewInstance] = useNewInstance({});
+  const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({
     data_volume_size: newInstance.data_volume_size || storage[0].value,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
@@ -30,7 +29,7 @@ export default ({ products, storage, regions, hasCard }) => {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
         setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {
-        setFormState({ submitted: false, error: 'All fields must be filled out.' });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
@@ -94,7 +93,7 @@ export default ({ products, storage, regions, hasCard }) => {
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true, error: false })}
+            onClick={() => setFormState({ submitted: true })}
             title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             block
             className="mt-3"
