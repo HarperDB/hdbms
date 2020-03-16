@@ -21,24 +21,24 @@ export default ({ auth, refreshInstance, url }) => [{
     original: { instance_name, instance_host, instance_status, clusterPort, connection },
   }) => (
     instance_host === 'localhost' ? (
-      <div style={{ paddingTop: 6, paddingLeft: 10 }} className="text-purple text-bold">
-        <i className="fa fa-exclamation-triangle mr-2" />
-        unreachable domain
+      <div style={{ paddingTop: 6 }}>
+        <i className="fa text-danger fa-exclamation-triangle mr-2" />
+        unreachable domain: {instance_host}
       </div>
     ) : instance_status === 'CREATE_IN_PROGRESS' ? (
-      <div style={{ paddingTop: 6, paddingLeft: 10 }} className="text-purple text-bold">
-        <i className="fa fa-spin fa-spinner mr-2" />
+      <div style={{ paddingTop: 6 }} className="text-bold">
+        <i className="text-purple fa fa-spin fa-spinner mr-2" />
         creating instance
       </div>
     ) : connection ? (
       <div style={{ paddingRight: 10 }}>
-        <Button color="purple" className="connect" block onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+        <Button color="danger" className="connect" onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
           disconnect
         </Button>
       </div>
     ) : (
       <div style={{ paddingRight: 10 }}>
-        <Button color="purple" className="connect" block onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+        <Button color="success" className="connect" onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
           connect
         </Button>
       </div>
