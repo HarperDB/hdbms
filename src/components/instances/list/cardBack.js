@@ -21,7 +21,7 @@ export default ({ compute_stack_id, url, flipCard, flipState }) => {
         const response = await queryInstance({ operation: 'describe_all' }, { user, pass }, url);
 
         if (response.error) {
-          setFormState({ error: response.message.toString() });
+          setFormState({ error: response.message.toString().toLowerCase() });
         } else {
           updateForm({});
           setFormState({});
@@ -76,6 +76,11 @@ export default ({ compute_stack_id, url, flipCard, flipState }) => {
               </Button>
             </Col>
           </Row>
+          {formState.error && (
+            <div className="text-smaller pt-2 text-danger text-center">
+              {formState.error}
+            </div>
+          )}
         </CardBody>
       )}
     </Card>

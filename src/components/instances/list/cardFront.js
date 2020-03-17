@@ -20,14 +20,14 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
 
   useAsyncEffect(async () => {
     if (!instanceAuth) {
-      setInstanceStatus({ ...instanceStatus, instance: 'PLEASE LOG IN', instanceError: true });
+      setInstanceStatus({ ...instanceStatus, instance: 'OK', license: 'PLEASE LOG IN', clustering: 'PLEASE LOG IN' });
     } else if (status === 'CREATE_IN_PROGRESS') {
       setInstanceStatus({ ...instanceStatus, instance: status });
     } else {
       const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, compute, storage, license, compute_stack_id, stripe_product_id });
       setInstanceStatus({ ...instanceStatus, ...registrationResult });
     }
-  }, [status, license]);
+  }, [status, license, instanceAuth]);
 
   const handleClick = () => {
     if (instanceStatus.instance !== 'OK') return alert.error('Instance is not currently available.');
