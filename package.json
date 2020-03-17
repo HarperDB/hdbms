@@ -5,8 +5,9 @@
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
   "scripts": {
-    "build": "webpack --mode production --config webpack.prod.js",
-    "start": "webpack-dev-server --mode development --config webpack.dev.js",
+    "build:prod": "webpack --config webpack.prod.js",
+    "build:stage": "webpack --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "lint": "eslint --fix src && npx stylelint --fix \"**/*.scss\""
   },
   "author": "harperdb",
