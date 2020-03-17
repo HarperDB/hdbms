@@ -20,18 +20,4 @@ module.exports = merge(common, {
     disableHostCheck: true,
     inline: false,
   },
-  module: {
-    rules: [
-      {
-        test: /\.worker\.js$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            name: 'processCSV.worker.js',
-            publicPath: '/',
-          },
-        },
-      },
-    ],
-  },
 });

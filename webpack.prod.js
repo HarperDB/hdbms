@@ -8,18 +8,4 @@ module.exports = merge(common, {
   output: {
     publicPath: 'https://ds5zz9rfvzuta.cloudfront.net/',
   },
-  module: {
-    rules: [
-      {
-        test: /\.worker\.js$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            name: 'processCSV.worker.js',
-            publicPath: 'https://ds5zz9rfvzuta.cloudfront.net/',
-          },
-        },
-      },
-    ],
-  },
 });
