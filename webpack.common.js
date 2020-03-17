@@ -101,7 +101,10 @@ module.exports = {
         test: /\.worker\.js$/,
         use: {
           loader: 'worker-loader',
-          options: { name: 'processCSV.worker.js' },
+          options: {
+            name: 'processCSV.worker.js',
+            publicPath: '/',
+          },
         },
       },
     ],
