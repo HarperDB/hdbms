@@ -1,5 +1,6 @@
 import { loadStripe } from '@stripe/stripe-js';
+import config from '../../../config';
 
-const stripePromise = loadStripe('pk_test_QeKQj2ThQ4mqatyLsXCexOmB00he3FXx2P');
+const stripePromise = loadStripe(config.stripe_public_key);
 
 export default stripePromise;
