@@ -103,7 +103,6 @@ module.exports = {
           loader: 'worker-loader',
           options: {
             name: 'processCSV.worker.js',
-            inline: true,
           },
         },
       },
