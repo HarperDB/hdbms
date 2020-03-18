@@ -1,16 +1,29 @@
-import React from 'react';
-import { Col, Row, Button, Card, CardBody } from '@nio/ui-kit';
-
+import React, { useState } from 'react';
+import { Col, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
+import { useAlert } from 'react-alert';
+
+import config from '../../../../config';
 import useNewInstance from '../../../state/stores/newInstance';
 
 export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();
-  const [newInstance] = useNewInstance({});
+  const alert = useAlert();
+  const [newInstance, setNewInstance] = useNewInstance({});
+  const [tc_version, setTCVersion] = useState(false);
 
   let totalPrice = 0;
   if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
   if (storageProduct && storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
+
+  const confirmAndSubmit = async () => {
+    if (!tc_version) {
+      alert.error('You must agree to the HarperDB Terms of Use, End User License Agreement, and HarperDB Cloud Terms of Service.');
+    } else {
+      setNewInstance({ ...newInstance, tc_version });
+      setTimeout(() => history.push('/instances/new/status'), 0);
+    }
+  };
 
   return (
     <>
@@ -121,6 +134,20 @@ export default ({ computeProduct, storageProduct }) => {
 
         </CardBody>
       </Card>
+      <br />
+      <Row noGutters>
+        <Col xs="2">
+          <RadioCheckbox
+            type="radio"
+            onChange={(value) => setTCVersion(value)}
+            options={{ label: '', value: config.tc_version}}
+          />
+        </Col>
+        <Col xs="10" className="text-small">
+          I agree to the HarperDB <a href="https://harperdb.io/legal/terms-of-use/" target="_blank" rel="noopener noreferrer">Terms of Use</a>, <a href="https://harperdb.io/legal/end-user-license-agreement/" target="_blank" rel="noopener noreferrer">End User License Agreement</a>, and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+        </Col>
+      </Row>
+      <hr />
       <Row>
         <Col sm="6">
           <Button
@@ -136,7 +163,7 @@ export default ({ computeProduct, storageProduct }) => {
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => history.push('/instances/new/status')}
+            onClick={confirmAndSubmit}
             title="Confirm Instance Details"
             block
             className="mt-3"

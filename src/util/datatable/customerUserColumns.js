@@ -19,7 +19,7 @@ export default ({ current_user_id, setUserToRemove }) => [{
   Header: '',
   Cell: ({
     original: { user_id },
-  }) => current_user_id !== user_id && (<Button color="danger" className="connect" block onClick={() => setUserToRemove(user_id)}>delete</Button>),
+  }) => current_user_id !== user_id && (<Button color="danger" className="datatable" block onClick={() => setUserToRemove(user_id)}>delete</Button>),
   width: 80,
   style: toggleCellPadding,
 }];

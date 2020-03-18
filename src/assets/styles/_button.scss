@@ -21,7 +21,7 @@
     width: 25px !important;
   }
 
-  &.connect {
+  &.datatable {
     font-size: 11px;
     height: 24px !important;
     padding: 0 !important;
@@ -37,8 +37,8 @@
   }
 
   &.btn-grey {
-    background-color: $grey-overlay !important;
-    border-color: $grey-overlay !important;
+    background-color: $color-grey !important;
+    border-color: $color-grey !important;
     color: $color-white !important;
   }
 

@@ -9,6 +9,7 @@ import useInstanceAuth from '../../../state/stores/instanceAuths';
 import useNewInstance from '../../../state/stores/newInstance';
 
 import addInstance from '../../../api/lms/addInstance';
+import addTCAcceptance from '../../../api/lms/addTCAcceptance';
 
 export default ({ closeAndResetModal }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
@@ -21,6 +22,10 @@ export default ({ closeAndResetModal }) => {
     const newInstanceObject = { ...newInstance };
     delete newInstanceObject.user;
     delete newInstanceObject.pass;
+    delete newInstanceObject.tc_version;
+
+    const tcresponse = addTCAcceptance({ auth: lmsAuth, payload: { ...lmsAuth, tc_version: newInstance.tc_version } });
+    console.log(tcresponse);
 
     const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
 

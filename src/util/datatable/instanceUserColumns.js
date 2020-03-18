@@ -2,9 +2,9 @@ import React from 'react';
 import { Button } from '@nio/ui-kit';
 
 
-const toggleCellPadding = { paddingTop: 3, paddingBottom: 0, paddingLeft: 0, paddingRight: 2 };
+const buttonCellPadding = { paddingTop: 3, paddingBottom: 0, paddingLeft: 0, paddingRight: 10 };
 
-export default ({ deleteUser }) => [{
+export default ({ auth, setModal }) => [{
   Header: 'username',
   accessor: 'username',
   style: { paddingTop: 10 },
@@ -13,21 +13,36 @@ export default ({ deleteUser }) => [{
   accessor: 'role.role',
   style: { paddingTop: 10 },
 }, {
-  Header: 'cluster user',
-  accessor: 'role.permission.cluster_user',
-  style: { paddingTop: 10 },
-  Cell: ({ original: { role: { permission: { cluster_user } } } }) => (cluster_user ? 'yes' : 'no'),
-}, {
-  Header: 'super user',
-  accessor: 'role.permission.super_user',
-  style: { paddingTop: 10 },
-  Cell: ({ original: { role: { permission: { super_user } } } }) => (super_user ? 'yes' : 'no'),
+  Header: '',
+  Cell: ({
+    original: { username, role: { id, permission: { cluster_user, super_user } } },
+  }) => (
+    auth.user !== username && !cluster_user && !super_user ? (
+      <Button color="darkpurple" className="datatable" block onClick={() => setModal({ action: 'role', username, role: id })}>edit role</Button>
+    ) : null
+  ),
+  width: 90,
+  style: buttonCellPadding,
 }, {
   Header: '',
   Cell: ({
     original: { username },
   }) => (
-    <Button color="danger" className="connect" block onClick={() => deleteUser({ username })}>delete</Button>),
-  width: 80,
-  style: toggleCellPadding,
+    auth.user !== username ? (
+      <Button color="purple" className="datatable" block onClick={() => setModal({ action: 'password', username })}>edit password</Button>
+    ) : null
+  ),
+  width: 90,
+  style: buttonCellPadding,
+}, {
+  Header: '',
+  Cell: ({
+    original: { username },
+  }) => (
+    auth.user !== username ? (
+      <Button color="danger" className="datatable" block onClick={() => setModal({ action: 'delete', username })}>delete user</Button>
+    ) : null
+  ),
+  width: 90,
+  style: buttonCellPadding,
 }];

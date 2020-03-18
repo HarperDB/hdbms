@@ -14,7 +14,6 @@ export default () => {
     users: s.users,
     roles: s.roles,
   }));
-
   const alert = useAlert();
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({});
@@ -56,7 +55,7 @@ export default () => {
             className="mb-2 text-center"
             name="username"
             placeholder="username"
-            value={formData.username}
+            value={formData.username || ''}
             onChange={(e) => updateForm({ ...formData, username: e.target.value })}
           />
 
@@ -65,19 +64,21 @@ export default () => {
             className="mb-2 text-center"
             name="password"
             placeholder="password"
-            value={formData.password}
+            value={formData.password || ''}
             onChange={(e) => updateForm({ ...formData, password: e.target.value })}
           />
 
           <SelectDropdown
-            className="mb-4 select-dropdown"
+            classNamePrefix="react-select"
+            className="mb-4"
             onChange={({ value }) => updateForm({ ...formData, role: value })}
             options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
             value={roles && formData.role && roles.find((r) => r.value === formData.role)}
             isSearchable={false}
             isClearable={false}
             isLoading={!roles}
-            placeholder="Select A Role"
+            placeholder="select a role"
+            styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
           />
 
           <Button

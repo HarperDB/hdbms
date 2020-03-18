@@ -32,13 +32,13 @@ export default ({ auth, refreshInstance, url }) => [{
       </div>
     ) : connection ? (
       <div style={{ paddingRight: 10 }}>
-        <Button color="danger" className="connect" onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+        <Button color="danger" className="datatable" onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
           disconnect
         </Button>
       </div>
     ) : (
       <div style={{ paddingRight: 10 }}>
-        <Button color="success" className="connect" onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+        <Button color="success" className="datatable" onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
           connect
         </Button>
       </div>
