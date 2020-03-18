@@ -24,8 +24,7 @@ export default ({ closeAndResetModal }) => {
     delete newInstanceObject.pass;
     delete newInstanceObject.tc_version;
 
-    const tcresponse = addTCAcceptance({ auth: lmsAuth, payload: { ...lmsAuth, tc_version: newInstance.tc_version } });
-    console.log(tcresponse);
+    addTCAcceptance({ auth: lmsAuth, payload: { ...lmsAuth, tc_version: newInstance.tc_version } });
 
     const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
 

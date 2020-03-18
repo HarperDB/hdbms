@@ -18,11 +18,14 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
 
-    &.error {
-      input {
-        border-color: $color-danger !important;
-      }
+  &.error {
+    border-color: $color-danger !important;
+    box-shadow: none;
+
+    input {
+      border-color: $color-danger !important;
     }
   }
 

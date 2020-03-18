@@ -14,8 +14,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@nio/ui-kit": "^2.2.5",
-    "@stripe/react-stripe-js": "^1.0.3",
-    "@stripe/stripe-js": "^1.1.0",
+    "@stripe/react-stripe-js": "^1.1.0",
+    "@stripe/stripe-js": "^1.2.0",
     "font-awesome": "^4.7.0",
     "json-stringify-pretty-compact": "^2.0.0",
     "pullstate": "^1.11.0",

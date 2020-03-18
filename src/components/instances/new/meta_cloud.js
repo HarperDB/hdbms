@@ -108,10 +108,11 @@ export default ({ instanceNames }) => {
         </Col>
       </Row>
       {formState.error && (
-        <div className="text-danger text-small text-center">
-          <hr />
-          {formState.error}
-        </div>
+        <Card className="mt-3 error">
+          <CardBody className="text-danger text-small text-center">
+            {formState.error}
+          </CardBody>
+        </Card>
       )}
     </>
   );

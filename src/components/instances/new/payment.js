@@ -161,10 +161,11 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
                 </Col>
               </Row>
               {error && (
-                <div className="text-danger text-small text-center">
-                  <hr className="mt-2" />
-                  {error.message}
-                </div>
+                <Card className="mt-3 error">
+                  <CardBody className="text-danger text-small text-center">
+                    {error}
+                  </CardBody>
+                </Card>
               )}
             </>
           )}
