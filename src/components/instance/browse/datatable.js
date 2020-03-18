@@ -8,7 +8,7 @@ import { useStoreState } from 'pullstate';
 
 import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
-import defaultTableState from '../../../state/defaults/defaultTableState';
+import defaultTableState from '../../../state/defaultTableState';
 import instanceState from '../../../state/stores/instanceState';
 
 const dataRefreshInterval = 3000;

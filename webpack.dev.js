@@ -16,7 +16,7 @@ module.exports = merge(common, {
     port: 3000,
     historyApiFallback: true,
     filename: '[chunkhash].min.js',
-    https: true,
+    https: false,
     disableHostCheck: true,
     inline: false,
   },

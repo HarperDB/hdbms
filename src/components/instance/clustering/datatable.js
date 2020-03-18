@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactTable from 'react-table';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 
-import defaultTableState from '../../../state/defaults/defaultTableState';
+import defaultTableState from '../../../state/defaultTableState';
 import clusterConfigColumns from '../../../util/datatable/clusterConfigColumns';
 import instanceState from '../../../state/stores/instanceState';
 

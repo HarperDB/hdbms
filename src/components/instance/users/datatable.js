@@ -3,7 +3,7 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
 
-import defaultTableState from '../../../state/defaults/defaultTableState';
+import defaultTableState from '../../../state/defaultTableState';
 import dropUser from '../../../api/instance/dropUser';
 import instanceState from '../../../state/stores/instanceState';
 import instanceUserColumns from '../../../util/datatable/instanceUserColumns';
