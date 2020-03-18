@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Input, Button, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 
 import isEmail from '../../util/isEmail';
 import addCustomer from '../../api/lms/addCustomer';
 
 export default () => {
-  const alert = useAlert();
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({});
 
@@ -26,7 +24,6 @@ export default () => {
         if (response.result) {
           updateForm({});
           setFormState({ success: true });
-          alert.success(response.message);
         } else {
           setFormState({ error: response.message });
         }
