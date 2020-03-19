@@ -61,8 +61,6 @@ export default () => {
     }
   }, [persistedLMSAuth]);
 
-  console.log(formData);
-
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
