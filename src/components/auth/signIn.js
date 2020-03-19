@@ -64,7 +64,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              Signing In<br /><br />
+              signing in<br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>

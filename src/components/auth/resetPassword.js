@@ -44,7 +44,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              Resetting Password<br /><br />
+              resetting password<br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -54,8 +54,8 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              Success!<br /><br />
-              If that email exists in our system, we sent you a password reset email.
+              success!<br /><br />
+              if that email exists in our system, we sent you a password reset email.
             </CardBody>
           </Card>
           <div className="text-small text-white text-center">

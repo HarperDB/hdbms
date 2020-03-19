@@ -44,7 +44,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              Processing Request<br /><br />
+              processing request<br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -54,8 +54,8 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              Success!<br /><br />
-              Check your email. If you still don&apos;t see it, shoot us an email:<br /><br />
+              success!<br /><br />
+              check your email. if you still don&apos;t see it, shoot us an email:<br /><br />
               <a href="mailto:support@harperdb.io">support@harperdb.io</a>
             </CardBody>
           </Card>

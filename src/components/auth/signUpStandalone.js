@@ -39,15 +39,15 @@ export default () => {
     <div id="add-customer-background">
       {formState.processing ? (
         <div className="p-4 text-center fieldset-label">
-          <b>Creating Account</b><br /><br />
+          <b>creating account</b><br /><br />
           <i className="fa fa-lg fa-spinner fa-spin text-purple" /><br /><br />
-          The office dogs are typing furiously.
+          the office dogs are typing furiously.
         </div>
       ) : formState.success ? (
         <div className="p-4 text-center fieldset-label">
-          <b>Success!</b><br /><br />
+          <b>success!</b><br /><br />
           <i className="fa fa-lg fa-thumbs-up text-purple" /><br /><br />
-          Check your email for your username and password.
+          check your email for your username and password
         </div>
       ) : (
         <>

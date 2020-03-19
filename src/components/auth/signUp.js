@@ -44,7 +44,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              Creating Your Account<br /><br />
+              creating your account<br /><br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -55,8 +55,8 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <div className="text-center text-white">
-                Success!<br /><br />
-                Check your email for your username and password.
+                success!<br /><br />
+                check your email for your username and password.
               </div>
             </CardBody>
           </Card>
