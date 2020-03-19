@@ -22,13 +22,17 @@ export default () => {
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
-  const newComputePrice = computeProducts.find((p) => p.value === formData.stripe_plan_id);
-  if (newComputePrice.price !== 'FREE') totalPrice += parseFloat(newComputePrice.price);
+
+  if (computeProducts) {
+    const newComputePrice = computeProducts.find((p) => p.value === formData.stripe_plan_id);
+    if (newComputePrice.price !== 'FREE') totalPrice += parseFloat(newComputePrice.price);
+  }
 
   if (storageProducts) {
     const newStoragePrice = storageProducts.find((p) => p.value === formData.data_volume_size);
     if (newStoragePrice.price !== 'FREE') totalPrice += parseFloat(newStoragePrice.price);
   }
+
 
   const hasChanged = stripe_plan_id !== formData.stripe_plan_id || data_volume_size !== formData.data_volume_size;
 
@@ -43,7 +47,7 @@ export default () => {
     }
   }, [formState]);
 
-  return (
+  return computeProducts ? (
     <Card className="my-3">
       <CardBody>
         {/*
@@ -137,5 +141,7 @@ export default () => {
         )}
       </CardBody>
     </Card>
+  ) : (
+    <i className="fa fa-spinner fa-spin text-white" />
   );
 };
