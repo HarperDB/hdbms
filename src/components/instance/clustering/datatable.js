@@ -33,7 +33,7 @@ export default ({ instances, network, schema, table, auth, url }) => {
       <Row>
         <Col className="text-nowrap">
           <span className="text-white">
-            <span>{schema}&nbsp;&gt;&nbsp;{table}</span>
+            <span>manage clustering for {schema}&nbsp;&gt;&nbsp;{table}</span>
           </span>
         </Col>
         <Col className="text-right text-white">

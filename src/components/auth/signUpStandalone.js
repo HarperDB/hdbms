@@ -57,9 +57,9 @@ export default () => {
           <div className="fieldset full-height">
             <Input
               type="text"
-              className="mb-0 text-center"
+              className="mb-0"
               name="firstname"
-              value={formData.firstname}
+              value={formData.firstname || ''}
               onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
               disabled={formState.submitted}
             />
@@ -69,9 +69,9 @@ export default () => {
           <div className="fieldset full-height">
             <Input
               type="text"
-              className="mb-0 text-center"
+              className="mb-0"
               name="lastname"
-              value={formData.lastname}
+              value={formData.lastname || ''}
               onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
               disabled={formState.submitted}
             />
@@ -81,9 +81,9 @@ export default () => {
           <div className="fieldset full-height">
             <Input
               type="text"
-              className="mb-0 text-center"
+              className="mb-0"
               name="email"
-              value={formData.email}
+              value={formData.email || ''}
               onChange={(e) => updateForm({ ...formData, email: e.target.value })}
               disabled={formState.submitted}
             />
@@ -93,9 +93,9 @@ export default () => {
           <div className="fieldset full-height">
             <Input
               type="text"
-              className="mb-0 text-center"
+              className="mb-0"
               name="customer_name"
-              value={formData.customer_name}
+              value={formData.customer_name || ''}
               onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
               disabled={formState.submitted}
             />
@@ -107,9 +107,9 @@ export default () => {
               <Col xs="8">
                 <Input
                   type="text"
-                  className="mb-0 text-center"
+                  className="mb-0"
                   name="customer_name"
-                  value={formData.subdomain}
+                  value={formData.subdomain || ''}
                   onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
                   disabled={formState.submitted}
                 />
@@ -124,9 +124,9 @@ export default () => {
           <div className="fieldset full-height">
             <Input
               type="text"
-              className="mb-0 text-center"
+              className="mb-0"
               name="coupon_code"
-              value={formData.coupon_code}
+              value={formData.coupon_code || ''}
               onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
               disabled={formState.submitted}
             />

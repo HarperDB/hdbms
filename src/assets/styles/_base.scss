@@ -63,20 +63,48 @@ body {
       min-width: $min-width;
       padding: 5px 2rem;
       position: fixed;
-      text-align: center;
       top: 60px !important;
       transition: top 250ms;
       width: 100%;
       z-index: 98 !important;
 
+      &.instances{
+        .navbar-nav {
+          text-align: center;
+          justify-content: center;
+          max-width: 400px;
+        }
+      }
+
+      &.instance {
+        @media screen and (max-width: 767px) {
+          flex-wrap: wrap;
+        }
+
+        .navbar-nav {
+          &.instance-nav {
+            justify-content: flex-end!important;
+
+            @media screen and (max-width: 767px) {
+              justify-content: center !important;
+            }
+          }
+
+          @media screen and (max-width: 767px) {
+            text-align: center;
+            justify-content: center !important;
+            max-width: 400px;
+          }
+        }
+      }
+
       .navbar-nav {
-        justify-content: center;
         margin: 0 auto;
-        max-width: 400px;
         width: 100%;
 
         .nav-item {
           padding: 0 10px;
+          line-height: 1 !important;
 
           @media screen and (max-width: 991px) {
             font-size: 0.875rem;

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import TopNav from '../navs/topnav';
+import TopNav from '../topnav';
 import Loader from './loader';
 import appState from '../../state/stores/appState';
 import getProducts from '../../api/lms/getProducts';

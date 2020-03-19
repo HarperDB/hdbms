@@ -6,13 +6,14 @@ import appState from '../../state/stores/appState';
 import instanceState from '../../state/stores/instanceState';
 import useInstanceAuth from '../../state/stores/instanceAuths';
 
-import SubNav from '../navs/subnav';
+import SubNav from './subnav';
 import routes from './routes';
 import buildActiveInstanceObject from '../../util/instance/buildActiveInstanceObject';
 
 export default () => {
   const { compute_stack_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
+  const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const { instances, products, regions, licenses } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
@@ -41,7 +42,7 @@ export default () => {
 
   return (
     <>
-      <SubNav routes={routes} instanceId={compute_stack_id} />
+      <SubNav routes={routes} instanceName={instance_name} instanceId={compute_stack_id} />
       <Switch>
         {routes.map((route) => (
           <Route key={route.path} path={route.path} component={route.component} />

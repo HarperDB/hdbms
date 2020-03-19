@@ -60,7 +60,7 @@ export default () => {
           </Card>
           <Row className="text-small">
             <Col xs="6" className="text-nowrap">
-              <NavLink to="/sign-in" className="login-nav-link">Sign In</NavLink>
+              <NavLink to="/sign-in" className="login-nav-link">Go to Sign In</NavLink>
             </Col>
             <Col xs="6" className="text-nowrap text-right">
               <NavLink to="/resend-registration-email" className="login-nav-link">Resend Email</NavLink>
@@ -153,9 +153,14 @@ export default () => {
               {formState.error}&nbsp;
             </div>
           ) : (
-            <div className="text-small text-white text-center">
-              <NavLink to="/sign-in" className="login-nav-link">Already Have An Account? Sign In Instead.</NavLink>
-            </div>
+            <Row className="text-small">
+              <Col xs="6" className="text-nowrap">
+                <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+              </Col>
+              <Col xs="6" className="text-nowrap text-right">
+                <NavLink to="/reset-password" className="login-nav-link">Reset Password</NavLink>
+              </Col>
+            </Row>
           )}
         </>
       )}

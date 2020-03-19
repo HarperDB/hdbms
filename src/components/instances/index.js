@@ -8,7 +8,7 @@ import appState from '../../state/stores/appState';
 
 import InstanceCard from './list/instanceCard';
 import NewInstanceCard from './list/newInstanceCard';
-import SubNav from '../navs/subnav';
+import SubNav from './subnav';
 import NewInstanceModal from './new';
 
 import filterInstances from '../../util/instance/filterInstances';

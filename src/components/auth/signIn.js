@@ -107,8 +107,8 @@ export default () => {
             </div>
           ) : (
             <Row className="text-small">
-              <Col xs="6" className="text-nowrap text-center">
-                <NavLink to="/forgot-password" className="login-nav-link">Forgot Password</NavLink>
+              <Col xs="6" className="text-nowrap">
+                <NavLink to="/reset-password" className="login-nav-link">Reset Password</NavLink>
               </Col>
               <Col xs="6" className="text-nowrap text-right">
                 <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
