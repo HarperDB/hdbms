@@ -14,7 +14,7 @@ import Loader from '../shared/loader';
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const [instanceReady, setInstanceReady] = useState(false);
+  const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths] = useInstanceAuth({});
 
   const { instances, products, regions, licenses } = useStoreState(appState, (s) => ({
@@ -24,10 +24,10 @@ export default () => {
     instances: s.instances,
   }));
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     const cancelSub = instanceState.subscribe((s) => s.lastUpdate, async () => {
       if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions && licenses) {
-        setInstanceReady(false);
+        setLoadingInstance(true);
         const auth = instanceAuths[compute_stack_id];
         const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
         const license = licenses.find((l) => l.compute_stack_id === compute_stack_id);
@@ -35,10 +35,8 @@ export default () => {
         const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
         const computeProducts = thisInstance.is_local ? products.localCompute : products.cloudCompute;
         const storageProducts = thisInstance.is_local ? false : products.cloudStorage;
-
-        const newInstanceState = await buildActiveInstanceObject({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts });
-        instanceState.update((s) => { Object.entries(newInstanceState).map(([key, value]) => s[key] = value); });
-        setInstanceReady(true);
+        await buildActiveInstanceObject({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts });
+        setLoadingInstance(false);
       }
     });
     return () => cancelSub();
@@ -48,15 +46,15 @@ export default () => {
 
   return (
     <>
-      <SubNav routes={routes} instanceReady={instanceReady} />
-      {instanceReady ? (
+      <SubNav routes={routes} loadingInstance={loadingInstance} />
+      {loadingInstance ? (
+        <Loader message="loading instance" />
+      ) : (
         <Switch>
           {routes.map((route) => (
             <Route key={route.path} path={route.path} component={route.component} />
           ))}
         </Switch>
-      ) : (
-        <Loader message="loading instance" />
       )}
     </>
   );
