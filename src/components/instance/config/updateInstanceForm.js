@@ -46,6 +46,7 @@ export default () => {
   return (
     <Card className="my-3">
       <CardBody>
+        {/*
         <div className="fieldset-label">Instance Name</div>
         <div className="fieldset">
           <Input
@@ -55,6 +56,7 @@ export default () => {
             value={formData.instance_name}
           />
         </div>
+        */}
 
         {instance_region && (
           <>
