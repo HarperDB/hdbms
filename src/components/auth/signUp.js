@@ -18,16 +18,18 @@ export default () => {
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ error: 'All fields must be filled out' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (!isEmail(email)) {
         setFormState({ error: 'Please provide a valid email' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
         setFormState({ ...formState, processing: true });
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
-        if (response.result) {
-          updateForm({});
-          setFormState({ success: true });
-        } else {
+        if (response.result === false) {
           setFormState({ error: response.message });
+          setTimeout(() => updateForm({}), 1000);
+        } else {
+          setFormState({ success: true });
         }
       }
     }
@@ -46,7 +48,7 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : formState.success ? (
         <>
@@ -58,11 +60,11 @@ export default () => {
               </div>
             </CardBody>
           </Card>
-          <Row className="text-small">
-            <Col xs="6" className="text-nowrap">
+          <Row>
+            <Col xs="6">
               <NavLink to="/sign-in" className="login-nav-link">Sign In</NavLink>
             </Col>
-            <Col xs="6" className="text-nowrap text-right">
+            <Col xs="6" className="text-right">
               <NavLink to="/resend-registration-email" className="login-nav-link">Resend Email</NavLink>
             </Col>
           </Row>
@@ -149,11 +151,11 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small text-white text-center">
+            <div className="login-nav-link text-center">
               {formState.error}&nbsp;
             </div>
           ) : (
-            <div className="text-small text-white text-center">
+            <div className="text-center">
               <NavLink to="/sign-in" className="login-nav-link">Already Have An Account? Sign In Instead.</NavLink>
             </div>
           )}

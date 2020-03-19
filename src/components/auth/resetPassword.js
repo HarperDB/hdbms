@@ -18,15 +18,18 @@ export default () => {
 
       if (!isEmail(email)) {
         setFormState({ error: 'invalid email supplied' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (!email) {
         setFormState({ error: 'email is required' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ ...formState, processing: true });
+        setFormState({ processing: true });
         const response = await resetPassword({ payload: { email } });
         if (response.result === false) {
           setFormState({ error: response.message });
+          setTimeout(() => updateForm({}), 1000);
         } else {
-          setFormState({ success: response.message });
+          setFormState({ success: true });
         }
       }
     }
@@ -45,17 +48,19 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="text-small login-nav-link text-center">&nbsp;</div>
         </>
       ) : formState.success ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
               Success!<br /><br />
-              Check your email. We just sent you a new password.
+              If that email exists in our system, we sent you a password reset email.
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="text-small text-white text-center">
+            <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+          </div>
         </>
       ) : (
         <>
@@ -83,15 +88,15 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small text-white text-center">
+            <div className="text-small login-nav-link text-center">
               {formState.error}&nbsp;
             </div>
           ) : (
-            <Row className="text-small">
-              <Col xs="6" className="text-nowrap">
+            <Row>
+              <Col xs="6">
                 <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
               </Col>
-              <Col xs="6" className="text-nowrap text-right">
+              <Col xs="6" className="text-right">
                 <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
               </Col>
             </Row>

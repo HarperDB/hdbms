@@ -16,16 +16,18 @@ export default () => {
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
         setFormState({ error: 'All fields must be filled out' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (!isEmail(email)) {
         setFormState({ error: 'Please provide a valid email' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
         setFormState({ ...formState, processing: true });
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
-        if (response.result) {
-          updateForm({});
-          setFormState({ success: true });
-        } else {
+        if (response.result === false) {
           setFormState({ error: response.message });
+          setTimeout(() => updateForm({}), 1000);
+        } else {
+          setFormState({ success: true });
         }
       }
     }

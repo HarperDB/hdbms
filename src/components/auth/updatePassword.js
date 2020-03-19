@@ -25,15 +25,17 @@ export default () => {
 
       if (!password || !password2) {
         setFormState({ error: 'all fields are required' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (password !== password2) {
         setFormState({ error: 'passwords must match' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ ...formState, processing: true });
+        setFormState({ processing: true });
         const response = await updatePassword({ auth: lmsAuth, payload: { ...lmsAuth, password } });
         if (response.result === false) {
           setFormState({ error: response.message });
+          setTimeout(() => updateForm({}), 1000);
         } else {
-          setFormState({});
           appState.update((s) => { s.auth = { ...lmsAuth, pass: password }; });
           setPersistedLMSAuth({ ...lmsAuth, pass: password });
           history.push('/sign-in');
@@ -55,7 +57,7 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : (
         <>
@@ -95,11 +97,11 @@ export default () => {
               {formState.error}&nbsp;
             </div>
           ) : (
-            <Row className="text-small">
-              <Col xs="6" className="text-nowrap">
+            <Row>
+              <Col xs="6">
                 <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
               </Col>
-              <Col xs="6" className="text-nowrap text-right">
+              <Col xs="6" className="text-right">
                 <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
               </Col>
             </Row>

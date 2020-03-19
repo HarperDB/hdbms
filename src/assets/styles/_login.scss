@@ -26,7 +26,6 @@
     background: $faint-white-overlay !important;
     box-shadow: 0 0 4px $lighter-grey-overlay !important;
     min-height: 183px !important;
-    text-transform: lowercase;
 
     .card-body {
       align-content: center;
@@ -58,7 +57,9 @@
 
   .login-nav-link {
     color: $white-overlay !important;
+    font-size: $font-size-small;
     text-transform: lowercase;
+    white-space: nowrap;
 
     &:hover {
       color: $color-white !important;

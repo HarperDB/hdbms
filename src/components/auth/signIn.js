@@ -25,14 +25,18 @@ export default () => {
     if (submitted) {
       if (!isEmail(formData.email)) {
         setFormState({ error: 'invalid email supplied' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (!formData.email || !formData.pass) {
         setFormState({ error: 'all fields are required' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
+        setFormState({ processing: true });
         const response = await getUser({ auth: { email: formData.email, pass: formData.pass }, payload: { email: formData.email } });
         if (response.result === false) {
           setFormState({ error: 'Invalid Credentials' });
           appState.update((s) => { s.auth = false; });
           setPersistedLMSAuth({});
+          setTimeout(() => updateForm({}), 1000);
         } else {
           appState.update((s) => { s.auth = { ...response, email: formData.email, pass: formData.pass }; });
           setPersistedLMSAuth({ email: formData.email, pass: formData.pass });
@@ -56,7 +60,7 @@ export default () => {
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
-      {formState.submitted ? (
+      {formState.processing ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
@@ -64,7 +68,7 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : (
         <>
@@ -102,16 +106,16 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small text-white text-center">
+            <div className="login-nav-link text-center">
               {formState.error}
             </div>
           ) : (
-            <Row className="text-small">
-              <Col xs="6" className="text-nowrap">
-                <NavLink to="/reset-password" className="login-nav-link">Reset Password</NavLink>
-              </Col>
-              <Col xs="6" className="text-nowrap text-right">
+            <Row>
+              <Col xs="6">
                 <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
+              </Col>
+              <Col xs="6" className="text-right">
+                <NavLink to="/reset-password" className="login-nav-link">Reset Password</NavLink>
               </Col>
             </Row>
           )}

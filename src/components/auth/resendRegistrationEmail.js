@@ -18,13 +18,16 @@ export default () => {
 
       if (!isEmail(email)) {
         setFormState({ error: 'invalid email supplied' });
+        setTimeout(() => updateForm({}), 1000);
       } else if (!email) {
         setFormState({ error: 'email is required' });
+        setTimeout(() => updateForm({}), 1000);
       } else {
         setFormState({ ...formState, processing: true });
         const response = await resendRegistrationEmail({ payload: { email } });
         if (response.result === false) {
           setFormState({ error: response.message });
+          setTimeout(() => updateForm({}), 1000);
         } else {
           setFormState({ success: response.message });
         }
@@ -45,7 +48,7 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : formState.success ? (
         <>
@@ -56,7 +59,7 @@ export default () => {
               <a href="mailto:support@harperdb.io">support@harperdb.io</a>
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : (
         <>
@@ -84,11 +87,11 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small text-white text-center">
+            <div className="login-nav-link text-center">
               {formState.error}&nbsp;
             </div>
           ) : (
-            <div className="text-center text-small">
+            <div className="text-center">
               <NavLink to="/sign-in" className="login-nav-link">Go to Sign In</NavLink>
             </div>
           )}
