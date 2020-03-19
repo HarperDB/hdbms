@@ -23,23 +23,27 @@ export default () => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      if (!isEmail(formData.email)) {
-        setFormState({ error: 'invalid email supplied' });
-        setTimeout(() => updateForm({}), 1000);
-      } else if (!formData.email || !formData.pass) {
+      const { email, pass } = formData;
+      if (!email || !pass) {
         setFormState({ error: 'all fields are required' });
-        setTimeout(() => updateForm({}), 1000);
+        setTimeout(() => setFormState({}), 1000);
+      } else if (!isEmail(email)) {
+        setFormState({ error: 'invalid email' });
+        setTimeout(() => setFormState({}), 1000);
       } else {
         setFormState({ processing: true });
-        const response = await getUser({ auth: { email: formData.email, pass: formData.pass }, payload: { email: formData.email } });
+        const response = await getUser({ auth: { email, pass }, payload: { email } });
         if (response.result === false) {
           setFormState({ error: 'Invalid Credentials' });
           appState.update((s) => { s.auth = false; });
           setPersistedLMSAuth({});
-          setTimeout(() => updateForm({}), 1000);
+          setTimeout(() => {
+            setFormState({});
+            updateForm({});
+          }, 1000);
         } else {
-          appState.update((s) => { s.auth = { ...response, email: formData.email, pass: formData.pass }; });
-          setPersistedLMSAuth({ email: formData.email, pass: formData.pass });
+          appState.update((s) => { s.auth = { ...response, email, pass }; });
+          setPersistedLMSAuth({ email, pass });
           setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 1000);
         }
       }
@@ -50,12 +54,14 @@ export default () => {
 
   useAsyncEffect(() => {
     const { email, pass } = persistedLMSAuth;
-    const { submitted } = formState;
-    if (email && pass && !submitted) {
+    const { processing } = formState;
+    if (email && pass && !processing) {
       updateForm({ email, pass });
       setFormState({ submitted: true });
     }
   }, [persistedLMSAuth]);
+
+  console.log(formData);
 
   return (
     <div id="login-form">
@@ -106,7 +112,7 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="login-nav-link text-center">
+            <div className="login-nav-link error">
               {formState.error}
             </div>
           ) : (

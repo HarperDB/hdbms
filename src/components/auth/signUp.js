@@ -27,7 +27,10 @@ export default () => {
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result === false) {
           setFormState({ error: response.message });
-          setTimeout(() => updateForm({}), 1000);
+          setTimeout(() => {
+            setFormState({});
+            updateForm({});
+          }, 1000);
         } else {
           setFormState({ success: true });
         }
@@ -151,7 +154,7 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="login-nav-link text-center">
+            <div className="login-nav-link error">
               {formState.error}&nbsp;
             </div>
           ) : (

@@ -27,7 +27,10 @@ export default () => {
         const response = await resetPassword({ payload: { email } });
         if (response.result === false) {
           setFormState({ error: response.message });
-          setTimeout(() => updateForm({}), 1000);
+          setTimeout(() => {
+            setFormState({});
+            updateForm({});
+          }, 1000);
         } else {
           setFormState({ success: true });
         }
@@ -88,7 +91,7 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small login-nav-link text-center">
+            <div className="login-nav-link error">
               {formState.error}&nbsp;
             </div>
           ) : (

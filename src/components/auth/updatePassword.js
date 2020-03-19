@@ -34,7 +34,10 @@ export default () => {
         const response = await updatePassword({ auth: lmsAuth, payload: { ...lmsAuth, password } });
         if (response.result === false) {
           setFormState({ error: response.message });
-          setTimeout(() => updateForm({}), 1000);
+          setTimeout(() => {
+            setFormState({});
+            updateForm({});
+          }, 1000);
         } else {
           appState.update((s) => { s.auth = { ...lmsAuth, pass: password }; });
           setPersistedLMSAuth({ ...lmsAuth, pass: password });
@@ -93,7 +96,7 @@ export default () => {
             </CardBody>
           </Card>
           {formState.error ? (
-            <div className="text-small text-white text-center">
+            <div className="login-nav-link error">
               {formState.error}&nbsp;
             </div>
           ) : (

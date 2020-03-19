@@ -60,9 +60,17 @@
     font-size: $font-size-small;
     text-transform: lowercase;
     white-space: nowrap;
+    display: block;
+
 
     &:hover {
       color: $color-white !important;
+    }
+
+    &.error {
+      color: $color-danger !important;
+      text-align: center;
+      font-weight: 700 !important;
     }
   }
 }

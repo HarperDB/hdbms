@@ -25,7 +25,10 @@ export default () => {
         const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
         if (response.result === false) {
           setFormState({ error: response.message });
-          setTimeout(() => updateForm({}), 1000);
+          setTimeout(() => {
+            setFormState({});
+            updateForm({});
+          }, 1000);
         } else {
           setFormState({ success: true });
         }
