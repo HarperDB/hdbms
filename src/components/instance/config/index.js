@@ -12,8 +12,6 @@ export default () => {
   let tables = 0;
   schemas.map((schema) => { tables += Object.keys(thisInstance.structure[schema]).length; });
 
-  console.log(thisInstance);
-
   return (
     <Row id="config">
       <Col xl="3" lg="4" md="5" xs="12">
