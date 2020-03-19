@@ -39,9 +39,7 @@ export default () => {
   const hasCard = customerHasChargeableCard(customer);
 
   const closeAndResetModal = () => {
-    if (purchaseStep === 'status') {
-      alert.error('Please wait for this window to close automatically');
-    } else {
+    if (purchaseStep !== 'status') {
       setNewInstance({});
       setTimeout(() => history.push('/instances'), 100);
     }
@@ -56,9 +54,11 @@ export default () => {
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>
-      <ModalHeader toggle={closeAndResetModal}>
-        {steps[purchaseStep].label}
-      </ModalHeader>
+      {purchaseStep !== 'status' && (
+        <ModalHeader toggle={closeAndResetModal}>
+          {steps[purchaseStep].label}
+        </ModalHeader>
+      )}
       <ModalBody>
         {!products ? (
           <Loader />
