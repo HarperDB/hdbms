@@ -27,7 +27,6 @@ export default () => {
   useEffect(() => {
     const cancelSub = instanceState.subscribe((s) => s.lastUpdate, async () => {
       if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions && licenses) {
-        setLoadingInstance(true);
         const auth = instanceAuths[compute_stack_id];
         const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
         const license = licenses.find((l) => l.compute_stack_id === compute_stack_id);
@@ -42,7 +41,10 @@ export default () => {
     return () => cancelSub();
   }, []);
 
-  useEffect(() => instanceState.update((s) => { s.lastUpdate = Date.now(); }), [compute_stack_id]);
+  useEffect(() => {
+    setLoadingInstance(true);
+    instanceState.update((s) => { s.lastUpdate = Date.now(); });
+  }, [compute_stack_id]);
 
   return (
     <>

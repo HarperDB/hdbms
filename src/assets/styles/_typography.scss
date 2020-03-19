@@ -62,11 +62,11 @@ h6 {
 }
 
 a {
-  color: $color-purple;
+  color: $color-purple !important;
   text-decoration: none !important;
 
   &:hover {
-    color: $color-purple;
+    color: $color-darkpurple !important;
     text-decoration: none !important;
   }
 }

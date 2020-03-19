@@ -12,10 +12,6 @@ export default ({ auth, refreshInstance, url }) => [{
   accessor: 'instance_name',
   style: { paddingTop: 10 },
 }, {
-  Header: 'url',
-  accessor: 'instance_url',
-  style: { paddingTop: 10 },
-}, {
   Header: 'connection',
   Cell: ({
     original: { instance_name, instance_host, instance_status, clusterPort, connection },
