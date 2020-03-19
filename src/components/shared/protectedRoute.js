@@ -64,7 +64,7 @@ export default ({ component, path }) => {
       {instances ? (
         <Route path={path} component={component} />
       ) : (
-        <Loader />
+        <Loader message="loading instances" />
       )}
 
     </>

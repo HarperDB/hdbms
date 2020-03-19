@@ -65,8 +65,8 @@ export default () => {
           <DataTable activeTable={entities.activeTable} />
         ) : (
           <>
-            <span className="mb-2">&nbsp;</span>
-            <Card className="mb-3 mt-2 py-5">
+            <span className="text-white floating-card-header">&nbsp;</span>
+            <Card className="my-3 py-5">
               <CardBody>
                 <div className="text-center">Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}</div>
               </CardBody>

@@ -4,8 +4,6 @@ import listUsers from '../../api/instance/listUsers';
 import listRoles from '../../api/instance/listRoles';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-import instanceState from '../../state/stores/instanceState';
-
 import browseTableColumns from '../datatable/browseTableColumns';
 
 export default async ({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts }) => {
@@ -24,7 +22,5 @@ export default async ({ thisInstance, auth, license, compute, storage, computePr
   const structure = browseTableColumns(schema);
   const network = await getNetwork({ auth, url: thisInstance.url, users, roles, cluster_status });
 
-  const newInstanceState = { ...thisInstance, auth, users, roles, structure, network, license, compute, storage, computeProducts, storageProducts };
-
-  return instanceState.update((s) => { Object.entries(newInstanceState).map(([key, value]) => (value ? s[key] = value : null)); });
+  return { ...thisInstance, auth, users, roles, structure, network, license, compute, storage, computeProducts, storageProducts };
 };

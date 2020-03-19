@@ -63,7 +63,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
           <Col xs="9">{is_local ? 'USER INSTALLED' : 'HARPERDB CLOUD'}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">URL</Col>
-          <Col xs="9">{url}</Col>
+          <Col xs="9" className="overflow-hidden">{url}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">LICENSE</Col>
           <Col xs="9" className={`text-${instanceStatus.licenseError ? 'danger' : ''}`}>{instanceStatus.license.toUpperCase()}</Col>
