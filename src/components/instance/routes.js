@@ -9,5 +9,5 @@ export default [
   { component: Clustering, path: '/instance/:compute_stack_id/clustering/:schema?/:table?', link: 'clustering', icon: 'share-alt' },
   { component: Config, path: '/instance/:compute_stack_id/config', link: 'config', icon: 'wrench' },
   { component: Users, path: '/instance/:compute_stack_id/users', link: 'users', icon: 'users' },
-  { component: Roles, path: '/instance/:compute_stack_id/roles', link: 'roles', icon: 'check-square' },
+  { component: Roles, path: '/instance/:compute_stack_id/roles/:role_id?', link: 'roles', icon: 'check-square' },
 ];

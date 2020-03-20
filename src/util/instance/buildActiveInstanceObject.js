@@ -7,6 +7,7 @@ import clusterStatus from '../../api/instance/clusterStatus';
 import instanceState from '../../state/stores/instanceState';
 
 import browseTableColumns from '../datatable/browseTableColumns';
+import buildPermissionStructure from './buildPermissionStructure';
 
 export default async ({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts }) => {
   const schema = await describeAll({ auth, url: thisInstance.url });
@@ -22,9 +23,10 @@ export default async ({ thisInstance, auth, license, compute, storage, computePr
   }
 
   const structure = browseTableColumns(schema);
+  const permissions = buildPermissionStructure(schema);
   const network = await getNetwork({ auth, url: thisInstance.url, users, roles, cluster_status });
 
-  const newInstanceState = { ...thisInstance, auth, users, roles, structure, network, license, compute, storage, computeProducts, storageProducts };
+  const newInstanceState = { ...thisInstance, auth, users, roles, permissions, structure, network, license, compute, storage, computeProducts, storageProducts };
 
   await instanceState.update((s) => { Object.entries(newInstanceState).map(([key, value]) => s[key] = value); });
 

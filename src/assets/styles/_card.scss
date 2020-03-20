@@ -9,6 +9,12 @@
   box-shadow: 0 0 5px $dark-grey-overlay;
   color: $color-black;
 
+  .card-body {
+    &.full-height-card {
+      height: calc(100vh - 230px);
+    }
+  }
+
   &.instance {
     cursor: pointer;
     height: 170px;
