@@ -5,13 +5,17 @@ textarea,
   background: $light-white-overlay !important;
   border: 1px solid $color-lightgrey !important;
   border-radius: 4px !important;
-  box-shadow: none !important;
+  box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
   color: $color-black;
   font-family: $font-family-sans;
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   outline: none !important;
   transition: none;
+
+  &.form-control {
+    box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
+  }
 
   &::placeholder {
     color: $color-grey !important;

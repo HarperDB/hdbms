@@ -1,3 +1,5 @@
+import { fetch } from 'whatwg-fetch';
+
 export default async (operation, auth, url) => {
   console.log('Querying Instance API', operation.operation);
 

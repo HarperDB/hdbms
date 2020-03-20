@@ -6,9 +6,11 @@ import { Elements } from '@stripe/react-stripe-js';
 
 import './util/textDecoderPolyfill';
 import stripePromise from './util/stripe/stripePromise';
+
 import AlertTemplate from './components/shared/alert';
 import App from './components/app';
 import ComingSoon from './components/comingSoon';
+
 import './app.scss';
 
 render(

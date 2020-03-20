@@ -10,21 +10,32 @@ import clusterStatus from '../../api/instance/clusterStatus';
 
 export default async ({ auth, instanceAuth, url, is_local, instance_id, compute, storage, license, compute_stack_id, stripe_product_id }) => {
   try {
+    if (!instanceAuth) {
+      return {
+        instance: 'PLEASE LOG IN',
+        instanceError: true,
+      };
+    }
+
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
-    if (registration.error && is_local) {
+    if (registration.error && registration.message === 'Login failed' && !is_local) {
+      await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
+      registration = await registrationInfo({ auth: instanceAuth, url });
+    }
+
+    if (registration.error && registration.message === 'Login failed') {
       return {
-        instance: 'OK',
+        instance: 'LOGIN FAILED',
         instanceError: true,
-        license: 'UNABLE TO VALIDATE',
-        licenseError: true,
-        clustering: '',
       };
     }
 
     if (registration.error) {
-      await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
-      registration = await registrationInfo({ auth: instanceAuth, url });
+      return {
+        instance: 'UNABLE TO CONNECT',
+        instanceError: true,
+      };
     }
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url });

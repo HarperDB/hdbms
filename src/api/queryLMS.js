@@ -1,3 +1,5 @@
+import { fetch } from 'whatwg-fetch';
+
 import config from '../../config';
 
 export default async ({ endpoint, payload, auth }) => {

@@ -17,13 +17,16 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: 1 !important;
+
+      .text-smaller {
+
+        color: $light-grey-overlay;
+      }
     }
   }
 
   &.error {
-    border-color: $color-danger !important;
-    box-shadow: none;
-
     input {
       border-color: $color-danger !important;
     }
