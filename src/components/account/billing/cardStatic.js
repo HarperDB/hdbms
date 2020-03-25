@@ -10,19 +10,25 @@ import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 
 export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCode, cardLast4, cardExp }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const response = await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
-      if (response.result) {
-        setLastUpdate(Date.now());
-        alert.success(response.message);
-        setFormState({});
+      const hasPaidInstance = instances.find((i) => i.compute.price !== 'FREE' || (i.storage && i.storage.price !== 'FREE'));
+      if (hasPaidInstance) {
+        setFormState({ error: 'You may not remove your payment method if you have active, non-free instances' });
       } else {
-        setFormState({ error: response.message });
+        const response = await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
+        if (response.result) {
+          setLastUpdate(Date.now());
+          alert.success(response.message);
+          setFormState({});
+        } else {
+          setFormState({ error: response.message });
+        }
       }
     }
   }, [formState]);
@@ -34,7 +40,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           card number
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input">**** **** **** {cardLast4}</div>
+          <div className="fake-input no-shadow no-border">**** **** **** {cardLast4}</div>
         </Col>
       </Row>
       <hr />
@@ -43,7 +49,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           expiration
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input">{cardExp}</div>
+          <div className="fake-input no-shadow no-border">{cardExp}</div>
         </Col>
       </Row>
       <hr />
@@ -52,7 +58,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           cvcc
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input">***</div>
+          <div className="fake-input no-shadow no-border">***</div>
         </Col>
       </Row>
       <hr />
@@ -61,7 +67,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           billing postal code
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input">{cardPostalCode}</div>
+          <div className="fake-input no-shadow no-border">{cardPostalCode}</div>
         </Col>
       </Row>
       <hr />

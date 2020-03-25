@@ -57,10 +57,10 @@
 
   .login-nav-link {
     color: $white-overlay !important;
+    display: block;
     font-size: $font-size-small;
     text-transform: lowercase;
     white-space: nowrap;
-    display: block;
 
 
     &:hover {
@@ -69,8 +69,8 @@
 
     &.error {
       color: $color-danger !important;
+      font-weight: $font-weight-bold;
       text-align: center;
-      font-weight: 700 !important;
     }
   }
 }

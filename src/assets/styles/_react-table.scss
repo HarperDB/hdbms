@@ -7,7 +7,7 @@
   .rt-thead {
     &.-header {
       border-top: 1px solid $lighter-grey-overlay !important;
-      font-weight: 700;
+      font-weight: $font-weight-bold;
     }
 
     &.-filters {

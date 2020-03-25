@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import useAsyncEffect from 'use-async-effect';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 

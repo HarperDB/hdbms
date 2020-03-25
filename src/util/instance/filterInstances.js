@@ -1,4 +1,5 @@
 export default ({ filters, instances }) => {
+  if (!instances) return [];
   if (!filters.local && !filters.cloud) return [];
   if (filters.search === '' && filters.local && filters.cloud) return instances;
 

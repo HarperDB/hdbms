@@ -63,8 +63,8 @@ h6 {
 
 a {
   color: $color-purple !important;
-  text-decoration: none !important;
   cursor: pointer !important;
+  text-decoration: none !important;
 
   &:hover {
     color: $color-darkpurple !important;
@@ -127,14 +127,14 @@ strong {
 @font-face {
   font-family: 'Raleway';
   font-style: normal;
-  font-weight: 100;
-  src: url('/fonts/raleway-v14-latin-100.eot');
-  src: local('Raleway Light'), local('Raleway-Light'),
-    url('/fonts/raleway-v14-latin-100.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/raleway-v14-latin-100.woff2') format('woff2'),
-    url('/fonts/raleway-v14-latin-100.woff') format('woff'),
-    url('/fonts/raleway-v14-latin-100.ttf') format('truetype'),
-    url('/fonts/raleway-v14-latin-100.svg#Raleway') format('svg');
+  font-weight: 200;
+  src: url('/fonts/raleway-v14-latin-200.eot'); /* IE9 Compat Modes */
+  src: local('Raleway ExtraLight'), local('Raleway-ExtraLight'),
+    url('/fonts/raleway-v14-latin-200.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/raleway-v14-latin-200.woff2') format('woff2'),
+    url('/fonts/raleway-v14-latin-200.woff')  format('woff'),
+    url('/fonts/raleway-v14-latin-200.ttf') format('truetype'),
+    url('/fonts/raleway-v14-latin-200.svg#Raleway') format('svg'); /* Legacy iOS */
 }
 
 @font-face {

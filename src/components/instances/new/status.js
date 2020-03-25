@@ -3,7 +3,6 @@ import { Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
 
 import appState from '../../../state/stores/appState';
 
@@ -16,7 +15,6 @@ import addTCAcceptance from '../../../api/lms/addTCAcceptance';
 export default ({ closeAndResetModal }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
-  const history = useHistory();
   const [newInstance] = useNewInstance({});
   const [formState, setFormState] = useState({ error: false });
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -47,7 +45,7 @@ export default ({ closeAndResetModal }) => {
       <i className="fa fa-lg fa-exclamation-triangle text-danger mb-4" /><br />
       {formState.error || 'there was an error creating your instance'}<br />
       <hr className="mt-4" />
-      <Button onClick={() => history.push('/instances')}>Click Here To Try Again</Button>
+      <Button onClick={closeAndResetModal}>Click Here To Try Again</Button>
       <hr className="mb-4" />
       If the issue persists, please contact <a href="mailto:support@harperdb.io">support@harperdb.io</a>.
     </div>

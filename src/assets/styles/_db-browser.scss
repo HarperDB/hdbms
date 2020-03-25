@@ -6,10 +6,10 @@
 
     .item-row {
       border-bottom: 1px solid $light-grey-overlay;
+      cursor: pointer;
       height: 49px;
       padding-bottom: 6px;
       padding-top: 12px;
-      cursor: pointer;
 
       &.form {
         padding-bottom: 6px;

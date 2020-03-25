@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
-import { useHistory} from 'react-router';
+import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/stores/instanceState';

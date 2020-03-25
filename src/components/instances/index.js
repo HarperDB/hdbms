@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Row } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
@@ -16,15 +16,7 @@ import filterInstances from '../../util/instance/filterInstances';
 export default () => {
   const { action } = useParams();
   const [filters, setFilters] = useState({ search: '', local: true, cloud: true });
-  const [filteredInstances, setFilteredInstances] = useState([]);
   const instances = useStoreState(appState, (s) => s.instances);
-
-  useEffect(() => {
-    if (instances) {
-      const newFilteredInstances = filterInstances({ filters, instances });
-      setFilteredInstances(newFilteredInstances);
-    }
-  }, [filters, instances]);
 
   useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, 10000);
 
@@ -36,7 +28,7 @@ export default () => {
       />
       <Row>
         <NewInstanceCard />
-        {filteredInstances.map((i) => (<InstanceCard key={i.compute_stack_id} {...i} />))}
+        {filterInstances({ filters, instances }).map((i) => (<InstanceCard key={i.compute_stack_id} {...i} />))}
       </Row>
       {action === 'new' && (<NewInstanceModal />)}
     </div>

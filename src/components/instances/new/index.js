@@ -3,7 +3,6 @@ import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/stores/appState';
@@ -31,7 +30,6 @@ export default () => {
   }));
 
   const history = useHistory();
-  const alert = useAlert();
   const { purchaseStep } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
 

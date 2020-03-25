@@ -27,7 +27,7 @@ export default ({ routes = [], loadingInstance }) => {
       <Nav navbar className="instance-nav">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink className="text-capitalize" to={compute_stack_id ? `/instance/${compute_stack_id}/${route.link}` : `/account/${route.link}`}>
+            <NavLink className="text-capitalize" to={`/instance/${compute_stack_id}/${route.link}`}>
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
             </NavLink>

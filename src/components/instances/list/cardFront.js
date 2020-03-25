@@ -23,6 +23,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
 
   const handleCardClick = async () => {
     if (!instanceAuth) return flipCard();
+    if (!is_local && status !== 'CREATE_COMPLETE') return false;
     const result = await registrationInfo({ auth: instanceAuth, url });
     if (result.error) {
       setInstanceStatus({ ...instanceStatus, instance: 'UNABLE TO CONNECT', instanceError: true });
@@ -32,7 +33,24 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
   };
 
   useAsyncEffect(async () => {
+    if (status === 'CREATE_IN_PROGRESS') {
+      return false;
+    }
+
+    if (status === 'WAITING ON APIGATEWAY') {
+      setInstanceStatus({ ...instanceStatus, instance: status });
+      return false;
+    }
+
     const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, compute, storage, license, compute_stack_id, stripe_product_id });
+
+    console.log(registrationResult.instance, instanceStatus.instance);
+
+    if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['RESTARTING INSTANCE', 'WAITING ON APIGATEWAY'].includes(instanceStatus.instance)) {
+      console.log('caught it');
+      return false;
+    }
+
     if (['PLEASE LOG IN', 'LOGIN FAILED'].includes(registrationResult.instance)) {
       if (instanceAuth) {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
@@ -41,11 +59,13 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
         registrationResult.instance = 'LOGIN FAILED';
       }
     }
+
+
     return setInstanceStatus({ ...instanceStatus, ...registrationResult });
   }, [status, license, instanceAuth, lastUpdate]);
 
   useInterval(() => {
-    if (instanceStatus.instance === 'UNABLE TO CONNECT') {
+    if (['WAITING ON APIGATEWAY', 'UNABLE TO CONNECT'].includes(instanceStatus.instance)) {
       setLastUpdate(Date.now());
     }
   }, 5000);
@@ -59,7 +79,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
             <span className="text-smaller">{compute_stack_id.split('-')[3]}</span>
           </Col>
           <Col xs="2" className="text-right">
-            {['CREATE_IN_PROGRESS', 'LOADING'].includes(instanceStatus.instance) ? (
+            {['CREATING INSTANCE', 'LOADING', 'WAITING ON APIGATEWAY', 'RESTARTING INSTANCE'].includes(instanceStatus.instance) ? (
               <i title="Instance Is Being Created" className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title="Could not connect to instance" className="fa fa-exclamation-triangle text-danger" />
