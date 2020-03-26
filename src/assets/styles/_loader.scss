@@ -5,4 +5,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  .card {
+    background: $faint-white-overlay !important;
+    box-shadow: 0 0 4px $lighter-grey-overlay !important;
+    height: 183px !important;
+    width: 270px !important;
+
+    .card-body {
+      align-content: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
 }

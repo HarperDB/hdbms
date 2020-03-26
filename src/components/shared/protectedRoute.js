@@ -49,12 +49,10 @@ export default ({ component, path }) => {
   }, [lastUpdate]);
 
   useAsyncEffect(async () => {
-    if (auth && !fetching) {
-      if (products && regions && licenses) {
-        setFetching(true);
-        await getInstances({ auth, payload: { customer_id: auth?.customer_id }, entities: { products, regions, licenses } });
-        setFetching(false);
-      }
+    if (auth && !fetching && products && regions && licenses) {
+      setFetching(true);
+      await getInstances({ auth, payload: { customer_id: auth?.customer_id }, entities: { products, regions, licenses } });
+      setFetching(false);
     }
   }, [products, regions, licenses, lastUpdate]);
 

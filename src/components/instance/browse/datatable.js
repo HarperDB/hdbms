@@ -6,12 +6,13 @@ import useInterval from 'use-interval';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
+import config from '../../../../config';
+
 import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
 import defaultTableState from '../../../state/defaultTableState';
 import instanceState from '../../../state/stores/instanceState';
 
-const dataRefreshInterval = 3000;
 let tableChangeTimeout = false;
 
 export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
@@ -49,7 +50,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
     if (tableState.autoRefresh) {
       setTableState({ ...tableState, lastUpdate: Date.now() });
     }
-  }, dataRefreshInterval);
+  }, config.instance_refresh_rate);
 
   return (
     <>

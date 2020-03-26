@@ -14,9 +14,12 @@ export default () => {
   return (
     <Card className="my-3">
       <CardBody>
-
+        <div className="fieldset-label">Instance URL</div>
+        <div className="fieldset full-height">
+          {thisInstance.url}
+        </div>
         <Row>
-          <Col lg="6">
+          <Col xl="6">
             <div className="fieldset-label">Instance Name</div>
             <div className="fieldset full-height">
               {thisInstance.instance_name}
@@ -25,11 +28,6 @@ export default () => {
             <div className="fieldset-label">Creation Date</div>
             <div className="fieldset full-height">
               {new Date(thisInstance.creation_date).toLocaleString()}
-            </div>
-
-            <div className="fieldset-label">Instance URL</div>
-            <div className="fieldset full-height">
-              {thisInstance.url}
             </div>
 
             {thisInstance.instance_region && (
@@ -51,7 +49,7 @@ export default () => {
               {thisInstance.storage?.disk_space || 'NO STORAGE LIMIT'}
             </div>
           </Col>
-          <Col lg="6">
+          <Col xl="6">
             <div className="fieldset-label">Users</div>
             <div className="fieldset full-height">
               {thisInstance.users.length}

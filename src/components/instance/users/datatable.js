@@ -6,9 +6,9 @@ import { useStoreState } from 'pullstate';
 import defaultTableState from '../../../state/defaultTableState';
 import instanceState from '../../../state/stores/instanceState';
 import instanceUserColumns from '../../../util/datatable/instanceUserColumns';
-import ModalPassword from './modal_password';
-import ModalRole from './modal_role';
-import ModalDelete from './modal_delete';
+import ModalPassword from './modalPassword';
+import ModalRole from './modalRole';
+import ModalDelete from './modalDelete';
 
 export default () => {
   const [tableData, setTableData] = useState({ data: [], columns: [] });

@@ -1,3 +1,8 @@
 .react-select__menu {
   margin-top: 1px !important;
 }
+
+.react-select__control--is-focused {
+  border-color: $color-darkgrey !important;
+  box-shadow: none !important;
+}

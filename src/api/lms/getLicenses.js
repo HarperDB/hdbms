@@ -15,5 +15,5 @@ export default async ({ auth, payload: { customer_id } }) => {
     licenses = response.body;
   }
 
-  return appState.update((s) => { s.licenses = licenses; });
+  return appState.update((s) => { s.licenses = licenses.filter((l) => l.status === 'valid'); });
 };

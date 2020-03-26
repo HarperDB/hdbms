@@ -182,6 +182,7 @@ textarea {
 
   &.full-height {
     max-height: none;
+    overflow: visible;
   }
 
   &:last-child {

@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
 
-export default ({ products, storage, regions, hasCard }) => {
+export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -18,14 +18,17 @@ export default ({ products, storage, regions, hasCard }) => {
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
   const instanceType = selectedProduct?.instance_type;
-  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 0;
-  const needsCard = products && storage && !hasCard && computePrice && (computePrice !== 'FREE' || storagePrice !== 'FREE');
+  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 'FREE';
+  const isFree = computePrice === 'FREE' && storagePrice === 'FREE';
+  const needsCard = products && storage && !hasCard && !isFree;
 
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
-      if (stripe_plan_id && instance_region && data_volume_size) {
+      if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
+        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}` });
+      } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
         setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {

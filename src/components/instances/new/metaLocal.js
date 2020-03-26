@@ -7,7 +7,7 @@ import useNewInstance from '../../../state/stores/newInstance';
 
 import queryInstance from '../../../api/queryInstance';
 
-export default ({ instanceNames }) => {
+export default ({ instanceNames, instanceURLs }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -24,11 +24,14 @@ export default ({ instanceNames }) => {
     const { submitted } = formState;
     const { instance_name, user, pass, host, port, is_ssl } = formData;
     if (submitted) {
+      const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
+
       if (instanceNames.includes(instance_name)) {
         setFormState({ error: `An instance named "${instance_name}" already exists` });
+      } else if (instanceURLs.includes(url)) {
+        setFormState({ error: `An instance at "${url}" already exists` });
       } else if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
         try {
-          const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
           const response = await queryInstance({ operation: 'describe_all' }, formData, url);
           if (response.error) {
             setFormState({ error: 'The provided credentials cannot log into that instance.' });

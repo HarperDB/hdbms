@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Col, RadioCheckbox, Row } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, RadioCheckbox, Row, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -15,7 +15,7 @@ import instanceState from '../../../state/stores/instanceState';
 export default () => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
-  const { auth, url, compute_stack_id, instance_name, stripe_plan_id, data_volume_size, computeProducts, storageProducts, instance_region, storage, compute } = useStoreState(instanceState);
+  const { auth, url, compute_stack_id, instance_name, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, instance_region, storage, compute } = useStoreState(instanceState);
   const history = useHistory();
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({ instance_name, stripe_plan_id, data_volume_size });
@@ -33,7 +33,6 @@ export default () => {
     if (newStoragePrice.price !== 'FREE') totalPrice += parseFloat(newStoragePrice.price);
   }
 
-
   const hasChanged = stripe_plan_id !== formData.stripe_plan_id || data_volume_size !== formData.data_volume_size;
 
   useAsyncEffect(async () => {
@@ -47,74 +46,55 @@ export default () => {
     }
   }, [formState]);
 
-  return computeProducts ? (
+  return (
     <Card className="my-3">
       <CardBody>
-        {/*
-        <div className="fieldset-label">Instance Name</div>
-        <div className="fieldset">
-          <Input
-            onChange={(e) => updateForm({ ...formData, instance_name: e.target.value })}
-            type="text"
-            title="instance_name"
-            value={formData.instance_name}
+        <div className="mb-3">
+          <div className="fieldset-label">Instance RAM</div>
+          <SelectDropdown
+            classNamePrefix="react-select"
+            onChange={({ value }) => updateForm({ ...formData, stripe_plan_id: value })}
+            options={computeProducts}
+            value={computeProducts && computeProducts.find((p) => p.stripe_plan_id === formData.stripe_plan_id)}
+            defaultValue={compute}
+            isSearchable={false}
+            isClearable={false}
+            isLoading={!computeProducts}
+            placeholder="select a RAM allotment"
+            styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
           />
         </div>
-        */}
 
-        {instance_region && (
-          <>
-            <div className="fieldset-label">Instance Region (no modification)</div>
-            <div className="fieldset">
-              {instance_region}
-            </div>
-          </>
-        )}
-
-        {storageProducts && (
-          <>
-            <div className="fieldset-label">Storage Size</div>
-            <div className="fieldset full-height">
-              <RadioCheckbox
-                id="data_volume_size"
-                className="radio-button"
-                type="radio"
-                onChange={(value) => updateForm({ ...formData, data_volume_size: value })}
-                options={storageProducts}
-                value={formData.data_volume_size}
-                defaultValue={storage}
-              />
-            </div>
-          </>
-        )}
-
-        <div className="fieldset-label">Instance Type</div>
-        <div className="fieldset full-height">
-          {computeProducts && (
-            <RadioCheckbox
-              id="stripe_plan_id"
-              className="radio-button"
-              type="radio"
-              onChange={(value) => updateForm({ ...formData, stripe_plan_id: value })}
-              options={computeProducts}
-              value={formData.stripe_plan_id}
-              defaultValue={compute}
+        {!is_local && (
+          <div className="mb-3">
+            <div className="fieldset-label">Instance Storage</div>
+            <SelectDropdown
+              classNamePrefix="react-select"
+              onChange={({ value }) => updateForm({ ...formData, data_volume_size: value })}
+              options={storageProducts}
+              value={storageProducts && storageProducts.find((p) => p.data_volume_size === formData.data_volume_size)}
+              defaultValue={storage}
+              isSearchable={false}
+              isClearable={false}
+              isLoading={!storageProducts}
+              placeholder="Select Data Volume Size"
+              styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
-          )}
-        </div>
+          </div>
+        )}
 
-        <hr className="mb-4" />
+        <hr />
 
         <Row>
-          <Col xs="5" className="text-nowrap">
+          <Col xs="5" className="text-nowrap text-small">
             <b>{!hasChanged ? 'Current' : 'New'} Price</b>
           </Col>
-          <Col xs="7" className="text-right text-nowrap">
+          <Col xs="7" className="text-right text-nowrap text-small">
             <b>${totalPrice.toFixed(2)}/{compute.interval}</b>
           </Col>
         </Row>
 
-        <hr className="mt-4" />
+        <hr />
 
         {hasChanged && totalPrice && !hasCard ? (
           <Button
@@ -141,7 +121,5 @@ export default () => {
         )}
       </CardBody>
     </Card>
-  ) : (
-    <i className="fa fa-spinner fa-spin text-white" />
   );
 };

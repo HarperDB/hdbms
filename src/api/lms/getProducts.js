@@ -4,6 +4,7 @@ import appState from '../../state/stores/appState';
 const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
   ram: instance_ram,
+  ram_allocation: (parseInt(instance_ram.replace('GB', ''), 10) * 1024),
   instance_type,
   interval,
   label: `${instance_ram} RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
@@ -16,6 +17,7 @@ const buildRadioSelectStorageOptions = (size, { tiers, interval }) => {
   return {
     price: pricingTier.unit_amount ? (size * (pricingTier.unit_amount / 100)).toFixed(2) : 'FREE',
     disk_space: size === 1000 ? '1TB' : `${size}GB`,
+    disk_space_raw: size,
     interval,
     label: `${size === 1000 ? '1TB' : `${size}GB`} Disk Space | ${pricingTier.unit_amount ? `$${price}/${interval}` : 'FREE'}`,
     value: size,

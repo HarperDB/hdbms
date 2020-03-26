@@ -1,14 +1,14 @@
 import registrationInfo from '../../api/instance/registrationInfo';
 import getFingerprint from '../../api/instance/getFingerprint';
-import addLicense from '../../api/lms/addLicense';
-import setLicense from '../../api/instance/setLicense';
-import removeLicense from '../../api/lms/removeLicense';
 import restartInstance from '../../api/instance/restartInstance';
+import setLicense from '../../api/instance/setLicense';
+
+import createLicense from '../../api/lms/createLicense';
 
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute, storage, license, compute_stack_id, stripe_product_id }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id }) => {
   try {
     if (!instanceAuth) {
       return {
@@ -40,35 +40,37 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute,
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
+    const lms_license_matches_instance_registration = license && parseInt(registration.ram_allocation, 10) === parseInt(license.ram_allocation, 10);
 
-    if (registration.registered) {
+    if (registration.registered && license && lms_license_matches_instance_registration) {
       return {
         instance: 'OK',
         instanceError: false,
-        license: `${compute.ram} RAM / ${storage ? `${storage.disk_space} Storage` : 'NO STORAGE LIMIT'}`,
-        licenseError: false,
         clustering,
       };
     }
 
     const fingerprint = await getFingerprint({ auth: instanceAuth, url });
 
-    if (!license) {
-      license = await addLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, stripe_product_id, fingerprint } });
+    if (!license || !lms_license_matches_instance_registration) {
+      const response = await createLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, fingerprint } });
+
+      if (response.result === false) {
+        return {
+          instance: 'ERROR CREATING LICENSE',
+          instanceError: true,
+          clustering,
+        };
+      }
+      license = response;
     }
 
-    let apply = await setLicense({ auth: instanceAuth, key: license.license, company: license.company.toString(), url });
-
-    if (apply.error && apply.message === 'There was an error parsing the license key.') {
-      await removeLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, record_id: license.record_id } });
-      license = await addLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, stripe_product_id, fingerprint } });
-      apply = await setLicense({ auth: instanceAuth, key: license.license, company: license.company.toString(), url });
-    }
+    const apply = await setLicense({ auth: instanceAuth, key: license.key, company: license.company.toString(), url });
 
     if (apply.error) {
       return {
-        license: apply.message,
-        licenseError: true,
+        instance: apply.message,
+        instanceError: true,
         clustering,
       };
     }
@@ -76,8 +78,8 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute,
     restartInstance({ auth: instanceAuth, url });
 
     return {
-      instance: 'RESTARTING INSTANCE',
-      instanceError: true,
+      instance: 'APPLYING LICENSE',
+      instanceError: false,
       clustering,
     };
   } catch (e) {

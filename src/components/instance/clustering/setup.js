@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
+import useInterval from 'use-interval';
 
-import Role from './setup_role';
-import User from './setup_user';
-import Port from './setup_port';
-import Enable from './setup_enable';
+import config from '../../../../config';
+import instanceState from '../../../state/stores/instanceState';
+
+import Role from './setupRole';
+import User from './setupUser';
+import Port from './setupPort';
+import Enable from './setupEnable';
+import Loader from '../../shared/loader';
 
 export default ({ network }) => {
-  const [port, setPort] = useState(false);
+  const [port, setPort] = useState(12345);
+  const [tryRefresh, setTryRefresh] = useState(false);
 
-  return (
+  useInterval(() => {
+    if (tryRefresh) {
+      instanceState.update((s) => { s.lastUpdate = Date.now(); });
+    }
+  }, config.instance_refresh_rate);
+
+  return tryRefresh ? (
+    <Loader message="configuring clustering" />
+  ) : (
     <Row id="clustering">
       <Col xl="3" lg="4" md="5" xs="12">
         <span className="text-white mb-2 floating-card-header">clustering</span>
@@ -35,7 +49,7 @@ export default ({ network }) => {
               <Port port={port} setPort={setPort} />
             )}
             {port && (
-              <Enable port={port} />
+              <Enable port={port} setTryRefresh={setTryRefresh} />
             )}
           </CardBody>
         </Card>

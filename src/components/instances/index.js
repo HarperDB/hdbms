@@ -4,6 +4,7 @@ import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
+import config from '../../../config';
 import appState from '../../state/stores/appState';
 
 import InstanceCard from './list/instanceCard';
@@ -18,7 +19,7 @@ export default () => {
   const [filters, setFilters] = useState({ search: '', local: true, cloud: true });
   const instances = useStoreState(appState, (s) => s.instances);
 
-  useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, 10000);
+  useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, config.instances_refresh_rate);
 
   return (
     <div id="instances">

@@ -24,11 +24,26 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
 
-      .text-smaller {
+    .instance-icon {
+      position: relative;
 
-        color: $light-grey-overlay;
+      i {
+        position: absolute;
+        right: 15px;
+        top: -2px;
       }
+    }
+
+    .instance-url {
+      font-size: $font-size-smaller;
+      overflow: hidden;
+      overflow-x: auto;
+      white-space: nowrap;
+      height: 20px;
+      margin: 5px 0 10px;
+
     }
   }
 

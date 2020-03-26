@@ -21,5 +21,5 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
     }));
   }
 
-  return appState.update((s) => { s.instances = instances; });
+  return appState.update((s) => { s.instances = instances.filter((i) => !['DELETE_COMPLETE', 'DELETE_IN_PROGRESS'].includes(i.status)).sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1)); });
 };

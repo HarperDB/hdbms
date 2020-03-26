@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
 
-export default ({ products, hasCard }) => {
+export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceLimit }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -12,13 +12,16 @@ export default ({ products, hasCard }) => {
 
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
-  const needsCard = products && !hasCard && computePrice && (computePrice !== 'FREE');
+  const isFree = computePrice === 'FREE';
+  const needsCard = products && !hasCard && !isFree;
 
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id } = formData;
     if (submitted) {
-      if (stripe_plan_id) {
+      if (isFree && freeLocalInstanceLimit && !canAddFreeLocalInstance) {
+        setFormState({ error: `You are limited to ${freeLocalInstanceLimit} free local instance${freeLocalInstanceLimit !== 1 ? 's' : ''}` });
+      } else if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
         setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {
