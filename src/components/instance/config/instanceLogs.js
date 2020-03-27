@@ -20,7 +20,7 @@ export default () => {
   useAsyncEffect(async () => {
     if (auth && url) {
       const { file } = await readLog({ auth, url });
-      setLogs(file);
+      setLogs(file.filter((l) => l.message !== 'ERROR on HDB Client socket: SocketProtocolError: Client connection establishment timed out'));
     }
   }, [lastUpdate, auth, url]);
 
