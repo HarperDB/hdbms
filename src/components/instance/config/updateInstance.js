@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Col, RadioCheckbox, Row, SelectDropdown } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Row, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/stores/appState';
+import instanceState from '../../../state/stores/instanceState';
 
 import updateInstance from '../../../api/lms/updateInstance';
 import updateLicense from '../../../api/lms/updateLicense';
 import setLicense from '../../../api/instance/setLicense';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
-import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const customer = useStoreState(appState, (s) => s.customer);
-  const { auth, url, compute_stack_id, instance_name, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, instance_region, storage, compute } = useStoreState(instanceState);
+  const { lmsAuth, customer } = useStoreState(appState, (s) => ({
+    lmsAuth: s.auth,
+    customer: s.customer,
+  }));
+  const { auth, url, compute_stack_id, instance_name, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, storage, compute } = useStoreState(instanceState, (s) => ({
+    auth: s.auth,
+    url: s.url,
+    compute_stack_id: s.compute_stack_id,
+    instance_name: s.instance_name,
+    is_local: s.is_local,
+    stripe_plan_id: s.stripe_plan_id,
+    data_volume_size: s.data_volume_size,
+    computeProducts: s.computeProducts,
+    storageProducts: s.storageProducts,
+    storage: s.storage,
+    compute: s.compute,
+  }));
   const history = useHistory();
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({ instance_name, stripe_plan_id, data_volume_size });

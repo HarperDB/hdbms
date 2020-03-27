@@ -74,7 +74,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
     return setInstanceStatus({ ...instanceStatus, ...registrationResult });
   };
 
-  useAsyncEffect(() => processInstanceCard(), [status, license, instanceAuth.user, instanceAuth.pass, lastUpdate]);
+  useAsyncEffect(() => processInstanceCard(), [status, license, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => { if (['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'].includes(instanceStatus.instance)) setLastUpdate(Date.now()); }, config.instance_refresh_rate);
 

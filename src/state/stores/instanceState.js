@@ -18,7 +18,9 @@ const instanceState = new Store({
   roles: false,
   license: false,
   compute: false,
+  computeProducts: false,
   storage: false,
+  storageProducts: false,
   error: false,
   lastUpdate: false,
 });

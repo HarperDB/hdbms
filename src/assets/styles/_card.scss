@@ -38,11 +38,11 @@
 
     .instance-url {
       font-size: $font-size-smaller;
+      height: 20px;
+      margin: 5px 0 10px;
       overflow: hidden;
       overflow-x: auto;
       white-space: nowrap;
-      height: 20px;
-      margin: 5px 0 10px;
 
     }
   }
