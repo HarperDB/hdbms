@@ -1,78 +1,59 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
 import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const thisInstance = useStoreState(instanceState);
 
-  const schemas = Object.keys(thisInstance.structure);
-  let tables = 0;
-  schemas.map((schema) => { tables += Object.keys(thisInstance.structure[schema]).length; });
-
   return (
-    <Card className="my-3">
+    <Card className="my-3 instance-details">
       <CardBody>
-        <div className="fieldset-label">Instance URL</div>
-        <div className="fieldset full-height">
-          {thisInstance.url}
-        </div>
         <Row>
-          <Col xl="6">
-            <div className="fieldset-label">Instance Name</div>
-            <div className="fieldset full-height">
+          <Col xs="12" className="mb-3">
+            <div className="fieldset-label">Instance URL</div>
+            <hr className="my-1" />
+            <div className="instance-url">{thisInstance.url}</div>
+          </Col>
+          <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+            <div className="fieldset-label">Name</div>
+            <div className="fieldset">
               {thisInstance.instance_name}
             </div>
-
-            <div className="fieldset-label">Creation Date</div>
-            <div className="fieldset full-height">
-              {new Date(thisInstance.creation_date).toLocaleString()}
-            </div>
-
-            {thisInstance.instance_region && (
-              <>
-                <div className="fieldset-label">Instance Region</div>
-                <div className="fieldset full-height">
-                  {thisInstance.instance_region}
-                </div>
-              </>
-            )}
-
-            <div className="fieldset-label">Instance RAM</div>
-            <div className="fieldset full-height">
-              {thisInstance.compute.ram}
-            </div>
-
-            <div className="fieldset-label">Instance Storage</div>
-            <div className="fieldset full-height">
-              {thisInstance.storage?.disk_space || 'NO STORAGE LIMIT'}
+          </Col>
+          <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+            <div className="fieldset-label">Created</div>
+            <div className="fieldset">
+              {new Date(thisInstance.creation_date).toLocaleDateString()}
             </div>
           </Col>
-          <Col xl="6">
-            <div className="fieldset-label">Users</div>
-            <div className="fieldset full-height">
-              {thisInstance.users.length}
+          {thisInstance.instance_region && (
+            <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+              <div className="fieldset-label">Region</div>
+              <div className="fieldset">
+                {thisInstance.instance_region}
+              </div>
+            </Col>
+          )}
+          <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+            <div className="fieldset-label">RAM</div>
+            <div className="fieldset">
+              {thisInstance.compute.ram}
             </div>
-
-            <div className="fieldset-label">Roles</div>
-            <div className="fieldset full-height">
-              {thisInstance.roles.length}
-            </div>
-
-            <div className="fieldset-label">Schemas</div>
-            <div className="fieldset full-height">
-              {schemas.length}
-            </div>
-
-            <div className="fieldset-label">Tables</div>
-            <div className="fieldset full-height">
-              {tables}
-            </div>
-
-            <div className="fieldset-label">Cluster Partners</div>
-            <div className="fieldset full-height">
-              {thisInstance.network.is_enabled ? thisInstance.network.outbound_connections.length : 'Clustering Is Not Enabled'}
+          </Col>
+          {!thisInstance.is_local && (
+            <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+              <div className="fieldset-label">Storage</div>
+              <div className="fieldset">
+                {thisInstance.storage?.disk_space}
+              </div>
+            </Col>
+          )}
+          <Col xl="2" lg="4" md="2" sm="4" xs="6" className="mb-3">
+            <div className="fieldset-label">Cluster</div>
+            <div className="fieldset">
+              {thisInstance.network.is_enabled ? 'On' : 'Off'}
             </div>
           </Col>
         </Row>

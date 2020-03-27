@@ -12,6 +12,7 @@ import removeInstance from '../../../api/lms/removeInstance';
 import UpdateInstance from './updateInstance';
 import RemoveInstance from './removeInstance';
 import InstanceDetails from './instanceDetails';
+import InstanceLogs from './instanceLogs';
 import Loader from '../../shared/loader';
 
 export default () => {
@@ -39,17 +40,25 @@ export default () => {
     <Loader message="Removing Instance" />
   ) : (
     <Row id="config">
-      <Col xl="3" lg="4" md="5" xs="12">
-        <span className="text-white mb-2 floating-card-header">resize instance</span>
-        <UpdateInstance />
-        <br />
-        <span className="text-white mb-2 floating-card-header">remove instance</span>
-        <RemoveInstance setRemovingInstance={setRemovingInstance} />
-        <br />
+      <Col lg="6" xs="12">
+        <Row>
+          <Col xs="12">
+            <span className="text-white mb-2 floating-card-header">instance overview</span>
+            <InstanceDetails />
+          </Col>
+          <Col xl="6" lg="12" md="6" xs="12">
+            <span className="text-white mb-2 floating-card-header">resize instance</span>
+            <UpdateInstance />
+          </Col>
+          <Col xl="6" lg="12" md="6" xs="12">
+            <span className="text-white mb-2 floating-card-header">remove instance</span>
+            <RemoveInstance setRemovingInstance={setRemovingInstance} />
+          </Col>
+        </Row>
       </Col>
-      <Col xl="9" lg="8" md="7" xs="12">
-        <span className="text-white mb-2 floating-card-header">instance details</span>
-        <InstanceDetails />
+      <Col lg="6" xs="12">
+        <span className="text-white mb-2 floating-card-header">instance logs</span>
+        <InstanceLogs />
       </Col>
     </Row>
   );
