@@ -113,6 +113,7 @@ export default () => {
               />
             )}
           </Card>
+          <hr />
           {status === 'validating' ? (
             <Button block color="black" onClick={handleCancel}>Return to Table View (Validate in Background)</Button>
           ) : (

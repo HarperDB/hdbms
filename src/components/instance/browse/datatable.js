@@ -30,8 +30,8 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
       clearTimeout(tableChangeTimeout);
       tableChangeTimeout = setTimeout(async () => {
         setTableState({ ...tableState, loading: true });
-        const newData = await getTableData({ schema, table, tableState, auth, url });
-        setTableState({ ...tableState, tableData: newData.tableData, totalPages: newData.totalPages, totalRecords: newData.totalRecords, loading: false });
+        const { tableData, totalPages, totalRecords } = await getTableData({ schema, table, tableState, auth, url });
+        setTableState({ ...tableState, tableData: tableData.error ? [] : tableData, totalPages, totalRecords, loading: false });
       }, 500);
     },
     () => {
@@ -44,7 +44,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
     if (table) {
       setTableState({ ...tableState, filtered: [], sorted: [{ id: hashAttribute, desc: false }], page: 0 });
     }
-  }, [table]);
+  }, [hashAttribute]);
 
   useInterval(() => {
     if (tableState.autoRefresh) {
