@@ -7,14 +7,36 @@ import updateNode from '../../api/instance/updateNode';
 
 const toggleCellPadding = { paddingTop: 3, paddingBottom: 0, paddingLeft: 0, paddingRight: 2 };
 
-export default ({ auth, refreshInstance, url }) => [{
+export default ({ auth, refreshInstance, url, registerInstance }) => [{
   Header: 'name',
   accessor: 'instance_name',
   style: { paddingTop: 10 },
 }, {
+  Header: 'studio-registered',
+  Cell: ({
+    original: { registered, instance_name, instance_host, clusterPort },
+  }) => (
+    registered ? (
+      <div className="pl-2">
+        <i className="fa fa-2x fa-check-circle text-success" />
+      </div>
+    ) : (
+      <div style={{ paddingRight: 10 }}>
+        <Button color="purple" className="datatable mr-2" onClick={registerInstance}>
+          register
+        </Button>
+        <Button color="danger" className="datatable" onClick={() => removeNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
+          remove
+        </Button>
+      </div>
+    )
+  ),
+  width: 200,
+  style: toggleCellPadding,
+}, {
   Header: 'connection',
   Cell: ({
-    original: { instance_name, instance_host, instance_status, clusterPort, connection },
+    original: { registered, instance_name, instance_host, instance_status, clusterPort, connection },
   }) => (
     instance_host === 'localhost' ? (
       <div style={{ paddingTop: 6 }}>
@@ -32,13 +54,13 @@ export default ({ auth, refreshInstance, url }) => [{
           disconnect
         </Button>
       </div>
-    ) : (
+    ) : registered ? (
       <div style={{ paddingRight: 10 }}>
         <Button color="success" className="datatable" onClick={() => addNode({ instance_name, instance_host, clusterPort, auth, url, refreshInstance })}>
           connect
         </Button>
       </div>
-    )
+    ) : null
   ),
   width: 100,
   style: toggleCellPadding,

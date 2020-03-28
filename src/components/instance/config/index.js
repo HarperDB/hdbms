@@ -40,24 +40,14 @@ export default () => {
     <Loader message="Removing Instance" />
   ) : (
     <Row id="config">
-      <Col lg="6" xs="12">
-        <Row>
-          <Col xs="12">
-            <span className="text-white mb-2 floating-card-header">instance overview</span>
-            <InstanceDetails />
-          </Col>
-          <Col xl="6" lg="12" md="6" xs="12">
-            <span className="text-white mb-2 floating-card-header">resize instance</span>
-            <UpdateInstance />
-          </Col>
-          <Col xl="6" lg="12" md="6" xs="12">
-            <span className="text-white mb-2 floating-card-header">remove instance</span>
-            <RemoveInstance setRemovingInstance={setRemovingInstance} />
-          </Col>
-        </Row>
+      <Col xs="12">
+        <InstanceDetails />
       </Col>
-      <Col lg="6" xs="12">
-        <span className="text-white mb-2 floating-card-header">instance logs</span>
+      <Col lg="4" xs="12">
+        <UpdateInstance />
+        <RemoveInstance setRemovingInstance={setRemovingInstance} />
+      </Col>
+      <Col lg="8" xs="12">
         <InstanceLogs />
       </Col>
     </Row>

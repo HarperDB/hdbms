@@ -24,7 +24,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
 
   const handleCardClick = async () => {
     if (!instanceAuth) return flipCard();
-    if (!is_local && status !== 'CREATE_COMPLETE') return false;
+    if (instanceStatus.instance !== 'OK') return false;
     const result = await registrationInfo({ auth: instanceAuth, url });
     if (result.error) {
       setInstanceStatus({ ...instanceStatus, instance: 'UNABLE TO CONNECT', instanceError: true });

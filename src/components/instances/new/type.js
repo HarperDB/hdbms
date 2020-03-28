@@ -31,7 +31,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
         <Col xs="12" lg="6" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">Add HarperDB Cloud Instance</div>
+              <div className="text-bold text-center">Create HarperDB Cloud Instance</div>
               <hr />
               <ul>
                 <li>Free License Tier Available!</li>
@@ -43,18 +43,18 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 <li>Scale On Demand</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: false })}>Add Cloud Instance</Button>
+              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: false })}>Create HarperDB Cloud Instance</Button>
             </CardBody>
           </Card>
         </Col>
         <Col xs="12" lg="6" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">Register A Local Instance</div>
+              <div className="text-bold text-center">Register User-Installed Instance</div>
               <hr />
               <ul>
                 <li>Free License Tier Available!</li>
-                <li>For HarperDB Instances You Install</li>
+                <li><a href="https://harperdb.io/developers/get-started/" target="_blank" rel="noopener noreferrer">Click Here To Install HarperDB Yourself</a></li>
                 <li>Browse Instance Data</li>
                 <li>Configure Users, Roles, and Clustering</li>
                 <li>Manage Instance Licenses</li>
@@ -62,7 +62,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 <li>Instance Credentials Stay Local</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: true })}>Register Local Instance</Button>
+              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: true })}>Register User-Installed Instance</Button>
             </CardBody>
           </Card>
         </Col>

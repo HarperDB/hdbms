@@ -3,16 +3,16 @@ export default {
     label: 'Select Instance Type',
   },
   meta_local: {
-    label: 'Local Instance Info',
+    label: 'Instance Info',
   },
   meta_cloud: {
-    label: 'Cloud Instance Info',
+    label: 'Instance Info',
   },
   details_local: {
-    label: 'Local Instance Specs',
+    label: 'Instance Specs',
   },
   details_cloud: {
-    label: 'Cloud Instance Specs',
+    label: 'Instance Specs',
   },
   payment: {
     label: 'Payment Details',

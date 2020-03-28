@@ -8,6 +8,8 @@ import { useStoreState } from 'pullstate';
 import appState from '../../../state/stores/appState';
 import useNewInstance from '../../../state/stores/newInstance';
 
+import config from '../../../../config';
+
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 import steps from '../../../util/instance/addInstanceSteps';
 
@@ -19,8 +21,6 @@ import CloudInstanceForm from './detailsCloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
-
-import config from '../../../../config';
 
 export default () => {
   const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount } = useStoreState(appState, (s) => {
@@ -42,7 +42,7 @@ export default () => {
   });
 
   const history = useHistory();
-  const { purchaseStep } = useParams();
+  const { purchaseStep = 'type' } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
 
   const isLocal = newInstance.is_local;
@@ -66,7 +66,7 @@ export default () => {
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>
       {purchaseStep !== 'status' && (
         <ModalHeader toggle={closeAndResetModal}>
-          {steps[purchaseStep].label}
+          {steps[purchaseStep]?.label}
         </ModalHeader>
       )}
       <ModalBody>
