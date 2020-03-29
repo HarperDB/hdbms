@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/stores/instanceState';
 
-import EntityManager from './entityManager';
+import EntityManager from './roleManager';
 import JSONViewer from './jsonviewer';
 
 const defaultState = { roleName: false, canEdit: false, editJSON: true, superUsers: [], clusterUsers: [], standardUsers: [] };

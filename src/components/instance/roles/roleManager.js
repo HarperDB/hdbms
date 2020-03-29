@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody } from '@nio/ui-kit';
 
-import EntityManagerForm from './entityManagerForm';
-import EntityManagerRow from './entityManagerRow';
-import EntityManagerHeader from './entityManagerHeader';
+import EntityManagerForm from './roleManagerForm';
+import EntityManagerRow from './roleManagerRow';
+import EntityManagerHeader from './roleManagerHeader';
 
 export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
   const [isDropping, toggleDropItem] = useState(false);
