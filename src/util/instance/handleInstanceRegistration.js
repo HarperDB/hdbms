@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute, instance_name }) => {
   try {
     if (!instanceAuth) {
       return {
@@ -40,9 +40,9 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, license,
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
-    const lms_license_matches_instance_registration = license && parseInt(registration.ram_allocation, 10) === parseInt(license.ram_allocation, 10);
+    const license_match = [registration.ram_allocation, license.ram_allocation, compute.ram_allocation].every((val, i, arr) => val === arr[0]);
 
-    if (registration.registered && license && lms_license_matches_instance_registration) {
+    if (registration.registered && license && license_match) {
       return {
         instance: 'OK',
         instanceError: false,
@@ -52,7 +52,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, license,
 
     const fingerprint = await getFingerprint({ auth: instanceAuth, url });
 
-    if (!license || !lms_license_matches_instance_registration) {
+    if (!license || !license_match) {
       const response = await createLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, fingerprint } });
 
       if (response.result === false) {

@@ -19,7 +19,13 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
-  const [instanceStatus, setInstanceStatus] = useState({ instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : 'LOADING', instanceError: false, clustering: '' });
+  const [instanceStatus, setInstanceStatus] = useState({
+    instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE'
+      : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE'
+        : 'LOADING',
+    instanceError: false,
+    clustering: '',
+  });
   const [lastUpdate, setLastUpdate] = useState(false);
 
   const handleCardClick = async () => {
@@ -34,7 +40,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
   };
 
   const processInstanceCard = async () => {
-    if (status === 'CREATE_IN_PROGRESS') {
+    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
       return false;
     }
 
@@ -56,7 +62,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
       return false;
     }
 
-    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id });
+    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute, instance_name });
 
     if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance)) {
       return false;
@@ -84,7 +90,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
         <Row>
           <Col xs="10" className="instance-name">{instance_name}</Col>
           <Col xs="2" className="instance-icon">
-            {['CREATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(instanceStatus.instance) ? (
+            {['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(instanceStatus.instance) ? (
               <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
@@ -95,19 +101,19 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
             )}
           </Col>
         </Row>
-        <div className="instance-url">{['PLEASE LOG IN', 'LOGIN FAILED', 'OK'].includes(instanceStatus.instance) ? url : ''}</div>
+        <div className="instance-url">{['PLEASE LOG IN', 'LOGIN FAILED', 'UPDATING INSTANCE', 'OK'].includes(instanceStatus.instance) ? url : ''}</div>
         <Row className="text-smaller text-nowrap text-darkgrey">
           <Col xs="3">STATUS</Col>
-          <Col xs="9" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>{instanceStatus.instance?.replace(/_/g, ' ').toUpperCase()}</Col>
+          <Col xs="9" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>{instanceStatus.instance?.toUpperCase()}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">TYPE</Col>
           <Col xs="9">{is_local ? 'USER INSTALLED' : 'HARPERDB CLOUD'}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">RAM</Col>
-          <Col xs="9">{compute?.ram}</Col>
+          <Col xs="9">{!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) && compute?.ram}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">STORAGE</Col>
-          <Col xs="9">{storage?.disk_space || 'NO LIMIT'}</Col>
+          <Col xs="9">{!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) && (storage?.disk_space || 'NO LIMIT')}</Col>
           <Col xs="12"><hr className="my-1" /></Col>
           <Col xs="3">CLUSTERING</Col>
           <Col xs="9">{instanceStatus.clustering.toUpperCase()}</Col>

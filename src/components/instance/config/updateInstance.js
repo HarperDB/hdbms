@@ -7,19 +7,14 @@ import { useStoreState } from 'pullstate';
 import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
 
-import updateInstance from '../../../api/lms/updateInstance';
-import createLicense from '../../../api/lms/createLicense';
-import setLicense from '../../../api/instance/setLicense';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 
-export default () => {
+export default ({ setUpdatingInstance }) => {
   const { lmsAuth, customer } = useStoreState(appState, (s) => ({
     lmsAuth: s.auth,
     customer: s.customer,
   }));
-  const { auth, url, compute_stack_id, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, storage, compute } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
+  const { compute_stack_id, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, storage, compute } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     instance_name: s.instance_name,
     is_local: s.is_local,
@@ -32,7 +27,7 @@ export default () => {
   }));
   const history = useHistory();
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({ compute_stack_id, stripe_plan_id, data_volume_size, customer_id: customer.customer_id });
+  const [formData, updateForm] = useState({ compute_stack_id, customer_id: customer.customer_id, stripe_plan_id, data_volume_size });
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
@@ -52,16 +47,10 @@ export default () => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const payload = Object.entries(formData).reduce((a, [k, v]) => (v ? { ...a, [k]: v } : a), {});
-      console.log(payload);
-      const instanceResult = await updateInstance({ auth: lmsAuth, payload });
-      console.log(instanceResult);
-      return false;
-
-      const { key, company } = await createLicense({ auth: lmsAuth, payload: formData });
-      await setLicense({ auth, key, company, url });
-      setFormState({ submitted: false });
-      instanceState.update((s) => { s.lastUpdate = Date.now(); });
+      const payload = { compute_stack_id, customer_id: customer.customer_id, ...formData };
+      if (formData.stripe_plan_id === stripe_plan_id) delete payload.stripe_plan_id;
+      if (formData.data_volume_size === data_volume_size) delete payload.data_volume_size;
+      setUpdatingInstance(payload);
     }
   }, [formState]);
 
@@ -71,12 +60,12 @@ export default () => {
       <Card className="my-3">
         <CardBody>
           <div className="mb-3">
-            <div className="fieldset-label">Instance RAM</div>
+            <div className="fieldset-label">Instance RAM {stripe_plan_id}</div>
             <SelectDropdown
               classNamePrefix="react-select"
               onChange={({ value }) => updateForm({ ...formData, stripe_plan_id: value })}
               options={computeProducts}
-              value={computeProducts && computeProducts.find((p) => p.stripe_plan_id === formData.stripe_plan_id)}
+              value={computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id)}
               defaultValue={compute}
               isSearchable={false}
               isClearable={false}
@@ -88,12 +77,12 @@ export default () => {
 
           {!is_local && (
             <div className="mb-3">
-              <div className="fieldset-label">Instance Storage</div>
+              <div className="fieldset-label">Instance Storage {data_volume_size}</div>
               <SelectDropdown
                 classNamePrefix="react-select"
                 onChange={({ value }) => updateForm({ ...formData, data_volume_size: value })}
                 options={storageProducts}
-                value={storageProducts && storageProducts.find((p) => p.data_volume_size === formData.data_volume_size)}
+                value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
                 defaultValue={storage}
                 isSearchable={false}
                 isClearable={false}
@@ -122,7 +111,7 @@ export default () => {
               onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
               title="Confirm Instance Details"
               block
-              disabled={!hasChanged}
+              disabled={!hasChanged || formState.submitted}
               className="mt-3"
               color="danger"
             >
@@ -133,7 +122,7 @@ export default () => {
               onClick={() => setFormState({ submitted: true })}
               title="Confirm Instance Details"
               block
-              disabled={!hasChanged}
+              disabled={!hasChanged || formState.submitted}
               className="mt-3"
               color="purple"
             >
