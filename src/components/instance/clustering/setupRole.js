@@ -13,19 +13,15 @@ export default () => {
   }));
 
   return cluster_role ? (
-    <Row className="config-row">
-      <Col xs="12" md="3" className="text">Cluster Role</Col>
-      <Col xs="12" md="6" className="text">{cluster_role}</Col>
-      <Col xs="12" md="3" className="text text-right">
+    <Row>
+      <Col xs="10" className="text">Cluster Role</Col>
+      <Col xs="2" className="text text-right">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>
   ) : (
-    <Row className="config-row">
-      <Col xs="12" md="9" className="text">Create a Cluster Role</Col>
-      <Col xs="12" md="3" className="text-right">
-        <Button color="success" block onClick={() => createClusterUserRole({ auth, url })}>Create Cluster Role</Button>
-      </Col>
-    </Row>
+    <>
+      <Button color="success" block onClick={() => createClusterUserRole({ auth, url })}>Create Cluster Role</Button>
+    </>
   );
 };

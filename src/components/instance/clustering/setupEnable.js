@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row, Col, Button } from '@nio/ui-kit';
+import { Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
 import configureCluster from '../../../api/instance/configureCluster';
 import instanceState from '../../../state/stores/instanceState';
 
-export default ({ port, setTryRefresh }) => {
+export default ({ port, setSubmitted, submitted }) => {
   const { auth, url, instance_name, cluster_user } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
     url: s.url,
@@ -14,16 +14,16 @@ export default ({ port, setTryRefresh }) => {
   }));
 
   return (
-    <Row className="config-row">
-      <Col>
-        <Button
-          color="success"
-          block
-          onClick={() => { configureCluster({ instance_name, cluster_user, port, auth, url }); setTryRefresh(true); }}
-        >
-          Enable Instance Clustering
-        </Button>
-      </Col>
-    </Row>
+    <>
+      <hr />
+      <Button
+        color="success"
+        block
+        onClick={() => { configureCluster({ instance_name, cluster_user, port, auth, url }); setSubmitted(true); }}
+        disabled={submitted}
+      >
+        Enable Instance Clustering
+      </Button>
+    </>
   );
 };

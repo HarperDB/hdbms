@@ -3,7 +3,7 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
 
-import defaultTableState from '../../../state/defaultTableState';
+import defaultTableState from '../../../util/datatable/defaultTableState';
 import instanceState from '../../../state/stores/instanceState';
 import instanceUserColumns from '../../../util/datatable/instanceUserColumns';
 import ModalPassword from './modalPassword';
@@ -49,12 +49,10 @@ export default () => {
           <ReactTable
             data={tableData.data}
             columns={tableData.columns}
-            pages={tableState.pages}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             sorted={tableState.sorted}
-            onPageChange={(value) => setTableState({ ...tableState, page: value })}
             page={tableState.page}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}

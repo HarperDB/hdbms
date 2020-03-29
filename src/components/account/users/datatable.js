@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/stores/appState';
-import defaultTableState from '../../../state/defaultTableState';
+import defaultTableState from '../../../util/datatable/defaultTableState';
 
 import customerUserColumns from '../../../util/datatable/customerUserColumns';
 import getUsers from '../../../api/lms/getUsers';

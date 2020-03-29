@@ -17,6 +17,10 @@ textarea,
     box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
   }
 
+  &.error {
+    border-color: $color-danger !important;
+  }
+
   &.no-border {
     border: 0 !important;
   }

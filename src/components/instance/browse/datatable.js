@@ -10,7 +10,7 @@ import config from '../../../../config';
 
 import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
-import defaultTableState from '../../../state/defaultTableState';
+import defaultTableState from '../../../util/datatable/defaultTableState';
 import instanceState from '../../../state/stores/instanceState';
 
 let tableChangeTimeout = false;
