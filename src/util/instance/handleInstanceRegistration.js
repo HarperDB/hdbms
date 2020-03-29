@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute, instance_name }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute }) => {
   try {
     if (!instanceAuth) {
       return {

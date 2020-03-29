@@ -10,10 +10,7 @@ import instanceState from '../../../state/stores/instanceState';
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 
 export default ({ setUpdatingInstance }) => {
-  const { lmsAuth, customer } = useStoreState(appState, (s) => ({
-    lmsAuth: s.auth,
-    customer: s.customer,
-  }));
+  const customer = useStoreState(appState, (s) => s.customer);
   const { compute_stack_id, is_local, stripe_plan_id, data_volume_size, computeProducts, storageProducts, storage, compute } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     instance_name: s.instance_name,

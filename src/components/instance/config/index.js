@@ -15,7 +15,6 @@ import RemoveInstance from './removeInstance';
 import InstanceDetails from './instanceDetails';
 import InstanceLogs from './instanceLogs';
 import Loader from '../../shared/loader';
-import getFingerprint from '../../../api/instance/getFingerprint';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);

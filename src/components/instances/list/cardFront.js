@@ -62,7 +62,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
       return false;
     }
 
-    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute, instance_name });
+    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute });
 
     if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance)) {
       return false;
