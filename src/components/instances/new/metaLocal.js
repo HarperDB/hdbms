@@ -53,8 +53,8 @@ export default ({ instanceNames, instanceURLs }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name">
-            <Row className="mb-4">
+          <ContentContainer header="Instance Name" className="mb-4">
+            <Row>
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;edge-1&quot;
               </Col>
@@ -69,7 +69,7 @@ export default ({ instanceNames, instanceURLs }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Admin Credentials">
+          <ContentContainer header="Admin Credentials" className="mb-4">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
