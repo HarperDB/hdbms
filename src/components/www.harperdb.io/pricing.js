@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { useStoreState } from 'pullstate';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 
 import getProducts from '../../api/lms/getProducts';
 import appState from '../../state/stores/appState';
@@ -32,7 +32,7 @@ export default () => {
         </Col>
       </Row>
       <hr className="my-2" />
-      {products && products.cloudCompute.map((p, i) => (
+      {products ? products.cloudCompute.map((p, i) => (
         <Fragment key={i}>
           <Row>
             <Col xs="4" className="px-4 text-nowrap">
@@ -47,7 +47,12 @@ export default () => {
           </Row>
           <hr className="my-2" />
         </Fragment>
-      ))}
+      )) : (
+        <div className="p-4 text-center text-small">
+          <i className="fa fa-spinner fa-spin text-purple mb-4" /><br />
+          The office dogs are fetching the price sheet.
+        </div>
+      )}
     </div>
   );
 };
