@@ -163,7 +163,6 @@ export default ({ computeProduct, storageProduct }) => {
             block
             className="mt-3"
             color="purple"
-            outline
           >
             <i className="fa fa-chevron-circle-left mr-2" />Instance Details
           </Button>

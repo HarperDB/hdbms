@@ -3,27 +3,30 @@
 @import '~react-table/react-table';
 
 // core styles
-@import './assets/styles/vars';
-@import './assets/styles/base';
-@import './assets/styles/typography';
+@import 'assets/styles/core/vars';
+@import 'assets/styles/core/base';
+@import 'assets/styles/core/global';
+@import 'assets/styles/core/typography';
+@import 'assets/styles/core/font-awesome';
 
-// global styles
-@import './assets/styles/global';
-@import './assets/styles/forms';
-@import './assets/styles/alert';
-@import './assets/styles/card';
-@import './assets/styles/button';
-@import './assets/styles/code';
+// page styles
+@import 'assets/styles/pages/instances';
+@import 'assets/styles/components/subnav';
+@import 'assets/styles/pages/login';
+@import 'assets/styles/pages/config';
 
 // component styles
-@import './assets/styles/db-browser';
-@import './assets/styles/react-table';
-@import './assets/styles/login';
-@import './assets/styles/csv-input';
-@import './assets/styles/react-select';
-@import './assets/styles/modal';
-@import './assets/styles/loader';
-@import './assets/styles/config';
+@import 'assets/styles/components/entity-manager';
+@import 'assets/styles/components/react-table';
+@import 'assets/styles/components/csv-uploader';
+@import 'assets/styles/components/react-select';
+@import 'assets/styles/components/modal';
+@import 'assets/styles/components/loader';
+@import 'assets/styles/components/alert';
+@import 'assets/styles/components/card';
+@import 'assets/styles/components/button';
+@import 'assets/styles/components/content-container';
+@import 'assets/styles/components/forms';
 
-@import '~font-awesome/scss/font-awesome';
+
 

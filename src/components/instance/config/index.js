@@ -10,14 +10,17 @@ import appState from '../../../state/stores/appState';
 import removeInstance from '../../../api/lms/removeInstance';
 import updateInstance from '../../../api/lms/updateInstance';
 
-import UpdateInstance from './updateInstance';
+import UpdateDiskVolume from './updateDiskVolume';
+import UpdateRAM from './updateRAM';
 import RemoveInstance from './removeInstance';
 import InstanceDetails from './instanceDetails';
 import InstanceLogs from './instanceLogs';
 import Loader from '../../shared/loader';
+import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [updatingInstance, setUpdatingInstance] = useState(false);
   const [removingInstance, setRemovingInstance] = useState(false);
   const history = useHistory();
@@ -63,7 +66,10 @@ export default () => {
         <InstanceDetails />
       </Col>
       <Col lg="4" xs="12">
-        <UpdateInstance setUpdatingInstance={setUpdatingInstance} />
+        <UpdateRAM setUpdatingInstance={setUpdatingInstance} />
+        {!is_local && (
+          <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} />
+        )}
         <RemoveInstance setRemovingInstance={setRemovingInstance} />
       </Col>
       <Col lg="8" xs="12">

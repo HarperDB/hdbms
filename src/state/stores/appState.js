@@ -6,7 +6,6 @@ const appState = new Store({
   users: false,
   products: false,
   regions: false,
-  licenses: false,
   instances: false,
   lastUpdate: false,
 });

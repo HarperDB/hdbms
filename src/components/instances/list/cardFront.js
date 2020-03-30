@@ -13,7 +13,7 @@ import useInstanceAuth from '../../../state/stores/instanceAuths';
 import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
 import registrationInfo from '../../../api/instance/registrationInfo';
 
-export default ({ compute_stack_id, instance_id, url, status, instance_name, is_local, flipCard, compute, storage, license }) => {
+export default ({ compute_stack_id, instance_id, url, status, instance_name, is_local, flipCard, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
@@ -62,7 +62,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
       return false;
     }
 
-    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute });
+    const registrationResult = await handleInstanceRegistration({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute });
 
     if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance)) {
       return false;
@@ -80,7 +80,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_name, is_
     return setInstanceStatus({ ...instanceStatus, ...registrationResult });
   };
 
-  useAsyncEffect(() => processInstanceCard(), [status, license, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
+  useAsyncEffect(() => processInstanceCard(), [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => { if (['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'].includes(instanceStatus.instance)) setLastUpdate(Date.now()); }, config.instance_refresh_rate);
 

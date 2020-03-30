@@ -26,12 +26,11 @@ $grey-overlay: rgba(0, 0, 0, 0.5);
 $dark-grey-overlay: rgba(0, 0, 0, 0.7);
 $black-overlay: rgba(0, 0, 0, 0.9);
 
-$fa-font-path: '/fonts';
 $border-radius-base: 6px;
 
 $font-family-sans: 'Raleway', Helvetica-Neue, Helvetica, Verdana, Sans-Serif !important;
 
-$font-size-root: 15px !important;
+$font-size-root: 14px !important;
 $font-size-h1: calc(3vw + 3vh) !important;
 $font-size-h1-max: 65px !important;
 $font-size-h2: calc(2.5vw + 2.5vh) !important;
@@ -45,10 +44,12 @@ $font-size-h5-max: 1.5rem !important;
 $font-size-h6: 1.25rem !important;
 $font-size-h6-max: 1.25rem !important;
 
-$font-size-small: 80% !important;
-$font-size-smaller: 65% !important;
-$font-size-smallest: 50% !important;
+$font-size-small: 85% !important;
+$font-size-smaller: 70% !important;
+$font-size-smallest: 55% !important;
 
 $font-weight-light: 200 !important;
 $font-weight-bold: 700 !important;
 $font-line-height: 1.2 !important;
+
+$min-width: 314px;

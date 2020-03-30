@@ -16,24 +16,22 @@ export default () => {
   const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths] = useInstanceAuth({});
 
-  const { instances, products, regions, licenses } = useStoreState(appState, (s) => ({
+  const { instances, products, regions } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
-    licenses: s.licenses,
     instances: s.instances,
   }));
 
   useEffect(() => {
     const cancelSub = instanceState.subscribe((s) => s.lastUpdate, async () => {
-      if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions && licenses) {
+      if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions) {
         const auth = instanceAuths[compute_stack_id];
         const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-        const license = licenses.find((l) => l.compute_stack_id === compute_stack_id);
         const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
         const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
         const computeProducts = thisInstance.is_local ? products.localCompute : products.cloudCompute;
         const storageProducts = thisInstance.is_local ? false : products.cloudStorage;
-        await buildActiveInstanceObject({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts });
+        await buildActiveInstanceObject({ thisInstance, auth, compute, storage, computeProducts, storageProducts });
         setLoadingInstance(false);
       }
     });
@@ -46,7 +44,7 @@ export default () => {
   }, [compute_stack_id]);
 
   return (
-    <>
+    <div id="instance">
       <SubNav routes={routes} loadingInstance={loadingInstance} />
       {loadingInstance ? (
         <Loader message="loading instance" />
@@ -57,6 +55,6 @@ export default () => {
           ))}
         </Switch>
       )}
-    </>
+    </div>
   );
 };

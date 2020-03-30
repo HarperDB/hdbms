@@ -42,8 +42,8 @@ export default () => {
             updateForm({});
           }, 1000);
         } else {
-          appState.update((s) => { s.auth = { ...response, email, pass }; });
           setPersistedLMSAuth({ email, pass });
+          appState.update((s) => { s.auth = { ...response, email, pass }; });
           setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 1000);
         }
       }

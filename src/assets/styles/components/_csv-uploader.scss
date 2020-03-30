@@ -1,9 +1,9 @@
-#csv-uploader {
+.csv-uploader {
   border: 0;
   height: 300px;
   position: relative;
 
-  #csv-message {
+  .csv-message {
     padding: 0 15px;
     position: absolute;
     text-align: center;
@@ -33,5 +33,4 @@
       width: 100%;
     }
   }
-
 }

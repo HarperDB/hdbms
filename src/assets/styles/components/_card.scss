@@ -1,0 +1,11 @@
+.floating-card-header {
+  color: $color-white !important;
+  text-shadow: 0 2px 3px $grey-overlay;
+}
+
+.card {
+  background: $color-white !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 5px $dark-grey-overlay;
+  color: $color-black;
+}

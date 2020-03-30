@@ -40,7 +40,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           card number
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input no-shadow no-border">**** **** **** {cardLast4}</div>
+          <div className="input-static">**** **** **** {cardLast4}</div>
         </Col>
       </Row>
       <hr />
@@ -49,7 +49,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           expiration
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input no-shadow no-border">{cardExp}</div>
+          <div className="input-static">{cardExp}</div>
         </Col>
       </Row>
       <hr />
@@ -58,7 +58,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           cvcc
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input no-shadow no-border">***</div>
+          <div className="input-static">***</div>
         </Col>
       </Row>
       <hr />
@@ -67,7 +67,7 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
           billing postal code
         </Col>
         <Col md="6" xs="12">
-          <div className="fake-input no-shadow no-border">{cardPostalCode}</div>
+          <div className="input-static">{cardPostalCode}</div>
         </Col>
       </Row>
       <hr />

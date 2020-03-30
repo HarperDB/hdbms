@@ -1,0 +1,98 @@
+input,
+select,
+textarea,
+.fake-input,
+.form-control {
+  background: $light-white-overlay !important;
+  border: 1px solid $color-lightgrey !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
+  color: $color-black;
+  font-family: $font-family-sans;
+  font-size: $font-size-root;
+  font-weight: $font-weight-light;
+  outline: none !important;
+  transition: none;
+
+  &::placeholder {
+    color: $color-grey !important;
+    font-family: $font-family-sans;
+    font-weight: $font-weight-light;
+  }
+}
+
+textarea {
+  height: auto !important;
+}
+
+.input-static,
+.fake-input {
+  cursor: not-allowed;
+  height: 35px;
+  overflow: hidden;
+  padding: 8px 12px 0;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nio-check-mark::before {
+  content: '\f00c';
+}
+
+.nio::before {
+  font-family: 'FontAwesome' !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400 !important;
+  text-transform: none;
+  vertical-align: top;
+}
+
+.radio-button > div {
+  border-bottom: 1px solid $color-lightergrey;
+  padding: 8px 0;
+  white-space: nowrap;
+
+  &:last-child {
+    border-bottom: 0;
+    padding-bottom: 4px;
+  }
+}
+
+.radio-checkbox-label {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+#add-customer-background {
+  background-color: #fff;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+
+  input {
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
+  }
+}
+
+
+#__lpform_input_idx_0_numspan,
+#__lpform_input_idx_1_numspan,
+#__lpform_input_idx_2_numspan,
+#__lpform_input_idx_3_numspan,
+#__lpform_input_idx_4_numspan {
+  display: none !important;
+}
+
+
+
+
+

@@ -23,10 +23,10 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
       return false;
     }
 
-    await addRole({ auth, url, role: entity.name, permission: { cluster_user: itemType === 'cluster user', super_user: itemType === 'super user' } });
+    const response = await addRole({ auth, url, role: entity.name, permission: { cluster_user: itemType === 'cluster user', super_user: itemType === 'super user' } });
     setEntity({});
     instanceState.update((s) => { s.lastUpdate = Date.now(); });
-    return setTimeout(() => history.push(`${baseUrl}/${entity.name}`), 100);
+    return setTimeout(() => history.push(`${baseUrl}/${response.id}`), 100);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);

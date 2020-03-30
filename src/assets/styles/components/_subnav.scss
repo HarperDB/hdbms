@@ -1,0 +1,21 @@
+.app-subnav {
+  @media screen and (max-width: 767px) {
+    flex-wrap: wrap;
+  }
+
+  .navbar-nav {
+    &.instance-nav {
+      justify-content: flex-end !important;
+
+      @media screen and (max-width: 767px) {
+        justify-content: center !important;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      justify-content: center !important;
+      max-width: 400px;
+      text-align: center;
+    }
+  }
+}

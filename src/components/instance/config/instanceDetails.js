@@ -3,6 +3,7 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
 import instanceState from '../../../state/stores/instanceState';
+import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
   const thisInstance = useStoreState(instanceState);
@@ -13,50 +14,44 @@ export default () => {
       <Card className="my-3 instance-details">
         <CardBody>
           <Row>
-            <Col xs="12" className="mb-3">
-              <div className="fieldset-label">Instance URL</div>
-              <hr className="my-1" />
-              <div className="instance-url">{thisInstance.url}</div>
+            <Col xs="12">
+              <ContentContainer header="Instance URL">
+                <div className="instance-url">{thisInstance.url}</div>
+              </ContentContainer>
             </Col>
-            <Col md="2" sm="4" xs="6" className="mb-3">
-              <div className="fieldset-label">Name</div>
-              <div className="fieldset">
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="Name" className="mt-3">
                 {thisInstance.instance_name}
-              </div>
+              </ContentContainer>
             </Col>
-            <Col md="2" sm="4" xs="6" className="mb-3">
-              <div className="fieldset-label">Created</div>
-              <div className="fieldset">
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="Created" className="mt-3">
                 {new Date(thisInstance.creation_date).toLocaleDateString()}
-              </div>
+              </ContentContainer>
             </Col>
             {thisInstance.instance_region && (
-              <Col md="2" sm="4" xs="6" className="mb-3">
-                <div className="fieldset-label">Region</div>
-                <div className="fieldset">
+              <Col md="2" sm="4" xs="6">
+                <ContentContainer header="Region" className="mt-3">
                   {thisInstance.instance_region}
-                </div>
+                </ContentContainer>
               </Col>
             )}
-            <Col md="2" sm="4" xs="6" className="mb-3">
-              <div className="fieldset-label">RAM</div>
-              <div className="fieldset">
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="RAM" className="mt-3">
                 {thisInstance.compute.ram}
-              </div>
+              </ContentContainer>
             </Col>
             {!thisInstance.is_local && (
-              <Col md="2" sm="4" xs="6" className="mb-3">
-                <div className="fieldset-label">Storage</div>
-                <div className="fieldset">
+              <Col md="2" sm="4" xs="6">
+                <ContentContainer header="Storage" className="mt-3">
                   {thisInstance.storage?.disk_space}
-                </div>
+                </ContentContainer>
               </Col>
             )}
-            <Col md="2" sm="4" xs="6" className="mb-3">
-              <div className="fieldset-label">Cluster</div>
-              <div className="fieldset">
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="Cluster" className="mt-3">
                 {thisInstance.network.is_enabled ? 'On' : 'Off'}
-              </div>
+              </ContentContainer>
             </Col>
           </Row>
         </CardBody>

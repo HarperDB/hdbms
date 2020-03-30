@@ -4,7 +4,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import InstanceManagerRow from './manageInstancesRow';
 
 export default ({ items, itemType }) => (
-  <div className="db-browser">
+  <div className="entity-manager">
     <div className="text-white floating-card-header">
       {itemType} instances
     </div>

@@ -4,6 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/stores/instanceState';
+import ContentContainer from '../../shared/contentContainer';
 
 export default ({ setRemovingInstance }) => {
   const { compute_stack_id, instance_name, is_local } = useStoreState(instanceState, (s) => ({
@@ -32,46 +33,51 @@ export default ({ setRemovingInstance }) => {
       <span className="text-white mb-2 floating-card-header">remove instance</span>
       <Card className="my-3">
         <CardBody className="text-small">
-          {is_local ? (
-            <ul>
-              <li><b>DOES NOT</b> uninstall HarperDB.</li>
-              <li><b>DOES</b> leave all your data intact.</li>
-              <li>REMOVES your instance license.</li>
-              <li>STOPS recurring license charges.</li>
-              <li>LIMITS instance to 1GB RAM.</li>
-              <li>REMOVES instance from the Studio.</li>
-              <li>RESTARTS the instance.</li>
-            </ul>
-          ) : (
-            <ul>
-              <li><b>THIS IS</b> an irreversible process.</li>
-              <li><b>IT CANNOT</b> be undone.</li>
-              <li>DELETES your instance completely.</li>
-              <li>STOPS recurring license charges.</li>
-              <li>REMOVES instance from the Studio.</li>
-            </ul>
+          <ContentContainer header={`Enter "${instance_name}" below to begin.`}>
+            <Input
+              onChange={(e) => updateForm({ delete_instance_name: e.target.value })}
+              type="text"
+              title="instance_name"
+              value={formData.instance_name}
+            />
+          </ContentContainer>
+
+          {formData.delete_instance_name === instance_name && (
+            <>
+              <Button
+                onClick={() => setFormState({ submitted: true })}
+                title="Confirm Instance Details"
+                block
+                disabled={formState.submitted}
+                className="mt-1"
+                color="danger"
+              >
+                Remove Instance
+              </Button>
+
+              <hr className="mt-1" />
+
+              {is_local ? (
+                <ul>
+                  <li><b>DOES NOT</b> uninstall HarperDB.</li>
+                  <li><b>DOES</b> leave all your data intact.</li>
+                  <li>REMOVES your instance license.</li>
+                  <li>STOPS recurring license charges.</li>
+                  <li>LIMITS instance to 1GB RAM.</li>
+                  <li>REMOVES instance from the Studio.</li>
+                  <li>RESTARTS the instance.</li>
+                </ul>
+              ) : (
+                <ul>
+                  <li><b>THIS IS</b> an irreversible process.</li>
+                  <li><b>IT CANNOT</b> be undone.</li>
+                  <li>DELETES your instance completely.</li>
+                  <li>STOPS recurring license charges.</li>
+                  <li>REMOVES instance from the Studio.</li>
+                </ul>
+              )}
+            </>
           )}
-          <hr className="my-3" />
-          <div className="mb-3">Enter <b>{instance_name}</b> below to confirm.</div>
-          <Input
-            onChange={(e) => updateForm({ delete_instance_name: e.target.value })}
-            type="text"
-            title="instance_name"
-            value={formData.instance_name}
-          />
-
-          <hr className="mt-3" />
-
-          <Button
-            onClick={() => setFormState({ submitted: true })}
-            title="Confirm Instance Details"
-            block
-            disabled={formState.submitted || formData.delete_instance_name !== instance_name}
-            className="mt-3"
-            color="danger"
-          >
-            Remove Instance
-          </Button>
         </CardBody>
       </Card>
       <br />

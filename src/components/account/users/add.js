@@ -78,10 +78,10 @@ export default ({ setLastUpdate }) => {
           >
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add User</span>}
           </Button>
-          {formData.error && (
+          {formState.error && (
             <div className="text-danger text-small text-center text-italic">
               <hr />
-              {formData.error}
+              {formState.error}
             </div>
           )}
         </CardBody>

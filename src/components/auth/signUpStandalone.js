@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col } from '@nio/ui-kit';
+import { Input, Button, Row, Col, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import isEmail from '../../util/isEmail';
@@ -41,97 +41,91 @@ export default () => {
   return (
     <div id="add-customer-background">
       {formState.processing ? (
-        <div className="p-4 text-center fieldset-label">
+        <div className="p-4 text-center">
           <b>creating account</b><br /><br />
           <i className="fa fa-lg fa-spinner fa-spin text-purple" /><br /><br />
           the office dogs are typing furiously.
         </div>
       ) : formState.success ? (
-        <div className="p-4 text-center fieldset-label">
+        <div className="p-4 text-center">
           <b>success!</b><br /><br />
           <i className="fa fa-lg fa-thumbs-up text-purple" /><br /><br />
           check your email for your username and password
         </div>
       ) : (
         <>
-          <div className="fieldset-label">First Name</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0"
-              name="firstname"
-              value={formData.firstname || ''}
-              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <b>First Name</b>
+          <hr className="my-1" />
+          <Input
+            type="text"
+            className="mb-0"
+            name="firstname"
+            value={formData.firstname || ''}
+            onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">Last Name</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0"
-              name="lastname"
-              value={formData.lastname || ''}
-              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <b>Last Name</b>
+          <hr className="my-1" />
+          <Input
+            type="text"
+            className="mb-0"
+            name="lastname"
+            value={formData.lastname || ''}
+            onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">Email Address</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0"
-              name="email"
-              value={formData.email || ''}
-              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <b>Email Address</b>
+          <hr className="my-1" />
+          <Input
+            type="text"
+            className="mb-0"
+            name="email"
+            value={formData.email || ''}
+            onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">Company</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0"
-              name="customer_name"
-              value={formData.customer_name || ''}
-              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <b>Company</b>
+          <hr className="my-1" />
+          <Input
+            type="text"
+            className="mb-0"
+            name="customer_name"
+            value={formData.customer_name || ''}
+            onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
+            disabled={formState.submitted}
+          />
 
-          <div className="fieldset-label">Subdomain</div>
-          <div className="fieldset full-height">
-            <Row noGutters>
-              <Col xs="8">
-                <Input
-                  type="text"
-                  className="mb-0"
-                  name="customer_name"
-                  value={formData.subdomain || ''}
-                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
-                  disabled={formState.submitted}
-                />
-              </Col>
-              <Col xs="4" className="pt-2 pl-1 text-nowrap">
-                .harperdbcloud.com
-              </Col>
-            </Row>
-          </div>
+          <b>Subdomain</b>
+          <hr className="my-1" />
+          <Row noGutters>
+            <Col xs="8">
+              <Input
+                type="text"
+                className="mb-0"
+                name="customer_name"
+                value={formData.subdomain || ''}
+                onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
+                disabled={formState.submitted}
+              />
+            </Col>
+            <Col xs="4" className="pt-2 pl-1 text-nowrap">
+              .harperdbcloud.com
+            </Col>
+          </Row>
 
-          <div className="fieldset-label">Coupon Code (optional)</div>
-          <div className="fieldset full-height">
-            <Input
-              type="text"
-              className="mb-0"
-              name="coupon_code"
-              value={formData.coupon_code || ''}
-              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
-              disabled={formState.submitted}
-            />
-          </div>
+          <b>Coupon Code (optional)</b>
+          <hr className="my-1" />
+          <Input
+            type="text"
+            className="mb-0"
+            name="coupon_code"
+            value={formData.coupon_code || ''}
+            onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
+            disabled={formState.submitted}
+          />
 
           <Button
             color="success"

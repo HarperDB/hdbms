@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, license, compute_stack_id, compute }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
   try {
     if (!instanceAuth) {
       return {
@@ -40,9 +40,9 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, license,
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
-    const license_match = [registration.ram_allocation, license.ram_allocation, compute.ram_allocation].every((val, i, arr) => val === arr[0]);
+    const registration_matches_stripe_plan = registration.registered && registration.ram_allocation === compute.ram_allocation;
 
-    if (registration.registered && license && license_match) {
+    if (registration_matches_stripe_plan) {
       return {
         instance: 'OK',
         instanceError: false,
@@ -51,18 +51,14 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, license,
     }
 
     const fingerprint = await getFingerprint({ auth: instanceAuth, url });
+    const license = await createLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, fingerprint } });
 
-    if (!license || !license_match) {
-      const response = await createLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, fingerprint } });
-
-      if (response.result === false) {
-        return {
-          instance: 'ERROR CREATING LICENSE',
-          instanceError: true,
-          clustering,
-        };
-      }
-      license = response;
+    if (license.result === false) {
+      return {
+        instance: 'ERROR CREATING LICENSE',
+        instanceError: true,
+        clustering,
+      };
     }
 
     const apply = await setLicense({ auth: instanceAuth, key: license.key, company: license.company.toString(), url });
@@ -83,6 +79,8 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, license,
       clustering,
     };
   } catch (e) {
+    console.log(e);
+
     return {
       instance: 'COULD NOT CONNECT',
       instanceError: true,

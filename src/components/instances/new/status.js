@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@nio/ui-kit';
+import { Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
@@ -40,20 +40,28 @@ export default ({ closeAndResetModal }) => {
   }, []);
 
   return formState.error ? (
-    <div className="text-center p-3 pb-4">
-      <b>Uh Oh!</b><br /><br />
-      <i className="fa fa-lg fa-exclamation-triangle text-danger mb-4" /><br />
-      {formState.error || 'there was an error creating your instance'}<br />
-      <hr className="mt-4" />
-      <Button onClick={closeAndResetModal}>Click Here To Try Again</Button>
-      <hr className="mb-4" />
-      If the issue persists, please contact <a href="mailto:support@harperdb.io">support@harperdb.io</a>.
-    </div>
+    <Card>
+      <CardBody>
+        <div className="p-4 text-center">
+          <b>Uh Oh!</b><br /><br />
+          <i className="fa fa-lg fa-exclamation-triangle text-danger mb-4" /><br />
+          {formState.error || 'there was an error creating your instance'}<br />
+          <hr className="mt-4" />
+          <Button onClick={closeAndResetModal}>Click Here To Try Again</Button>
+          <hr className="mb-4" />
+          If the issue persists, please contact <a href="mailto:support@harperdb.io">support@harperdb.io</a>.
+        </div>
+      </CardBody>
+    </Card>
   ) : (
-    <div className="text-center p-3 pb-4">
-      <b>{newInstance.is_local ? 'Adding' : 'Creating'} Your Instance</b><br /><br /><br />
-      <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" /><br /><br />
-      The office dogs are typing furiously. Hang tight.
-    </div>
+    <Card>
+      <CardBody>
+        <div className="p-4 text-center">
+          <b>{newInstance.is_local ? 'Adding' : 'Creating'} Your Instance</b><br /><br /><br />
+          <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" /><br /><br />
+          The office dogs are typing furiously. Hang tight.
+        </div>
+      </CardBody>
+    </Card>
   );
 };

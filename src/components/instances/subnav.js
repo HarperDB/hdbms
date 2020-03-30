@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar, Nav, Input, Button, ToggleButton } from '@nio/ui-kit';
 
 export default ({ setFilters, filters }) => (
-  <Navbar id="app-subnav" className="instances" fixed="top" expand="xs">
+  <Navbar className="app-subnav" fixed="top" expand="xs">
     <Nav navbar>
       <div className="instance-toggle-holder">
         <ToggleButton
@@ -29,7 +29,7 @@ export default ({ setFilters, filters }) => (
       <div className="instance-filter-holder">
         <Input
           type="text"
-          className="outline-dark text-center"
+          className="instances-filter text-center"
           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
           placeholder="filter instances"
           value={filters.search}

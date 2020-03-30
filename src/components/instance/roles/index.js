@@ -14,10 +14,12 @@ export default () => {
   const { compute_stack_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const [formState, setFormState] = useState(defaultState);
+  const baseUrl = `/instance/${compute_stack_id}/roles`;
 
   useEffect(() => {
     if (roles) {
       const thisRole = role_id && roles.find((r) => r.id === role_id);
+
       setFormState({
         ...formState,
         roleName: thisRole && thisRole.role,
@@ -38,21 +40,21 @@ export default () => {
           showForm
           activeItem={role_id}
           items={formState.superUsers}
-          baseUrl={`/instance/${compute_stack_id}/roles`}
+          baseUrl={baseUrl}
           itemType="super user"
         />
         <EntityManager
           showForm
           activeItem={role_id}
           items={formState.clusterUsers}
-          baseUrl={`/instance/${compute_stack_id}/roles`}
+          baseUrl={baseUrl}
           itemType="cluster user"
         />
         <EntityManager
           showForm
           activeItem={role_id}
           items={formState.standardUsers}
-          baseUrl={`/instance/${compute_stack_id}/roles`}
+          baseUrl={baseUrl}
           itemType="standard role"
         />
       </Col>
@@ -63,6 +65,7 @@ export default () => {
               <Col className="text-nowrap">
                 <span className="text-white mb-2 floating-card-header">edit role &gt; {formState.roleName}&nbsp;</span>
               </Col>
+              {/*
               <Col className="text-right text-white text-nowrap">
                 <a onClick={() => setFormState({ ...formState, editJSON: true })}>
                   <span className="floating-card-header">json</span>
@@ -74,9 +77,10 @@ export default () => {
                   <i title="Edit JSON" className="fa fa-check-square-o ml-1 floating-card-header" />
                 </a>
               </Col>
+              */}
             </Row>
             <Card className="my-3">
-              <CardBody className="full-height-card">
+              <CardBody className="full-height">
                 {formState.editJSON ? (
                   <JSONViewer />
                 ) : (

@@ -10,16 +10,14 @@ import appState from '../../state/stores/appState';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getCustomer from '../../api/lms/getCustomer';
-import getLicenses from '../../api/lms/getLicenses';
 import getInstances from '../../api/lms/getInstances';
 import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
 
 export default ({ component, path }) => {
-  const { auth, products, regions, licenses, instances, lastUpdate } = useStoreState(appState, (s) => ({
+  const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
     regions: s.regions,
-    licenses: s.licenses,
     lastUpdate: s.lastUpdate,
     instances: s.instances,
   }));
@@ -40,21 +38,15 @@ export default ({ component, path }) => {
       getRegions();
       getCustomer({ auth, payload: { customer_id: auth.customer_id } });
     }
-  }, []);
-
-  useAsyncEffect(() => {
-    if (auth && !fetching) {
-      getLicenses({ auth, payload: { customer_id: auth.customer_id } });
-    }
-  }, [lastUpdate]);
+  }, [])
 
   useAsyncEffect(async () => {
-    if (auth && !fetching && products && regions && licenses) {
+    if (auth && !fetching && products && regions) {
       setFetching(true);
-      await getInstances({ auth, payload: { customer_id: auth?.customer_id }, entities: { products, regions, licenses } });
+      await getInstances({ auth, payload: { customer_id: auth?.customer_id }, entities: { products, regions } });
       setFetching(false);
     }
-  }, [products, regions, licenses, lastUpdate]);
+  }, [products, regions, lastUpdate]);
 
   return auth?.email && auth?.pass ? (
     <>

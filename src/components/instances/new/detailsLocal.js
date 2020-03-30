@@ -3,6 +3,7 @@ import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
+import ContentContainer from '../../shared/contentContainer';
 
 export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceLimit }) => {
   const history = useHistory();
@@ -34,8 +35,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
     <>
       <Card>
         <CardBody>
-          <div className="fieldset-label">Instance Type</div>
-          <div className="fieldset full-height">
+          <ContentContainer header="Instance Type">
             <RadioCheckbox
               className="radio-button"
               type="radio"
@@ -44,7 +44,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
-          </div>
+          </ContentContainer>
         </CardBody>
       </Card>
       <Row>
@@ -55,7 +55,6 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
             block
             className="mt-3"
             color="purple"
-            outline
           >
             <i className="fa fa-chevron-circle-left mr-2" />Basic Info
           </Button>

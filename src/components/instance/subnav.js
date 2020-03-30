@@ -12,7 +12,7 @@ export default ({ routes = [], loadingInstance }) => {
   }));
 
   return (
-    <Navbar id="app-subnav" className="instance" fixed="top" expand="xs">
+    <Navbar className="app-subnav" fixed="top" expand="xs">
       <Nav navbar>
         <NavItem className="text-white">
           {loadingInstance ? (

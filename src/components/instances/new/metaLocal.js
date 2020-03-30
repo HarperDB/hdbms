@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
 import useNewInstance from '../../../state/stores/newInstance';
-
+import ContentContainer from '../../shared/contentContainer';
 import queryInstance from '../../../api/queryInstance';
 
 export default ({ instanceNames, instanceURLs }) => {
@@ -31,12 +31,13 @@ export default ({ instanceNames, instanceURLs }) => {
       } else if (instanceURLs.includes(url)) {
         setFormState({ error: `An instance at "${url}" already exists` });
       } else if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
+        setNewInstance({ ...newInstance, instance_name, user, pass, host, port, is_ssl });
+
         try {
           const response = await queryInstance({ operation: 'describe_all' }, formData, url);
           if (response.error) {
             setFormState({ error: 'The provided credentials cannot log into that instance.' });
           } else {
-            setNewInstance({ ...newInstance, instance_name, user, pass, host, port, is_ssl });
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
         } catch (e) {
@@ -52,9 +53,8 @@ export default ({ instanceNames, instanceURLs }) => {
     <>
       <Card>
         <CardBody>
-          <div className="fieldset-label">Instance Name</div>
-          <div className="fieldset">
-            <Row>
+          <ContentContainer header="Instance Name">
+            <Row className="mb-4">
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;edge-1&quot;
               </Col>
@@ -67,10 +67,9 @@ export default ({ instanceNames, instanceURLs }) => {
                 />
               </Col>
             </Row>
-          </div>
+          </ContentContainer>
 
-          <div className="fieldset-label">Admin Credentials</div>
-          <div className="fieldset">
+          <ContentContainer header="Admin Credentials">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
@@ -98,9 +97,9 @@ export default ({ instanceNames, instanceURLs }) => {
                 />
               </Col>
             </Row>
-          </div>
-          <div className="fieldset-label">Instance Details</div>
-          <div className="fieldset">
+          </ContentContainer>
+
+          <ContentContainer header="Instance Details">
             <Row>
               <Col xs="4" className="pt-2">
                 Host
@@ -142,7 +141,7 @@ export default ({ instanceNames, instanceURLs }) => {
                 />
               </Col>
             </Row>
-          </div>
+          </ContentContainer>
         </CardBody>
       </Card>
       <Row>
@@ -153,7 +152,6 @@ export default ({ instanceNames, instanceURLs }) => {
             block
             className="mt-3"
             color="purple"
-            outline
           >
             <i className="fa fa-chevron-circle-left mr-2" />Instance Type
           </Button>

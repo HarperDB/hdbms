@@ -17,7 +17,7 @@ export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
   const sortedRoles = items && items.sort((a, b) => (a.role < b.role ? -1 : 1));
 
   return (
-    <div className="db-browser">
+    <div className="entity-manager">
       <EntityManagerHeader
         items={items}
         itemType={itemType}

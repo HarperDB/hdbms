@@ -7,7 +7,6 @@
   outline: none !important;
   padding-left: 5px;
   padding-right: 5px;
-  text-transform: lowercase;
   transition: none !important;
 
   &:active,
@@ -26,10 +25,6 @@
     height: 24px !important;
     padding: 0 !important;
     width: 80px !important;
-  }
-
-  &.no-shadow {
-    box-shadow: none !important;
   }
 
   &.btn-link {
@@ -59,37 +54,5 @@
     border-color: $color-darkpurple !important;
     color: $color-white !important;
   }
-
-  &.btn-outline-purple {
-    background-color: $color-white !important;
-    border-color: $color-purple !important;
-    color: $color-purple !important;
-  }
-
-  &.btn-filter {
-    background: $faint-white-overlay !important;
-    border-color: transparent !important;
-    color: $white-overlay !important;
-
-    &.active {
-      background: $white-overlay !important;
-      color: $color-white !important;
-    }
-  }
 }
 
-.btn-group {
-  width: 100%;
-}
-
-.btn-group>.btn-group:not(:last-child)>.btn,
-.btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
-  border-bottom-right-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-}
-
-.btn-group>.btn-group:not(:first-child)>.btn,
-.btn-group>.btn:not(:first-child) {
-  border-bottom-left-radius: 0 !important;
-  border-top-left-radius: 0 !important;
-}

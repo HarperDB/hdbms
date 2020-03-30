@@ -6,7 +6,7 @@ export default {
       color: '#212121',
       fontWeight: 100,
       fontFamily: 'Raleway, Open Sans, Segoe UI, sans-serif',
-      fontSize: '16px',
+      fontSize: '14px',
       fontSmoothing: 'antialiased',
       ':-webkit-autofill': {
         color: '#fff',

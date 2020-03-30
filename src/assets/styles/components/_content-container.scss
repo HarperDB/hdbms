@@ -1,0 +1,10 @@
+.content-container {
+  .header {
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

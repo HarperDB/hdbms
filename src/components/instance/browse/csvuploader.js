@@ -82,8 +82,8 @@ export default () => {
       <span className="text-white mb-2 floating-card-header">{schema} &gt; {table} &gt; csv upload</span>
       <Card className="my-3">
         <CardBody>
-          <Card id="csv-uploader" className="mb-4 mt-2 no-shadow">
-            <div id="csv-message">
+          <Card className="csv-uploader mb-4 mt-2 no-shadow">
+            <div className="csv-message">
               {status === 'validating' ? (
                 <div className="text-purple text-center">validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records</div>
               ) : status === 'inserting' ? (

@@ -15,7 +15,7 @@ export default ({ items, activeItem, activeSchema = false, showForm, baseUrl, it
   }, [activeItem, activeSchema, items]);
 
   return (
-    <div className="db-browser">
+    <div className="entity-manager">
       <EntityManagerHeader
         items={items}
         itemType={itemType}

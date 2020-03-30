@@ -3,6 +3,7 @@ import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
+import ContentContainer from '../../shared/contentContainer';
 
 export default ({ instanceNames }) => {
   const history = useHistory();
@@ -33,9 +34,9 @@ export default ({ instanceNames }) => {
     <>
       <Card>
         <CardBody>
-          <div className="fieldset-label">Instance Name</div>
-          <div className="fieldset">
-            <Row>
+
+          <ContentContainer header="Instance Name">
+            <Row className="mb-4">
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;cloud-1&quot;
               </Col>
@@ -48,10 +49,9 @@ export default ({ instanceNames }) => {
                 />
               </Col>
             </Row>
-          </div>
+          </ContentContainer>
 
-          <div className="fieldset-label">Admin Credentials</div>
-          <div className="fieldset">
+          <ContentContainer header="Admin Credentials">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
@@ -79,7 +79,8 @@ export default ({ instanceNames }) => {
                 />
               </Col>
             </Row>
-          </div>
+          </ContentContainer>
+
         </CardBody>
       </Card>
       <Row>
@@ -90,7 +91,6 @@ export default ({ instanceNames }) => {
             block
             className="mt-3"
             color="purple"
-            outline
           >
             <i className="fa fa-chevron-circle-left mr-2" />Instance Type
           </Button>

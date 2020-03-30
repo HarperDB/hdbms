@@ -1,0 +1,32 @@
+ul {
+  padding-inline-start: 14px;
+
+  li {
+    margin-bottom: 6px;
+  }
+}
+
+.full-height {
+  height: calc(100vh - 230px) !important;
+}
+
+.no-shadow {
+  box-shadow: none !important;
+}
+
+.no-border {
+  border: 0 !important;
+}
+
+.no-background {
+  background: none !important;
+}
+
+.error {
+  border-color: $color-danger !important;
+}
+
+.scrollable {
+  overflow-x: hidden;
+  overflow-y: auto;
+}

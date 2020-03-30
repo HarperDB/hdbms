@@ -3,6 +3,7 @@ import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/stores/newInstance';
+import ContentContainer from '../../shared/contentContainer';
 
 export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit }) => {
   const history = useHistory();
@@ -41,8 +42,8 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     <>
       <Card>
         <CardBody>
-          <div className="fieldset-label">Storage Size (scroll for more)</div>
-          <div className="fieldset">
+
+          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="data_volume_size"
               className="radio-button"
@@ -52,10 +53,9 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
-          </div>
+          </ContentContainer>
 
-          <div className="fieldset-label">Instance RAM (scroll for more)</div>
-          <div className="fieldset">
+          <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="stripe_plan_id"
               className="radio-button"
@@ -65,10 +65,9 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
-          </div>
+          </ContentContainer>
 
-          <div className="fieldset-label">Instance Region (scroll for more)</div>
-          <div className="fieldset">
+          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"
@@ -78,7 +77,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               value={formData.instance_region}
               defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
             />
-          </div>
+          </ContentContainer>
         </CardBody>
       </Card>
       <Row>
@@ -89,7 +88,6 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
             block
             className="mt-3"
             color="purple"
-            outline
           >
             <i className="fa fa-chevron-circle-left mr-2" />Basic Info
           </Button>

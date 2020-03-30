@@ -1,4 +1,4 @@
-$min-width: 314px;
+
 
 body {
   min-width: $min-width;
@@ -56,7 +56,32 @@ body {
       }
     }
 
-    #app-subnav {
+    .nav-item {
+      display: inline-block;
+      white-space: nowrap;
+
+      .nav-link,
+      a {
+        color: $white-overlay !important;
+        display: inline-block;
+        padding: 5px 0 0 !important;
+        text-shadow: 0 2px 3px $grey-overlay;
+        transition: color 250ms;
+
+        &.active,
+        &:hover {
+          color: $color-white !important;
+        }
+      }
+
+      .nav-divider {
+        color: $color-lightgrey !important;
+        display: inline-block;
+        padding: 5px 0 0 !important;
+      }
+    }
+
+    .app-subnav {
       background: $dark-grey-overlay !important;
       box-shadow: inset 0 10px 5px -10px $color-black, inset 0 -10px 5px -10px $color-black;
       height: 50px;
@@ -67,36 +92,6 @@ body {
       transition: top 250ms;
       width: 100%;
       z-index: 98 !important;
-
-      &.instances {
-        .navbar-nav {
-          justify-content: center;
-          max-width: 400px;
-          text-align: center;
-        }
-      }
-
-      &.instance {
-        @media screen and (max-width: 767px) {
-          flex-wrap: wrap;
-        }
-
-        .navbar-nav {
-          &.instance-nav {
-            justify-content: flex-end !important;
-
-            @media screen and (max-width: 767px) {
-              justify-content: center !important;
-            }
-          }
-
-          @media screen and (max-width: 767px) {
-            justify-content: center !important;
-            max-width: 400px;
-            text-align: center;
-          }
-        }
-      }
 
       .navbar-nav {
         margin: 0 auto;
@@ -130,31 +125,6 @@ body {
 
       @media screen and (max-width: 991px) {
         padding: 0 1rem;
-      }
-    }
-
-    .nav-item {
-      display: inline-block;
-      white-space: nowrap;
-
-      .nav-link,
-      a {
-        color: $white-overlay !important;
-        display: inline-block;
-        padding: 5px 0 0 !important;
-        text-shadow: 0 2px 3px $grey-overlay;
-        transition: color 250ms;
-
-        &.active,
-        &:hover {
-          color: $color-white !important;
-        }
-      }
-
-      .nav-divider {
-        color: $color-lightgrey !important;
-        display: inline-block;
-        padding: 5px 0 0 !important;
       }
     }
   }

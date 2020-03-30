@@ -19,12 +19,11 @@ export default async ({ endpoint, payload, auth }) => {
     );
     const response = await request.json();
 
-    if (response.errorType) {
+    if (!response || response.errorType) {
       return {
         body: {
           result: false,
-          message: response.errorMessage,
-          eType: response.errorType,
+          message: response?.errorMessage || 'The server did not respond',
         },
       };
     }
@@ -34,7 +33,6 @@ export default async ({ endpoint, payload, auth }) => {
       body: {
         result: false,
         message: e.toString(),
-        eType: 'catch',
       },
     };
   }
