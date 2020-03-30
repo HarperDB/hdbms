@@ -5,7 +5,7 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import instanceState from '../../../state/stores/instanceState';
 import ContentContainer from '../../shared/contentContainer';
 
-export default () => {
+export default ({ totalPrice }) => {
   const thisInstance = useStoreState(instanceState);
 
   return (
@@ -17,6 +17,11 @@ export default () => {
             <Col xs="12">
               <ContentContainer header="Instance URL">
                 <div className="instance-url">{thisInstance.url}</div>
+              </ContentContainer>
+            </Col>
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="Cost" className="mt-3">
+                {totalPrice}
               </ContentContainer>
             </Col>
             <Col md="2" sm="4" xs="6">
@@ -38,7 +43,7 @@ export default () => {
             )}
             <Col md="2" sm="4" xs="6">
               <ContentContainer header="RAM" className="mt-3">
-                {thisInstance.compute.ram}
+                {thisInstance.compute?.ram}
               </ContentContainer>
             </Col>
             {!thisInstance.is_local && (
@@ -48,11 +53,6 @@ export default () => {
                 </ContentContainer>
               </Col>
             )}
-            <Col md="2" sm="4" xs="6">
-              <ContentContainer header="Cluster" className="mt-3">
-                {thisInstance.network.is_enabled ? 'On' : 'Off'}
-              </ContentContainer>
-            </Col>
           </Row>
         </CardBody>
       </Card>

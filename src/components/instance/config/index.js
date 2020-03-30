@@ -20,11 +20,20 @@ import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const { is_local, storage, compute } = useStoreState(instanceState, (s) => ({
+    is_local: s.is_local,
+    storage: s.storage,
+    compute: s.compute,
+  }));
   const [updatingInstance, setUpdatingInstance] = useState(false);
   const [removingInstance, setRemovingInstance] = useState(false);
   const history = useHistory();
   const alert = useAlert();
+
+  let totalPrice = 0;
+
+  if (compute) totalPrice += compute.price === 'FREE' ? 0 : parseFloat(compute.price);
+  if (storage) totalPrice += storage.price === 'FREE' ? 0 : parseFloat(storage.price);
 
   useAsyncEffect(async () => {
     if (removingInstance) {
@@ -63,12 +72,12 @@ export default () => {
   ) : (
     <Row id="config">
       <Col xs="12">
-        <InstanceDetails />
+        <InstanceDetails totalPrice={totalPrice ? `$${totalPrice.toFixed(2)}/${compute.interval}` : 'FREE'} />
       </Col>
       <Col lg="4" xs="12">
-        <UpdateRAM setUpdatingInstance={setUpdatingInstance} />
+        <UpdateRAM setUpdatingInstance={setUpdatingInstance} storagePrice={!storage || storage.price === 'FREE' ? 0 : parseFloat(storage.price)} />
         {!is_local && (
-          <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} />
+          <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} computePrice={!compute || compute.price === 'FREE' ? 0 : parseFloat(compute.price)} />
         )}
         <RemoveInstance setRemovingInstance={setRemovingInstance} />
       </Col>

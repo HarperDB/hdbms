@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, SelectDropdown } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Row, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -9,8 +9,9 @@ import instanceState from '../../../state/stores/instanceState';
 
 import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 import ContentContainer from '../../shared/contentContainer';
+import ChangeSummary from './changeSummary';
 
-export default ({ setUpdatingInstance }) => {
+export default ({ setUpdatingInstance, computePrice }) => {
   const customer = useStoreState(appState, (s) => s.customer);
   const { compute_stack_id, data_volume_size, storageProducts, storage } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
@@ -61,6 +62,15 @@ export default ({ setUpdatingInstance }) => {
             />
           </ContentContainer>
 
+          {hasChanged && (
+            <ChangeSummary
+              which="storage"
+              compute={computePrice ? `$${computePrice.toFixed(2)}/${storage.interval}` : 'FREE'}
+              storage={totalPrice ? `$${totalPrice.toFixed(2)}/${storage.interval}` : 'FREE'}
+              total={totalPrice ? `$${(computePrice + totalPrice).toFixed(2)}/${storage.interval}` : 'FREE'}
+            />
+          )}
+
           {hasChanged && totalPrice && !hasCard ? (
             <Button
               onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
@@ -81,7 +91,7 @@ export default ({ setUpdatingInstance }) => {
               className="mt-1"
               color="purple"
             >
-              Update Instance: {newStorage.disk_space} / {totalPrice ? `${totalPrice.toFixed(2)}/${storage.interval}` : 'FREE'}
+              Update Instance Storage
             </Button>
           ) : null}
         </CardBody>
