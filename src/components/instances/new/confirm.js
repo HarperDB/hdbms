@@ -150,7 +150,7 @@ export default ({ computeProduct, storageProduct }) => {
               />
             </Col>
             <Col xs="11" className="text-small">
-              I agree to the HarperDB <a href="https://harperdb.io/legal/terms-of-use/" target="_blank" rel="noopener noreferrer">Terms of Use</a>, <a href="https://harperdb.io/legal/end-user-license-agreement/" target="_blank" rel="noopener noreferrer">End User License Agreement</a>, and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+              I agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
             </Col>
           </Row>
         </CardBody>

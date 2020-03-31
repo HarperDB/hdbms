@@ -55,13 +55,22 @@
     line-height: 1.7;
   }
 
+  .disclaimer {
+    font-size: $font-size-smaller;
+    color: $white-overlay !important;
+
+    a,
+    a:hover {
+      color: $light-white-overlay !important;
+    }
+  }
+
   .login-nav-link {
     color: $white-overlay !important;
     display: block;
     font-size: $font-size-small;
     text-transform: lowercase;
     white-space: nowrap;
-
 
     &:hover {
       color: $color-white !important;

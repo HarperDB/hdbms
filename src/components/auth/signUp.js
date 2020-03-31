@@ -135,7 +135,7 @@ export default () => {
               </Row>
               <Input
                 type="text"
-                className="mb-4 text-center"
+                className="text-center mb-3"
                 name="coupon_code"
                 title="coupon code"
                 placeholder="coupon code (optional)"
@@ -143,6 +143,9 @@ export default () => {
                 onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
                 disabled={formState.submitted}
               />
+              <div className="mb-3 disclaimer">
+                By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+              </div>
               <Button
                 color="purple"
                 block

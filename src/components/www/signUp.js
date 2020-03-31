@@ -125,6 +125,12 @@ export default () => {
             />
           </ContentContainer>
 
+          <hr />
+          <div className="text-small text-center">
+            By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+          </div>
+          <hr />
+
           <Button
             color="success"
             block
