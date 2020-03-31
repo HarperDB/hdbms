@@ -38,7 +38,7 @@ export default async () => {
 
   if (Array.isArray(response.body)) {
     const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
-    const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Beta');
+    const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)');
     const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
     const cloudStorageOptions = [10, 100, 250, 500, 1000];
 
