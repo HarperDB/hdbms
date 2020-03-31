@@ -23,7 +23,7 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount } = useStoreState(appState, (s) => {
+  const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount, cloudInstancesBeingModified } = useStoreState(appState, (s) => {
     const cloud = s.instances.filter((i) => !i.is_local && !['DELETE_COMPLETE', 'DELETE_IN_PROGRESS'].includes(i.status));
     const local = s.instances.filter((i) => i.is_local);
 
@@ -34,6 +34,7 @@ export default () => {
       regions: s.regions,
       instanceNames: [...cloud, ...local].map((i) => i.instance_name),
       instanceURLs: [...cloud, ...local].map((i) => i.url),
+      cloudInstancesBeingModified: cloud.filter((i) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
       cloudInstanceCount: cloud.length,
       freeCloudInstanceCount: cloud.filter((i) => i.compute.price === 'FREE' && i.storage.price === 'FREE').length,
       localInstanceCount: local.length,
@@ -74,6 +75,7 @@ export default () => {
           <Loader />
         ) : purchaseStep === 'type' ? (
           <InstanceTypeForm
+            cloudInstancesBeingModified={cloudInstancesBeingModified}
             canAddCloudInstance={config.total_cloud_instance_limit && config.total_cloud_instance_limit > cloudInstanceCount}
             cloudInstanceLimit={config.total_cloud_instance_limit}
             canAddLocalInstance={config.total_local_instance_limit && config.total_local_instance_limit > localInstanceCount}

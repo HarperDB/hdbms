@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 
 import useNewInstance from '../../../state/stores/newInstance';
 
-export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, localInstanceLimit }) => {
+export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, localInstanceLimit, cloudInstancesBeingModified }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -18,6 +18,8 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
         setFormState({ error: `You have reached the limit of ${localInstanceLimit} total local instance${localInstanceLimit !== 1 ? 's' : ''}` });
       } else if (!is_local && cloudInstanceLimit && !canAddCloudInstance) {
         setFormState({ error: `You have reached the limit of ${cloudInstanceLimit} total cloud instance${cloudInstanceLimit !== 1 ? 's' : ''}` });
+      } else if (!is_local && cloudInstancesBeingModified) {
+        setFormState({ error: 'Please wait until your existing cloud instances are created' });
       } else {
         setNewInstance({ ...newInstance, is_local });
         setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);

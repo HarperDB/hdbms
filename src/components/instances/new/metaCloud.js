@@ -21,8 +21,8 @@ export default ({ instanceNames }) => {
     if (submitted) {
       if (instanceNames.includes(instance_name)) {
         setFormState({ submitted: false, error: `An instance named "${instance_name}" already exists` });
-      } else if (!user.match(/^[^a-zA-Z0-9]+$/)) {
-        setFormState({ submitted: false, error: 'usernames may not contain special characters' });
+      } else if (!user.match(/^[a-zA-Z0-9-_]+$/)) {
+        setFormState({ submitted: false, error: 'usernames must have only letters, numbers, and underscores' });
       } else if ((instance_name.length && user.length && pass.length)) {
         setNewInstance({ ...newInstance, instance_name, user, pass, is_ssl: true });
         setTimeout(() => history.push('/instances/new/details_cloud'), 0);
