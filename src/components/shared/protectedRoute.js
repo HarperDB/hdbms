@@ -38,7 +38,7 @@ export default ({ component, path }) => {
       getRegions();
       getCustomer({ auth, payload: { customer_id: auth.customer_id } });
     }
-  }, [])
+  }, []);
 
   useAsyncEffect(async () => {
     if (auth && !fetching && products && regions) {

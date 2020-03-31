@@ -79,8 +79,6 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       clustering,
     };
   } catch (e) {
-    console.log(e);
-
     return {
       instance: 'COULD NOT CONNECT',
       instanceError: true,

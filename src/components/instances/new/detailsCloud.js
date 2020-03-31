@@ -67,7 +67,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
             />
           </ContentContainer>
 
-          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px" className="mb-4">
+          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"

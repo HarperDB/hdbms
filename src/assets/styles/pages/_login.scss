@@ -6,12 +6,12 @@
   justify-content: center;
   left: 50%;
   max-width: 270px;
+  min-height: 343px;
   overflow: visible;
   position: absolute;
   top: 0;
   transform: translateX(-50%);
   width: 100%;
-  min-height: 343px;
 
   &.sign-up {
     min-height: 553px;
@@ -55,14 +55,33 @@
     }
   }
 
-  .subdomain-label {
-    font-size: 0.75rem;
-    line-height: 1.7;
+  .subdomain-form {
+    padding-right: 0;
+    width: 120px;
+
+    input {
+      width: 95px;
+    }
   }
 
+  .subdomain-label {
+    color: $color-white;
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+    padding-left: 0;
+    padding-top: 12px;
+    white-space: nowrap;
+
+    a {
+      color: $color-white !important;
+    }
+  }
+
+
+
   .disclaimer {
-    font-size: $font-size-smaller;
     color: $white-overlay !important;
+    font-size: $font-size-smaller;
 
     a,
     a:hover {

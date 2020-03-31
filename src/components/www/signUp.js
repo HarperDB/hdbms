@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, CardBody } from '@nio/ui-kit';
+import { Input, Button, Row, Col, Tooltip } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import isEmail from '../../util/isEmail';
@@ -9,6 +9,7 @@ import ContentContainer from '../shared/contentContainer';
 export default () => {
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({});
+  const [showToolTip, setShowToolTip] = useState(false);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -107,7 +108,7 @@ export default () => {
                 />
               </Col>
               <Col xs="4" className="pt-2 pl-1 text-nowrap">
-                .harperdbcloud.com
+                .harperdbcloud.com <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}><i className="fa fa-question-circle" /></a>
               </Col>
             </Row>
           </ContentContainer>
@@ -140,6 +141,9 @@ export default () => {
               {formState.error}
             </div>
           )}
+          <Tooltip isOpen={showToolTip} placement="top-end" target="subdomainHelp" className="subdomain-tooltip">
+            The URL you will use to reach HarperDB Cloud Instances.
+          </Tooltip>
         </>
       )}
     </div>

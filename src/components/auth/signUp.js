@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Input, Button, Row, Col, Card, CardBody, Tooltip } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import handleKeydown from '../../util/handleKeydown';
 export default () => {
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({});
+  const [showToolTip, setShowToolTip] = useState(false);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -117,7 +118,7 @@ export default () => {
                 onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
               />
               <Row>
-                <Col xs="6">
+                <Col className="subdomain-form">
                   <Input
                     onKeyDown={(e) => handleKeydown(e, setFormState)}
                     className="mb-2 text-center"
@@ -129,8 +130,8 @@ export default () => {
                     onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
                   />
                 </Col>
-                <Col xs="6" className="pt-2 pl-0 text-white text-nowrap subdomain-label">
-                  .harperdbcloud.com
+                <Col className="subdomain-label">
+                  .harperdbcloud.com <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}><i className="fa fa-question-circle" /></a>
                 </Col>
               </Row>
               <Input
@@ -165,6 +166,9 @@ export default () => {
               <NavLink to="/sign-in" className="login-nav-link">Already Have An Account? Sign In Instead.</NavLink>
             </div>
           )}
+          <Tooltip isOpen={showToolTip} placement="top-end" target="subdomainHelp" className="subdomain-tooltip">
+            The URL you will use to reach HarperDB Cloud Instances.
+          </Tooltip>
         </>
       )}
     </div>
