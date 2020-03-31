@@ -91,8 +91,8 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
     <>
       <Card>
         <CardBody>
-          {computeProduct.price !== 'FREE' && <div className="mb-2">The selected <b>instance type</b> has a cost of <b>${computeProduct.price}/{computeProduct.interval}</b>.</div>}
-          {storageProduct.price !== 'FREE' && <div className="mb-2">The selected <b>storage size</b> has a cost of <b>${storageProduct.price}/{storageProduct.interval}</b>.</div>}
+          {computeProduct?.price !== 'FREE' && <div className="mb-2">The selected <b>instance type</b> has a cost of <b>${computeProduct?.price}/{computeProduct?.interval}</b>.</div>}
+          {storageProduct?.price !== 'FREE' && <div className="mb-2">The selected <b>storage size</b> has a cost of <b>${storageProduct?.price}/{storageProduct?.interval}</b>.</div>}
           Please add a credit card to your account using the form below. If you registered using a promo code, your card will not be charged until your promo credits run out.
           <hr className="mt-4 mb-2" />
           <Row>

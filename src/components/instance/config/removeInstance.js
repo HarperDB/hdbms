@@ -5,8 +5,10 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/stores/instanceState';
 import ContentContainer from '../../shared/contentContainer';
+import appState from '../../../state/stores/appState';
 
 export default ({ setRemovingInstance }) => {
+  const cloudInstancesBeingModified = useStoreState(appState, (s) => s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length);
   const { compute_stack_id, instance_name, is_local } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     instance_name: s.instance_name,
@@ -20,7 +22,9 @@ export default ({ setRemovingInstance }) => {
     if (submitted) {
       const { delete_instance_name } = formData;
 
-      if (instance_name !== delete_instance_name) {
+      if (!is_local && cloudInstancesBeingModified) {
+        setFormState({ error: 'another cloud instance is being modified' });
+      } else if (instance_name !== delete_instance_name) {
         setFormState({ error: 'instance name is not correct' });
       } else {
         setRemovingInstance(compute_stack_id);
@@ -42,7 +46,11 @@ export default ({ setRemovingInstance }) => {
             />
           </ContentContainer>
 
-          {formData.delete_instance_name === instance_name && (
+          {formState.error ? (
+            <div className="mt-1">
+              {formState.error}
+            </div>
+          ) : formData.delete_instance_name === instance_name && (
             <>
               <Button
                 onClick={() => setFormState({ submitted: true })}

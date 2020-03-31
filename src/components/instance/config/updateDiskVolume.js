@@ -13,11 +13,13 @@ import ChangeSummary from './changeSummary';
 
 export default ({ setUpdatingInstance, computePrice }) => {
   const customer = useStoreState(appState, (s) => s.customer);
-  const { compute_stack_id, data_volume_size, storageProducts, storage } = useStoreState(instanceState, (s) => ({
+  const cloudInstancesBeingModified = useStoreState(appState, (s) => s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length);
+  const { compute_stack_id, data_volume_size, storageProducts, storage, is_local } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     data_volume_size: s.data_volume_size,
     storageProducts: s.storageProducts,
     storage: s.storage,
+    is_local: s.is_local,
   }));
   const history = useHistory();
   const [formState, setFormState] = useState({});
@@ -37,8 +39,12 @@ export default ({ setUpdatingInstance, computePrice }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const payload = { compute_stack_id, customer_id: customer.customer_id, ...formData };
-      setUpdatingInstance(payload);
+      if (!is_local && cloudInstancesBeingModified) {
+        setFormState({ error: 'another cloud instance is being modified' });
+      } else {
+        setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
+      }
+
     }
   }, [formState]);
 
@@ -71,7 +77,11 @@ export default ({ setUpdatingInstance, computePrice }) => {
             />
           )}
 
-          {hasChanged && totalPrice && !hasCard ? (
+          {formState.error ? (
+            <div className="mt-1">
+              {formState.error}
+            </div>
+          ) : hasChanged && totalPrice && !hasCard ? (
             <Button
               onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
               title="Confirm Instance Details"

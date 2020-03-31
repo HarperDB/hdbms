@@ -23,24 +23,19 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount, cloudInstancesBeingModified } = useStoreState(appState, (s) => {
-    const cloud = s.instances.filter((i) => !i.is_local && !['DELETE_COMPLETE', 'DELETE_IN_PROGRESS'].includes(i.status));
-    const local = s.instances.filter((i) => i.is_local);
-
-    return ({
-      auth: s.auth,
-      customer: s.customer,
-      products: s.products,
-      regions: s.regions,
-      instanceNames: [...cloud, ...local].map((i) => i.instance_name),
-      instanceURLs: [...cloud, ...local].map((i) => i.url),
-      cloudInstancesBeingModified: cloud.filter((i) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
-      cloudInstanceCount: cloud.length,
-      freeCloudInstanceCount: cloud.filter((i) => i.compute.price === 'FREE' && i.storage.price === 'FREE').length,
-      localInstanceCount: local.length,
-      freeLocalInstanceCount: local.filter((i) => i.compute.price === 'FREE').length,
-    });
-  });
+  const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount, cloudInstancesBeingModified } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    customer: s.customer,
+    products: s.products,
+    regions: s.regions,
+    instanceNames: s.instances.map((i) => i.instance_name),
+    instanceURLs: s.instances.map((i) => i.url),
+    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
+    cloudInstanceCount: s.instances.filter((i) => !i.is_local).length,
+    freeCloudInstanceCount: s.instances.filter((i) => !i.is_local && i.compute.price === 'FREE' && i.storage.price === 'FREE').length,
+    localInstanceCount: s.instances.filter((i) => i.is_local).length,
+    freeLocalInstanceCount: s.instances.filter((i) => i.is_local && i.compute.price === 'FREE').length,
+  }));
 
   const history = useHistory();
   const { purchaseStep = 'type' } = useParams();
