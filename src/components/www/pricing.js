@@ -1,9 +1,11 @@
 import React, { useEffect, Fragment } from 'react';
 import { useStoreState } from 'pullstate';
-import { Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col } from '@nio/ui-kit';
 
 import getProducts from '../../api/lms/getProducts';
 import appState from '../../state/stores/appState';
+
+import commaNumbers from '../../util/commaNumbers';
 
 export default () => {
   const products = useStoreState(appState, (s) => s.products);
@@ -14,7 +16,7 @@ export default () => {
 
   const getLocalPrice = (ram) => {
     const localRAMEquivalent = products.localCompute.find((l) => l.ram_allocation === ram);
-    return !localRAMEquivalent ? '-' : localRAMEquivalent.price === 'FREE' ? 'FREE' : `$${localRAMEquivalent.price}`;
+    return !localRAMEquivalent ? '-' : localRAMEquivalent.price === 'FREE' ? 'FREE' : `$${commaNumbers(localRAMEquivalent.price)}`;
   };
 
   return (
@@ -39,7 +41,7 @@ export default () => {
               {p.ram_allocation === 1024 ? 'Up To ' : ''}{p.ram_allocation / 1024}
             </Col>
             <Col xs="4" className="px-4 text-nowrap">
-              {p.price !== 'FREE' && '$'}{p.price}
+              {p.price === 'FREE' ? 'FREE' : `$${commaNumbers(p.price)}`}
             </Col>
             <Col xs="4" className="px-4 text-nowrap">
               {getLocalPrice(p.ram_allocation)}
