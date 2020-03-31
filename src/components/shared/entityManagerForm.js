@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
+import { useAlert } from 'react-alert';
 
 import queryInstance from '../../api/queryInstance';
 import instanceState from '../../state/stores/instanceState';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
+  const alert = useAlert();
   const { auth, url } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
     url: s.url,
@@ -25,6 +27,12 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     if (!entityName || items.includes(entityName)) {
       toggleNameError(true);
       error = true;
+    }
+
+    if (!entityName.match(/^[a-zA-Z0-9_]+$/)) {
+      toggleNameError(true);
+      error = true;
+      alert.error('You may only use alphanumeric characters or underscores.')
     }
 
     if (itemType === 'table' && !hashAttribute) {
