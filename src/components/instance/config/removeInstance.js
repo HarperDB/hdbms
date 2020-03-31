@@ -22,9 +22,7 @@ export default ({ setRemovingInstance }) => {
     if (submitted) {
       const { delete_instance_name } = formData;
 
-      if (!is_local && cloudInstancesBeingModified) {
-        setFormState({ error: 'another cloud instance is being modified' });
-      } else if (instance_name !== delete_instance_name) {
+      if (instance_name !== delete_instance_name) {
         setFormState({ error: 'instance name is not correct' });
       } else {
         setRemovingInstance(compute_stack_id);
@@ -32,57 +30,69 @@ export default ({ setRemovingInstance }) => {
     }
   }, [formState]);
 
+  useAsyncEffect(() => {
+    if (!is_local && cloudInstancesBeingModified) {
+      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+    }
+  }, [formData]);
+
   return (
     <>
       <span className="text-white mb-2 floating-card-header">remove instance</span>
       <Card className="my-3">
-        <CardBody className="text-small">
-          <ContentContainer header={`Enter "${instance_name}" below to begin.`}>
-            <Input
-              onChange={(e) => updateForm({ delete_instance_name: e.target.value })}
-              type="text"
-              title="instance_name"
-              value={formData.instance_name}
-            />
-          </ContentContainer>
-
+        <CardBody>
           {formState.error ? (
-            <div className="mt-1">
-              {formState.error}
-            </div>
-          ) : formData.delete_instance_name === instance_name && (
+            <Card className="mt-2 error">
+              <CardBody className="text-danger text-small text-center">
+                {formState.error}
+              </CardBody>
+            </Card>
+          ) : (
             <>
-              <Button
-                onClick={() => setFormState({ submitted: true })}
-                title="Confirm Instance Details"
-                block
-                disabled={formState.submitted}
-                className="mt-1"
-                color="danger"
-              >
-                Remove Instance
-              </Button>
+              <ContentContainer header={`Enter "${instance_name}" below to begin.`}>
+                <Input
+                  onChange={(e) => updateForm({ delete_instance_name: e.target.value })}
+                  type="text"
+                  title="instance_name"
+                  value={formData.instance_name}
+                />
+              </ContentContainer>
 
-              <hr className="mt-1" />
+              {formData.delete_instance_name === instance_name && (
+                <>
+                  <Button
+                    onClick={() => setFormState({ submitted: true })}
+                    title="Confirm Instance Details"
+                    block
+                    disabled={formState.submitted}
+                    className="mt-1"
+                    color="danger"
+                  >
+                    Remove Instance
+                  </Button>
 
-              {is_local ? (
-                <ul>
-                  <li><b>DOES NOT</b> uninstall HarperDB.</li>
-                  <li><b>DOES</b> leave all your data intact.</li>
-                  <li>REMOVES your instance license.</li>
-                  <li>STOPS recurring license charges.</li>
-                  <li>LIMITS instance to 1GB RAM.</li>
-                  <li>REMOVES instance from the Studio.</li>
-                  <li>RESTARTS the instance.</li>
-                </ul>
-              ) : (
-                <ul>
-                  <li><b>THIS IS</b> an irreversible process.</li>
-                  <li><b>IT CANNOT</b> be undone.</li>
-                  <li>DELETES your instance completely.</li>
-                  <li>STOPS recurring license charges.</li>
-                  <li>REMOVES instance from the Studio.</li>
-                </ul>
+                  <hr className="mt-1" />
+
+                  {is_local ? (
+                    <ul className="text-small">
+                      <li><b>DOES NOT</b> uninstall HarperDB.</li>
+                      <li><b>DOES</b> leave all your data intact.</li>
+                      <li>REMOVES your instance license.</li>
+                      <li>STOPS recurring license charges.</li>
+                      <li>LIMITS instance to 1GB RAM.</li>
+                      <li>REMOVES instance from the Studio.</li>
+                      <li>RESTARTS the instance.</li>
+                    </ul>
+                  ) : (
+                    <ul className="text-small">
+                      <li><b>THIS IS</b> an irreversible process.</li>
+                      <li><b>IT CANNOT</b> be undone.</li>
+                      <li>DELETES your instance completely.</li>
+                      <li>STOPS recurring license charges.</li>
+                      <li>REMOVES instance from the Studio.</li>
+                    </ul>
+                  )}
+                </>
               )}
             </>
           )}

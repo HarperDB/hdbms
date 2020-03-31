@@ -53,7 +53,7 @@ export default ({ instanceNames }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Admin Credentials">
+          <ContentContainer header="Create Instance Admin Credentials">
             <Row>
               <Col xs="4" className="pt-2">
                 Username

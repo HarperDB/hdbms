@@ -39,71 +39,78 @@ export default ({ setUpdatingInstance, computePrice }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      if (!is_local && cloudInstancesBeingModified) {
-        setFormState({ error: 'another cloud instance is being modified' });
-      } else {
-        setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
-      }
-
+      setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
     }
   }, [formState]);
+
+  useAsyncEffect(() => {
+    if (!is_local && cloudInstancesBeingModified) {
+      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+    }
+  }, [formData]);
 
   return (
     <>
       <span className="text-white mb-2 floating-card-header">resize disk volume</span>
       <Card className="my-3">
         <CardBody>
-          <ContentContainer header="Instance Storage" className="mb-2">
-            <SelectDropdown
-              classNamePrefix="react-select"
-              onChange={({ value }) => updateForm({ ...formData, data_volume_size: value })}
-              options={storageProducts}
-              value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
-              defaultValue={storage}
-              isSearchable={false}
-              isClearable={false}
-              isLoading={!storageProducts}
-              placeholder="Select Data Volume Size"
-              styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-            />
-          </ContentContainer>
-
-          {hasChanged && (
-            <ChangeSummary
-              which="storage"
-              compute={computePrice ? `$${computePrice.toFixed(2)}/${storage.interval}` : 'FREE'}
-              storage={totalPrice ? `$${totalPrice.toFixed(2)}/${storage.interval}` : 'FREE'}
-              total={totalPrice ? `$${(computePrice + totalPrice).toFixed(2)}/${storage.interval}` : 'FREE'}
-            />
-          )}
-
           {formState.error ? (
-            <div className="mt-1">
-              {formState.error}
-            </div>
-          ) : hasChanged && totalPrice && !hasCard ? (
-            <Button
-              onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              className="mt-1"
-              color="danger"
-            >
-              Add Credit Card To Account
-            </Button>
-          ) : hasChanged ? (
-            <Button
-              onClick={() => setFormState({ submitted: true })}
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              className="mt-1"
-              color="purple"
-            >
-              Update Instance Storage
-            </Button>
-          ) : null}
+            <Card className="mt-2 error">
+              <CardBody className="text-danger text-small text-center">
+                {formState.error}
+              </CardBody>
+            </Card>
+          ) : (
+            <>
+              <ContentContainer header="Instance Storage" className="mb-2">
+                <SelectDropdown
+                  classNamePrefix="react-select"
+                  onChange={({ value }) => updateForm({ ...formData, data_volume_size: value })}
+                  options={storageProducts}
+                  value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
+                  defaultValue={storage}
+                  isSearchable={false}
+                  isClearable={false}
+                  isLoading={!storageProducts}
+                  placeholder="Select Data Volume Size"
+                  styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+                />
+              </ContentContainer>
+
+              {hasChanged && (
+                <ChangeSummary
+                  which="storage"
+                  compute={computePrice ? `$${computePrice.toFixed(2)}/${storage.interval}` : 'FREE'}
+                  storage={totalPrice ? `$${totalPrice.toFixed(2)}/${storage.interval}` : 'FREE'}
+                  total={totalPrice ? `$${(computePrice + totalPrice).toFixed(2)}/${storage.interval}` : 'FREE'}
+                />
+              )}
+
+              {hasChanged && totalPrice && !hasCard ? (
+                <Button
+                  onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
+                  title="Confirm Instance Details"
+                  block
+                  disabled={!hasChanged || formState.submitted}
+                  className="mt-1"
+                  color="danger"
+                >
+                  Add Credit Card To Account
+                </Button>
+              ) : hasChanged ? (
+                <Button
+                  onClick={() => setFormState({ submitted: true })}
+                  title="Confirm Instance Details"
+                  block
+                  disabled={!hasChanged || formState.submitted}
+                  className="mt-1"
+                  color="purple"
+                >
+                  Update Instance Storage
+                </Button>
+              ) : null}
+            </>
+          )}
         </CardBody>
       </Card>
       <br />

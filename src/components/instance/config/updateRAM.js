@@ -39,70 +39,78 @@ export default ({ setUpdatingInstance, storagePrice }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      if (!is_local && cloudInstancesBeingModified) {
-        setFormState({ error: 'another cloud instance is being modified' });
-      } else {
-        setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
-      }
+      setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
     }
   }, [formState]);
+
+  useAsyncEffect(() => {
+    if (!is_local && cloudInstancesBeingModified) {
+      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+    }
+  }, [formData]);
 
   return (
     <>
       <span className="text-white mb-2 floating-card-header">update RAM</span>
       <Card className="my-3">
         <CardBody>
-          <ContentContainer header="Instance RAM">
-            <SelectDropdown
-              classNamePrefix="react-select"
-              onChange={({ value }) => updateForm({ ...formData, stripe_plan_id: value })}
-              options={computeProducts}
-              value={computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id)}
-              defaultValue={compute}
-              isSearchable={false}
-              isClearable={false}
-              isLoading={!computeProducts}
-              placeholder="select a RAM allotment"
-              styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-            />
-          </ContentContainer>
-
-          {hasChanged && (
-            <ChangeSummary
-              which="compute"
-              compute={totalPrice ? `$${totalPrice.toFixed(2)}/${compute.interval}` : 'FREE'}
-              storage={storagePrice ? `$${storagePrice.toFixed(2)}/${compute.interval}` : 'FREE'}
-              total={totalPrice ? `$${(storagePrice + totalPrice).toFixed(2)}/${compute.interval}` : 'FREE'}
-            />
-          )}
-
           {formState.error ? (
-            <div className="mt-1">
-              {formState.error}
-            </div>
-          ) : hasChanged && totalPrice && !hasCard ? (
-            <Button
-              onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              className="mt-1"
-              color="danger"
-            >
-              Add Credit Card To Account
-            </Button>
-          ) : hasChanged ? (
-            <Button
-              onClick={() => setFormState({ submitted: true })}
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              className="mt-1"
-              color="purple"
-            >
-              Update Instance
-            </Button>
-          ) : null}
+            <Card className="mt-2 error">
+              <CardBody className="text-danger text-small text-center">
+                {formState.error}
+              </CardBody>
+            </Card>
+          ) : (
+            <>
+              <ContentContainer header="Instance RAM">
+                <SelectDropdown
+                  classNamePrefix="react-select"
+                  onChange={({ value }) => updateForm({ ...formData, stripe_plan_id: value })}
+                  options={computeProducts}
+                  value={computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id)}
+                  defaultValue={compute}
+                  isSearchable={false}
+                  isClearable={false}
+                  isLoading={!computeProducts}
+                  placeholder="select a RAM allotment"
+                  styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+                />
+              </ContentContainer>
+
+              {hasChanged && (
+                <ChangeSummary
+                  which="compute"
+                  compute={totalPrice ? `$${totalPrice.toFixed(2)}/${compute.interval}` : 'FREE'}
+                  storage={storagePrice ? `$${storagePrice.toFixed(2)}/${compute.interval}` : 'FREE'}
+                  total={totalPrice ? `$${(storagePrice + totalPrice).toFixed(2)}/${compute.interval}` : 'FREE'}
+                />
+              )}
+
+              {hasChanged && totalPrice && !hasCard ? (
+                <Button
+                  onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
+                  title="Confirm Instance Details"
+                  block
+                  disabled={!hasChanged || formState.submitted}
+                  className="mt-1"
+                  color="danger"
+                >
+                  Add Credit Card To Account
+                </Button>
+              ) : hasChanged ? (
+                <Button
+                  onClick={() => setFormState({ submitted: true })}
+                  title="Confirm Instance Details"
+                  block
+                  disabled={!hasChanged || formState.submitted}
+                  className="mt-1"
+                  color="purple"
+                >
+                  Update Instance
+                </Button>
+              ) : null}
+            </>
+          )}
         </CardBody>
       </Card>
       <br />
