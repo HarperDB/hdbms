@@ -11,7 +11,8 @@ export default ({ filters, instances }) => {
     let pass = false;
     if (i.instance_name && i.instance_name.indexOf(filters.search) !== -1) pass = true;
     if (i.host && i.host.indexOf(filters.search) !== -1) pass = true;
-    if (i.domain_name && i.domain_name.indexOf(filters.search) !== -1) pass = true;
+    if (i.url && i.url.indexOf(filters.search) !== -1) pass = true;
+    if (i.instance_region && i.instance_region.indexOf(filters.search) !== -1) pass = true;
     return pass;
   });
 };
