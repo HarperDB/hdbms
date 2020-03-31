@@ -5,7 +5,4 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   mode: 'production',
-  output: {
-    publicPath: 'https://ds5zz9rfvzuta.cloudfront.net/',
-  },
 });

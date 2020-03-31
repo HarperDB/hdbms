@@ -17,6 +17,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public'),
     filename: '[contenthash].js',
+    publicPath: '/',
   },
 
   optimization: {
@@ -37,7 +38,6 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
     new CopyWebpackPlugin([
       { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },
-      { from: path.join(__dirname, '/src/assets/fonts/'), to: 'fonts/' },
       { from: path.join(__dirname, '/node_modules/font-awesome/fonts/'), to: 'fonts/' },
     ]),
   ],
@@ -60,13 +60,6 @@ module.exports = {
             options: { minimize: true },
           },
         ],
-      },
-      {
-        include: [/\.(ttf|woff|woff2|eot|svg)$/],
-        loader: require.resolve('file-loader'),
-        options: {
-          name: 'fonts/[name].[ext]',
-        },
       },
       {
         test: /\.s?css$/,

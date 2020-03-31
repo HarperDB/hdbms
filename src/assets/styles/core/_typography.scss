@@ -127,29 +127,3 @@ strong {
 .text-purple {
   color: $color-purple;
 }
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 200;
-  src: url('/fonts/raleway-v14-latin-200.eot'); /* IE9 Compat Modes */
-  src: local('Raleway ExtraLight'), local('Raleway-ExtraLight'),
-    url('/fonts/raleway-v14-latin-200.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/raleway-v14-latin-200.woff2') format('woff2'),
-    url('/fonts/raleway-v14-latin-200.woff')  format('woff'),
-    url('/fonts/raleway-v14-latin-200.ttf') format('truetype'),
-    url('/fonts/raleway-v14-latin-200.svg#Raleway') format('svg'); /* Legacy iOS */
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/raleway-v14-latin-700.eot');
-  src: local('Raleway Bold'), local('Raleway-Bold'),
-    url('/fonts/raleway-v14-latin-700.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/raleway-v14-latin-700.woff2') format('woff2'),
-    url('/fonts/raleway-v14-latin-700.woff') format('woff'),
-    url('/fonts/raleway-v14-latin-700.ttf') format('truetype'),
-    url('/fonts/raleway-v14-latin-700.svg#Raleway') format('svg');
-}
