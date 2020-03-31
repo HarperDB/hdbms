@@ -47,7 +47,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         <div className="p-4 text-center">
           <b>Adding Credit Card To Your Account</b><br /><br /><br />
           <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" /><br /><br />
-          The credit schnauzer is securely contacting Stripe.
+          The Credit Schnauzer is securely contacting Stripe.
         </div>
       </CardBody>
     </Card>

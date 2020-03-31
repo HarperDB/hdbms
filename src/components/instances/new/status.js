@@ -59,7 +59,7 @@ export default ({ closeAndResetModal }) => {
         <div className="p-4 text-center">
           <b>{newInstance.is_local ? 'Adding' : 'Creating'} Your Instance</b><br /><br /><br />
           <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" /><br /><br />
-          The networking Samoyed is gnawing the CAT cables.
+          The Networking Samoyed is gnawing the CAT cables.
         </div>
       </CardBody>
     </Card>

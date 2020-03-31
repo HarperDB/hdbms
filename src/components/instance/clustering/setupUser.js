@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Input } from '@nio/ui-kit';
+import { Row, Col, Button, Input, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
@@ -17,17 +17,22 @@ export default () => {
   const [formState, setFormState] = useState({});
   const [formData, updateForm] = useState({});
 
-  useAsyncEffect(() => {
+  useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
       const { username, password } = formData;
       if (!username || !password) {
-        setFormState({ error: true });
+        setFormState({ error: 'All fields are required' });
       } else {
-        createClusterUser({ username, password, role: cluster_role, auth, url });
+        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
+        if (response) {
+          setFormState({ error: response.message });
+        }
       }
     }
   }, [formState]);
+
+  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return cluster_user ? (
     <Row>
@@ -58,6 +63,13 @@ export default () => {
         placeholder="password"
       />
       <Button color="success" block onClick={() => setFormState({ submitted: true })}>Create Cluster User</Button>
+      {formState.error && (
+        <Card className="mt-3 error no-shadow">
+          <CardBody className="text-danger text-small text-center">
+            {formState.error}
+          </CardBody>
+        </Card>
+      )}
     </>
   );
 };
