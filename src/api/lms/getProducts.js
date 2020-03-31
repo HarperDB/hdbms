@@ -1,13 +1,13 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/stores/appState';
 
-const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { instance_ram, instance_type } }) => ({
+const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { ram_allocation, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
-  ram: instance_ram,
-  ram_allocation: instance_ram ? (parseInt(instance_ram.replace('GB', ''), 10) * 1024) : false,
+  ram: `${ram_allocation / 1024}GB`,
+  ram_allocation,
   instance_type,
   interval,
-  label: `${instance_ram} RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
+  label: `${ram_allocation / 1024}GB RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
   value: id,
 });
 
@@ -37,14 +37,17 @@ export default async () => {
   };
 
   if (Array.isArray(response.body)) {
+    console.log(response.body);
     const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
     const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)');
     const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
     const cloudStorageOptions = [10, 100, 250, 500, 1000];
 
     const cloudStorage = cloudStorageOptions.map((size) => buildRadioSelectStorageOptions(size, cloudStoragePlans.plans[0]));
-    const cloudCompute = cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).filter((o) => o.ram).sort((a, b) => a.ram - b.ram);
-    const localCompute = localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).filter((o) => o.ram).sort((a, b) => a.ram - b.ram);
+    const cloudCompute = cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram - b.ram);
+    const localCompute = localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram - b.ram);
+
+    console.log(cloudStorage, cloudCompute, localCompute);
 
     products = {
       cloudStorage,
