@@ -65,8 +65,8 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
 
     if (apply.error) {
       return {
-        instance: apply.message,
-        instanceError: true,
+        instance: 'APPLYING LICENSE',
+        instanceError: false,
         clustering,
       };
     }

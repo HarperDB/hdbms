@@ -35,8 +35,10 @@ export default ({ instanceNames, instanceURLs }) => {
 
         try {
           const response = await queryInstance({ operation: 'describe_all' }, formData, url);
-          if (response.error) {
+          if (response.error && response.message === 'Login failed') {
             setFormState({ error: 'The provided credentials cannot log into that instance.' });
+          } else if (response.error && is_ssl) {
+            setFormState({ error: 'You may need to accept the instance\'s self-signed cert', url });
           } else {
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
@@ -172,6 +174,8 @@ export default ({ instanceNames, instanceURLs }) => {
         <Card className="mt-3 error">
           <CardBody className="text-danger text-small text-center">
             {formState.error}
+            &nbsp;
+            {formState.url && (<a href={formState.url} target="_blank" rel="noopener noreferrer"><i className="fa fa-external-link-square" /></a>)}
           </CardBody>
         </Card>
       )}
