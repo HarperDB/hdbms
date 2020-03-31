@@ -122,7 +122,7 @@ export default () => {
             />
           </ContentContainer>
 
-          <div className="text-small text-center pt-3 pb-4">
+          <div className="text-small pt-3 pb-4">
             By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
           </div>
 
