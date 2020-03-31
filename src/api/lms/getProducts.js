@@ -37,7 +37,6 @@ export default async () => {
   };
 
   if (Array.isArray(response.body)) {
-    console.log(response.body);
     const localComputeOptions = response.body.find((p) => p.name === 'HarperDB Local Annual');
     const cloudComputeOptions = response.body.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)');
     const cloudStoragePlans = response.body.find((p) => p.name === 'HarperDB Cloud Storage');
@@ -46,8 +45,6 @@ export default async () => {
     const cloudStorage = cloudStorageOptions.map((size) => buildRadioSelectStorageOptions(size, cloudStoragePlans.plans[0]));
     const cloudCompute = cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram - b.ram);
     const localCompute = localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram - b.ram);
-
-    console.log(cloudStorage, cloudCompute, localCompute);
 
     products = {
       cloudStorage,
