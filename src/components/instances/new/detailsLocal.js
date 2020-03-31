@@ -35,7 +35,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Type">
+          <ContentContainer header="Instance RAM">
             <RadioCheckbox
               className="radio-button"
               type="radio"

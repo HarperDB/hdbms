@@ -1,13 +1,15 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/stores/appState';
 
+import commaNumbers from '../../util/commaNumbers';
+
 const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { ram_allocation, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
   ram: `${ram_allocation / 1024}GB`,
   ram_allocation,
   instance_type,
   interval,
-  label: `${ram_allocation / 1024}GB RAM | ${amount_decimal !== '0' ? `${amount}/${interval}` : 'FREE'}`,
+  label: `${ram_allocation / 1024}GB RAM | ${amount_decimal !== '0' ? `${commaNumbers(amount)}/${interval}` : 'FREE'}`,
   value: id,
 });
 
@@ -19,7 +21,7 @@ const buildRadioSelectStorageOptions = (size, { tiers, interval }) => {
     disk_space: size === 1000 ? '1TB' : `${size}GB`,
     disk_space_raw: size,
     interval,
-    label: `${size === 1000 ? '1TB' : `${size}GB`} Disk Space | ${pricingTier.unit_amount ? `$${price}/${interval}` : 'FREE'}`,
+    label: `${size === 1000 ? '1TB' : `${size}GB`} Disk Space | ${pricingTier.unit_amount ? `$${commaNumbers(price)}/${interval}` : 'FREE'}`,
     value: size,
   };
 };
@@ -29,6 +31,8 @@ export default async () => {
     endpoint: 'getProducts',
     method: 'POST',
   });
+
+  if (response.errorMessage) return false;
 
   let products = {
     cloudStorage: [],

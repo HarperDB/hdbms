@@ -41,7 +41,7 @@ export default () => {
   useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
-    <div id="login-form">
+    <div id="login-form" className="sign-up">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.processing ? (
         <>
