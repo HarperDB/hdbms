@@ -5,11 +5,11 @@ import commaNumbers from '../../util/commaNumbers';
 
 const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { ram_allocation, instance_type } }) => ({
   price: amount_decimal !== '0' ? (amount_decimal / 100).toFixed(2) : 'FREE',
-  ram: `${ram_allocation / 1024}GB`,
-  ram_allocation,
+  ram: `${parseInt(ram_allocation, 10) / 1024}GB`,
+  ram_allocation: parseInt(ram_allocation, 10),
   instance_type,
   interval,
-  label: `${ram_allocation / 1024}GB RAM | ${amount_decimal !== '0' ? `${commaNumbers(amount)}/${interval}` : 'FREE'}`,
+  label: `${parseInt(ram_allocation, 10) / 1024}GB RAM | ${amount_decimal !== '0' ? `${commaNumbers(amount)}/${interval}` : 'FREE'}`,
   value: id,
 });
 

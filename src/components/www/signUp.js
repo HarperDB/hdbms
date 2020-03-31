@@ -45,7 +45,7 @@ export default () => {
         <div className="p-4 text-center">
           <b>creating account</b><br /><br />
           <i className="fa fa-lg fa-spinner fa-spin text-purple" /><br /><br />
-          the office dogs are typing furiously.
+          the account poodle is typing fur-iously.
         </div>
       ) : formState.success ? (
         <div className="p-4 text-center">

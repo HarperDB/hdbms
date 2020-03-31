@@ -52,7 +52,7 @@ export default () => {
       )) : (
         <div className="p-4 text-center text-small">
           <i className="fa fa-spinner fa-spin text-purple mb-4" /><br />
-          The office dogs are fetching the price sheet.
+          The Chief Fur Officer is fetching the price sheet.
         </div>
       )}
     </div>

@@ -43,7 +43,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       <Card>
         <CardBody>
 
-          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px" className="mb-4">
             <RadioCheckbox
               id="data_volume_size"
               className="radio-button"
@@ -55,7 +55,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
             />
           </ContentContainer>
 
-          <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px" className="mb-4">
             <RadioCheckbox
               id="stripe_plan_id"
               className="radio-button"
@@ -67,7 +67,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
             />
           </ContentContainer>
 
-          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px" className="mb-4">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"
