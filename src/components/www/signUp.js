@@ -4,6 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import isEmail from '../../util/isEmail';
 import addCustomer from '../../api/lms/addCustomer';
+import ContentContainer from '../shared/contentContainer';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -39,7 +40,7 @@ export default () => {
   useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
 
   return (
-    <div id="add-customer-background">
+    <div id="standalone">
       {formState.processing ? (
         <div className="p-4 text-center">
           <b>creating account</b><br /><br />
@@ -54,78 +55,75 @@ export default () => {
         </div>
       ) : (
         <>
-          <b>First Name</b>
-          <hr className="my-1" />
-          <Input
-            type="text"
-            className="mb-0"
-            name="firstname"
-            value={formData.firstname || ''}
-            onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
-            disabled={formState.submitted}
-          />
+          <ContentContainer header="First Name" className="mb-3">
+            <Input
+              type="text"
+              name="firstname"
+              value={formData.firstname || ''}
+              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+              disabled={formState.submitted}
+            />
+          </ContentContainer>
 
-          <b>Last Name</b>
-          <hr className="my-1" />
-          <Input
-            type="text"
-            className="mb-0"
-            name="lastname"
-            value={formData.lastname || ''}
-            onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
-            disabled={formState.submitted}
-          />
+          <ContentContainer header="Last Name" className="mb-3">
+            <Input
+              type="text"
+              name="lastname"
+              value={formData.lastname || ''}
+              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+              disabled={formState.submitted}
+            />
+          </ContentContainer>
 
-          <b>Email Address</b>
-          <hr className="my-1" />
-          <Input
-            type="text"
-            className="mb-0"
-            name="email"
-            value={formData.email || ''}
-            onChange={(e) => updateForm({ ...formData, email: e.target.value })}
-            disabled={formState.submitted}
-          />
+          <ContentContainer header="Email Address" className="mb-3">
+            <Input
+              type="text"
+              name="email"
+              value={formData.email || ''}
+              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+              disabled={formState.submitted}
+            />
+          </ContentContainer>
 
-          <b>Company</b>
-          <hr className="my-1" />
-          <Input
-            type="text"
-            className="mb-0"
-            name="customer_name"
-            value={formData.customer_name || ''}
-            onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
-            disabled={formState.submitted}
-          />
+          <ContentContainer header="Company" className="mb-3">
+            <Input
+              type="text"
+              className="mb-0"
+              name="customer_name"
+              value={formData.customer_name || ''}
+              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
+              disabled={formState.submitted}
+            />
+          </ContentContainer>
 
-          <b>Subdomain</b>
-          <hr className="my-1" />
-          <Row noGutters>
-            <Col xs="8">
-              <Input
-                type="text"
-                className="mb-0"
-                name="customer_name"
-                value={formData.subdomain || ''}
-                onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
-                disabled={formState.submitted}
-              />
-            </Col>
-            <Col xs="4" className="pt-2 pl-1 text-nowrap">
-              .harperdbcloud.com
-            </Col>
-          </Row>
+          <ContentContainer header="Subdomain" className="mb-3">
+            <Row noGutters>
+              <Col xs="8">
+                <Input
+                  type="text"
+                  className="mb-0"
+                  name="customer_name"
+                  value={formData.subdomain || ''}
+                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
+                  disabled={formState.submitted}
+                />
+              </Col>
+              <Col xs="4" className="pt-2 pl-1 text-nowrap">
+                .harperdbcloud.com
+              </Col>
+            </Row>
+          </ContentContainer>
 
-          <b>Coupon Code (optional)</b>
-          <hr className="my-1" />
-          <Input
-            type="text"
-            className="mb-0"
-            name="coupon_code"
-            value={formData.coupon_code || ''}
-            onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
-            disabled={formState.submitted}
-          />
+          <ContentContainer header="Coupon Code (optional)" className="mb-3">
+            <Input
+              type="text"
+              className="mb-0"
+              name="coupon_code"
+              value={formData.coupon_code || ''}
+              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
+              disabled={formState.submitted}
+            />
+          </ContentContainer>
 
           <Button
             color="success"

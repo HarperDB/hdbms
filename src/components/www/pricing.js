@@ -18,7 +18,7 @@ export default () => {
   };
 
   return (
-    <div id="add-customer-background">
+    <div id="standalone">
       <hr className="mt-0 mb-2" />
       <Row>
         <Col xs="4" className="px-4 text-nowrap">
@@ -39,7 +39,7 @@ export default () => {
               {p.ram_allocation === 1024 ? 'Up To ' : ''}{p.ram_allocation / 1024}
             </Col>
             <Col xs="4" className="px-4 text-nowrap">
-              {p.price === 'FREE' ? p.price : `$${p.price}`}
+              {p.price !== 'FREE' && '$'}{p.price}
             </Col>
             <Col xs="4" className="px-4 text-nowrap">
               {getLocalPrice(p.ram_allocation)}

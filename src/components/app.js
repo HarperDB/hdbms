@@ -7,8 +7,8 @@ import ResetPassword from './auth/resetPassword';
 import UpdatePassword from './auth/updatePassword';
 import ResendRegistrationEmail from './auth/resendRegistrationEmail';
 
-import SignUpStandalone from './www.harperdb.io/signUpStandalone';
-import Pricing from './www.harperdb.io/pricing';
+import SignUpStandalone from './www/signUp';
+import Pricing from './www/pricing';
 
 import ProtectedRoute from './shared/protectedRoute';
 import Account from './account';

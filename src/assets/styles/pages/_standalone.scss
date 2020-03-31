@@ -1,4 +1,4 @@
-#add-customer-background {
+#standalone {
   background-color: #fff;
   bottom: 0;
   height: 100vh;
@@ -12,5 +12,6 @@
   input {
     border-radius: 0 !important;
     border-width: 0 0 1px !important;
+    box-shadow: none !important;
   }
 }
