@@ -30,6 +30,8 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({ error: `An instance named "${instance_name}" already exists` });
       } else if (instanceURLs.includes(url)) {
         setFormState({ error: `An instance at "${url}" already exists` });
+      } else if (!user.match(/^[^a-zA-Z0-9]+$/)) {
+        setFormState({ submitted: false, error: 'usernames may not contain special characters' });
       } else if ((instance_name.length && user.length && pass.length && host.length && port.length)) {
         setNewInstance({ ...newInstance, instance_name, user, pass, host, port, is_ssl });
 

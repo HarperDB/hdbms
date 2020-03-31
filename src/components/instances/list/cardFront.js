@@ -94,7 +94,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
               <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
-            ) : instanceAuths[compute_stack_id] ? (
+            ) : instanceAuth ? (
               <i onClick={(e) => { e.stopPropagation(); setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false }); }} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
             ) : (
               <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
