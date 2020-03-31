@@ -88,7 +88,6 @@ export default () => {
           <ContentContainer header="Company" className="mb-3">
             <Input
               type="text"
-              className="mb-0"
               name="customer_name"
               value={formData.customer_name || ''}
               onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
@@ -101,7 +100,6 @@ export default () => {
               <Col xs="8">
                 <Input
                   type="text"
-                  className="mb-0"
                   name="customer_name"
                   value={formData.subdomain || ''}
                   onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
@@ -117,7 +115,6 @@ export default () => {
           <ContentContainer header="Coupon Code (optional)" className="mb-3">
             <Input
               type="text"
-              className="mb-0"
               name="coupon_code"
               value={formData.coupon_code || ''}
               onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
@@ -125,11 +122,9 @@ export default () => {
             />
           </ContentContainer>
 
-          <hr />
-          <div className="text-small text-center">
+          <div className="text-small text-center pt-3 pb-4">
             By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
           </div>
-          <hr />
 
           <Button
             color="success"
