@@ -123,7 +123,7 @@ export default () => {
                     </Button>
                   </div>
                 ) : status === 'processing' ? (
-                  <div className="text-purple text-center">pre-processing{commaNumbers(newRecordCount)} records</div>
+                  <div className="text-purple text-center">pre-processing {commaNumbers(newRecordCount)} records</div>
                 ) : fileError ? (
                   <div className="text-danger text-center">{fileError}</div>
                 ) : (
