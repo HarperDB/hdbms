@@ -1,63 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Card, CardBody, Tooltip } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
-import isEmail from '../../util/isEmail';
-import addCustomer from '../../api/lms/addCustomer';
+import handleSignup from '../../util/auth/handleSignup';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  useAsyncEffect(async () => {
-    const { submitted, processing } = formState;
-    if (submitted && !processing) {
-      const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
-
-      if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({
-          error: 'All fields must be filled out',
-        });
-        setTimeout(() => updateForm({}), 1000);
-      } else if (!isEmail(email)) {
-        setFormState({
-          error: 'Please provide a valid email',
-        });
-        setTimeout(() => updateForm({}), 1000);
-      } else {
-        setFormState({
-          ...formState,
-          processing: true,
-        });
-        const response = await addCustomer({
-          payload: {
-            firstname,
-            lastname,
-            email,
-            customer_name,
-            subdomain,
-            coupon_code,
-          },
-        });
-        if (response.result === false) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            updateForm({});
-          }, 1000);
-        } else {
-          setFormState({ success: true });
-        }
-      }
-    }
+  useEffect(() => {
+    handleSignup({ formState, setFormState, formData });
   }, [formState]);
 
-  useAsyncEffect(() => {
+  useEffect(() => {
     if (!formState.submitted) {
       setFormState({});
     }
@@ -116,7 +73,7 @@ export default () => {
                 value={formData.firstname || ''}
                 disabled={formState.submitted}
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     firstname: e.target.value,
                   })
@@ -131,7 +88,7 @@ export default () => {
                 value={formData.lastname || ''}
                 disabled={formState.submitted}
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     lastname: e.target.value,
                   })
@@ -146,7 +103,7 @@ export default () => {
                 value={formData.email || ''}
                 disabled={formState.submitted}
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     email: e.target.value,
                   })
@@ -161,7 +118,7 @@ export default () => {
                 value={formData.customer_name || ''}
                 disabled={formState.submitted}
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     customer_name: e.target.value,
                   })
@@ -178,7 +135,7 @@ export default () => {
                     value={formData.subdomain || ''}
                     disabled={formState.submitted}
                     onChange={(e) =>
-                      updateForm({
+                      setFormData({
                         ...formData,
                         subdomain: e.target.value,
                       })
@@ -200,7 +157,7 @@ export default () => {
                 placeholder="coupon code (optional)"
                 value={formData.coupon_code || ''}
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     coupon_code: e.target.value,
                   })
@@ -228,7 +185,7 @@ export default () => {
                   })
                 }
               >
-                Sign Up For Free
+                {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
               </Button>
             </CardBody>
           </Card>

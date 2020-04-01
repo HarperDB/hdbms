@@ -8,10 +8,11 @@ import { useStoreState } from 'pullstate';
 
 import config from '../../../../config';
 
+import instanceState from '../../../state/stores/instanceState';
+import defaultTableState from '../../../util/datatable/defaultTableState';
+
 import commaNumbers from '../../../util/commaNumbers';
 import getTableData from '../../../api/instance/getTableData';
-import defaultTableState from '../../../util/datatable/defaultTableState';
-import instanceState from '../../../state/stores/instanceState';
 
 let tableChangeTimeout = false;
 

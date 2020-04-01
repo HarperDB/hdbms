@@ -11,9 +11,9 @@
   &.error,
   &.success {
     border: 1px solid $color-lightgrey !important;
-    text-align: center;
     font-size: $font-size-smaller;
     font-weight: $font-weight-bold;
+    text-align: center;
   }
 
   &.error {

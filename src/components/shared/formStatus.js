@@ -8,7 +8,7 @@ export default ({ header, subhead = ' ', height, status }) => (
       <div className="py-4">
         <i
           className={`fa fa-lg ${
-            status === 'processing' ? 'fa-spinner fa-spin text-purple' : status === 'success' ? 'fa-thumbs-up text-purple' : 'fa-exclamation-triangle text-danger'
+            status === 'processing' ? 'fa-spinner fa-spin text-purple' : status === 'success' ? 'fa-check-circle text-purple' : 'fa-exclamation-triangle text-danger'
           }`}
         />
       </div>

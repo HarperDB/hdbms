@@ -1,62 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Tooltip } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 
-import isEmail from '../../util/isEmail';
-import addCustomer from '../../api/lms/addCustomer';
 import ContentContainer from '../shared/contentContainer';
+import handleSignup from '../../util/auth/handleSignup';
 
 export default () => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  useAsyncEffect(async () => {
-    const { submitted, processing } = formState;
-    if (submitted && !processing) {
-      const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
-
-      if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({
-          error: 'All fields must be filled out',
-        });
-        setTimeout(() => updateForm({}), 1000);
-      } else if (!isEmail(email)) {
-        setFormState({
-          error: 'Please provide a valid email',
-        });
-        setTimeout(() => updateForm({}), 1000);
-      } else {
-        setFormState({
-          ...formState,
-          processing: true,
-        });
-        const response = await addCustomer({
-          payload: {
-            firstname,
-            lastname,
-            email,
-            customer_name,
-            subdomain,
-            coupon_code,
-          },
-        });
-        if (response.result === false) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            updateForm({});
-          }, 1000);
-        } else {
-          setFormState({ success: true });
-        }
-      }
-    }
+  useEffect(() => {
+    handleSignup({ formState, setFormState, formData });
   }, [formState]);
 
-  useAsyncEffect(() => {
+  useEffect(() => {
     if (!formState.submitted) {
       setFormState({});
     }
@@ -72,17 +29,17 @@ export default () => {
           <i className="fa fa-lg fa-spinner fa-spin text-purple" />
           <br />
           <br />
-          the account poodle is typing fur-iously.
+          The Account Poodle is typing fur-iously.
         </div>
       ) : formState.success ? (
         <div className="p-4 text-center">
           <b>success!</b>
           <br />
           <br />
-          <i className="fa fa-lg fa-thumbs-up text-purple" />
+          <i className="fa fa-lg fa-check-circle text-success" />
           <br />
           <br />
-          check your email for your username and password
+          Check your email for your username and password
         </div>
       ) : (
         <>
@@ -92,7 +49,7 @@ export default () => {
               name="firstname"
               value={formData.firstname || ''}
               onChange={(e) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   firstname: e.target.value,
                 })
@@ -107,7 +64,7 @@ export default () => {
               name="lastname"
               value={formData.lastname || ''}
               onChange={(e) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   lastname: e.target.value,
                 })
@@ -122,7 +79,7 @@ export default () => {
               name="email"
               value={formData.email || ''}
               onChange={(e) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   email: e.target.value,
                 })
@@ -137,7 +94,7 @@ export default () => {
               name="customer_name"
               value={formData.customer_name || ''}
               onChange={(e) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   customer_name: e.target.value,
                 })
@@ -154,7 +111,7 @@ export default () => {
                   name="customer_name"
                   value={formData.subdomain || ''}
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       subdomain: e.target.value,
                     })
@@ -177,7 +134,7 @@ export default () => {
               name="coupon_code"
               value={formData.coupon_code || ''}
               onChange={(e) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   coupon_code: e.target.value,
                 })
