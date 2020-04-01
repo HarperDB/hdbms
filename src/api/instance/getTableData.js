@@ -22,7 +22,10 @@ export default async ({ schema, table, tableState, auth, url }) => {
     let dataSQL = `SELECT * FROM ${schema}.${table} `;
     if (tableState.filtered.length) dataSQL += `WHERE ${tableState.filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
     if (tableState.sorted.length) dataSQL += `ORDER BY \`${tableState.sorted[0].id}\` ${tableState.sorted[0].desc ? 'DESC' : 'ASC'}`;
-    dataSQL += ` LIMIT ${tableState.page * tableState.pageSize + tableState.pageSize} OFFSET ${tableState.page * tableState.pageSize}`;
+    dataSQL += ` OFFSET ${tableState.page * tableState.pageSize} FETCH ${tableState.pageSize}`;
+
+    console.log(dataSQL);
+
     newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url);
   } catch (e) {
     // console.log('Failed to get table data');
