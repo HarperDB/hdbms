@@ -24,8 +24,6 @@ export default async ({ schema, table, tableState, auth, url }) => {
     if (tableState.sorted.length) dataSQL += `ORDER BY \`${tableState.sorted[0].id}\` ${tableState.sorted[0].desc ? 'DESC' : 'ASC'}`;
     dataSQL += ` OFFSET ${tableState.page * tableState.pageSize} FETCH ${tableState.pageSize}`;
 
-    console.log(dataSQL);
-
     newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url);
   } catch (e) {
     // console.log('Failed to get table data');
