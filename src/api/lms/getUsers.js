@@ -15,5 +15,7 @@ export default async ({ auth, payload: { customer_id } }) => {
     users = response.body.sort((a, b) => (a.lastname < b.lastname ? 1 : -1));
   }
 
-  return appState.update((s) => { s.users = users; });
+  return appState.update((s) => {
+    s.users = users;
+  });
 };

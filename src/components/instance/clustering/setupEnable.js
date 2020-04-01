@@ -19,7 +19,16 @@ export default ({ port, setSubmitted, submitted }) => {
       <Button
         color="success"
         block
-        onClick={() => { configureCluster({ instance_name, cluster_user, port, auth, url }); setSubmitted(true); }}
+        onClick={() => {
+          configureCluster({
+            instance_name,
+            cluster_user,
+            port,
+            auth,
+            url,
+          });
+          setSubmitted(true);
+        }}
         disabled={submitted}
       >
         Enable Instance Clustering

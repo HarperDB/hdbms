@@ -17,5 +17,7 @@ export default async ({ username, password, role, auth, url }) => {
       message: result.message,
     };
   }
-  return instanceState.update((s) => { s.lastUpdate = Date.now(); });
+  return instanceState.update((s) => {
+    s.lastUpdate = Date.now();
+  });
 };

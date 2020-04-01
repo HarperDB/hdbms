@@ -20,5 +20,7 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
     }));
   }
 
-  return appState.update((s) => { s.instances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1)); });
+  return appState.update((s) => {
+    s.instances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
+  });
 };

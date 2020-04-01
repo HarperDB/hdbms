@@ -22,15 +22,18 @@ export default () => {
   useAsyncEffect(async () => {
     if (auth && url) {
       setLoading(true);
-      const { file } = await readLog({ auth, url });
-      if (Array.isArray(file)) {
-        setLogs(file);
-      }
+      const newLogs = await readLog({
+        auth,
+        url,
+      });
+      setLogs(newLogs);
       setLoading(false);
     }
   }, [lastUpdate, auth, url]);
 
-  useInterval(() => { if (autoRefresh) setLastUpdate(Date.now()); }, config.instance_refresh_rate);
+  useInterval(() => {
+    if (autoRefresh) setLastUpdate(Date.now());
+  }, config.instance_refresh_rate);
 
   return (
     <>
@@ -57,7 +60,8 @@ export default () => {
           </Row>
           <hr className="mt-1 mb-2" />
           <div className="log-scroller">
-            {logs && logs.map((l, i) => (
+            {logs.map((l, i) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Fragment key={i}>
                 <Row>
                   <Col xl="3" lg="12" md="3" className={`text-${['error', 'fatal'].includes(l.level) ? 'danger' : 'grey'}`}>

@@ -17,16 +17,34 @@ export default () => {
       const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({ error: 'All fields must be filled out' });
+        setFormState({
+          error: 'All fields must be filled out',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else if (!isEmail(email)) {
-        setFormState({ error: 'Please provide a valid email' });
+        setFormState({
+          error: 'Please provide a valid email',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ ...formState, processing: true });
-        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
+        setFormState({
+          ...formState,
+          processing: true,
+        });
+        const response = await addCustomer({
+          payload: {
+            firstname,
+            lastname,
+            email,
+            customer_name,
+            subdomain,
+            coupon_code,
+          },
+        });
         if (response.result === false) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
           setTimeout(() => {
             setFormState({});
             updateForm({});
@@ -38,20 +56,32 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <div id="standalone">
       {formState.processing ? (
         <div className="p-4 text-center">
-          <b>creating account</b><br /><br />
-          <i className="fa fa-lg fa-spinner fa-spin text-purple" /><br /><br />
+          <b>creating account</b>
+          <br />
+          <br />
+          <i className="fa fa-lg fa-spinner fa-spin text-purple" />
+          <br />
+          <br />
           the account poodle is typing fur-iously.
         </div>
       ) : formState.success ? (
         <div className="p-4 text-center">
-          <b>success!</b><br /><br />
-          <i className="fa fa-lg fa-thumbs-up text-purple" /><br /><br />
+          <b>success!</b>
+          <br />
+          <br />
+          <i className="fa fa-lg fa-thumbs-up text-purple" />
+          <br />
+          <br />
           check your email for your username and password
         </div>
       ) : (
@@ -61,7 +91,12 @@ export default () => {
               type="text"
               name="firstname"
               value={formData.firstname || ''}
-              onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+              onChange={(e) =>
+                updateForm({
+                  ...formData,
+                  firstname: e.target.value,
+                })
+              }
               disabled={formState.submitted}
             />
           </ContentContainer>
@@ -71,7 +106,12 @@ export default () => {
               type="text"
               name="lastname"
               value={formData.lastname || ''}
-              onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+              onChange={(e) =>
+                updateForm({
+                  ...formData,
+                  lastname: e.target.value,
+                })
+              }
               disabled={formState.submitted}
             />
           </ContentContainer>
@@ -81,7 +121,12 @@ export default () => {
               type="text"
               name="email"
               value={formData.email || ''}
-              onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                updateForm({
+                  ...formData,
+                  email: e.target.value,
+                })
+              }
               disabled={formState.submitted}
             />
           </ContentContainer>
@@ -91,7 +136,12 @@ export default () => {
               type="text"
               name="customer_name"
               value={formData.customer_name || ''}
-              onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
+              onChange={(e) =>
+                updateForm({
+                  ...formData,
+                  customer_name: e.target.value,
+                })
+              }
               disabled={formState.submitted}
             />
           </ContentContainer>
@@ -103,12 +153,20 @@ export default () => {
                   type="text"
                   name="customer_name"
                   value={formData.subdomain || ''}
-                  onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
+                  onChange={(e) =>
+                    updateForm({
+                      ...formData,
+                      subdomain: e.target.value,
+                    })
+                  }
                   disabled={formState.submitted}
                 />
               </Col>
               <Col xs="4" className="pt-2 pl-1 text-nowrap">
-                .harperdbcloud.com <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}><i className="fa fa-question-circle" /></a>
+                .harperdbcloud.com{' '}
+                <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
+                  <i className="fa fa-question-circle" />
+                </a>
               </Col>
             </Row>
           </ContentContainer>
@@ -118,19 +176,36 @@ export default () => {
               type="text"
               name="coupon_code"
               value={formData.coupon_code || ''}
-              onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
+              onChange={(e) =>
+                updateForm({
+                  ...formData,
+                  coupon_code: e.target.value,
+                })
+              }
               disabled={formState.submitted}
             />
           </ContentContainer>
 
           <div className="text-small pt-3 pb-4">
-            By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+            By creating an account, I certify that I have read and agree to the HarperDB{' '}
+            <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+              Privacy Policy
+            </a>{' '}
+            and{' '}
+            <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+              HarperDB Cloud Terms of Service
+            </a>
+            .
           </div>
 
           <Button
             color="success"
             block
-            onClick={() => setFormState({ submitted: true })}
+            onClick={() =>
+              setFormState({
+                submitted: true,
+              })
+            }
             disabled={formState.submitted}
           >
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Create A Free HarperDB Account</span>}

@@ -1,7 +1,8 @@
 .csv-uploader {
-  border: 0;
-  height: 300px;
+  height: 350px;
   position: relative;
+  padding: 0;
+  background: $lightest-grey-overlay;
 
   .csv-message {
     padding: 0 15px;
@@ -22,12 +23,13 @@
     overflow: hidden;
     position: relative;
     width: 100%;
+    border-radius: 4px;
 
     #csv-input {
       background: none !important;
       border: 0 !important;
       box-shadow: none !important;
-      height: 330px;
+      height: 380px;
       position: absolute;
       top: -30px;
       width: 100%;

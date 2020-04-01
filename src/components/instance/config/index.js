@@ -37,14 +37,22 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (removingInstance) {
-      const response = await removeInstance({ auth, payload: { customer_id: auth.customer_id, compute_stack_id: removingInstance } });
+      const response = await removeInstance({
+        auth,
+        payload: {
+          customer_id: auth.customer_id,
+          compute_stack_id: removingInstance,
+        },
+      });
 
       if (response.result === false) {
         alert.error('There was an error removing your instance. Please try again later.');
         setRemovingInstance(false);
       } else {
         alert.success('Instance deleted successfully');
-        appState.update((s) => { s.lastUpdate = Date.now(); });
+        appState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
         setTimeout(() => history.push('/instances'), 3000);
       }
     }
@@ -52,14 +60,19 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (updatingInstance) {
-      const response = await updateInstance({ auth, payload: updatingInstance });
+      const response = await updateInstance({
+        auth,
+        payload: updatingInstance,
+      });
 
       if (response.result === false) {
         alert.error('There was an error updating your instance. Please try again later.');
         setUpdatingInstance(false);
       } else {
         alert.success('Instance update initialized successfully');
-        appState.update((s) => { s.lastUpdate = Date.now(); });
+        appState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
         setTimeout(() => history.push('/instances'), 3000);
       }
     }
@@ -76,9 +89,7 @@ export default () => {
       </Col>
       <Col lg="4" xs="12">
         <UpdateRAM setUpdatingInstance={setUpdatingInstance} storagePrice={!storage || storage.price === 'FREE' ? 0 : parseFloat(storage.price)} />
-        {!is_local && (
-          <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} computePrice={!compute || compute.price === 'FREE' ? 0 : parseFloat(compute.price)} />
-        )}
+        {!is_local && <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} computePrice={!compute || compute.price === 'FREE' ? 0 : parseFloat(compute.price)} />}
         <RemoveInstance setRemovingInstance={setRemovingInstance} />
       </Col>
       <Col lg="8" xs="12">

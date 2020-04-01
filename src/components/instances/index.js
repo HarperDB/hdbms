@@ -16,22 +16,33 @@ import filterInstances from '../../util/instance/filterInstances';
 
 export default () => {
   const { action } = useParams();
-  const [filters, setFilters] = useState({ search: '', local: true, cloud: true });
+  const [filters, setFilters] = useState({
+    search: '',
+    local: true,
+    cloud: true,
+  });
   const instances = useStoreState(appState, (s) => s.instances);
 
-  useInterval(() => { if (!action) appState.update((s) => { s.lastUpdate = Date.now(); }); }, config.instances_refresh_rate);
+  useInterval(() => {
+    if (!action)
+      appState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
+  }, config.instances_refresh_rate);
 
   return (
     <div id="instances">
-      <SubNav
-        filters={filters}
-        setFilters={setFilters}
-      />
+      <SubNav filters={filters} setFilters={setFilters} />
       <Row>
         <NewInstanceCard />
-        {filterInstances({ filters, instances }).map((i) => (<InstanceCard key={i.compute_stack_id} {...i} />))}
+        {filterInstances({
+          filters,
+          instances,
+        }).map((i) => (
+          <InstanceCard key={i.compute_stack_id} {...i} />
+        ))}
       </Row>
-      {action === 'new' && (<NewInstanceModal />)}
+      {action === 'new' && <NewInstanceModal />}
     </div>
   );
 };

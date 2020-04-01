@@ -34,24 +34,28 @@ export default () => {
         </Col>
       </Row>
       <hr className="my-2" />
-      {products ? products.cloudCompute.map((p, i) => (
-        <Fragment key={i}>
-          <Row>
-            <Col xs="4" className="px-4 text-nowrap">
-              {p.ram_allocation === 1024 ? 'Up To ' : ''}{p.ram_allocation / 1024}
-            </Col>
-            <Col xs="4" className="px-4 text-nowrap">
-              {p.price === 'FREE' ? 'FREE' : `$${commaNumbers(p.price)}`}
-            </Col>
-            <Col xs="4" className="px-4 text-nowrap">
-              {getLocalPrice(p.ram_allocation)}
-            </Col>
-          </Row>
-          <hr className="my-2" />
-        </Fragment>
-      )) : (
+      {products ? (
+        products.cloudCompute.map((p) => (
+          <Fragment key={p.ram_allocation}>
+            <Row>
+              <Col xs="4" className="px-4 text-nowrap">
+                {p.ram_allocation === 1024 ? 'Up To ' : ''}
+                {p.ram_allocation / 1024}
+              </Col>
+              <Col xs="4" className="px-4 text-nowrap">
+                {p.price === 'FREE' ? 'FREE' : `$${commaNumbers(p.price)}`}
+              </Col>
+              <Col xs="4" className="px-4 text-nowrap">
+                {getLocalPrice(p.ram_allocation)}
+              </Col>
+            </Row>
+            <hr className="my-2" />
+          </Fragment>
+        ))
+      ) : (
         <div className="p-4 text-center text-small">
-          <i className="fa fa-spinner fa-spin text-purple mb-4" /><br />
+          <i className="fa fa-spinner fa-spin text-purple mb-4" />
+          <br />
           The Chief Fur Officer is fetching the price sheet.
         </div>
       )}

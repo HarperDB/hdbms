@@ -4,7 +4,10 @@ export default async ({ auth, payload: { customer_id, compute_stack_id } }) => {
   const response = await queryLMS({
     endpoint: 'removeInstance',
     method: 'POST',
-    payload: { customer_id, compute_stack_id },
+    payload: {
+      customer_id,
+      compute_stack_id,
+    },
     auth,
   });
 

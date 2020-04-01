@@ -17,16 +17,24 @@ export default () => {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({ error: 'invalid email supplied' });
+        setFormState({
+          error: 'invalid email supplied',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else if (!email) {
-        setFormState({ error: 'email is required' });
+        setFormState({
+          error: 'email is required',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ processing: true });
+        setFormState({
+          processing: true,
+        });
         const response = await resetPassword({ payload: { email } });
         if (response.result === false) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
           setTimeout(() => {
             setFormState({});
             updateForm({});
@@ -38,7 +46,11 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <div id="login-form">
@@ -47,7 +59,9 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              resetting password<br /><br />
+              resetting password
+              <br />
+              <br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -57,12 +71,16 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              success!<br /><br />
+              success!
+              <br />
+              <br />
               if that email exists in our system, we sent you a password reset email.
             </CardBody>
           </Card>
           <div className="text-small text-white text-center">
-            <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+            <NavLink to="/sign-in" className="login-nav-link">
+              Back to Sign In
+            </NavLink>
           </div>
         </>
       ) : (
@@ -70,7 +88,12 @@ export default () => {
           <Card className="mb-3">
             <CardBody className="text-center text-white">
               <Input
-                onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    email: e.target.value,
+                  })
+                }
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -80,7 +103,11 @@ export default () => {
                 placeholder="email address"
               />
               <Button
-                onClick={() => setFormState({ submitted: true })}
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
                 disabled={formState.submitted}
                 title="Send Password Reset Email"
                 block
@@ -92,15 +119,20 @@ export default () => {
           </Card>
           {formState.error ? (
             <div className="login-nav-link error">
-              {formState.error}&nbsp;
+              {formState.error}
+              &nbsp;
             </div>
           ) : (
             <Row>
               <Col xs="6">
-                <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+                <NavLink to="/sign-in" className="login-nav-link">
+                  Back to Sign In
+                </NavLink>
               </Col>
               <Col xs="6" className="text-right">
-                <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
+                <NavLink to="/sign-up" className="login-nav-link">
+                  Sign Up for Free
+                </NavLink>
               </Col>
             </Row>
           )}

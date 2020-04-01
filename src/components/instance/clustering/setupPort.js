@@ -11,7 +11,9 @@ export default ({ port, setPort }) => {
     if (submitted) {
       const { newPort } = formData;
       if (!newPort) {
-        setFormState({ error: 'All fields are required.' });
+        setFormState({
+          error: 'All fields are required.',
+        });
       } else {
         setPort(newPort);
       }
@@ -23,7 +25,9 @@ export default ({ port, setPort }) => {
       <Col xs="12">
         <hr />
       </Col>
-      <Col xs="10" className="text">Cluster Port {port}</Col>
+      <Col xs="10" className="text">
+        Cluster Port {port}
+      </Col>
       <Col xs="2" className="text-right">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
@@ -33,13 +37,28 @@ export default ({ port, setPort }) => {
       <hr />
       <div className="mb-3">Cluster Port</div>
       <Input
-        onChange={(e) => updateForm({ ...formData, newPort: e.target.value })}
+        onChange={(e) =>
+          updateForm({
+            ...formData,
+            newPort: e.target.value,
+          })
+        }
         className="mb-3"
         type="number"
         title="port"
         placeholder="cluster port"
       />
-      <Button color="success" block onClick={() => setFormState({ submitted: true })}>Set Cluster Port</Button>
+      <Button
+        color="success"
+        block
+        onClick={() =>
+          setFormState({
+            submitted: true,
+          })
+        }
+      >
+        Set Cluster Port
+      </Button>
     </>
   );
 };

@@ -29,16 +29,11 @@ export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
       />
       <Card className="mt-3 mb-4">
         <CardBody>
-          {sortedRoles && sortedRoles.length ? sortedRoles.map((item) => (
-            <EntityManagerRow
-              key={item.id}
-              item={item}
-              baseUrl={baseUrl}
-              isActive={activeItem === item.id}
-              isDropping={isDropping}
-              toggleDropItem={toggleDropItem}
-            />
-          )) : null}
+          {sortedRoles && sortedRoles.length
+            ? sortedRoles.map((item) => (
+                <EntityManagerRow key={item.id} item={item} baseUrl={baseUrl} isActive={activeItem === item.id} isDropping={isDropping} toggleDropItem={toggleDropItem} />
+              ))
+            : null}
           {((items && !items.length) || isCreating) && (
             <EntityManagerForm
               items={items}

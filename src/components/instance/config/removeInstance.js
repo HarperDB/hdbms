@@ -23,7 +23,9 @@ export default ({ setRemovingInstance }) => {
       const { delete_instance_name } = formData;
 
       if (instance_name !== delete_instance_name) {
-        setFormState({ error: 'instance name is not correct' });
+        setFormState({
+          error: 'instance name is not correct',
+        });
       } else {
         setRemovingInstance(compute_stack_id);
       }
@@ -32,7 +34,9 @@ export default ({ setRemovingInstance }) => {
 
   useAsyncEffect(() => {
     if (!is_local && cloudInstancesBeingModified) {
-      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+      setFormState({
+        error: 'another cloud instance is being modified. please wait.',
+      });
     }
   }, [formData]);
 
@@ -43,15 +47,17 @@ export default ({ setRemovingInstance }) => {
         <CardBody>
           {formState.error ? (
             <Card className="mt-2 error">
-              <CardBody className="text-danger text-small text-center">
-                {formState.error}
-              </CardBody>
+              <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
             </Card>
           ) : (
             <>
               <ContentContainer header={`Enter "${instance_name}" below to begin.`}>
                 <Input
-                  onChange={(e) => updateForm({ delete_instance_name: e.target.value })}
+                  onChange={(e) =>
+                    updateForm({
+                      delete_instance_name: e.target.value,
+                    })
+                  }
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
@@ -61,7 +67,11 @@ export default ({ setRemovingInstance }) => {
               {formData.delete_instance_name === instance_name && (
                 <>
                   <Button
-                    onClick={() => setFormState({ submitted: true })}
+                    onClick={() =>
+                      setFormState({
+                        submitted: true,
+                      })
+                    }
                     title="Confirm Instance Details"
                     block
                     disabled={formState.submitted}
@@ -75,8 +85,12 @@ export default ({ setRemovingInstance }) => {
 
                   {is_local ? (
                     <ul className="text-small">
-                      <li><b>DOES NOT</b> uninstall HarperDB.</li>
-                      <li><b>DOES</b> leave all your data intact.</li>
+                      <li>
+                        <b>DOES NOT</b> uninstall HarperDB.
+                      </li>
+                      <li>
+                        <b>DOES</b> leave all your data intact.
+                      </li>
                       <li>REMOVES your instance license.</li>
                       <li>STOPS recurring license charges.</li>
                       <li>LIMITS instance to 1GB RAM.</li>
@@ -85,8 +99,12 @@ export default ({ setRemovingInstance }) => {
                     </ul>
                   ) : (
                     <ul className="text-small">
-                      <li><b>THIS IS</b> an irreversible process.</li>
-                      <li><b>IT CANNOT</b> be undone.</li>
+                      <li>
+                        <b>THIS IS</b> an irreversible process.
+                      </li>
+                      <li>
+                        <b>IT CANNOT</b> be undone.
+                      </li>
                       <li>DELETES your instance completely.</li>
                       <li>STOPS recurring license charges.</li>
                       <li>REMOVES instance from the Studio.</li>

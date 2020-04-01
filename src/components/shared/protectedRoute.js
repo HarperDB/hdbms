@@ -28,7 +28,9 @@ export default ({ component, path }) => {
 
   const logOut = () => {
     setPersistedLMSAuth(false);
-    appState.update((s) => { s.auth = false; });
+    appState.update((s) => {
+      s.auth = false;
+    });
     setTimeout(() => history.push('/sign-in'), 0);
   };
 
@@ -36,14 +38,25 @@ export default ({ component, path }) => {
     if (auth && !fetching) {
       getProducts();
       getRegions();
-      getCustomer({ auth, payload: { customer_id: auth.customer_id } });
+      getCustomer({
+        auth,
+        payload: {
+          customer_id: auth.customer_id,
+        },
+      });
     }
   }, []);
 
   useAsyncEffect(async () => {
     if (auth && !fetching && products && regions) {
       setFetching(true);
-      await getInstances({ auth, payload: { customer_id: auth?.customer_id }, entities: { products, regions } });
+      await getInstances({
+        auth,
+        payload: {
+          customer_id: auth?.customer_id,
+        },
+        entities: { products, regions },
+      });
       setFetching(false);
     }
   }, [products, regions, lastUpdate]);
@@ -51,12 +64,7 @@ export default ({ component, path }) => {
   return auth?.email && auth?.pass ? (
     <>
       <TopNav logOut={logOut} />
-      {instances ? (
-        <Route path={path} component={component} />
-      ) : (
-        <Loader message="loading instances" />
-      )}
-
+      {instances ? <Route path={path} component={component} /> : <Loader message="loading instances" />}
     </>
   ) : (
     <Redirect to={`/sign-in${pathname !== '/instances' ? `?returnURL=${pathname}` : ''}`} />

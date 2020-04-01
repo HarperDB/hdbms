@@ -22,14 +22,18 @@ export default async ({ schema, table, tableState, auth, url }) => {
     let dataSQL = `SELECT * FROM ${schema}.${table} `;
     if (tableState.filtered.length) dataSQL += `WHERE ${tableState.filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
     if (tableState.sorted.length) dataSQL += `ORDER BY \`${tableState.sorted[0].id}\` ${tableState.sorted[0].desc ? 'DESC' : 'ASC'}`;
-    dataSQL += ` LIMIT ${(tableState.page * tableState.pageSize) + tableState.pageSize} OFFSET ${tableState.page * tableState.pageSize}`;
+    dataSQL += ` LIMIT ${tableState.page * tableState.pageSize + tableState.pageSize} OFFSET ${tableState.page * tableState.pageSize}`;
     newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url);
   } catch (e) {
     // console.log('Failed to get table data');
     fetchError = true;
   }
 
-  const result = { tableData: [], totalPages: 1, totalRecords: 0 };
+  const result = {
+    tableData: [],
+    totalPages: 1,
+    totalRecords: 0,
+  };
 
   if (fetchError) {
     return result;

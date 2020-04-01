@@ -17,9 +17,21 @@ export default ({ instances }) => {
     url: s.url,
     structure: s.structure,
   }));
-  const columns = clusterConfigColumns({ auth, url });
+  const columns = clusterConfigColumns({
+    auth,
+    url,
+  });
 
-  useAsyncEffect(() => setTableData(buildClusteringTable({ structure, instances })), [structure, instances]);
+  useAsyncEffect(
+    () =>
+      setTableData(
+        buildClusteringTable({
+          structure,
+          instances,
+        })
+      ),
+    [structure, instances]
+  );
 
   return (
     <>
@@ -30,7 +42,17 @@ export default ({ instances }) => {
           </span>
         </Col>
         <Col className="text-right text-white">
-          <i title="Filter Instances" className="fa fa-search mr-3" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
+          <i
+            title="Filter Instances"
+            className="fa fa-search mr-3"
+            onClick={() =>
+              setTableState({
+                ...tableState,
+                filtered: tableState.showFilter ? [] : tableState.filtered,
+                showFilter: !tableState.showFilter,
+              })
+            }
+          />
         </Col>
       </Row>
       <Card className="my-3">
@@ -38,13 +60,23 @@ export default ({ instances }) => {
           <ReactTable
             data={tableData}
             columns={columns}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onFilteredChange={(value) =>
+              setTableState({
+                ...tableState,
+                filtered: value,
+              })
+            }
             filtered={tableState.filtered}
             sortable={false}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            onPageSizeChange={(value) =>
+              setTableState({
+                ...tableState,
+                pageSize: value,
+              })
+            }
             resizable={false}
           />
         </CardBody>

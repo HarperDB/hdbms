@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
-import { Row, Col, Button } from '@nio/ui-kit';
-import { useAlert } from 'react-alert';
+import { Row, Col, Button, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/stores/appState';
 
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
+import FormStatus from '../../shared/formStatus';
+import getCustomer from '../../../api/lms/getCustomer';
 
-export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCode, cardLast4, cardExp }) => {
+export default ({ setEditingCard, customerCard }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const instances = useStoreState(appState, (s) => s.instances);
-  const alert = useAlert();
+  const customer = useStoreState(appState, (s) => s.customer);
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
@@ -19,80 +20,115 @@ export default ({ setEditingCard, setLastUpdate, stripeId, cardId, cardPostalCod
     if (submitted) {
       const hasPaidInstance = instances.find((i) => i.compute.price !== 'FREE' || (i.storage && i.storage.price !== 'FREE'));
       if (hasPaidInstance) {
-        setFormState({ error: 'You may not remove your payment method if you have active, non-free instances' });
+        setFormState({
+          error: 'You have active, non-free instances.',
+        });
+        setTimeout(() => setFormState({}), 2000);
       } else {
-        const response = await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
+        setFormState({
+          processing: true,
+        });
+
+        const response = await removePaymentMethod({
+          auth: lmsAuth,
+          payload: {
+            stripe_id: customer.stripe_id,
+            payment_method_id: customerCard.id,
+          },
+        });
         if (response.result) {
-          setLastUpdate(Date.now());
-          alert.success(response.message);
-          setFormState({});
+          setFormState({
+            success: true,
+          });
+          await getCustomer({
+            auth: lmsAuth,
+            payload: {
+              customer_id: lmsAuth.customer_id,
+            },
+          });
+          setEditingCard(false);
         } else {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
         }
       }
     }
   }, [formState]);
 
-  return (
+  return formState.processing ? (
+    <FormStatus height="283px" status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+  ) : formState.success ? (
+    <FormStatus height="283px" status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
+  ) : formState.error ? (
+    <FormStatus height="283px" status="error" header={formState.error} subhead="You must remove them to remove your card." />
+  ) : (
     <>
-      <Row className="standardHeight">
-        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          card number
-        </Col>
-        <Col md="6" xs="12">
-          <div className="input-static">**** **** **** {cardLast4}</div>
-        </Col>
-      </Row>
-      <hr />
-      <Row className="standardHeight">
-        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          expiration
-        </Col>
-        <Col md="6" xs="12">
-          <div className="input-static">{cardExp}</div>
-        </Col>
-      </Row>
-      <hr />
-      <Row className="standardHeight">
-        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          cvcc
-        </Col>
-        <Col md="6" xs="12">
-          <div className="input-static">***</div>
-        </Col>
-      </Row>
-      <hr />
-      <Row className="standardHeight">
-        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          billing postal code
-        </Col>
-        <Col md="6" xs="12">
-          <div className="input-static">{cardPostalCode}</div>
-        </Col>
-      </Row>
-      <hr />
+      <Card className="credit-card-form">
+        <CardBody>
+          <Row>
+            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+              card number
+            </Col>
+            <Col md="6" xs="12">
+              <div className="input-static">
+                **** **** ****
+                {customerCard?.card?.last4}
+              </div>
+            </Col>
+            <Col xs="12">
+              <hr className="my-2" />
+            </Col>
+            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+              expiration
+            </Col>
+            <Col md="6" xs="12">
+              <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
+            </Col>
+            <Col xs="12">
+              <hr className="my-2" />
+            </Col>
+            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+              cvcc
+            </Col>
+            <Col md="6" xs="12">
+              <div className="input-static">***</div>
+            </Col>
+            <Col xs="12">
+              <hr className="my-2" />
+            </Col>
+            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+              billing postal code
+            </Col>
+            <Col md="6" xs="12">
+              <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
       <Row>
         <Col sm="6">
-          <Button block color="purple" className="mb-2" onClick={() => setEditingCard(true)}>Update Card</Button>
+          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+            Update Card
+          </Button>
         </Col>
         <Col sm="6">
           <Button
-            block
-            color="danger"
-            className="mb-2"
-            onClick={() => setFormState({ submitted: true })}
+            title="Remove Card"
             disabled={formState.submitted}
+            onClick={() =>
+              setFormState({
+                submitted: true,
+              })
+            }
+            block
+            className="mt-3"
+            color="danger"
           >
-            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove Card</span>}
+            Remove Card
           </Button>
         </Col>
       </Row>
-      {formState.error && (
-        <div className="text-danger text-small text-center text-italic">
-          <hr />
-          {formState.error}
-        </div>
-      )}
     </>
   );
 };

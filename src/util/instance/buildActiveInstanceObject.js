@@ -10,10 +10,22 @@ import browseTableColumns from '../datatable/browseTableColumns';
 import buildPermissionStructure from './buildPermissionStructure';
 
 export default async ({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts }) => {
-  const schema = await describeAll({ auth, url: thisInstance.url });
-  const users = await listUsers({ auth, url: thisInstance.url });
-  const roles = await listRoles({ auth, url: thisInstance.url });
-  const cluster_status = await clusterStatus({ auth, url: thisInstance.url });
+  const schema = await describeAll({
+    auth,
+    url: thisInstance.url,
+  });
+  const users = await listUsers({
+    auth,
+    url: thisInstance.url,
+  });
+  const roles = await listRoles({
+    auth,
+    url: thisInstance.url,
+  });
+  const cluster_status = await clusterStatus({
+    auth,
+    url: thisInstance.url,
+  });
 
   if (schema.error) {
     return {
@@ -24,11 +36,34 @@ export default async ({ thisInstance, auth, license, compute, storage, computePr
 
   const structure = browseTableColumns(schema);
   const permissions = buildPermissionStructure(schema);
-  const network = await getNetwork({ auth, url: thisInstance.url, users, roles, cluster_status });
+  const network = await getNetwork({
+    auth,
+    url: thisInstance.url,
+    users,
+    roles,
+    cluster_status,
+  });
 
-  const newInstanceState = { ...thisInstance, auth, users, roles, permissions, structure, network, license, compute, storage, computeProducts, storageProducts };
+  const newInstanceState = {
+    ...thisInstance,
+    auth,
+    users,
+    roles,
+    permissions,
+    structure,
+    network,
+    license,
+    compute,
+    storage,
+    computeProducts,
+    storageProducts,
+  };
 
-  await instanceState.update((s) => { Object.entries(newInstanceState).map(([key, value]) => s[key] = value); });
+  await instanceState.update((s) => {
+    Object.entries(newInstanceState).map(([key, value]) => (s[key] = value));
+  });
 
-  return { message: `created instance object for ${thisInstance.compute_stack_id}` };
+  return {
+    message: `created instance object for ${thisInstance.compute_stack_id}`,
+  };
 };

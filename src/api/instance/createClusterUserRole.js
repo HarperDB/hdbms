@@ -10,5 +10,7 @@ export default async ({ auth, url }) => {
     },
   };
   await queryInstance(query, auth, url);
-  return instanceState.update((s) => { s.lastUpdate = Date.now(); });
+  return instanceState.update((s) => {
+    s.lastUpdate = Date.now();
+  });
 };

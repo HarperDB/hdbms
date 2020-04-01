@@ -8,7 +8,14 @@ import instanceState from '../../../state/stores/instanceState';
 import EntityManager from './roleManager';
 import JSONViewer from './jsonviewer';
 
-const defaultState = { roleName: false, canEdit: false, editJSON: true, superUsers: [], clusterUsers: [], standardUsers: [] };
+const defaultState = {
+  roleName: false,
+  canEdit: false,
+  editJSON: true,
+  superUsers: [],
+  clusterUsers: [],
+  standardUsers: [],
+};
 
 export default () => {
   const { compute_stack_id, role_id } = useParams();
@@ -36,34 +43,19 @@ export default () => {
   return (
     <Row id="roles">
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager
-          showForm
-          activeItem={role_id}
-          items={formState.superUsers}
-          baseUrl={baseUrl}
-          itemType="super user"
-        />
-        <EntityManager
-          showForm
-          activeItem={role_id}
-          items={formState.clusterUsers}
-          baseUrl={baseUrl}
-          itemType="cluster user"
-        />
-        <EntityManager
-          showForm
-          activeItem={role_id}
-          items={formState.standardUsers}
-          baseUrl={baseUrl}
-          itemType="standard role"
-        />
+        <EntityManager showForm activeItem={role_id} items={formState.superUsers} baseUrl={baseUrl} itemType="super user" />
+        <EntityManager showForm activeItem={role_id} items={formState.clusterUsers} baseUrl={baseUrl} itemType="cluster user" />
+        <EntityManager showForm activeItem={role_id} items={formState.standardUsers} baseUrl={baseUrl} itemType="standard role" />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         {formState.canEdit ? (
           <>
             <Row>
               <Col className="text-nowrap">
-                <span className="text-white mb-2 floating-card-header">edit role &gt; {formState.roleName}&nbsp;</span>
+                <span className="text-white mb-2 floating-card-header">
+                  edit role &gt; {formState.roleName}
+                  &nbsp;
+                </span>
               </Col>
               {/*
               <Col className="text-right text-white text-nowrap">
@@ -80,13 +72,7 @@ export default () => {
               */}
             </Row>
             <Card className="my-3">
-              <CardBody className="full-height">
-                {formState.editJSON ? (
-                  <JSONViewer />
-                ) : (
-                  <div className="text-center py-5">table editor coming soon!</div>
-                )}
-              </CardBody>
+              <CardBody className="full-height">{formState.editJSON ? <JSONViewer /> : <div className="text-center py-5">table editor coming soon!</div>}</CardBody>
             </Card>
           </>
         ) : (

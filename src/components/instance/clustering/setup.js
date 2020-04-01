@@ -17,7 +17,9 @@ export default ({ network }) => {
 
   useInterval(() => {
     if (submitted) {
-      instanceState.update((s) => { s.lastUpdate = Date.now(); });
+      instanceState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
     }
   }, config.instance_refresh_rate);
 
@@ -28,15 +30,9 @@ export default ({ network }) => {
         <Card className="my-3">
           <CardBody>
             <Role />
-            {network?.cluster_role && (
-              <User />
-            )}
-            {network?.cluster_user && (
-              <Port port={port} setPort={setPort} />
-            )}
-            {port && network?.cluster_role && network?.cluster_user && (
-              <Enable port={port} setSubmitted={setSubmitted} submitted={submitted} />
-            )}
+            {network?.cluster_role && <User />}
+            {network?.cluster_user && <Port port={port} setPort={setPort} />}
+            {port && network?.cluster_role && network?.cluster_user && <Enable port={port} setSubmitted={setSubmitted} submitted={submitted} />}
           </CardBody>
         </Card>
       </Col>
@@ -50,7 +46,9 @@ export default ({ network }) => {
               <div className="text-center">
                 This instance does not yet have clustering enabled. To enable clustering, complete the steps at left.
                 <hr />
-                <span className="text-danger"><b>Note:</b> The Cluster User and Password must be the same between all instances in a HarperDB cluster.</span>
+                <span className="text-danger">
+                  <b>Note:</b> The Cluster User and Password must be the same between all instances in a HarperDB cluster.
+                </span>
               </div>
             </CardBody>
           </Card>

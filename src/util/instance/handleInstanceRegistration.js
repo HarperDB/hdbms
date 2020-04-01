@@ -20,7 +20,11 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
     if (registration.error && registration.message === 'Login failed' && !is_local) {
-      await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
+      await handleCloudInstanceUsernameChange({
+        instance_id,
+        instanceAuth,
+        url,
+      });
       registration = await registrationInfo({ auth: instanceAuth, url });
     }
 
@@ -51,7 +55,14 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     }
 
     const fingerprint = await getFingerprint({ auth: instanceAuth, url });
-    const license = await createLicense({ auth, payload: { compute_stack_id, customer_id: auth.customer_id, fingerprint } });
+    const license = await createLicense({
+      auth,
+      payload: {
+        compute_stack_id,
+        customer_id: auth.customer_id,
+        fingerprint,
+      },
+    });
 
     if (license.result === false) {
       return {
@@ -61,7 +72,12 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       };
     }
 
-    const apply = await setLicense({ auth: instanceAuth, key: license.key, company: license.company.toString(), url });
+    const apply = await setLicense({
+      auth: instanceAuth,
+      key: license.key,
+      company: license.company.toString(),
+      url,
+    });
 
     if (apply.error) {
       return {
@@ -71,7 +87,10 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       };
     }
 
-    restartInstance({ auth: instanceAuth, url });
+    restartInstance({
+      auth: instanceAuth,
+      url,
+    });
 
     return {
       instance: 'APPLYING LICENSE',

@@ -19,15 +19,24 @@ export default ({ username, closeModal }) => {
     const { password } = formData;
 
     if (!password) {
-      setFormState({ error: 'password is required' });
+      setFormState({
+        error: 'password is required',
+      });
     } else {
-      const response = await alterUser({ auth, url, username, password });
+      const response = await alterUser({
+        auth,
+        url,
+        username,
+        password,
+      });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
         closeModal({ refresh: true });
       } else {
-        setFormState({ error: response.message });
+        setFormState({
+          error: response.message,
+        });
       }
     }
   };
@@ -35,7 +44,9 @@ export default ({ username, closeModal }) => {
   return (
     <Modal id="new-instance-modal" isOpen toggle={closeModal}>
       <ModalHeader toggle={closeModal}>
-        Update Password For &quot;{username}&quot;
+        Update Password For &quot;
+        {username}
+        &quot;
       </ModalHeader>
       <ModalBody>
         <Input
@@ -44,15 +55,24 @@ export default ({ username, closeModal }) => {
           name="password"
           placeholder="new password"
           value={formData.password || ''}
-          onChange={(e) => updateForm({ ...formData, password: e.target.value })}
+          onChange={(e) =>
+            updateForm({
+              ...formData,
+              password: e.target.value,
+            })
+          }
         />
         <hr />
         <Row>
           <Col sm="6">
-            <Button block color="grey" onClick={closeModal}>cancel</Button>
+            <Button block color="grey" onClick={closeModal}>
+              cancel
+            </Button>
           </Col>
           <Col sm="6">
-            <Button block color="danger" onClick={updatePassword}>do it</Button>
+            <Button block color="danger" onClick={updatePassword}>
+              do it
+            </Button>
           </Col>
         </Row>
         {formState.error && (

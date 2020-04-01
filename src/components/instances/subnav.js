@@ -12,7 +12,12 @@ export default ({ setFilters, filters }) => (
             unchecked: <div>local</div>,
           }}
           checked={filters.local}
-          onChange={(e) => setFilters({ ...filters, local: e.target.checked })}
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              local: e.target.checked,
+            })
+          }
         />
       </div>
       <div className="instance-toggle-holder">
@@ -23,19 +28,37 @@ export default ({ setFilters, filters }) => (
             unchecked: <div>cloud</div>,
           }}
           checked={filters.cloud}
-          onChange={(e) => setFilters({ ...filters, cloud: e.target.checked })}
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              cloud: e.target.checked,
+            })
+          }
         />
       </div>
       <div className="instance-filter-holder">
         <Input
           type="text"
           className="instances-filter text-center"
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              search: e.target.value,
+            })
+          }
           placeholder="filter instances"
           value={filters.search}
         />
         {filters.search && (
-          <Button className="clear-filter" onClick={() => setFilters({ ...filters, search: '' })}>
+          <Button
+            className="clear-filter"
+            onClick={() =>
+              setFilters({
+                ...filters,
+                search: '',
+              })
+            }
+          >
             <i className="fa fa-times text-white" />
           </Button>
         )}

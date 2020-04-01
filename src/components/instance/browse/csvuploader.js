@@ -34,10 +34,12 @@ export default () => {
     setStatus('validating');
     const validatedCount = await getTotalRecords({ schema, table, auth, url });
     setValidatedRecordCount(validatedCount);
-    if (validatedCount !== initialRecordCount && validatedCount < (newRecordCount + initialRecordCount)) {
+    if (validatedCount !== initialRecordCount && validatedCount < newRecordCount + initialRecordCount) {
       return setTimeout(() => validateData(), 1000);
     }
-    instanceState.update((s) => { s.lastUpdate = Date.now(); });
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
     return setTimeout(() => {
       setStatus(false);
       history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
@@ -48,7 +50,13 @@ export default () => {
   const insertData = async () => {
     if (!processedData) return false;
     setStatus('inserting');
-    await csvDataLoad({ schema, table, data: processedData, auth, url });
+    await csvDataLoad({
+      schema,
+      table,
+      data: processedData,
+      auth,
+      url,
+    });
     setProcessedData(false);
     return setTimeout(() => validateData(), 1000);
   };
@@ -75,54 +83,86 @@ export default () => {
     history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
-  useAsyncEffect(async () => setInitialRecordCount(await getTotalRecords({ schema, table, auth, url })), []);
+  useAsyncEffect(
+    async () =>
+      setInitialRecordCount(
+        await getTotalRecords({
+          schema,
+          table,
+          auth,
+          url,
+        })
+      ),
+    []
+  );
 
   return (
     <>
-      <span className="text-white mb-2 floating-card-header">{schema} &gt; {table} &gt; csv upload</span>
+      <span className="text-white mb-2 floating-card-header">
+        {schema} &gt;{table} &gt; csv upload
+      </span>
       <Card className="my-3">
         <CardBody>
-          <Card className="csv-uploader mb-4 mt-2 no-shadow">
-            <div className="csv-message">
-              {status === 'validating' ? (
-                <div className="text-purple text-center">validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records</div>
-              ) : status === 'inserting' ? (
-                <div className="text-purple text-center">inserting {commaNumbers(newRecordCount)} records into {schema}.{table}</div>
-              ) : status === 'processed' ? (
-                <div className="text-purple text-center">
-                  successfully prepared {commaNumbers(newRecordCount)} records<br />
-                  <Button color="purple" className="mt-3 px-5 clear-files" onClick={handleClear}>replace file</Button>
-                </div>
-              ) : status === 'processing' ? (
-                <div className="text-purple text-center">pre-processing {commaNumbers(newRecordCount)} records</div>
-              ) : fileError ? (
-                <div className="text-danger text-center">{fileError}</div>
-              ) : (
-                <div className="text-center">
-                  Click to select or drag and drop a .csv file to insert into {schema}.{table}<br />
-                  <Button color="purple" className="mt-3 px-5 browse-files">browse files</Button>
-                </div>
+          <Card className="mb-1">
+            <CardBody className="csv-uploader">
+              <div className="csv-message">
+                {status === 'validating' ? (
+                  <div className="text-purple text-center">
+                    validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records
+                  </div>
+                ) : status === 'inserting' ? (
+                  <div className="text-purple text-center">
+                    inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
+                  </div>
+                ) : status === 'processed' ? (
+                  <div className="text-purple text-center">
+                    successfully prepared {commaNumbers(newRecordCount)} records
+                    <br />
+                    <Button color="purple" className="mt-3 px-5 clear-files" onClick={handleClear}>
+                      replace file
+                    </Button>
+                  </div>
+                ) : status === 'processing' ? (
+                  <div className="text-purple text-center">pre-processing{commaNumbers(newRecordCount)} records</div>
+                ) : fileError ? (
+                  <div className="text-danger text-center">{fileError}</div>
+                ) : (
+                  <div className="text-center">
+                    Click to select or drag and drop a .csv file to insert into {schema}.{table}
+                    <br />
+                    <Button color="purple" className="mt-3 px-5 browse-files">
+                      browse files
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {!status && (
+                <CSVReader
+                  onFileLoaded={processData}
+                  onError={setFileError}
+                  parserOptions={{
+                    skipEmptyLines: true,
+                  }}
+                  inputId="csv-input"
+                />
               )}
-            </div>
-            { !status && (
-              <CSVReader
-                onFileLoaded={processData}
-                onError={setFileError}
-                parserOptions={{ skipEmptyLines: true }}
-                inputId="csv-input"
-              />
-            )}
+            </CardBody>
           </Card>
-          <hr />
           {status === 'validating' ? (
-            <Button block color="black" onClick={handleCancel}>Return to Table View (Validate in Background)</Button>
+            <Button block className="mt-2" color="black" onClick={handleCancel}>
+              Return to Table View (Validate in Background)
+            </Button>
           ) : (
             <Row>
-              <Col md="6" className="mb-2">
-                <Button block disabled={['inserting', 'processing'].includes(status)} color="black" onClick={handleCancel}>Cancel</Button>
+              <Col md="6" className="mt-2">
+                <Button block disabled={['inserting', 'processing'].includes(status)} color="black" onClick={handleCancel}>
+                  Cancel
+                </Button>
               </Col>
-              <Col md="6" className="mb-2">
-                <Button block disabled={[false, 'inserting', 'processing'].includes(status)} color="success" onClick={insertData}>Insert Records</Button>
+              <Col md="6" className="mt-2">
+                <Button block disabled={[false, 'inserting', 'processing'].includes(status)} color="success" onClick={insertData}>
+                  Insert Records
+                </Button>
               </Col>
             </Row>
           )}

@@ -4,7 +4,14 @@ export default async ({ payload: { firstname, lastname, email, customer_name, su
   const response = await queryLMS({
     endpoint: 'addCustomer',
     method: 'POST',
-    payload: { firstname, lastname, email, customer_name, subdomain, coupon_code },
+    payload: {
+      firstname,
+      lastname,
+      email,
+      customer_name,
+      subdomain,
+      coupon_code,
+    },
   });
 
   return response.body;

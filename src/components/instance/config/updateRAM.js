@@ -23,7 +23,11 @@ export default ({ setUpdatingInstance, storagePrice }) => {
   }));
   const history = useHistory();
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({ compute_stack_id, customer_id: customer.customer_id, stripe_plan_id });
+  const [formData, updateForm] = useState({
+    compute_stack_id,
+    customer_id: customer.customer_id,
+    stripe_plan_id,
+  });
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
@@ -39,13 +43,19 @@ export default ({ setUpdatingInstance, storagePrice }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
+      setUpdatingInstance({
+        compute_stack_id,
+        customer_id: customer.customer_id,
+        ...formData,
+      });
     }
   }, [formState]);
 
   useAsyncEffect(() => {
     if (!is_local && cloudInstancesBeingModified) {
-      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+      setFormState({
+        error: 'another cloud instance is being modified. please wait.',
+      });
     }
   }, [formData]);
 
@@ -56,16 +66,19 @@ export default ({ setUpdatingInstance, storagePrice }) => {
         <CardBody>
           {formState.error ? (
             <Card className="mt-2 error">
-              <CardBody className="text-danger text-small text-center">
-                {formState.error}
-              </CardBody>
+              <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
             </Card>
           ) : (
             <>
               <ContentContainer header="Instance RAM">
                 <SelectDropdown
                   classNamePrefix="react-select"
-                  onChange={({ value }) => updateForm({ ...formData, stripe_plan_id: value })}
+                  onChange={({ value }) =>
+                    updateForm({
+                      ...formData,
+                      stripe_plan_id: value,
+                    })
+                  }
                   options={computeProducts}
                   value={computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id)}
                   defaultValue={compute}
@@ -73,7 +86,14 @@ export default ({ setUpdatingInstance, storagePrice }) => {
                   isClearable={false}
                   isLoading={!computeProducts}
                   placeholder="select a RAM allotment"
-                  styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+                  styles={{
+                    placeholder: (styles) => ({
+                      ...styles,
+                      textAlign: 'center',
+                      width: '100%',
+                      color: '#BCBCBC',
+                    }),
+                  }}
                 />
               </ContentContainer>
 
@@ -99,7 +119,11 @@ export default ({ setUpdatingInstance, storagePrice }) => {
                 </Button>
               ) : hasChanged ? (
                 <Button
-                  onClick={() => setFormState({ submitted: true })}
+                  onClick={() =>
+                    setFormState({
+                      submitted: true,
+                    })
+                  }
                   title="Confirm Instance Details"
                   block
                   disabled={!hasChanged || formState.submitted}

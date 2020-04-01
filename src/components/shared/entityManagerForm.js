@@ -29,10 +29,10 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       error = true;
     }
 
-    if (!entityName.match(/^[a-zA-Z0-9_]+$/)) {
+    if (entityName && !entityName.match(/^[a-zA-Z0-9_]+$/)) {
       toggleNameError(true);
       error = true;
-      alert.error('You may only use alphanumeric characters or underscores.')
+      alert.error('You may only use alphanumeric characters or underscores.');
     }
 
     if (itemType === 'table' && !hashAttribute) {
@@ -42,7 +42,9 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
 
     if (error) return false;
 
-    const operation = { operation: `create_${itemType}` };
+    const operation = {
+      operation: `create_${itemType}`,
+    };
 
     if (itemType === 'table') {
       operation.schema = activeSchema;
@@ -57,7 +59,9 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     setHashAttribute();
     toggleNameError();
     toggleHashError();
-    instanceState.update((s) => { s.lastUpdate = Date.now(); });
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
     return setTimeout(() => history.push(`${baseUrl}/${entityName}`), 100);
   };
 
@@ -69,17 +73,23 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
         <Col className="input-holder">
           <Input
             invalid={nameError}
-            onChange={(e) => { toggleNameError(false); setEntityName(e.target.value.toString()); }}
+            onChange={(e) => {
+              toggleNameError(false);
+              setEntityName(e.target.value.toString());
+            }}
             type="text"
             name="name"
             placeholder="name"
           />
         </Col>
-        { itemType === 'table' && (
+        {itemType === 'table' && (
           <Col className="input-holder">
             <Input
               invalid={hashError}
-              onChange={(e) => { toggleHashError(false); setHashAttribute(e.target.value.toString()); }}
+              onChange={(e) => {
+                toggleHashError(false);
+                setHashAttribute(e.target.value.toString());
+              }}
               type="test"
               name="hash_attribute"
               placeholder="hash attr."
@@ -87,17 +97,10 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           </Col>
         )}
         <Col className="item-action text-right pt-1">
-          <Button
-            color="success"
-            className="round mr-1"
-          >
+          <Button color="success" className="round mr-1">
             <i className="fa fa-check text-white" />
           </Button>
-          <Button
-            color="black"
-            className="round"
-            onClick={() => toggleCreate(false)}
-          >
+          <Button color="black" className="round" onClick={() => toggleCreate(false)}>
             <i className="fa fa-times text-white" />
           </Button>
         </Col>

@@ -23,7 +23,11 @@ export default ({ setUpdatingInstance, computePrice }) => {
   }));
   const history = useHistory();
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({ compute_stack_id, customer_id: customer.customer_id, data_volume_size });
+  const [formData, updateForm] = useState({
+    compute_stack_id,
+    customer_id: customer.customer_id,
+    data_volume_size,
+  });
   const hasCard = customerHasChargeableCard(customer);
 
   let totalPrice = 0;
@@ -39,13 +43,19 @@ export default ({ setUpdatingInstance, computePrice }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      setUpdatingInstance({ compute_stack_id, customer_id: customer.customer_id, ...formData });
+      setUpdatingInstance({
+        compute_stack_id,
+        customer_id: customer.customer_id,
+        ...formData,
+      });
     }
   }, [formState]);
 
   useAsyncEffect(() => {
     if (!is_local && cloudInstancesBeingModified) {
-      setFormState({ error: 'another cloud instance is being modified. please wait.' });
+      setFormState({
+        error: 'another cloud instance is being modified. please wait.',
+      });
     }
   }, [formData]);
 
@@ -56,16 +66,19 @@ export default ({ setUpdatingInstance, computePrice }) => {
         <CardBody>
           {formState.error ? (
             <Card className="mt-2 error">
-              <CardBody className="text-danger text-small text-center">
-                {formState.error}
-              </CardBody>
+              <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
             </Card>
           ) : (
             <>
               <ContentContainer header="Instance Storage" className="mb-2">
                 <SelectDropdown
                   classNamePrefix="react-select"
-                  onChange={({ value }) => updateForm({ ...formData, data_volume_size: value })}
+                  onChange={({ value }) =>
+                    updateForm({
+                      ...formData,
+                      data_volume_size: value,
+                    })
+                  }
                   options={storageProducts}
                   value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
                   defaultValue={storage}
@@ -73,7 +86,14 @@ export default ({ setUpdatingInstance, computePrice }) => {
                   isClearable={false}
                   isLoading={!storageProducts}
                   placeholder="Select Data Volume Size"
-                  styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+                  styles={{
+                    placeholder: (styles) => ({
+                      ...styles,
+                      textAlign: 'center',
+                      width: '100%',
+                      color: '#BCBCBC',
+                    }),
+                  }}
                 />
               </ContentContainer>
 
@@ -99,7 +119,11 @@ export default ({ setUpdatingInstance, computePrice }) => {
                 </Button>
               ) : hasChanged ? (
                 <Button
-                  onClick={() => setFormState({ submitted: true })}
+                  onClick={() =>
+                    setFormState({
+                      submitted: true,
+                    })
+                  }
                   title="Confirm Instance Details"
                   block
                   disabled={!hasChanged || formState.submitted}

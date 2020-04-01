@@ -4,7 +4,12 @@ export default async ({ auth, payload: { firstname, lastname, customer_id, user_
   const response = await queryLMS({
     endpoint: 'updateUser',
     method: 'POST',
-    payload: { firstname, lastname, customer_id, user_id },
+    payload: {
+      firstname,
+      lastname,
+      customer_id,
+      user_id,
+    },
     auth,
   });
   return response.body;

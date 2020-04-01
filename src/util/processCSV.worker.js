@@ -7,7 +7,7 @@ const processNewData = (data) => {
   while (data.length) {
     const nextRowArray = data.shift();
     const nextRowObject = {};
-    formattedKeys.map((k, i) => nextRowObject[k] = nextRowArray[i]);
+    formattedKeys.map((k, i) => (nextRowObject[k] = nextRowArray[i]));
     returnArray.push(nextRowObject);
   }
   // console.timeEnd('processCSV');

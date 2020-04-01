@@ -13,6 +13,15 @@ export default async ({ instance_name, cluster_user, port, auth, url }) => {
 
   if (result.error) return result;
 
-  await queryInstance({ operation: 'restart', force: 'true' }, auth, url);
-  return instanceState.update((s) => { s.lastUpdate = Date.now(); });
+  await queryInstance(
+    {
+      operation: 'restart',
+      force: 'true',
+    },
+    auth,
+    url
+  );
+  return instanceState.update((s) => {
+    s.lastUpdate = Date.now();
+  });
 };

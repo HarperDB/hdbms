@@ -1,9 +1,14 @@
-const processConnections = (connections) => (connections ? connections.filter((c) => c.host_address.indexOf('::ffff') === -1).map((c) => ({
-  name: c.node_name,
-  host: c.host_address,
-  port: c.host_port,
-  subscriptions: c.subscriptions,
-})) : []);
+const processConnections = (connections) =>
+  connections
+    ? connections
+        .filter((c) => c.host_address.indexOf('::ffff') === -1)
+        .map((c) => ({
+          name: c.node_name,
+          host: c.host_address,
+          port: c.host_port,
+          subscriptions: c.subscriptions,
+        }))
+    : [];
 
 export default async ({ users, roles, cluster_status }) => {
   const cluster_role = roles.find((r) => r.role === 'cluster_user');
@@ -20,7 +25,10 @@ export default async ({ users, roles, cluster_status }) => {
     };
   }
 
-  const { is_enabled, status: { inbound_connections, outbound_connections, __originator } } = cluster_status;
+  const {
+    is_enabled,
+    status: { inbound_connections, outbound_connections, __originator },
+  } = cluster_status;
 
   return {
     is_enabled,

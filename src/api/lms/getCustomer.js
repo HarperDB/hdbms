@@ -15,5 +15,7 @@ export default async ({ auth, payload: { customer_id } }) => {
     customer = response.body;
   }
 
-  return appState.update((s) => { s.customer = customer; });
+  return appState.update((s) => {
+    s.customer = customer;
+  });
 };

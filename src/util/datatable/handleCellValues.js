@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import isImage from './isImage';
 
-const TextViewer = ({ value }) => (<div className="text-renderer">{value}</div>);
+const TextViewer = ({ value }) => <div className="text-renderer">{value}</div>;
 
 const ImageViewer = ({ src }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -10,7 +10,7 @@ const ImageViewer = ({ src }) => {
   return (
     <div className="image-renderer" onMouseEnter={() => setPreviewOpen(true)} onMouseLeave={() => setPreviewOpen(false)}>
       <i className="fa fa-image" />
-      {previewOpen && (<img alt={src} src={src} className="preview-image" />)}
+      {previewOpen && <img alt={src} src={src} className="preview-image" />}
     </div>
   );
 };

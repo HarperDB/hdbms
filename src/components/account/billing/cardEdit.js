@@ -1,141 +1,131 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Input } from '@nio/ui-kit';
-import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
-import { useLocation, useHistory } from 'react-router-dom';
-import queryString from 'query-string';
-import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import cardOptions from '../../../util/stripe/cardOptions';
-import addPaymentMethod from '../../../api/lms/addPaymentMethod';
-import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 import appState from '../../../state/stores/appState';
 
-export default ({ setEditingCard, cardId, stripeId, setLastUpdate }) => {
+import addPaymentMethod from '../../../api/lms/addPaymentMethod';
+import getCustomer from '../../../api/lms/getCustomer';
+
+import CreditCardForm from '../../shared/creditCardForm';
+import FormStatus from '../../shared/formStatus';
+
+export default ({ setEditingCard, customerCard }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const alert = useAlert();
+  const customer = useStoreState(appState, (s) => s.customer);
+  const [formData, setFormData] = useState({
+    postal_code: false,
+    card: false,
+    expire: false,
+    cvc: false,
+  });
+  const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
-  const location = useLocation();
-  const history = useHistory();
-  const [postalCode, setPostalCode] = useState(false);
-  const [cardSubmitted, setCardSubmitted] = useState(false);
-  const [error, setError] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const { returnURL } = queryString.parse(location.search);
 
   useAsyncEffect(async () => {
-    if (cardSubmitted && stripe && elements) {
-      if (cardComplete) setProcessing(true);
-      const newCardObject = { type: 'card', card: elements.getElement(CardNumberElement), billing_details: { address: { postal_code: postalCode } } };
-      const payload = await stripe.createPaymentMethod(newCardObject);
-
-      if (payload.error) {
-        setError(payload.error);
+    const { submitted, processing } = formState;
+    if (submitted && !processing) {
+      const { card, expire, cvc, postal_code } = formData;
+      if (!card || !expire || !cvc || !postal_code) {
+        setFormState({
+          error: 'All fields are required',
+        });
       } else {
-        if (cardId) {
-          await removePaymentMethod({ auth: lmsAuth, payload: { stripe_id: stripeId, payment_method_id: cardId } });
-        }
-        const response = await addPaymentMethod({ auth: lmsAuth, payload: { payment_method_id: payload.paymentMethod.id, stripe_id: stripeId } });
-        if (response.result) {
-          setLastUpdate(Date.now());
-          setEditingCard(false);
-          alert.success(response.message);
-          if (returnURL) {
-            setTimeout(() => history.push(returnURL), 100);
-          }
+        const payload = await stripe.createPaymentMethod({
+          type: 'card',
+          card: elements.getElement(CardNumberElement),
+          billing_details: {
+            address: { postal_code },
+          },
+        });
+
+        setFormState({
+          processing: true,
+        });
+
+        if (payload.error) {
+          setFormState({
+            error: payload.error,
+          });
         } else {
-          setError({ message: response.message });
+          const response = await addPaymentMethod({
+            auth: lmsAuth,
+            payload: {
+              payment_method_id: payload.paymentMethod.id,
+              stripe_id: customer.stripe_id,
+            },
+          });
+
+          if (response.result) {
+            setFormState({
+              success: response.message,
+            });
+
+            await getCustomer({
+              auth: lmsAuth,
+              payload: {
+                customer_id: lmsAuth.customer_id,
+              },
+            });
+
+            setEditingCard(false);
+          } else {
+            setFormState({
+              error: response.message,
+            });
+          }
         }
       }
-      setCardSubmitted(false);
-      setProcessing(false);
+
+      setTimeout(() => setFormState({}), 2000);
     }
-  }, [cardSubmitted]);
+  }, [formState]);
 
   return (
-    <div>
-      <Row>
-        <Col xs="6" className="mb-2 text text-nowrap d-none d-md-block pt-2">
-          card number
-        </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="fake-input">
-            <CardNumberElement
-              options={cardOptions}
-              onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
-            />
-          </div>
-        </Col>
-      </Row>
-      <hr />
-      <Row>
-        <Col xs="6" className="mb-2 text text-nowrap d-none d-md-block pt-2">
-          expiration
-        </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="fake-input">
-            <CardExpiryElement
-              options={cardOptions}
-              onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
-            />
-          </div>
-        </Col>
-      </Row>
-      <hr />
-      <Row>
-        <Col xs="6" className="mb-2 text text-nowrap d-none d-md-block pt-2">
-          cvcc
-        </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
-          <div className="fake-input">
-            <CardCvcElement
-              options={cardOptions}
-              onChange={(e) => { setError(e.error); setCardComplete(e.complete); }}
-            />
-          </div>
-        </Col>
-      </Row>
-      <hr />
-      <Row>
-        <Col xs="6" className="mb-2 text text-nowrap d-none d-md-block pt-2">
-          billing postal code
-        </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
-          <Input
-            onChange={(e) => setPostalCode(e.target.value)}
-          />
-        </Col>
-      </Row>
-      <hr />
-      {cardId ? (
-        <Row>
-          <Col sm="6">
-            <Button disabled={processing} onClick={() => setEditingCard(false)} block color="danger" className="mb-2">Cancel</Button>
-          </Col>
-          <Col sm="6">
-            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">
-              {processing ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Save New Card</span>}
-            </Button>
-          </Col>
-        </Row>
+    <>
+      {formState.processing ? (
+        <FormStatus height="283px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+      ) : formState.success ? (
+        <FormStatus height="283px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
+      ) : formState.error ? (
+        <FormStatus height="283px" status="error" header={formState.error} subhead="Please try again" />
       ) : (
-        <Row>
-          <Col sm="12">
-            <Button disabled={processing} onClick={() => setCardSubmitted(true)} block color="purple" className="mb-2">
-              {processing ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add Card To Account</span>}
-            </Button>
-          </Col>
-        </Row>
+        <>
+          <Card>
+            <CardBody>
+              <CreditCardForm setFormData={setFormData} formData={formData} />
+            </CardBody>
+          </Card>
+          <Row>
+            {customerCard && (
+              <Col sm="6">
+                <Button onClick={() => setEditingCard(false)} block color="danger" className="mt-3">
+                  Cancel
+                </Button>
+              </Col>
+            )}
+            <Col>
+              <Button
+                title={customerCard ? 'Save New Card' : 'Add Card To Account'}
+                disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
+                block
+                className="mt-3"
+                color="purple"
+              >
+                {customerCard ? 'Save New Card' : 'Add Card To Account'}
+              </Button>
+            </Col>
+          </Row>
+        </>
       )}
-      {error && (
-        <div className="text-danger text-small text-center">
-          <hr className="mt-2" />
-          {error.message}
-        </div>
-      )}
-    </div>
+    </>
   );
 };

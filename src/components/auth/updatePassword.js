@@ -24,30 +24,56 @@ export default () => {
       const { password, password2 } = formData;
 
       if (!password || !password2) {
-        setFormState({ error: 'all fields are required' });
+        setFormState({
+          error: 'all fields are required',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else if (password !== password2) {
-        setFormState({ error: 'passwords must match' });
+        setFormState({
+          error: 'passwords must match',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ processing: true });
-        const response = await updatePassword({ auth: lmsAuth, payload: { ...lmsAuth, password } });
+        setFormState({
+          processing: true,
+        });
+        const response = await updatePassword({
+          auth: lmsAuth,
+          payload: {
+            ...lmsAuth,
+            password,
+          },
+        });
         if (response.result === false) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
           setTimeout(() => {
             setFormState({});
             updateForm({});
           }, 1000);
         } else {
-          appState.update((s) => { s.auth = { ...lmsAuth, pass: password }; });
-          setPersistedLMSAuth({ ...lmsAuth, pass: password });
+          appState.update((s) => {
+            s.auth = {
+              ...lmsAuth,
+              pass: password,
+            };
+          });
+          setPersistedLMSAuth({
+            ...lmsAuth,
+            pass: password,
+          });
           history.push('/sign-in');
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <div id="login-form">
@@ -56,7 +82,9 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              updating your password<br /><br />
+              updating your password
+              <br />
+              <br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -67,7 +95,12 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <Input
-                onChange={(e) => updateForm({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    password: e.target.value,
+                  })
+                }
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
@@ -76,7 +109,12 @@ export default () => {
                 placeholder="new password"
               />
               <Input
-                onChange={(e) => updateForm({ ...formData, password2: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    password2: e.target.value,
+                  })
+                }
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -85,7 +123,11 @@ export default () => {
                 placeholder="verify password"
               />
               <Button
-                onClick={() => setFormState({ submitted: true })}
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
                 disabled={formState.submitted}
                 title="Update My Password"
                 block
@@ -97,15 +139,20 @@ export default () => {
           </Card>
           {formState.error ? (
             <div className="login-nav-link error">
-              {formState.error}&nbsp;
+              {formState.error}
+              &nbsp;
             </div>
           ) : (
             <Row>
               <Col xs="6">
-                <NavLink to="/sign-in" className="login-nav-link">Back to Sign In</NavLink>
+                <NavLink to="/sign-in" className="login-nav-link">
+                  Back to Sign In
+                </NavLink>
               </Col>
               <Col xs="6" className="text-right">
-                <NavLink to="/sign-up" className="login-nav-link">Sign Up for Free</NavLink>
+                <NavLink to="/sign-up" className="login-nav-link">
+                  Sign Up for Free
+                </NavLink>
               </Col>
             </Row>
           )}

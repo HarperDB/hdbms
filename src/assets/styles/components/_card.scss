@@ -6,10 +6,21 @@
 .card {
   background: $color-white !important;
   border-radius: 4px !important;
-  box-shadow: 0 0 5px $dark-grey-overlay;
   color: $color-black;
 
   &.error {
+    border-color: $color-danger;
     box-shadow: none !important;
+    color: $color-danger;
+  }
+
+  &.success {
+    border-color: $color-success;
+    box-shadow: none !important;
+    color: $color-success;
+  }
+
+  &.has-shadow {
+    box-shadow: 0 0 5px $dark-grey-overlay;
   }
 }

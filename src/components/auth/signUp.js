@@ -18,16 +18,34 @@ export default () => {
       const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
 
       if (!firstname || !lastname || !email || !customer_name || !subdomain) {
-        setFormState({ error: 'All fields must be filled out' });
+        setFormState({
+          error: 'All fields must be filled out',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else if (!isEmail(email)) {
-        setFormState({ error: 'Please provide a valid email' });
+        setFormState({
+          error: 'Please provide a valid email',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ ...formState, processing: true });
-        const response = await addCustomer({ payload: { firstname, lastname, email, customer_name, subdomain, coupon_code } });
+        setFormState({
+          ...formState,
+          processing: true,
+        });
+        const response = await addCustomer({
+          payload: {
+            firstname,
+            lastname,
+            email,
+            customer_name,
+            subdomain,
+            coupon_code,
+          },
+        });
         if (response.result === false) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
           setTimeout(() => {
             setFormState({});
             updateForm({});
@@ -39,7 +57,11 @@ export default () => {
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <div id="login-form" className="sign-up">
@@ -48,7 +70,9 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              creating your account<br /><br />
+              creating your account
+              <br />
+              <br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -59,17 +83,23 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <div className="text-center text-white">
-                success!<br /><br />
+                success!
+                <br />
+                <br />
                 check your email for your username and password.
               </div>
             </CardBody>
           </Card>
           <Row>
             <Col xs="6">
-              <NavLink to="/sign-in" className="login-nav-link">Sign In</NavLink>
+              <NavLink to="/sign-in" className="login-nav-link">
+                Sign In
+              </NavLink>
             </Col>
             <Col xs="6" className="text-right">
-              <NavLink to="/resend-registration-email" className="login-nav-link">Resend Email</NavLink>
+              <NavLink to="/resend-registration-email" className="login-nav-link">
+                Resend Email
+              </NavLink>
             </Col>
           </Row>
         </>
@@ -85,7 +115,12 @@ export default () => {
                 placeholder="first name"
                 value={formData.firstname || ''}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, firstname: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    firstname: e.target.value,
+                  })
+                }
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -95,7 +130,12 @@ export default () => {
                 placeholder="last name"
                 value={formData.lastname || ''}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, lastname: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    lastname: e.target.value,
+                  })
+                }
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -105,7 +145,12 @@ export default () => {
                 placeholder="email"
                 value={formData.email || ''}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    email: e.target.value,
+                  })
+                }
               />
               <Input
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
@@ -115,7 +160,12 @@ export default () => {
                 placeholder="company name"
                 value={formData.customer_name || ''}
                 disabled={formState.submitted}
-                onChange={(e) => updateForm({ ...formData, customer_name: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    customer_name: e.target.value,
+                  })
+                }
               />
               <Row>
                 <Col className="subdomain-form">
@@ -127,11 +177,19 @@ export default () => {
                     placeholder="subdomain"
                     value={formData.subdomain || ''}
                     disabled={formState.submitted}
-                    onChange={(e) => updateForm({ ...formData, subdomain: e.target.value })}
+                    onChange={(e) =>
+                      updateForm({
+                        ...formData,
+                        subdomain: e.target.value,
+                      })
+                    }
                   />
                 </Col>
                 <Col className="subdomain-label">
-                  .harperdbcloud.com <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}><i className="fa fa-question-circle" /></a>
+                  .harperdbcloud.com{' '}
+                  <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
+                    <i className="fa fa-question-circle" />
+                  </a>
                 </Col>
               </Row>
               <Input
@@ -141,17 +199,34 @@ export default () => {
                 title="coupon code"
                 placeholder="coupon code (optional)"
                 value={formData.coupon_code || ''}
-                onChange={(e) => updateForm({ ...formData, coupon_code: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    coupon_code: e.target.value,
+                  })
+                }
                 disabled={formState.submitted}
               />
               <div className="mb-3 disclaimer">
-                By creating an account, I certify that I have read and agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+                By creating an account, I certify that I have read and agree to the HarperDB{' '}
+                <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+                  Privacy Policy
+                </a>{' '}
+                and{' '}
+                <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+                  HarperDB Cloud Terms of Service
+                </a>
+                .
               </div>
               <Button
                 color="purple"
                 block
                 disabled={formState.submitted}
-                onClick={() => setFormState({ submitted: true })}
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
               >
                 Sign Up For Free
               </Button>
@@ -159,11 +234,14 @@ export default () => {
           </Card>
           {formState.error ? (
             <div className="login-nav-link error">
-              {formState.error}&nbsp;
+              {formState.error}
+              &nbsp;
             </div>
           ) : (
             <div className="text-center">
-              <NavLink to="/sign-in" className="login-nav-link">Already Have An Account? Sign In Instead.</NavLink>
+              <NavLink to="/sign-in" className="login-nav-link">
+                Already Have An Account? Sign In Instead.
+              </NavLink>
             </div>
           )}
           <Tooltip isOpen={showToolTip} placement="top-end" target="subdomainHelp" className="subdomain-tooltip">

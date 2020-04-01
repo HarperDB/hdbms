@@ -1,20 +1,18 @@
 import { fetch } from 'whatwg-fetch';
 
 export default async (operation, auth, url) => {
+  // eslint-disable-next-line no-console
   console.log('Querying Instance API', operation.operation);
 
   try {
-    const request = await fetch(
-      url,
-      {
-        method: 'POST',
-        body: JSON.stringify(operation),
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
-        },
+    const request = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(operation),
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
       },
-    );
+    });
 
     const response = await request.json();
 

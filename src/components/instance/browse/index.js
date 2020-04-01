@@ -16,7 +16,11 @@ import instanceState from '../../../state/stores/instanceState';
 export default () => {
   const history = useHistory();
   const { compute_stack_id, schema, table, action } = useParams();
-  const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
+  const [entities, setEntities] = useState({
+    schemas: [],
+    tables: [],
+    activeTable: false,
+  });
   const { current_compute_stack_id, structure } = useStoreState(instanceState, (s) => ({
     current_compute_stack_id: s.compute_stack_id,
     structure: s.structure,
@@ -31,33 +35,27 @@ export default () => {
 
   useAsyncEffect(() => {
     if (current_compute_stack_id === compute_stack_id) {
-      handleSchemaTableRedirect({ entities, compute_stack_id, schema, table, history, targetPath: '/browse' });
+      handleSchemaTableRedirect({
+        entities,
+        compute_stack_id,
+        schema,
+        table,
+        history,
+        targetPath: '/browse',
+      });
     }
   }, [entities]);
 
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager
-          activeItem={schema}
-          items={entities.schemas}
-          baseUrl={`/instance/${compute_stack_id}/browse`}
-          itemType="schema"
-          showForm
-        />
-        { schema && (
-          <EntityManager
-            activeItem={table}
-            items={entities.tables}
-            activeSchema={schema}
-            baseUrl={`/instance/${compute_stack_id}/browse/${schema}`}
-            itemType="table"
-            showForm
-          />
+        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/instance/${compute_stack_id}/browse`} itemType="schema" showForm />
+        {schema && (
+          <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`/instance/${compute_stack_id}/browse/${schema}`} itemType="table" showForm />
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        { schema && table && action === 'csv' && entities.activeTable ? (
+        {schema && table && action === 'csv' && entities.activeTable ? (
           <CSVUploader />
         ) : schema && table && action && entities.activeTable ? (
           <JSONViewer newEntityColumns={entities.activeTable.newEntityColumns} hashAttribute={entities.activeTable.hashAttribute} />
@@ -68,7 +66,9 @@ export default () => {
             <span className="text-white floating-card-header">&nbsp;</span>
             <Card className="my-3 py-5">
               <CardBody>
-                <div className="text-center">Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}</div>
+                <div className="text-center">
+                  Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}
+                </div>
               </CardBody>
             </Card>
           </>

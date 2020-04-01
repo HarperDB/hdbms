@@ -22,17 +22,31 @@ export default () => {
     if (submitted) {
       const { username, password } = formData;
       if (!username || !password) {
-        setFormState({ error: 'All fields are required' });
+        setFormState({
+          error: 'All fields are required',
+        });
       } else {
-        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
+        const response = await createClusterUser({
+          username,
+          password,
+          role: cluster_role,
+          auth,
+          url,
+        });
         if (response) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return cluster_user ? (
     <Row>
@@ -49,25 +63,43 @@ export default () => {
       <hr />
       <div className="text-nowrap mb-3">Cluster User</div>
       <Input
-        onChange={(e) => updateForm({ ...formData, username: e.target.value })}
+        onChange={(e) =>
+          updateForm({
+            ...formData,
+            username: e.target.value,
+          })
+        }
         className={`mb-1 ${formState.error && !formData.username ? 'error' : ''}`}
         type="text"
         title="username"
         placeholder="username"
       />
       <Input
-        onChange={(e) => updateForm({ ...formData, password: e.target.value })}
+        onChange={(e) =>
+          updateForm({
+            ...formData,
+            password: e.target.value,
+          })
+        }
         className={`mb-3 ${formState.error && !formData.password ? 'error' : ''}`}
         type="password"
         title="password"
         placeholder="password"
       />
-      <Button color="success" block onClick={() => setFormState({ submitted: true })}>Create Cluster User</Button>
+      <Button
+        color="success"
+        block
+        onClick={() =>
+          setFormState({
+            submitted: true,
+          })
+        }
+      >
+        Create Cluster User
+      </Button>
       {formState.error && (
         <Card className="mt-3 error no-shadow">
-          <CardBody className="text-danger text-small text-center">
-            {formState.error}
-          </CardBody>
+          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
         </Card>
       )}
     </>

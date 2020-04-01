@@ -20,22 +20,44 @@ export default ({ closeAndResetModal }) => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
-    const newInstanceObject = { ...newInstance };
+    const newInstanceObject = {
+      ...newInstance,
+    };
     delete newInstanceObject.user;
     delete newInstanceObject.pass;
     delete newInstanceObject.tc_version;
 
-    addTCAcceptance({ auth: lmsAuth, payload: { ...lmsAuth, tc_version: newInstance.tc_version } });
+    addTCAcceptance({
+      auth: lmsAuth,
+      payload: {
+        ...lmsAuth,
+        tc_version: newInstance.tc_version,
+      },
+    });
 
-    const response = await addInstance({ auth: lmsAuth, payload: newInstanceObject });
+    const response = await addInstance({
+      auth: lmsAuth,
+      payload: newInstanceObject,
+    });
 
     if (response.result) {
       alert.success(response.message);
-      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
-      appState.update((s) => { s.lastUpdate = Date.now(); });
+      setInstanceAuths({
+        ...instanceAuths,
+        [response.instance_id]: {
+          user: newInstance.user,
+          pass: newInstance.pass,
+        },
+      });
+      appState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
       setTimeout(() => closeAndResetModal(), 0);
     } else {
-      setFormState({ submitted: false, error: response.message });
+      setFormState({
+        submitted: false,
+        error: response.message,
+      });
     }
   }, []);
 
@@ -43,9 +65,13 @@ export default ({ closeAndResetModal }) => {
     <Card>
       <CardBody>
         <div className="p-4 text-center">
-          <b>Uh Oh!</b><br /><br />
-          <i className="fa fa-lg fa-exclamation-triangle text-danger mb-4" /><br />
-          {formState.error || 'there was an error creating your instance'}<br />
+          <b>Uh Oh!</b>
+          <br />
+          <br />
+          <i className="fa fa-lg fa-exclamation-triangle text-danger mb-4" />
+          <br />
+          {formState.error || 'there was an error creating your instance'}
+          <br />
           <hr className="mt-4" />
           <Button onClick={closeAndResetModal}>Click Here To Try Again</Button>
           <hr className="mb-4" />
@@ -57,8 +83,13 @@ export default ({ closeAndResetModal }) => {
     <Card>
       <CardBody>
         <div className="p-4 text-center">
-          <b>{newInstance.is_local ? 'Adding' : 'Creating'} Your Instance</b><br /><br /><br />
-          <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" /><br /><br />
+          <b>{newInstance.is_local ? 'Adding' : 'Creating'} Your Instance</b>
+          <br />
+          <br />
+          <br />
+          <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" />
+          <br />
+          <br />
           The Networking Samoyed is gnawing the CAT cables.
         </div>
       </CardBody>

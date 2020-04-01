@@ -7,8 +7,6 @@ export default ({ message, options, close }) => (
       {options.type === 'success' && <i className="fa fa-2x fa-check-circle" />}
       {options.type === 'error' && <i className="fa fa-2x fa-exclamation-circle" />}
     </div>
-    <div className="text-white message">
-      {message}
-    </div>
+    <div className="text-white message">{message}</div>
   </div>
 );

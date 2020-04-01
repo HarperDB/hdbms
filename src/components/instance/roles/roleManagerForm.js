@@ -19,13 +19,26 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
     e.preventDefault();
 
     if (!entity.name || items.includes(entity.name)) {
-      setEntity({ ...entity, error: true });
+      setEntity({
+        ...entity,
+        error: true,
+      });
       return false;
     }
 
-    const response = await addRole({ auth, url, role: entity.name, permission: { cluster_user: itemType === 'cluster user', super_user: itemType === 'super user' } });
+    const response = await addRole({
+      auth,
+      url,
+      role: entity.name,
+      permission: {
+        cluster_user: itemType === 'cluster user',
+        super_user: itemType === 'super user',
+      },
+    });
     setEntity({});
-    instanceState.update((s) => { s.lastUpdate = Date.now(); });
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
     return setTimeout(() => history.push(`${baseUrl}/${response.id}`), 100);
   };
 
@@ -37,24 +50,21 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
         <Col className="input-holder">
           <Input
             invalid={entity.error}
-            onChange={(e) => setEntity({ name: e.target.value.toString() })}
+            onChange={(e) =>
+              setEntity({
+                name: e.target.value.toString(),
+              })
+            }
             type="text"
             name="name"
             placeholder="name"
           />
         </Col>
         <Col className="item-action text-right pt-1">
-          <Button
-            color="success"
-            className="round mr-1"
-          >
+          <Button color="success" className="round mr-1">
             <i className="fa fa-check text-white" />
           </Button>
-          <Button
-            color="black"
-            className="round"
-            onClick={() => toggleCreate(false)}
-          >
+          <Button color="black" className="round" onClick={() => toggleCreate(false)}>
             <i className="fa fa-times text-white" />
           </Button>
         </Col>

@@ -20,14 +20,28 @@ export default ({ instanceNames }) => {
     const { instance_name, user, pass } = formData;
     if (submitted) {
       if (instanceNames.includes(instance_name)) {
-        setFormState({ submitted: false, error: `An instance named "${instance_name}" already exists` });
-      } else if (!user.match(/^[a-zA-Z0-9-_]+$/)) {
-        setFormState({ submitted: false, error: 'usernames must have only letters, numbers, and underscores' });
-      } else if ((instance_name.length && user.length && pass.length)) {
-        setNewInstance({ ...newInstance, instance_name, user, pass, is_ssl: true });
+        setFormState({
+          submitted: false,
+          error: `An instance named "${instance_name}" already exists`,
+        });
+      } else if (user && !user.match(/^[a-zA-Z0-9-_]+$/)) {
+        setFormState({
+          submitted: false,
+          error: 'usernames must have only letters, numbers, and underscores',
+        });
+      } else if (instance_name.length && user.length && pass.length) {
+        setNewInstance({
+          ...newInstance,
+          instance_name,
+          user,
+          pass,
+          is_ssl: true,
+        });
         setTimeout(() => history.push('/instances/new/details_cloud'), 0);
       } else {
-        setFormState({ error: 'All fields must be filled out.' });
+        setFormState({
+          error: 'All fields must be filled out.',
+        });
       }
     }
   }, [formState]);
@@ -36,7 +50,6 @@ export default ({ instanceNames }) => {
     <>
       <Card>
         <CardBody>
-
           <ContentContainer header="Instance Name">
             <Row className="mb-4">
               <Col xs="4" className="pt-2 text-nowrap">
@@ -44,7 +57,12 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase() })}
+                  onChange={(e) =>
+                    updateForm({
+                      ...formData,
+                      instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase(),
+                    })
+                  }
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
@@ -60,21 +78,31 @@ export default ({ instanceNames }) => {
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, user: e.target.value })}
+                  onChange={(e) =>
+                    updateForm({
+                      ...formData,
+                      user: e.target.value,
+                    })
+                  }
                   type="text"
                   title="username"
                   value={formData.user}
                 />
               </Col>
             </Row>
-            <hr className="my-1" />
+            <hr className="my-2" />
             <Row>
               <Col xs="4" className="pt-2">
                 Password
               </Col>
               <Col xs="8">
                 <Input
-                  onChange={(e) => updateForm({ ...formData, pass: e.target.value })}
+                  onChange={(e) =>
+                    updateForm({
+                      ...formData,
+                      pass: e.target.value,
+                    })
+                  }
                   type="password"
                   title="password"
                   value={formData.pass}
@@ -82,38 +110,35 @@ export default ({ instanceNames }) => {
               </Col>
             </Row>
           </ContentContainer>
-
         </CardBody>
       </Card>
       <Row>
         <Col sm="6">
-          <Button
-            onClick={() => history.push('/instances/new/type')}
-            title="Back to Instance Type"
-            block
-            className="mt-3"
-            color="purple"
-          >
-            <i className="fa fa-chevron-circle-left mr-2" />Instance Type
+          <Button onClick={() => history.push('/instances/new/type')} title="Back to Instance Type" block className="mt-3" color="purple">
+            <i className="fa fa-chevron-circle-left mr-2" />
+            Instance Type
           </Button>
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true })}
+            onClick={() =>
+              setFormState({
+                submitted: true,
+              })
+            }
             title="Instance Details"
             block
             className="mt-3"
             color="purple"
           >
-            Instance Details<i className="fa fa-chevron-circle-right ml-2" />
+            Instance Details
+            <i className="fa fa-chevron-circle-right ml-2" />
           </Button>
         </Col>
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">
-            {formState.error}
-          </CardBody>
+          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
         </Card>
       )}
     </>

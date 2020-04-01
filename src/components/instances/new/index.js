@@ -23,7 +23,19 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const { auth, customer, products, regions, instanceNames, instanceURLs, cloudInstanceCount, freeCloudInstanceCount, localInstanceCount, freeLocalInstanceCount, cloudInstancesBeingModified } = useStoreState(appState, (s) => ({
+  const {
+    auth,
+    customer,
+    products,
+    regions,
+    instanceNames,
+    instanceURLs,
+    cloudInstanceCount,
+    freeCloudInstanceCount,
+    localInstanceCount,
+    freeLocalInstanceCount,
+    cloudInstancesBeingModified,
+  } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
     products: s.products,
@@ -56,15 +68,18 @@ export default () => {
     setTimeout(() => history.push('/instances'), 100);
   };
 
-  useAsyncEffect(() => setNewInstance({ ...newInstance, customer_id: auth.customer_id }), [purchaseStep]);
+  useAsyncEffect(
+    () =>
+      setNewInstance({
+        ...newInstance,
+        customer_id: auth.customer_id,
+      }),
+    [purchaseStep]
+  );
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>
-      {purchaseStep !== 'status' && (
-        <ModalHeader toggle={closeAndResetModal}>
-          {steps[purchaseStep]?.label}
-        </ModalHeader>
-      )}
+      {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody>
         {!products ? (
           <Loader />
@@ -77,14 +92,9 @@ export default () => {
             localInstanceLimit={config.total_local_instance_limit}
           />
         ) : purchaseStep === 'meta_local' ? (
-          <LocalMetadataForm
-            instanceNames={instanceNames}
-            instanceURLs={instanceURLs}
-          />
+          <LocalMetadataForm instanceNames={instanceNames} instanceURLs={instanceURLs} />
         ) : purchaseStep === 'meta_cloud' ? (
-          <CloudMetadataForm
-            instanceNames={instanceNames}
-          />
+          <CloudMetadataForm instanceNames={instanceNames} />
         ) : purchaseStep === 'details_local' ? (
           <LocalInstanceForm
             products={products.localCompute}
@@ -114,9 +124,7 @@ export default () => {
             storageProduct={isLocal ? { price: 'FREE' } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
           />
         ) : purchaseStep === 'status' ? (
-          <OrderStatus
-            closeAndResetModal={finishOrder}
-          />
+          <OrderStatus closeAndResetModal={finishOrder} />
         ) : null}
       </ModalBody>
     </Modal>

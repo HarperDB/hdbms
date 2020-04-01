@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Input, Button, Card, CardBody, SelectDropdown } from '@nio/ui-kit';
+import { Input, Button, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
 import addUser from '../../../api/instance/addUser';
 import instanceState from '../../../state/stores/instanceState';
+import FormStatus from '../../shared/formStatus';
 
 export default () => {
   const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
@@ -14,9 +14,8 @@ export default () => {
     users: s.users,
     roles: s.roles,
   }));
-  const alert = useAlert();
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -24,78 +23,136 @@ export default () => {
       const { username, password, role } = formData;
 
       if (!username || !role || !password) {
-        setFormState({ error: 'All fields must be filled out' });
+        setFormState({
+          error: 'All fields must be filled out',
+        });
       } else if (username.indexOf(' ') !== -1) {
-        setFormState({ error: 'Username may not have spaces' });
+        setFormState({
+          error: 'Username may not have spaces',
+        });
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
-        setFormState({ error: 'User already exists' });
+        setFormState({
+          error: 'User already exists',
+        });
       } else {
-        const response = await addUser({ auth, role, username, password, url });
+        setFormState({
+          processing: true,
+        });
+
+        const response = await addUser({
+          auth,
+          role,
+          username,
+          password,
+          url,
+        });
+
         if (response.message.indexOf('successfully') !== -1) {
-          updateForm({});
-          instanceState.update((s) => { s.lastUpdate = Date.now(); });
-          alert.success(response.message);
+          instanceState.update((s) => {
+            s.lastUpdate = Date.now();
+          });
+
+          setFormState({
+            success: response.message,
+          });
         } else {
-          alert.error(response.message);
+          setFormState({
+            error: response.message,
+          });
         }
-        setFormState({});
       }
+      setTimeout(() => setFormData({}), 2000);
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (roles) updateForm({ ...formData, role: false }); }, [roles]);
+  useAsyncEffect(() => setFormState({}), [formData]);
 
-  return (
+  useAsyncEffect(() => {
+    if (roles)
+      setFormData({
+        ...formData,
+        role: false,
+      });
+  }, [roles]);
+
+  return formState.processing ? (
+    <FormStatus height="174px" status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
+  ) : formState.success ? (
+    <FormStatus height="174px" status="success" header="Success!" subhead={formState.success} />
+  ) : formState.error ? (
+    <FormStatus height="174px" status="error" header={formState.error} subhead="Please try again" />
+  ) : (
     <>
-      <span className="text-white mb-2 floating-card-header">add user</span>
-      <Card className="my-3">
-        <CardBody>
-          <Input
-            type="text"
-            className="mb-2 text-center"
-            name="username"
-            placeholder="username"
-            value={formData.username || ''}
-            onChange={(e) => updateForm({ ...formData, username: e.target.value })}
-          />
+      <Input
+        type="text"
+        className="mb-2 text-center"
+        name="username"
+        placeholder="username"
+        value={formData.username || ''}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            username: e.target.value,
+          })
+        }
+      />
 
-          <Input
-            type="text"
-            className="mb-2 text-center"
-            name="password"
-            placeholder="password"
-            value={formData.password || ''}
-            onChange={(e) => updateForm({ ...formData, password: e.target.value })}
-          />
+      <Input
+        type="text"
+        className="mb-2 text-center"
+        name="password"
+        placeholder="password"
+        value={formData.password || ''}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            password: e.target.value,
+          })
+        }
+      />
 
-          <SelectDropdown
-            classNamePrefix="react-select"
-            className="mb-4"
-            onChange={({ value }) => updateForm({ ...formData, role: value })}
-            options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
-            value={roles && formData.role && roles.find((r) => r.value === formData.role)}
-            isSearchable={false}
-            isClearable={false}
-            isLoading={!roles}
-            placeholder="select a role"
-            styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-          />
+      <SelectDropdown
+        classNamePrefix="react-select"
+        className="mb-3"
+        onChange={({ value }) =>
+          setFormData({
+            ...formData,
+            role: value,
+          })
+        }
+        options={
+          roles &&
+          roles.map((r) => ({
+            label: r.role,
+            value: r.id,
+          }))
+        }
+        value={roles && formData.role && roles.find((r) => r.value === formData.role)}
+        isSearchable={false}
+        isClearable={false}
+        isLoading={!roles}
+        placeholder="select a role"
+        styles={{
+          placeholder: (styles) => ({
+            ...styles,
+            textAlign: 'center',
+            width: '100%',
+            color: '#BCBCBC',
+          }),
+        }}
+      />
 
-          <Button
-            color="success"
-            block
-            onClick={() => setFormState({ submitted: true })}
-          >
-            Add User
-          </Button>
-          {formState.error && (
-            <div className="text-danger text-small text-center text-italic">
-              <hr />
-              {formState.error}
-            </div>
-          )}
-        </CardBody>
-      </Card>
+      <Button
+        color="purple"
+        block
+        onClick={() =>
+          setFormState({
+            submitted: true,
+          })
+        }
+      >
+        Add User
+      </Button>
     </>
   );
 };

@@ -15,13 +15,22 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
     const { is_local } = formData;
     if (is_local !== undefined) {
       if (is_local && localInstanceLimit && !canAddLocalInstance) {
-        setFormState({ error: `You have reached the limit of ${localInstanceLimit} total local instance${localInstanceLimit !== 1 ? 's' : ''}` });
+        setFormState({
+          error: `You have reached the limit of ${localInstanceLimit} total local instance${localInstanceLimit !== 1 ? 's' : ''}`,
+        });
       } else if (!is_local && cloudInstanceLimit && !canAddCloudInstance) {
-        setFormState({ error: `You have reached the limit of ${cloudInstanceLimit} total cloud instance${cloudInstanceLimit !== 1 ? 's' : ''}` });
+        setFormState({
+          error: `You have reached the limit of ${cloudInstanceLimit} total cloud instance${cloudInstanceLimit !== 1 ? 's' : ''}`,
+        });
       } else if (!is_local && cloudInstancesBeingModified) {
-        setFormState({ error: 'Please wait until your existing cloud instances are created' });
+        setFormState({
+          error: 'Please wait until your existing cloud instances are created',
+        });
       } else {
-        setNewInstance({ ...newInstance, is_local });
+        setNewInstance({
+          ...newInstance,
+          is_local,
+        });
         setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
       }
     }
@@ -45,7 +54,18 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 <li>Scale On Demand</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: false })}>Create HarperDB Cloud Instance</Button>
+              <Button
+                className="mt-3"
+                color="purple"
+                block
+                onClick={() =>
+                  updateForm({
+                    is_local: false,
+                  })
+                }
+              >
+                Create HarperDB Cloud Instance
+              </Button>
             </CardBody>
           </Card>
         </Col>
@@ -56,7 +76,11 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
               <hr />
               <ul>
                 <li>Free License Tier Available!</li>
-                <li><a href="https://harperdb.io/developers/get-started/" target="_blank" rel="noopener noreferrer">Click Here To Install HarperDB Yourself</a></li>
+                <li>
+                  <a href="https://harperdb.io/developers/get-started/" target="_blank" rel="noopener noreferrer">
+                    Click Here To Install HarperDB Yourself
+                  </a>
+                </li>
                 <li>Browse Instance Data</li>
                 <li>Configure Users, Roles, and Clustering</li>
                 <li>Manage Instance Licenses</li>
@@ -64,16 +88,25 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 <li>Instance Credentials Stay Local</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => updateForm({ is_local: true })}>Register User-Installed Instance</Button>
+              <Button
+                className="mt-3"
+                color="purple"
+                block
+                onClick={() =>
+                  updateForm({
+                    is_local: true,
+                  })
+                }
+              >
+                Register User-Installed Instance
+              </Button>
             </CardBody>
           </Card>
         </Col>
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">
-            {formState.error}
-          </CardBody>
+          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
         </Card>
       )}
     </>

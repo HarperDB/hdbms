@@ -14,14 +14,27 @@ export default () => {
 
   return cluster_role ? (
     <Row>
-      <Col xs="10" className="text">Cluster Role</Col>
+      <Col xs="10" className="text">
+        Cluster Role
+      </Col>
       <Col xs="2" className="text text-right">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>
   ) : (
     <>
-      <Button color="success" block onClick={() => createClusterUserRole({ auth, url })}>Create Cluster Role</Button>
+      <Button
+        color="success"
+        block
+        onClick={() =>
+          createClusterUserRole({
+            auth,
+            url,
+          })
+        }
+      >
+        Create Cluster Role
+      </Button>
     </>
   );
 };

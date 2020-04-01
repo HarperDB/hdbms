@@ -13,12 +13,21 @@ import App from './components/app';
 import './app.scss';
 
 render(
-  <Elements stripe={stripePromise} options={{ fonts: [{ cssSrc: 'https://fonts.googleapis.com/css?family=Raleway' }] }}>
+  <Elements
+    stripe={stripePromise}
+    options={{
+      fonts: [
+        {
+          cssSrc: 'https://fonts.googleapis.com/css?family=Raleway',
+        },
+      ],
+    }}
+  >
     <Provider template={AlertTemplate} timeout={2000} position={positions.TOP_CENTER}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
   </Elements>,
-  document.getElementById('app'),
+  document.getElementById('app')
 );

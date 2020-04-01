@@ -15,5 +15,7 @@ export default async ({ auth, payload: { customer_id } }) => {
     invoices = response.body;
   }
 
-  return appState.update((s) => { s.invoices = invoices; });
+  return appState.update((s) => {
+    s.invoices = invoices;
+  });
 };

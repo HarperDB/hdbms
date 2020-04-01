@@ -17,28 +17,43 @@ export default () => {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({ error: 'invalid email supplied' });
+        setFormState({
+          error: 'invalid email supplied',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else if (!email) {
-        setFormState({ error: 'email is required' });
+        setFormState({
+          error: 'email is required',
+        });
         setTimeout(() => updateForm({}), 1000);
       } else {
-        setFormState({ ...formState, processing: true });
+        setFormState({
+          ...formState,
+          processing: true,
+        });
         const response = await resendRegistrationEmail({ payload: { email } });
         if (response.result === false) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message,
+          });
           setTimeout(() => {
             setFormState({});
             updateForm({});
           }, 1000);
         } else {
-          setFormState({ success: response.message });
+          setFormState({
+            success: response.message,
+          });
         }
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => { if (!formState.submitted) { setFormState({}); } }, [formData]);
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <div id="login-form">
@@ -47,7 +62,9 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              processing request<br /><br />
+              processing request
+              <br />
+              <br />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -57,8 +74,12 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              success!<br /><br />
-              check your email. if you still don&apos;t see it, shoot us an email:<br /><br />
+              success!
+              <br />
+              <br />
+              check your email. if you still don&apos;t see it, shoot us an email:
+              <br />
+              <br />
               <a href="mailto:support@harperdb.io">support@harperdb.io</a>
             </CardBody>
           </Card>
@@ -69,7 +90,12 @@ export default () => {
           <Card className="mb-3">
             <CardBody className="text-center text-white">
               <Input
-                onChange={(e) => updateForm({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  updateForm({
+                    ...formData,
+                    email: e.target.value,
+                  })
+                }
                 onKeyDown={(e) => handleKeydown(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -79,7 +105,11 @@ export default () => {
                 placeholder="email address"
               />
               <Button
-                onClick={() => setFormState({ submitted: true })}
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
                 disabled={formState.submitted}
                 title="Resend Registration Email"
                 block
@@ -91,11 +121,14 @@ export default () => {
           </Card>
           {formState.error ? (
             <div className="login-nav-link error">
-              {formState.error}&nbsp;
+              {formState.error}
+              &nbsp;
             </div>
           ) : (
             <div className="text-center">
-              <NavLink to="/sign-in" className="login-nav-link">Go to Sign In</NavLink>
+              <NavLink to="/sign-in" className="login-nav-link">
+                Go to Sign In
+              </NavLink>
             </div>
           )}
         </>

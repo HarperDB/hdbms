@@ -7,12 +7,23 @@ export default ({ instances, network }) => {
     const instance_status = is_local ? 'OK' : i.status;
     const instance_host = host || ip_address;
     const reachable = instance_status !== 'CREATE_IN_PROGRESS' && !['localhost', '127.0.0.1'].includes(instance_host);
-    return { instance_name, instance_url: i.url, instance_status, instance_host, clusterPort, connection, subscriptions, reachable };
+    return {
+      instance_name,
+      instance_url: i.url,
+      instance_status,
+      instance_host,
+      clusterPort,
+      connection,
+      subscriptions,
+      reachable,
+    };
   });
 
-  const unregistered = network.outbound_connections.filter((c) => !registered.find((r) => r.instance_host === c.host)).map((i) => ({
-    instance_name: i.name,
-  }));
+  const unregistered = network.outbound_connections
+    .filter((c) => !registered.find((r) => r.instance_host === c.host))
+    .map((i) => ({
+      instance_name: i.name,
+    }));
 
   return {
     connected: registered.filter((i) => i.connection && i.reachable),

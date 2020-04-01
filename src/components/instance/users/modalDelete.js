@@ -15,33 +15,48 @@ export default ({ username, closeModal }) => {
   }));
 
   const deleteUser = async () => {
-    const response = await dropUser({ auth, username, url });
+    const response = await dropUser({
+      auth,
+      username,
+      url,
+    });
 
     if (response.message.indexOf('successfully') !== -1) {
       alert.success(response.message);
       closeModal({ refresh: true });
     } else {
-      setFormState({ error: response.message });
+      setFormState({
+        error: response.message,
+      });
     }
   };
 
   return (
     <Modal id="new-instance-modal" isOpen toggle={closeModal}>
       <ModalHeader toggle={closeModal}>
-        Delete User &quot;{username}&quot;
+        Delete User &quot;
+        {username}
+        &quot;
       </ModalHeader>
       <ModalBody>
         <div className="text-center">
-          Are you sure you want to delete {username}?<br /><br />
+          Are you sure you want to delete {username}
+          ?
+          <br />
+          <br />
           This action cannot be undone.
         </div>
         <hr />
         <Row>
           <Col sm="6">
-            <Button block color="grey" onClick={closeModal}>cancel</Button>
+            <Button block color="grey" onClick={closeModal}>
+              cancel
+            </Button>
           </Col>
           <Col sm="6">
-            <Button block color="danger" onClick={deleteUser}>do it</Button>
+            <Button block color="danger" onClick={deleteUser}>
+              do it
+            </Button>
           </Col>
         </Row>
         {formState.error && (

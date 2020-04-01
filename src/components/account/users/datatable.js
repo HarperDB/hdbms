@@ -16,16 +16,30 @@ export default ({ lastUpdate, setLastUpdate }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const users = useStoreState(appState, (s) => s.users);
-  const [tableState, setTableState] = useState({ ...defaultTableState, sorted: [{ id: 'lastname', desc: false }] });
+  const [tableState, setTableState] = useState({
+    ...defaultTableState,
+    sorted: [{ id: 'lastname', desc: false }],
+  });
   const [userToRemove, setUserToRemove] = useState(false);
 
   useAsyncEffect(async () => {
-    getUsers({ auth: lmsAuth, payload: { customer_id: lmsAuth.customer_id } });
+    getUsers({
+      auth: lmsAuth,
+      payload: {
+        customer_id: lmsAuth.customer_id,
+      },
+    });
   }, [lastUpdate, lmsAuth.customer_id]);
 
   useAsyncEffect(async () => {
     if (userToRemove && userToRemove !== lmsAuth.user_id) {
-      const response = await removeUser({ auth: lmsAuth, payload: { user_id: userToRemove, customer_id: lmsAuth.customer_id } });
+      const response = await removeUser({
+        auth: lmsAuth,
+        payload: {
+          user_id: userToRemove,
+          customer_id: lmsAuth.customer_id,
+        },
+      });
       if (response.result === false) {
         alert.error(response.message);
       } else {
@@ -42,25 +56,59 @@ export default ({ lastUpdate, setLastUpdate }) => {
           <span className="text-white mb-2 floating-card-header">existing users</span>
         </Col>
         <Col className="text-right text-white text-nowrap">
-          <i title="Filter Users" className="fa fa-search floating-card-header" onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })} />
+          <i
+            title="Filter Users"
+            className="fa fa-search floating-card-header"
+            onClick={() =>
+              setTableState({
+                ...tableState,
+                filtered: tableState.showFilter ? [] : tableState.filtered,
+                showFilter: !tableState.showFilter,
+              })
+            }
+          />
         </Col>
       </Row>
       <Card className="my-3">
         <CardBody>
           <ReactTable
             data={users || []}
-            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: lmsAuth.user_id })}
+            columns={customerUserColumns({
+              setUserToRemove,
+              userToRemove,
+              current_user_id: lmsAuth.user_id,
+            })}
             pages={tableState.pages}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onFilteredChange={(value) =>
+              setTableState({
+                ...tableState,
+                filtered: value,
+              })
+            }
             filtered={tableState.filtered}
-            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onSortedChange={(value) =>
+              setTableState({
+                ...tableState,
+                sorted: value,
+              })
+            }
             sorted={tableState.sorted}
-            onPageChange={(value) => setTableState({ ...tableState, page: value })}
+            onPageChange={(value) =>
+              setTableState({
+                ...tableState,
+                page: value,
+              })
+            }
             page={tableState.page}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            onPageSizeChange={(value) =>
+              setTableState({
+                ...tableState,
+                pageSize: value,
+              })
+            }
             resizable={false}
           />
         </CardBody>

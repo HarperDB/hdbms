@@ -10,7 +10,9 @@ export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({ tc_version: newInstance.tc_version || false });
+  const [formData, updateForm] = useState({
+    tc_version: newInstance.tc_version || false,
+  });
 
   let totalPrice = 0;
   if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
@@ -21,10 +23,15 @@ export default ({ computeProduct, storageProduct }) => {
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
-        setNewInstance({ ...newInstance, tc_version });
+        setNewInstance({
+          ...newInstance,
+          tc_version,
+        });
         setTimeout(() => history.push('/instances/new/status'), 0);
       } else {
-        setFormState({ error: 'You must agree to the HarperDB Terms of Use, End User License Agreement, and HarperDB Cloud Terms of Service.' });
+        setFormState({
+          error: 'You must agree to the HarperDB Terms of Use, End User License Agreement, and HarperDB Cloud Terms of Service.',
+        });
       }
     }
   }, [formState]);
@@ -135,7 +142,6 @@ export default ({ computeProduct, storageProduct }) => {
               <b>{totalPrice ? `$${totalPrice.toFixed(2)}/${computeProduct && computeProduct.interval}` : 'FREE'}</b>
             </Col>
           </Row>
-
         </CardBody>
       </Card>
       <Card className="mt-3">
@@ -145,12 +151,26 @@ export default ({ computeProduct, storageProduct }) => {
               <RadioCheckbox
                 className={formState.error ? 'error' : ''}
                 type="radio"
-                onChange={(value) => updateForm({ tc_version: value })}
-                options={{ value: config.tc_version }}
+                onChange={(value) =>
+                  updateForm({
+                    tc_version: value,
+                  })
+                }
+                options={{
+                  value: config.tc_version,
+                }}
               />
             </Col>
             <Col xs="11" className="text-small">
-              I agree to the HarperDB <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">HarperDB Cloud Terms of Service</a>.
+              I agree to the HarperDB{' '}
+              <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+                Privacy Policy
+              </a>{' '}
+              and{' '}
+              <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+                HarperDB Cloud Terms of Service
+              </a>
+              .
             </Col>
           </Row>
         </CardBody>
@@ -164,26 +184,30 @@ export default ({ computeProduct, storageProduct }) => {
             className="mt-3"
             color="purple"
           >
-            <i className="fa fa-chevron-circle-left mr-2" />Instance Details
+            <i className="fa fa-chevron-circle-left mr-2" />
+            Instance Details
           </Button>
         </Col>
         <Col sm="6">
           <Button
-            onClick={() => setFormState({ submitted: true })}
+            onClick={() =>
+              setFormState({
+                submitted: true,
+              })
+            }
             title="Confirm Instance Details"
             block
             className="mt-3"
             color="purple"
           >
-            Add Instance<i className="fa fa-check-circle ml-2" />
+            Add Instance
+            <i className="fa fa-check-circle ml-2" />
           </Button>
         </Col>
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">
-            {formState.error}
-          </CardBody>
+          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
         </Card>
       )}
     </>
