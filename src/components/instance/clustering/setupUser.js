@@ -98,8 +98,8 @@ export default () => {
         Create Cluster User
       </Button>
       {formState.error && (
-        <Card className="mt-3 error no-shadow">
-          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+        <Card className="mt-3 error">
+          <CardBody>{formState.error}</CardBody>
         </Card>
       )}
     </>

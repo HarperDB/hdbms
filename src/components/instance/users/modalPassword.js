@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, Button, Input, Col, Row } from '@nio/ui-kit';
+import { Modal, ModalHeader, ModalBody, Button, Input, Col, Row, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -76,10 +76,9 @@ export default ({ username, closeModal }) => {
           </Col>
         </Row>
         {formState.error && (
-          <div className="mt-3 text-danger text-small text-center">
-            <hr />
-            {formState.error}
-          </div>
+          <Card className="mt-3 error">
+            <CardBody>{formState.error}</CardBody>
+          </Card>
         )}
       </ModalBody>
     </Modal>

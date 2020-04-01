@@ -1,23 +1,31 @@
 .floating-card-header {
-  color: $color-white !important;
+  color: $color-white;
   text-shadow: 0 2px 3px $grey-overlay;
 }
 
 .card {
-  background: $color-white !important;
-  border-radius: 4px !important;
+  background: $color-white;
+  border-radius: $border-radius;
   color: $color-black;
 
+  &.error,
+  &.success {
+    border: 1px solid $color-lightgrey !important;
+    text-align: center;
+    font-size: $font-size-smaller;
+    font-weight: $font-weight-bold;
+  }
+
   &.error {
-    border-color: $color-danger;
-    box-shadow: none !important;
-    color: $color-danger;
+    .card-body {
+      color: $color-danger;
+    }
   }
 
   &.success {
-    border-color: $color-success;
-    box-shadow: none !important;
-    color: $color-success;
+    .card-body {
+      color: $color-success;
+    }
   }
 
   &.has-shadow {

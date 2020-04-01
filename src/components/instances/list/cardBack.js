@@ -91,7 +91,11 @@ export default ({ compute_stack_id, flipCard, flipState }) => {
               </Button>
             </Col>
           </Row>
-          {formState.error && <div className="text-smaller pt-2 text-danger text-center">{formState.error}</div>}
+          {formState.error && (
+            <Card className="mt-3 error">
+              <CardBody>{formState.error}</CardBody>
+            </Card>
+          )}
         </CardBody>
       )}
     </Card>

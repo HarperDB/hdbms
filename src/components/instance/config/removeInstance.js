@@ -46,12 +46,12 @@ export default ({ setRemovingInstance }) => {
       <Card className="my-3">
         <CardBody>
           {formState.error ? (
-            <Card className="mt-2 error">
-              <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+            <Card className="error">
+              <CardBody>{formState.error}</CardBody>
             </Card>
           ) : (
             <>
-              <ContentContainer header={`Enter "${instance_name}" below to begin.`}>
+              <ContentContainer header={`Enter "${instance_name}" below to begin.`} className="mb-2">
                 <Input
                   onChange={(e) =>
                     updateForm({
@@ -75,13 +75,12 @@ export default ({ setRemovingInstance }) => {
                     title="Confirm Instance Details"
                     block
                     disabled={formState.submitted}
-                    className="mt-1"
                     color="danger"
                   >
                     Remove Instance
                   </Button>
 
-                  <hr className="mt-1" />
+                  <hr className="mt-2" />
 
                   {is_local ? (
                     <ul className="text-small">

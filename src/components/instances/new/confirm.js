@@ -30,8 +30,9 @@ export default ({ computeProduct, storageProduct }) => {
         setTimeout(() => history.push('/instances/new/status'), 0);
       } else {
         setFormState({
-          error: 'You must agree to the HarperDB Terms of Use, End User License Agreement, and HarperDB Cloud Terms of Service.',
+          error: 'Please agree to the Privacy Policy and Cloud Terms of Service.',
         });
+        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);
@@ -207,7 +208,7 @@ export default ({ computeProduct, storageProduct }) => {
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+          <CardBody>{formState.error}</CardBody>
         </Card>
       )}
     </>

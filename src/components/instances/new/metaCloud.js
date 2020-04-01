@@ -21,14 +21,14 @@ export default ({ instanceNames }) => {
     if (submitted) {
       if (instanceNames.includes(instance_name)) {
         setFormState({
-          submitted: false,
           error: `An instance named "${instance_name}" already exists`,
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (user && !user.match(/^[a-zA-Z0-9-_]+$/)) {
         setFormState({
-          submitted: false,
           error: 'usernames must have only letters, numbers, and underscores',
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({
           ...newInstance,
@@ -42,6 +42,7 @@ export default ({ instanceNames }) => {
         setFormState({
           error: 'All fields must be filled out.',
         });
+        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);
@@ -138,7 +139,7 @@ export default ({ instanceNames }) => {
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+          <CardBody>{formState.error}</CardBody>
         </Card>
       )}
     </>

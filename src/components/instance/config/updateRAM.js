@@ -65,8 +65,8 @@ export default ({ setUpdatingInstance, storagePrice }) => {
       <Card className="my-3">
         <CardBody>
           {formState.error ? (
-            <Card className="mt-2 error">
-              <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+            <Card className="error">
+              <CardBody>{formState.error}</CardBody>
             </Card>
           ) : (
             <>

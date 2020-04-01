@@ -18,14 +18,17 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
         setFormState({
           error: `You have reached the limit of ${localInstanceLimit} total local instance${localInstanceLimit !== 1 ? 's' : ''}`,
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (!is_local && cloudInstanceLimit && !canAddCloudInstance) {
         setFormState({
           error: `You have reached the limit of ${cloudInstanceLimit} total cloud instance${cloudInstanceLimit !== 1 ? 's' : ''}`,
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (!is_local && cloudInstancesBeingModified) {
         setFormState({
-          error: 'Please wait until your existing cloud instances are created',
+          error: 'Please wait until current cloud instance modifications are complete',
         });
+        setTimeout(() => setFormState({}), 2000);
       } else {
         setNewInstance({
           ...newInstance,
@@ -106,7 +109,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">{formState.error}</CardBody>
+          <CardBody>{formState.error}</CardBody>
         </Card>
       )}
     </>

@@ -30,15 +30,17 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (instanceURLs.includes(url)) {
         setFormState({
           error: `An instance at "${url}" already exists`,
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (user && !user.match(/^[a-zA-Z0-9-_]+$/)) {
         setFormState({
-          submitted: false,
           error: 'usernames must have only letters, numbers, and underscores',
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         setNewInstance({
           ...newInstance,
@@ -56,11 +58,13 @@ export default ({ instanceNames, instanceURLs }) => {
             setFormState({
               error: 'The provided credentials cannot log into that instance.',
             });
+            setTimeout(() => setFormState({}), 2000);
           } else if (response.error && is_ssl) {
             setFormState({
               error: "You may need to accept the instance's self-signed cert",
               url,
             });
+            setTimeout(() => setFormState({}), 2000);
           } else {
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
@@ -68,11 +72,13 @@ export default ({ instanceNames, instanceURLs }) => {
           setFormState({
             error: 'We found no HarperDB at that url/port. Is it running?',
           });
+          setTimeout(() => setFormState({}), 2000);
         }
       } else {
         setFormState({
           error: 'All fields must be filled out.',
         });
+        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);
@@ -231,7 +237,7 @@ export default ({ instanceNames, instanceURLs }) => {
       </Row>
       {formState.error && (
         <Card className="mt-3 error">
-          <CardBody className="text-danger text-small text-center">
+          <CardBody>
             {formState.error}
             &nbsp;
             {formState.url && (
