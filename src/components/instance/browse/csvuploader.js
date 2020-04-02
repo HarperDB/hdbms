@@ -63,6 +63,7 @@ export default () => {
 
   // after they've selected/dropped the file, send it to the worker
   const processData = (data) => {
+    console.log(data);
     setStatus('processing');
     setNewRecordCount(data.length - 1);
     worker.postMessage(data);
@@ -108,22 +109,31 @@ export default () => {
               <div className="csv-message">
                 {status === 'validating' ? (
                   <div className="text-purple text-center">
-                    validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records
+                    <i className="fa fa-lg fa-spin fa-spinner" />
+                    <div className="mt-3">
+                      validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records
+                    </div>
                   </div>
                 ) : status === 'inserting' ? (
                   <div className="text-purple text-center">
-                    inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
+                    <i className="fa fa-lg fa-spin fa-spinner" />
+                    <div className="mt-3">
+                      inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
+                    </div>
                   </div>
                 ) : status === 'processed' ? (
                   <div className="text-purple text-center">
-                    successfully prepared {commaNumbers(newRecordCount)} records
-                    <br />
-                    <Button color="purple" className="mt-3 px-5 clear-files" onClick={handleClear}>
+                    <i className="fa fa-lg fa-check-circle" />
+                    <div className="my-3">successfully prepared {commaNumbers(newRecordCount)} records</div>
+                    <Button color="purple" className="px-5 clear-files" onClick={handleClear}>
                       replace file
                     </Button>
                   </div>
                 ) : status === 'processing' ? (
-                  <div className="text-purple text-center">pre-processing {commaNumbers(newRecordCount)} records</div>
+                  <div className="text-purple text-center">
+                    <i className="fa fa-spin fa-spinner" />
+                    <div className="mt-3">pre-processing {commaNumbers(newRecordCount)} records</div>
+                  </div>
                 ) : fileError ? (
                   <div className="text-danger text-center">{fileError}</div>
                 ) : (
