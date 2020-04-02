@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
-import CSVReader from 'react-csv-reader';
-import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useDropzone } from 'react-dropzone';
 
-import getTotalRecords from '../../../api/instance/getTotalRecords';
+import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
-import Worker from '../../../util/processCSV.worker';
 import instanceState from '../../../state/stores/instanceState';
-
-const worker = new Worker();
 
 export default () => {
   const history = useHistory();
@@ -25,23 +21,20 @@ export default () => {
   const [status, setStatus] = useState(false);
   const [processedData, setProcessedData] = useState(false);
   const [newRecordCount, setNewRecordCount] = useState(0);
-  const [validatedRecordCount, setValidatedRecordCount] = useState(0);
-  const [initialRecordCount, setInitialRecordCount] = useState(0);
   const [fileError, setFileError] = useState(false);
 
   // query the table to determine if all the records have been processed.
-  const validateData = async () => {
-    setStatus('validating');
-    const validatedCount = await getTotalRecords({ schema, table, auth, url });
-    setValidatedRecordCount(validatedCount);
-    if (validatedCount !== initialRecordCount && validatedCount < newRecordCount + initialRecordCount) {
-      return setTimeout(() => validateData(), 1000);
+  const validateData = async (uploadJobId) => {
+    const jobStatus = await getJob({ auth, url, id: uploadJobId });
+
+    if (jobStatus !== 'COMPLETE') {
+      return setTimeout(() => validateData(uploadJobId), 2000);
     }
+
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
     return setTimeout(() => {
-      setStatus(false);
       history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
     }, 1000);
   };
@@ -50,28 +43,40 @@ export default () => {
   const insertData = async () => {
     if (!processedData) return false;
     setStatus('inserting');
-    await csvDataLoad({
+    const uploadJob = await csvDataLoad({
       schema,
       table,
       data: processedData,
       auth,
       url,
     });
+    const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
     setProcessedData(false);
-    return setTimeout(() => validateData(), 1000);
+    return setTimeout(() => validateData(uploadJobId), 1000);
   };
 
   // after they've selected/dropped the file, send it to the worker
   const processData = (data) => {
-    console.log(data);
     setStatus('processing');
-    setNewRecordCount(data.length - 1);
-    worker.postMessage(data);
-    worker.addEventListener('message', (event) => {
-      setProcessedData(event.data);
-      setStatus('processed');
-    });
+    const lines = data.match(/\r?\n/g);
+    setNewRecordCount(lines.length - 1);
+    setProcessedData(data);
+    setStatus('processed');
   };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onabort = () => setFileError('file reading was aborted');
+      reader.onerror = () => setFileError('file reading has failed');
+      reader.onload = () => {
+        processData(reader.result);
+      };
+      reader.readAsText(file);
+    });
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleClear = () => {
     setProcessedData(false);
@@ -84,19 +89,6 @@ export default () => {
     history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
-  useAsyncEffect(
-    async () =>
-      setInitialRecordCount(
-        await getTotalRecords({
-          schema,
-          table,
-          auth,
-          url,
-        })
-      ),
-    []
-  );
-
   return (
     <>
       <span className="text-white mb-2 floating-card-header">
@@ -107,14 +99,7 @@ export default () => {
           <Card className="mb-1">
             <CardBody className="csv-uploader">
               <div className="csv-message">
-                {status === 'validating' ? (
-                  <div className="text-purple text-center">
-                    <i className="fa fa-lg fa-spin fa-spinner" />
-                    <div className="mt-3">
-                      validated {validatedRecordCount ? commaNumbers(validatedRecordCount - initialRecordCount) : '0'} of {commaNumbers(newRecordCount)} records
-                    </div>
-                  </div>
-                ) : status === 'inserting' ? (
+                {status === 'inserting' ? (
                   <div className="text-purple text-center">
                     <i className="fa fa-lg fa-spin fa-spinner" />
                     <div className="mt-3">
@@ -137,30 +122,23 @@ export default () => {
                 ) : fileError ? (
                   <div className="text-danger text-center">{fileError}</div>
                 ) : (
-                  <div className="text-center">
-                    Click to select or drag and drop a .csv file to insert into {schema}.{table}
-                    <br />
-                    <Button color="purple" className="mt-3 px-5 browse-files">
+                  <div {...getRootProps()} id="csv-input" className="text-center">
+                    <input {...getInputProps()} />
+                    <i className="fa fa-lg fa-file-text text-purple " />
+                    <div className="my-3">
+                      Click to select or drag and drop a .csv file to insert into {schema}.{table}
+                    </div>
+                    <Button color="purple" className="px-5 browse-files">
                       browse files
                     </Button>
                   </div>
                 )}
               </div>
-              {!status && (
-                <CSVReader
-                  onFileLoaded={processData}
-                  onError={setFileError}
-                  parserOptions={{
-                    skipEmptyLines: true,
-                  }}
-                  inputId="csv-input"
-                />
-              )}
             </CardBody>
           </Card>
-          {status === 'validating' ? (
+          {status === 'inserting' ? (
             <Button block className="mt-2" color="black" onClick={handleCancel}>
-              Return to Table View (Validate in Background)
+              Return to Table View (Insert Runs in Background)
             </Button>
           ) : (
             <Row>

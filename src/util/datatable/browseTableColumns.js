@@ -17,8 +17,8 @@ export default (dbResponse) => {
         hashAttribute: thisTable.hash_attribute,
         newEntityColumns: {},
         dataTableColumns: orderedColumns.map((k) => ({
-          Header: k,
-          accessor: k,
+          Header: k.toString(),
+          accessor: k.toString(),
           style: {
             height: 29,
             paddingTop: 10,

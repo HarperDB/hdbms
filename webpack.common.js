@@ -24,7 +24,7 @@ module.exports = {
     minimize: true,
     minimizer: [
       new TerserPlugin(),
-      new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true })
+      new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/g, cssProcessor: cssNano, cssProcessorOptions: { discardComments: { removeAll: true } }, canPrint: true }),
     ],
   },
 
@@ -80,25 +80,13 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-              plugins: () => [
-                postCssFlexbugFixes,
-              ],
+              plugins: () => [postCssFlexbugFixes],
             },
           },
           {
             loader: 'sass-loader',
           },
         ],
-      },
-      {
-        test: /\.worker\.js$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            name: 'processCSV.worker.js',
-            inline: true,
-          },
-        },
       },
     ],
   },

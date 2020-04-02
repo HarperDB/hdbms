@@ -81,7 +81,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   }, [hashAttribute, table]);
 
   useInterval(() => {
-    if (autoRefresh) {
+    if (autoRefresh && !loading) {
       tableState.update((s) => {
         s.lastUpdate = Date.now();
       });
