@@ -5,13 +5,14 @@ import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
+import instanceState from '../../../state/stores/instanceState';
+
 import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUploader from './csvuploader';
 import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
-import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const history = useHistory();

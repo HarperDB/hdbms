@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ schema, table, tableState, auth, url }) => {
-  if (!tableState.sorted.length) return false;
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url }) => {
+  if (!sorted.length) return false;
 
   let fetchError = false;
   let newTotalPages = 1;
@@ -10,9 +10,9 @@ export default async ({ schema, table, tableState, auth, url }) => {
 
   try {
     let countSQL = `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `;
-    if (tableState.filtered.length) countSQL += `WHERE ${tableState.filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
     [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url);
-    newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / tableState.pageSize);
+    newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
     // console.log('Failed to get row count');
     fetchError = true;
@@ -20,9 +20,9 @@ export default async ({ schema, table, tableState, auth, url }) => {
 
   try {
     let dataSQL = `SELECT * FROM ${schema}.${table} `;
-    if (tableState.filtered.length) dataSQL += `WHERE ${tableState.filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-    if (tableState.sorted.length) dataSQL += `ORDER BY \`${tableState.sorted[0].id}\` ${tableState.sorted[0].desc ? 'DESC' : 'ASC'}`;
-    dataSQL += ` OFFSET ${tableState.page * tableState.pageSize} FETCH ${tableState.pageSize}`;
+    if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
+    if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+    dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
     newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url);
   } catch (e) {
@@ -31,18 +31,18 @@ export default async ({ schema, table, tableState, auth, url }) => {
   }
 
   const result = {
-    tableData: [],
-    totalPages: 1,
-    totalRecords: 0,
+    newData: [],
+    newTotalPages: 1,
+    newTotalRecords: 0,
   };
 
   if (fetchError) {
     return result;
   }
 
-  if (newData) result.tableData = newData;
-  if (newTotalPages) result.totalPages = newTotalPages;
-  result.totalRecords = newTotalRecords;
+  if (newData) result.newData = newData;
+  if (newTotalPages) result.newTotalPages = newTotalPages;
+  result.newTotalRecords = newTotalRecords;
 
   return result;
 };

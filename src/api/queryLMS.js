@@ -4,7 +4,7 @@ import config from '../../config';
 
 export default async ({ endpoint, payload, auth }) => {
   // eslint-disable-next-line no-console
-  console.log('Querying LMS API', endpoint);
+  // console.log('Querying LMS API', endpoint);
 
   try {
     const request = await fetch(`${config.lms_api_url}${endpoint}`, {
@@ -17,7 +17,7 @@ export default async ({ endpoint, payload, auth }) => {
     });
     const response = await request.json();
 
-    if (!response || response.errorType) {
+    if (!response || response.errorType || response.errorMessage) {
       return {
         body: {
           result: false,
