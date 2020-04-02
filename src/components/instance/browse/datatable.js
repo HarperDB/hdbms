@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -64,7 +64,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
     });
   }, [sorted, page, filtered, pageSize, lastUpdate]);
 
-  useEffect(() => {
+  useAsyncEffect(() => {
     if (table !== currentTable || hashAttribute !== currentHash) {
       tableState.update((s) => {
         s.filtered = [];
@@ -129,6 +129,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
             onClick={() =>
               tableState.update((s) => {
                 s.filtered = showFilter ? [] : filtered;
+                s.page = 0;
                 s.showFilter = !showFilter;
               })
             }
@@ -149,6 +150,8 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
         <CardBody className="react-table-holder">
           <ReactTable
             manual
+            loading={loading}
+            loadingText="loading"
             data={tableData}
             pages={totalPages}
             columns={dataTableColumns}
