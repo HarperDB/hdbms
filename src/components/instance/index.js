@@ -22,8 +22,7 @@ export default () => {
   }));
 
   const refreshInstance = async () => {
-    if (instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions) {
-      setLoadingInstance(true);
+    if (!loadingInstance && instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions) {
       const auth = instanceAuths[compute_stack_id];
       const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
       const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
@@ -51,6 +50,7 @@ export default () => {
   }, []);
 
   useEffect(() => {
+    setLoadingInstance(true);
     refreshInstance();
   }, [compute_stack_id]);
 
