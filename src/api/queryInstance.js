@@ -1,11 +1,12 @@
 import { fetch } from 'whatwg-fetch';
 
-export default async (operation, auth, url) => {
+export default async (operation, auth, url, signal = undefined) => {
   // eslint-disable-next-line no-console
   // console.log('Querying Instance API', operation.operation);
 
   try {
     const request = await fetch(url, {
+      signal,
       method: 'POST',
       body: JSON.stringify(operation),
       headers: {

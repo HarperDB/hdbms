@@ -2,12 +2,13 @@ import { fetch } from 'whatwg-fetch';
 
 import config from '../../config';
 
-export default async ({ endpoint, payload, auth }) => {
+export default async ({ endpoint, payload, auth, signal = undefined }) => {
   // eslint-disable-next-line no-console
   // console.log('Querying LMS API', endpoint);
 
   try {
     const request = await fetch(`${config.lms_api_url}${endpoint}`, {
+      signal,
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {

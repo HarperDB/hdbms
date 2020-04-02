@@ -4,10 +4,12 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useDropzone } from 'react-dropzone';
 
+import instanceState from '../../../state/stores/instanceState';
+import config from '../../../../config';
+
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
-import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const history = useHistory();
@@ -67,12 +69,19 @@ export default () => {
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
-      reader.onabort = () => setFileError('file reading was aborted');
-      reader.onerror = () => setFileError('file reading has failed');
+      reader.onabort = () => setFileError({ header: 'File reading was aborted' });
+      reader.onerror = () => setFileError({ header: 'file reading has failed' });
       reader.onload = () => {
         processData(reader.result);
       };
-      reader.readAsText(file);
+      if (file.size > config.max_file_upload_size) {
+        setFileError({
+          header: 'Studio CSV Uploads Are Currently Limited to 10MB.',
+          subhead: 'Instead, host the file somewhere public and use HarperDB\'s "csv_url_load" method.',
+        });
+      } else {
+        reader.readAsText(file);
+      }
     });
   }, []);
 
@@ -80,11 +89,13 @@ export default () => {
 
   const handleClear = () => {
     setProcessedData(false);
+    setFileError(false);
     setStatus(false);
   };
 
   const handleCancel = () => {
     setProcessedData(false);
+    setFileError(false);
     setStatus(false);
     history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
@@ -116,11 +127,21 @@ export default () => {
                   </div>
                 ) : status === 'processing' ? (
                   <div className="text-purple text-center">
-                    <i className="fa fa-spin fa-spinner" />
+                    <i className="fa fa-lg fa-spin fa-spinner" />
                     <div className="mt-3">pre-processing {commaNumbers(newRecordCount)} records</div>
                   </div>
                 ) : fileError ? (
-                  <div className="text-danger text-center">{fileError}</div>
+                  <div className="text-danger text-center">
+                    <i className="fa fa-lg fa-exclamation-triangle" />
+                    <div className="my-3">
+                      {fileError.header}
+                      <br />
+                      {fileError.subhead}
+                    </div>
+                    <Button color="purple" className="px-5 clear-files" onClick={handleClear}>
+                      start over
+                    </Button>
+                  </div>
                 ) : (
                   <div {...getRootProps()} id="csv-input" className="text-center">
                     <input {...getInputProps()} />

@@ -37,32 +37,41 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
       lastUpdate: s.lastUpdate,
       currentTable: s.currentTable,
       currentHash: s.currentHash,
-    })
+    }),
+    [table]
   );
+  let controller;
 
-  useAsyncEffect(async () => {
-    tableState.update((s) => {
-      s.loading = true;
-    });
+  useAsyncEffect(
+    async () => {
+      controller = new AbortController();
 
-    const { newData, newTotalPages, newTotalRecords } = await getTableData({
-      schema,
-      table,
-      filtered,
-      pageSize,
-      sorted,
-      page,
-      auth,
-      url,
-    });
+      tableState.update((s) => {
+        s.loading = true;
+      });
 
-    tableState.update((s) => {
-      s.tableData = newData;
-      s.totalPages = newTotalPages;
-      s.totalRecords = newTotalRecords;
-      s.loading = false;
-    });
-  }, [sorted, page, filtered, pageSize, lastUpdate]);
+      const { newData, newTotalPages, newTotalRecords } = await getTableData({
+        schema,
+        table,
+        filtered,
+        pageSize,
+        sorted,
+        page,
+        auth,
+        url,
+        signal: controller.signal,
+      });
+
+      tableState.update((s) => {
+        s.tableData = newData;
+        s.totalPages = newTotalPages;
+        s.totalRecords = newTotalRecords;
+        s.loading = false;
+      });
+    },
+    () => controller.abort(),
+    [sorted, page, filtered, pageSize, lastUpdate]
+  );
 
   useAsyncEffect(() => {
     if (hashAttribute !== currentHash || table !== currentTable) {

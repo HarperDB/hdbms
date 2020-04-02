@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal }) => {
   if (!sorted.length) return false;
 
   let fetchError = false;
@@ -11,7 +11,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   try {
     let countSQL = `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `;
     if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-    [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url);
+    [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, signal);
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
     // console.log('Failed to get row count');
@@ -24,7 +24,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
     dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-    newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url);
+    newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
   } catch (e) {
     // console.log('Failed to get table data');
     fetchError = true;
