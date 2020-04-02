@@ -117,7 +117,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
 
   return (
     <Card
-      className="instance"
+      className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`}
       onClick={() =>
         handleCardClick({
           instanceAuth,

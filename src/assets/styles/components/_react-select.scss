@@ -1,3 +1,20 @@
+.react-select-container {
+  width: 100%;
+  max-width: 287px;
+
+  .react-select__control,
+  .react-select__control:hover {
+    background: $color-black;
+    border-color: $color-darkgrey;
+
+    .react-select__single-value{
+      color: $color-white;
+    }
+
+  }
+
+}
+
 .react-select__menu {
   margin-top: 1px !important;
 }

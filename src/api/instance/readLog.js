@@ -6,6 +6,7 @@ const logMessagesToIgnore = [
   'Error in server socket: SocketProtocolError: Socket hung up',
   'ERROR on HDB Client socket: SocketProtocolError: Socket hung up',
   'Disconnected from cluster server with code: 1000 - SUCCESSFUL_SHUTDOWN',
+  '{"ip":"::1", "error":"undefined"',
 ];
 
 export default async ({ auth, url }) => {
