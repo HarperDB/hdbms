@@ -65,8 +65,12 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   }, [sorted, page, filtered, pageSize, lastUpdate]);
 
   useAsyncEffect(() => {
-    if (table !== currentTable || hashAttribute !== currentHash) {
+    if (hashAttribute !== currentHash || table !== currentTable) {
       tableState.update((s) => {
+        s.tableData = [];
+        s.totalPages = -1;
+        s.totalRecords = 0;
+        s.loading = true;
         s.filtered = [];
         s.sorted = [{ id: hashAttribute, desc: false }];
         s.page = 0;
@@ -74,7 +78,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
         s.currentHash = hashAttribute;
       });
     }
-  }, [hashAttribute]);
+  }, [hashAttribute, table]);
 
   useInterval(() => {
     if (autoRefresh) {

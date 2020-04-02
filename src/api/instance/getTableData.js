@@ -36,7 +36,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     newTotalRecords: 0,
   };
 
-  if (fetchError) {
+  if (fetchError || !Array.isArray(newData) || newData.error) {
     return result;
   }
 
