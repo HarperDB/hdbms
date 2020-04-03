@@ -10,7 +10,13 @@ export default async ({ instance_id, instanceAuth, url }) => {
     },
     url,
   });
+
+  if (roles.error) {
+    return false;
+  }
+
   const role = roles.find((r) => r.permission.super_user).id;
+
   await addUser({
     auth: {
       user: instance_id,
@@ -26,5 +32,6 @@ export default async ({ instance_id, instanceAuth, url }) => {
     username: instance_id,
     url,
   });
-  return { instance: 'OK' };
+
+  return true;
 };

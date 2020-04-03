@@ -20,12 +20,20 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
     if (registration.error && registration.message === 'Login failed' && !is_local) {
-      await handleCloudInstanceUsernameChange({
+      const result = await handleCloudInstanceUsernameChange({
         instance_id,
         instanceAuth,
         url,
       });
-      registration = await registrationInfo({ auth: instanceAuth, url });
+
+      if (result) {
+        registration = await registrationInfo({ auth: instanceAuth, url });
+      } else {
+        return {
+          instance: 'LOGIN FAILED',
+          instanceError: true,
+        };
+      }
     }
 
     if (registration.error && registration.message === 'Login failed') {
