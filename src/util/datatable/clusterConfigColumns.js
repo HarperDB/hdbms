@@ -31,13 +31,13 @@ export default ({ auth, url }) => [
   },
   {
     Header: 'publish',
-    Cell: ({ original: { instance_name, instance_host, clusterPort, subscriptions, publish, channel } }) => (
+    Cell: ({ original: { compute_stack_id, instance_host, clusterPort, subscriptions, publish, channel } }) => (
       <ToggleButton
         width={75}
         checked={publish || false}
         onChange={() =>
           updateNode({
-            instance_name,
+            compute_stack_id,
             instance_host,
             clusterPort,
             subscriptions,
@@ -55,13 +55,13 @@ export default ({ auth, url }) => [
   },
   {
     Header: 'subscribe',
-    Cell: ({ original: { instance_name, instance_host, clusterPort, subscriptions, subscribe, channel } }) => (
+    Cell: ({ original: { compute_stack_id, instance_host, clusterPort, subscriptions, subscribe, channel } }) => (
       <ToggleButton
         width={75}
         checked={subscribe || false}
         onChange={() =>
           updateNode({
-            instance_name,
+            compute_stack_id,
             instance_host,
             clusterPort,
             subscriptions,

@@ -25,6 +25,11 @@ export default () => {
         setFormState({
           error: 'All fields are required',
         });
+      } else if (!username.match(/^[a-zA-Z0-9_]+$/)) {
+        setFormState({
+          error: 'usernames must have only letters, numbers, and underscores',
+        });
+        setTimeout(() => setFormState({}), 2000);
       } else {
         const response = await createClusterUser({
           username,

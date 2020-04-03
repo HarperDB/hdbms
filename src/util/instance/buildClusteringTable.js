@@ -3,7 +3,7 @@ export default ({ instances, structure }) => {
 
   const newTableData = [];
   instances.map((instance) => {
-    const { instance_name, instance_host, clusterPort, subscriptions } = instance;
+    const { instance_name, compute_stack_id, instance_host, clusterPort, subscriptions } = instance;
     Object.keys(structure)
       .sort()
       .map((schema, s) => {
@@ -20,6 +20,7 @@ export default ({ instances, structure }) => {
               instance_name,
               schema,
               table,
+              compute_stack_id,
               instance_host,
               clusterPort,
               subscriptions,

@@ -26,10 +26,11 @@ export default () => {
         setFormState({
           error: 'All fields must be filled out',
         });
-      } else if (username.indexOf(' ') !== -1) {
+      } else if (!username.match(/^[a-zA-Z0-9_]+$/)) {
         setFormState({
-          error: 'Username may not have spaces',
+          error: 'usernames must have only letters, numbers, and underscores',
         });
+        setTimeout(() => setFormState({}), 2000);
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
         setFormState({
           error: 'User already exists',

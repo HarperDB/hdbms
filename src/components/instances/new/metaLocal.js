@@ -36,7 +36,7 @@ export default ({ instanceNames, instanceURLs }) => {
           error: `An instance at "${url}" already exists`,
         });
         setTimeout(() => setFormState({}), 2000);
-      } else if (user && !user.match(/^[a-zA-Z0-9-_]+$/)) {
+      } else if (user && !user.match(/^[a-zA-Z0-9_]+$/)) {
         setFormState({
           error: 'usernames must have only letters, numbers, and underscores',
         });
