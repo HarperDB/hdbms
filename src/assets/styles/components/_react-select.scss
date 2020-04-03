@@ -3,12 +3,18 @@
   max-width: 287px;
 
   .react-select__control,
-  .react-select__control:hover {
-    background: $color-black;
-    border-color: $color-darkgrey;
+  .react-select__control:hover,
+  .react-select__control:focus,
+  .react-select__indicator-separator {
+    background: transparent;
+    border-color: $faint-white-overlay !important;
 
     .react-select__single-value{
       color: $color-white;
+    }
+
+    .react-select__indicator-separator {
+      background: $faint-white-overlay !important;
     }
 
   }

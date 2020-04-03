@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useDropzone } from 'react-dropzone';
+import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/stores/instanceState';
 import config from '../../../../config';
@@ -10,6 +11,8 @@ import config from '../../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
+import isURL from '../../../util/isURL';
+import csvURLLoad from '../../../api/instance/csvURLLoad';
 
 export default () => {
   const history = useHistory();
@@ -20,16 +23,27 @@ export default () => {
     url: s.url,
   }));
 
-  const [status, setStatus] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
   const [processedData, setProcessedData] = useState(false);
   const [newRecordCount, setNewRecordCount] = useState(0);
   const [fileError, setFileError] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [formState, setFormState] = useState({});
+  const [mounted, setMounted] = useState(false);
 
   // query the table to determine if all the records have been processed.
-  const validateData = async (uploadJobId) => {
-    const jobStatus = await getJob({ auth, url, id: uploadJobId });
+  const validateData = async (uploadJobId, type) => {
+    const { status, message } = await getJob({ auth, url, id: uploadJobId });
 
-    if (jobStatus !== 'COMPLETE') {
+    if (status === 'ERROR' && type === 'url') {
+      return setFormState({ error: message.split(':')[1] });
+    }
+
+    if (status === 'ERROR' && type === 'file') {
+      return setFileError(message);
+    }
+
+    if (status !== 'COMPLETE' && mounted) {
       return setTimeout(() => validateData(uploadJobId), 2000);
     }
 
@@ -44,7 +58,7 @@ export default () => {
   // insert the processed data into HarperDB
   const insertData = async () => {
     if (!processedData) return false;
-    setStatus('inserting');
+    setUploadStatus('inserting');
     const uploadJob = await csvDataLoad({
       schema,
       table,
@@ -54,31 +68,28 @@ export default () => {
     });
     const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
     setProcessedData(false);
-    return setTimeout(() => validateData(uploadJobId), 1000);
+    return setTimeout(() => validateData(uploadJobId, 'file'), 1000);
   };
 
   // after they've selected/dropped the file, send it to the worker
   const processData = (data) => {
-    setStatus('processing');
+    setUploadStatus('processing');
     const lines = data.match(/\r?\n/g);
     setNewRecordCount(lines.length - 1);
     setProcessedData(data);
-    setStatus('processed');
+    setUploadStatus('processed');
   };
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
-      reader.onabort = () => setFileError({ header: 'File reading was aborted' });
-      reader.onerror = () => setFileError({ header: 'file reading has failed' });
+      reader.onabort = () => setFileError('File reading was aborted');
+      reader.onerror = () => setFileError('file reading has failed');
       reader.onload = () => {
         processData(reader.result);
       };
       if (file.size > config.max_file_upload_size) {
-        setFileError({
-          header: 'Studio CSV Uploads Are Currently Limited to 10MB.',
-          subhead: 'Instead, host the file somewhere public and use HarperDB\'s "csv_url_load" method.',
-        });
+        setFileError('File exceeds 10MB Limit. Use URL Loader Above.');
       } else {
         reader.readAsText(file);
       }
@@ -90,91 +101,133 @@ export default () => {
   const handleClear = () => {
     setProcessedData(false);
     setFileError(false);
-    setStatus(false);
+    setUploadStatus(false);
   };
 
   const handleCancel = () => {
     setProcessedData(false);
     setFileError(false);
-    setStatus(false);
+    setUploadStatus(false);
     history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
+
+  useAsyncEffect(async () => {
+    const { submitted } = formState;
+    if (submitted) {
+      const { csv_url } = formData;
+      if (isURL(csv_url)) {
+        const uploadJob = await csvURLLoad({ schema, table, csv_url, auth, url });
+        const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
+        setTimeout(() => validateData(uploadJobId, 'url'), 1000);
+      } else {
+        setFormState({ error: 'Please provide a valid URL' });
+        setTimeout(() => setFormState({}), 2000);
+      }
+    }
+  }, [formState]);
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
+  );
 
   return (
     <>
       <span className="text-white mb-2 floating-card-header">
-        {schema} &gt;{table} &gt; csv upload
+        {schema} &gt; {table} &gt; csv upload
       </span>
       <Card className="my-3">
         <CardBody>
-          <Card className="mb-1">
-            <CardBody className="csv-uploader">
-              <div className="csv-message">
-                {status === 'inserting' ? (
-                  <div className="text-purple text-center">
-                    <i className="fa fa-lg fa-spin fa-spinner" />
-                    <div className="mt-3">
-                      inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
-                    </div>
-                  </div>
-                ) : status === 'processed' ? (
-                  <div className="text-purple text-center">
-                    <i className="fa fa-lg fa-check-circle" />
-                    <div className="my-3">successfully prepared {commaNumbers(newRecordCount)} records</div>
-                    <Button color="purple" className="px-5 clear-files" onClick={handleClear}>
-                      replace file
-                    </Button>
-                  </div>
-                ) : status === 'processing' ? (
-                  <div className="text-purple text-center">
-                    <i className="fa fa-lg fa-spin fa-spinner" />
-                    <div className="mt-3">pre-processing {commaNumbers(newRecordCount)} records</div>
-                  </div>
-                ) : fileError ? (
-                  <div className="text-danger text-center">
-                    <i className="fa fa-lg fa-exclamation-triangle" />
-                    <div className="my-3">
-                      {fileError.header}
-                      <br />
-                      {fileError.subhead}
-                    </div>
-                    <Button color="purple" className="px-5 clear-files" onClick={handleClear}>
-                      start over
-                    </Button>
-                  </div>
+          <Row>
+            <Col sm="6" className="mb-2">
+              <b className="text-small">Specify A Hosted CSV File</b>
+              <hr className="my-1" />
+              {formState.submitted ? (
+                <div className="csv-status">
+                  <i className="fa fa-spin fa-spinner mr-3" />
+                  uploading .csv into {schema}.{table}
+                </div>
+              ) : formState.error ? (
+                <div className="text-danger csv-status">
+                  <i className="fa fa-exclamation-triangle mr-3" />
+                  {formState.error}
+                </div>
+              ) : (
+                <Input
+                  onChange={(e) =>
+                    setFormData({
+                      csv_url: e.target.value,
+                    })
+                  }
+                  type="text"
+                  invalid={formData.csv_url && !isURL(formData.csv_url)}
+                  title="instance_name"
+                  placeholder="CSV file URL"
+                  value={formData.csv_url || ''}
+                  disabled={formState.submitted}
+                />
+              )}
+              <div className="pt-2">
+                {formState.error ? (
+                  <Button block color="danger" onClick={() => setFormState({})}>
+                    Clear URL
+                  </Button>
                 ) : (
-                  <div {...getRootProps()} id="csv-input" className="text-center">
-                    <input {...getInputProps()} />
-                    <i className="fa fa-lg fa-file-text text-purple " />
-                    <div className="my-3">
-                      Click to select or drag and drop a .csv file to insert into {schema}.{table}
-                    </div>
-                    <Button color="purple" className="px-5 browse-files">
-                      browse files
-                    </Button>
-                  </div>
+                  <Button disabled={formState.submitted || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
+                    Import From URL
+                  </Button>
                 )}
               </div>
-            </CardBody>
-          </Card>
-          {status === 'inserting' ? (
-            <Button block className="mt-2" color="black" onClick={handleCancel}>
-              Return to Table View (Insert Runs in Background)
-            </Button>
-          ) : (
-            <Row>
-              <Col md="6" className="mt-2">
-                <Button block disabled={['inserting', 'processing'].includes(status)} color="black" onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </Col>
-              <Col md="6" className="mt-2">
-                <Button block disabled={[false, 'inserting', 'processing'].includes(status)} color="success" onClick={insertData}>
-                  Insert Records
-                </Button>
-              </Col>
-            </Row>
-          )}
+            </Col>
+            <Col sm="6">
+              <b className="text-small">Upload A CSV FIle (10MB Limit)</b>
+              <hr className="my-1" />
+              {uploadStatus === 'inserting' ? (
+                <div className="csv-status">
+                  <i className="fa fa-spin fa-spinner mr-3" />
+                  inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
+                </div>
+              ) : uploadStatus === 'processed' ? (
+                <div className="csv-status" onClick={handleClear}>
+                  <i className="fa fa-thumbs-up text-success mr-3" />
+                  {commaNumbers(newRecordCount)} records. Click here to replace file.
+                </div>
+              ) : uploadStatus === 'processing' ? (
+                <div className="csv-status">
+                  <i className="fa fa-spin fa-spinner" /> processing {commaNumbers(newRecordCount)} records
+                </div>
+              ) : fileError ? (
+                <div className="text-danger csv-status">{fileError}</div>
+              ) : (
+                <div {...getRootProps()} className="text-center">
+                  <input {...getInputProps()} />
+                  <Button className="no-shadow" disabled={formState.submitted} color="grey" outline block>
+                    Click to select a .csv file
+                  </Button>
+                </div>
+              )}
+              <div className="pt-2">
+                {uploadStatus === 'inserting' ? (
+                  <Button block color="black" onClick={handleCancel}>
+                    Return to Table View (Insert Runs in Background)
+                  </Button>
+                ) : fileError ? (
+                  <Button color="danger" block className="px-5 clear-files" onClick={handleClear}>
+                    Clear File
+                  </Button>
+                ) : (
+                  <Button block disabled={[false, 'inserting', 'processing'].includes(uploadStatus)} color="success" onClick={insertData}>
+                    Insert {commaNumbers(newRecordCount)} Records
+                  </Button>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <hr className="mt-2 mb-4" />
+          <Button block disabled={['inserting', 'processing'].includes(uploadStatus) || formState.submitted} color="black" onClick={handleCancel}>
+            Cancel
+          </Button>
         </CardBody>
       </Card>
     </>

@@ -1,11 +1,11 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/stores/instanceState';
 
-export default async ({ instance_name, auth, url }) => {
+export default async ({ compute_stack_id, auth, url }) => {
   await queryInstance(
     {
       operation: 'remove_node',
-      name: instance_name,
+      name: compute_stack_id,
     },
     auth,
     url

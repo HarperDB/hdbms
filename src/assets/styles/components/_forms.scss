@@ -12,6 +12,8 @@ textarea,
   font-weight: $font-weight-light;
   outline: none !important;
   transition: none;
+  border-radius: $border-radius;
+  height: 36px;
 
   &::placeholder {
     color: $color-grey !important;

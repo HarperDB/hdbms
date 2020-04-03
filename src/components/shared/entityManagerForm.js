@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
+import { Row, Col, Button, Input } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -19,6 +19,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
   const [nameError, toggleNameError] = useState(false);
   const [hashAttribute, setHashAttribute] = useState(false);
   const [hashError, toggleHashError] = useState(false);
+  const [addingItem, setAddingItem] = useState(false);
 
   const createItem = async (e) => {
     e.preventDefault();
@@ -42,6 +43,8 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
 
     if (error) return false;
 
+    setAddingItem(true);
+
     const operation = {
       operation: `create_${itemType}`,
     };
@@ -55,56 +58,66 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     }
 
     await queryInstance(operation, auth, url);
-    setEntityName();
-    setHashAttribute();
-    toggleNameError();
-    toggleHashError();
-    instanceState.update((s) => {
+
+    return instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-    return setTimeout(() => history.push(`${baseUrl}/${entityName}`), 100);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);
 
+  useEffect(() => {
+    if (entityName && items.find((i) => i === entityName)) {
+      history.push(`${baseUrl}/${entityName}`);
+    }
+  }, [items]);
+
   return (
-    <Form onSubmit={createItem}>
-      <Row className="item-row form">
+    <Row className="item-row form">
+      <Col className="input-holder">
+        <Input
+          invalid={nameError}
+          onChange={(e) => {
+            toggleNameError(false);
+            setEntityName(e.target.value.toString());
+          }}
+          disabled={addingItem}
+          type="text"
+          name="name"
+          placeholder="name"
+        />
+      </Col>
+      {itemType === 'table' && (
         <Col className="input-holder">
           <Input
-            invalid={nameError}
+            invalid={hashError}
+            disabled={addingItem}
             onChange={(e) => {
-              toggleNameError(false);
-              setEntityName(e.target.value.toString());
+              toggleHashError(false);
+              setHashAttribute(e.target.value.toString());
             }}
-            type="text"
-            name="name"
-            placeholder="name"
+            type="test"
+            name="hash_attribute"
+            placeholder="hash attr."
           />
         </Col>
-        {itemType === 'table' && (
-          <Col className="input-holder">
-            <Input
-              invalid={hashError}
-              onChange={(e) => {
-                toggleHashError(false);
-                setHashAttribute(e.target.value.toString());
-              }}
-              type="test"
-              name="hash_attribute"
-              placeholder="hash attr."
-            />
-          </Col>
-        )}
-        <Col className="item-action text-right pt-1">
+      )}
+      <Col className="item-action text-right pt-1">
+        {addingItem ? (
           <Button color="success" className="round mr-1">
-            <i className="fa fa-check text-white" />
+            <i className="fa fa-spinner fa-spin text-white" />
           </Button>
-          <Button color="black" className="round" onClick={() => toggleCreate(false)}>
-            <i className="fa fa-times text-white" />
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+        ) : (
+          <>
+            <Button color="success" className="round mr-1">
+              <i className="fa fa-check text-white" onClick={createItem} />
+            </Button>
+            <Button color="black" className="round" onClick={() => toggleCreate(false)}>
+              <i className="fa fa-times text-white" />
+            </Button>
+          </>
+        )}
+      </Col>
+    </Row>
   );
 };

@@ -55,7 +55,7 @@ export default () => {
   }, [compute_stack_id]);
 
   return (
-    <div id="instance">
+    <>
       <SubNav routes={routes} />
       {loadingInstance ? (
         <Loader message="loading instance" />
@@ -66,6 +66,6 @@ export default () => {
           ))}
         </Switch>
       )}
-    </div>
+    </>
   );
 };

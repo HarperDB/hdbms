@@ -7,7 +7,7 @@ import instanceState from '../../../state/stores/instanceState';
 import removeNode from '../../../api/instance/removeNode';
 import addNode from '../../../api/instance/addNode';
 
-export default ({ item: { instance_name, instance_host, instance_status, connection, clusterPort, reachable }, itemType }) => {
+export default ({ item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort, reachable }, itemType }) => {
   const history = useHistory();
   const [changing, setChanging] = useState(false);
   const { auth, url } = useStoreState(instanceState, (s) => ({
@@ -32,7 +32,7 @@ export default ({ item: { instance_name, instance_host, instance_status, connect
               onClick={() => {
                 setChanging(true);
                 removeNode({
-                  instance_name,
+                  compute_stack_id,
                   auth,
                   url,
                 });
@@ -58,7 +58,7 @@ export default ({ item: { instance_name, instance_host, instance_status, connect
             onClick={() => {
               setChanging(true);
               removeNode({
-                instance_name,
+                compute_stack_id,
                 auth,
                 url,
               });
@@ -75,7 +75,7 @@ export default ({ item: { instance_name, instance_host, instance_status, connect
             onClick={() => {
               setChanging(true);
               addNode({
-                instance_name,
+                compute_stack_id,
                 instance_host,
                 clusterPort,
                 auth,

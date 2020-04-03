@@ -14,6 +14,10 @@
     outline: none !important;
   }
 
+  &.no-shadow {
+    box-shadow: none !important;
+  }
+
   &.round {
     height: 25px !important;
     padding: 0;
@@ -35,6 +39,12 @@
     background-color: $color-grey !important;
     border-color: $color-grey !important;
     color: $color-white !important;
+  }
+
+  &.btn-outline-grey {
+    background-color: $color-white !important;
+    border-color: $color-grey !important;
+    color: $color-grey !important;
   }
 
   &.btn-black {

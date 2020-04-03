@@ -1,38 +1,8 @@
-.csv-uploader {
-  background: $lightest-grey-overlay;
-  height: 350px;
-  padding: 0;
-  position: relative;
-
-  .csv-message {
-    padding: 0 15px;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-
-    .clear-files,
-    .browse-files {
-      z-index: 99999;
-    }
-  }
-
-  .csv-reader-input {
-    border-radius: 4px;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-
-    #csv-input {
-      background: none !important;
-      border: 0 !important;
-      box-shadow: none !important;
-      height: 380px;
-      position: absolute;
-      top: -30px;
-      width: 100%;
-    }
-  }
+.csv-status {
+  height: 36px;
+  font-size: $font-size-small;
+  text-align: center;
+  padding-top: 13px;
+  cursor: pointer;
+  white-space: nowrap;
 }
