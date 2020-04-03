@@ -36,6 +36,11 @@ export default ({ instanceNames, instanceURLs }) => {
           error: `An instance at "${url}" already exists`,
         });
         setTimeout(() => setFormState({}), 2000);
+      } else if (!instance_name.match(/^[a-zA-Z0-9_]+$/)) {
+        setFormState({
+          error: 'instance names must have only letters, numbers, and underscores',
+        });
+        setTimeout(() => setFormState({}), 2000);
       } else if (user && !user.match(/^[a-zA-Z0-9_]+$/)) {
         setFormState({
           error: 'usernames must have only letters, numbers, and underscores',
@@ -90,14 +95,14 @@ export default ({ instanceNames, instanceURLs }) => {
           <ContentContainer header="Instance Name">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
-                Example: &quot;edge-1&quot;
+                Example: &quot;edge_1&quot;
               </Col>
               <Col xs="8">
                 <Input
                   onChange={(e) =>
                     updateForm({
                       ...formData,
-                      instance_name: e.target.value.replace(/\W+/g, '-').toLowerCase(),
+                      instance_name: e.target.value.replace(/\W+/g, '_').toLowerCase(),
                     })
                   }
                   type="text"

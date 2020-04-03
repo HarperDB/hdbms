@@ -6,6 +6,7 @@ const processConnections = (connections) =>
           name: c.node_name,
           host: c.host_address,
           port: c.host_port,
+          state: c.state,
           subscriptions: c.subscriptions,
         }))
     : [];

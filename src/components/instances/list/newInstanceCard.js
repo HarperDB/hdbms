@@ -8,8 +8,12 @@ export default () => {
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <Card title="Add New Instance" className="instance" onClick={() => history.push('/instances/new')}>
-        <CardBody className="d-flex flex-column align-items-center justify-content-center">
-          <i className="text-purple fa fa-2x fa-plus" />
+        <CardBody className="d-flex flex-column align-items-center justify-content-center text-bold text-purple">
+          <span className="text-small">Create New HarperDB Cloud Instance</span>
+          <div className="my-3">
+            <i className="fa fa-2x fa-plus-circle" />
+          </div>
+          <span className="text-small">Import Existing HarperDB Instance</span>
         </CardBody>
       </Card>
     </Col>
