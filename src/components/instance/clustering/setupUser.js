@@ -25,9 +25,9 @@ export default () => {
         setFormState({
           error: 'All fields are required',
         });
-      } else if (!username.match(/^[a-zA-Z0-9_]+$/)) {
+      } else if (!username.match(/^[a-zA-Z_]+$/)) {
         setFormState({
-          error: 'usernames must have only letters, numbers, and underscores',
+          error: 'usernames must have only letters and underscores',
         });
         setTimeout(() => setFormState({}), 2000);
       } else {

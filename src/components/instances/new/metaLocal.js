@@ -41,9 +41,9 @@ export default ({ instanceNames, instanceURLs }) => {
           error: 'instance names must have only letters, numbers, and underscores',
         });
         setTimeout(() => setFormState({}), 2000);
-      } else if (user && !user.match(/^[a-zA-Z0-9_]+$/)) {
+      } else if (user && !user.match(/^[a-zA-Z_]+$/)) {
         setFormState({
-          error: 'usernames must have only letters, numbers, and underscores',
+          error: 'usernames must have only letters and underscores',
         });
         setTimeout(() => setFormState({}), 2000);
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
