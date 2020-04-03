@@ -9,7 +9,7 @@ import instanceState from '../../../state/stores/instanceState';
 
 export default ({ username, role, closeModal }) => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const alert = useAlert();
   const { auth, url, roles } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
@@ -47,7 +47,7 @@ export default ({ username, role, closeModal }) => {
     }
   };
 
-  useAsyncEffect(() => updateForm({ ...formData, role }), []);
+  useAsyncEffect(() => setFormData({ ...formData, role }), []);
 
   return (
     <Modal id="new-instance-modal" isOpen toggle={closeModal}>
@@ -61,7 +61,7 @@ export default ({ username, role, closeModal }) => {
           classNamePrefix="react-select"
           className="mb-2"
           onChange={({ value }) =>
-            updateForm({
+            setFormData({
               ...formData,
               newRole: value,
             })

@@ -8,7 +8,6 @@ export default ({ instances, network }) => {
       const { instance_name, ip_address, is_local, host, compute_stack_id } = i;
       const instance_status = is_local ? 'OK' : i.status;
       const instance_host = host || ip_address;
-      const reachable = instance_status !== 'CREATE_IN_PROGRESS' && !['localhost', '127.0.0.1'].includes(instance_host);
       return {
         instance_name,
         instance_url: i.url,
@@ -18,7 +17,6 @@ export default ({ instances, network }) => {
         clusterPort,
         connection,
         subscriptions,
-        reachable,
       };
     });
 
@@ -30,9 +28,8 @@ export default ({ instances, network }) => {
     }));
 
   return {
-    connected: registered.filter((i) => i.connection && i.reachable),
-    unconnected: registered.filter((i) => !i.connection && i.reachable),
-    unreachable: registered.filter((i) => !i.reachable),
+    connected: registered.filter((i) => i.connection),
+    unconnected: registered.filter((i) => !i.connection),
     unregistered,
   };
 };

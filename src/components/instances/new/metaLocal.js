@@ -11,7 +11,7 @@ export default ({ instanceNames, instanceURLs }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({
+  const [formData, setFormData] = useState({
     instance_name: newInstance.instance_name || '',
     user: newInstance.user || '',
     pass: newInstance.pass || '',
@@ -100,7 +100,7 @@ export default ({ instanceNames, instanceURLs }) => {
               <Col xs="8">
                 <Input
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       instance_name: e.target.value.replace(/\W+/g, '_').toLowerCase(),
                     })
@@ -121,7 +121,7 @@ export default ({ instanceNames, instanceURLs }) => {
               <Col xs="8">
                 <Input
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       user: e.target.value,
                     })
@@ -140,7 +140,7 @@ export default ({ instanceNames, instanceURLs }) => {
               <Col xs="8">
                 <Input
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       pass: e.target.value,
                     })
@@ -161,7 +161,7 @@ export default ({ instanceNames, instanceURLs }) => {
               <Col xs="8">
                 <Input
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       host: e.target.value,
                     })
@@ -180,7 +180,7 @@ export default ({ instanceNames, instanceURLs }) => {
               <Col xs="8">
                 <Input
                   onChange={(e) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       port: e.target.value,
                     })
@@ -200,7 +200,7 @@ export default ({ instanceNames, instanceURLs }) => {
                 <RadioCheckbox
                   type="checkbox"
                   onChange={(value) =>
-                    updateForm({
+                    setFormData({
                       ...formData,
                       is_ssl: value || false,
                     })

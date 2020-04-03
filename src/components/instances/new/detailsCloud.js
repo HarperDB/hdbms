@@ -9,7 +9,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({
+  const [formData, setFormData] = useState({
     data_volume_size: newInstance.data_volume_size || storage[0].value,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
     instance_region: newInstance.instance_region || regions[0].value,
@@ -58,7 +58,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               className="radio-button"
               type="radio"
               onChange={(value) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   data_volume_size: value,
                 })
@@ -75,7 +75,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               className="radio-button"
               type="radio"
               onChange={(value) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   stripe_plan_id: value,
                 })
@@ -92,7 +92,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               className="radio-button"
               type="radio"
               onChange={(value) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   instance_region: value,
                 })

@@ -9,7 +9,7 @@ import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -20,12 +20,12 @@ export default () => {
         setFormState({
           error: 'invalid email supplied',
         });
-        setTimeout(() => updateForm({}), 1000);
+        setTimeout(() => setFormData({}), 1000);
       } else if (!email) {
         setFormState({
           error: 'email is required',
         });
-        setTimeout(() => updateForm({}), 1000);
+        setTimeout(() => setFormData({}), 1000);
       } else {
         setFormState({
           processing: true,
@@ -37,7 +37,7 @@ export default () => {
           });
           setTimeout(() => {
             setFormState({});
-            updateForm({});
+            setFormData({});
           }, 1000);
         } else {
           setFormState({ success: true });
@@ -89,7 +89,7 @@ export default () => {
             <CardBody className="text-center text-white">
               <Input
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     email: e.target.value,
                   })

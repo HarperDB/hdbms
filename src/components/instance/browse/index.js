@@ -22,10 +22,14 @@ export default () => {
     tables: [],
     activeTable: false,
   });
-  const { current_compute_stack_id, structure } = useStoreState(instanceState, (s) => ({
-    current_compute_stack_id: s.compute_stack_id,
-    structure: s.structure,
-  }));
+  const { current_compute_stack_id, structure } = useStoreState(
+    instanceState,
+    (s) => ({
+      current_compute_stack_id: s.compute_stack_id,
+      structure: s.structure,
+    }),
+    [compute_stack_id]
+  );
 
   useAsyncEffect(() => {
     if (structure && current_compute_stack_id === compute_stack_id) {

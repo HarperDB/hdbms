@@ -1,14 +1,16 @@
 .app-subnav {
-  @media screen and (max-width: 767px) {
-    flex-wrap: wrap;
-  }
-
   .navbar-nav {
     &.instance-nav {
       justify-content: flex-end !important;
 
       @media screen and (max-width: 767px) {
         justify-content: center !important;
+      }
+    }
+
+    &.instance-select {
+      @media screen and (max-width: 767px) {
+        display: none;
       }
     }
 

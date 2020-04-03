@@ -15,7 +15,7 @@ export default () => {
   }));
 
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -69,7 +69,7 @@ export default () => {
       <div className="text-nowrap mb-3">Cluster User</div>
       <Input
         onChange={(e) =>
-          updateForm({
+          setFormData({
             ...formData,
             username: e.target.value,
           })
@@ -81,7 +81,7 @@ export default () => {
       />
       <Input
         onChange={(e) =>
-          updateForm({
+          setFormData({
             ...formData,
             password: e.target.value,
           })

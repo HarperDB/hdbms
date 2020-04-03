@@ -15,7 +15,7 @@ export default () => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const history = useHistory();
 
   useAsyncEffect(async () => {
@@ -27,12 +27,12 @@ export default () => {
         setFormState({
           error: 'all fields are required',
         });
-        setTimeout(() => updateForm({}), 1000);
+        setTimeout(() => setFormData({}), 1000);
       } else if (password !== password2) {
         setFormState({
           error: 'passwords must match',
         });
-        setTimeout(() => updateForm({}), 1000);
+        setTimeout(() => setFormData({}), 1000);
       } else {
         setFormState({
           processing: true,
@@ -50,7 +50,7 @@ export default () => {
           });
           setTimeout(() => {
             setFormState({});
-            updateForm({});
+            setFormData({});
           }, 1000);
         } else {
           appState.update((s) => {
@@ -96,7 +96,7 @@ export default () => {
             <CardBody>
               <Input
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     password: e.target.value,
                   })
@@ -110,7 +110,7 @@ export default () => {
               />
               <Input
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     password2: e.target.value,
                   })

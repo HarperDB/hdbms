@@ -15,7 +15,7 @@ import handleKeydown from '../../util/handleKeydown';
 export default () => {
   const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const history = useHistory();
   const { search } = useLocation();
   const { returnURL } = queryString.parse(search);
@@ -52,7 +52,7 @@ export default () => {
           setPersistedLMSAuth({});
           setTimeout(() => {
             setFormState({});
-            updateForm({});
+            setFormData({});
           }, 1000);
         } else {
           setPersistedLMSAuth({
@@ -82,7 +82,7 @@ export default () => {
     const { email, pass } = persistedLMSAuth;
     const { processing } = formState;
     if (email && pass && !processing) {
-      updateForm({ email, pass });
+      setFormData({ email, pass });
       setFormState({ submitted: true });
     }
   }, [persistedLMSAuth]);
@@ -106,7 +106,7 @@ export default () => {
             <CardBody>
               <Input
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     email: e.target.value,
                   })
@@ -121,7 +121,7 @@ export default () => {
               />
               <Input
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     pass: e.target.value,
                   })

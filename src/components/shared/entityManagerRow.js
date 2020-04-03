@@ -38,15 +38,9 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       return alert.error(result.error);
     }
 
-    instanceState.update((s) => {
+    return instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-
-    return setTimeout(() => {
-      if ((itemType === 'schema' && item === schema) || (itemType === 'table' && item === table)) {
-        history.push(baseUrl);
-      }
-    }, 100);
   };
 
   const selectItemForDrop = () => {

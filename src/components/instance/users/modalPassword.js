@@ -8,7 +8,7 @@ import instanceState from '../../../state/stores/instanceState';
 
 export default ({ username, closeModal }) => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const alert = useAlert();
   const { auth, url } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
@@ -56,7 +56,7 @@ export default ({ username, closeModal }) => {
           placeholder="new password"
           value={formData.password || ''}
           onChange={(e) =>
-            updateForm({
+            setFormData({
               ...formData,
               password: e.target.value,
             })

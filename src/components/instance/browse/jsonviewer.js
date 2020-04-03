@@ -64,10 +64,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
       auth,
       url
     );
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-    return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
+    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 
   const deleteRecord = async (e) => {
@@ -84,13 +81,8 @@ export default ({ newEntityColumns, hashAttribute }) => {
       auth,
       url
     );
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-    return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
+    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
-
-  console.log(rowValue);
 
   return (
     <>
@@ -119,7 +111,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
                 colors={{
                   background: 'transparent',
                   default: '#000',
-                  colon: '#000',
+                  colon: '#00',
                   keys: '#480b8a',
                   string: '#0280c4',
                   number: '#ea4c89',

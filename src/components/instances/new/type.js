@@ -9,7 +9,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useAsyncEffect(() => {
     const { is_local } = formData;
@@ -62,7 +62,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 color="purple"
                 block
                 onClick={() =>
-                  updateForm({
+                  setFormData({
                     is_local: false,
                   })
                 }
@@ -96,7 +96,7 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
                 color="purple"
                 block
                 onClick={() =>
-                  updateForm({
+                  setFormData({
                     is_local: true,
                   })
                 }

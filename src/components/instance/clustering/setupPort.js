@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 
 export default ({ port, setPort }) => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -38,7 +38,7 @@ export default ({ port, setPort }) => {
       <div className="mb-3">Cluster Port</div>
       <Input
         onChange={(e) =>
-          updateForm({
+          setFormData({
             ...formData,
             newPort: e.target.value,
           })

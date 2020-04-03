@@ -9,7 +9,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({
+  const [formData, setFormData] = useState({
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
   });
 
@@ -51,7 +51,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
               className="radio-button"
               type="radio"
               onChange={(value) =>
-                updateForm({
+                setFormData({
                   ...formData,
                   stripe_plan_id: value,
                 })

@@ -10,7 +10,7 @@ export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({
+  const [formData, setFormData] = useState({
     tc_version: newInstance.tc_version || false,
   });
 
@@ -153,7 +153,7 @@ export default ({ computeProduct, storageProduct }) => {
                 className={formState.error ? 'error' : ''}
                 type="radio"
                 onChange={(value) =>
-                  updateForm({
+                  setFormData({
                     tc_version: value,
                   })
                 }

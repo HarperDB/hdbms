@@ -44,7 +44,7 @@ export default ({ routes = [] }) => {
 
   return (
     <Navbar className="app-subnav" fixed="top" expand="xs">
-      <Nav navbar>
+      <Nav navbar className="instance-select">
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"

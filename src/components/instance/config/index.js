@@ -1,96 +1,73 @@
 import React, { useState } from 'react';
-import { Col, Row } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
+import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
-import { useAlert } from 'react-alert';
 
-import appState from '../../../state/stores/appState';
-
-import removeInstance from '../../../api/lms/removeInstance';
-import updateInstance from '../../../api/lms/updateInstance';
+import instanceState from '../../../state/stores/instanceState';
 
 import UpdateDiskVolume from './updateDiskVolume';
 import UpdateRAM from './updateRAM';
 import RemoveInstance from './removeInstance';
+import RestartInstance from './restartInstance';
 import InstanceDetails from './instanceDetails';
 import InstanceLogs from './instanceLogs';
 import Loader from '../../shared/loader';
-import instanceState from '../../../state/stores/instanceState';
+import ContentContainer from '../../shared/contentContainer';
+import appState from '../../../state/stores/appState';
+import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 
 export default () => {
-  const auth = useStoreState(appState, (s) => s.auth);
+  const { cloudInstancesBeingModified, hasCard } = useStoreState(appState, (s) => ({
+    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
+    hasCard: customerHasChargeableCard(s.customer),
+  }));
   const { is_local, storage, compute } = useStoreState(instanceState, (s) => ({
     is_local: s.is_local,
     storage: s.storage,
     compute: s.compute,
   }));
-  const [updatingInstance, setUpdatingInstance] = useState(false);
-  const [removingInstance, setRemovingInstance] = useState(false);
-  const history = useHistory();
-  const alert = useAlert();
+
+  const [instanceAction, setInstanceAction] = useState(false);
 
   let totalPrice = 0;
 
   if (compute) totalPrice += compute.price === 'FREE' ? 0 : parseFloat(compute.price);
   if (storage) totalPrice += storage.price === 'FREE' ? 0 : parseFloat(storage.price);
 
-  useAsyncEffect(async () => {
-    if (removingInstance) {
-      const response = await removeInstance({
-        auth,
-        payload: {
-          customer_id: auth.customer_id,
-          compute_stack_id: removingInstance,
-        },
-      });
-
-      if (response.result === false) {
-        alert.error('There was an error removing your instance. Please try again later.');
-        setRemovingInstance(false);
-      } else {
-        alert.success('Instance deleted successfully');
-        appState.update((s) => {
-          s.lastUpdate = Date.now();
-        });
-        setTimeout(() => history.push('/instances'), 3000);
-      }
-    }
-  }, [removingInstance]);
-
-  useAsyncEffect(async () => {
-    if (updatingInstance) {
-      const response = await updateInstance({
-        auth,
-        payload: updatingInstance,
-      });
-
-      if (response.result === false) {
-        alert.error('There was an error updating your instance. Please try again later.');
-        setUpdatingInstance(false);
-      } else {
-        alert.success('Instance update initialized successfully');
-        appState.update((s) => {
-          s.lastUpdate = Date.now();
-        });
-        setTimeout(() => history.push('/instances'), 3000);
-      }
-    }
-  }, [updatingInstance]);
-
-  return removingInstance ? (
-    <Loader message="Removing Instance" />
-  ) : updatingInstance ? (
-    <Loader message="Updating Instance" />
+  return instanceAction && instanceAction !== 'Restarting' ? (
+    <Loader message={`${instanceAction} Instance`} />
   ) : (
     <Row id="config">
       <Col xs="12">
         <InstanceDetails totalPrice={totalPrice ? `$${totalPrice.toFixed(2)}/${compute.interval}` : 'FREE'} />
       </Col>
       <Col lg="4" xs="12">
-        <UpdateRAM setUpdatingInstance={setUpdatingInstance} storagePrice={!storage || storage.price === 'FREE' ? 0 : parseFloat(storage.price)} />
-        {!is_local && <UpdateDiskVolume setUpdatingInstance={setUpdatingInstance} computePrice={!compute || compute.price === 'FREE' ? 0 : parseFloat(compute.price)} />}
-        <RemoveInstance setRemovingInstance={setRemovingInstance} />
+        <span className="text-white mb-2 floating-card-header">instance actions</span>
+        <Card className="my-3">
+          <CardBody>
+            <ContentContainer header="Update Instance RAM" className="mb-3">
+              <UpdateRAM
+                setInstanceAction={setInstanceAction}
+                instanceAction={instanceAction}
+                storagePrice={!storage || storage.price === 'FREE' ? 0 : parseFloat(storage.price)}
+              />
+            </ContentContainer>
+            {!is_local && (
+              <ContentContainer header="Update Instance Storage" className="mb-3">
+                <UpdateDiskVolume
+                  setInstanceAction={setInstanceAction}
+                  instanceAction={instanceAction}
+                  computePrice={!compute || compute.price === 'FREE' ? 0 : parseFloat(compute.price)}
+                />
+              </ContentContainer>
+            )}
+            <ContentContainer header="Remove Instance" className="mb-3">
+              <RemoveInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+            </ContentContainer>
+            <ContentContainer header="Restart Instance" className="mb-2">
+              <RestartInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+            </ContentContainer>
+          </CardBody>
+        </Card>
       </Col>
       <Col lg="8" xs="12">
         <InstanceLogs />

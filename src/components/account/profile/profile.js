@@ -13,7 +13,7 @@ import FormStatus from '../../shared/formStatus';
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState(auth);
+  const [formData, setFormData] = useState(auth);
 
   useAsyncEffect(async () => {
     const { firstname, lastname, customer_id, user_id } = formData;
@@ -87,7 +87,7 @@ export default () => {
                 name="fname"
                 placeholder="first name"
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     firstname: e.target.value,
                   })
@@ -109,7 +109,7 @@ export default () => {
                 name="lname"
                 placeholder="last name"
                 onChange={(e) =>
-                  updateForm({
+                  setFormData({
                     ...formData,
                     lastname: e.target.value,
                   })
