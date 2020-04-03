@@ -1,12 +1,12 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/stores/instanceState';
 
-export default async ({ instance_name, cluster_user, port, auth, url }) => {
+export default async ({ compute_stack_id, cluster_user, port, auth, url }) => {
   const query = {
     operation: 'configure_cluster',
     CLUSTERING: true,
     CLUSTERING_PORT: parseInt(port, 10),
-    NODE_NAME: instance_name,
+    NODE_NAME: compute_stack_id,
     CLUSTERING_USER: cluster_user,
   };
   const result = await queryInstance(query, auth, url);
