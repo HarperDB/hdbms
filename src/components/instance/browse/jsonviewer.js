@@ -5,11 +5,13 @@ import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/stores/instanceState';
 
 export default ({ newEntityColumns, hashAttribute }) => {
+  const alert = useAlert();
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
   const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
@@ -44,7 +46,13 @@ export default ({ newEntityColumns, hashAttribute }) => {
 
   const submitRecord = async (e) => {
     e.preventDefault();
-    if (!action) return false;
+    if (!action) {
+      return false;
+    }
+    if (!rowValue) {
+      alert.error('Please insert valid JSON to proceed');
+      return false;
+    }
 
     await queryInstance(
       {
@@ -82,6 +90,8 @@ export default ({ newEntityColumns, hashAttribute }) => {
     return history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
   };
 
+  console.log(rowValue);
+
   return (
     <>
       <span className="text-white mb-2 floating-card-header">
@@ -117,7 +127,8 @@ export default ({ newEntityColumns, hashAttribute }) => {
                 }}
                 locale={locale}
                 width="100%"
-                waitAfterKeyPress={5000}
+                waitAfterKeyPress={1000}
+                confirmGood={false}
                 onChange={(value) => setRowValue(value.jsObject)}
               />
             </CardBody>

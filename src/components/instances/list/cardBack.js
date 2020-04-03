@@ -20,7 +20,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
         });
       } else {
         const result = await registrationInfo({ auth: { user, pass }, url });
-        console.log(result);
+
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({
             error: 'Login failed. Click to accept SSL Cert?',
