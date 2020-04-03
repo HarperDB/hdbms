@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/stores/instanceState';
 
-export default ({ username, closeModal }) => {
+export default ({ username, closeModal, clusterUser }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
@@ -53,7 +53,7 @@ export default ({ username, closeModal }) => {
           type="text"
           className="mb-2 text-center"
           name="password"
-          placeholder="new password"
+          placeholder="enter new password"
           value={formData.password || ''}
           onChange={(e) =>
             setFormData({
@@ -62,6 +62,13 @@ export default ({ username, closeModal }) => {
             })
           }
         />
+        {clusterUser && (
+          <Card>
+            <CardBody className="text-danger">
+              You must <b>restart</b> the instance for the cluster user reconnect with a new password. You may do this in the <b>Config</b> section.
+            </CardBody>
+          </Card>
+        )}
         <hr />
         <Row>
           <Col sm="6">
@@ -75,6 +82,7 @@ export default ({ username, closeModal }) => {
             </Button>
           </Col>
         </Row>
+
         {formState.error && (
           <Card className="mt-3 error">
             <CardBody>{formState.error}</CardBody>

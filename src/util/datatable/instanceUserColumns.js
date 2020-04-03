@@ -51,7 +51,14 @@ export default ({ auth, setModal }) => [
   },
   {
     Header: '',
-    Cell: ({ original: { username } }) =>
+    Cell: ({
+      original: {
+        username,
+        role: {
+          permission: { cluster_user },
+        },
+      },
+    }) =>
       auth.user !== username ? (
         <Button
           color="purple"
@@ -61,6 +68,7 @@ export default ({ auth, setModal }) => [
             setModal({
               action: 'password',
               username,
+              cluster_user,
             })
           }
         >

@@ -97,7 +97,7 @@ export default () => {
         </CardBody>
       </Card>
       {modal?.action === 'password' ? (
-        <ModalPassword closeModal={closeModal} username={modal.username} />
+        <ModalPassword closeModal={closeModal} username={modal.username} clusterUser={modal.cluster_user} />
       ) : modal?.action === 'role' ? (
         <ModalRole closeModal={closeModal} username={modal.username} role={modal.role} />
       ) : modal?.action === 'delete' ? (
