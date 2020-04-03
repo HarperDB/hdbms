@@ -38,6 +38,12 @@ export default () => {
 
   const submitRecord = async (e) => {
     e.preventDefault();
+
+    if (!newPermissions) {
+      alert.error('Please insert valid JSON to proceed');
+      return false;
+    }
+
     const response = await alterRole({
       permission: newPermissions,
       id: role_id,
