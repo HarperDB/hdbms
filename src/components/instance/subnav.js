@@ -33,9 +33,9 @@ export default ({ routes = [] }) => {
           is_local: i.is_local,
         })),
         activeOption: {
-          label: selectedInstance.instance_name,
+          label: selectedInstance?.instance_name,
           value: compute_stack_id,
-          is_local: selectedInstance.is_local,
+          is_local: selectedInstance?.is_local,
         },
       };
     },

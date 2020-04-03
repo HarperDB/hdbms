@@ -21,6 +21,7 @@ export default async (operation, auth, url, signal = undefined) => {
       return {
         error: true,
         message: response.error,
+        type: 'response',
       };
     }
 
@@ -28,6 +29,7 @@ export default async (operation, auth, url, signal = undefined) => {
       return {
         error: true,
         message: `Error of type ${request.status}`,
+        type: 'status',
       };
     }
 
@@ -36,6 +38,7 @@ export default async (operation, auth, url, signal = undefined) => {
     return {
       error: true,
       message: e,
+      type: 'catch',
     };
   }
 };

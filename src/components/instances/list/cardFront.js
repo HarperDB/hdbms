@@ -27,8 +27,12 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   const [lastUpdate, setLastUpdate] = useState(false);
 
   const handleCardClick = async () => {
-    if (!instanceAuth) return flipCard();
-    if (instanceStatus.instance !== 'OK') return false;
+    if (!instanceAuth) {
+      return flipCard();
+    }
+    if (instanceStatus.instance !== 'OK') {
+      return false;
+    }
     const result = await registrationInfo({ auth: instanceAuth, url });
     if (result.error) {
       setInstanceStatus({

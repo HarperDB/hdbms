@@ -1,31 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
+import useAsyncEffect from 'use-async-effect';
 
 import useInstanceAuth from '../../../state/stores/instanceAuths';
+import registrationInfo from '../../../api/instance/registrationInfo';
 
-export default ({ compute_stack_id, flipCard, flipState }) => {
+export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
   const [formState, setFormState] = useState({});
-  const [formData, updateForm] = useState({});
+  const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
       const { user, pass } = formData;
       if (!user || !pass) {
         setFormState({
-          error: 'all fields are required',
+          error: 'All fields are required',
         });
       } else {
-        setFormState({});
-        setInstanceAuths({
-          ...instanceAuths,
-          [compute_stack_id]: {
-            user: formData.user,
-            pass: formData.pass,
-          },
-        });
-        flipCard();
+        const result = await registrationInfo({ auth: { user, pass }, url });
+        console.log(result);
+        if (is_ssl && result.error && result.type === 'catch') {
+          setFormState({
+            error: 'Login failed. Click to accept SSL Cert?',
+            url,
+          });
+        } else if (result.error && result.type === 'catch') {
+          setFormState({
+            error: "Can't reach non-SSL instance. Enable SSL?",
+            url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
+          });
+        } else if (result.error) {
+          setFormState({
+            error: 'Login failed.',
+          });
+        } else {
+          setInstanceAuths({
+            ...instanceAuths,
+            [compute_stack_id]: {
+              user: formData.user,
+              pass: formData.pass,
+            },
+          });
+          flipCard();
+        }
       }
     }
   }, [formState]);
@@ -36,7 +55,7 @@ export default ({ compute_stack_id, flipCard, flipState }) => {
         <CardBody>
           <Input
             onChange={(e) =>
-              updateForm({
+              setFormData({
                 ...formData,
                 user: e.target.value,
               })
@@ -49,7 +68,7 @@ export default ({ compute_stack_id, flipCard, flipState }) => {
           />
           <Input
             onChange={(e) =>
-              updateForm({
+              setFormData({
                 ...formData,
                 pass: e.target.value,
               })
@@ -64,7 +83,8 @@ export default ({ compute_stack_id, flipCard, flipState }) => {
             <Col xs="6" className="pr-1">
               <Button
                 onClick={() => {
-                  updateForm({});
+                  setFormData({});
+                  setFormState({});
                   flipCard();
                 }}
                 title="Cancel"
@@ -92,9 +112,10 @@ export default ({ compute_stack_id, flipCard, flipState }) => {
             </Col>
           </Row>
           {formState.error && (
-            <Card className="mt-3 error">
-              <CardBody>{formState.error}</CardBody>
-            </Card>
+            <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-smaller text-danger d-block mt-2">
+              {formState.error}
+              {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
+            </a>
           )}
         </CardBody>
       )}

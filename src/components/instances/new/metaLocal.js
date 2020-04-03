@@ -242,7 +242,7 @@ export default ({ instanceNames, instanceURLs }) => {
             &nbsp;
             {formState.url && (
               <a href={formState.url} target="_blank" rel="noopener noreferrer">
-                <i className="fa fa-external-link-square" />
+                <i className="ml-3 fa fa-lg fa-external-link-square text-purple" />
               </a>
             )}
           </CardBody>
