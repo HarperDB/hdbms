@@ -39,7 +39,7 @@ export default () => {
   }, [structure, schema, table, compute_stack_id]);
 
   useAsyncEffect(() => {
-    if (current_compute_stack_id === compute_stack_id && entities.schemas && entities.tables) {
+    if (current_compute_stack_id === compute_stack_id && entities.schemas) {
       handleSchemaTableRedirect({
         entities,
         compute_stack_id,
