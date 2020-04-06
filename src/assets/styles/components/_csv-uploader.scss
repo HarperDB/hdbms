@@ -2,7 +2,7 @@
   cursor: pointer;
   font-size: $font-size-small;
   height: 36px;
-  padding-top: 13px;
-  text-align: center;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -13,6 +13,7 @@ import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
 import isURL from '../../../util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
+import tableState from '../../../state/stores/tableState';
 
 export default () => {
   const history = useHistory();
@@ -22,6 +23,7 @@ export default () => {
     auth: s.auth,
     url: s.url,
   }));
+  const currentHash = useStoreState(tableState, (s) => s.currentHash);
 
   const [uploadStatus, setUploadStatus] = useState(false);
   const [processedData, setProcessedData] = useState(false);
@@ -32,14 +34,18 @@ export default () => {
   const [mounted, setMounted] = useState(false);
 
   // query the table to determine if all the records have been processed.
-  const validateData = async (uploadJobId, type) => {
-    const { status, message } = await getJob({ auth, url, id: uploadJobId });
+  const validateData = async (uploadJobId) => {
+    const [{ status, message, type }] = await getJob({ auth, url, id: uploadJobId });
 
-    if (status === 'ERROR' && type === 'url') {
+    if (status === 'ERROR' && type === 'csv_url_load') {
       return setFormState({ error: message.split(':')[1] });
     }
 
-    if (status === 'ERROR' && type === 'file') {
+    if (status === 'ERROR' && message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
+      return setFileError('The CSV file contains a row with a forward slash in the hash field.');
+    }
+
+    if (status === 'ERROR') {
       return setFileError(message);
     }
 
@@ -68,7 +74,7 @@ export default () => {
     });
     const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
     setProcessedData(false);
-    return setTimeout(() => validateData(uploadJobId, 'file'), 1000);
+    return setTimeout(() => validateData(uploadJobId), 1000);
   };
 
   // after they've selected/dropped the file, send it to the worker
@@ -118,7 +124,7 @@ export default () => {
       if (isURL(csv_url)) {
         const uploadJob = await csvURLLoad({ schema, table, csv_url, auth, url });
         const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
-        setTimeout(() => validateData(uploadJobId, 'url'), 1000);
+        setTimeout(() => validateData(uploadJobId), 1000);
       } else {
         setFormState({ error: 'Please provide a valid URL' });
         setTimeout(() => setFormState({}), 2000);
@@ -132,6 +138,8 @@ export default () => {
     []
   );
 
+  console.log(fileError);
+
   return (
     <>
       <span className="text-white mb-2 floating-card-header">
@@ -143,15 +151,15 @@ export default () => {
             <Col sm="6" className="mb-2">
               <b className="text-small">Specify A Hosted CSV File</b>
               <hr className="my-1" />
-              {formState.submitted ? (
-                <div className="csv-status">
-                  <i className="fa fa-spin fa-spinner mr-3" />
-                  uploading .csv into {schema}.{table}
-                </div>
-              ) : formState.error ? (
+              {formState.error ? (
                 <div className="text-danger csv-status">
                   <i className="fa fa-exclamation-triangle mr-3" />
                   {formState.error}
+                </div>
+              ) : formState.submitted ? (
+                <div className="csv-status">
+                  <i className="fa fa-spin fa-spinner mr-3" />
+                  uploading .csv into {schema}.{table}
                 </div>
               ) : (
                 <Input
@@ -174,7 +182,12 @@ export default () => {
                     Clear URL
                   </Button>
                 ) : (
-                  <Button disabled={formState.submitted || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
+                  <Button
+                    disabled={formState.submitted || !isURL(formData.csv_url)}
+                    block
+                    color="success"
+                    onClick={() => setFormState({ submitted: true })}
+                  >
                     Import From URL
                   </Button>
                 )}
@@ -183,7 +196,9 @@ export default () => {
             <Col sm="6">
               <b className="text-small">Upload A CSV FIle (10MB Limit)</b>
               <hr className="my-1" />
-              {uploadStatus === 'inserting' ? (
+              {fileError ? (
+                <div className="text-danger csv-status">{fileError}</div>
+              ) : uploadStatus === 'inserting' ? (
                 <div className="csv-status">
                   <i className="fa fa-spin fa-spinner mr-3" />
                   inserting {commaNumbers(newRecordCount)} records into {schema}.{table}
@@ -197,8 +212,6 @@ export default () => {
                 <div className="csv-status">
                   <i className="fa fa-spin fa-spinner" /> processing {commaNumbers(newRecordCount)} records
                 </div>
-              ) : fileError ? (
-                <div className="text-danger csv-status">{fileError}</div>
               ) : (
                 <div {...getRootProps()} className="text-center">
                   <input {...getInputProps()} />
@@ -208,13 +221,13 @@ export default () => {
                 </div>
               )}
               <div className="pt-2">
-                {uploadStatus === 'inserting' ? (
-                  <Button block color="black" onClick={handleCancel}>
-                    Return to Table View (Insert Runs in Background)
-                  </Button>
-                ) : fileError ? (
+                {fileError ? (
                   <Button color="danger" block className="px-5 clear-files" onClick={handleClear}>
                     Clear File
+                  </Button>
+                ) : uploadStatus === 'inserting' ? (
+                  <Button block color="black" onClick={handleCancel}>
+                    Return to Table View (Insert Runs in Background)
                   </Button>
                 ) : (
                   <Button block disabled={[false, 'inserting', 'processing'].includes(uploadStatus)} color="success" onClick={insertData}>
