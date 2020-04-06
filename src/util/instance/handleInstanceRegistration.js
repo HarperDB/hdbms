@@ -66,6 +66,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
         instance: 'OK',
         instanceError: false,
         clustering,
+        version: registration.version,
       };
     }
 

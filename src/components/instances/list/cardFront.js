@@ -35,6 +35,7 @@ export default ({
     instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE' : 'LOADING',
     instanceError: false,
     clustering: '',
+    version: '',
   });
   const [lastUpdate, setLastUpdate] = useState(false);
 
@@ -187,18 +188,21 @@ export default ({
           <Col xs="12">
             <hr className="my-1" />
           </Col>
+          <Col xs="4">VERSION</Col>
+          <Col xs="8">{instanceStatus.version}</Col>
+          <Col xs="12">
+            <hr className="my-1" />
+          </Col>
           <Col xs="4">REGION</Col>
           <Col xs="8">{is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
-          <Col xs="4">RAM</Col>
-          <Col xs="8">{!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) && compute?.ram}</Col>
-          <Col xs="12">
-            <hr className="my-1" />
+          <Col xs="4">LICENSE</Col>
+          <Col xs="8">
+            {!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) &&
+              `${compute?.ram} / ${storage?.disk_space || 'NO LIMIT'}`}
           </Col>
-          <Col xs="4">STORAGE</Col>
-          <Col xs="8">{!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) && (storage?.disk_space || 'NO LIMIT')}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
