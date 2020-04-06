@@ -76,7 +76,7 @@ export default () => {
   );
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen toggle={closeAndResetModal}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody>
         {!products ? (

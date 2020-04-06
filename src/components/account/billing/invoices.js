@@ -8,19 +8,27 @@ import appState from '../../../state/stores/appState';
 import getInvoices from '../../../api/lms/getInvoices';
 
 export default () => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const invoices = useStoreState(appState, (s) => s.invoices);
+  const { auth, customer_id, invoices } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    customer_id: s.customer.customer_id,
+    invoices: s.invoices,
+  }));
+  let controller;
 
   useAsyncEffect(
-    () =>
+    () => {
+      controller = new AbortController();
       getInvoices({
-        auth: lmsAuth,
-        payload: {
-          customer_id: lmsAuth.customer_id,
-        },
-      }),
+        auth,
+        signal: controller.signal,
+        customer_id,
+      });
+    },
+    () => controller.abort(),
     []
   );
+
+  console.log(invoices);
 
   return (
     <Card className="no-shadow">
@@ -30,7 +38,9 @@ export default () => {
             <i className="fa fa-spinner fa-spin text-purple" />
           </div>
         ) : !invoices.length ? (
-          <div className="py-5 text-center">We were unable to fetch your invoices. Please try again later.</div>
+          <div className="py-5 text-center">
+            We were unable to fetch your invoices. Please try again later.
+          </div>
         ) : (
           <>
             <Row>
@@ -55,7 +65,12 @@ export default () => {
                     ${(i.total / 100).toFixed(2)}
                   </Col>
                   <Col xs="3" className="text-right text text-nowrap">
-                    <a title="print invoice" href={i.hosted_invoice_url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      title="print invoice"
+                      href={i.hosted_invoice_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <i className="fa fa-print text-purple" />
                     </a>
                   </Col>

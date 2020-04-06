@@ -1,15 +1,16 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/stores/appState';
 
-export default async ({ auth, payload: { customer_id } }) => {
+export default async ({ auth, signal, customer_id }) => {
   const response = await queryLMS({
     endpoint: 'getInvoices',
     method: 'POST',
     payload: { customer_id },
+    signal,
     auth,
   });
 
-  let invoices = [];
+  let invoices = false;
 
   if (Array.isArray(response.body)) {
     invoices = response.body;
