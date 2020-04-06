@@ -1,6 +1,6 @@
 .react-select-container {
-  width: 100%;
   max-width: 287px;
+  width: 100%;
 
   .react-select__control,
   .react-select__control:hover,
@@ -9,7 +9,7 @@
     background: transparent;
     border-color: $faint-white-overlay !important;
 
-    .react-select__single-value{
+    .react-select__single-value {
       color: $color-white;
     }
 
@@ -31,6 +31,6 @@
 }
 
 .react-select__value-container {
-  padding-top: 0 !important;
   padding-bottom: 0 !important;
+  padding-top: 0 !important;
 }

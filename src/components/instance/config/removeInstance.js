@@ -73,7 +73,7 @@ export default ({ setInstanceAction }) => {
         }
         type="text"
         title="instance_name"
-        placeholder={`Enter "${instance_name}" below to confirm.`}
+        placeholder={`Enter "${instance_name}" here to confirm.`}
         value={formData.instance_name}
       />
 

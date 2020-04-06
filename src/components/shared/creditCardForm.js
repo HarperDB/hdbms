@@ -51,7 +51,7 @@ export default ({ setFormData, formData }) => {
           <hr className="my-2" />
         </Col>
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          cvcc
+          cvc
         </Col>
         <Col md="6" xs="12" className="text-md-right text-center">
           <div className={`fake-input ${formState.cvcError ? 'error' : ''}`}>

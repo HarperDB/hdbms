@@ -59,7 +59,7 @@ export default () => {
     } else {
       alert.success('Permissions updated successfully');
     }
-    instanceState.update((s) => {
+    return instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
   };

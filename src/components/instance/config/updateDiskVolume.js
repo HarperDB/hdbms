@@ -8,25 +8,25 @@ import { useAlert } from 'react-alert';
 import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
 
-import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';
+import commaNumbers from '../../../util/commaNumbers';
 
-export default ({ setInstanceAction, computePrice }) => {
+export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
   const { auth, customer, cloudInstancesBeingModified, hasCard } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
     cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
-    hasCard: customerHasChargeableCard(s.customer),
+    hasCard: s.hasCard,
   }));
-  const { compute_stack_id, data_volume_size, storageProducts, storage, is_local, last_volume_resize } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, data_volume_size, storageProducts, storage, compute, last_volume_resize } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     data_volume_size: s.data_volume_size,
     storageProducts: s.storageProducts,
     storage: s.storage,
-    is_local: s.is_local,
+    compute: s.compute,
     last_volume_resize: s.last_volume_resize,
   }));
   const [formState, setFormState] = useState({});
@@ -36,16 +36,11 @@ export default ({ setInstanceAction, computePrice }) => {
     data_volume_size,
   });
 
-  let totalPrice = 0;
-  let newStorage;
-
-  if (storageProducts) {
-    newStorage = storageProducts.find((p) => p.value === formData.data_volume_size);
-    if (newStorage && newStorage.price !== 'FREE') totalPrice += parseFloat(newStorage.price);
-  }
-
+  const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size);
+  const newTotal = (compute?.price || 0) + newStorage.price;
+  const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.interval}` : 'FREE';
   const hasChanged = data_volume_size !== formData.data_volume_size;
-  const canChange = last_volume_resize && (Date.now() - new Date(last_volume_resize).getTime()) / 1000 / 3600 > 6;
+  const canChange = last_volume_resize ? (Date.now() - new Date(last_volume_resize).getTime()) / 1000 / 3600 > 6 : true;
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -109,16 +104,9 @@ export default ({ setInstanceAction, computePrice }) => {
         }}
       />
 
-      {hasChanged && (
-        <ChangeSummary
-          which="storage"
-          compute={computePrice ? `$${computePrice.toFixed(2)}/${storage.interval}` : 'FREE'}
-          storage={totalPrice ? `$${totalPrice.toFixed(2)}/${storage.interval}` : 'FREE'}
-          total={totalPrice ? `$${(computePrice + totalPrice).toFixed(2)}/${storage.interval}` : 'FREE'}
-        />
-      )}
+      {hasChanged && <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />}
 
-      {hasChanged && totalPrice && !hasCard ? (
+      {hasChanged && (newStorage.price || compute.price) && !hasCard ? (
         <Button
           onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
@@ -158,7 +146,7 @@ export default ({ setInstanceAction, computePrice }) => {
               disabled={!hasChanged || formState.submitted}
               color="success"
             >
-              Update Instance Storage
+              Update Storage
             </Button>
           </Col>
         </Row>

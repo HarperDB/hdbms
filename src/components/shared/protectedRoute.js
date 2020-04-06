@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Redirect, useLocation } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
@@ -13,7 +13,7 @@ import getCustomer from '../../api/lms/getCustomer';
 import getInstances from '../../api/lms/getInstances';
 import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
 
-export default ({ component, path }) => {
+export default ({ children }) => {
   const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
@@ -64,9 +64,9 @@ export default ({ component, path }) => {
   return auth?.email && auth?.pass ? (
     <>
       <TopNav logOut={logOut} />
-      {instances ? <Route path={path} component={component} /> : <Loader message="loading instances" />}
+      {instances ? children : <Loader message="loading instances" />}
     </>
   ) : (
-    <Redirect to={`/sign-in${pathname !== '/instances' ? `?returnURL=${pathname}` : ''}`} />
+    <Redirect to={`/sign-in${!['/', '/instances'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />
   );
 };

@@ -8,24 +8,25 @@ import { useAlert } from 'react-alert';
 import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
 
-import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';
+import commaNumbers from '../../../util/commaNumbers';
 
-export default ({ instanceAction, setInstanceAction, storagePrice }) => {
+export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
   const { auth, customer, cloudInstancesBeingModified, hasCard } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
     cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
-    hasCard: customerHasChargeableCard(s.customer),
+    hasCard: s.hasCard,
   }));
-  const { compute_stack_id, stripe_plan_id, computeProducts, compute, is_local } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_local } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     stripe_plan_id: s.stripe_plan_id,
     computeProducts: s.computeProducts,
     compute: s.compute,
+    storage: s.storage,
     is_local: s.is_local,
   }));
   const [formState, setFormState] = useState({});
@@ -35,14 +36,9 @@ export default ({ instanceAction, setInstanceAction, storagePrice }) => {
     stripe_plan_id,
   });
 
-  let totalPrice = 0;
-  let newCompute;
-
-  if (computeProducts) {
-    newCompute = computeProducts.find((p) => p.value === formData.stripe_plan_id);
-    if (newCompute && newCompute.price !== 'FREE') totalPrice += parseFloat(newCompute.price);
-  }
-
+  const newCompute = computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id);
+  const newTotal = (storage?.price || 0) + newCompute.price;
+  const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.interval}` : 'FREE';
   const hasChanged = stripe_plan_id !== formData.stripe_plan_id;
 
   useAsyncEffect(async () => {
@@ -103,16 +99,9 @@ export default ({ instanceAction, setInstanceAction, storagePrice }) => {
         }}
       />
 
-      {hasChanged && (
-        <ChangeSummary
-          which="compute"
-          compute={totalPrice ? `$${totalPrice.toFixed(2)}/${compute.interval}` : 'FREE'}
-          storage={storagePrice ? `$${storagePrice.toFixed(2)}/${compute.interval}` : 'FREE'}
-          total={totalPrice ? `$${(storagePrice + totalPrice).toFixed(2)}/${compute.interval}` : 'FREE'}
-        />
-      )}
+      {hasChanged && <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />}
 
-      {hasChanged && totalPrice && !hasCard ? (
+      {hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
           onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
@@ -152,7 +141,7 @@ export default ({ instanceAction, setInstanceAction, storagePrice }) => {
               disabled={!hasChanged || formState.submitted}
               color="success"
             >
-              Update Instance RAM
+              Update RAM
             </Button>
           </Col>
         </Row>

@@ -14,9 +14,7 @@ export default ({ computeProduct, storageProduct }) => {
     tc_version: newInstance.tc_version || false,
   });
 
-  let totalPrice = 0;
-  if (computeProduct && computeProduct.price !== 'FREE') totalPrice += parseFloat(computeProduct.price);
-  if (storageProduct && storageProduct.price !== 'FREE') totalPrice += parseFloat(storageProduct.price);
+  const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
 
   useAsyncEffect(() => {
     const { submitted } = formState;
@@ -117,7 +115,7 @@ export default ({ computeProduct, storageProduct }) => {
                   {storageProduct && storageProduct.disk_space}
                 </Col>
                 <Col xs="4" className="text-right text-nowrap">
-                  {!storageProduct ? '' : storageProduct.price === 'FREE' ? 'FREE' : `$${storageProduct.price}/${storageProduct.interval}`}
+                  {storageProduct && storageProduct.priceStringWithInterval}
                 </Col>
               </Row>
               <hr />
@@ -128,10 +126,10 @@ export default ({ computeProduct, storageProduct }) => {
               Instance RAM
             </Col>
             <Col xs="2" className="text-right text-nowrap">
-              {computeProduct && computeProduct.ram}
+              {computeProduct?.ram}
             </Col>
             <Col xs="4" className="text-right text-nowrap">
-              {!computeProduct ? '' : computeProduct.price === 'FREE' ? 'FREE' : `$${computeProduct.price}/${computeProduct.interval}`}
+              {computeProduct?.priceStringWithInterval}
             </Col>
           </Row>
           <hr />

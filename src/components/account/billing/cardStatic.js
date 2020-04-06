@@ -10,9 +10,11 @@ import FormStatus from '../../shared/formStatus';
 import getCustomer from '../../../api/lms/getCustomer';
 
 export default ({ setEditingCard, customerCard }) => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const instances = useStoreState(appState, (s) => s.instances);
-  const customer = useStoreState(appState, (s) => s.customer);
+  const { auth, instances, customer } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    instances: s.instances,
+    customer: s.customer,
+  }));
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
@@ -30,7 +32,7 @@ export default ({ setEditingCard, customerCard }) => {
         });
 
         const response = await removePaymentMethod({
-          auth: lmsAuth,
+          auth,
           payload: {
             stripe_id: customer.stripe_id,
             payment_method_id: customerCard.id,
@@ -41,9 +43,9 @@ export default ({ setEditingCard, customerCard }) => {
             success: true,
           });
           await getCustomer({
-            auth: lmsAuth,
+            auth,
             payload: {
-              customer_id: lmsAuth.customer_id,
+              customer_id: customer.customer_id,
             },
           });
           setEditingCard(false);

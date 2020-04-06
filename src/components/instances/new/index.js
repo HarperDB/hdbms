@@ -10,7 +10,6 @@ import useNewInstance from '../../../state/stores/newInstance';
 
 import config from '../../../../config';
 
-import customerHasChargeableCard from '../../../util/stripe/customerHasChargeableCard';
 import steps from '../../../util/instance/addInstanceSteps';
 
 import InstanceTypeForm from './type';
@@ -25,7 +24,6 @@ import OrderStatus from './status';
 export default () => {
   const {
     auth,
-    customer,
     products,
     regions,
     instanceNames,
@@ -35,9 +33,9 @@ export default () => {
     localInstanceCount,
     freeLocalInstanceCount,
     cloudInstancesBeingModified,
+    hasCard,
   } = useStoreState(appState, (s) => ({
     auth: s.auth,
-    customer: s.customer,
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
@@ -47,6 +45,7 @@ export default () => {
     freeCloudInstanceCount: s.instances.filter((i) => !i.is_local && i.compute.price === 'FREE' && i.storage.price === 'FREE').length,
     localInstanceCount: s.instances.filter((i) => i.is_local).length,
     freeLocalInstanceCount: s.instances.filter((i) => i.is_local && i.compute.price === 'FREE').length,
+    hasCard: s.hasCard,
   }));
 
   const history = useHistory();
@@ -54,7 +53,6 @@ export default () => {
   const [newInstance, setNewInstance] = useNewInstance({});
 
   const isLocal = newInstance.is_local;
-  const hasCard = customerHasChargeableCard(customer);
 
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {

@@ -9,11 +9,19 @@ import instanceState from '../../state/stores/instanceState';
 import browseTableColumns from '../datatable/browseTableColumns';
 import buildPermissionStructure from './buildPermissionStructure';
 
-export default async ({ thisInstance, auth, license, compute, storage, computeProducts, storageProducts }) => {
+export default async ({ thisInstance, auth }) => {
   const schema = await describeAll({
     auth,
     url: thisInstance.url,
   });
+
+  if (schema.error) {
+    return {
+      ...thisInstance,
+      structure: false,
+    };
+  }
+
   const users = await listUsers({
     auth,
     url: thisInstance.url,
@@ -26,13 +34,6 @@ export default async ({ thisInstance, auth, license, compute, storage, computePr
     auth,
     url: thisInstance.url,
   });
-
-  if (schema.error) {
-    return {
-      ...thisInstance,
-      structure: false,
-    };
-  }
 
   const structure = browseTableColumns(schema);
   const permissions = buildPermissionStructure(schema);
@@ -47,19 +48,14 @@ export default async ({ thisInstance, auth, license, compute, storage, computePr
   const newInstanceState = {
     ...thisInstance,
     auth,
+    structure,
+    network,
     users,
     roles,
     permissions,
-    structure,
-    network,
-    license,
-    compute,
-    storage,
-    computeProducts,
-    storageProducts,
   };
 
-  await instanceState.update((s) => {
+  instanceState.update((s) => {
     Object.entries(newInstanceState).map(([key, value]) => (s[key] = value));
   });
 

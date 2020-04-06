@@ -54,9 +54,10 @@ export default ({ closeAndResetModal }) => {
       });
       setTimeout(() => closeAndResetModal(), 0);
     } else {
+      const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
       setFormState({
         submitted: false,
-        error: response.message,
+        error,
       });
     }
   }, []);

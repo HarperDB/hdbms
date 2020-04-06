@@ -15,27 +15,14 @@ export default () => {
   const { compute_stack_id } = useParams();
   const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths] = useInstanceAuth({});
-  const { instances, products, regions } = useStoreState(appState, (s) => ({
-    products: s.products,
-    regions: s.regions,
-    instances: s.instances,
-  }));
+  const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
+  const instances = useStoreState(appState, (s) => s.instances);
 
   const refreshInstance = async () => {
-    if (!loadingInstance && instanceAuths && compute_stack_id && instanceAuths[compute_stack_id] && products && regions) {
-      const auth = instanceAuths[compute_stack_id];
-      const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-      const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
-      const storage = thisInstance.is_local ? null : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
-      const computeProducts = thisInstance.is_local ? products.localCompute : products.cloudCompute;
-      const storageProducts = thisInstance.is_local ? false : products.cloudStorage;
+    if (!loadingInstance && instanceAuth) {
       await buildActiveInstanceObject({
-        thisInstance,
-        auth,
-        compute,
-        storage,
-        computeProducts,
-        storageProducts,
+        thisInstance: instances.find((i) => i.compute_stack_id === compute_stack_id),
+        auth: instanceAuth,
       });
       setLoadingInstance(false);
     }

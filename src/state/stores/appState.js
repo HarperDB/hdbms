@@ -7,6 +7,7 @@ const appState = new Store({
   products: false,
   regions: false,
   instances: false,
+  hasCard: false,
   lastUpdate: false,
 });
 

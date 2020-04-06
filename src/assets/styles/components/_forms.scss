@@ -5,15 +5,15 @@ textarea,
 .form-control {
   background: $light-white-overlay !important;
   border: 1px solid $color-lightgrey !important;
+  border-radius: $border-radius;
   box-shadow: none !important;
   color: $color-black;
   font-family: $font-family-sans;
   font-size: $font-size-root;
   font-weight: $font-weight-light;
+  height: 38px;
   outline: none !important;
   transition: none;
-  border-radius: $border-radius;
-  height: 38px;
 
   &::placeholder {
     color: $color-grey !important;

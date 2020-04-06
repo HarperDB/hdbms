@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -10,7 +10,6 @@ import instanceState from '../../state/stores/instanceState';
 export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { schema, table } = useParams();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
   const { auth, url } = useStoreState(instanceState, (s) => ({

@@ -7,7 +7,7 @@ export default ({ which, compute, storage, total }) => (
       <Row>
         <Col xs="6">
           Compute
-          {which === 'compute' && '(new)'}
+          {which === 'compute' && ' (new)'}
         </Col>
         <Col xs="6" className="text-right">
           {compute}
@@ -19,7 +19,7 @@ export default ({ which, compute, storage, total }) => (
       <Row>
         <Col xs="6">
           Storage
-          {which === 'storage' && '(new)'}
+          {which === 'storage' && ' (new)'}
         </Col>
         <Col xs="6" className="text-right">
           {storage}

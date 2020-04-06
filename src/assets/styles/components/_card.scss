@@ -17,15 +17,14 @@
   }
 
   &.error {
-
     .card-body {
-      display: flex;
-      justify-content: center;
       align-items: center;
       color: $color-danger;
+      display: flex;
+      height: 36px;
+      justify-content: center;
       line-height: 1;
       padding: 0;
-      height: 36px;
     }
   }
 
