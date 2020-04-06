@@ -37,7 +37,7 @@ export default ({ setInstanceAction }) => {
   });
 
   const newCompute = computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id);
-  const newTotal = (storage?.price || 0) + newCompute.price;
+  const newTotal = (storage?.price || 0) + (newCompute?.price || 0);
   const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.interval}` : 'FREE';
   const hasChanged = stripe_plan_id !== formData.stripe_plan_id;
 
@@ -99,7 +99,14 @@ export default ({ setInstanceAction }) => {
         }}
       />
 
-      {hasChanged && <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />}
+      {hasChanged && (
+        <ChangeSummary
+          which="compute"
+          compute={newCompute?.priceStringWithInterval}
+          storage={storage?.priceStringWithInterval || 'FREE'}
+          total={newTotalString}
+        />
+      )}
 
       {hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button

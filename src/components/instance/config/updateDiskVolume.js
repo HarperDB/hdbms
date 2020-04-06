@@ -37,7 +37,7 @@ export default ({ setInstanceAction }) => {
   });
 
   const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size);
-  const newTotal = (compute?.price || 0) + newStorage.price;
+  const newTotal = (compute?.price || 0) + (newStorage?.price || 0);
   const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.interval}` : 'FREE';
   const hasChanged = data_volume_size !== formData.data_volume_size;
   const canChange = last_volume_resize ? (Date.now() - new Date(last_volume_resize).getTime()) / 1000 / 3600 > 6 : true;
@@ -104,7 +104,14 @@ export default ({ setInstanceAction }) => {
         }}
       />
 
-      {hasChanged && <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />}
+      {hasChanged && (
+        <ChangeSummary
+          which="storage"
+          compute={compute?.priceStringWithInterval || 'FREE'}
+          storage={newStorage?.priceStringWithInterval}
+          total={newTotalString}
+        />
+      )}
 
       {hasChanged && (newStorage.price || compute.price) && !hasCard ? (
         <Button

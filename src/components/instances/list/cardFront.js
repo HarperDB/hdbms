@@ -13,7 +13,19 @@ import useInstanceAuth from '../../../state/stores/instanceAuths';
 import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
 import registrationInfo from '../../../api/instance/registrationInfo';
 
-export default ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, showLogin, showDelete, compute, storage }) => {
+export default ({
+  compute_stack_id,
+  instance_id,
+  url,
+  status,
+  instance_region,
+  instance_name,
+  is_local,
+  showLogin,
+  showDelete,
+  compute,
+  storage,
+}) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
@@ -116,11 +128,15 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   useAsyncEffect(() => processInstanceCard(), [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => {
-    if (['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'].includes(instanceStatus.instance)) setLastUpdate(Date.now());
+    if (['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'].includes(instanceStatus.instance))
+      setLastUpdate(Date.now());
   }, config.instance_refresh_rate);
 
   return (
-    <Card className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`} onClick={handleCardClick}>
+    <Card
+      className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`}
+      onClick={handleCardClick}
+    >
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
@@ -137,7 +153,9 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
                 }}
               />
             )}
-            {['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(instanceStatus.instance) ? (
+            {['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(
+              instanceStatus.instance
+            ) ? (
               <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
@@ -158,7 +176,9 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             )}
           </Col>
         </Row>
-        <div className="instance-url">{['PLEASE LOG IN', 'LOGIN FAILED', 'UPDATING INSTANCE', 'OK'].includes(instanceStatus.instance) ? url : ''}</div>
+        <div className="instance-url">
+          {['PLEASE LOG IN', 'LOGIN FAILED', 'UPDATING INSTANCE', 'OK'].includes(instanceStatus.instance) ? url : ''}
+        </div>
         <Row className="text-smaller text-nowrap text-darkgrey">
           <Col xs="4">STATUS</Col>
           <Col xs="8" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>
