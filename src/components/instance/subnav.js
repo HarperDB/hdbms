@@ -25,7 +25,7 @@ export default ({ routes = [] }) => {
     appState,
     (s) => {
       const selectedInstance = s.instances.find((i) => i.compute_stack_id === compute_stack_id);
-      const otherInstances = s.instances.filter((i) => i.compute_stack_id !== compute_stack_id);
+      const otherInstances = s.instances.filter((i) => !['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(i.status) && i.compute_stack_id !== compute_stack_id);
       return {
         options: otherInstances.map((i) => ({
           label: i.instance_name,
