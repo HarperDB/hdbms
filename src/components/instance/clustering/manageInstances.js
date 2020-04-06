@@ -9,7 +9,9 @@ export default ({ items, itemType, setShowModal }) => (
     <Card className="mt-3 mb-4">
       <CardBody>
         {items && items.length ? (
-          items.map((item) => <InstanceManagerRow key={item.instance_name} item={item} itemType={itemType} setShowModal={setShowModal} />)
+          items.map((item) => (
+            <InstanceManagerRow key={item.instance_name} item={item} itemType={itemType} setShowModal={setShowModal} />
+          ))
         ) : (
           <Row className="item-row">
             <Col className="text-nowrap text-truncate pt-1">There are no {itemType} instances</Col>
