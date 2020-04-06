@@ -23,11 +23,17 @@
 
       .instance-icon {
         position: relative;
+        width: 15px;
 
         i {
           position: absolute;
           right: 15px;
           top: -2px;
+
+          &.delete {
+            right: 35px;
+            top: -3px;
+          }
         }
       }
 

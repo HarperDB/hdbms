@@ -10,8 +10,7 @@ export default (props) => {
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <ReactCardFlip isFlipped={flipState}>
-        <CardFront flipCard={() => setFlipState(true)} {...props} />
-
+        <CardFront showLogin={() => setFlipState('login')} showDelete={() => setFlipState('delete')} {...props} />
         <CardBack flipCard={() => setFlipState(false)} flipState={flipState} {...props} />
       </ReactCardFlip>
     </Col>

@@ -13,7 +13,7 @@ import useInstanceAuth from '../../../state/stores/instanceAuths';
 import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
 import registrationInfo from '../../../api/instance/registrationInfo';
 
-export default ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, flipCard, compute, storage }) => {
+export default ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, showLogin, showDelete, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
@@ -28,7 +28,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
 
   const handleCardClick = async () => {
     if (!instanceAuth) {
-      return flipCard();
+      return showLogin();
     }
     if (instanceStatus.instance !== 'OK') {
       return false;
@@ -120,27 +120,23 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   }, config.instance_refresh_rate);
 
   return (
-    <Card
-      className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`}
-      onClick={() =>
-        handleCardClick({
-          instanceAuth,
-          flipCard,
-          instanceStatus,
-          url,
-          setInstanceStatus,
-          history,
-          compute_stack_id,
-          alert,
-        })
-      }
-    >
+    <Card className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`} onClick={handleCardClick}>
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
             {instance_name}
           </Col>
           <Col xs="2" className="instance-icon">
+            {['OK', 'COULD NOT CONNECT', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) && (
+              <i
+                title="remove Instane"
+                className="fa fa-trash rm-1 delete text-danger"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showDelete();
+                }}
+              />
+            )}
             {['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(instanceStatus.instance) ? (
               <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
