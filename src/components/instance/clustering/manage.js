@@ -49,12 +49,8 @@ export default () => {
       <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
           <InstanceManager items={clusterInstances.connected} setShowModal={setShowModal} itemType="connected" />
-          {clusterInstances.unconnected.length ? (
-            <InstanceManager items={clusterInstances.unconnected} itemType="unconnected" />
-          ) : null}
-          {clusterInstances.unregistered.length ? (
-            <InstanceManager items={clusterInstances.unregistered} itemType="unregistered" />
-          ) : null}
+          {clusterInstances.unconnected.length ? <InstanceManager items={clusterInstances.unconnected} itemType="unconnected" /> : null}
+          {clusterInstances.unregistered.length ? <InstanceManager items={clusterInstances.unregistered} itemType="unregistered" /> : null}
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
           {clusterInstances.connected.length ? (
@@ -79,22 +75,15 @@ export default () => {
               <b>{instance_name}</b> is unable to open a connection to <b>{showModal}</b>.
               <hr />
               <ul>
+                <li>Clustered instances must be able to reach each other. This may require allowing access through a firewall.</li>
+                <li>Both instances must be running. In the event of a restart, instances will automatically attempt to reconnect.</li>
                 <li>
-                  Clustered instances must be able to reach each other. This may require allowing access through a
-                  firewall.
-                </li>
-                <li>
-                  Both instances must be running. In the event of a restart, instances will automatically attempt to
-                  reconnect.
-                </li>
-                <li>
-                  Clustered instances must have the same cluster user <b>name</b> and <b>password</b>. You can edit an
-                  instance&apos;s cluster user credentials in the <b>config</b> section.
+                  Clustered instances must have the same cluster user <b>name</b> and <b>password</b>. You can edit an instance&apos;s cluster user credentials in the <b>config</b>{' '}
+                  section.
                 </li>
               </ul>
               <hr />
-              If none of these help fix the issue, you can disconnect <b>{showModal}</b> from <b>{instance_name}</b> by
-              clicking the purple disconnect button with the minus sign.
+              If none of these help fix the issue, you can disconnect <b>{showModal}</b> from <b>{instance_name}</b> by clicking the purple disconnect button with the minus sign.
               <hr />
               <Button block onClick={() => setShowModal(false)} color="danger">
                 OK

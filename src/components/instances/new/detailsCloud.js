@@ -20,7 +20,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
   const computePrice = selectedProduct?.price;
   const instanceType = selectedProduct?.instance_type;
   const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 'FREE';
-  const isFree = computePrice === 'FREE' && storagePrice === 'FREE';
+  const isFree = !computePrice && !storagePrice;
   const needsCard = products && storage && !hasCard && !isFree;
 
   useAsyncEffect(() => {

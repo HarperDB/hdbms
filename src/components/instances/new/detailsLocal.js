@@ -15,7 +15,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
 
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
-  const isFree = computePrice === 'FREE';
+  const isFree = !computePrice;
   const needsCard = products && !hasCard && !isFree;
 
   useAsyncEffect(() => {
