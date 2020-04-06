@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, ModalHeader, ModalBody, Modal, Button } from '@nio/ui-kit';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import useInterval from 'use-interval';
 
 import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
@@ -10,6 +11,7 @@ import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
 
 import buildInstanceClusterPartners from '../../../util/instance/buildInstanceClusterPartners';
+import config from '../../../../config';
 
 export default () => {
   const { compute_stack_id } = useParams();
@@ -35,6 +37,12 @@ export default () => {
         })
       );
   }, [instances, network]);
+
+  useInterval(() => {
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
+  }, config.instance_refresh_rate);
 
   return (
     <>
