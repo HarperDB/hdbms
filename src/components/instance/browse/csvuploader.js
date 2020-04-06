@@ -23,7 +23,6 @@ export default () => {
     auth: s.auth,
     url: s.url,
   }));
-  const currentHash = useStoreState(tableState, (s) => s.currentHash);
 
   const [uploadStatus, setUploadStatus] = useState(false);
   const [processedData, setProcessedData] = useState(false);
@@ -38,14 +37,16 @@ export default () => {
     const [{ status, message, type }] = await getJob({ auth, url, id: uploadJobId });
 
     if (status === 'ERROR' && type === 'csv_url_load') {
+      if (message.indexOf('Error: CSV Load failed from URL') !== -1) {
+        return setFormState({ error: 'The URL did not return a valid csv file' });
+      }
       return setFormState({ error: message.split(':')[1] });
     }
 
-    if (status === 'ERROR' && message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
-      return setFileError('The CSV file contains a row with a forward slash in the hash field.');
-    }
-
     if (status === 'ERROR') {
+      if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
+        return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+      }
       return setFileError(message);
     }
 
