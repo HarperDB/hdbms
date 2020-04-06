@@ -17,7 +17,7 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
       const thisInstance = i;
       const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
       const storage = thisInstance.is_local ? false : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
-      const totalPrice = parseFloat(compute.price || 0) + parseFloat(storage.price || 0);
+      const totalPrice = parseFloat(compute?.price || 0) + parseFloat(storage?.price || 0);
 
       return {
         ...thisInstance,
