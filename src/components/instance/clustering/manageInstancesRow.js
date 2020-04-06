@@ -45,7 +45,7 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
           <Button color="grey" className="round" title="Creating Instance" disabled>
             <i className="fa fa-spin fa-spinner" />
           </Button>
-        ) : connection?.state === 'open' ? (
+        ) : connection?.state !== 'closed' ? (
           <Button
             color="purple"
             className="round"

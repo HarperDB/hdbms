@@ -54,7 +54,7 @@ export default () => {
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
           {clusterInstances.connected.length ? (
-            <DataTable instances={clusterInstances.connected.filter((i) => i.connection.state === 'open')} />
+            <DataTable instances={clusterInstances.connected.filter((i) => i.connection.state !== 'closed')} />
           ) : (
             <>
               <span className="text-white floating-card-header">&nbsp;</span>
