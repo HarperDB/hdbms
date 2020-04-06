@@ -11,7 +11,7 @@ export default () => {
         <CardBody className="d-flex flex-column align-items-center justify-content-center text-bold text-purple">
           <span className="text-small">Create New HarperDB Cloud Instance</span>
           <div className="my-4">
-            <i className="fa fa-lg fa-plus-circle" />
+            <i className="fa fa-2x fa-plus-circle" />
           </div>
           <span className="text-small">Import Existing HarperDB Instance</span>
         </CardBody>
