@@ -18,8 +18,8 @@ export default () => {
   const history = useHistory();
   const { compute_stack_id, schema, table, action } = useParams();
   const [entities, setEntities] = useState({
-    schemas: [],
-    tables: [],
+    schemas: false,
+    tables: false,
     activeTable: false,
   });
   const { current_compute_stack_id, structure } = useStoreState(
@@ -39,7 +39,7 @@ export default () => {
   }, [structure, schema, table, compute_stack_id]);
 
   useAsyncEffect(() => {
-    if (current_compute_stack_id === compute_stack_id) {
+    if (current_compute_stack_id === compute_stack_id && entities.schemas && entities.tables) {
       handleSchemaTableRedirect({
         entities,
         compute_stack_id,

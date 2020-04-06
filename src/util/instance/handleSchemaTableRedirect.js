@@ -1,4 +1,6 @@
 export default ({ entities, compute_stack_id, schema, table, history, targetPath }) => {
+  console.log(entities, schema, table);
+
   switch (true) {
     case !entities.schemas.length && history.location.pathname !== targetPath:
       history.push(`/instance/${compute_stack_id}${targetPath}`);
