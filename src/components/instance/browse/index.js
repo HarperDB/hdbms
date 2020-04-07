@@ -10,7 +10,7 @@ import instanceState from '../../../state/stores/instanceState';
 import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
-import CSVUploader from './csvuploader';
+import CSVUpload from './csvupload';
 import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
 
@@ -60,7 +60,7 @@ export default () => {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         {schema && table && action === 'csv' && entities.activeTable ? (
-          <CSVUploader />
+          <CSVUpload />
         ) : schema && table && action && entities.activeTable ? (
           <JSONViewer newEntityColumns={entities.activeTable.newEntityColumns} hashAttribute={entities.activeTable.hashAttribute} />
         ) : schema && table && entities.activeTable ? (

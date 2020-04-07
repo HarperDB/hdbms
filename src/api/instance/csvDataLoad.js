@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ schema, table, data, auth, url }) =>
+export default async ({ schema, table, csv_file, auth, url }) =>
   queryInstance(
     {
       operation: 'csv_data_load',
@@ -8,7 +8,7 @@ export default async ({ schema, table, data, auth, url }) =>
       transact_to_cluster: true,
       schema,
       table,
-      data,
+      data: csv_file,
     },
     auth,
     url

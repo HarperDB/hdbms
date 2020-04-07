@@ -1,8 +1,30 @@
-.csv-status {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  font-size: $font-size-small;
-  height: 38px;
-  justify-content: center;
+#csv-upload {
+  .csv-status,
+  .drop-zone {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-size: $font-size-small;
+    height: 38px;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .drop-zone {
+    background-image: linear-gradient(45deg, $color-lightergrey 25%, transparent 25%),
+    linear-gradient(-45deg, $color-lightergrey 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, $color-lightergrey 75%),
+    linear-gradient(-45deg, transparent 75%, $color-lightergrey 75%);
+    background-size: 2px 2px;
+    background-position: 0 0, 1px 0, 1px -1px, 0px 1px;
+    outline: none !important;
+    font-size: $font-size-root;
+    color: $color-grey;
+  }
+  .btn {
+    height: 38px;
+  }
 }
+
+
+
