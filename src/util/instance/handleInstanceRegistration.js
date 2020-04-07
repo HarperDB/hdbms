@@ -62,9 +62,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
 
     if (cluster_status.is_enabled && cluster_status.node_name !== compute_stack_id) {
-      const name_change_result = await configureClusterNodeName({ auth: instanceAuth, url, compute_stack_id });
-
-      console.log(name_change_result);
+      configureClusterNodeName({ auth: instanceAuth, url, compute_stack_id });
 
       return {
         instance: 'UPDATING NODE NAME',

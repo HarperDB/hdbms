@@ -13,7 +13,6 @@ import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../util/commaNumbers';
 import isURL from '../../../util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
-import tableState from '../../../state/stores/tableState';
 
 export default () => {
   const history = useHistory();
@@ -139,8 +138,6 @@ export default () => {
     []
   );
 
-  console.log(fileError);
-
   return (
     <>
       <span className="text-white mb-2 floating-card-header">
@@ -183,12 +180,7 @@ export default () => {
                     Clear URL
                   </Button>
                 ) : (
-                  <Button
-                    disabled={formState.submitted || !isURL(formData.csv_url)}
-                    block
-                    color="success"
-                    onClick={() => setFormState({ submitted: true })}
-                  >
+                  <Button disabled={formState.submitted || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
                     Import From URL
                   </Button>
                 )}

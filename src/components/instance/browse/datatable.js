@@ -22,20 +22,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
     url: s.url,
     lastUpdate: s.lastUpdate,
   }));
-  const {
-    filtered,
-    sorted,
-    page,
-    loading,
-    tableData,
-    currentTable,
-    currentHash,
-    totalPages,
-    totalRecords,
-    pageSize,
-    autoRefresh,
-    showFilter,
-  } = useStoreState(
+  const { filtered, sorted, page, loading, tableData, currentTable, currentHash, totalPages, totalRecords, pageSize, autoRefresh, showFilter } = useStoreState(
     tableState,
     (s) => ({
       filtered: s.filtered,
@@ -112,13 +99,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
 
   return (
     <>
-      <DataTableHeader
-        totalRecords={totalRecords}
-        loading={loading}
-        autoRefresh={autoRefresh}
-        showFilter={showFilter}
-        filtered={filtered}
-      />
+      <DataTableHeader totalRecords={totalRecords} loading={loading} autoRefresh={autoRefresh} showFilter={showFilter} filtered={filtered} />
       <Card className="my-3">
         <CardBody className="react-table-holder">
           <ReactTable
@@ -156,10 +137,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
               })
             }
             getTrProps={(state, rowInfo) => ({
-              onClick: () =>
-                history.push(
-                  `/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`
-                ),
+              onClick: () => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`),
             })}
           />
         </CardBody>

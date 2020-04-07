@@ -99,14 +99,7 @@ export default ({ setInstanceAction }) => {
         }}
       />
 
-      {hasChanged && (
-        <ChangeSummary
-          which="compute"
-          compute={newCompute?.priceStringWithInterval}
-          storage={storage?.priceStringWithInterval || 'FREE'}
-          total={newTotalString}
-        />
-      )}
+      {hasChanged && <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />}
 
       {hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button

@@ -179,12 +179,12 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             <hr className="my-1" />
           </Col>
           <Col xs="4">REGION</Col>
-          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
+          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
           <Col xs="4">LICENSE</Col>
-          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} / ${storage?.disk_space || 'NO LIMIT'}`}</Col>
+          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
