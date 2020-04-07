@@ -23,7 +23,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
 
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({
-            error: 'Login failed. Click to accept SSL Cert?',
+            error: 'Login failed. Click to verify status?',
             url,
           });
         } else if (result.error && result.type === 'catch') {
