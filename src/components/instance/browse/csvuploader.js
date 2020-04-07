@@ -44,7 +44,7 @@ export default () => {
 
     if (status === 'ERROR') {
       if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
-        return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+        return setFileError('The CSV file contains a row with a forward slash in the hash field.');
       }
       return setFileError(message);
     }
