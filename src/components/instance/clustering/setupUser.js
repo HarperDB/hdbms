@@ -66,7 +66,7 @@ export default () => {
   ) : (
     <>
       <hr />
-      <div className="text-nowrap mb-3">Cluster User</div>
+      <div className="text-nowrap mb-3">Create Cluster User</div>
       <Input
         onChange={(e) =>
           setFormData({

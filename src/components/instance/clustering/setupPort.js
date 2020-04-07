@@ -35,7 +35,7 @@ export default ({ port, setPort }) => {
   ) : (
     <>
       <hr />
-      <div className="mb-3">Cluster Port</div>
+      <div className="mb-3">Set Cluster Port</div>
       <Input
         onChange={(e) =>
           setFormData({

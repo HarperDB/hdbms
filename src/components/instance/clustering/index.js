@@ -13,9 +13,9 @@ export default () => {
 
   return !network ? (
     <i className="fa fa-spinner fa-spin text-white" />
-  ) : network.is_enabled && network.cluster_user && network.cluster_role ? (
+  ) : network.is_enabled && network.cluster_user && network.cluster_role && network.name === compute_stack_id ? (
     <Manage />
   ) : (
-    <Setup network={network} />
+    <Setup />
   );
 };
