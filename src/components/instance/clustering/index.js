@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/stores/instanceState';
 
@@ -7,7 +8,8 @@ import Setup from './setup';
 import Manage from './manage';
 
 export default () => {
-  const network = useStoreState(instanceState, (s) => s.network);
+  const { compute_stack_id } = useParams();
+  const network = useStoreState(instanceState, (s) => s.network, [compute_stack_id]);
 
   return !network ? (
     <i className="fa fa-spinner fa-spin text-white" />

@@ -15,30 +15,30 @@ export default () => {
   const { compute_stack_id } = useParams();
   const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths] = useInstanceAuth({});
-  const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
+  const auth = instanceAuths && instanceAuths[compute_stack_id];
   const instances = useStoreState(appState, (s) => s.instances);
 
   const refreshInstance = async () => {
-    if (!loadingInstance && instanceAuth) {
+    if (!loadingInstance && auth) {
       await buildActiveInstanceObject({
-        thisInstance: instances.find((i) => i.compute_stack_id === compute_stack_id),
-        auth: instanceAuth,
+        instances,
+        compute_stack_id,
+        auth,
       });
       setLoadingInstance(false);
     }
   };
 
   useEffect(() => {
-    const cancelSub = instanceState.subscribe(
-      (s) => s.lastUpdate,
-      () => refreshInstance()
-    );
-    return () => cancelSub();
-  }, []);
-
-  useEffect(() => {
     setLoadingInstance(true);
     refreshInstance();
+    const cancelSub = instanceState.subscribe(
+      (s) => s.lastUpdate,
+      () => {
+        refreshInstance();
+      }
+    );
+    return () => cancelSub();
   }, [compute_stack_id]);
 
   return (

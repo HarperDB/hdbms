@@ -7,11 +7,7 @@ import instanceState from '../../../state/stores/instanceState';
 import removeNode from '../../../api/instance/removeNode';
 import addNode from '../../../api/instance/addNode';
 
-export default ({
-  setShowModal,
-  item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort },
-  itemType,
-}) => {
+export default ({ setShowModal, item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort }, itemType }) => {
   const history = useHistory();
   const [changing, setChanging] = useState(false);
   const { auth, url } = useStoreState(instanceState, (s) => ({
@@ -21,18 +17,11 @@ export default ({
 
   return (
     <Row className="item-row">
-      <Col className={`text-nowrap text-truncate pt-1 ${connection?.state === 'closed' ? 'text-danger' : ''}`}>
-        {instance_name}
-      </Col>
+      <Col className={`text-nowrap text-truncate pt-1 ${connection?.state === 'closed' ? 'text-danger' : ''}`}>{instance_name}</Col>
       <Col className="item-action text-right">
         {itemType === 'unregistered' ? (
           <>
-            <Button
-              color="success"
-              className="round mr-1"
-              title="Add Instance To Studio"
-              onClick={() => history.push('/instances/new')}
-            >
+            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push('/instances/new')}>
               <i className="fa fa-plus text-white" />
             </Button>
             <Button
@@ -77,13 +66,7 @@ export default ({
           </Button>
         ) : connection?.state === 'closed' ? (
           <>
-            <Button
-              color="danger"
-              className="round mr-1"
-              title="Why isn't this instance clustering?"
-              disabled={changing}
-              onClick={() => setShowModal(instance_name)}
-            >
+            <Button color="danger" className="round mr-1" title="Why isn't this instance clustering?" disabled={changing} onClick={() => setShowModal(instance_name)}>
               <i className="fa fa-exclamation" />
             </Button>
             <Button
@@ -118,11 +101,7 @@ export default ({
               });
             }}
           >
-            <i
-              className={`fa ${
-                changing || connection?.state === 'connecting' ? 'fa-spin fa-spinner' : 'fa-minus'
-              } text-white`}
-            />
+            <i className={`fa ${changing || connection?.state === 'connecting' ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
           </Button>
         )}
       </Col>

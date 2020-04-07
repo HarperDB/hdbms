@@ -8,8 +8,11 @@ import instanceState from '../../state/stores/instanceState';
 
 import browseTableColumns from '../datatable/browseTableColumns';
 import buildPermissionStructure from './buildPermissionStructure';
+import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 
-export default async ({ thisInstance, auth }) => {
+export default async ({ instances, auth, compute_stack_id }) => {
+  const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
+
   const schema = await describeAll({
     auth,
     url: thisInstance.url,
@@ -26,23 +29,32 @@ export default async ({ thisInstance, auth }) => {
     auth,
     url: thisInstance.url,
   });
+
   const roles = await listRoles({
     auth,
     url: thisInstance.url,
   });
+
   const cluster_status = await clusterStatus({
     auth,
     url: thisInstance.url,
   });
 
   const structure = browseTableColumns(schema);
+
   const permissions = buildPermissionStructure(schema);
+
   const network = await getNetwork({
     auth,
     url: thisInstance.url,
     users,
     roles,
     cluster_status,
+  });
+
+  const clustering = buildInstanceClusterPartners({
+    instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
+    network,
   });
 
   const newInstanceState = {
@@ -53,6 +65,7 @@ export default async ({ thisInstance, auth }) => {
     users,
     roles,
     permissions,
+    clustering,
   };
 
   instanceState.update((s) => {

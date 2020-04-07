@@ -13,6 +13,11 @@ import useInstanceAuth from '../../../state/stores/instanceAuths';
 import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
 import registrationInfo from '../../../api/instance/registrationInfo';
 
+const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE', 'UPDATING NODE NAME'];
+const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE'];
+const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT', 'UPDATING NODE NAME'];
+const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
+
 export default ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, showLogin, showDelete, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
@@ -117,20 +122,20 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   useAsyncEffect(() => processInstanceCard(), [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => {
-    if (['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'].includes(instanceStatus.instance)) setLastUpdate(Date.now());
+    if (refreshInstanceStatus.includes(instanceStatus.instance)) setLastUpdate(Date.now());
   }, config.instance_refresh_rate);
 
   return (
-    <Card className={`instance ${['OK', 'PLEASE LOG IN', 'LOGIN FAILED'].includes(instanceStatus.instance) ? '' : 'unclickable'}`} onClick={handleCardClick}>
+    <Card className={`instance ${clickableStatus.includes(instanceStatus.instance) ? '' : 'unclickable'}`} onClick={handleCardClick}>
       <CardBody>
         <Row>
           <Col xs="10" className="instance-name">
             {instance_name}
           </Col>
           <Col xs="2" className="instance-icon">
-            {!['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE'].includes(instanceStatus.instance) && (
+            {!modifyingStatus.includes(instanceStatus.instance) && (
               <i
-                title="remove Instane"
+                title="Remove Instance"
                 className="fa fa-trash rm-1 delete text-purple"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -138,7 +143,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
                 }}
               />
             )}
-            {['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'].includes(instanceStatus.instance) ? (
+            {showSpinnerStatus.includes(instanceStatus.instance) ? (
               <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
             ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
               <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
@@ -159,7 +164,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             )}
           </Col>
         </Row>
-        <div className="instance-url">{['PLEASE LOG IN', 'LOGIN FAILED', 'UPDATING INSTANCE', 'OK'].includes(instanceStatus.instance) ? url : ''}</div>
+        <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
         <Row className="text-smaller text-nowrap text-darkgrey">
           <Col xs="4">STATUS</Col>
           <Col xs="8" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>
@@ -174,12 +179,12 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             <hr className="my-1" />
           </Col>
           <Col xs="4">REGION</Col>
-          <Col xs="8">{['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
+          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
           <Col xs="4">LICENSE</Col>
-          <Col xs="8">{!['UPDATING INSTANCE', 'CREATING INSTANCE'].includes(instanceStatus.instance) && `${compute?.ram} / ${storage?.disk_space || 'NO LIMIT'}`}</Col>
+          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} / ${storage?.disk_space || 'NO LIMIT'}`}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>

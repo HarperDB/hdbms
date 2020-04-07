@@ -22,24 +22,23 @@ export default () => {
     tables: false,
     activeTable: false,
   });
-  const { current_compute_stack_id, structure } = useStoreState(
+  const { structure } = useStoreState(
     instanceState,
     (s) => ({
-      current_compute_stack_id: s.compute_stack_id,
       structure: s.structure,
     }),
     [compute_stack_id]
   );
 
   useAsyncEffect(() => {
-    if (structure && current_compute_stack_id === compute_stack_id) {
+    if (structure) {
       const newEntities = buildInstanceStructure({ structure, schema, table });
       setEntities(newEntities);
     }
   }, [structure, schema, table, compute_stack_id]);
 
   useAsyncEffect(() => {
-    if (current_compute_stack_id === compute_stack_id && entities.schemas) {
+    if (entities.schemas) {
       handleSchemaTableRedirect({
         entities,
         compute_stack_id,
@@ -56,14 +55,7 @@ export default () => {
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/instance/${compute_stack_id}/browse`} itemType="schema" showForm />
         {schema && (
-          <EntityManager
-            activeItem={table}
-            items={entities.tables}
-            activeSchema={schema}
-            baseUrl={`/instance/${compute_stack_id}/browse/${schema}`}
-            itemType="table"
-            showForm
-          />
+          <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`/instance/${compute_stack_id}/browse/${schema}`} itemType="table" showForm />
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
@@ -79,8 +71,7 @@ export default () => {
             <Card className="my-3 py-5">
               <CardBody>
                 <div className="text-center">
-                  Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a{' '}
-                  {schema ? 'table' : 'schema'}
+                  Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}
                 </div>
               </CardBody>
             </Card>

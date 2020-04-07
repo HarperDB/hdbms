@@ -1,60 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Card, CardBody, ModalHeader, ModalBody, Modal, Button } from '@nio/ui-kit';
-import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
+import { useParams } from 'react-router-dom';
 
-import appState from '../../../state/stores/appState';
 import instanceState from '../../../state/stores/instanceState';
 
 import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
 
-import buildInstanceClusterPartners from '../../../util/instance/buildInstanceClusterPartners';
-import config from '../../../../config';
-
 export default () => {
   const { compute_stack_id } = useParams();
-  const [clusterInstances, setClusterInstances] = useState({
-    connected: [],
-    unconnected: [],
-    unregistered: [],
-  });
   const [showModal, setShowModal] = useState(false);
 
-  const instances = useStoreState(appState, (s) => s.instances.filter((i) => i.compute_stack_id !== compute_stack_id));
-  const { network, instance_name } = useStoreState(instanceState, (s) => ({
-    network: s.network,
-    instance_name: s.instance_name,
-  }));
-
-  useEffect(() => {
-    if (instances && network)
-      setClusterInstances(
-        buildInstanceClusterPartners({
-          instances,
-          network,
-        })
-      );
-  }, [instances, network]);
+  const { instance_name, clustering } = useStoreState(
+    instanceState,
+    (s) => ({
+      instance_name: s.instance_name,
+      clustering: s.clustering,
+    }),
+    [compute_stack_id]
+  );
 
   useInterval(() => {
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-  }, config.instance_refresh_rate);
+    if (clustering?.connected?.find((i) => i.connection.state === 'connecting')) {
+      instanceState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
+    }
+  }, 1000);
 
   return (
     <>
       <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
-          <InstanceManager items={clusterInstances.connected} setShowModal={setShowModal} itemType="connected" />
-          {clusterInstances.unconnected.length ? <InstanceManager items={clusterInstances.unconnected} itemType="unconnected" /> : null}
-          {clusterInstances.unregistered.length ? <InstanceManager items={clusterInstances.unregistered} itemType="unregistered" /> : null}
+          <InstanceManager items={clustering?.connected || []} setShowModal={setShowModal} itemType="connected" />
+          {clustering?.unconnected?.length ? <InstanceManager items={clustering.unconnected} itemType="unconnected" /> : null}
+          {clustering?.unregistered?.length ? <InstanceManager items={clustering.unregistered} itemType="unregistered" /> : null}
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
-          {clusterInstances.connected.length ? (
-            <DataTable instances={clusterInstances.connected.filter((i) => i.connection.state !== 'closed')} />
+          {clustering?.connected?.length ? (
+            <DataTable instances={clustering.connected.filter((i) => i.connection.state !== 'closed')} />
           ) : (
             <>
               <span className="text-white floating-card-header">&nbsp;</span>

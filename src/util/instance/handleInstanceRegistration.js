@@ -7,6 +7,7 @@ import createLicense from '../../api/lms/createLicense';
 
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
+import configureClusterNodeName from '../../api/instance/configureClusterNodeName';
 
 export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
   try {
@@ -59,6 +60,20 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
+
+    if (cluster_status.is_enabled && cluster_status.node_name !== compute_stack_id) {
+      const name_change_result = await configureClusterNodeName({ auth: instanceAuth, url, compute_stack_id });
+
+      console.log(name_change_result);
+
+      return {
+        instance: 'UPDATING NODE NAME',
+        instanceError: false,
+        clustering,
+        version: registration.version,
+      };
+    }
+
     const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.ram_allocation);
 
     if (registration_matches_stripe_plan) {
