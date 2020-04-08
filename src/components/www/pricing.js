@@ -5,8 +5,6 @@ import { Row, Col } from '@nio/ui-kit';
 import getProducts from '../../api/lms/getProducts';
 import appState from '../../state/stores/appState';
 
-import commaNumbers from '../../util/commaNumbers';
-
 export default () => {
   const products = useStoreState(appState, (s) => s.products);
 

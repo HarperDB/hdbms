@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
