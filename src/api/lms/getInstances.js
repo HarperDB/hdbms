@@ -40,4 +40,6 @@ export default async ({ auth, customer_id, products, regions, instanceCount }) =
       s.instances = [];
     });
   }
+
+  return false;
 };
