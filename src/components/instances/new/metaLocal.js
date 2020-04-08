@@ -113,7 +113,7 @@ export default ({ instanceNames, instanceURLs }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Create Instance Admin Credentials">
+          <ContentContainer header="Instance Credentials (From Installation)">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
