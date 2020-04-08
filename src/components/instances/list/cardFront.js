@@ -25,7 +25,14 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
   const [instanceStatus, setInstanceStatus] = useState({
-    instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE' : 'LOADING',
+    instance:
+      status === 'CREATE_IN_PROGRESS'
+        ? 'CREATING INSTANCE'
+        : status === 'UPDATE_IN_PROGRESS'
+        ? 'UPDATING INSTANCE'
+        : ['DELETE_IN_PROGRESS', 'QUEUED_FOR_DELETE'].includes(status)
+        ? 'DELETING INSTANCE'
+        : 'LOADING',
     instanceError: false,
     clustering: '',
     version: '',
@@ -64,7 +71,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
       return false;
     }
 
-    if (status === 'DELETE_IN_PROGRESS') {
+    if (['DELETE_IN_PROGRESS', 'QUEUED_FOR_DELETE'].includes(status)) {
       setInstanceStatus({
         ...instanceStatus,
         instance: 'DELETING INSTANCE',
@@ -79,6 +86,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
         setInstanceStatus({
           ...instanceStatus,
           instance: 'OK',
+          version: restartResult.version,
         });
       }
       return false;

@@ -85,6 +85,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
         instance: 'ERROR CREATING LICENSE',
         instanceError: true,
         clustering,
+        version: registration.version,
       };
     }
 
@@ -100,6 +101,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
         instance: 'APPLYING LICENSE',
         instanceError: false,
         clustering,
+        version: registration.version,
       };
     }
 
@@ -112,6 +114,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       instance: 'APPLYING LICENSE',
       instanceError: false,
       clustering,
+      version: registration.version,
     };
   } catch (e) {
     return {
