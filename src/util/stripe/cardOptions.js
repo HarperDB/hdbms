@@ -8,9 +8,6 @@ export default {
       fontFamily: 'Raleway, Open Sans, Segoe UI, sans-serif',
       fontSize: '14px',
       fontSmoothing: 'antialiased',
-      ':-webkit-autofill': {
-        color: '#fff',
-      },
       '::placeholder': {
         color: '#bcbcbc',
       },

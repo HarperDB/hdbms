@@ -105,12 +105,12 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           <div className="mb-4">
             {computeProduct?.price ? (
               <div className="mb-2">
-                The selected <b>instance type</b> has a cost of <b>{computeProduct?.priceString}</b>.
+                The selected <b>instance type</b> has a cost of <b>{computeProduct?.priceStringWithInterval}</b>.
               </div>
             ) : null}
             {storageProduct?.price ? (
               <div className="mb-2">
-                The selected <b>storage size</b> has a cost of <b>{storageProduct?.priceString}</b>.
+                The selected <b>storage size</b> has a cost of <b>{storageProduct?.priceStringWithInterval}</b>.
               </div>
             ) : null}
             Please add a credit card to your account using the form below. If you registered using a promo code, your card will not be charged until your promo credits run out.
