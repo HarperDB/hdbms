@@ -12,7 +12,7 @@ import getCustomer from '../../../api/lms/getCustomer';
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 
-export default ({ setEditingCard, customerCard }) => {
+export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ export default ({ setEditingCard, customerCard }) => {
 
         if (payload.error) {
           setFormState({
-            error: payload.error,
+            error: payload.error.message,
           });
         } else {
           const response = await addPaymentMethod({
@@ -87,11 +87,11 @@ export default ({ setEditingCard, customerCard }) => {
   return (
     <>
       {formState.processing ? (
-        <FormStatus height="283px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+        <FormStatus height={formStateHeight} status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
       ) : formState.success ? (
-        <FormStatus height="283px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
+        <FormStatus height={formStateHeight} status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
       ) : formState.error ? (
-        <FormStatus height="283px" status="error" header={formState.error} subhead="Please try again" />
+        <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
       ) : (
         <>
           <Card>

@@ -10,7 +10,7 @@ import usePersistedLMSAuth from '../../../state/stores/persistedLMSAuth';
 import updatePassword from '../../../api/lms/updatePassword';
 import FormStatus from '../../shared/formStatus';
 
-export default () => {
+export default ({ formStateHeight }) => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
   const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
   const [formState, setFormState] = useState({});
@@ -71,11 +71,11 @@ export default () => {
   useAsyncEffect(() => setFormState({}), [formData]);
 
   return formState.processing ? (
-    <FormStatus height="231px" status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
+    <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
   ) : formState.success ? (
-    <FormStatus height="231px" status="success" header="Success!" subhead={formState.success} />
+    <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
   ) : formState.error ? (
-    <FormStatus height="231px" status="error" header={formState.error} subhead="Please try again" />
+    <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
   ) : (
     <>
       <Card className="mb-3">
