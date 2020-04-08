@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Card, CardBody, Tooltip } from '@nio/ui-kit';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+import queryString from 'query-string';
 
 import handleSignup from '../../util/auth/handleSignup';
 import handleKeydown from '../../util/handleKeydown';
 
 export default () => {
+  const { search } = useLocation();
+  const { code } = queryString.parse(search);
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ coupon_code: code });
   const [showToolTip, setShowToolTip] = useState(false);
 
   useAsyncEffect(async () => {
