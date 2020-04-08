@@ -17,4 +17,7 @@ module.exports = merge(common, {
     disableHostCheck: true,
     inline: false,
   },
+  output: {
+    publicPath: '/',
+  },
 });
