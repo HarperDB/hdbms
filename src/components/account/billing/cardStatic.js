@@ -20,7 +20,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const hasPaidInstance = instances.find((i) => i.compute.price !== 'FREE' || (i.storage && i.storage.price !== 'FREE'));
+      const hasPaidInstance = instances.find((i) => i.compute?.price || i.storage?.price);
       if (hasPaidInstance) {
         setFormState({
           error: 'You have active, non-free instances.',
