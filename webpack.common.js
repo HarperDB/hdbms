@@ -35,10 +35,7 @@ module.exports = {
       inlineSource: '.(js|css)$',
     }),
     new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
-    new CopyWebpackPlugin([
-      { from: path.join(__dirname, '/src/assets/images/'), to: 'images/' },
-      { from: path.join(__dirname, '/node_modules/font-awesome/fonts/'), to: 'fonts/' },
-    ]),
+    new CopyWebpackPlugin([{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }]),
   ],
 
   module: {
