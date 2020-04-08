@@ -10,7 +10,7 @@ import updateUser from '../../../api/lms/updateUser';
 import getUser from '../../../api/lms/getUser';
 import FormStatus from '../../shared/formStatus';
 
-export default () => {
+export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState(auth);
@@ -67,11 +67,11 @@ export default () => {
   useAsyncEffect(() => setFormState({}), [formData]);
 
   return formState.processing ? (
-    <FormStatus height="231px" status="processing" header="Updating Profile" subhead="The Profile Poodle is doing his thing." />
+    <FormStatus height={formStateHeight} status="processing" header="Updating Profile" subhead="The Profile Poodle is doing his thing." />
   ) : formState.success ? (
-    <FormStatus height="231px" status="success" header="Success!" subhead={formState.success} />
+    <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
   ) : formState.error ? (
-    <FormStatus height="231px" status="error" header={formState.error} subhead="Please try again" />
+    <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
   ) : (
     <>
       <Card className="mb-3">

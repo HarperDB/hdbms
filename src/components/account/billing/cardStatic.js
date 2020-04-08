@@ -9,7 +9,7 @@ import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 import FormStatus from '../../shared/formStatus';
 import getCustomer from '../../../api/lms/getCustomer';
 
-export default ({ setEditingCard, customerCard }) => {
+export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const { auth, instances, customer } = useStoreState(appState, (s) => ({
     auth: s.auth,
     instances: s.instances,
@@ -59,11 +59,11 @@ export default ({ setEditingCard, customerCard }) => {
   }, [formState]);
 
   return formState.processing ? (
-    <FormStatus height="283px" status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+    <FormStatus height={formStateHeight} status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
   ) : formState.success ? (
-    <FormStatus height="283px" status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
+    <FormStatus height={formStateHeight} status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
   ) : formState.error ? (
-    <FormStatus height="283px" status="error" header={formState.error} subhead="You must remove them to remove your card." />
+    <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." />
   ) : (
     <>
       <Card className="credit-card-form">
