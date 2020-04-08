@@ -22,7 +22,21 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
     url: s.url,
     lastUpdate: s.lastUpdate,
   }));
-  const { filtered, sorted, page, loading, tableData, currentTable, currentHash, totalPages, totalRecords, pageSize, autoRefresh, showFilter } = useStoreState(
+  const {
+    filtered,
+    sorted,
+    page,
+    loading,
+    tableData,
+    currentTable,
+    currentHash,
+    totalPages,
+    totalRecords,
+    pageSize,
+    autoRefresh,
+    showFilter,
+    currentComputeStackId,
+  } = useStoreState(
     tableState,
     (s) => ({
       filtered: s.filtered,
@@ -37,6 +51,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
       showFilter: s.showFilter,
       currentTable: s.currentTable,
       currentHash: s.currentHash,
+      currentComputeStackId: s.currentComputeStackId,
     }),
     [table]
   );
@@ -79,7 +94,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   );
 
   useAsyncEffect(() => {
-    if (hashAttribute !== currentHash || table !== currentTable) {
+    if (hashAttribute !== currentHash || table !== currentTable || currentComputeStackId !== compute_stack_id) {
       tableState.update((s) => {
         s.tableData = [];
         s.totalPages = -1;
@@ -88,11 +103,13 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
         s.filtered = [];
         s.sorted = [{ id: hashAttribute, desc: false }];
         s.page = 0;
+        s.showFilter = false;
         s.currentTable = table;
         s.currentHash = hashAttribute;
+        s.currentComputeStackId = compute_stack_id;
       });
     }
-  }, [hashAttribute, table]);
+  }, [hashAttribute, table, compute_stack_id]);
 
   useInterval(() => {
     if (autoRefresh && !loading) {
