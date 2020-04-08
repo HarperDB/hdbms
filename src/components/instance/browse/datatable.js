@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -109,7 +109,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
         <CardBody className="react-table-holder">
           <ReactTable
             manual
-            loading={loading && (!autoRefresh || showFilter)}
+            loading={loading && !autoRefresh}
             loadingText="loading"
             data={tableData}
             pages={totalPages}

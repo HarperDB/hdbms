@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, ModalHeader, ModalBody, Modal, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -21,6 +21,14 @@ export default () => {
       clustering: s.clustering,
     }),
     [compute_stack_id]
+  );
+
+  useEffect(
+    () =>
+      instanceState.update((s) => {
+        s.lastUpdate = Date.now();
+      }),
+    []
   );
 
   useInterval(() => {
