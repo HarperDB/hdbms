@@ -50,6 +50,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           setFormState({
             error: payload.error.message,
           });
+          setTimeout(() => setFormState({}), 2000);
         } else {
           const response = await addPaymentMethod({
             auth: lmsAuth,
@@ -76,11 +77,10 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             setFormState({
               error: response.message,
             });
+            setTimeout(() => setFormState({}), 2000);
           }
         }
       }
-
-      setTimeout(() => setFormState({}), 2000);
     }
   }, [formState]);
 

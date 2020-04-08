@@ -53,6 +53,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           setFormState({
             error: response.message,
           });
+          setTimeout(() => setFormState({}), 2000);
         }
       }
     }
