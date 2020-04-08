@@ -14,6 +14,17 @@
         cursor: not-allowed;
       }
 
+      .new-instance-plus {
+        transition: transform 500ms ease-in-out;
+        transform: rotate(-90deg);
+      }
+
+      &:hover {
+        .new-instance-plus {
+          transform: rotate(90deg);
+        }
+      }
+
       .instance-name {
         line-height: 1 !important;
         overflow: hidden;
@@ -29,6 +40,7 @@
           position: absolute;
           right: 15px;
           top: -2px;
+
 
           &.delete {
             right: 35px;
