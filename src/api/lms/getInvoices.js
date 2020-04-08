@@ -10,13 +10,13 @@ export default async ({ auth, signal, customer_id }) => {
     auth,
   });
 
-  let invoices = false;
+  let invoices = [];
 
   if (Array.isArray(response.body)) {
     invoices = response.body;
   }
 
   return appState.update((s) => {
-    s.invoices = invoices;
+    s.invoices = invoices.filter((i) => i.amount_paid);
   });
 };
