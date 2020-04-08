@@ -2,7 +2,7 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/stores/appState';
 import commaNumbers from '../../util/commaNumbers';
 
-export default async ({ auth, payload: { customer_id }, entities: { products, regions } }) => {
+export default async ({ auth, customer_id, products, regions, instanceCount }) => {
   const response = await queryLMS({
     endpoint: 'getInstances',
     method: 'POST',
@@ -10,10 +10,8 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
     auth,
   });
 
-  let instances = [];
-
   if (Array.isArray(response.body)) {
-    instances = response.body.map((i) => {
+    const instances = response.body.map((i) => {
       const thisInstance = i;
       const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
       const storage = thisInstance.is_local ? false : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
@@ -31,9 +29,15 @@ export default async ({ auth, payload: { customer_id }, entities: { products, re
         region: thisInstance.is_local ? false : regions.find((r) => r.value === i.instance_region),
       };
     });
+
+    return appState.update((s) => {
+      s.instances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
+    });
   }
 
-  return appState.update((s) => {
-    s.instances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
-  });
+  if (!instanceCount) {
+    return appState.update((s) => {
+      s.instances = [];
+    });
+  }
 };
