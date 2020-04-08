@@ -44,32 +44,37 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
 
   useAsyncEffect(
     async () => {
-      controller = new AbortController();
+      if (controller) {
+        controller.abort();
+      }
+      if (!loading) {
+        controller = new AbortController();
 
-      tableState.update((s) => {
-        s.loading = true;
-      });
+        tableState.update((s) => {
+          s.loading = true;
+        });
 
-      const { newData, newTotalPages, newTotalRecords } = await getTableData({
-        schema,
-        table,
-        filtered,
-        pageSize,
-        sorted,
-        page,
-        auth,
-        url,
-        signal: controller.signal,
-      });
+        const { newData, newTotalPages, newTotalRecords } = await getTableData({
+          schema,
+          table,
+          filtered,
+          pageSize,
+          sorted,
+          page,
+          auth,
+          url,
+          signal: controller.signal,
+        });
 
-      tableState.update((s) => {
-        s.tableData = newData;
-        s.totalPages = newTotalPages;
-        s.totalRecords = newTotalRecords;
-        s.loading = false;
-      });
+        tableState.update((s) => {
+          s.tableData = newData;
+          s.totalPages = newTotalPages;
+          s.totalRecords = newTotalRecords;
+          s.loading = false;
+        });
+      }
     },
-    () => controller.abort(),
+    () => controller?.abort(),
     [sorted, page, filtered, pageSize, lastUpdate]
   );
 
@@ -104,7 +109,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
         <CardBody className="react-table-holder">
           <ReactTable
             manual
-            loading={loading && !autoRefresh}
+            loading={loading && (!autoRefresh || showFilter)}
             loadingText="loading"
             data={tableData}
             pages={totalPages}

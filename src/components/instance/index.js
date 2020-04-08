@@ -18,26 +18,24 @@ export default () => {
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const instances = useStoreState(appState, (s) => s.instances);
 
-  const refreshInstance = async () => {
-    if (!loadingInstance && auth) {
-      await buildActiveInstanceObject({
-        instances,
-        compute_stack_id,
-        auth,
-      });
-      setLoadingInstance(false);
-    }
-  };
-
   useEffect(() => {
+    const refreshInstance = async () => {
+      if (!loadingInstance && auth) {
+        await buildActiveInstanceObject({
+          instances,
+          compute_stack_id,
+          auth,
+        });
+        setLoadingInstance(false);
+      }
+    };
+
     setLoadingInstance(true);
-    refreshInstance();
     const cancelSub = instanceState.subscribe(
       (s) => s.lastUpdate,
-      () => {
-        refreshInstance();
-      }
+      () => refreshInstance()
     );
+    refreshInstance();
     return () => cancelSub();
   }, [compute_stack_id]);
 

@@ -8,9 +8,10 @@ import instanceState from '../../../state/stores/instanceState';
 
 export default () => {
   const [tableState, setTableState] = useState(defaultTableState);
-  const { clusterDataTable, clusterDataTableColumns } = useStoreState(instanceState, (s) => ({
+  const { clusterDataTable, clusterDataTableColumns, loading } = useStoreState(instanceState, (s) => ({
     clusterDataTable: s.clusterDataTable,
     clusterDataTableColumns: s.clusterDataTableColumns,
+    loading: s.loading,
   }));
 
   return (
@@ -22,6 +23,16 @@ export default () => {
           </span>
         </Col>
         <Col className="text-right text-white">
+          <i
+            title="Refresh instance schema and tables"
+            className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
+            onClick={() =>
+              instanceState.update((s) => {
+                s.lastUpdate = Date.now();
+              })
+            }
+          />
+          <span className="mx-3 text">|</span>
           <i
             title="Filter Instances"
             className="fa fa-search mr-3"

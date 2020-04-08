@@ -8,6 +8,7 @@ import instanceState from '../../../state/stores/instanceState';
 
 import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
+import ManageEmptyPrompt from './manageEmptyPrompt';
 
 export default () => {
   const { compute_stack_id } = useParams();
@@ -39,18 +40,7 @@ export default () => {
           {clustering?.unregistered?.length ? <InstanceManager items={clustering.unregistered} itemType="unregistered" /> : null}
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
-          {clustering?.connected?.length ? (
-            <DataTable />
-          ) : (
-            <>
-              <span className="text-white floating-card-header">&nbsp;</span>
-              <Card className="my-3 py-5">
-                <CardBody>
-                  <div className="text-center">Please connect at least one instance to configure clustering</div>
-                </CardBody>
-              </Card>
-            </>
-          )}
+          {clustering?.connected?.length ? <DataTable /> : <ManageEmptyPrompt message="Please connect at least one instance to configure clustering" />}
         </Col>
       </Row>
       <Modal id="cluster-state-modal" isOpen={!!showModal} toggle={() => setShowModal(false)}>

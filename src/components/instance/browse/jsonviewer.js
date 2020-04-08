@@ -65,6 +65,10 @@ export default ({ newEntityColumns, hashAttribute }) => {
       url
     );
 
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
+
     return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 

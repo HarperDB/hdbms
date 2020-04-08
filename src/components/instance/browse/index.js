@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
@@ -11,6 +11,7 @@ import DataTable from './datatable';
 import EntityManager from '../../shared/entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
+import EmptyPrompt from './emptyPrompt';
 import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
 import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
 
@@ -66,16 +67,9 @@ export default () => {
         ) : schema && table && entities.activeTable ? (
           <DataTable activeTable={entities.activeTable} />
         ) : (
-          <>
-            <span className="text-white floating-card-header">&nbsp;</span>
-            <Card className="my-3 py-5">
-              <CardBody>
-                <div className="text-center">
-                  Please {(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a {schema ? 'table' : 'schema'}
-                </div>
-              </CardBody>
-            </Card>
-          </>
+          <EmptyPrompt
+            message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
+          />
         )}
       </Col>
     </Row>
