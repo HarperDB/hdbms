@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Tooltip } from '@nio/ui-kit';
+import useAsyncEffect from 'use-async-effect';
 
 import ContentContainer from '../shared/contentContainer';
 import handleSignup from '../../util/auth/handleSignup';
@@ -9,8 +10,13 @@ export default () => {
   const [formData, setFormData] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  useEffect(() => {
-    handleSignup({ formState, setFormState, formData });
+  useAsyncEffect(async () => {
+    if (formState.submitted) {
+      const newFormState = await handleSignup({ formState, setFormState, formData });
+      if (newFormState) {
+        setFormState(newFormState);
+      }
+    }
   }, [formState]);
 
   useEffect(() => {
@@ -21,7 +27,7 @@ export default () => {
 
   return (
     <div id="standalone">
-      {formState.processing ? (
+      {formState.submitted ? (
         <div className="p-4 text-center">
           <b>creating account</b>
           <br />
