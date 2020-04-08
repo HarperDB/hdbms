@@ -2,36 +2,16 @@ import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
-import useAsyncEffect from 'use-async-effect';
 
 import defaultTableState from '../../../util/datatable/defaultTableState';
-import clusterConfigColumns from '../../../util/datatable/clusterConfigColumns';
-import buildClusteringTable from '../../../util/instance/buildClusteringTable';
 import instanceState from '../../../state/stores/instanceState';
 
-export default ({ instances }) => {
+export default () => {
   const [tableState, setTableState] = useState(defaultTableState);
-  const [tableData, setTableData] = useState([]);
-  const { auth, url, structure } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    structure: s.structure,
+  const { clusterDataTable, clusterDataTableColumns } = useStoreState(instanceState, (s) => ({
+    clusterDataTable: s.clusterDataTable,
+    clusterDataTableColumns: s.clusterDataTableColumns,
   }));
-  const columns = clusterConfigColumns({
-    auth,
-    url,
-  });
-
-  useAsyncEffect(
-    () =>
-      setTableData(
-        buildClusteringTable({
-          structure,
-          instances,
-        })
-      ),
-    [structure, instances]
-  );
 
   return (
     <>
@@ -58,8 +38,8 @@ export default ({ instances }) => {
       <Card className="my-3">
         <CardBody>
           <ReactTable
-            data={tableData}
-            columns={columns}
+            data={clusterDataTable}
+            columns={clusterDataTableColumns}
             onFilteredChange={(value) =>
               setTableState({
                 ...tableState,

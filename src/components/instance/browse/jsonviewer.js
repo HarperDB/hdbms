@@ -64,7 +64,8 @@ export default ({ newEntityColumns, hashAttribute }) => {
       auth,
       url
     );
-    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
+
+    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 
   const deleteRecord = async (e) => {

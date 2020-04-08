@@ -9,7 +9,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   let newData = [];
 
   try {
-    let countSQL = `SELECT count(*) as newTotalRecords FROM ${schema}.${table} `;
+    let countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` `;
     if (filtered.length) countSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
     [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, signal);
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
@@ -19,7 +19,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   }
 
   try {
-    let dataSQL = `SELECT * FROM ${schema}.${table} `;
+    let dataSQL = `SELECT * FROM \`${schema}\`.\`${table}\` `;
     if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
     if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
     dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;

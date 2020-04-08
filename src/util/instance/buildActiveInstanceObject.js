@@ -9,6 +9,8 @@ import instanceState from '../../state/stores/instanceState';
 import browseTableColumns from '../datatable/browseTableColumns';
 import buildPermissionStructure from './buildPermissionStructure';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
+import buildClusteringTable from './buildClusteringTable';
+import clusterConfigColumns from '../datatable/clusterConfigColumns';
 
 export default async ({ instances, auth, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
@@ -57,6 +59,16 @@ export default async ({ instances, auth, compute_stack_id }) => {
     network,
   });
 
+  const clusterDataTable = buildClusteringTable({
+    instances: clustering.connected.filter((i) => i.connection.state !== 'closed'),
+    structure,
+  });
+
+  const clusterDataTableColumns = clusterConfigColumns({
+    auth,
+    url: thisInstance.url,
+  });
+
   const newInstanceState = {
     ...thisInstance,
     auth,
@@ -66,6 +78,9 @@ export default async ({ instances, auth, compute_stack_id }) => {
     roles,
     permissions,
     clustering,
+    clusterDataTable,
+    clusterDataTableColumns,
+    loading: false,
   };
 
   instanceState.update((s) => {
