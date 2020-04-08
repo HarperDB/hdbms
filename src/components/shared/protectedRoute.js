@@ -52,10 +52,10 @@ export default ({ children }) => {
       setFetching(true);
       await getInstances({
         auth,
-        payload: {
-          customer_id: auth?.customer_id,
-        },
-        entities: { products, regions },
+        customer_id: auth?.customer_id,
+        products,
+        regions,
+        instanceCount: instances?.length,
       });
       setFetching(false);
     }

@@ -15,6 +15,12 @@ import clusterConfigColumns from '../datatable/clusterConfigColumns';
 export default async ({ instances, auth, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
 
+  if (!thisInstance) {
+    return {
+      error: 'Instance does not exist',
+    };
+  }
+
   const schema = await describeAll({
     auth,
     url: thisInstance.url,
@@ -22,8 +28,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   if (schema.error) {
     return {
-      ...thisInstance,
-      structure: false,
+      error: 'Could not log into instance',
     };
   }
 
@@ -88,6 +93,6 @@ export default async ({ instances, auth, compute_stack_id }) => {
   });
 
   return {
-    message: `created instance object for ${thisInstance.compute_stack_id}`,
+    error: false,
   };
 };
