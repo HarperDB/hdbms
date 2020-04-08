@@ -16,7 +16,7 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
-      const newFormState = await handleSignup({ formState, setFormState, formData });
+      const newFormState = await handleSignup({ formData });
       if (newFormState) {
         setFormState(newFormState);
       }

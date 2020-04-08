@@ -1,8 +1,7 @@
 import queryInstance from '../queryInstance';
-import instanceState from '../../state/stores/instanceState';
 
-export default async ({ compute_stack_id, instance_host, clusterPort, auth, url }) => {
-  await queryInstance(
+export default async ({ compute_stack_id, instance_host, clusterPort, auth, url }) =>
+  queryInstance(
     {
       operation: 'add_node',
       name: compute_stack_id,
@@ -13,7 +12,3 @@ export default async ({ compute_stack_id, instance_host, clusterPort, auth, url 
     auth,
     url
   );
-  return instanceState.update((s) => {
-    s.lastUpdate = Date.now();
-  });
-};
