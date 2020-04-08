@@ -58,6 +58,7 @@ export default ({ routes = [] }) => {
           isSearchable={false}
           isClearable={false}
           isLoading={!options}
+          noOptionsMessage={() => 'No other instances available'}
           styles={{
             option: (styles, { data }) => ({ ...styles, ...icon(data.is_local) }),
             singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local) }),
