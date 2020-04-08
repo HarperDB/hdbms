@@ -16,7 +16,7 @@ export default () => {
 
   const getLocalPrice = (ram) => {
     const localRAMEquivalent = products.localCompute.find((l) => l.ram_allocation === ram);
-    return !localRAMEquivalent ? '-' : localRAMEquivalent.price === 'FREE' ? 'FREE' : `$${commaNumbers(localRAMEquivalent.price)}`;
+    return !localRAMEquivalent ? '-' : localRAMEquivalent.priceString;
   };
 
   return (
@@ -43,7 +43,7 @@ export default () => {
                 {p.ram_allocation / 1024}
               </Col>
               <Col xs="4" className="px-4 text-nowrap">
-                {p.price === 'FREE' ? 'FREE' : `$${commaNumbers(p.price)}`}
+                {p.priceString}
               </Col>
               <Col xs="4" className="px-4 text-nowrap">
                 {getLocalPrice(p.ram_allocation)}
