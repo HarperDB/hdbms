@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, Card, CardBody, Tooltip } from '@nio/ui-kit';
 import { NavLink } from 'react-router-dom';
+import useAsyncEffect from 'use-async-effect';
 
 import handleSignup from '../../util/auth/handleSignup';
 import handleKeydown from '../../util/handleKeydown';
@@ -10,8 +11,13 @@ export default () => {
   const [formData, setFormData] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  useEffect(() => {
-    handleSignup({ formState, setFormState, formData });
+  useAsyncEffect(async () => {
+    if (formState.submitted) {
+      const newFormState = await handleSignup({ formState, setFormState, formData });
+      if (newFormState) {
+        setFormState(newFormState);
+      }
+    }
   }, [formState]);
 
   useEffect(() => {
@@ -23,7 +29,7 @@ export default () => {
   return (
     <div id="login-form" className="sign-up">
       <div id="login-logo" title="HarperDB Logo" />
-      {formState.processing ? (
+      {formState.submitted ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
