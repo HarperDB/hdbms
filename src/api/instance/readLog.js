@@ -10,7 +10,7 @@ const logMessagesToIgnore = [
 ];
 
 export default async ({ auth, url }) => {
-  const { file } = await queryInstance(
+  const { file, dailyRotateFile } = await queryInstance(
     {
       operation: 'read_log',
       limit: 1000,
@@ -20,5 +20,7 @@ export default async ({ auth, url }) => {
     url
   );
 
-  return Array.isArray(file) ? file.filter((l) => !logMessagesToIgnore.includes(l.message) && l.message.indexOf('Got a duplicate child started event for pid') === -1) : [];
+  const result = file || dailyRotateFile || false;
+
+  return Array.isArray(result) ? result.filter((l) => !logMessagesToIgnore.includes(l.message) && l.message.indexOf('Got a duplicate child started event for pid') === -1) : [];
 };
