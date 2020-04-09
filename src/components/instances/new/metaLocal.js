@@ -56,6 +56,16 @@ export default ({ instanceNames, instanceURLs }) => {
         try {
           const response = await registrationInfo({ auth: { user, pass }, url });
 
+          console.log(response);
+
+          if (response.ram_allocation) {
+            setNewInstance({
+              ...newInstance,
+              registered: response.registered,
+              ram_allocation: response.ram_allocation,
+            });
+          }
+
           if (response.error && response.message === 'Login failed') {
             setFormState({
               error: 'The provided credentials cannot log into that instance.',
