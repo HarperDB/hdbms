@@ -15,6 +15,11 @@ export default async ({ formData }) => {
       error: 'Please provide a valid email',
     };
   }
+  if (!subdomain.match(/^[a-zA-Z0-9\d-]+$/)) {
+    return {
+      error: 'subdomain: alphanumeric and hyphens only',
+    };
+  }
 
   const subdomainResponse = await checkSubdomain({ payload: { subdomain } });
 
