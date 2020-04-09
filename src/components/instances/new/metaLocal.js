@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 
 import useNewInstance from '../../../state/stores/newInstance';
 import ContentContainer from '../../shared/contentContainer';
-import queryInstance from '../../../api/queryInstance';
+import registrationInfo from '../../../api/instance/registrationInfo';
 
 export default ({ instanceNames, instanceURLs }) => {
   const history = useHistory();
@@ -30,22 +30,18 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (instanceURLs.includes(url)) {
         setFormState({
           error: `An instance at "${url}" already exists`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (!instance_name.match(/^[a-zA-Z0-9_]+$/)) {
         setFormState({
           error: 'instance names must have only letters, numbers, and underscores',
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (user && !user.match(/^[a-zA-Z_]+$/)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         setNewInstance({
           ...newInstance,
@@ -58,18 +54,17 @@ export default ({ instanceNames, instanceURLs }) => {
         });
 
         try {
-          const response = await queryInstance({ operation: 'describe_all' }, formData, url);
+          const response = await registrationInfo({ auth: { user, pass }, url });
+
           if (response.error && response.message === 'Login failed') {
             setFormState({
               error: 'The provided credentials cannot log into that instance.',
             });
-            setTimeout(() => setFormState({}), 2000);
-          } else if (response.error && is_ssl) {
+          } else if (response.error && response.type === 'catch') {
             setFormState({
-              error: "You may need to accept the instance's self-signed cert",
-              url,
+              error: is_ssl ? "You may need to accept the instance's self-signed cert" : "Can't reach non-SSL instance. Enable SSL?",
+              url: is_ssl ? url : 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
             });
-            setTimeout(() => setFormState({}), 2000);
           } else {
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
@@ -77,16 +72,20 @@ export default ({ instanceNames, instanceURLs }) => {
           setFormState({
             error: 'We found no HarperDB at that url/port. Is it running?',
           });
-          setTimeout(() => setFormState({}), 2000);
         }
       } else {
         setFormState({
           error: 'All fields must be filled out.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);
+
+  useAsyncEffect(() => {
+    if (!formState.submitted) {
+      setFormState({});
+    }
+  }, [formData]);
 
   return (
     <>
@@ -205,11 +204,9 @@ export default ({ instanceNames, instanceURLs }) => {
                       is_ssl: value || false,
                     })
                   }
-                  options={{
-                    label: '',
-                    value: true,
-                  }}
-                  value={formData.is_ssl}
+                  options={{ label: '', value: true }}
+                  value={formData.is_ssl || false}
+                  defaultValue={formData.is_ssl ? { label: '', value: true } : undefined}
                 />
               </Col>
             </Row>

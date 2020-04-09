@@ -30,7 +30,6 @@ export default ({ computeProduct, storageProduct }) => {
         setFormState({
           error: 'Please agree to the Privacy Policy and Cloud Terms of Service.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);

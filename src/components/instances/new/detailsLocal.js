@@ -26,7 +26,6 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
         setFormState({
           error: `You are limited to ${freeLocalInstanceLimit} free local instance${freeLocalInstanceLimit !== 1 ? 's' : ''}`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (stripe_plan_id) {
         setNewInstance({
           ...newInstance,
@@ -37,7 +36,6 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
         setFormState({
           error: 'All fields must be filled out.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);

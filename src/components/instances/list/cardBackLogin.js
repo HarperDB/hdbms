@@ -76,7 +76,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
             className="text-center mb-2"
             type="password"
             title="password"
-            placeholder="pass"
+            placeholder="password"
             disabled={formState.submitted}
           />
           <Row noGutters>
