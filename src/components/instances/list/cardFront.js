@@ -182,7 +182,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             <hr className="my-1" />
           </Col>
           <Col xs="4">VERSION</Col>
-          <Col xs="8">{instanceStatus.version}</Col>
+          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.version}</Col>
           <Col xs="12">
             <hr className="my-1" />
           </Col>
@@ -197,7 +197,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
             <hr className="my-1" />
           </Col>
           <Col xs="4">CLUSTERING</Col>
-          <Col xs="8">{instanceStatus.clustering.toUpperCase()}</Col>
+          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.clustering.toUpperCase()}</Col>
         </Row>
       </CardBody>
     </Card>
