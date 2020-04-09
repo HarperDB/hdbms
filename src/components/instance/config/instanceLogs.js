@@ -8,11 +8,15 @@ import instanceState from '../../../state/stores/instanceState';
 import config from '../../../../config';
 
 import readLog from '../../../api/instance/readLog';
+import LogRow from './instanceLogsRow';
+import logMessagesToIgnore from '../../../util/instance/logMessagesToIgnore';
 
 export default () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [noLogsReturned, setNoLogsReturned] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(Date.now());
   const { auth, url } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
@@ -22,11 +26,13 @@ export default () => {
   useAsyncEffect(async () => {
     if (auth && url) {
       setLoading(true);
-      const newLogs = await readLog({
-        auth,
-        url,
-      });
-      setLogs(newLogs);
+      const newLogs = await readLog({ auth, url });
+      if (newLogs) {
+        setLogs(newLogs);
+        setNoLogsReturned(false);
+      } else {
+        setNoLogsReturned(true);
+      }
       setLoading(false);
     }
   }, [lastUpdate, auth, url]);
@@ -46,6 +52,9 @@ export default () => {
           <i title="Update Logs" className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
           <span className="mr-2">auto</span>
           <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
+          <span className="mx-3 text">|</span>
+          <span className="mr-2">detailed</span>
+          <i title="Turn on detailed logs" className={`floating-card-header fa fa-lg fa-toggle-${showDetail ? 'on' : 'off'}`} onClick={() => setShowDetail(!showDetail)} />
         </Col>
       </Row>
       <Card className="my-3">
@@ -54,26 +63,21 @@ export default () => {
             <Col xs="3">
               <b>time</b>
             </Col>
-            <Col xs="9">
+            <Col xs="3">
               <b>message</b>
             </Col>
+            <Col xs="6" className="text-right text-danger">
+              {noLogsReturned && <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>}
+            </Col>
           </Row>
-          <hr className="mt-1 mb-2" />
+          <hr className="mt-1 mb-0" />
           <div className="log-scroller">
-            {logs.map((l, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Fragment key={i}>
-                <Row>
-                  <Col xl="3" lg="12" md="3" className={`text-${['error', 'fatal'].includes(l.level) ? 'danger' : 'grey'}`}>
-                    {new Date(l.timestamp).toLocaleString()}
-                  </Col>
-                  <Col xl="9" lg="12" md="9">
-                    {l.message}
-                  </Col>
-                </Row>
-                <hr className="my-2" />
-              </Fragment>
-            ))}
+            {logs
+              .filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1))
+              .map((l, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <LogRow key={i} {...l} />
+              ))}
           </div>
         </CardBody>
       </Card>

@@ -1,0 +1,15 @@
+export default [
+  '{"ip":"::1", "error":"undefined"',
+  'Connected to cluster server.',
+  'Error in server socket: SocketProtocolError: Socket hung up',
+  'Cannot request cluster status.',
+  'Got a duplicate child started event for pid',
+  'ERROR on HDB Client socket: SocketProtocolError: Client connection establishment timed out',
+  'ERROR on HDB Client socket: SocketProtocolError: Server ping timed out',
+  'ERROR on HDB Client socket: SocketProtocolError: Client pong timed out',
+  'ERROR on HDB Client socket: SocketProtocolError: Socket hung up',
+  'Disconnected from cluster server with code: 1000 - SUCCESSFUL_SHUTDOWN',
+  'Disconnected from cluster server with code: 1006 - CLOSE_ABNORMAL',
+  'Disconnected from cluster server with code: 4000 - undefined',
+  'Disconnected from cluster server with code: 4001 - undefined',
+];
