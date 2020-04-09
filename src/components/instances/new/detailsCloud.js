@@ -31,7 +31,6 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
         setFormState({
           error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({
           ...newInstance,
@@ -43,7 +42,6 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
         setFormState({
           error: 'All fields must be filled out.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);

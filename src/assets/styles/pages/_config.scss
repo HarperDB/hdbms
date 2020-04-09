@@ -15,5 +15,21 @@
     @media only screen and (max-width: 991px) {
       height: auto;
     }
+
+    .log-row {
+      padding: 8px 0;
+      color: $color-grey;
+      border-bottom: 1px solid $lightest-grey-overlay !important;
+
+      &.error,
+      &.fatal {
+        color: $color-danger;
+      }
+
+      &.pinned {
+        background: $color-danger;
+        color: $color-white;
+      }
+    }
   }
 }

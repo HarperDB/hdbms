@@ -26,7 +26,6 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
         setFormState({
           error: `You are limited to ${freeLocalInstanceLimit} free local instance${freeLocalInstanceLimit !== 1 ? 's' : ''}`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (stripe_plan_id) {
         setNewInstance({
           ...newInstance,
@@ -37,7 +36,6 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
         setFormState({
           error: 'All fields must be filled out.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);
@@ -56,7 +54,10 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
                   stripe_plan_id: value,
                 })
               }
-              options={products}
+              options={products.map((p) => ({
+                ...p,
+                label: `${p.label} ${p.ram_allocation === newInstance.ram_allocation ? `(${newInstance.registered ? 'Current' : 'Default'} License)` : ''}`,
+              }))}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />

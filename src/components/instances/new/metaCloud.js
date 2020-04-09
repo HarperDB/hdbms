@@ -23,17 +23,14 @@ export default ({ instanceNames }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (!instance_name.match(/^[a-zA-Z0-9_]+$/)) {
         setFormState({
           error: 'instance names must have only letters, numbers, and underscores',
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (user && !user.match(/^[a-zA-Z_]+$/)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
-        setTimeout(() => setFormState({}), 2000);
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({
           ...newInstance,
@@ -47,7 +44,6 @@ export default ({ instanceNames }) => {
         setFormState({
           error: 'All fields must be filled out.',
         });
-        setTimeout(() => setFormState({}), 2000);
       }
     }
   }, [formState]);

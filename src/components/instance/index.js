@@ -24,7 +24,11 @@ export default () => {
 
   useEffect(() => {
     const refreshInstance = async () => {
-      if (!loadingInstance && auth) {
+      if (!auth) {
+        alert.error('Unable to log into that instance');
+        history.push('/instances');
+        setLoadingInstance(false);
+      } else if (!loadingInstance) {
         const { error } = await buildActiveInstanceObject({
           instances,
           compute_stack_id,
