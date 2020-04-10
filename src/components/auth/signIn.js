@@ -5,12 +5,12 @@ import { useHistory } from 'react-router';
 import { NavLink, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
-import appState from '../../state/stores/appState';
+import usePersistedLMSAuth from '../../state/persistedLMSAuth';
+import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
-import isEmail from '../../util/isEmail';
-import handleKeydown from '../../util/handleKeydown';
+import isEmail from '../../methods/util/isEmail';
+import handleKeydown from '../../methods/util/handleKeydown';
 
 export default () => {
   const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});

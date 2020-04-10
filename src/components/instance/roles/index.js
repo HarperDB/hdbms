@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import EntityManager from './roleManager';
 import JSONViewer from './jsonviewer';

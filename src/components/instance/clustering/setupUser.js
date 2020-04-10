@@ -3,8 +3,8 @@ import { Row, Col, Button, Input, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import createClusterUser from '../../../api/instance/createClusterUser';
-import instanceState from '../../../state/stores/instanceState';
+import createClusterUser from '../../../methods/instance/createClusterUser';
+import instanceState from '../../../state/instanceState';
 
 export default () => {
   const { auth, url, cluster_role, cluster_user } = useStoreState(instanceState, (s) => ({

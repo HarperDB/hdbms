@@ -6,12 +6,12 @@ import useAsyncEffect from 'use-async-effect';
 
 import TopNav from '../topnav';
 import Loader from './loader';
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getCustomer from '../../api/lms/getCustomer';
 import getInstances from '../../api/lms/getInstances';
-import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
+import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 
 export default ({ children }) => {
   const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({

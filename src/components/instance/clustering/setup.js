@@ -6,7 +6,7 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
 import config from '../../../../config';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import Role from './setupRole';
 import User from './setupUser';

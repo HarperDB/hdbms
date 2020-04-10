@@ -1,5 +1,5 @@
 import queryLMS from '../queryLMS';
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 
 export default async () => {
   const response = await queryLMS({

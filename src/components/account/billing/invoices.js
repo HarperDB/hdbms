@@ -3,7 +3,7 @@ import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import getInvoices from '../../../api/lms/getInvoices';
 

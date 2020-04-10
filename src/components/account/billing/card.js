@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import StaticCard from './cardStatic';
 import EditCard from './cardEdit';

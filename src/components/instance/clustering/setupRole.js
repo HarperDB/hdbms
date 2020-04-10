@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import createClusterUserRole from '../../../api/instance/createClusterUserRole';
-import instanceState from '../../../state/stores/instanceState';
+import createClusterUserRole from '../../../methods/instance/createClusterUserRole';
+import instanceState from '../../../state/instanceState';
 
 export default () => {
   const { auth, url, cluster_role } = useStoreState(instanceState, (s) => ({

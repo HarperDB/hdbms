@@ -1,5 +1,5 @@
 import queryInstance from '../queryInstance';
-import instanceState from '../../state/stores/instanceState';
+import instanceState from '../../state/instanceState';
 
 export default async ({ auth, url, signal, currentLogCount }) => {
   const { file, dailyRotateFile } = await queryInstance(

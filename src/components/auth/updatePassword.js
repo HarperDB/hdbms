@@ -5,11 +5,11 @@ import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import usePersistedLMSAuth from '../../state/stores/persistedLMSAuth';
-import appState from '../../state/stores/appState';
+import usePersistedLMSAuth from '../../state/persistedLMSAuth';
+import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import handleKeydown from '../../util/handleKeydown';
+import handleKeydown from '../../methods/util/handleKeydown';
 
 export default () => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);

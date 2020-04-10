@@ -1,10 +1,10 @@
-import getNetwork from '../../api/instance/getNetwork';
+import instanceState from '../../state/instanceState';
+
+import buildNetwork from './buildNetwork';
 import describeAll from '../../api/instance/describeAll';
 import listUsers from '../../api/instance/listUsers';
 import listRoles from '../../api/instance/listRoles';
 import clusterStatus from '../../api/instance/clusterStatus';
-
-import instanceState from '../../state/stores/instanceState';
 
 import browseTableColumns from '../datatable/browseTableColumns';
 import buildPermissionStructure from './buildPermissionStructure';
@@ -51,9 +51,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   const permissions = buildPermissionStructure(schema);
 
-  const network = await getNetwork({
-    auth,
-    url: thisInstance.url,
+  const network = await buildNetwork({
     users,
     roles,
     cluster_status,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import useInstanceAuth from '../../../state/stores/instanceAuths';
+import useInstanceAuth from '../../../state/instanceAuths';
 import userInfo from '../../../api/instance/userInfo';
 
 export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {

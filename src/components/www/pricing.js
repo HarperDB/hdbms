@@ -3,7 +3,7 @@ import { useStoreState } from 'pullstate';
 import { Row, Col } from '@nio/ui-kit';
 
 import getProducts from '../../api/lms/getProducts';
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 
 export default () => {
   const products = useStoreState(appState, (s) => s.products);

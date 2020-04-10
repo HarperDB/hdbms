@@ -4,7 +4,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 
 const icon = (is_local) => ({
   alignItems: 'center',

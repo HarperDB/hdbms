@@ -4,13 +4,13 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 
-import appState from '../../state/stores/appState';
-import instanceState from '../../state/stores/instanceState';
-import useInstanceAuth from '../../state/stores/instanceAuths';
+import appState from '../../state/appState';
+import instanceState from '../../state/instanceState';
+import useInstanceAuth from '../../state/instanceAuths';
 
 import SubNav from './subnav';
 import routes from './routes';
-import buildActiveInstanceObject from '../../util/instance/buildActiveInstanceObject';
+import buildActiveInstanceObject from '../../methods/instance/buildActiveInstanceObject';
 import Loader from '../shared/loader';
 
 export default () => {

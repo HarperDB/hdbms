@@ -8,11 +8,11 @@ import { useStoreState } from 'pullstate';
 
 import config from '../../../../config';
 
-import instanceState from '../../../state/stores/instanceState';
-import tableState from '../../../state/stores/tableState';
+import instanceState from '../../../state/instanceState';
+import tableState from '../../../state/tableState';
 
 import DataTableHeader from './datatableHeader';
-import getTableData from '../../../api/instance/getTableData';
+import getTableData from '../../../methods/instance/getTableData';
 
 export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const history = useHistory();

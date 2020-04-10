@@ -3,7 +3,7 @@ import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 
-import useNewInstance from '../../../state/stores/newInstance';
+import useNewInstance from '../../../state/newInstance';
 
 export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, localInstanceLimit, cloudInstancesBeingModified }) => {
   const history = useHistory();

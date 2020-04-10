@@ -3,9 +3,9 @@ import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
-import isEmail from '../../util/isEmail';
+import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
-import handleKeydown from '../../util/handleKeydown';
+import handleKeydown from '../../methods/util/handleKeydown';
 
 export default () => {
   const [formState, setFormState] = useState({});

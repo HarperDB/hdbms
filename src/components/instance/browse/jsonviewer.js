@@ -8,7 +8,7 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../api/queryInstance';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default ({ newEntityColumns, hashAttribute }) => {
   const alert = useAlert();

@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import DataTable from './datatable';
-import EntityManager from '../../shared/entityManager';
+import EntityManager from './entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
-import buildInstanceStructure from '../../../util/instance/buildInstanceStructure';
-import handleSchemaTableRedirect from '../../../util/instance/handleSchemaTableRedirect';
 
 export default () => {
   const history = useHistory();
@@ -31,23 +28,31 @@ export default () => {
     [compute_stack_id]
   );
 
-  useAsyncEffect(() => {
+  useEffect(() => {
     if (structure) {
-      const newEntities = buildInstanceStructure({ structure, schema, table });
-      setEntities(newEntities);
+      setEntities({
+        schemas: Object.keys(structure).sort(),
+        tables: Object.keys(structure?.[schema] || {}).sort(),
+        activeTable: structure?.[schema]?.[table],
+      });
     }
   }, [structure, schema, table, compute_stack_id]);
 
-  useAsyncEffect(() => {
+  useEffect(() => {
     if (entities.schemas) {
-      handleSchemaTableRedirect({
-        entities,
-        compute_stack_id,
-        schema,
-        table,
-        history,
-        targetPath: '/browse',
-      });
+      switch (true) {
+        case !entities.schemas.length && history.location.pathname !== '/browse':
+          history.push(`/instance/${compute_stack_id}/browse`);
+          break;
+        case entities.schemas?.length && (!schema || !entities.schemas.includes(schema)):
+          history.push(`/instance/${compute_stack_id}/browse/${entities.schemas[0]}`);
+          break;
+        case entities.tables?.length && (!table || !entities.tables.includes(table)):
+          history.push(`/instance/${compute_stack_id}/browse/${schema}/${entities.tables[0]}`);
+          break;
+        default:
+          break;
+      }
     }
   }, [entities]);
 

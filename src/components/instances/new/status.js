@@ -4,10 +4,10 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
-import useInstanceAuth from '../../../state/stores/instanceAuths';
-import useNewInstance from '../../../state/stores/newInstance';
+import useInstanceAuth from '../../../state/instanceAuths';
+import useNewInstance from '../../../state/newInstance';
 
 import addInstance from '../../../api/lms/addInstance';
 import addTCAcceptance from '../../../api/lms/addTCAcceptance';

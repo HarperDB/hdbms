@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';

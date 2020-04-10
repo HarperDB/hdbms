@@ -5,14 +5,14 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import config from '../../../config';
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 
 import InstanceCard from './list/instanceCard';
 import NewInstanceCard from './list/newInstanceCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
 
-import filterInstances from '../../util/instance/filterInstances';
+import filterInstances from '../../methods/instances/filterInstances';
 
 export default () => {
   const { action } = useParams();

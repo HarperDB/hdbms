@@ -3,9 +3,9 @@ import { Row, Col, Input, Button, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
-import usePersistedLMSAuth from '../../../state/stores/persistedLMSAuth';
+import usePersistedLMSAuth from '../../../state/persistedLMSAuth';
 
 import updatePassword from '../../../api/lms/updatePassword';
 import FormStatus from '../../shared/formStatus';

@@ -2,7 +2,7 @@ import React from 'react';
 import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import ContentContainer from '../../shared/contentContainer';
 
 export default () => {

@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import addUser from '../../../api/instance/addUser';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import FormStatus from '../../shared/formStatus';
 
 export default () => {

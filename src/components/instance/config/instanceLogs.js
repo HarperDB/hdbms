@@ -4,12 +4,12 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 
 import readLog from '../../../api/instance/readLog';
 import LogRow from './instanceLogsRow';
-import logMessagesToIgnore from '../../../util/instance/logMessagesToIgnore';
+import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
 
 export default () => {
   const [autoRefresh, setAutoRefresh] = useState(false);

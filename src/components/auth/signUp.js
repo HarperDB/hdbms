@@ -4,8 +4,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
-import handleSignup from '../../util/auth/handleSignup';
-import handleKeydown from '../../util/handleKeydown';
+import handleSignup from '../../methods/auth/handleSignup';
+import handleKeydown from '../../methods/util/handleKeydown';
 
 export default () => {
   const { search } = useLocation();

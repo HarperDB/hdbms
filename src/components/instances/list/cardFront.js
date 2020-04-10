@@ -7,10 +7,10 @@ import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
 
 import config from '../../../../config';
-import appState from '../../../state/stores/appState';
-import useInstanceAuth from '../../../state/stores/instanceAuths';
+import appState from '../../../state/appState';
+import useInstanceAuth from '../../../state/instanceAuths';
 
-import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
+import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
 import userInfo from '../../../api/instance/userInfo';
 
 const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];

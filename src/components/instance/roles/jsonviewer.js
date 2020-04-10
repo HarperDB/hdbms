@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import alterRole from '../../../api/instance/alterRole';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default () => {
   const alert = useAlert();

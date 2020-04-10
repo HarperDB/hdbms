@@ -5,10 +5,9 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
-import defaultTableState from '../../../util/datatable/defaultTableState';
+import appState from '../../../state/appState';
 
-import customerUserColumns from '../../../util/datatable/customerUserColumns';
+import customerUserColumns from '../../../methods/datatable/customerUserColumns';
 import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
 
@@ -17,7 +16,16 @@ export default ({ lastUpdate, setLastUpdate }) => {
   const alert = useAlert();
   const users = useStoreState(appState, (s) => s.users);
   const [tableState, setTableState] = useState({
-    ...defaultTableState,
+    filtered: [],
+    page: 0,
+    loading: true,
+    tableData: [],
+    pages: -1,
+    totalRecords: 0,
+    pageSize: 20,
+    autoRefresh: false,
+    showFilter: false,
+    lastUpdate: false,
     sorted: [{ id: 'lastname', desc: false }],
   });
   const [userToRemove, setUserToRemove] = useState(false);

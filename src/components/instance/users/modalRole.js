@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import alterUser from '../../../api/instance/alterUser';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default ({ username, role, closeModal }) => {
   const [formState, setFormState] = useState({});

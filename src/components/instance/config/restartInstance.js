@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useAlert } from 'react-alert';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import userInfo from '../../../api/instance/userInfo';
 import config from '../../../../config';
 import restartInstance from '../../../api/instance/restartInstance';

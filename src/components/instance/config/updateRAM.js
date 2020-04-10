@@ -5,12 +5,12 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import appState from '../../../state/stores/appState';
-import instanceState from '../../../state/stores/instanceState';
+import appState from '../../../state/appState';
+import instanceState from '../../../state/instanceState';
 
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';
-import commaNumbers from '../../../util/commaNumbers';
+import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default ({ setInstanceAction }) => {
   const history = useHistory();

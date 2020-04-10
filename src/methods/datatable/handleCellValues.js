@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import isImage from './isImage';
+import isImage from '../util/isImage';
 
 const TextViewer = ({ value }) => <div className="text-renderer">{value}</div>;
 
