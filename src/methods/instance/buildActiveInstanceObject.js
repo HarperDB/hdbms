@@ -47,7 +47,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
     url: thisInstance.url,
   });
 
-  const structure = browseTableColumns(schema);
+  const { structure, defaultBrowseURL } = browseTableColumns(schema);
 
   const permissions = buildPermissionStructure(schema);
 
@@ -80,6 +80,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
     users,
     roles,
     permissions,
+    defaultBrowseURL,
     clustering,
     clusterDataTable,
     clusterDataTableColumns,

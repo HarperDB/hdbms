@@ -5,6 +5,7 @@ import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 
 import appState from '../../state/appState';
+import instanceState from '../../state/instanceState';
 
 const icon = (is_local) => ({
   alignItems: 'center',
@@ -23,6 +24,7 @@ const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE
 export default ({ routes = [] }) => {
   const { compute_stack_id } = useParams();
   const history = useHistory();
+  const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
   const { options, activeOption } = useStoreState(
     appState,
     (s) => {
@@ -68,7 +70,7 @@ export default ({ routes = [] }) => {
       <Nav navbar className="instance-nav">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink className="text-capitalize" to={`/instance/${compute_stack_id}/${route.link}`}>
+            <NavLink className="text-capitalize" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
             </NavLink>
