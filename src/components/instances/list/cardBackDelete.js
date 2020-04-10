@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import removeInstance from '../../../api/lms/removeInstance';
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 export default ({ compute_stack_id, instance_name, is_local, flipCard, flipState }) => {
   const alert = useAlert();

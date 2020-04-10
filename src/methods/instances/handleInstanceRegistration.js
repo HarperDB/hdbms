@@ -1,4 +1,5 @@
 import registrationInfo from '../../api/instance/registrationInfo';
+import userInfo from '../../api/instance/userInfo';
 import getFingerprint from '../../api/instance/getFingerprint';
 import restartInstance from '../../api/instance/restartInstance';
 import setLicense from '../../api/instance/setLicense';
@@ -27,7 +28,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       });
 
       if (result) {
-        registration = await registrationInfo({ auth: instanceAuth, url });
+        registration = await userInfo({ auth: instanceAuth, url });
       } else {
         return {
           instance: 'LOGIN FAILED',

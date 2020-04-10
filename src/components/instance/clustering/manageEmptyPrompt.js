@@ -2,7 +2,7 @@ import React from 'react';
 import { CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default ({ message }) => {
   const loading = useStoreState(instanceState, (s) => s.loading);

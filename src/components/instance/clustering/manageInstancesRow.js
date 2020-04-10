@@ -4,7 +4,7 @@ import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import removeNode from '../../../api/instance/removeNode';
 import addNode from '../../../api/instance/addNode';
 

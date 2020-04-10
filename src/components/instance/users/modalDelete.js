@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, Button, Row, Col, CardBody, Card } from 
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import dropUser from '../../../api/instance/dropUser';
 
 export default ({ username, closeModal }) => {

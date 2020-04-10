@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import queryInstance from '../../api/queryInstance';
-import instanceState from '../../state/stores/instanceState';
+import queryInstance from '../../../api/queryInstance';
+import instanceState from '../../../state/instanceState';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();

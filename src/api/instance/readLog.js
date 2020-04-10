@@ -1,6 +1,7 @@
 import queryInstance from '../queryInstance';
+import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url }) => {
+export default async ({ auth, url, signal, currentLogCount }) => {
   const { file, dailyRotateFile } = await queryInstance(
     {
       operation: 'read_log',
@@ -8,8 +9,19 @@ export default async ({ auth, url }) => {
       order: 'desc',
     },
     auth,
-    url
+    url,
+    signal
   );
 
-  return file || dailyRotateFile || false;
+  const logs = file || dailyRotateFile || false;
+
+  if (logs || !currentLogCount) {
+    return instanceState.update((s) => {
+      s.logs = logs || [];
+      s.logsError = false;
+    });
+  }
+  return instanceState.update((s) => {
+    s.logsError = true;
+  });
 };

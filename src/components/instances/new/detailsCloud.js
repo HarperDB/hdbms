@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import useNewInstance from '../../../state/stores/newInstance';
+import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
 export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit }) => {

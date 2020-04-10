@@ -3,8 +3,11 @@ import { Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
@@ -13,8 +16,10 @@ import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const customer = useStoreState(appState, (s) => s.customer);
+  const { auth, customer } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    customer: s.customer,
+  }));
   const [formData, setFormData] = useState({
     postal_code: false,
     card: false,
@@ -24,6 +29,9 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
+  const history = useHistory();
+  const { search } = useLocation();
+  const { returnURL } = queryString.parse(search);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -53,7 +61,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           setTimeout(() => setFormState({}), 2000);
         } else {
           const response = await addPaymentMethod({
-            auth: lmsAuth,
+            auth,
             payload: {
               payment_method_id: payload.paymentMethod.id,
               stripe_id: customer.stripe_id,
@@ -66,13 +74,17 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             });
 
             await getCustomer({
-              auth: lmsAuth,
+              auth,
               payload: {
-                customer_id: lmsAuth.customer_id,
+                customer_id: customer.customer_id,
               },
             });
 
-            setEditingCard(false);
+            if (returnURL) {
+              history.push(returnURL);
+            } else {
+              setEditingCard(false);
+            }
           } else {
             setFormState({
               error: response.message,

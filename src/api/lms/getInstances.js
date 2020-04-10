@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
-import appState from '../../state/stores/appState';
-import commaNumbers from '../../util/commaNumbers';
+import appState from '../../state/appState';
+import commaNumbers from '../../methods/util/commaNumbers';
 
 export default async ({ auth, customer_id, products, regions, instanceCount }) => {
   const response = await queryLMS({

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Col, Input, Row } from '@nio/ui-kit';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 
-import cardOptions from '../../util/stripe/cardOptions';
+import cardOptions from '../../methods/stripe/cardOptions';
 
 export default ({ setFormData, formData }) => {
   const [formState, setFormState] = useState({});

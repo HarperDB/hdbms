@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import useNewInstance from '../../../state/stores/newInstance';
+import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
 export default ({ instanceNames }) => {

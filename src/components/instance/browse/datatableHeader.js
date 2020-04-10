@@ -2,9 +2,9 @@ import React from 'react';
 import { Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 
-import commaNumbers from '../../../util/commaNumbers';
-import instanceState from '../../../state/stores/instanceState';
-import tableState from '../../../state/stores/tableState';
+import commaNumbers from '../../../methods/util/commaNumbers';
+import instanceState from '../../../state/instanceState';
+import tableState from '../../../state/tableState';
 
 export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) => {
   const history = useHistory();

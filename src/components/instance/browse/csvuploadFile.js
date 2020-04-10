@@ -5,12 +5,12 @@ import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
-import commaNumbers from '../../../util/commaNumbers';
+import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default () => {
   const history = useHistory();

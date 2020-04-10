@@ -3,9 +3,9 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
 
-import defaultTableState from '../../../util/datatable/defaultTableState';
-import instanceState from '../../../state/stores/instanceState';
-import instanceUserColumns from '../../../util/datatable/instanceUserColumns';
+import instanceState from '../../../state/instanceState';
+
+import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
 import ModalPassword from './modalPassword';
 import ModalRole from './modalRole';
 import ModalDelete from './modalDelete';
@@ -13,7 +13,16 @@ import ModalDelete from './modalDelete';
 export default () => {
   const [tableData, setTableData] = useState({ data: [], columns: [] });
   const [tableState, setTableState] = useState({
-    ...defaultTableState,
+    filtered: [],
+    page: 0,
+    loading: true,
+    tableData: [],
+    pages: -1,
+    totalRecords: 0,
+    pageSize: 20,
+    autoRefresh: false,
+    showFilter: false,
+    lastUpdate: false,
     sorted: [{ id: 'username', desc: false }],
   });
   const [modal, setModal] = useState(false);

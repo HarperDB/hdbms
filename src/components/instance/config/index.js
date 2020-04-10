@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import UpdateDiskVolume from './updateDiskVolume';
 import UpdateRAM from './updateRAM';

@@ -3,11 +3,22 @@ import ReactTable from 'react-table';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import defaultTableState from '../../../util/datatable/defaultTableState';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default () => {
-  const [tableState, setTableState] = useState(defaultTableState);
+  const [tableState, setTableState] = useState({
+    filtered: [],
+    sorted: [],
+    page: 0,
+    loading: true,
+    tableData: [],
+    pages: -1,
+    totalRecords: 0,
+    pageSize: 20,
+    autoRefresh: false,
+    showFilter: false,
+    lastUpdate: false,
+  });
   const { clusterDataTable, clusterDataTableColumns, loading } = useStoreState(instanceState, (s) => ({
     clusterDataTable: s.clusterDataTable,
     clusterDataTableColumns: s.clusterDataTableColumns,

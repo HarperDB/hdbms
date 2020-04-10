@@ -4,10 +4,10 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import getJob from '../../../api/instance/getJob';
-import isURL from '../../../util/isURL';
+import isURL from '../../../methods/util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
 
 export default () => {

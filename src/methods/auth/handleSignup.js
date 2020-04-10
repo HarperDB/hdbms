@@ -1,4 +1,4 @@
-import isEmail from '../isEmail';
+import isEmail from '../util/isEmail';
 import addCustomer from '../../api/lms/addCustomer';
 import checkSubdomain from '../../api/lms/checkSubdomain';
 

@@ -3,7 +3,7 @@ import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import CSVUploadURL from './csvuploadURL';
 import CSVUploadFile from './csvuploadFile';

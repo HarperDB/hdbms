@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { useLocation } from 'react-router-dom';
 
 import ContentContainer from '../shared/contentContainer';
-import handleSignup from '../../util/auth/handleSignup';
+import handleSignup from '../../methods/auth/handleSignup';
 
 export default () => {
   const { search } = useLocation();

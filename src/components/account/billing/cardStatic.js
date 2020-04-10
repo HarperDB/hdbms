@@ -3,7 +3,7 @@ import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 import FormStatus from '../../shared/formStatus';

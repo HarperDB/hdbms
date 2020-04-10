@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import config from '../../../../config';
-import useNewInstance from '../../../state/stores/newInstance';
+import useNewInstance from '../../../state/newInstance';
 
 export default ({ computeProduct, storageProduct }) => {
   const history = useHistory();

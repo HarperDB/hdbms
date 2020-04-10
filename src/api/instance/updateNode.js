@@ -1,5 +1,5 @@
 import queryInstance from '../queryInstance';
-import instanceState from '../../state/stores/instanceState';
+import instanceState from '../../state/instanceState';
 
 export default async ({ channel, subscriptions, buttonState, compute_stack_id, instance_host, clusterPort, auth, url }) => {
   const newSubscriptions = JSON.parse(JSON.stringify(subscriptions));

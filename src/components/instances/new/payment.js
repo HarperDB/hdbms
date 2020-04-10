@@ -5,7 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';

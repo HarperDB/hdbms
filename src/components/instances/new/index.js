@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
-import useNewInstance from '../../../state/stores/newInstance';
+import appState from '../../../state/appState';
+import useNewInstance from '../../../state/newInstance';
 
 import config from '../../../../config';
 
-import steps from '../../../util/instance/addInstanceSteps';
+import steps from '../../../methods/instances/addInstanceSteps';
 
 import InstanceTypeForm from './type';
 import CloudMetadataForm from './metaCloud';

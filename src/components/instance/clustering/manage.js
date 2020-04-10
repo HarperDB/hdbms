@@ -4,7 +4,7 @@ import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';

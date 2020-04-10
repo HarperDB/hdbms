@@ -1,15 +1,8 @@
-import queryInstance from '../queryInstance';
-import instanceState from '../../state/stores/instanceState';
+import addUser from '../../api/instance/addUser';
+import instanceState from '../../state/instanceState';
 
 export default async ({ username, password, role, auth, url }) => {
-  const query = {
-    operation: 'add_user',
-    role,
-    username,
-    password,
-    active: true,
-  };
-  const result = await queryInstance(query, auth, url);
+  const result = await addUser({ username, password, role, auth, url });
 
   if (result.message.indexOf('already exists') !== -1) {
     return {

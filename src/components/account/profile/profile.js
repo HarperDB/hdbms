@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import updateUser from '../../../api/lms/updateUser';
 import getUser from '../../../api/lms/getUser';

@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
-import appState from '../../state/stores/appState';
+import appState from '../../state/appState';
 
-import commaNumbers from '../../util/commaNumbers';
+import commaNumbers from '../../methods/util/commaNumbers';
 
 const buildRadioSelectProductOptions = ({ id, amount_decimal, interval, amount, metadata: { ram_allocation, instance_type } }) => {
   const price = parseInt(amount_decimal, 10) / 100;

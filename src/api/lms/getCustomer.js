@@ -1,6 +1,5 @@
 import queryLMS from '../queryLMS';
-import appState from '../../state/stores/appState';
-import customerHasChargeableCard from '../../util/stripe/customerHasChargeableCard';
+import appState from '../../state/appState';
 
 export default async ({ auth, payload: { customer_id } }) => {
   const response = await queryLMS({
@@ -18,6 +17,6 @@ export default async ({ auth, payload: { customer_id } }) => {
 
   return appState.update((s) => {
     s.customer = customer;
-    s.hasCard = customerHasChargeableCard(customer);
+    s.hasCard = customer.stripe_payment_methods?.[0];
   });
 };

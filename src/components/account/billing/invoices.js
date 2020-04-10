@@ -3,7 +3,7 @@ import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import getInvoices from '../../../api/lms/getInvoices';
 
@@ -24,7 +24,7 @@ export default () => {
         customer_id,
       });
     },
-    () => controller.abort(),
+    () => controller?.abort(),
     []
   );
 
@@ -36,7 +36,7 @@ export default () => {
             <i className="fa fa-spinner fa-spin text-purple" />
           </div>
         ) : !invoices.length ? (
-          <div className="py-5 text-center">We were unable to fetch your invoices. Please try again later.</div>
+          <div className="py-5 text-center">You have not yet received an invoice.</div>
         ) : (
           <>
             <Row>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import addRole from '../../../api/instance/addRole';
-import instanceState from '../../../state/stores/instanceState';
+import instanceState from '../../../state/instanceState';
 
 export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();

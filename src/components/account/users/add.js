@@ -3,10 +3,10 @@ import { Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/stores/appState';
+import appState from '../../../state/appState';
 
 import addUser from '../../../api/lms/addUser';
-import isEmail from '../../../util/isEmail';
+import isEmail from '../../../methods/util/isEmail';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ setLastUpdate }) => {
