@@ -3,9 +3,9 @@ import { Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { useHistory } from 'react-router';
 
 import appState from '../../../state/stores/appState';
 
@@ -81,7 +81,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             });
 
             if (returnURL) {
-              setTimeout(() => history.push(returnURL), 100);
+              history.push(returnURL);
             } else {
               setEditingCard(false);
             }

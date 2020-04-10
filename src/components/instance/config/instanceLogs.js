@@ -15,6 +15,7 @@ export default () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { auth, url, logs, logsError } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
     url: s.url,
@@ -25,11 +26,19 @@ export default () => {
 
   useAsyncEffect(
     () => {
-      controller = new AbortController();
-      readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+      if (mounted) {
+        controller = new AbortController();
+        readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+      }
     },
     () => controller?.abort(),
-    [lastUpdate]
+    [lastUpdate, mounted]
+  );
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
   );
 
   useInterval(() => {
