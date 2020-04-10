@@ -14,6 +14,7 @@ import logMessagesToIgnore from '../../../util/instance/logMessagesToIgnore';
 export default () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { auth, url, logs, logsError } = useStoreState(instanceState, (s) => ({
@@ -25,10 +26,12 @@ export default () => {
   let controller;
 
   useAsyncEffect(
-    () => {
+    async () => {
       if (mounted) {
+        setLoading(true);
         controller = new AbortController();
-        readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+        setLoading(false);
       }
     },
     () => controller?.abort(),
@@ -53,7 +56,7 @@ export default () => {
         </Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right text-white text-nowrap">
-          <i title="Update Logs" className="fa floating-card-header mr-2 fa-refresh" onClick={() => setLastUpdate(Date.now())} />
+          <i title="Update Logs" className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
           <span className="mr-2">auto</span>
           <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
           <span className="mx-3 text">|</span>
