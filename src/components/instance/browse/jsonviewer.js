@@ -116,7 +116,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
                 colors={{
                   background: 'transparent',
                   default: '#000',
-                  colon: '#00',
+                  colon: '#000',
                   keys: '#480b8a',
                   string: '#0280c4',
                   number: '#ea4c89',

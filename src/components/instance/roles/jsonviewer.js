@@ -71,7 +71,7 @@ export default () => {
         height="calc(100vh - 340px)"
         theme="light_mitsuketa_tribute"
         colors={{
-          background: 'rgba(255, 255, 255, 0.3)',
+          background: 'transparent',
           default: '#000',
           colon: '#000',
           keys: '#480b8a',
@@ -81,7 +81,8 @@ export default () => {
         }}
         locale={locale}
         width="100%"
-        waitAfterKeyPress={5000}
+        waitAfterKeyPress={1000}
+        confirmGood={false}
         onChange={(value) => setNewPermissions(value.jsObject)}
       />
       <hr />

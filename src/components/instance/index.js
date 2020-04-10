@@ -15,7 +15,7 @@ import Loader from '../shared/loader';
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const [loadingInstance, setLoadingInstance] = useState(false);
+  const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const instances = useStoreState(appState, (s) => s.instances);
@@ -28,7 +28,7 @@ export default () => {
         alert.error('Unable to log into that instance');
         history.push('/instances');
         setLoadingInstance(false);
-      } else if (!loadingInstance) {
+      } else {
         const { error } = await buildActiveInstanceObject({
           instances,
           compute_stack_id,

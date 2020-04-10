@@ -11,7 +11,6 @@ import ModalRole from './modalRole';
 import ModalDelete from './modalDelete';
 
 export default () => {
-  const [tableData, setTableData] = useState({ data: [], columns: [] });
   const [tableState, setTableState] = useState({
     filtered: [],
     page: 0,
@@ -30,6 +29,12 @@ export default () => {
     auth: s.auth,
     users: s.users,
   }));
+  const [tableColumns] = useState(
+    instanceUserColumns({
+      auth,
+      setModal,
+    })
+  );
 
   const closeModal = ({ refresh = false }) => {
     setModal(false);
@@ -39,18 +44,6 @@ export default () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (users && auth) {
-      setTableData({
-        data: users,
-        columns: instanceUserColumns({
-          auth,
-          setModal,
-        }),
-      });
-    }
-  }, [users, auth]);
 
   return (
     <>
@@ -75,8 +68,8 @@ export default () => {
       <Card className="my-3">
         <CardBody>
           <ReactTable
-            data={tableData.data}
-            columns={tableData.columns}
+            data={users}
+            columns={tableColumns}
             onFilteredChange={(value) =>
               setTableState({
                 ...tableState,

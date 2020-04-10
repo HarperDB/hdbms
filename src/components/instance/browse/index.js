@@ -31,8 +31,8 @@ export default () => {
   useEffect(() => {
     if (structure) {
       setEntities({
-        schemas: Object.keys(structure).sort(),
-        tables: Object.keys(structure?.[schema] || {}).sort(),
+        schemas: Object.keys(structure),
+        tables: Object.keys(structure?.[schema] || {}),
         activeTable: structure?.[schema]?.[table],
       });
     }
