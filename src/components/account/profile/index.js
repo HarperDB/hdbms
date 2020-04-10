@@ -12,7 +12,7 @@ export default () => {
         <span className="text-white mb-2 floating-card-header">profile</span>
         <Card className="my-3">
           <CardBody>
-            <ProfileForm height={formStateHeight} />
+            <ProfileForm formStateHeight={formStateHeight} />
           </CardBody>
         </Card>
       </Col>
@@ -20,7 +20,7 @@ export default () => {
         <span className="text-white mb-2 floating-card-header">password</span>
         <Card className="my-3">
           <CardBody>
-            <PasswordForm height={formStateHeight} />
+            <PasswordForm formStateHeight={formStateHeight} />
           </CardBody>
         </Card>
       </Col>

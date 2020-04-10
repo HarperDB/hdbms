@@ -11,7 +11,7 @@ import appState from '../../../state/stores/appState';
 import useInstanceAuth from '../../../state/stores/instanceAuths';
 
 import handleInstanceRegistration from '../../../util/instance/handleInstanceRegistration';
-import registrationInfo from '../../../api/instance/registrationInfo';
+import userInfo from '../../../api/instance/userInfo';
 
 const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE'];
@@ -46,7 +46,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
     if (instanceStatus.instance !== 'OK') {
       return false;
     }
-    const result = await registrationInfo({ auth: instanceAuth, url });
+    const result = await userInfo({ auth: instanceAuth, url });
     if (result.error) {
       setInstanceStatus({
         ...instanceStatus,
@@ -81,12 +81,11 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
     }
 
     if (instanceStatus.instance === 'APPLYING LICENSE') {
-      const restartResult = await registrationInfo({ auth: instanceAuth, url });
+      const restartResult = await userInfo({ auth: instanceAuth, url });
       if (!restartResult.error) {
         setInstanceStatus({
           ...instanceStatus,
           instance: 'OK',
-          version: restartResult.version,
         });
       }
       return false;

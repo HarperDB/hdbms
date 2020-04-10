@@ -3,7 +3,7 @@ import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
 import useInstanceAuth from '../../../state/stores/instanceAuths';
-import registrationInfo from '../../../api/instance/registrationInfo';
+import userInfo from '../../../api/instance/userInfo';
 
 export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
   const [formState, setFormState] = useState({});
@@ -19,7 +19,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
           error: 'All fields are required',
         });
       } else {
-        const result = await registrationInfo({ auth: { user, pass }, url });
+        const result = await userInfo({ auth: { user, pass }, url });
 
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({

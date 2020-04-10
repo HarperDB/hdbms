@@ -18,6 +18,7 @@ import Loader from '../../shared/loader';
 
 import configureCluster from '../../../api/instance/configureCluster';
 import restartInstance from '../../../api/instance/restartInstance';
+import userInfo from '../../../api/instance/userInfo';
 
 export default () => {
   const { compute_stack_id } = useParams();
@@ -45,15 +46,22 @@ export default () => {
         url,
       });
       await restartInstance({ auth, url });
-      setFormState({ restarting: true });
+      setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
 
-  useInterval(() => {
-    if (formState.restarting) {
+  const checkInstance = async () => {
+    const response = await userInfo({ auth, url });
+    if (!response.error) {
       instanceState.update((s) => {
         s.lastUpdate = Date.now();
       });
+    }
+  };
+
+  useInterval(() => {
+    if (formState.restarting) {
+      checkInstance();
     }
   }, config.instance_refresh_rate);
 

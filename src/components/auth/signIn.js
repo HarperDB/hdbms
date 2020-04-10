@@ -66,7 +66,7 @@ export default () => {
               pass,
             };
           });
-          setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 1000);
+          setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 100);
         }
       }
     }
