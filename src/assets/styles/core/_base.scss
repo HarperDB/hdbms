@@ -3,7 +3,9 @@ body {
   overflow-x: hidden;
 
   #app-bg {
-    background: $gradient-purple-magenta !important;
+    background-image: $gradient-purple-magenta !important;
+    background-position: 0 0, 1px 0, 1px -1px, 0 1px;
+    background-size: 2px 2px;
     bottom: 0;
     height: 100vh;
     left: 0;
@@ -29,7 +31,7 @@ body {
     }
 
     #app-nav {
-      background: $gradient-purple-magenta !important;
+      background: transparent !important;
       height: 60px;
       min-width: $min-width;
       padding: 0 2rem;
@@ -63,7 +65,6 @@ body {
         color: $white-overlay !important;
         display: inline-block;
         padding: 5px 0 0 !important;
-        text-shadow: 0 2px 3px $grey-overlay;
         transition: color 250ms;
 
         &.active,

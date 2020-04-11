@@ -58,14 +58,12 @@ export default () => {
       {formState.processing ? (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white">
-              resetting password
-              <br />
-              <br />
+            <CardBody className="text-white text-center">
+              <div className="mb-3">resetting password</div>
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
-          <div className="text-small login-nav-link text-center">&nbsp;</div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       ) : formState.success ? (
         <>
@@ -74,12 +72,12 @@ export default () => {
               success!
               <br />
               <br />
-              if that email exists in our system, we sent you a password reset email.
+              check your email for a password reset link.
             </CardBody>
           </Card>
-          <div className="text-small text-white text-center">
+          <div className="text-center">
             <NavLink to="/sign-in" className="login-nav-link">
-              Back to Sign In
+              Go to Sign In
             </NavLink>
           </div>
         </>

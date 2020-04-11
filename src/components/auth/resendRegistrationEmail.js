@@ -61,10 +61,8 @@ export default () => {
       {formState.processing ? (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white">
-              processing request
-              <br />
-              <br />
+            <CardBody className="text-white text-center">
+              <div className="mb-3">processing request</div>
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -73,10 +71,8 @@ export default () => {
       ) : formState.success ? (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white">
-              success!
-              <br />
-              <br />
+            <CardBody className="text-white text-center">
+              <div className="mb-3">success!</div>
               check your email. if you still don&apos;t see it, shoot us an email:
               <br />
               <br />
