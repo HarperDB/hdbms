@@ -1,18 +1,18 @@
-export default ({ filters, instances }) => {
+export default ({ filterSearch, filterCloud, filterLocal, instances }) => {
   if (!instances) return [];
-  if (!filters.local && !filters.cloud) return [];
-  if (filters.search === '' && filters.local && filters.cloud) return instances;
+  if (!filterCloud && !filterLocal) return [];
+  if (filterSearch.search === '' && filterLocal && filterCloud) return instances;
 
   return instances.filter((i) => {
-    if (!filters.local && i.is_local) return false;
-    if (!filters.cloud && !i.is_local) return false;
-    if (filters.search === '') return true;
+    if (!filterLocal && i.is_local) return false;
+    if (!filterCloud && !i.is_local) return false;
+    if (filterSearch === '') return true;
 
     let pass = false;
-    if (i.instance_name && i.instance_name.indexOf(filters.search) !== -1) pass = true;
-    if (i.host && i.host.indexOf(filters.search) !== -1) pass = true;
-    if (i.url && i.url.indexOf(filters.search) !== -1) pass = true;
-    if (i.instance_region && i.instance_region.indexOf(filters.search) !== -1) pass = true;
+    if (i.instance_name && i.instance_name.indexOf(filterSearch) !== -1) pass = true;
+    if (i.host && i.host.indexOf(filterSearch) !== -1) pass = true;
+    if (i.url && i.url.indexOf(filterSearch) !== -1) pass = true;
+    if (i.instance_region && i.instance_region.indexOf(filterSearch) !== -1) pass = true;
     return pass;
   });
 };

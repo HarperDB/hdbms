@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
@@ -18,12 +18,12 @@ const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INS
 const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-export default ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, showLogin, showDelete, compute, storage }) => {
+const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
-  const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
+  const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceStatus, setInstanceStatus] = useState({
     instance:
       status === 'CREATE_IN_PROGRESS'
@@ -39,9 +39,9 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
   });
   const [lastUpdate, setLastUpdate] = useState(false);
 
-  const handleCardClick = async () => {
+  const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
-      return showLogin();
+      return setFlipState('login');
     }
     if (instanceStatus.instance !== 'OK') {
       return false;
@@ -56,9 +56,9 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
       return alert.error('Unable to connect to instance.');
     }
     return history.push(`/instance/${compute_stack_id}/browse`);
-  };
+  }, [instanceAuth, instanceStatus.instance]);
 
-  const processInstanceCard = async () => {
+  const processInstanceCard = useCallback(async () => {
     if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
       return false;
     }
@@ -124,7 +124,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
       ...instanceStatus,
       ...registrationResult,
     });
-  };
+  }, [instanceAuth, instanceStatus.instance]);
 
   useAsyncEffect(() => processInstanceCard(), [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
@@ -146,7 +146,7 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
                 className="fa fa-trash rm-1 delete text-purple"
                 onClick={(e) => {
                   e.stopPropagation();
-                  showDelete();
+                  setFlipState('delete');
                 }}
               />
             )}
@@ -202,3 +202,5 @@ export default ({ compute_stack_id, instance_id, url, status, instance_region, i
     </Card>
   );
 };
+
+export default CardFront;

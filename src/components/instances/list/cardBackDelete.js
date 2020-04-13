@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 import removeInstance from '../../../api/lms/removeInstance';
 import appState from '../../../state/appState';
 
-export default ({ compute_stack_id, instance_name, is_local, flipCard, flipState }) => {
+const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();
   const { auth, customer } = useStoreState(appState, (s) => ({
     auth: s.auth,
@@ -41,7 +41,7 @@ export default ({ compute_stack_id, instance_name, is_local, flipCard, flipState
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => flipCard(), 1000);
+          setTimeout(() => setFlipState(false), 1000);
         }
       }
     }
@@ -84,7 +84,7 @@ export default ({ compute_stack_id, instance_name, is_local, flipCard, flipState
           />
           <Row>
             <Col>
-              <Button onClick={() => flipCard()} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={() => setFlipState(false)} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>
@@ -109,3 +109,5 @@ export default ({ compute_stack_id, instance_name, is_local, flipCard, flipState
     </Card>
   );
 };
+
+export default CardBackDelete;

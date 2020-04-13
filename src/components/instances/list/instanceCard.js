@@ -5,14 +5,17 @@ import { Col } from '@nio/ui-kit';
 import CardFront from './cardFront';
 import CardBack from './cardBack';
 
-export default (props) => {
+const InstanceCard = (props) => {
   const [flipState, setFlipState] = useState(false);
+
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <ReactCardFlip isFlipped={flipState}>
-        <CardFront showLogin={() => setFlipState('login')} showDelete={() => setFlipState('delete')} {...props} />
-        <CardBack flipCard={() => setFlipState(false)} flipState={flipState} {...props} />
+        <CardFront setFlipState={setFlipState} {...props} />
+        <CardBack setFlipState={setFlipState} flipState={flipState} {...props} />
       </ReactCardFlip>
     </Col>
   );
 };
+
+export default InstanceCard;

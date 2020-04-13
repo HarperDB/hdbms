@@ -5,7 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import useInstanceAuth from '../../../state/instanceAuths';
 import userInfo from '../../../api/instance/userInfo';
 
-export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
+const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -43,7 +43,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
               pass: formData.pass,
             },
           });
-          flipCard();
+          setFlipState(false);
         }
       }
     }
@@ -85,7 +85,7 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
                 onClick={() => {
                   setFormData({});
                   setFormState({});
-                  flipCard();
+                  setFlipState(false);
                 }}
                 title="Cancel"
                 block
@@ -122,3 +122,5 @@ export default ({ compute_stack_id, url, is_ssl, flipCard, flipState }) => {
     </Card>
   );
 };
+
+export default CardBackLogin;
