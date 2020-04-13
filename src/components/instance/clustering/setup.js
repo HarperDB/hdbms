@@ -75,7 +75,7 @@ export default () => {
             {cluster_role && <User />}
             {cluster_user && <Port port={12345} />}
             {cluster_role && cluster_user && <NodeName nodeNameMatch={nodeNameMatch} setNodeNameMatch={setNodeNameMatch} />}
-            {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} disabled={formState.submitted} />}
+            {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} disabled={formState.submitted || formState.restarting} />}
           </CardBody>
         </Card>
       </Col>
