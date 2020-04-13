@@ -14,9 +14,11 @@ import ProtectedRoute from './shared/protectedRoute';
 import Account from './account';
 import Instances from './instances';
 import Instance from './instance';
+import TopNav from './topnav';
 
-export default () => (
+const App = () => (
   <div id="app-container">
+    <TopNav />
     <Switch>
       <Route component={SignIn} exact path="/sign-in" />
       <Route component={SignUp} exact path="/sign-up" />
@@ -36,3 +38,5 @@ export default () => (
     </Switch>
   </div>
 );
+
+export default App;

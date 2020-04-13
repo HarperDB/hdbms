@@ -9,6 +9,9 @@ const appState = new Store({
   instances: false,
   hasCard: false,
   lastUpdate: false,
+  filterSearch: '',
+  filterLocal: true,
+  filterCloud: true,
 });
 
 export default appState;

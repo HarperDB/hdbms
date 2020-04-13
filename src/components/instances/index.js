@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Row } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
@@ -7,42 +7,43 @@ import { useStoreState } from 'pullstate';
 import config from '../../../config';
 import appState from '../../state/appState';
 
-import InstanceCard from './list/instanceCard';
+import InstanceList from './list/instanceList';
 import NewInstanceCard from './list/newInstanceCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
+import getInstances from '../../api/lms/getInstances';
 
-import filterInstances from '../../methods/instances/filterInstances';
-
-export default () => {
+const InstancesIndex = () => {
   const { action } = useParams();
-  const [filters, setFilters] = useState({
-    search: '',
-    local: true,
-    cloud: true,
-  });
-  const instances = useStoreState(appState, (s) => s.instances);
+  const { auth, products, regions, instances } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    products: s.products,
+    regions: s.regions,
+    lastUpdate: s.lastUpdate,
+    instances: s.instances,
+  }));
 
   useInterval(() => {
     if (!action)
-      appState.update((s) => {
-        s.lastUpdate = Date.now();
+      getInstances({
+        auth,
+        customer_id: auth?.customer_id,
+        products,
+        regions,
+        instanceCount: instances?.length,
       });
   }, config.instances_refresh_rate);
 
   return (
     <div id="instances">
-      <SubNav filters={filters} setFilters={setFilters} />
+      <SubNav />
       <Row>
         <NewInstanceCard />
-        {filterInstances({
-          filters,
-          instances,
-        }).map((i) => (
-          <InstanceCard key={i.compute_stack_id} {...i} />
-        ))}
+        <InstanceList />
       </Row>
       {action === 'new' && <NewInstanceModal />}
     </div>
   );
 };
+
+export default InstancesIndex;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { Card, CardBody, Col } from '@nio/ui-kit';
 
-export default () => {
+const NewInstanceCard = () => {
   const history = useHistory();
 
   return (
@@ -19,3 +19,5 @@ export default () => {
     </Col>
   );
 };
+
+export default NewInstanceCard;

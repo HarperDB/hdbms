@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import TopNav from '../topnav';
 import Loader from './loader';
 import appState from '../../state/appState';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getCustomer from '../../api/lms/getCustomer';
 import getInstances from '../../api/lms/getInstances';
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 
-export default ({ children }) => {
+const ProtectedRoute = ({ children }) => {
   const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
@@ -22,17 +19,7 @@ export default ({ children }) => {
     instances: s.instances,
   }));
   const { pathname } = useLocation();
-  const history = useHistory();
-  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
   const [fetching, setFetching] = useState(false);
-
-  const logOut = () => {
-    setPersistedLMSAuth(false);
-    appState.update((s) => {
-      s.auth = false;
-    });
-    setTimeout(() => history.push('/sign-in'), 0);
-  };
 
   useAsyncEffect(() => {
     if (auth && !fetching) {
@@ -62,11 +49,10 @@ export default ({ children }) => {
   }, [products, regions, lastUpdate]);
 
   return auth?.email && auth?.pass ? (
-    <>
-      <TopNav logOut={logOut} />
-      {instances ? children : <Loader message="loading instances" />}
-    </>
+    <>{instances ? children : <Loader message="loading instances" />}</>
   ) : (
     <Redirect to={`/sign-in${!['/', '/instances'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />
   );
 };
+
+export default ProtectedRoute;
