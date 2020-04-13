@@ -70,7 +70,7 @@ export default ({ routes = [] }) => {
       <Nav navbar className="instance-nav">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink className="text-capitalize" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
+            <NavLink className="text-capitalize nav-link" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
             </NavLink>
