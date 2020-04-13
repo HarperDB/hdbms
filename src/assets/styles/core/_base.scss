@@ -40,12 +40,13 @@ body {
       .nav-item {
         display: inline-block;
         white-space: nowrap;
+        margin-bottom: 0!important;
 
         .nav-link,
         a {
           color: $white-overlay !important;
           display: inline-block;
-          padding: 5px 0 0 !important;
+          padding: 0 !important;
           transition: color 250ms;
 
           &.active,
