@@ -16,7 +16,7 @@ export default ({ logOut }) => (
           <span className="d-none d-sm-inline-block">Instances</span>
         </NavLink>
       </NavItem>
-      <NavItem>
+      <NavItem className="ml-3">
         <NavLink title="Manage Account" to="/account">
           <i className="fa fa-gear fa-lg d-sm-none d-inline-block" />
           <i className="fa fa-gear d-none d-sm-inline-block" />
@@ -24,7 +24,7 @@ export default ({ logOut }) => (
           <span className="d-none d-sm-inline-block">Account</span>
         </NavLink>
       </NavItem>
-      <NavItem>
+      <NavItem className="ml-3">
         <DumbLink title="Log Out" onClick={logOut}>
           <i className="fa fa-sign-out fa-lg d-sm-none d-inline-block" />
           <i className="fa fa-sign-out d-none d-sm-inline-block" />
