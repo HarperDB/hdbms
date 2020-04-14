@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';

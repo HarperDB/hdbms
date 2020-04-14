@@ -13,9 +13,12 @@ import useInstanceAuth from '../../../state/instanceAuths';
 import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
 import userInfo from '../../../api/instance/userInfo';
 
-const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
+import CardFrontStatusRow from './cardFrontStatusRow';
+import CardFrontIcons from './cardFrontIcons';
+
+const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'APPLYING LICENSE'];
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE'];
-const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'];
+const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'UNABLE TO CONNECT'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
@@ -39,6 +42,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   });
   const [lastUpdate, setLastUpdate] = useState(false);
   const [processing, setProccessing] = useState(false);
+  const showInstanceInfoRows = !modifyingStatus.includes(instanceStatus.instance);
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -60,38 +64,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, [instanceAuth, instanceStatus.instance]);
 
   const processInstanceCard = useCallback(async () => {
-    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
-      return false;
-    }
-
-    if (status === 'WAITING ON APIGATEWAY') {
-      setInstanceStatus({
-        ...instanceStatus,
-        instance: 'CONFIGURING NETWORK',
-      });
-      return false;
-    }
-
-    if (['DELETE_IN_PROGRESS', 'QUEUED_FOR_DELETE'].includes(status)) {
-      setInstanceStatus({
-        ...instanceStatus,
-        instance: 'DELETING INSTANCE',
-        instanceError: true,
-      });
-      return false;
-    }
-
-    if (instanceStatus.instance === 'APPLYING LICENSE') {
-      const restartResult = await userInfo({ auth: instanceAuth, url });
-      if (!restartResult.error) {
-        setInstanceStatus({
-          ...instanceStatus,
-          instance: 'OK',
-        });
-      }
-      return false;
-    }
-
     setProccessing(true);
 
     const registrationResult = await handleInstanceRegistration({
@@ -102,14 +74,14 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       instance_id,
       compute_stack_id,
       compute,
+      modifyingStatus,
+      instanceStatus,
+      setInstanceStatus,
     });
 
     setProccessing(false);
 
-    if (
-      ['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) &&
-      ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance)
-    ) {
+    if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE'].includes(instanceStatus.instance)) {
       return false;
     }
 
@@ -132,7 +104,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, [instanceAuth, instanceStatus.instance]);
 
   useAsyncEffect(() => {
-    if (!processing && !flipState) {
+    if (!processing && !flipState && !modifyingStatus.includes(instanceStatus.instance)) {
       processInstanceCard();
     }
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
@@ -152,64 +124,28 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               {instance_name}
             </Col>
             <Col xs="2" className="instance-icon">
-              {!modifyingStatus.includes(instanceStatus.instance) && (
-                <i
-                  title="Remove Instance"
-                  className="fa fa-trash rm-1 delete text-purple"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFlipState('delete');
-                  }}
-                />
-              )}
-              {showSpinnerStatus.includes(instanceStatus.instance) ? (
-                <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
-              ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
-                <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
-              ) : instanceAuth ? (
-                <i
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setInstanceAuths({
-                      ...instanceAuths,
-                      [compute_stack_id]: false,
-                    });
-                  }}
-                  title="Remove Instance Authentication"
-                  className="fa fa-lock text-purple"
-                />
-              ) : (
-                <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
-              )}
+              <CardFrontIcons
+                showRemove={!modifyingStatus.includes(instanceStatus.instance)}
+                showSpinner={showSpinnerStatus.includes(instanceStatus.instance)}
+                showError={instanceStatus.instance === 'COULD NOT CONNECT'}
+                showLogout={instanceAuth}
+                setFlipState={setFlipState}
+                compute_stack_id={compute_stack_id}
+              />
             </Col>
           </Row>
           <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
-          <Row className="text-smaller text-nowrap text-darkgrey">
-            <Col xs="4">STATUS</Col>
-            <Col xs="8" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>
-              {instanceStatus.instance?.toUpperCase()}
-            </Col>
-            <Col xs="12">
-              <hr className="my-1" />
-            </Col>
-            <Col xs="4">VERSION</Col>
-            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.version}</Col>
-            <Col xs="12">
-              <hr className="my-1" />
-            </Col>
-            <Col xs="4">REGION</Col>
-            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
-            <Col xs="12">
-              <hr className="my-1" />
-            </Col>
-            <Col xs="4">LICENSE</Col>
-            <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`}</Col>
-            <Col xs="12">
-              <hr className="my-1" />
-            </Col>
-            <Col xs="4">CLUSTERING</Col>
-            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.clustering.toUpperCase()}</Col>
-          </Row>
+          <CardFrontStatusRow
+            label="STATUS"
+            showInstanceInfoRows
+            textClass={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}
+            value={instanceStatus.instance?.toUpperCase()}
+            bottomDivider
+          />
+          <CardFrontStatusRow label="VERSION" showInstanceInfoRows={showInstanceInfoRows} value={instanceStatus.version} bottomDivider />
+          <CardFrontStatusRow label="REGION" showInstanceInfoRows={showInstanceInfoRows} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
+          <CardFrontStatusRow label="LICENSE" showInstanceInfoRows={showInstanceInfoRows} value={`${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+          <CardFrontStatusRow label="CLUSTERING" showInstanceInfoRows={showInstanceInfoRows} value={instanceStatus.clustering.toUpperCase()} />
         </CardBody>
       )}
     </Card>

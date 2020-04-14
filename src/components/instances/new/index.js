@@ -72,12 +72,7 @@ export default () => {
         ) : purchaseStep === 'meta_cloud' ? (
           <CloudMetadataForm instanceNames={instanceNames} />
         ) : purchaseStep === 'details_local' ? (
-          <LocalInstanceForm
-            products={products.localCompute}
-            hasCard={hasCard}
-            canAddFreeLocalInstance={config.free_local_instance_limit && config.free_local_instance_limit > freeLocalInstanceCount}
-            freeLocalInstanceLimit={config.free_local_instance_limit}
-          />
+          <LocalInstanceForm products={products.localCompute} hasCard={hasCard} />
         ) : purchaseStep === 'details_cloud' ? (
           <CloudInstanceForm
             products={products.cloudCompute}

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceLimit }) => {
+export default ({ products, hasCard }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -22,11 +22,7 @@ export default ({ products, hasCard, canAddFreeLocalInstance, freeLocalInstanceL
     const { submitted } = formState;
     const { stripe_plan_id } = formData;
     if (submitted) {
-      if (isFree && freeLocalInstanceLimit && !canAddFreeLocalInstance) {
-        setFormState({
-          error: `You are limited to ${freeLocalInstanceLimit} free local instance${freeLocalInstanceLimit !== 1 ? 's' : ''}`,
-        });
-      } else if (stripe_plan_id) {
+      if (stripe_plan_id) {
         setNewInstance({
           ...newInstance,
           stripe_plan_id,

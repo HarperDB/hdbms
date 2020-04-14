@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import registrationInfo from '../../../api/instance/registrationInfo';
-import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 

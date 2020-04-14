@@ -31,5 +31,9 @@ export default async ({ users, roles, cluster_status }) => {
     return networkObject;
   }
 
-  return { ...networkObject, inbound_connections: processConnections(status.inbound_connections), outbound_connections: processConnections(status.outbound_connections) };
+  return {
+    ...networkObject,
+    inbound_connections: processConnections(status.inbound_connections),
+    outbound_connections: processConnections(status.outbound_connections),
+  };
 };

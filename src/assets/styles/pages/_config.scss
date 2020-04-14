@@ -17,9 +17,9 @@
     }
 
     .log-row {
-      padding: 8px 0;
-      color: $color-grey;
       border-bottom: 1px solid $lightest-grey-overlay !important;
+      color: $color-grey;
+      padding: 8px 0;
 
       &.error,
       &.fatal {

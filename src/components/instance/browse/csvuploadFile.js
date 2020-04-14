@@ -20,7 +20,6 @@ export default () => {
     auth: s.auth,
     url: s.url,
   }));
-
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
