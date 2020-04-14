@@ -28,7 +28,7 @@ export default ({ instanceNames }) => {
         });
       } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
-          error: 'instance names must have only letters, numbers, and underscores',
+          error: 'instance names must have only letters, numbers, and hyphens',
         });
       } else if (user && !isAlphaUnderscore(user)) {
         setFormState({

@@ -8,6 +8,7 @@ import ContentContainer from '../../shared/contentContainer';
 import registrationInfo from '../../../api/instance/registrationInfo';
 import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
 export default ({ instanceNames, instanceURLs }) => {
   const history = useHistory();
@@ -36,25 +37,15 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({
           error: `An instance at "${url}" already exists`,
         });
-      } else if (!isAlphaNumericUnderscore(instance_name)) {
+      } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
-          error: 'instance names must have only letters, numbers, and underscores',
+          error: 'instance names must have only letters, numbers, and hyphen',
         });
       } else if (user && !isAlphaUnderscore(user)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
-        setNewInstance({
-          ...newInstance,
-          instance_name,
-          user,
-          pass,
-          host,
-          port,
-          is_ssl,
-        });
-
         try {
           const response = await registrationInfo({ auth: { user, pass }, url });
 
@@ -63,6 +54,12 @@ export default ({ instanceNames, instanceURLs }) => {
               ...newInstance,
               registered: response.registered,
               ram_allocation: response.ram_allocation,
+              instance_name,
+              user,
+              pass,
+              host,
+              port,
+              is_ssl,
             });
           }
 
