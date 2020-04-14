@@ -15,19 +15,19 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, cloudInstancesBeingModified, hasCard } = useStoreState(appState, (s) => ({
+  const { auth, customer, hasCard } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
-    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
     hasCard: s.hasCard,
   }));
-  const { compute_stack_id, data_volume_size, storageProducts, storage, compute, last_volume_resize } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, data_volume_size, storageProducts, storage, compute, last_volume_resize, is_being_modified } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     data_volume_size: s.data_volume_size,
     storageProducts: s.storageProducts,
     storage: s.storage,
     compute: s.compute,
     last_volume_resize: s.last_volume_resize,
+    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
   }));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -73,9 +73,9 @@ export default ({ setInstanceAction }) => {
     <Card className="error">
       <CardBody>Limit 1 volume resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
     </Card>
-  ) : cloudInstancesBeingModified ? (
+  ) : is_being_modified ? (
     <Card className="error">
-      <CardBody>another cloud instance is being modified. please wait.</CardBody>
+      <CardBody>this instance is being modified. please wait.</CardBody>
     </Card>
   ) : (
     <>

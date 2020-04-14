@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
@@ -10,12 +10,7 @@ import Manage from './manage';
 export default () => {
   const { compute_stack_id } = useParams();
   const network = useStoreState(instanceState, (s) => s.network, [compute_stack_id]);
-  const showManage = useMemo(() => !!network.is_enabled && !!network.cluster_user && !!network.cluster_role && network.name === compute_stack_id, [
-    network.is_enabled,
-    network.cluster_user,
-    network.cluster_role,
-    compute_stack_id,
-  ]);
+  const showManage = !!network.is_enabled && !!network.cluster_user && !!network.cluster_role && network.name === compute_stack_id;
 
   return !network ? <i className="fa fa-spinner fa-spin text-white" /> : showManage ? <Manage /> : <Setup />;
 };
