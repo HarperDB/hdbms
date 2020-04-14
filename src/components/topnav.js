@@ -29,25 +29,28 @@ const TopNav = () => {
         <NavItem>
           <NavLink title="View Instances" to="/instances">
             <i className="fa fa-th fa-lg d-sm-none d-inline-block" />
-            <i className="fa fa-th d-none d-sm-inline-block" />
-            &nbsp;
-            <span className="d-none d-sm-inline-block">Instances</span>
+            <span className="d-none d-sm-inline-block">
+              <i className="fa fa-th" />
+              &nbsp; Instances
+            </span>
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
           <NavLink title="Manage Account" to="/account">
             <i className="fa fa-gear fa-lg d-sm-none d-inline-block" />
-            <i className="fa fa-gear d-none d-sm-inline-block" />
-            &nbsp;
-            <span className="d-none d-sm-inline-block">Account</span>
+            <span className="d-none d-sm-inline-block">
+              <i className="fa fa-gear" />
+              &nbsp;Account
+            </span>
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
           <DumbLink title="Log Out" onClick={logOut}>
             <i className="fa fa-sign-out fa-lg d-sm-none d-inline-block" />
-            <i className="fa fa-sign-out d-none d-sm-inline-block" />
-            &nbsp;
-            <span className="d-none d-sm-inline-block">Log Out</span>
+            <span className="d-none d-sm-inline-block">
+              <i className="fa fa-sign-out" />
+              &nbsp;Log Out
+            </span>
           </DumbLink>
         </NavItem>
       </Nav>

@@ -6,6 +6,8 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import registrationInfo from '../../../api/instance/registrationInfo';
+import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
 export default ({ instanceNames, instanceURLs }) => {
   const history = useHistory();
@@ -34,35 +36,29 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({
           error: `An instance at "${url}" already exists`,
         });
-      } else if (!instance_name.match(/^[a-zA-Z0-9_]+$/)) {
+      } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
-          error: 'instance names must have only letters, numbers, and underscores',
+          error: 'instance names must have only letters, numbers, and hyphen',
         });
-      } else if (user && !user.match(/^[a-zA-Z_]+$/)) {
+      } else if (user && !isAlphaUnderscore(user)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
-        setNewInstance({
-          ...newInstance,
-          instance_name,
-          user,
-          pass,
-          host,
-          port,
-          is_ssl,
-        });
-
         try {
           const response = await registrationInfo({ auth: { user, pass }, url });
-
-          console.log(response);
 
           if (response.ram_allocation) {
             setNewInstance({
               ...newInstance,
               registered: response.registered,
               ram_allocation: response.ram_allocation,
+              instance_name,
+              user,
+              pass,
+              host,
+              port,
+              is_ssl,
             });
           }
 
@@ -101,17 +97,17 @@ export default ({ instanceNames, instanceURLs }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name">
+          <ContentContainer header="Instance Name (letters, numbers, and hyphens only)">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
-                Example: &quot;edge_1&quot;
+                Example: &quot;edge-1&quot;
               </Col>
               <Col xs="8">
                 <Input
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      instance_name: e.target.value.replace(/\W+/g, '_').toLowerCase(),
+                      instance_name: e.target.value.replace(/[^a-zA-Z0-9\d-]+/gi, '').toLowerCase(),
                     })
                   }
                   type="text"

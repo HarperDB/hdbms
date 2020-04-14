@@ -90,7 +90,7 @@ export default ({ computeProduct, storageProduct }) => {
                   Uses SSL
                 </Col>
                 <Col xs="8" className="text-right text-nowrap">
-                  {newInstance.is_ssl.toString()}
+                  {newInstance.is_ssl ? 'yes' : 'no'}
                 </Col>
               </Row>
               <hr />

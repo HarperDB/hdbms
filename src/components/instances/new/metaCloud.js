@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
+import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
 export default ({ instanceNames }) => {
   const history = useHistory();
@@ -23,11 +26,11 @@ export default ({ instanceNames }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
-      } else if (!instance_name.match(/^[a-zA-Z0-9_]+$/)) {
+      } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
-          error: 'instance names must have only letters, numbers, and underscores',
+          error: 'instance names must have only letters, numbers, and hyphens',
         });
-      } else if (user && !user.match(/^[a-zA-Z_]+$/)) {
+      } else if (user && !isAlphaUnderscore(user)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
@@ -52,17 +55,17 @@ export default ({ instanceNames }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name">
+          <ContentContainer header="Instance Name (letters, numbers, and hyphens only)">
             <Row className="mb-4">
               <Col xs="4" className="pt-2 text-nowrap">
-                Example: &quot;cloud_1&quot;
+                Example: &quot;cloud-1&quot;
               </Col>
               <Col xs="8">
                 <Input
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      instance_name: e.target.value.replace(/\W+/g, '_').toLowerCase(),
+                      instance_name: e.target.value.replace(/[^a-zA-Z0-9\d-]+/gi, '').toLowerCase(),
                     })
                   }
                   type="text"
@@ -73,7 +76,7 @@ export default ({ instanceNames }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Create Instance Admin Credentials">
+          <ContentContainer header="Create Instance Admin Credentials (letters and underscores only)">
             <Row>
               <Col xs="4" className="pt-2">
                 Username

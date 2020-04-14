@@ -5,34 +5,19 @@ import { useHistory } from 'react-router';
 
 import useNewInstance from '../../../state/newInstance';
 
-export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, localInstanceLimit, cloudInstancesBeingModified }) => {
+export default () => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
-  const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
-      if (is_local && localInstanceLimit && !canAddLocalInstance) {
-        setFormState({
-          error: `You have reached the limit of ${localInstanceLimit} total local instance${localInstanceLimit !== 1 ? 's' : ''}`,
-        });
-      } else if (!is_local && cloudInstanceLimit && !canAddCloudInstance) {
-        setFormState({
-          error: `You have reached the limit of ${cloudInstanceLimit} total cloud instance${cloudInstanceLimit !== 1 ? 's' : ''}`,
-        });
-      } else if (!is_local && cloudInstancesBeingModified) {
-        setFormState({
-          error: 'Please wait until current cloud instance modifications are complete',
-        });
-      } else {
-        setNewInstance({
-          ...newInstance,
-          is_local,
-        });
-        setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
-      }
+      setNewInstance({
+        ...newInstance,
+        is_local,
+      });
+      setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
     }
   }, [formData]);
 
@@ -104,11 +89,6 @@ export default ({ canAddCloudInstance, cloudInstanceLimit, canAddLocalInstance, 
           </Card>
         </Col>
       </Row>
-      {formState.error && (
-        <Card className="mt-3 error">
-          <CardBody>{formState.error}</CardBody>
-        </Card>
-      )}
     </>
   );
 };

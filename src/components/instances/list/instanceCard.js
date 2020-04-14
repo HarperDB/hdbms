@@ -11,7 +11,7 @@ const InstanceCard = (props) => {
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <ReactCardFlip isFlipped={flipState}>
-        <CardFront setFlipState={setFlipState} {...props} />
+        <CardFront setFlipState={setFlipState} flipState={flipState} {...props} />
         <CardBack setFlipState={setFlipState} flipState={flipState} {...props} />
       </ReactCardFlip>
     </Col>

@@ -22,29 +22,13 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const {
-    auth,
-    products,
-    regions,
-    instanceNames,
-    instanceURLs,
-    cloudInstanceCount,
-    freeCloudInstanceCount,
-    localInstanceCount,
-    freeLocalInstanceCount,
-    cloudInstancesBeingModified,
-    hasCard,
-  } = useStoreState(appState, (s) => ({
+  const { auth, products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
     instanceURLs: s.instances.map((i) => i.url),
-    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
-    cloudInstanceCount: s.instances.filter((i) => !i.is_local).length,
-    freeCloudInstanceCount: s.instances.filter((i) => !i.is_local && i.compute.price === 'FREE' && i.storage.price === 'FREE').length,
-    localInstanceCount: s.instances.filter((i) => i.is_local).length,
-    freeLocalInstanceCount: s.instances.filter((i) => i.is_local && i.compute.price === 'FREE').length,
+    canAddFreeCloudInstance: config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
     hasCard: s.hasCard,
   }));
 
@@ -82,31 +66,20 @@ export default () => {
         {!products ? (
           <Loader />
         ) : purchaseStep === 'type' ? (
-          <InstanceTypeForm
-            cloudInstancesBeingModified={cloudInstancesBeingModified}
-            canAddCloudInstance={config.total_cloud_instance_limit && config.total_cloud_instance_limit > cloudInstanceCount}
-            cloudInstanceLimit={config.total_cloud_instance_limit}
-            canAddLocalInstance={config.total_local_instance_limit && config.total_local_instance_limit > localInstanceCount}
-            localInstanceLimit={config.total_local_instance_limit}
-          />
+          <InstanceTypeForm />
         ) : purchaseStep === 'meta_local' ? (
           <LocalMetadataForm instanceNames={instanceNames} instanceURLs={instanceURLs} />
         ) : purchaseStep === 'meta_cloud' ? (
           <CloudMetadataForm instanceNames={instanceNames} />
         ) : purchaseStep === 'details_local' ? (
-          <LocalInstanceForm
-            products={products.localCompute}
-            hasCard={hasCard}
-            canAddFreeLocalInstance={config.free_local_instance_limit && config.free_local_instance_limit > freeLocalInstanceCount}
-            freeLocalInstanceLimit={config.free_local_instance_limit}
-          />
+          <LocalInstanceForm products={products.localCompute} hasCard={hasCard} />
         ) : purchaseStep === 'details_cloud' ? (
           <CloudInstanceForm
             products={products.cloudCompute}
             storage={products.cloudStorage}
             regions={regions}
             hasCard={hasCard}
-            canAddFreeCloudInstance={config.free_cloud_instance_limit && config.free_cloud_instance_limit > freeCloudInstanceCount}
+            canAddFreeCloudInstance={canAddFreeCloudInstance}
             freeCloudInstanceLimit={config.free_cloud_instance_limit}
           />
         ) : purchaseStep === 'payment' ? (

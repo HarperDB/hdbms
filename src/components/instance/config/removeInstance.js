@@ -12,15 +12,15 @@ import removeInstance from '../../../api/lms/removeInstance';
 export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, cloudInstancesBeingModified } = useStoreState(appState, (s) => ({
+  const { auth, customer } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
-    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
   }));
-  const { compute_stack_id, instance_name, is_local } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, instance_name, is_local, is_being_modified } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     instance_name: s.instance_name,
     is_local: s.is_local,
+    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
   }));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -59,9 +59,9 @@ export default ({ setInstanceAction }) => {
     }
   }, [formState]);
 
-  return !is_local && cloudInstancesBeingModified ? (
+  return is_being_modified ? (
     <Card className="error">
-      <CardBody>another cloud instance is being modified. please wait.</CardBody>
+      <CardBody>this instance is being modified. please wait.</CardBody>
     </Card>
   ) : (
     <>

@@ -9,8 +9,19 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, instanceStatus, setInstanceStatus }) => {
   try {
+    if (instanceStatus.instance === 'APPLYING LICENSE') {
+      const restartResult = await userInfo({ auth: instanceAuth, url });
+      if (!restartResult.error) {
+        setInstanceStatus({
+          ...instanceStatus,
+          instance: 'OK',
+        });
+      }
+      return false;
+    }
+
     if (!instanceAuth) {
       return {
         instance: 'PLEASE LOG IN',

@@ -9,7 +9,7 @@ import filterInstances from '../../../methods/instances/filterInstances';
 
 const InstanceList = () => {
   const { instances, filterSearch, filterCloud, filterLocal } = useStoreState(appState, (s) => ({
-    instances: s.instances,
+    instances: s.instances.filter((i) => i.status !== 'DELETE_IN_PROGRESS'),
     filterSearch: s.filterSearch,
     filterCloud: s.filterCloud,
     filterLocal: s.filterLocal,

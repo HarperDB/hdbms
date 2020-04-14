@@ -15,8 +15,8 @@
       }
 
       .new-instance-plus {
-        transition: transform 500ms ease-in-out;
         transform: rotate(-90deg);
+        transition: transform 500ms ease-in-out;
       }
 
       &:hover {

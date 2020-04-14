@@ -6,6 +6,8 @@ import { useStoreState } from 'pullstate';
 import createClusterUser from '../../../methods/instance/createClusterUser';
 import instanceState from '../../../state/instanceState';
 
+import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+
 export default () => {
   const { auth, url, cluster_role, cluster_user } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
@@ -25,7 +27,7 @@ export default () => {
         setFormState({
           error: 'All fields are required',
         });
-      } else if (!username.match(/^[a-zA-Z_]+$/)) {
+      } else if (!isAlphaUnderscore(username)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });

@@ -15,19 +15,18 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, cloudInstancesBeingModified, hasCard } = useStoreState(appState, (s) => ({
+  const { auth, customer, hasCard } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
-    cloudInstancesBeingModified: s.instances.filter((i) => !i.is_local && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(i.status)).length,
     hasCard: s.hasCard,
   }));
-  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_local } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_being_modified } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     stripe_plan_id: s.stripe_plan_id,
     computeProducts: s.computeProducts,
     compute: s.compute,
     storage: s.storage,
-    is_local: s.is_local,
+    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
   }));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -68,9 +67,9 @@ export default ({ setInstanceAction }) => {
     }
   }, [formState]);
 
-  return !is_local && cloudInstancesBeingModified ? (
+  return is_being_modified ? (
     <Card className="error">
-      <CardBody>another cloud instance is being modified. please wait.</CardBody>
+      <CardBody>this instance is being modified. please wait.</CardBody>
     </Card>
   ) : (
     <>

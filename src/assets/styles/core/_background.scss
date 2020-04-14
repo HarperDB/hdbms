@@ -9,13 +9,13 @@
   width: 100vw;
 }
 
-#app-bg-color{
-  z-index: -2;
+#app-bg-color {
   background-image: $gradient-purple-magenta !important;
+  z-index: -2;
 }
 
 #app-bg-dots {
-  z-index: -1;
   background-image: radial-gradient($color-purple 1px, transparent 0);
   background-size: 3px 3px;
+  z-index: -1;
 }

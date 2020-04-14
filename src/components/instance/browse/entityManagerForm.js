@@ -7,6 +7,8 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
 
+import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
+
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
   const alert = useAlert();
@@ -30,7 +32,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       error = true;
     }
 
-    if (entityName && !entityName.match(/^[a-zA-Z0-9_]+$/)) {
+    if (entityName && !isAlphaNumericUnderscore(entityName)) {
       toggleNameError(true);
       error = true;
       alert.error('You may only use alphanumeric characters or underscores.');
