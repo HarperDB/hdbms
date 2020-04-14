@@ -38,6 +38,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     version: '',
   });
   const [lastUpdate, setLastUpdate] = useState(false);
+  const [processing, setProccessing] = useState(false);
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -91,6 +92,8 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       return false;
     }
 
+    setProccessing(true);
+
     const registrationResult = await handleInstanceRegistration({
       auth,
       instanceAuth,
@@ -100,6 +103,8 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       compute_stack_id,
       compute,
     });
+
+    setProccessing(false);
 
     if (
       ['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) &&
@@ -126,10 +131,16 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     });
   }, [instanceAuth, instanceStatus.instance]);
 
-  useAsyncEffect(() => processInstanceCard(), [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
+  useAsyncEffect(() => {
+    if (!processing) {
+      processInstanceCard();
+    }
+  }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => {
-    if (refreshInstanceStatus.includes(instanceStatus.instance)) setLastUpdate(Date.now());
+    if (refreshInstanceStatus.includes(instanceStatus.instance)) {
+      setLastUpdate(Date.now());
+    }
   }, config.instance_refresh_rate);
 
   return (
