@@ -18,7 +18,7 @@ const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INS
 const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, compute, storage }) => {
+const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const alert = useAlert();
@@ -132,7 +132,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, [instanceAuth, instanceStatus.instance]);
 
   useAsyncEffect(() => {
-    if (!processing) {
+    if (!processing && !flipState) {
       processInstanceCard();
     }
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
@@ -145,71 +145,73 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
   return (
     <Card className={`instance ${clickableStatus.includes(instanceStatus.instance) ? '' : 'unclickable'}`} onClick={handleCardClick}>
-      <CardBody>
-        <Row>
-          <Col xs="10" className="instance-name">
-            {instance_name}
-          </Col>
-          <Col xs="2" className="instance-icon">
-            {!modifyingStatus.includes(instanceStatus.instance) && (
-              <i
-                title="Remove Instance"
-                className="fa fa-trash rm-1 delete text-purple"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFlipState('delete');
-                }}
-              />
-            )}
-            {showSpinnerStatus.includes(instanceStatus.instance) ? (
-              <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
-            ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
-              <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
-            ) : instanceAuth ? (
-              <i
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setInstanceAuths({
-                    ...instanceAuths,
-                    [compute_stack_id]: false,
-                  });
-                }}
-                title="Remove Instance Authentication"
-                className="fa fa-lock text-purple"
-              />
-            ) : (
-              <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
-            )}
-          </Col>
-        </Row>
-        <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
-        <Row className="text-smaller text-nowrap text-darkgrey">
-          <Col xs="4">STATUS</Col>
-          <Col xs="8" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>
-            {instanceStatus.instance?.toUpperCase()}
-          </Col>
-          <Col xs="12">
-            <hr className="my-1" />
-          </Col>
-          <Col xs="4">VERSION</Col>
-          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.version}</Col>
-          <Col xs="12">
-            <hr className="my-1" />
-          </Col>
-          <Col xs="4">REGION</Col>
-          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
-          <Col xs="12">
-            <hr className="my-1" />
-          </Col>
-          <Col xs="4">LICENSE</Col>
-          <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`}</Col>
-          <Col xs="12">
-            <hr className="my-1" />
-          </Col>
-          <Col xs="4">CLUSTERING</Col>
-          <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.clustering.toUpperCase()}</Col>
-        </Row>
-      </CardBody>
+      {!flipState && (
+        <CardBody>
+          <Row>
+            <Col xs="10" className="instance-name">
+              {instance_name}
+            </Col>
+            <Col xs="2" className="instance-icon">
+              {!modifyingStatus.includes(instanceStatus.instance) && (
+                <i
+                  title="Remove Instance"
+                  className="fa fa-trash rm-1 delete text-purple"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFlipState('delete');
+                  }}
+                />
+              )}
+              {showSpinnerStatus.includes(instanceStatus.instance) ? (
+                <i title={instanceStatus.instance} className="fa fa-spinner fa-spin text-purple" />
+              ) : instanceStatus.instance === 'COULD NOT CONNECT' ? (
+                <i title={instanceStatus.instance} className="fa fa-exclamation-triangle text-danger" />
+              ) : instanceAuth ? (
+                <i
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setInstanceAuths({
+                      ...instanceAuths,
+                      [compute_stack_id]: false,
+                    });
+                  }}
+                  title="Remove Instance Authentication"
+                  className="fa fa-lock text-purple"
+                />
+              ) : (
+                <i title="Instance Requires Authentication" className="fa fa-unlock-alt text-danger" />
+              )}
+            </Col>
+          </Row>
+          <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
+          <Row className="text-smaller text-nowrap text-darkgrey">
+            <Col xs="4">STATUS</Col>
+            <Col xs="8" className={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}>
+              {instanceStatus.instance?.toUpperCase()}
+            </Col>
+            <Col xs="12">
+              <hr className="my-1" />
+            </Col>
+            <Col xs="4">VERSION</Col>
+            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.version}</Col>
+            <Col xs="12">
+              <hr className="my-1" />
+            </Col>
+            <Col xs="4">REGION</Col>
+            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : is_local ? 'USER INSTALLED' : instance_region.toUpperCase()}</Col>
+            <Col xs="12">
+              <hr className="my-1" />
+            </Col>
+            <Col xs="4">LICENSE</Col>
+            <Col xs="8">{!modifyingStatus.includes(instanceStatus.instance) && `${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`}</Col>
+            <Col xs="12">
+              <hr className="my-1" />
+            </Col>
+            <Col xs="4">CLUSTERING</Col>
+            <Col xs="8">{modifyingStatus.includes(instanceStatus.instance) ? '' : instanceStatus.clustering.toUpperCase()}</Col>
+          </Row>
+        </CardBody>
+      )}
     </Card>
   );
 };
