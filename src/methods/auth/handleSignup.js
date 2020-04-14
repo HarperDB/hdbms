@@ -1,6 +1,7 @@
 import isEmail from '../util/isEmail';
 import addCustomer from '../../api/lms/addCustomer';
 import checkSubdomain from '../../api/lms/checkSubdomain';
+import isAlphaNumericHyphen from '../util/isAlphaNumericHyphen';
 
 export default async ({ formData }) => {
   const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
@@ -15,7 +16,7 @@ export default async ({ formData }) => {
       error: 'Please provide a valid email',
     };
   }
-  if (!subdomain.match(/^[a-zA-Z0-9\d-]+$/)) {
+  if (!isAlphaNumericHyphen(subdomain)) {
     return {
       error: 'subdomain: alphanumeric and hyphens only',
     };

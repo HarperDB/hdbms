@@ -6,6 +6,7 @@ import { useStoreState } from 'pullstate';
 import addUser from '../../../api/instance/addUser';
 import instanceState from '../../../state/instanceState';
 import FormStatus from '../../shared/formStatus';
+import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
   const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
@@ -26,7 +27,7 @@ export default () => {
         setFormState({
           error: 'All fields must be filled out',
         });
-      } else if (!username.match(/^[a-zA-Z_]+$/)) {
+      } else if (!isAlphaUnderscore(username)) {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
