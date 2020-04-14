@@ -58,8 +58,8 @@ export default () => {
       reader.onerror = () => setFormState({ error: 'file reading has failed' });
       reader.onload = () => {
         setFormState({ processing: true });
-        const lines = reader.result.match(/\r?\n/g);
-        setFormData({ records: lines.length - 1, csv_file: reader.result });
+        const lines = reader.result.split(/\r\n|\n/).filter((l) => l.trim().length).length - 1;
+        setFormData({ records: lines, csv_file: reader.result });
         setFormState({ processed: true });
       };
       if (file.size > config.max_file_upload_size) {
