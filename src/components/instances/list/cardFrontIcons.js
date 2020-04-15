@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import useInstanceAuth from '../../../state/instanceAuths';
 
-const CardFrontIcons = ({ showRemove, showSpinner, showError, showLogout, setFlipState, compute_stack_id }) => {
+const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id }) => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   const logOut = useCallback((e) => {
@@ -20,11 +20,9 @@ const CardFrontIcons = ({ showRemove, showSpinner, showError, showLogout, setFli
 
   return (
     <>
-      {showRemove && <i title="Remove Instance" className="fa fa-trash rm-1 delete text-purple" onClick={flipToDelete} />}
-      {showSpinner ? (
+      {isReady && <i title="Remove Instance" className="fa fa-trash rm-1 delete text-purple" onClick={flipToDelete} />}
+      {!isReady ? (
         <i className="fa fa-spinner fa-spin text-purple" />
-      ) : showError ? (
-        <i className="fa fa-exclamation-triangle text-danger" />
       ) : showLogout ? (
         <i onClick={logOut} title="Remove Instance Authentication" className="fa fa-lock text-purple" />
       ) : (
