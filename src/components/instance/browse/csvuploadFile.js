@@ -25,31 +25,34 @@ export default () => {
   const [mounted, setMounted] = useState(false);
 
   // query the table to determine if all the records have been processed.
-  const validateData = useCallback(async (uploadJobId) => {
-    const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+  const validateData = useCallback(
+    async (uploadJobId) => {
+      const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
 
-    if (status === 'ERROR') {
-      if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
-        return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+      if (status === 'ERROR') {
+        if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
+          return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+        }
+        if (message.indexOf('Invalid column name') !== -1) {
+          return setFormState({ error: 'The CSV file contains an invalid column name.' });
+        }
+        return setFormState({ error: message });
       }
-      if (message.indexOf('Invalid column name') !== -1) {
-        return setFormState({ error: 'The CSV file contains an invalid column name.' });
+
+      if (status !== 'COMPLETE' && mounted) {
+        return setTimeout(() => validateData(uploadJobId), 2000);
       }
-      return setFormState({ error: message });
-    }
 
-    if (status !== 'COMPLETE' && mounted) {
-      return setTimeout(() => validateData(uploadJobId), 2000);
-    }
+      instanceState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
 
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-
-    return setTimeout(() => {
-      history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
-    }, 1000);
-  }, []);
+      return setTimeout(() => {
+        history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
+      }, 1000);
+    },
+    [mounted]
+  );
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -58,8 +61,8 @@ export default () => {
       reader.onerror = () => setFormState({ error: 'file reading has failed' });
       reader.onload = () => {
         setFormState({ processing: true });
-        const lines = reader.result.match(/\r?\n/g);
-        setFormData({ records: lines.length - 1, csv_file: reader.result });
+        const lines = reader.result.split(/\r\n|\n/).filter((l) => l.trim().length).length - 1;
+        setFormData({ records: lines, csv_file: reader.result });
         setFormState({ processed: true });
       };
       if (file.size > config.max_file_upload_size) {

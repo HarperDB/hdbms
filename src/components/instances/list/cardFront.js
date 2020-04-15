@@ -16,9 +16,8 @@ import userInfo from '../../../api/instance/userInfo';
 import CardFrontStatusRow from './cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
 
-const showSpinnerStatus = ['CREATING INSTANCE', 'UPDATING INSTANCE', 'DELETING INSTANCE', 'LOADING', 'APPLYING LICENSE'];
-const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE'];
-const refreshInstanceStatus = ['ERROR CREATING LICENSE', 'APPLYING LICENSE', 'UNABLE TO CONNECT'];
+const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
+const refreshInstanceStatus = ['APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
@@ -28,21 +27,14 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceStatus, setInstanceStatus] = useState({
-    instance:
-      status === 'CREATE_IN_PROGRESS'
-        ? 'CREATING INSTANCE'
-        : status === 'UPDATE_IN_PROGRESS'
-        ? 'UPDATING INSTANCE'
-        : ['DELETE_IN_PROGRESS', 'QUEUED_FOR_DELETE'].includes(status)
-        ? 'DELETING INSTANCE'
-        : 'LOADING',
+    instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE' : 'LOADING',
     instanceError: false,
     clustering: '',
     version: '',
   });
   const [lastUpdate, setLastUpdate] = useState(false);
-  const [processing, setProccessing] = useState(false);
-  const showInstanceInfoRows = !modifyingStatus.includes(instanceStatus.instance);
+  const [processing, setProcessing] = useState(false);
+  const isReady = useMemo(() => !modifyingStatus.includes(instanceStatus.instance), [instanceStatus.instance]);
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -63,8 +55,23 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     return history.push(`/instance/${compute_stack_id}/browse`);
   }, [instanceAuth, instanceStatus.instance]);
 
-  const processInstanceCard = useCallback(async () => {
-    setProccessing(true);
+  const processInstanceCard = async () => {
+    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
+      return false;
+    }
+
+    if (instanceStatus.instance === 'APPLYING LICENSE') {
+      const restartResult = await userInfo({ auth: instanceAuth, url });
+      if (!restartResult.error) {
+        setInstanceStatus({
+          ...instanceStatus,
+          instance: 'OK',
+        });
+      }
+      return false;
+    }
+
+    setProcessing(true);
 
     const registrationResult = await handleInstanceRegistration({
       auth,
@@ -74,14 +81,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       instance_id,
       compute_stack_id,
       compute,
-      modifyingStatus,
-      instanceStatus,
-      setInstanceStatus,
     });
 
-    setProccessing(false);
+    setProcessing(false);
 
-    if (['COULD NOT CONNECT', 'UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE'].includes(instanceStatus.instance)) {
+    if (['UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance)) {
       return false;
     }
 
@@ -101,18 +105,16 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       ...instanceStatus,
       ...registrationResult,
     });
-  }, [instanceAuth, instanceStatus.instance]);
+  };
 
   useAsyncEffect(() => {
-    if (!processing && !flipState && !modifyingStatus.includes(instanceStatus.instance)) {
+    if (!processing) {
       processInstanceCard();
     }
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => {
-    if (refreshInstanceStatus.includes(instanceStatus.instance)) {
-      setLastUpdate(Date.now());
-    }
+    if (refreshInstanceStatus.includes(instanceStatus.instance)) setLastUpdate(Date.now());
   }, config.instance_refresh_rate);
 
   return (
@@ -124,28 +126,21 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               {instance_name}
             </Col>
             <Col xs="2" className="instance-icon">
-              <CardFrontIcons
-                showRemove={!modifyingStatus.includes(instanceStatus.instance)}
-                showSpinner={showSpinnerStatus.includes(instanceStatus.instance)}
-                showError={instanceStatus.instance === 'COULD NOT CONNECT'}
-                showLogout={instanceAuth}
-                setFlipState={setFlipState}
-                compute_stack_id={compute_stack_id}
-              />
+              <CardFrontIcons isReady={isReady} showLogout={instanceAuth} setFlipState={setFlipState} compute_stack_id={compute_stack_id} />
             </Col>
           </Row>
           <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
           <CardFrontStatusRow
             label="STATUS"
-            showInstanceInfoRows
+            isReady
             textClass={`text-bold text-${instanceStatus.instanceError ? 'danger' : 'success'}`}
             value={instanceStatus.instance?.toUpperCase()}
             bottomDivider
           />
-          <CardFrontStatusRow label="VERSION" showInstanceInfoRows={showInstanceInfoRows} value={instanceStatus.version} bottomDivider />
-          <CardFrontStatusRow label="REGION" showInstanceInfoRows={showInstanceInfoRows} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-          <CardFrontStatusRow label="LICENSE" showInstanceInfoRows={showInstanceInfoRows} value={`${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
-          <CardFrontStatusRow label="CLUSTERING" showInstanceInfoRows={showInstanceInfoRows} value={instanceStatus.clustering.toUpperCase()} />
+          <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceStatus.version} bottomDivider />
+          <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
+          <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+          <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceStatus.clustering.toUpperCase()} />
         </CardBody>
       )}
     </Card>

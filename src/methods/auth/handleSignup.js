@@ -21,6 +21,11 @@ export default async ({ formData }) => {
       error: 'subdomain: alphanumeric and hyphens only',
     };
   }
+  if (subdomain.length > 16) {
+    return {
+      error: 'subdomain: max 16 characters',
+    };
+  }
 
   const subdomainResponse = await checkSubdomain({ payload: { subdomain } });
 

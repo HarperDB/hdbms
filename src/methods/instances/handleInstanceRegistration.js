@@ -1,5 +1,4 @@
 import registrationInfo from '../../api/instance/registrationInfo';
-import userInfo from '../../api/instance/userInfo';
 import getFingerprint from '../../api/instance/getFingerprint';
 import restartInstance from '../../api/instance/restartInstance';
 import setLicense from '../../api/instance/setLicense';
@@ -9,26 +8,8 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, instanceStatus, setInstanceStatus }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
   try {
-    if (instanceStatus.instance === 'APPLYING LICENSE') {
-      const restartResult = await userInfo({ auth: instanceAuth, url });
-      if (!restartResult.error) {
-        setInstanceStatus({
-          ...instanceStatus,
-          instance: 'OK',
-        });
-      }
-      return false;
-    }
-
-    if (!instanceAuth) {
-      return {
-        instance: 'PLEASE LOG IN',
-        instanceError: true,
-      };
-    }
-
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
     if (registration.error && registration.message === 'Login failed' && !is_local) {
@@ -39,7 +20,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       });
 
       if (result) {
-        registration = await userInfo({ auth: instanceAuth, url });
+        registration = await registrationInfo({ auth: instanceAuth, url });
       } else {
         return {
           instance: 'LOGIN FAILED',
@@ -55,7 +36,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       };
     }
 
-    if (registration.error && registration.message === 'Error of type 504') {
+    if (registration.error && registration.type === 'catch') {
       return {
         instance: 'CONFIGURING NETWORK',
         instanceError: false,
@@ -92,15 +73,6 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       },
     });
 
-    if (license.result === false) {
-      return {
-        instance: 'ERROR CREATING LICENSE',
-        instanceError: true,
-        clustering,
-        version: registration.version,
-      };
-    }
-
     const apply = await setLicense({
       auth: instanceAuth,
       key: license.key,
@@ -130,7 +102,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     };
   } catch (e) {
     return {
-      instance: 'COULD NOT CONNECT',
+      instance: 'UNABLE TO CONNECT',
       instanceError: true,
     };
   }
