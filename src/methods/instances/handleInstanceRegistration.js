@@ -36,13 +36,6 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       };
     }
 
-    if (registration.error && registration.type === 'catch') {
-      return {
-        instance: 'CONFIGURING NETWORK',
-        instanceError: false,
-      };
-    }
-
     if (registration.error) {
       return {
         instance: 'UNABLE TO CONNECT',

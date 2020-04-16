@@ -60,6 +60,7 @@
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.2.0",
+    "logrocket": "^1.0.7",
     "merge": "^1.2.1",
     "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
