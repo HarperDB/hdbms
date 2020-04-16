@@ -38,25 +38,28 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const isReady = useMemo(() => !modifyingStatus.includes(instanceStatus.instance), [instanceStatus.instance]);
 
   useAsyncEffect(async () => {
-    if (clicked && !instanceAuth) {
-      setFlipState('login');
-    } else if (clicked && instanceStatus.instance === 'OK') {
-      const result = await userInfo({ auth: instanceAuth, url });
-      if (result.error) {
-        setInstanceStatus({
-          ...instanceStatus,
-          instance: 'UNABLE TO CONNECT',
-          instanceError: true,
-        });
-        alert.error('Unable to connect to instance.');
-      } else {
-        history.push(`/instance/${compute_stack_id}/browse`);
+    if (clicked) {
+      handleCardClick(false);
+      if (!instanceAuth) {
+        setFlipState('login');
+      } else if (instanceStatus.instance === 'OK') {
+        const result = await userInfo({ auth: instanceAuth, url });
+        if (result.error) {
+          setInstanceStatus({
+            ...instanceStatus,
+            instance: 'UNABLE TO CONNECT',
+            instanceError: true,
+          });
+          alert.error('Unable to connect to instance.');
+        } else {
+          history.push(`/instance/${compute_stack_id}/browse`);
+        }
       }
     }
   }, [clicked]);
 
   useAsyncEffect(async () => {
-    if (processing || ['CREATING INSTANCE', 'UPDATING INSTANCE'].includes(instanceStatus.instance)) {
+    if (processing || ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
       return false;
     }
 
@@ -66,6 +69,17 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         instance: 'PLEASE LOG IN',
         instanceError: true,
       });
+    }
+
+    if (['CREATING INSTANCE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance) && status === 'CREATE_COMPLETE') {
+      const connectionResult = await userInfo({ auth: instanceAuth, url });
+      if (connectionResult.error) {
+        setInstanceStatus({
+          ...instanceStatus,
+          instance: 'CONFIGURING NETWORK',
+        });
+        return false;
+      }
     }
 
     if (instanceStatus.instance === 'APPLYING LICENSE') {
