@@ -27,7 +27,14 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceStatus, setInstanceStatus] = useState({
-    instance: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE' : 'LOADING',
+    instance:
+      status === 'CREATE_IN_PROGRESS'
+        ? 'CREATING INSTANCE'
+        : status === 'UPDATE_IN_PROGRESS'
+        ? 'UPDATING INSTANCE'
+        : status === 'CONFIGURING_NETWORK'
+        ? 'CONFIGURING NETWORK'
+        : 'LOADING',
     instanceError: false,
     clustering: '',
     version: '',
@@ -59,6 +66,8 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, [clicked]);
 
   useAsyncEffect(async () => {
+    console.log(instance_name, status, instanceStatus.instance);
+
     if (processing || ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
       return false;
     }
@@ -69,17 +78,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         instance: 'PLEASE LOG IN',
         instanceError: true,
       });
-    }
-
-    if (['CREATING INSTANCE', 'CONFIGURING NETWORK'].includes(instanceStatus.instance) && status === 'CREATE_COMPLETE') {
-      const connectionResult = await userInfo({ auth: instanceAuth, url });
-      if (connectionResult.error) {
-        setInstanceStatus({
-          ...instanceStatus,
-          instance: 'CONFIGURING NETWORK',
-        });
-        return false;
-      }
     }
 
     if (instanceStatus.instance === 'APPLYING LICENSE') {
@@ -104,6 +102,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       compute_stack_id,
       compute,
       instance_name,
+      status: instanceStatus.instance,
     });
 
     setProcessing(false);

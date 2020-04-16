@@ -5,9 +5,9 @@ export default ({ instances, network }) => {
       const connection = network?.outbound_connections.find((n) => n.name === i.compute_stack_id);
       const subscriptions = connection?.subscriptions || [];
       const clusterPort = 12345;
-      const { instance_name, ip_address, is_local, host, compute_stack_id } = i;
+      const { instance_name, is_local, host, compute_stack_id } = i;
       const instance_status = is_local ? 'OK' : i.status;
-      const instance_host = host || ip_address;
+      const instance_host = host;
       return {
         instance_name,
         instance_url: i.url,

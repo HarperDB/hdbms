@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
@@ -34,6 +34,10 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
         instance: 'LOGIN FAILED',
         instanceError: true,
       };
+    }
+
+    if (registration.error && status === 'CONFIGURING NETWORK') {
+      return false;
     }
 
     if (registration.error) {
