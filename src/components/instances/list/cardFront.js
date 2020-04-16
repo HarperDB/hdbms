@@ -38,9 +38,9 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const isReady = useMemo(() => !modifyingStatus.includes(instanceStatus.instance), [instanceStatus.instance]);
 
   useAsyncEffect(async () => {
-    if (!instanceAuth) {
+    if (clicked && !instanceAuth) {
       setFlipState('login');
-    } else if (instanceStatus.instance === 'OK') {
+    } else if (clicked && instanceStatus.instance === 'OK') {
       const result = await userInfo({ auth: instanceAuth, url });
       if (result.error) {
         setInstanceStatus({
