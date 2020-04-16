@@ -41,7 +41,6 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => setFlipState(false), 1000);
         }
       }
     }

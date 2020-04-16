@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
@@ -34,30 +34,38 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   });
   const [lastUpdate, setLastUpdate] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [clicked, handleCardClick] = useState(false);
   const isReady = useMemo(() => !modifyingStatus.includes(instanceStatus.instance), [instanceStatus.instance]);
 
-  const handleCardClick = useCallback(async () => {
+  useAsyncEffect(async () => {
     if (!instanceAuth) {
-      return setFlipState('login');
+      setFlipState('login');
+    } else if (instanceStatus.instance === 'OK') {
+      const result = await userInfo({ auth: instanceAuth, url });
+      if (result.error) {
+        setInstanceStatus({
+          ...instanceStatus,
+          instance: 'UNABLE TO CONNECT',
+          instanceError: true,
+        });
+        alert.error('Unable to connect to instance.');
+      } else {
+        history.push(`/instance/${compute_stack_id}/browse`);
+      }
     }
-    if (instanceStatus.instance !== 'OK') {
+  }, [clicked]);
+
+  useAsyncEffect(async () => {
+    if (processing || ['CREATING INSTANCE', 'UPDATING INSTANCE'].includes(instanceStatus.instance)) {
       return false;
     }
-    const result = await userInfo({ auth: instanceAuth, url });
-    if (result.error) {
-      setInstanceStatus({
+
+    if (!instanceAuth) {
+      return setInstanceStatus({
         ...instanceStatus,
-        instance: 'UNABLE TO CONNECT',
+        instance: 'PLEASE LOG IN',
         instanceError: true,
       });
-      return alert.error('Unable to connect to instance.');
-    }
-    return history.push(`/instance/${compute_stack_id}/browse`);
-  }, [instanceAuth, instanceStatus.instance]);
-
-  const processInstanceCard = async () => {
-    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS'].includes(status)) {
-      return false;
     }
 
     if (instanceStatus.instance === 'APPLYING LICENSE') {
@@ -81,6 +89,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       instance_id,
       compute_stack_id,
       compute,
+      instance_name,
     });
 
     setProcessing(false);
@@ -101,16 +110,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       }
     }
 
-    return setInstanceStatus({
-      ...instanceStatus,
-      ...registrationResult,
-    });
-  };
-
-  useAsyncEffect(() => {
-    if (!processing) {
-      processInstanceCard();
-    }
+    return setInstanceStatus({ ...instanceStatus, ...registrationResult });
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
   useInterval(() => {
@@ -129,7 +129,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               <CardFrontIcons isReady={isReady} showLogout={instanceAuth} setFlipState={setFlipState} compute_stack_id={compute_stack_id} />
             </Col>
           </Row>
-          <div className="instance-url">{clickableStatus.includes(instanceStatus.instance) ? url : ''}</div>
+          <div className="instance-url">{url}</div>
           <CardFrontStatusRow
             label="STATUS"
             isReady
@@ -137,9 +137,9 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
             value={instanceStatus.instance?.toUpperCase()}
             bottomDivider
           />
-          <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceStatus.version} bottomDivider />
           <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
           <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+          <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceStatus.version} bottomDivider />
           <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceStatus.clustering.toUpperCase()} />
         </CardBody>
       )}
