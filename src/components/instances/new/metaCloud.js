@@ -26,6 +26,10 @@ export default ({ instanceNames }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
+      } else if (!instance_name) {
+        setFormState({
+          error: 'instance name is required',
+        });
       } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
           error: 'instance names must have only letters, numbers, and hyphens',
@@ -34,10 +38,14 @@ export default ({ instanceNames }) => {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
+      } else if (instance_name.length > 16) {
+        setFormState({
+          error: 'instance names are limited to 16 characters',
+        });
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({
           ...newInstance,
-          instance_name,
+          instance_name: instance_name.replace(/-+$/, ''),
           user,
           pass,
           is_ssl: true,
@@ -55,7 +63,7 @@ export default ({ instanceNames }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name (letters, numbers, hyphens only, no leading zeroes)">
+          <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
             <Row className="mb-4">
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;cloud-1&quot;
@@ -67,7 +75,9 @@ export default ({ instanceNames }) => {
                       ...formData,
                       instance_name: e.target.value
                         .replace(/^0+/, '')
+                        .replace(/^-+/, '')
                         .replace(/[^a-zA-Z0-9\d-]+/gi, '')
+                        .substring(0, 15)
                         .toLowerCase(),
                     })
                   }
@@ -79,7 +89,7 @@ export default ({ instanceNames }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Create Instance Admin Credentials (letters and underscores only)">
+          <ContentContainer header="Create Instance Credentials" subheader="letters and underscores only. 250 char max.">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
@@ -89,7 +99,7 @@ export default ({ instanceNames }) => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      user: e.target.value,
+                      user: e.target.value.substring(0, 249),
                     })
                   }
                   type="text"
@@ -108,7 +118,7 @@ export default ({ instanceNames }) => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      pass: e.target.value,
+                      pass: e.target.value.substring(0, 249),
                     })
                   }
                   type="password"

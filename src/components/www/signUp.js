@@ -113,7 +113,7 @@ export default () => {
             />
           </ContentContainer>
 
-          <ContentContainer header="Subdomain" className="mb-3">
+          <ContentContainer header="Subdomain (16 characters max)" className="mb-3">
             <Row noGutters>
               <Col xs="8">
                 <Input
@@ -123,7 +123,7 @@ export default () => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      subdomain: e.target.value,
+                      subdomain: e.target.value.substring(0, 15),
                     })
                   }
                   disabled={formState.submitted}

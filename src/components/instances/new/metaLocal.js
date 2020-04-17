@@ -32,6 +32,10 @@ export default ({ instanceNames, instanceURLs }) => {
         setFormState({
           error: `An instance named "${instance_name}" already exists`,
         });
+      } else if (!instance_name) {
+        setFormState({
+          error: 'instance name is required',
+        });
       } else if (instanceURLs.includes(url)) {
         setFormState({
           error: `An instance at "${url}" already exists`,
@@ -39,6 +43,10 @@ export default ({ instanceNames, instanceURLs }) => {
       } else if (!isAlphaNumericHyphen(instance_name)) {
         setFormState({
           error: 'instance names must have only letters, numbers, and hyphen',
+        });
+      } else if (instance_name.length > 16) {
+        setFormState({
+          error: 'instance names are limited to 16 characters',
         });
       } else if (user && !isAlphaUnderscore(user)) {
         setFormState({
@@ -53,7 +61,7 @@ export default ({ instanceNames, instanceURLs }) => {
               ...newInstance,
               registered: response.registered,
               ram_allocation: response.ram_allocation,
-              instance_name,
+              instance_name: instance_name.replace(/-+$/, ''),
               user,
               pass,
               host,
@@ -97,7 +105,7 @@ export default ({ instanceNames, instanceURLs }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name (letters, numbers, hyphens only, no leading zeroes.)">
+          <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;edge-1&quot;
@@ -109,7 +117,9 @@ export default ({ instanceNames, instanceURLs }) => {
                       ...formData,
                       instance_name: e.target.value
                         .replace(/^0+/, '')
+                        .replace(/^-+/, '')
                         .replace(/[^a-zA-Z0-9\d-]+/gi, '')
+                        .substring(0, 15)
                         .toLowerCase(),
                     })
                   }
@@ -121,7 +131,7 @@ export default ({ instanceNames, instanceURLs }) => {
             </Row>
           </ContentContainer>
 
-          <ContentContainer header="Instance Credentials (From Installation)">
+          <ContentContainer header="Instance Credentials" subheader="From Installation.  250 char max.">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
@@ -131,7 +141,7 @@ export default ({ instanceNames, instanceURLs }) => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      user: e.target.value,
+                      user: e.target.value.substring(0, 249),
                     })
                   }
                   type="text"
@@ -150,7 +160,7 @@ export default ({ instanceNames, instanceURLs }) => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      pass: e.target.value,
+                      pass: e.target.value.substring(0, 249),
                     })
                   }
                   type="password"
