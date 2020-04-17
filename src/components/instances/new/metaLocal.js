@@ -97,7 +97,7 @@ export default ({ instanceNames, instanceURLs }) => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name (letters, numbers, and hyphens only)">
+          <ContentContainer header="Instance Name (letters, numbers, hyphens only, no leading zeroes.)">
             <Row>
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;edge-1&quot;
@@ -107,7 +107,10 @@ export default ({ instanceNames, instanceURLs }) => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      instance_name: e.target.value.replace(/[^a-zA-Z0-9\d-]+/gi, '').toLowerCase(),
+                      instance_name: e.target.value
+                        .replace(/^0+/, '')
+                        .replace(/[^a-zA-Z0-9\d-]+/gi, '')
+                        .toLowerCase(),
                     })
                   }
                   type="text"

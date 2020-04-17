@@ -24,7 +24,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
     if (submitted) {
       const { delete_instance_name } = formData;
 
-      if (instance_name !== delete_instance_name) {
+      if (instance_name.toString() !== delete_instance_name?.toString()) {
         setFormState({
           error: 'instance name is not correct',
         });
@@ -110,7 +110,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
                 }
                 title="Confirm Instance Details"
                 block
-                disabled={formState.submitted || instance_name !== formData.delete_instance_name}
+                disabled={formState.submitted || instance_name?.toString() !== formData.delete_instance_name?.toString()}
                 color="danger"
               >
                 {formState.submitted ? <i className="fa fa-spinner fa-spin" /> : <span>Do It</span>}
