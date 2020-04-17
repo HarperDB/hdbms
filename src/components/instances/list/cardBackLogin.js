@@ -4,8 +4,10 @@ import useAsyncEffect from 'use-async-effect';
 
 import useInstanceAuth from '../../../state/instanceAuths';
 import userInfo from '../../../api/instance/userInfo';
+import handleCloudInstanceUsernameChange from '../../../methods/instances/handleCloudInstanceUsernameChange';
+import registrationInfo from '../../../api/instance/registrationInfo';
 
-const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState }) => {
+const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -31,10 +33,27 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState 
             error: "Can't reach non-SSL instance. Enable SSL?",
             url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
           });
-        } else if (result.error) {
-          setFormState({
-            error: 'Login failed.',
+        } else if (result.error && result.message === 'Login failed' && !is_local) {
+          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
+            instance_id,
+            instanceAuth: { user, pass },
+            url,
           });
+
+          if (handleCloudInstanceUsernameChangeResult) {
+            setInstanceAuths({
+              ...instanceAuths,
+              [compute_stack_id]: {
+                user: formData.user,
+                pass: formData.pass,
+              },
+            });
+            setFlipState(false);
+          } else {
+            setFormState({
+              error: 'Login failed.',
+            });
+          }
         } else {
           setInstanceAuths({
             ...instanceAuths,
