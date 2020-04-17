@@ -17,7 +17,7 @@ export default async ({ auth, url, signal, currentLogCount }) => {
 
   if (logs || !currentLogCount) {
     return instanceState.update((s) => {
-      s.logs = logs || [];
+      s.logs = logs.filter((l) => l.message) || [];
       s.logsError = false;
     });
   }

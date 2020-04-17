@@ -31,7 +31,6 @@ export default () => {
         setFormState({
           error: 'usernames must have only letters and underscores',
         });
-        setTimeout(() => setFormState({}), 2000);
       } else {
         const response = await createClusterUser({
           username,

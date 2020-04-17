@@ -2,6 +2,8 @@ export default [
   '{"ip":"::1", "error":"undefined"',
   'Connected to cluster server.',
   'Error in server socket: SocketProtocolError: Socket hung up',
+  'uncaughtException: write EPIPE',
+  'Error in socket cluster server',
   'Cannot request cluster status.',
   'Got a duplicate child started event for pid',
   'ERROR on HDB Client socket: SocketProtocolError: Client connection establishment timed out',
