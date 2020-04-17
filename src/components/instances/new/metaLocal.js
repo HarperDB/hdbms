@@ -70,7 +70,11 @@ export default ({ instanceNames, instanceURLs }) => {
             });
           }
 
-          if (response.error && response.message === 'Login failed') {
+          if (response.error && response.message === 'You are not authorized to perform the operation specified') {
+            setFormState({
+              error: 'Please log in as a super user',
+            });
+          } else if (response.error && response.message === 'Login failed') {
             setFormState({
               error: 'The provided credentials cannot log into that instance.',
             });
