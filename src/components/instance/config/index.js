@@ -39,7 +39,7 @@ export default () => {
             <ContentContainer header="Remove Instance" className="mb-3">
               <RemoveInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
             </ContentContainer>
-            <ContentContainer header="Restart Instance" className="mb-2">
+            <ContentContainer header="Restart Instance">
               <RestartInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
             </ContentContainer>
           </CardBody>
