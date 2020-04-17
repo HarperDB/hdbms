@@ -17,7 +17,6 @@ import CardFrontStatusRow from './cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
-const refreshInstanceStatus = ['APPLYING LICENSE', 'CONFIGURING NETWORK', 'UNABLE TO CONNECT'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {

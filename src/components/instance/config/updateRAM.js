@@ -11,7 +11,6 @@ import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 
 import ChangeSummary from './changeSummary';
-import ChangeDenied from './changeDenied';
 import updateInstance from '../../../api/lms/updateInstance';
 import commaNumbers from '../../../methods/util/commaNumbers';
 
