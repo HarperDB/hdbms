@@ -38,9 +38,17 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
       };
     }
 
-    if (registration.error && status === 'CONFIGURING NETWORK') {
+    if (registration.error && ['UPDATING INSTANCE', 'CONFIGURING NETWORK'].includes(status)) {
       return {
-        status: 'CONFIGURING NETWORK',
+        status,
+        error: false,
+        retry: true,
+      };
+    }
+
+    if (registration.error && status === 'UPDATING INSTANCE') {
+      return {
+        status: 'FINALIZING UPDATE',
         error: false,
         retry: true,
       };

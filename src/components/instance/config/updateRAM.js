@@ -8,14 +8,17 @@ import { useAlert } from 'react-alert';
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
+import config from '../../../../config';
+
 import ChangeSummary from './changeSummary';
+import ChangeDenied from './changeDenied';
 import updateInstance from '../../../api/lms/updateInstance';
 import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, hasCard } = useStoreState(appState, (s) => ({
+  const { auth, customer, hasCard, canAddFreeCloudInstance } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
     hasCard: s.hasCard,
@@ -27,6 +30,7 @@ export default ({ setInstanceAction }) => {
     compute: s.compute,
     storage: s.storage,
     is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
+    canAddFreeCloudInstance: s.instances && config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
   }));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -43,26 +47,35 @@ export default ({ setInstanceAction }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      setInstanceAction('Updating');
-
-      const response = await updateInstance({
-        auth,
-        payload: {
-          compute_stack_id,
-          customer_id: customer.customer_id,
+      if (!newTotal && !canAddFreeCloudInstance) {
+        alert.error(`You are limited to ${config.free_cloud_instance_limit} free cloud instance${config.free_cloud_instance_limit !== 1 ? 's' : ''}`);
+        setFormData({
           ...formData,
-        },
-      });
-
-      if (response.result === false) {
-        alert.error('There was an error updating your instance. Please try again later.');
-        setInstanceAction(false);
-      } else {
-        alert.success('Instance update initialized successfully');
-        appState.update((s) => {
-          s.lastUpdate = Date.now();
+          stripe_plan_id,
         });
-        setTimeout(() => history.push('/instances'), 3000);
+        setFormState({});
+      } else {
+        setInstanceAction('Updating');
+
+        const response = await updateInstance({
+          auth,
+          payload: {
+            compute_stack_id,
+            customer_id: customer.customer_id,
+            ...formData,
+          },
+        });
+
+        if (response.result === false) {
+          alert.error('There was an error updating your instance. Please try again later.');
+          setInstanceAction(false);
+        } else {
+          alert.success('Instance update initialized successfully');
+          appState.update((s) => {
+            s.lastUpdate = Date.now();
+          });
+          setTimeout(() => history.push('/instances'), 3000);
+        }
       }
     }
   }, [formState]);
@@ -98,9 +111,13 @@ export default ({ setInstanceAction }) => {
         }}
       />
 
-      {hasChanged && <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />}
-
-      {hasChanged && (storage.price || newCompute.price) && !hasCard ? (
+      {hasChanged && !newTotal && !canAddFreeCloudInstance ? (
+        <Card className="error mt-2">
+          <CardBody>
+            You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
+          </CardBody>
+        </Card>
+      ) : hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
           onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
@@ -111,39 +128,42 @@ export default ({ setInstanceAction }) => {
           Add Credit Card To Account
         </Button>
       ) : hasChanged ? (
-        <Row>
-          <Col>
-            <Button
-              onClick={() =>
-                setFormData({
-                  ...formData,
-                  stripe_plan_id,
-                })
-              }
-              title="Cancel"
-              block
-              disabled={formState.submitted}
-              color="grey"
-            >
-              Cancel
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              onClick={() =>
-                setFormState({
-                  submitted: true,
-                })
-              }
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              color="success"
-            >
-              Update RAM
-            </Button>
-          </Col>
-        </Row>
+        <>
+          <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />
+          <Row>
+            <Col>
+              <Button
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    stripe_plan_id,
+                  })
+                }
+                title="Cancel"
+                block
+                disabled={formState.submitted}
+                color="grey"
+              >
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                onClick={() =>
+                  setFormState({
+                    submitted: true,
+                  })
+                }
+                title="Confirm Instance Details"
+                block
+                disabled={!hasChanged || formState.submitted}
+                color="success"
+              >
+                Update RAM
+              </Button>
+            </Col>
+          </Row>
+        </>
       ) : null}
     </>
   );
