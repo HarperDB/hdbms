@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute }) => {
+export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
@@ -23,23 +23,42 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
         registration = await registrationInfo({ auth: instanceAuth, url });
       } else {
         return {
-          instance: 'LOGIN FAILED',
-          instanceError: true,
+          status: 'LOGIN FAILED',
+          error: true,
+          retry: false,
         };
       }
     }
 
     if (registration.error && registration.message === 'Login failed') {
       return {
-        instance: 'LOGIN FAILED',
-        instanceError: true,
+        status: 'LOGIN FAILED',
+        error: true,
+        retry: false,
+      };
+    }
+
+    if (registration.error && ['UPDATING INSTANCE', 'CONFIGURING NETWORK'].includes(status)) {
+      return {
+        status,
+        error: false,
+        retry: true,
+      };
+    }
+
+    if (registration.error && status === 'UPDATING INSTANCE') {
+      return {
+        status: 'FINALIZING UPDATE',
+        error: false,
+        retry: true,
       };
     }
 
     if (registration.error) {
       return {
-        instance: 'UNABLE TO CONNECT',
-        instanceError: true,
+        status: 'UNABLE TO CONNECT',
+        error: true,
+        retry: true,
       };
     }
 
@@ -49,10 +68,11 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
 
     if (registration_matches_stripe_plan) {
       return {
-        instance: 'OK',
-        instanceError: false,
+        status: 'OK',
+        error: false,
         clustering,
         version: registration.version,
+        retry: false,
       };
     }
 
@@ -75,10 +95,11 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
 
     if (apply.error) {
       return {
-        instance: 'APPLYING LICENSE',
-        instanceError: false,
+        status: 'APPLYING LICENSE',
+        error: false,
         clustering,
         version: registration.version,
+        retry: true,
       };
     }
 
@@ -88,15 +109,17 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     });
 
     return {
-      instance: 'APPLYING LICENSE',
-      instanceError: false,
+      status: 'APPLYING LICENSE',
+      error: false,
       clustering,
       version: registration.version,
+      retry: true,
     };
   } catch (e) {
     return {
-      instance: 'UNABLE TO CONNECT',
-      instanceError: true,
+      status: 'UNABLE TO CONNECT',
+      error: true,
+      retry: true,
     };
   }
 };

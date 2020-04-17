@@ -1,13 +1,13 @@
-export default ({ instances, network }) => {
+export default ({ instances, network, instance_region }) => {
   const registered = instances
     .filter((i) => i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {
       const connection = network?.outbound_connections.find((n) => n.name === i.compute_stack_id);
       const subscriptions = connection?.subscriptions || [];
       const clusterPort = 12345;
-      const { instance_name, ip_address, is_local, host, compute_stack_id } = i;
+      const { instance_name, is_local, compute_stack_id } = i;
       const instance_status = is_local ? 'OK' : i.status;
-      const instance_host = host || ip_address;
+      const instance_host = instance_region && instance_region === i.instance_region ? i.private_ip : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
       return {
         instance_name,
         instance_url: i.url,

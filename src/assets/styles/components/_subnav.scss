@@ -1,6 +1,7 @@
 .app-subnav {
   background: $grey-overlay !important;
-  box-shadow: inset 0 10px 5px -8px $color-black, inset 0 -10px 5px -8px $color-black;
+  border-bottom: 1px inset $black-overlay;
+  border-top: 1px inset $black-overlay;
   height: 50px;
   min-width: $min-width;
   padding: 5px 2rem;

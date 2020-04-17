@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
@@ -6,6 +6,7 @@ import { useAlert } from 'react-alert';
 
 import removeInstance from '../../../api/lms/removeInstance';
 import appState from '../../../state/appState';
+import useInstanceAuth from '../../../state/instanceAuths';
 
 const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();
@@ -13,6 +14,8 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
     auth: s.auth,
     customer: s.customer,
   }));
+  const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
+  const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -38,9 +41,20 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           alert.error('There was an error removing your instance. Please try again later.');
         } else {
           alert.success('Instance deletion initiated');
-          appState.update((s) => {
-            s.lastUpdate = Date.now();
-          });
+          if (instanceAuth) {
+            setInstanceAuths({
+              ...instanceAuths,
+              [compute_stack_id]: false,
+            });
+          }
+
+          setTimeout(
+            () =>
+              appState.update((s) => {
+                s.lastUpdate = Date.now();
+              }),
+            100
+          );
         }
       }
     }

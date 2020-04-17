@@ -13,7 +13,7 @@
     "prettier"
   ],
   "rules": {
-    "max-lines": ["warn", {"max": 150, "skipComments": false}],
+    "max-lines": ["warn", {"max": 165, "skipComments": false}],
     "strict": 1,
     "camelcase": 0,
     "jsx-a11y/anchor-is-valid": 0,

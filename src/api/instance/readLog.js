@@ -2,7 +2,7 @@ import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
 export default async ({ auth, url, signal, currentLogCount }) => {
-  const { file, dailyRotateFile } = await queryInstance(
+  const { error, file, dailyRotateFile } = await queryInstance(
     {
       operation: 'read_log',
       limit: 1000,
@@ -13,15 +13,23 @@ export default async ({ auth, url, signal, currentLogCount }) => {
     signal
   );
 
-  const logs = file || dailyRotateFile || false;
-
-  if (logs || !currentLogCount) {
+  if (error && currentLogCount) {
     return instanceState.update((s) => {
-      s.logs = logs || [];
-      s.logsError = false;
+      s.logsError = true;
     });
   }
+
+  if (error) {
+    return instanceState.update((s) => {
+      s.logs = [];
+      s.logsError = true;
+    });
+  }
+
+  const logs = file || dailyRotateFile;
+
   return instanceState.update((s) => {
-    s.logsError = true;
+    s.logs = (Array.isArray(logs) && logs.filter((l) => l.message)) || [];
+    s.logsError = false;
   });
 };

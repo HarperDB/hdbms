@@ -1,7 +1,9 @@
 export default [
-  '{"ip":"::1", "error":"undefined"',
+  '{"ip":"::',
   'Connected to cluster server.',
   'Error in server socket: SocketProtocolError: Socket hung up',
+  'uncaughtException: write EPIPE',
+  'Error in socket cluster server',
   'Cannot request cluster status.',
   'Got a duplicate child started event for pid',
   'ERROR on HDB Client socket: SocketProtocolError: Client connection establishment timed out',
@@ -12,4 +14,8 @@ export default [
   'Disconnected from cluster server with code: 1006 - CLOSE_ABNORMAL',
   'Disconnected from cluster server with code: 4000 - undefined',
   'Disconnected from cluster server with code: 4001 - undefined',
+  'already exists in',
+  'Issue in room publish in rules WORKER_RULE_FAILURE',
+  'Error calling operation: createTable',
+  "attribute '",
 ];

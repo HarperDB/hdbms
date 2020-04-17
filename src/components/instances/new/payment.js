@@ -36,6 +36,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         setFormState({
           error: 'All fields are required',
         });
+        setTimeout(() => setFormState({}), 2000);
       } else {
         const payload = await stripe.createPaymentMethod({
           type: 'card',
@@ -53,6 +54,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           setFormState({
             error: payload.error.message,
           });
+          setTimeout(() => setFormState({}), 2000);
         } else {
           await addPaymentMethod({
             auth: lmsAuth,
@@ -72,7 +74,6 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           });
         }
       }
-      setTimeout(() => setFormState({}), 2000);
     }
   }, [formState]);
 

@@ -60,6 +60,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
   const clustering = buildInstanceClusterPartners({
     instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
     network,
+    instance_region: thisInstance.instance_region,
   });
 
   const clusterDataTable = buildClusteringTable({

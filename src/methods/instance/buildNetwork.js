@@ -14,7 +14,7 @@ const processConnections = (connections) =>
 export default async ({ users, roles, cluster_status }) => {
   const { is_enabled, node_name, status } = cluster_status;
 
-  const cluster_role = roles && roles.find((r) => r.role === 'cluster_user');
+  const cluster_role = roles && Array.isArray(roles) && roles.find((r) => r.role === 'cluster_user');
 
   const cluster_user = cluster_role && users.find((u) => u.role.id === cluster_role.id);
 
