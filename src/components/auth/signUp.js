@@ -146,7 +146,7 @@ export default () => {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        subdomain: e.target.value,
+                        subdomain: e.target.value.substring(0, 15),
                       })
                     }
                   />

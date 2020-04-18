@@ -2,8 +2,16 @@
   margin-bottom: 30px;
 
   .header {
-    font-size: 12px;
     font-weight: 700;
+    display:inline-block;
+  }
+
+  .subheader {
+    font-style: italic;
+    display:inline-block;
+    color: $color-lightpurple;
+    float: right;
+    text-transform: lowercase;
   }
 
   &:last-child {

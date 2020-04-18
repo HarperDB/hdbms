@@ -1,6 +1,6 @@
 export default ({ instances, network, instance_region }) => {
   const registered = instances
-    .filter((i) => i.status !== 'DELETE_IN_PROGRESS')
+    .filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {
       const connection = network?.outbound_connections.find((n) => n.name === i.compute_stack_id);
       const subscriptions = connection?.subscriptions || [];
