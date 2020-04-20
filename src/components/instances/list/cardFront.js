@@ -12,7 +12,6 @@ import useInstanceAuth from '../../../state/instanceAuths';
 
 import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
 import userInfo from '../../../api/instance/userInfo';
-
 import CardFrontStatusRow from './cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
 
@@ -60,9 +59,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, [clicked]);
 
   useAsyncEffect(async () => {
-    if (processing) {
-      return false;
-    }
+    if (processing) return false;
 
     if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(status)) {
       return setInstanceData({
