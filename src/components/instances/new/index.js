@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
