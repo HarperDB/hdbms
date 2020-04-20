@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useStoreState } from 'pullstate';
 
 import useNewInstance from '../../../state/newInstance';
+import appState from '../../../state/appState';
 
 export default () => {
+  const customer_id = useStoreState(appState, (s) => s.auth.customer_id);
   const history = useHistory();
-  const [newInstance, setNewInstance] = useNewInstance({});
+  const [, setNewInstance] = useNewInstance({});
   const [formData, setFormData] = useState({});
 
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
       setNewInstance({
-        ...newInstance,
+        customer_id,
         is_local,
       });
       setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
