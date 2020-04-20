@@ -44,9 +44,8 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
 
   useAsyncEffect(
     async () => {
-      if (controller) {
-        controller.abort();
-      }
+      if (controller) controller.abort();
+
       if (!loading) {
         controller = new AbortController();
 

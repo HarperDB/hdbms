@@ -28,12 +28,10 @@ export default () => {
         setFormState({
           error: 'all fields are required',
         });
-        setTimeout(() => setFormState({}), 1000);
       } else if (!isEmail(email)) {
         setFormState({
           error: 'invalid email',
         });
-        setTimeout(() => setFormState({}), 1000);
       } else {
         setFormState({
           processing: true,
@@ -50,10 +48,6 @@ export default () => {
             s.auth = false;
           });
           setPersistedLMSAuth({});
-          setTimeout(() => {
-            setFormState({});
-            setFormData({});
-          }, 1000);
         } else {
           setPersistedLMSAuth({
             email,
@@ -73,9 +67,7 @@ export default () => {
   }, [formState]);
 
   useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   useAsyncEffect(() => {

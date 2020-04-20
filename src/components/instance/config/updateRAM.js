@@ -87,12 +87,7 @@ export default ({ setInstanceAction }) => {
     <>
       <SelectDropdown
         classNamePrefix="react-select"
-        onChange={({ value }) =>
-          setFormData({
-            ...formData,
-            stripe_plan_id: value,
-          })
-        }
+        onChange={({ value }) => setFormData({ ...formData, stripe_plan_id: value })}
         options={computeProducts}
         value={computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id)}
         defaultValue={compute}
@@ -109,7 +104,6 @@ export default ({ setInstanceAction }) => {
           }),
         }}
       />
-
       {hasChanged && !newTotal && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">
           <CardBody>
@@ -131,33 +125,12 @@ export default ({ setInstanceAction }) => {
           <ChangeSummary which="compute" compute={newCompute?.priceStringWithInterval} storage={storage?.priceStringWithInterval || 'FREE'} total={newTotalString} />
           <Row>
             <Col>
-              <Button
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    stripe_plan_id,
-                  })
-                }
-                title="Cancel"
-                block
-                disabled={formState.submitted}
-                color="grey"
-              >
+              <Button onClick={() => setFormData({ ...formData, stripe_plan_id })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>
             <Col>
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Confirm Instance Details"
-                block
-                disabled={!hasChanged || formState.submitted}
-                color="success"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
                 Update RAM
               </Button>
             </Col>
