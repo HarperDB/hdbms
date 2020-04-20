@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
@@ -22,8 +21,7 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const { auth, products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard } = useStoreState(appState, (s) => ({
-    auth: s.auth,
+  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
@@ -49,15 +47,6 @@ export default () => {
     setNewInstance({});
     setTimeout(() => history.push('/instances'), 100);
   };
-
-  useAsyncEffect(
-    () =>
-      setNewInstance({
-        ...newInstance,
-        customer_id: auth.customer_id,
-      }),
-    [purchaseStep]
-  );
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen>
