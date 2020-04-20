@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build:prod": "webpack --config webpack.prod.js",
-    "build:stage": "webpack --config webpack.dev.js",
+    "build:stage": "webpack --config webpack.stage.js",
     "start": "webpack-dev-server --config webpack.dev.js",
     "lint": "eslint --fix src && npx stylelint --fix \"**/*.scss\""
   },
