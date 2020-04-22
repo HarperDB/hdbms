@@ -5,8 +5,9 @@ import useAsyncEffect from 'use-async-effect';
 
 import config from '../../../../config';
 import useNewInstance from '../../../state/newInstance';
+import CouponForm from '../../shared/couponForm';
 
-export default ({ computeProduct, storageProduct }) => {
+export default ({ computeProduct, storageProduct, customerCoupon }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -33,6 +34,8 @@ export default ({ computeProduct, storageProduct }) => {
       }
     }
   }, [formState]);
+
+  console.log(customerCoupon);
 
   return (
     <>
@@ -142,6 +145,20 @@ export default ({ computeProduct, storageProduct }) => {
           </Row>
         </CardBody>
       </Card>
+      {customerCoupon ? (
+        <Card className="mt-3">
+          <CardBody>
+            Your coupon code, <b>&apos;{customerCoupon.name}&apos;</b> grants a <b>${parseInt(customerCoupon.amount_off / 100, 10)}</b> credit across all products. Charges beyond $
+            {parseInt(customerCoupon.amount_off / 100, 10)} will be billed to your card.
+          </CardBody>
+        </Card>
+      ) : (
+        <>
+          <hr className="my-3" />
+          <CouponForm />
+          <hr className="mt-3 mb-0" />
+        </>
+      )}
       <Card className="mt-3">
         <CardBody>
           <Row noGutters>
