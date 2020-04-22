@@ -1,6 +1,7 @@
 export default {
   stripe_public_key: 'pk_test_replacethiswithyourtestkey',
   lms_api_url: 'https://dev.harperdbcloudservices.com/',
+  google_analytics_code: 'UA-98232508-3',
   tc_version: '2020-01-01',
   instances_refresh_rate: 10000,
   instance_refresh_rate: 5000,
