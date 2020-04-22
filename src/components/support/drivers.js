@@ -9,10 +9,10 @@ export default () => (
     <Card className="my-3">
       <CardBody>
         <Row>
-          <DriverCard icon="file-excel-o" name="Excel (Windows exe)" docs="xls" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/Excel/setup.exe' }]} />
-          <DriverCard icon="coffee" name="JDBC" docs="jdbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/JDBC/setup.zip' }]} />
-          <DriverCard icon="windows" name="ODBC Windows" docs="odbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Windows/odbc_windows.exe' }]} />
-          <DriverCard icon="apple" name="ODBC Mac" docs="odbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Mac/odbc_mac.dmg' }]} />
+          <DriverCard icon="file-excel-o" name="Excel (Windows exe)" docs="xls" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/Excel/setup.exe' }]} />
+          <DriverCard icon="coffee" name="JDBC" docs="jdbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/JDBC/setup.zip' }]} />
+          <DriverCard icon="windows" name="ODBC Windows" docs="odbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Windows/odbc_windows.exe' }]} />
+          <DriverCard icon="apple" name="ODBC Mac" docs="odbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Mac/odbc_mac.dmg' }]} />
           <DriverCard
             icon="linux"
             name="ODBC Linux (RPM)"
@@ -31,10 +31,10 @@ export default () => (
               { label: 'x86_64', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.deb' },
             ]}
           />
-          <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ADO/setup_ado.exe' }]} />
-          <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe' }]} />
-          <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe' }]} />
-          <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe' }]} />
+          <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ADO/setup_ado.exe' }]} />
+          <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe' }]} />
+          <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe' }]} />
+          <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe' }]} />
         </Row>
       </CardBody>
     </Card>

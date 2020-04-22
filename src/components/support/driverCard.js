@@ -14,7 +14,7 @@ export default ({ icon, name, docs, urls }) => (
           {urls.map((u) => (
             <Col key={u.link}>
               <Button href={u.link} block color="purple">
-                {u.label}
+                {u.label || 'Download'}
               </Button>
             </Col>
           ))}
