@@ -17,7 +17,7 @@ export default () => (
       <span className="text-white mb-2 floating-card-header">SQL Features Matrix</span>
       <Card className="my-3">
         <CardBody>
-          <Button color="purple" block href="https://harperdbhelp.zendesk.com/hc/en-us/articles/115001803433-SQL-Features-Matrix">
+          <Button color="purple" block href="https://harperdbhelp.zendesk.com/hc/en-us/articles/115001803433-SQL-Features-Matrix" target="_blank" rel="noopener noreferrer">
             HarperDB SQL Guides
           </Button>
         </CardBody>
