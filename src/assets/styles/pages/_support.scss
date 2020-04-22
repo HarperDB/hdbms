@@ -1,0 +1,16 @@
+#support {
+  .card-body {
+    &.installation {
+      min-height: 414px;
+
+      @media only screen and (max-width: 991px) {
+        min-height: 0;
+      }
+    }
+  }
+
+  .alert {
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+}

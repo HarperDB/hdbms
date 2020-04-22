@@ -9,6 +9,7 @@ import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getCustomer from '../../api/lms/getCustomer';
 import getInstances from '../../api/lms/getInstances';
+import getCurrentVersion from '../../api/lms/getCurrentVersion';
 
 const ProtectedRoute = ({ children }) => {
   const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({
@@ -23,6 +24,7 @@ const ProtectedRoute = ({ children }) => {
 
   useAsyncEffect(() => {
     if (auth && !fetching) {
+      getCurrentVersion();
       getProducts();
       getRegions();
       getCustomer({

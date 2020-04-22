@@ -7,7 +7,7 @@ export default ({ routes = [] }) => (
     <Nav navbar>
       {routes.map((route) => (
         <NavItem key={route.path}>
-          <NavLink className="text-capitalize" to={`/account/${route.link}`}>
+          <NavLink className="text-capitalize" to={`/support/${route.link}`}>
             <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
             {route.link}
           </NavLink>
