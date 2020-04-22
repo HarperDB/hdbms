@@ -53,6 +53,9 @@ export default () => {
                 <br />
                 <br />
                 check your email for your username and password.
+                <br />
+                <br />
+                be sure to check your spam folder, just in case.
               </div>
             </CardBody>
           </Card>

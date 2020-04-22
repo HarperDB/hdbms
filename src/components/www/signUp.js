@@ -49,7 +49,10 @@ export default () => {
           <i className="fa fa-lg fa-check-circle text-success" />
           <br />
           <br />
-          Check your email for your username and password
+          Check your email for your username and password.
+          <br />
+          <br />
+          Be sure to check your spam folder, just in case.
         </div>
       ) : (
         <>
