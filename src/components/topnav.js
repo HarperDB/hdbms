@@ -45,6 +45,15 @@ const TopNav = () => {
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
+          <NavLink title="Manage Account" to="/support">
+            <i className="fa fa-support fa-lg d-sm-none d-inline-block" />
+            <span className="d-none d-sm-inline-block">
+              <i className="fa fa-support" />
+              &nbsp;Support
+            </span>
+          </NavLink>
+        </NavItem>
+        <NavItem className="ml-3">
           <DumbLink title="Log Out" onClick={logOut}>
             <i className="fa fa-sign-out fa-lg d-sm-none d-inline-block" />
             <span className="d-none d-sm-inline-block">

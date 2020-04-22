@@ -12,6 +12,7 @@ import Pricing from './www/pricing';
 
 import ProtectedRoute from './shared/protectedRoute';
 import Account from './account';
+import Support from './support';
 import Instances from './instances';
 import Instance from './instance';
 import TopNav from './topnav';
@@ -31,6 +32,7 @@ const App = () => (
         <Switch>
           <Route component={Instance} path="/instance/:compute_stack_id" />
           <Route component={Account} path="/account/:view?" />
+          <Route component={Support} path="/support/:view?" />
           <Route component={Instances} path="/instances/:action?/:purchaseStep?" />
         </Switch>
       </ProtectedRoute>
