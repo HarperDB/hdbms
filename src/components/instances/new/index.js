@@ -21,13 +21,14 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard } = useStoreState(appState, (s) => ({
+  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
     instanceURLs: s.instances.map((i) => i.url),
     canAddFreeCloudInstance: config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
     hasCard: s.hasCard,
+    stripeCoupons: s.customer.stripe_coupons,
   }));
 
   const history = useHistory();
@@ -82,6 +83,7 @@ export default () => {
           <ConfirmOrderForm
             computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
             storageProduct={isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
+            customerCoupon={stripeCoupons}
           />
         ) : purchaseStep === 'status' ? (
           <OrderStatus closeAndResetModal={finishOrder} />
