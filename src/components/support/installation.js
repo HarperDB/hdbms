@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardBody, Row, Col, Alert, Button } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
 
-import getCurrentVersion from '../../api/lms/getCurrentVersion';
+import appState from '../../state/appState';
 
 export default () => {
-  const [version, setVersion] = useState({ number: '...', location: '#' });
-  let controller;
-
-  useAsyncEffect(
-    async () => {
-      controller = new AbortController();
-      const response = await getCurrentVersion({ signal: controller.signal });
-      setVersion(response);
-    },
-    () => controller?.abort(),
-    []
-  );
+  const version = useStoreState(appState, (s) => s.version);
 
   return (
     <Row id="support">
