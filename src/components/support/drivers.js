@@ -1,5 +1,7 @@
 import React from 'react';
-import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row } from '@nio/ui-kit';
+
+import DriverCard from './driverCard';
 
 export default () => (
   <>
@@ -7,134 +9,32 @@ export default () => (
     <Card className="my-3">
       <CardBody>
         <Row>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-file-excel-o text-purple" />
-                <b className="d-block my-4">Excel (Windows exe)</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/Excel/setup.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-coffee text-purple" />
-                <b className="d-block my-4">JDBC</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/JDBC/setup.zip" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-windows text-purple" />
-                <b className="d-block my-4">ODBC Windows</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Windows/odbc_windows.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-apple text-purple" />
-                <b className="d-block my-4">ODBC Mac</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Mac/odbc_mac.dmg" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-linux text-purple" />
-                <b className="d-block my-4">ODBC Linux (RPM)</b>
-                <Row>
-                  <Col>
-                    <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.rpm" block color="purple">
-                      i686 RPM
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.rpm" block color="purple">
-                      x86_64 RPM
-                    </Button>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-linux text-purple" />
-                <b className="d-block my-4">ODBC Linux (DEB)</b>
-                <Row>
-                  <Col>
-                    <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.deb" block color="purple">
-                      i686 DEB
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button href="https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.deb" block color="purple">
-                      x86_64 DEB
-                    </Button>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-windows text-purple" />
-                <b className="d-block my-4">ADO</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/ADO/setup_ado.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-windows text-purple" />
-                <b className="d-block my-4">BizTalk</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-code text-purple" />
-                <b className="d-block my-4">Cmdlets</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
-            <Card>
-              <CardBody className="text-center">
-                <i className="fa fa-2x fa-windows text-purple" />
-                <b className="d-block my-4">SSIS</b>
-                <Button href="https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe" block color="purple">
-                  Download
-                </Button>
-              </CardBody>
-            </Card>
-          </Col>
+          <DriverCard icon="file-excel-o" name="Excel (Windows exe)" docs="xls" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/Excel/setup.exe' }]} />
+          <DriverCard icon="coffee" name="JDBC" docs="jdbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/JDBC/setup.zip' }]} />
+          <DriverCard icon="windows" name="ODBC Windows" docs="odbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Windows/odbc_windows.exe' }]} />
+          <DriverCard icon="apple" name="ODBC Mac" docs="odbc" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Mac/odbc_mac.dmg' }]} />
+          <DriverCard
+            icon="linux"
+            name="ODBC Linux (RPM)"
+            docs="odbc"
+            urls={[
+              { label: 'i686', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.rpm' },
+              { label: 'x86_64', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.rpm' },
+            ]}
+          />
+          <DriverCard
+            icon="linux"
+            name="ODBC Linux (DEB)"
+            docs="odbc"
+            urls={[
+              { label: 'i686', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.deb' },
+              { label: 'x86_64', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.deb' },
+            ]}
+          />
+          <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/ADO/setup_ado.exe' }]} />
+          <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe' }]} />
+          <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe' }]} />
+          <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ label: 'Download', link: 'https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe' }]} />
         </Row>
       </CardBody>
     </Card>

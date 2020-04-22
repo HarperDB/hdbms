@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, Row, Col, Alert, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import queryNPM from '../../api/queryNPM';
+import getCurrentVersion from '../../api/lms/getCurrentVersion';
 
 export default () => {
   const [version, setVersion] = useState({ number: '...', location: '#' });
@@ -11,7 +11,7 @@ export default () => {
   useAsyncEffect(
     async () => {
       controller = new AbortController();
-      const response = await queryNPM({ signal: controller.signal });
+      const response = await getCurrentVersion({ signal: controller.signal });
       setVersion(response);
     },
     () => controller?.abort(),
