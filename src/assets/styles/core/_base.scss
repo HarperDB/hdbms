@@ -17,7 +17,7 @@ body {
     }
 
     #app-nav {
-      background: transparent !important;
+      background-image: $gradient-purple-magenta !important;
       height: 60px;
       min-width: $min-width;
       padding: 0 2rem;
