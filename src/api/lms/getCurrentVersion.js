@@ -7,11 +7,11 @@ export default async () => {
     method: 'POST',
   });
 
-  if (response.body.result === false) {
+  if (!response.number) {
     return false;
   }
 
   return appState.update((s) => {
-    s.version = response.body;
+    s.version = response;
   });
 };
