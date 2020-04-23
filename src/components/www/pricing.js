@@ -63,7 +63,7 @@ export default () => {
         {products ? (
           <>
             <Row>
-              <Col xs="12" className="px-4 pb-2 text-nowrap">
+              <Col xs="12" className="px-4 pt-3 pb-2 text-nowrap">
                 <h5>HarperDB Cloud</h5>
               </Col>
               <Col xs="6" className="px-4 text-nowrap">
