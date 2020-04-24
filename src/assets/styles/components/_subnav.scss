@@ -1,34 +1,33 @@
 .app-subnav {
   background: $black-overlay !important;
+  display: flex;
+  flex-flow: row nowrap;
   height: 50px;
+  justify-content: flex-start;
+  left: 0;
   min-width: $min-width;
   padding: 5px 2rem;
   position: fixed;
   right: 0;
-  left: 0;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
   top: 60px !important;
   width: 100%;
   z-index: 98 !important;
 
+  @media screen and (max-width: 991px) {
+    padding: 5px 1rem;
+  }
+
   .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center !important;
     margin: 0 auto;
     width: 100%;
-    justify-content: center !important;
-    flex-direction: row;
-    display: flex;
 
     .nav-item {
       line-height: 1 !important;
       margin-bottom: 0;
       padding: 0 10px;
-
-      @media screen and (max-width: 991px) {
-        font-size: 0.875rem;
-        padding: 0 5px;
-      }
 
       &:first-child {
         padding-left: 0;
@@ -61,12 +60,14 @@
       }
     }
 
+    &.instance-nav-select {
+      justify-content: flex-end !important;
+      padding-left: 15px;
+    }
+
     &.instance-select {
       justify-content: flex-start !important;
-
-      @media screen and (max-width: 767px) {
-        display: none;
-      }
+      padding-right: 15px;
     }
 
   }

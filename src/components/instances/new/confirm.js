@@ -35,8 +35,6 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
     }
   }, [formState]);
 
-  console.log(customerCoupon);
-
   return (
     <>
       <Card>

@@ -79,7 +79,7 @@ export default ({ query }) => {
         const queryOrderBy = query.query.toLowerCase().split('order by')[1].trim().split(' ');
         const hasTableRef = queryOrderBy[0].indexOf('.') !== -1;
         const queryOrderId = hasTableRef ? queryOrderBy[0].split('.')[1] : queryOrderBy[0];
-        const queryOrderDesc = queryOrderBy[1].toLowerCase() === 'desc';
+        const queryOrderDesc = queryOrderBy[1]?.toLowerCase() === 'desc';
         newSort = [{ id: queryOrderId, desc: queryOrderDesc }];
       }
 

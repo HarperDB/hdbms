@@ -14,7 +14,7 @@ export default () => {
         <QueryWindow setQuery={setQuery} />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {query ? <DataTable query={query} /> : <EmptyPrompt message="Please enter a query at left" />}
+        {query ? <DataTable query={query} /> : <EmptyPrompt message="Please enter a query to proceed" />}
       </Col>
     </Row>
   );
