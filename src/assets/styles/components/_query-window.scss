@@ -1,6 +1,7 @@
 #query-window {
   textarea {
     height: 300px !important;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 
     @media screen and (max-width: 767px) {
       height: 100px !important;

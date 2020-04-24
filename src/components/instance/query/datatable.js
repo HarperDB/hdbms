@@ -20,12 +20,11 @@ export default ({ query }) => {
     auth: s.auth,
     url: s.url,
   }));
-  const { filtered, sorted, page, loading, tableData, totalRecords, pageSize, autoRefresh, showFilter, dataTableColumns, error } = useStoreState(
+  const { filtered, sorted, loading, tableData, totalRecords, pageSize, autoRefresh, showFilter, dataTableColumns, error, message, reload } = useStoreState(
     tableState,
     (s) => ({
       filtered: s.filtered,
       sorted: s.sorted,
-      page: s.page,
       loading: s.loading,
       tableData: s.tableData,
       totalRecords: s.totalRecords,
@@ -34,6 +33,8 @@ export default ({ query }) => {
       showFilter: s.showFilter,
       dataTableColumns: s.dataTableColumns,
       error: s.error,
+      message: s.message,
+      reload: s.reload,
     }),
     [query.query]
   );
@@ -45,14 +46,21 @@ export default ({ query }) => {
         s.tableData = [];
         s.totalPages = -1;
         s.totalRecords = 0;
-        s.loading = true;
+        s.loading = false;
         s.filtered = [];
         s.sorted = [];
-        s.page = 0;
         s.autoRefresh = false;
         s.showFilter = false;
         s.dataTableColumns = [];
         s.error = false;
+        s.message = false;
+        s.reload = true;
+      });
+    } else {
+      tableState.update((s) => {
+        s.error = false;
+        s.message = false;
+        s.reload = false;
       });
     }
   }, [query.query]);
@@ -68,21 +76,26 @@ export default ({ query }) => {
           s.loading = true;
         });
 
-        const { newData, newTotalRecords, newDataTableColumns, newError } = await getQueryData({
-          query: query.query,
-          filtered,
-          pageSize,
-          sorted,
-          page,
+        const response = await getQueryData({
+          query: query.query.replace(/\n/g, ' ').trim(),
           auth,
           url,
           signal: controller.signal,
         });
 
-        if (newError) {
+        if (response.error) {
           tableState.update((s) => {
             s.loading = false;
-            s.error = `Error fetching data: ${newError}`;
+            s.message = `Error fetching data: ${response.message}`;
+            s.error = true;
+            s.reload = false;
+          });
+        } else if (response.message) {
+          tableState.update((s) => {
+            s.loading = false;
+            s.message = response.message;
+            s.error = false;
+            s.reload = false;
           });
         } else {
           const sortFromQuery = query.query.toLowerCase().indexOf('order by') !== -1;
@@ -96,17 +109,21 @@ export default ({ query }) => {
           }
 
           tableState.update((s) => {
-            s.tableData = newData;
-            s.totalRecords = newTotalRecords;
-            s.dataTableColumns = newDataTableColumns;
+            s.tableData = response.tableData;
+            s.totalRecords = response.totalRecords;
+            s.dataTableColumns = response.dataTableColumns;
             s.loading = false;
             s.error = false;
-            s.sorted = newSort || [{ id: newDataTableColumns[0].accessor, desc: s.sorted[0]?.desc || false }];
+            s.message = false;
+            s.reload = false;
+            s.sorted = newSort || [{ id: response.dataTableColumns[0].accessor, desc: s.sorted[0]?.desc || false }];
           });
         }
       }
     },
-    () => controller?.abort(),
+    () => {
+      if (controller) controller.abort();
+    },
     [query, lastUpdate]
   );
 
@@ -116,8 +133,10 @@ export default ({ query }) => {
     }
   }, config.instance_refresh_rate);
 
-  return error ? (
-    <EmptyPrompt error message={error} />
+  return reload ? (
+    <EmptyPrompt message="Executing Query" />
+  ) : message ? (
+    <EmptyPrompt error={error} message={message} />
   ) : query ? (
     <>
       <DataTableHeader totalRecords={totalRecords} loading={loading} autoRefresh={autoRefresh} showFilter={showFilter} filtered={filtered} setLastUpdate={setLastUpdate} />
@@ -145,7 +164,6 @@ export default ({ query }) => {
                 s.page = value;
               })
             }
-            page={page}
             filterable={showFilter}
             defaultPageSize={pageSize}
             pageSize={pageSize}
@@ -159,6 +177,6 @@ export default ({ query }) => {
       </Card>
     </>
   ) : (
-    <EmptyPrompt message="Please enter a query at left" />
+    <EmptyPrompt message="Please execute a SQL query to proceed" />
   );
 };

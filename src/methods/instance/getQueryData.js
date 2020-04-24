@@ -2,46 +2,45 @@ import sql from '../../api/instance/sql';
 import handleCellValues from '../datatable/handleCellValues';
 
 export default async ({ query, auth, url, signal }) => {
-  let fetchError = false;
-  let newTotalRecords = 0;
-  let newData = [];
-  let newDataTableColumns = [];
-
   try {
-    newData = await sql({ sql: query, auth, url, signal });
+    const tableData = await sql({ sql: query, auth, url, signal });
 
-    if (newData.error) {
-      fetchError = newData.message;
-    } else {
-      newTotalRecords = newData.length;
-      newDataTableColumns = newTotalRecords
-        ? Object.keys(newData[0]).map((k) => ({
-            Header: k.toString(),
-            accessor: k.toString(),
-            style: {
-              height: 29,
-              paddingTop: 10,
-            },
-            Cell: (props) => handleCellValues(props.value),
-          }))
-        : [];
+    if (tableData.error) {
+      return {
+        message: tableData.message,
+        error: true,
+      };
     }
-  } catch (e) {
-    fetchError = e;
-  }
 
-  if (fetchError || !Array.isArray(newData) || newData.error) {
+    if (tableData.message) {
+      return {
+        message: tableData.message,
+      };
+    }
+
+    const totalRecords = tableData.length;
+    const attributes = totalRecords ? Object.keys(tableData[0]) : [];
+    const filteredAttributes = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a));
+    const orderedColumns = [...filteredAttributes, '__createdtime__', '__updatedtime__'];
+    const dataTableColumns = orderedColumns.map((k) => ({
+      Header: k.toString(),
+      accessor: k.toString(),
+      style: {
+        height: 29,
+        paddingTop: 10,
+      },
+      Cell: (props) => handleCellValues(props.value),
+    }));
+
     return {
-      newData: [],
-      newTotalRecords,
-      newDataTableColumns,
-      newError: fetchError,
+      tableData,
+      totalRecords,
+      dataTableColumns,
+    };
+  } catch (e) {
+    return {
+      message: e,
+      error: true,
     };
   }
-
-  return {
-    newData: newData || [],
-    newTotalRecords,
-    newDataTableColumns,
-  };
 };

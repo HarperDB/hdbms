@@ -4,7 +4,7 @@ const tableState = new Store({
   filtered: [],
   sorted: [],
   page: 0,
-  loading: true,
+  loading: false,
   tableData: [],
   totalPages: -1,
   totalRecords: 0,
@@ -16,6 +16,8 @@ const tableState = new Store({
   currentHash: false,
   dataTableColumns: [],
   error: false,
+  message: false,
+  reload: false,
 });
 
 export default tableState;
