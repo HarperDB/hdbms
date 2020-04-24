@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Row, Col } from '@nio/ui-kit';
 
 import DataTable from './datatable';
-import EmptyPrompt from './emptyPrompt';
 import QueryWindow from './queryWindow';
 
 export default () => {
@@ -14,7 +13,7 @@ export default () => {
         <QueryWindow setQuery={setQuery} />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {query ? <DataTable query={query} /> : <EmptyPrompt message="Please enter a query to proceed" />}
+        <DataTable query={query} />
       </Col>
     </Row>
   );
