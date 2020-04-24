@@ -14,6 +14,7 @@ const tableState = new Store({
   lastUpdate: false,
   currentTable: false,
   currentHash: false,
+  dataTableColumns: [],
 });
 
 export default tableState;

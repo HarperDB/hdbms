@@ -38,7 +38,7 @@ export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) =>
         />
         <span className="mr-2">auto</span>
         <i
-          title="Turn on autofresh"
+          title="Turn on Auto-Refresh"
           className={`floating-card-header fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`}
           onClick={() =>
             tableState.update((s) => {

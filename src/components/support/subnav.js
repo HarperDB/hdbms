@@ -3,7 +3,7 @@ import { Navbar, Nav, NavItem } from '@nio/ui-kit';
 import { NavLink } from 'react-router-dom';
 
 export default ({ routes = [] }) => (
-  <Navbar className="app-subnav" fixed="top" expand="xs">
+  <Navbar className="app-subnav">
     <Nav navbar>
       {routes.map((route) => (
         <NavItem key={route.path}>

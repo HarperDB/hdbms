@@ -1,4 +1,5 @@
 import Browse from './browse';
+import Query from './query';
 import Clustering from './clustering';
 import Config from './config';
 import Users from './users';
@@ -10,6 +11,12 @@ export default [
     path: '/instance/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?',
     link: 'browse',
     icon: 'list',
+  },
+  {
+    component: Query,
+    path: '/instance/:compute_stack_id/query',
+    link: 'query',
+    icon: 'code',
   },
   {
     component: Clustering,
