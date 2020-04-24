@@ -20,7 +20,13 @@ export default ({ setQuery }) => {
       <span className="text-white floating-card-header">sql query</span>
       <Card className="mt-3 mb-4">
         <CardBody>
-          <Input type="textarea" className="sql-query-textarea" value={formData} onKeyDown={(e) => handleKeydown(e, setFormState)} onChange={(e) => setFormData(e.target.value)} />
+          <Input
+            type="textarea"
+            className="sql-query-textarea"
+            value={formData}
+            onKeyDown={(e) => handleKeydown(e, setFormState, true)}
+            onChange={(e) => setFormData(e.target.value)}
+          />
           <Row>
             <Col>
               <Button

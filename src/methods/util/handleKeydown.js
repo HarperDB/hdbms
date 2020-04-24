@@ -1,3 +1,3 @@
-export default (e, setFormState) => {
-  if (e.keyCode === 13) setFormState({ submitted: true });
+export default (e, setFormState, requiresCtrl = false) => {
+  if (e.keyCode === 13 && (!requiresCtrl || e.metaKey)) setFormState({ submitted: true });
 };
