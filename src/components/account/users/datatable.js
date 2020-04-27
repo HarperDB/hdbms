@@ -55,14 +55,12 @@ export default ({ lastUpdate, setLastUpdate }) => {
 
   return (
     <>
-      <Row>
-        <Col className="text-nowrap">
-          <span className="text-white mb-2 floating-card-header">existing users</span>
-        </Col>
-        <Col className="text-right text-white text-nowrap">
+      <Row className="floating-card-header">
+        <Col>existing users</Col>
+        <Col className="text-right">
           <i
             title="Filter Users"
-            className="fa fa-search floating-card-header"
+            className="fa fa-search "
             onClick={() =>
               setTableState({
                 ...tableState,

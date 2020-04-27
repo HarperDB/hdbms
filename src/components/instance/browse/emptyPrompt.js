@@ -9,10 +9,10 @@ export default ({ message }) => {
 
   return (
     <>
-      <div className="text-white floating-card-header text-right">
+      <div className="floating-card-header text-right">
         <i
           title="Refresh instance schema and tables"
-          className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
+          className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
           onClick={() =>
             instanceState.update((s) => {
               s.lastUpdate = Date.now();

@@ -11,25 +11,19 @@ export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) =>
   const { compute_stack_id, schema, table } = useParams();
 
   return (
-    <Row>
-      <Col className="text-nowrap text-left">
-        <span className="text-white floating-card-header">
-          <span>
-            {schema}
-            &nbsp;
-          </span>
-          <span>{table && `> ${table} > `} </span>
-          <span>
-            {commaNumbers(totalRecords)} record
-            {totalRecords !== 1 ? 's' : ''}
-          </span>
-        </span>
+    <Row className="floating-card-header">
+      <Col>
+        {schema}
+        &nbsp;
+        {table && `> ${table} > `}
+        {commaNumbers(totalRecords)} record
+        {totalRecords !== 1 ? 's' : ''}
       </Col>
       <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-      <Col className="text-md-right text-white text-nowrap">
+      <Col className="text-md-right">
         <i
           title={`Refresh table ${table}`}
-          className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
+          className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
           onClick={() =>
             instanceState.update((s) => {
               s.lastUpdate = Date.now();
@@ -39,7 +33,7 @@ export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) =>
         <span className="mr-2">auto</span>
         <i
           title="Turn on Auto-Refresh"
-          className={`floating-card-header fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`}
+          className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`}
           onClick={() =>
             tableState.update((s) => {
               s.autoRefresh = !autoRefresh;
@@ -49,7 +43,7 @@ export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) =>
         <span className="mx-3 text">|</span>
         <i
           title={`Filter table ${table}`}
-          className="floating-card-header fa fa-search mr-3"
+          className="fa fa-search mr-3"
           onClick={() =>
             tableState.update((s) => {
               s.filtered = showFilter ? [] : filtered;
@@ -58,16 +52,8 @@ export default ({ totalRecords, loading, autoRefresh, showFilter, filtered }) =>
             })
           }
         />
-        <i
-          title={`Add new record to table ${table}`}
-          className="floating-card-header fa fa-plus mr-3"
-          onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/add`)}
-        />
-        <i
-          title={`Bulk Upload CSV to ${table}`}
-          className="floating-card-header fa fa-file-text-o"
-          onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/csv`)}
-        />
+        <i title={`Add new record to table ${table}`} className="fa fa-plus mr-3" onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/add`)} />
+        <i title={`Bulk Upload CSV to ${table}`} className="fa fa-file-text-o" onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/csv`)} />
       </Col>
     </Row>
   );

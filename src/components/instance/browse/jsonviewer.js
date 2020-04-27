@@ -91,7 +91,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
 
   return (
     <>
-      <span className="text-white mb-2 floating-card-header">
+      <span className="floating-card-header">
         {schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}
         &nbsp;
       </span>

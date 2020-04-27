@@ -68,7 +68,7 @@ export default () => {
   return (
     <Row id="clustering">
       <Col xl="3" lg="4" md="5" xs="12">
-        <span className="text-white mb-2 floating-card-header">enable clustering</span>
+        <span className="floating-card-header">enable clustering</span>
         <Card className="my-3">
           <CardBody>
             <Role />
@@ -80,7 +80,7 @@ export default () => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        <span className="text-white mb-2 floating-card-header">&nbsp;</span>
+        <span className="floating-card-header">&nbsp;</span>
         {formState.restarting ? <Loader message="configuring clustering" /> : <Instructions showNodeNameInstructions={compute_stack_id !== name} />}
       </Col>
     </Row>

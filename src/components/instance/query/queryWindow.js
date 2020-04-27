@@ -3,9 +3,16 @@ import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
 
 import handleKeydown from '../../../methods/util/handleKeydown';
 
-export default ({ setQuery, query: { query } }) => {
+export default ({ setQuery, query }) => {
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
+
+  useEffect(() => {
+    if (query) {
+      setFormState({ submitted: false });
+      setFormData(query.query || query);
+    }
+  }, [query]);
 
   useEffect(() => {
     if (formState.submitted && formData.length) {
@@ -15,16 +22,9 @@ export default ({ setQuery, query: { query } }) => {
     }
   }, [formState]);
 
-  useEffect(() => {
-    if (query) {
-      setFormState({ submitted: false });
-      setFormData(query);
-    }
-  }, [query]);
-
   return (
     <div id="query-window">
-      <span className="text-white floating-card-header">sql query</span>
+      <span className="floating-card-header">sql query</span>
       <Card className="mt-3 mb-4">
         <CardBody>
           <Input

@@ -25,7 +25,7 @@ export default () => {
         <InstanceDetails />
       </Col>
       <Col lg="4" xs="12">
-        <span className="text-white mb-2 floating-card-header">instance actions</span>
+        <span className="floating-card-header">instance actions</span>
         <Card className="my-3">
           <CardBody>
             <ContentContainer header="Update Instance RAM" className="mb-3">

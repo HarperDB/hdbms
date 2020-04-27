@@ -27,16 +27,12 @@ export default () => {
 
   return (
     <>
-      <Row>
-        <Col className="text-nowrap">
-          <span className="text-white">
-            <span>manage clustering</span>
-          </span>
-        </Col>
-        <Col className="text-right text-white">
+      <Row className="floating-card-header">
+        <Col>manage clustering</Col>
+        <Col className="text-right">
           <i
             title="Refresh instance schema and tables"
-            className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
+            className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
             onClick={() =>
               instanceState.update((s) => {
                 s.lastUpdate = Date.now();

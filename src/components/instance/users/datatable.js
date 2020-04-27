@@ -47,11 +47,9 @@ export default () => {
 
   return (
     <>
-      <Row>
-        <Col className="text-nowrap">
-          <span className="text-white mb-2 floating-card-header">existing users</span>
-        </Col>
-        <Col className="text-right text-white text-nowrap">
+      <Row className="floating-card-header">
+        <Col>existing users</Col>
+        <Col className="text-right">
           <a
             onClick={() =>
               setTableState({
@@ -61,7 +59,7 @@ export default () => {
               })
             }
           >
-            <i title="Filter Users" className="fa fa-search mr-3 floating-card-header" />
+            <i title="Filter Users" className="fa fa-search mr-3" />
           </a>
         </Col>
       </Row>

@@ -50,34 +50,14 @@ export default () => {
       <Col xl="9" lg="8" md="7" xs="12">
         {formState.canEdit ? (
           <>
-            <Row>
-              <Col className="text-nowrap">
-                <span className="text-white mb-2 floating-card-header">
-                  edit role &gt; {formState.roleName}
-                  &nbsp;
-                </span>
-              </Col>
-              {/*
-              <Col className="text-right text-white text-nowrap">
-                <a onClick={() => setFormState({ ...formState, editJSON: true })}>
-                  <span className="floating-card-header">json</span>
-                  <i title="Edit JSON" className="fa fa-code ml-1 floating-card-header" />
-                </a>
-                <span className="mx-2 text">|</span>
-                <a onClick={() => setFormState({ ...formState, editJSON: false })}>
-                  <span className="floating-card-header">table</span>
-                  <i title="Edit JSON" className="fa fa-check-square-o ml-1 floating-card-header" />
-                </a>
-              </Col>
-              */}
-            </Row>
+            <span className="floating-card-header">edit role &gt; {formState.roleName}</span>
             <Card className="my-3">
               <CardBody className="full-height">{formState.editJSON ? <JSONViewer /> : <div className="text-center py-5">table editor coming soon!</div>}</CardBody>
             </Card>
           </>
         ) : (
           <>
-            <span className="text-white mb-2 floating-card-header">&nbsp;</span>
+            <span className="floating-card-header">&nbsp;</span>
             <Card className="my-3 py-5">
               <CardBody>
                 {role_id ? (

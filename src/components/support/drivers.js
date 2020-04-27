@@ -5,7 +5,7 @@ import DriverCard from './driverCard';
 
 export default () => (
   <>
-    <span className="text-white mb-2 floating-card-header">Download Drivers</span>
+    <span className="floating-card-header">Download Drivers</span>
     <Card className="my-3">
       <CardBody>
         <Row>

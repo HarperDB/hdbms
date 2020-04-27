@@ -67,7 +67,7 @@ export default ({ query }) => {
 
   useAsyncEffect(
     async () => {
-      if (query.query) {
+      if (query.query && query.lastUpdate) {
         if (controller) controller.abort();
 
         controller = new AbortController();
