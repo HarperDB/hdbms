@@ -1,3 +1,3 @@
 import createPersistedState from 'use-persisted-state';
 
-export default createPersistedState('queryHistory');
+export default createPersistedState('instanceQueries');
