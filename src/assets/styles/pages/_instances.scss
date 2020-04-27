@@ -1,8 +1,6 @@
 #instances {
   .navbar-nav {
-    justify-content: center;
     max-width: 400px;
-    text-align: center;
   }
 
   .card {
@@ -87,6 +85,8 @@
     }
 
     .react-toggle-thumb {
+      text-align: center;
+
       &::after {
         color: $color-danger;
         content: '\f00d';

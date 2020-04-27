@@ -10,8 +10,8 @@ export default async ({ auth, customer_id, products, regions, instanceCount }) =
     auth,
   });
 
-  if (Array.isArray(response.body)) {
-    const instances = response.body.map((i) => {
+  if (Array.isArray(response)) {
+    const instances = response.map((i) => {
       const thisInstance = i;
       const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
       const storage = thisInstance.is_local ? false : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);

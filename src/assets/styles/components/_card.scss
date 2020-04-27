@@ -1,11 +1,15 @@
 .floating-card-header {
   color: $color-white;
-  //text-shadow: 0 2px 3px $grey-overlay;
+}
+
+i.floating-card-header {
+  cursor: pointer;
 }
 
 .card {
   background: $color-white;
   border-radius: $border-radius;
+  box-shadow: 0 0 6px $lighter-grey-overlay;
   color: $color-black;
 
   &.error,
@@ -34,7 +38,7 @@
     }
   }
 
-  &.has-shadow {
-    box-shadow: 0 0 5px $dark-grey-overlay;
+  .card {
+    box-shadow: none !important;
   }
 }

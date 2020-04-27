@@ -8,5 +8,5 @@ export default async ({ auth, payload }) => {
     auth,
   });
 
-  return response.body;
+  return response;
 };

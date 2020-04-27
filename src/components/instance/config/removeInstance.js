@@ -39,13 +39,11 @@ export default ({ setInstanceAction }) => {
 
         const response = await removeInstance({
           auth,
-          payload: {
-            customer_id: customer.customer_id,
-            compute_stack_id,
-          },
+          customer_id: customer.customer_id,
+          compute_stack_id,
         });
 
-        if (response.result === false) {
+        if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
           setInstanceAction(false);
         } else {

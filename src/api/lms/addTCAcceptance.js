@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { user_id, tc_version, customer_id } }) => {
+export default async ({ auth, user_id, tc_version, customer_id }) => {
   const response = await queryLMS({
     endpoint: 'addTCAcceptance',
     method: 'POST',
@@ -12,5 +12,5 @@ export default async ({ auth, payload: { user_id, tc_version, customer_id } }) =
     auth,
   });
 
-  return response.body;
+  return response;
 };

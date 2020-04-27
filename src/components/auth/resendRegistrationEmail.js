@@ -31,8 +31,8 @@ export default () => {
           ...formState,
           processing: true,
         });
-        const response = await resendRegistrationEmail({ payload: { email } });
-        if (response.result === false) {
+        const response = await resendRegistrationEmail({ email });
+        if (response.error) {
           setFormState({
             error: response.message,
           });

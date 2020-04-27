@@ -104,7 +104,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           />
         </Col>
       )}
-      <Col className="item-action text-right pt-1">
+      <Col className="item-action">
         {addingItem ? (
           <Button color="success" className="round mr-1">
             <i className="fa fa-spinner fa-spin text-white" />

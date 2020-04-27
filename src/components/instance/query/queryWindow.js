@@ -3,7 +3,7 @@ import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
 
 import handleKeydown from '../../../methods/util/handleKeydown';
 
-export default ({ setQuery }) => {
+export default ({ setQuery, query: { query } }) => {
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
 
@@ -14,6 +14,13 @@ export default ({ setQuery }) => {
       setFormState({ submitted: false });
     }
   }, [formState]);
+
+  useEffect(() => {
+    if (query) {
+      setFormState({ submitted: false });
+      setFormData(query);
+    }
+  }, [query]);
 
   return (
     <div id="query-window">

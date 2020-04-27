@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { stripe_plan_id, compute_stack_id, customer_id, data_volume_size } }) => {
+export default async ({ auth, stripe_plan_id, compute_stack_id, customer_id, data_volume_size }) => {
   const response = await queryLMS({
     endpoint: 'updateInstance',
     method: 'POST',
@@ -13,5 +13,5 @@ export default async ({ auth, payload: { stripe_plan_id, compute_stack_id, custo
     auth,
   });
 
-  return response.body;
+  return response;
 };

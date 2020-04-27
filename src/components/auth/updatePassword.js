@@ -39,12 +39,10 @@ export default () => {
         });
         const response = await updatePassword({
           auth: lmsAuth,
-          payload: {
-            ...lmsAuth,
-            password,
-          },
+          ...lmsAuth,
+          password,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: response.message,
           });

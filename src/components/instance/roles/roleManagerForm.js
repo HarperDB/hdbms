@@ -60,7 +60,7 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
             placeholder="name"
           />
         </Col>
-        <Col className="item-action text-right pt-1">
+        <Col className="item-action">
           <Button color="success" className="round mr-1">
             <i className="fa fa-check text-white" />
           </Button>

@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { license_id, compute_stack_id, customer_id, stripe_product_id, fingerprint } }) => {
+export default async ({ auth, license_id, compute_stack_id, customer_id, stripe_product_id, fingerprint }) => {
   const response = await queryLMS({
     endpoint: 'updateLicense',
     method: 'POST',
@@ -14,5 +14,5 @@ export default async ({ auth, payload: { license_id, compute_stack_id, customer_
     auth,
   });
 
-  return response.body;
+  return response;
 };

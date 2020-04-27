@@ -29,18 +29,22 @@ export default ({ closeAndResetModal }) => {
 
     addTCAcceptance({
       auth: lmsAuth,
-      payload: {
-        ...lmsAuth,
-        tc_version: newInstance.tc_version,
-      },
+      ...lmsAuth,
+      tc_version: newInstance.tc_version,
     });
 
     const response = await addInstance({
       auth: lmsAuth,
-      payload: newInstanceObject,
+      newInstanceObject,
     });
 
-    if (response.result) {
+    if (response.error) {
+      const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
+      setFormState({
+        submitted: false,
+        error,
+      });
+    } else {
       alert.success(response.message);
       setInstanceAuths({
         ...instanceAuths,
@@ -53,12 +57,6 @@ export default ({ closeAndResetModal }) => {
         s.lastUpdate = Date.now();
       });
       setTimeout(() => closeAndResetModal(), 0);
-    } else {
-      const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
-      setFormState({
-        submitted: false,
-        error,
-      });
     }
   }, []);
 

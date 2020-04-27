@@ -30,8 +30,8 @@ export default () => {
         setFormState({
           processing: true,
         });
-        const response = await resetPassword({ payload: { email } });
-        if (response.result === false) {
+        const response = await resetPassword({ email });
+        if (response.error) {
           setFormState({
             error: response.message,
           });

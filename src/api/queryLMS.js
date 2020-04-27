@@ -16,23 +16,23 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
         authorization: auth ? `Basic ${btoa(`${auth.email}:${auth.pass}`)}` : undefined,
       },
     });
-    const response = await request.json();
 
-    if (!response || response.errorType || response.errorMessage) {
+    const { body } = await request.json();
+
+    if (body.error) {
       return {
-        body: {
-          result: false,
-          message: response?.errorMessage || 'The server did not respond',
-        },
+        error: true,
+        message:
+          body.message.replace(/Validation error:|Throttling error:|Bad request:|Internal Server Error:|Unauthorized:|StripeInvalidRequestError:/g, '') ||
+          'The server did not respond',
       };
     }
-    return response;
+
+    return body;
   } catch (e) {
     return {
-      body: {
-        result: false,
-        message: e.toString(),
-      },
+      error: true,
+      message: e.toString(),
     };
   }
 };

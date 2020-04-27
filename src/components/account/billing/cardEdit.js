@@ -62,22 +62,23 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
         } else {
           const response = await addPaymentMethod({
             auth,
-            payload: {
-              payment_method_id: payload.paymentMethod.id,
-              stripe_id: customer.stripe_id,
-            },
+            payment_method_id: payload.paymentMethod.id,
+            stripe_id: customer.stripe_id,
           });
 
-          if (response.result) {
+          if (response.error) {
+            setFormState({
+              error: response.message,
+            });
+            setTimeout(() => setFormState({}), 2000);
+          } else {
             setFormState({
               success: response.message,
             });
 
             await getCustomer({
               auth,
-              payload: {
-                customer_id: customer.customer_id,
-              },
+              customer_id: customer.customer_id,
             });
 
             if (returnURL) {
@@ -85,11 +86,6 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             } else {
               setEditingCard(false);
             }
-          } else {
-            setFormState({
-              error: response.message,
-            });
-            setTimeout(() => setFormState({}), 2000);
           }
         }
       }

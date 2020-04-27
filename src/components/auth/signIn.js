@@ -38,9 +38,9 @@ export default () => {
         });
         const response = await getUser({
           auth: { email, pass },
-          payload: { email },
+          email,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: 'Invalid Credentials',
           });

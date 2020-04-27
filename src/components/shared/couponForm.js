@@ -33,15 +33,13 @@ export default () => {
             coupon_code,
           });
 
-          if (response.result === false) {
+          if (response.error) {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
             getCustomer({
               auth,
-              payload: {
-                customer_id: customer.customer_id,
-              },
+              customer_id: customer.customer_id,
             });
           }
         }
