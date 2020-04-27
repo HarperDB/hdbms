@@ -20,8 +20,13 @@ export default async ({ query, auth, url, signal }) => {
 
     const totalRecords = tableData.length;
     const attributes = totalRecords ? Object.keys(tableData[0]) : [];
-    const filteredAttributes = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a));
-    const orderedColumns = [...filteredAttributes, '__createdtime__', '__updatedtime__'];
+    const orderedColumns = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a));
+    if (attributes.includes('__createdtime__')) {
+      orderedColumns.push('__createdtime__');
+    }
+    if (attributes.includes('__updatedtime__')) {
+      orderedColumns.push('__updatedtime__');
+    }
     const dataTableColumns = orderedColumns.map((k) => ({
       Header: k.toString(),
       accessor: k.toString(),

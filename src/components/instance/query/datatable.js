@@ -63,7 +63,7 @@ export default ({ query }) => {
         s.reload = false;
       });
     }
-  }, [query.query]);
+  }, [query]);
 
   useAsyncEffect(
     async () => {
@@ -94,6 +94,13 @@ export default ({ query }) => {
           tableState.update((s) => {
             s.loading = false;
             s.message = response.message;
+            s.error = false;
+            s.reload = false;
+          });
+        } else if (!response.tableData.length) {
+          tableState.update((s) => {
+            s.loading = false;
+            s.message = 'Your query produced no results';
             s.error = false;
             s.reload = false;
           });
@@ -137,7 +144,7 @@ export default ({ query }) => {
     <EmptyPrompt message="Executing Query" />
   ) : message ? (
     <EmptyPrompt error={error} message={message} />
-  ) : query ? (
+  ) : tableData.length ? (
     <>
       <DataTableHeader totalRecords={totalRecords} loading={loading} autoRefresh={autoRefresh} showFilter={showFilter} filtered={filtered} setLastUpdate={setLastUpdate} />
       <Card className="my-3">
