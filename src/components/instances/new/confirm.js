@@ -143,51 +143,49 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
           </Row>
         </CardBody>
       </Card>
+
+      <hr className="my-3" />
       {customerCoupon ? (
-        <Card className="mt-3">
-          <CardBody>
-            Your coupon code, <b>&apos;{customerCoupon.name}&apos;</b> grants a <b>${parseInt(customerCoupon.amount_off / 100, 10)}</b> credit across all products. Charges beyond $
-            {parseInt(customerCoupon.amount_off / 100, 10)} will be billed to your card.
-          </CardBody>
-        </Card>
+        <div className="px-2">
+          Your coupon code, <b>&apos;{customerCoupon.name}&apos;</b> grants a <b>${parseInt(customerCoupon.amount_off / 100, 10)}</b> credit across all products. Charges beyond $
+          {parseInt(customerCoupon.amount_off / 100, 10)} will be billed to your card.
+        </div>
       ) : (
-        <>
-          <hr className="my-3" />
+        <div className="px-2">
           <CouponForm />
-          <hr className="mt-3 mb-0" />
-        </>
+        </div>
       )}
-      <Card className="mt-3">
-        <CardBody>
-          <Row noGutters>
-            <Col xs="1" className="text-nowrap overflow-hidden">
-              <RadioCheckbox
-                className={formState.error ? 'error' : ''}
-                type="radio"
-                onChange={(value) =>
-                  setFormData({
-                    tc_version: value,
-                  })
-                }
-                options={{
-                  value: config.tc_version,
-                }}
-              />
-            </Col>
-            <Col xs="11" className="text-small">
-              I agree to the HarperDB{' '}
-              <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
-                Privacy Policy
-              </a>{' '}
-              and{' '}
-              <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
-                HarperDB Cloud Terms of Service
-              </a>
-              .
-            </Col>
-          </Row>
-        </CardBody>
-      </Card>
+      <hr className="my-3" />
+
+      <Row noGutters>
+        <Col xs="1" className="text-nowrap overflow-hidden pl-2">
+          <RadioCheckbox
+            className={formState.error ? 'error' : ''}
+            type="radio"
+            onChange={(value) =>
+              setFormData({
+                tc_version: value,
+              })
+            }
+            options={{
+              value: config.tc_version,
+            }}
+          />
+        </Col>
+        <Col xs="11" className="text-small pt-1 pr-2">
+          I agree to HarperDB&apos;s&nbsp;
+          <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+          </a>{' '}
+          and{' '}
+          <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+            HarperDB Cloud Terms of Service
+          </a>
+        </Col>
+      </Row>
+
+      <hr className="my-3" />
+
       <Row>
         <Col sm="6">
           <Button

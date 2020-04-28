@@ -114,8 +114,8 @@ export default () => {
       />
 
       <SelectDropdown
+        className="react-select-container"
         classNamePrefix="react-select"
-        className="mb-3"
         onChange={({ value }) =>
           setFormData({
             ...formData,
@@ -146,6 +146,7 @@ export default () => {
 
       <Button
         color="purple"
+        className="mt-3"
         block
         onClick={() =>
           setFormState({

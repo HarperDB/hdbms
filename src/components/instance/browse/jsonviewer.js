@@ -9,8 +9,10 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
+import useDarkTheme from '../../../state/darkTheme';
 
 export default ({ newEntityColumns, hashAttribute }) => {
+  const [darkTheme] = useDarkTheme(false);
   const alert = useAlert();
   const history = useHistory();
   const { schema, table, hash, action } = useParams();
@@ -115,12 +117,12 @@ export default ({ newEntityColumns, hashAttribute }) => {
                 theme="light_mitsuketa_tribute"
                 colors={{
                   background: 'transparent',
-                  default: '#000',
-                  colon: '#000',
-                  keys: '#480b8a',
-                  string: '#0280c4',
+                  default: darkTheme ? '#aaa' : '#000',
+                  colon: darkTheme ? '#aaa' : '#000',
+                  keys: darkTheme ? '#aaa' : '#000',
+                  string: '#13c664',
                   number: '#ea4c89',
-                  primitive: '#312556',
+                  primitive: '#ffa500',
                 }}
                 locale={locale}
                 width="100%"

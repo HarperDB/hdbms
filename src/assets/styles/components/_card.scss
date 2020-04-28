@@ -11,8 +11,8 @@ i.floating-card-header {
 .card {
   background: $color-white;
   border-radius: $border-radius;
-  box-shadow: 0 0 6px $lighter-grey-overlay;
   color: $color-black;
+  border: 1px solid $faint-white-overlay;
 
   &.error,
   &.success {
@@ -38,9 +38,5 @@ i.floating-card-header {
     .card-body {
       color: $color-success;
     }
-  }
-
-  .card {
-    box-shadow: none !important;
   }
 }

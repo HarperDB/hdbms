@@ -17,6 +17,6 @@ export default async ({ auth, signal, customer_id }) => {
   }
 
   return appState.update((s) => {
-    s.invoices = invoices.filter((i) => i.amount_paid);
+    s.invoices = invoices; //.filter((i) => i.amount_paid);
   });
 };

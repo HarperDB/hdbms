@@ -10,12 +10,24 @@
 }
 
 #app-bg-color {
-  background-image: $gradient-purple-magenta !important;
+  background: $gradient-purple-magenta !important;
   z-index: -2;
 }
 
 #app-bg-dots {
-  background-image: radial-gradient($color-purple 1px, transparent 0);
+  background: radial-gradient($color-purple 1px, transparent 0);
   background-size: 3px 3px;
   z-index: -1;
+}
+
+body.dark {
+  #app-bg-color {
+    background: $color-black !important;
+    z-index: -2;
+  }
+  #app-bg-dots {
+    background: radial-gradient($faint-white-overlay 1px, transparent 0);
+    background-size: 3px 3px;
+    z-index: -1;
+  }
 }

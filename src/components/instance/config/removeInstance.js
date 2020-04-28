@@ -72,7 +72,7 @@ export default ({ setInstanceAction }) => {
         type="text"
         title="instance_name"
         placeholder={`Enter "${instance_name}" here to confirm.`}
-        value={formData.instance_name}
+        value={formData.delete_instance_name || ''}
       />
 
       {formData.delete_instance_name === instance_name && (
@@ -110,7 +110,7 @@ export default ({ setInstanceAction }) => {
           </Card>
           <Row>
             <Col>
-              <Button onClick={() => setFormData({})} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

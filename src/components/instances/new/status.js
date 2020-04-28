@@ -35,7 +35,7 @@ export default ({ closeAndResetModal }) => {
 
     const response = await addInstance({
       auth: lmsAuth,
-      newInstanceObject,
+      ...newInstanceObject,
     });
 
     if (response.error) {

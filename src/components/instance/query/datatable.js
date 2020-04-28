@@ -20,6 +20,7 @@ export default ({ query }) => {
   let controller;
 
   useAsyncEffect(() => {
+    console.log(1);
     if (query.query) {
       setTableState({
         ...tableState,
@@ -46,7 +47,7 @@ export default ({ query }) => {
       if (query.query && query.lastUpdate) {
         if (controller) controller.abort();
         controller = new AbortController();
-        setTableState({ loading: true });
+        setTableState({ ...tableState, loading: true });
 
         const response = await getQueryData({
           query: query.query.replace(/\n/g, ' ').trim(),
@@ -56,14 +57,15 @@ export default ({ query }) => {
         });
 
         if (response.error) {
-          setTableState({ message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });
+          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });
         } else if (response.message) {
-          setTableState({ message: response.message, loading: false, error: false, reload: false });
+          setTableState({ ...tableState, message: response.message, loading: false, error: false, reload: false });
         } else if (!response.tableData.length) {
-          setTableState({ message: 'Your query produced no results', loading: false, error: false, reload: false });
+          setTableState({ ...tableState, message: 'Your query produced no results', loading: false, error: false, reload: false });
         } else {
           const sortable = query.query.toLowerCase().indexOf('order by') === -1;
           setTableState({
+            ...tableState,
             tableData: response.tableData,
             totalRecords: response.totalRecords,
             dataTableColumns: response.dataTableColumns,
@@ -97,8 +99,10 @@ export default ({ query }) => {
         totalRecords={tableState.totalRecords}
         loading={tableState.loading}
         autoRefresh={tableState.autoRefresh}
+        setAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         showFilter={tableState.showFilter}
         filtered={tableState.filtered}
+        toggleFilter={(newValues) => setTableState({ ...tableState, ...newValues })}
         setLastUpdate={setLastUpdate}
       />
       <Card className="my-3">

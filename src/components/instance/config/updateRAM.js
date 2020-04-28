@@ -84,6 +84,7 @@ export default ({ setInstanceAction }) => {
   ) : (
     <>
       <SelectDropdown
+        className="react-select-container"
         classNamePrefix="react-select"
         onChange={({ value }) => setFormData({ ...formData, stripe_plan_id: value })}
         options={computeProducts}

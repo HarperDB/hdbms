@@ -107,11 +107,6 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
-            Update Card
-          </Button>
-        </Col>
-        <Col sm="6">
           <Button
             title="Remove Card"
             disabled={formState.submitted}
@@ -125,6 +120,11 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             color="danger"
           >
             Remove Card
+          </Button>
+        </Col>
+        <Col sm="6">
+          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+            Update Card
           </Button>
         </Col>
       </Row>

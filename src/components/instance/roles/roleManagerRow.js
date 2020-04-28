@@ -48,7 +48,7 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
 
   return (
     <Row key={item} className="item-row" onClick={handleSetActive}>
-      <Col className={`text-nowrap text-truncate pt-1 ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item.role}?` : item.role}</Col>
+      <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item.role}?` : item.role}</Col>
       <Col className="item-action">
         {isConfirmingDropItem ? (
           <>

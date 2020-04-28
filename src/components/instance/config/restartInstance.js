@@ -77,7 +77,7 @@ export default ({ instanceAction, setInstanceAction }) => {
         type="text"
         title="instance_name"
         placeholder={`Enter "${instance_name}" here to confirm.`}
-        value={formData.instance_name}
+        value={formData.restart_instance_name || ''}
       />
 
       {formData.restart_instance_name === instance_name && (
@@ -96,7 +96,7 @@ export default ({ instanceAction, setInstanceAction }) => {
           </Card>
           <Row>
             <Col>
-              <Button onClick={() => setFormData({})} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={() => setFormData({ restart_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

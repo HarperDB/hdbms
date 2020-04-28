@@ -12,16 +12,22 @@
         cursor: not-allowed;
       }
 
-      .new-instance-plus {
-        transform: rotate(-90deg);
-        transition: transform 500ms ease-in-out;
-      }
+      &.new {
+        color: $color-purple;
 
-      &:hover {
         .new-instance-plus {
-          transform: rotate(90deg);
+          transform: rotate(-90deg);
+          transition: transform 500ms ease-in-out;
+        }
+
+        &:hover {
+          .new-instance-plus {
+            transform: rotate(90deg);
+          }
         }
       }
+
+
 
       .instance-name {
         line-height: 1 !important;

@@ -50,7 +50,9 @@ export default () => {
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">
-          <a
+          <i
+            title="Filter Users"
+            className="fa fa-search mr-3"
             onClick={() =>
               setTableState({
                 ...tableState,
@@ -58,9 +60,7 @@ export default () => {
                 showFilter: !tableState.showFilter,
               })
             }
-          >
-            <i title="Filter Users" className="fa fa-search mr-3" />
-          </a>
+          />
         </Col>
       </Row>
       <Card className="my-3">
