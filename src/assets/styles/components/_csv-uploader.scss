@@ -11,13 +11,9 @@
   }
 
   .drop-zone {
-    background-image: linear-gradient(45deg, $color-lightergrey 25%, transparent 25%),
-      linear-gradient(-45deg, $color-lightergrey 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, $color-lightergrey 75%),
-      linear-gradient(-45deg, transparent 75%, $color-lightergrey 75%);
-    background-position: 0 0, 1px 0, 1px -1px, 0 1px;
-    background-size: 2px 2px;
-    color: $color-grey;
+    background: radial-gradient($color-lightgrey 1px, transparent 0);
+    background-size: 3px 3px !important;
+    color: $color-black;
     font-size: $font-size-root;
     outline: none !important;
   }

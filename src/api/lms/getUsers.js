@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 
-export default async ({ auth, payload: { customer_id } }) => {
+export default async ({ auth, customer_id }) => {
   const response = await queryLMS({
     endpoint: 'getUsers',
     method: 'POST',
@@ -11,8 +11,8 @@ export default async ({ auth, payload: { customer_id } }) => {
 
   let users = [];
 
-  if (Array.isArray(response.body)) {
-    users = response.body.sort((a, b) => (a.lastname < b.lastname ? 1 : -1));
+  if (Array.isArray(response)) {
+    users = response.sort((a, b) => (a.lastname < b.lastname ? 1 : -1));
   }
 
   return appState.update((s) => {

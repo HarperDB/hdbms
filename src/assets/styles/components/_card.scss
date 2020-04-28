@@ -1,12 +1,18 @@
 .floating-card-header {
   color: $color-white;
-  //text-shadow: 0 2px 3px $grey-overlay;
+  margin-bottom: 0.5rem !important;
+  white-space: nowrap;
+}
+
+i.floating-card-header {
+  cursor: pointer;
 }
 
 .card {
   background: $color-white;
   border-radius: $border-radius;
   color: $color-black;
+  border: 1px solid $faint-white-overlay;
 
   &.error,
   &.success {
@@ -32,9 +38,5 @@
     .card-body {
       color: $color-success;
     }
-  }
-
-  &.has-shadow {
-    box-shadow: 0 0 5px $dark-grey-overlay;
   }
 }

@@ -6,7 +6,7 @@ import Cloud from './filter/cloud';
 import Search from './filter/search';
 
 const SubNav = () => (
-  <Navbar className="app-subnav" fixed="top" expand="xs">
+  <Navbar className="app-subnav">
     <Nav navbar>
       <div className="instance-toggle-holder">
         <Local />

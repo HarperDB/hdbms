@@ -39,12 +39,10 @@ export default ({ formStateHeight }) => {
 
         const response = await updatePassword({
           auth: lmsAuth,
-          payload: {
-            user_id: lmsAuth.user_id,
-            password: newpassword,
-          },
+          user_id: lmsAuth.user_id,
+          password: newpassword,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: response.message,
           });

@@ -5,8 +5,10 @@ import { useAlert } from 'react-alert';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
+import useDarkTheme from '../../../state/darkTheme';
 
 export default ({ username, closeModal, clusterUser }) => {
+  const [darkTheme] = useDarkTheme(false);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
@@ -42,7 +44,7 @@ export default ({ username, closeModal, clusterUser }) => {
   };
 
   return (
-    <Modal id="new-instance-modal" isOpen toggle={closeModal}>
+    <Modal id="new-instance-modal" isOpen toggle={closeModal} className={darkTheme ? 'dark' : ''}>
       <ModalHeader toggle={closeModal}>
         Update Password For &quot;
         {username}

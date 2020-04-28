@@ -33,19 +33,17 @@ export default ({ setLastUpdate }) => {
 
         const response = await addUser({
           auth,
-          payload: {
-            ...formData,
-            customer_id: auth.customer_id,
-          },
+          ...formData,
+          customer_id: auth.customer_id,
         });
-        if (response.result) {
+        if (response.error) {
+          setFormState({
+            error: response.message,
+          });
+        } else {
           setLastUpdate(Date.now());
           setFormState({
             success: response.message,
-          });
-        } else {
-          setFormState({
-            error: response.message,
           });
         }
       }

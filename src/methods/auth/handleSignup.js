@@ -27,7 +27,7 @@ export default async ({ formData }) => {
     };
   }
 
-  const subdomainResponse = await checkSubdomain({ payload: { subdomain } });
+  const subdomainResponse = await checkSubdomain({ subdomain });
 
   if (subdomainResponse.result) {
     return {
@@ -36,16 +36,14 @@ export default async ({ formData }) => {
   }
 
   const response = await addCustomer({
-    payload: {
-      firstname,
-      lastname,
-      email,
-      customer_name,
-      subdomain,
-      coupon_code,
-    },
+    firstname,
+    lastname,
+    email,
+    customer_name,
+    subdomain,
+    coupon_code,
   });
-  if (response.result === false) {
+  if (response.error) {
     return {
       error: response.message.replace('Bad request: ', '').replace(/['"]+/g, ''),
     };

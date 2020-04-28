@@ -6,8 +6,10 @@ import { useAlert } from 'react-alert';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
+import useDarkTheme from '../../../state/darkTheme';
 
 export default ({ username, role, closeModal }) => {
+  const [darkTheme] = useDarkTheme(false);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
@@ -50,7 +52,7 @@ export default ({ username, role, closeModal }) => {
   useAsyncEffect(() => setFormData({ ...formData, role }), []);
 
   return (
-    <Modal id="new-instance-modal" isOpen toggle={closeModal}>
+    <Modal id="new-instance-modal" isOpen toggle={closeModal} className={darkTheme ? 'dark' : ''}>
       <ModalHeader toggle={closeModal}>
         Update Role For &quot;
         {username}
@@ -58,8 +60,8 @@ export default ({ username, role, closeModal }) => {
       </ModalHeader>
       <ModalBody>
         <SelectDropdown
+          className="react-select-container mb-2"
           classNamePrefix="react-select"
-          className="mb-2"
           onChange={({ value }) =>
             setFormData({
               ...formData,

@@ -50,18 +50,16 @@ export default () => {
 
   return (
     <>
-      <Row>
-        <Col className="text-nowrap text-left">
-          <span className="text-white mb-2 floating-card-header">instance logs</span>
-        </Col>
+      <Row className="floating-card-header">
+        <Col>instance logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-right text-white text-nowrap">
-          <i title="Update Logs" className={`fa floating-card-header mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
+        <Col className="text-md-right">
+          <i title="Update Logs" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
           <span className="mr-2">auto</span>
-          <i title="Turn on autofresh" className={`floating-card-header fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
+          <i title="Turn on autofresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
           <span className="mx-3 text">|</span>
           <span className="mr-2">detailed</span>
-          <i title="Turn on detailed logs" className={`floating-card-header fa fa-lg fa-toggle-${showDetail ? 'on' : 'off'}`} onClick={() => setShowDetail(!showDetail)} />
+          <i title="Turn on detailed logs" className={`fa fa-lg fa-toggle-${showDetail ? 'on' : 'off'}`} onClick={() => setShowDetail(!showDetail)} />
         </Col>
       </Row>
       <Card className="my-3">

@@ -7,7 +7,7 @@ import AddUserForm from './add';
 export default () => (
   <Row>
     <Col xl="3" lg="4" md="5" xs="12">
-      <span className="text-white mb-2 floating-card-header">add user</span>
+      <span className="floating-card-header">add user</span>
       <Card className="my-3">
         <CardBody>
           <AddUserForm />

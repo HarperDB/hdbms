@@ -38,7 +38,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         });
         setTimeout(() => setFormState({}), 2000);
       } else {
-        const payload = await stripe.createPaymentMethod({
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: 'card',
           card: elements.getElement(CardNumberElement),
           billing_details: {
@@ -50,24 +50,20 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           processing: true,
         });
 
-        if (payload.error) {
+        if (error) {
           setFormState({
-            error: payload.error.message,
+            error: error.message,
           });
           setTimeout(() => setFormState({}), 2000);
         } else {
           await addPaymentMethod({
             auth: lmsAuth,
-            payload: {
-              payment_method_id: payload.paymentMethod.id,
-              stripe_id: customer.stripe_id,
-            },
+            payment_method_id: paymentMethod.id,
+            stripe_id: customer.stripe_id,
           });
           await getCustomer({
             auth: lmsAuth,
-            payload: {
-              customer_id: lmsAuth.customer_id,
-            },
+            customer_id: lmsAuth.customer_id,
           });
           setFormState({
             success: true,

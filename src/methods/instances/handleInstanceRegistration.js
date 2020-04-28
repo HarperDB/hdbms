@@ -79,11 +79,9 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     const fingerprint = await getFingerprint({ auth: instanceAuth, url });
     const license = await createLicense({
       auth,
-      payload: {
-        compute_stack_id,
-        customer_id: auth.customer_id,
-        fingerprint,
-      },
+      compute_stack_id,
+      customer_id: auth.customer_id,
+      fingerprint,
     });
 
     const apply = await setLicense({

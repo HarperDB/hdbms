@@ -34,23 +34,19 @@ export default ({ formStateHeight }) => {
 
         const response = await updateUser({
           auth,
-          payload: {
-            firstname,
-            lastname,
-            customer_id,
-            user_id,
-          },
+          firstname,
+          lastname,
+          customer_id,
+          user_id,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: response.message,
           });
         } else {
           const user = await getUser({
             auth,
-            payload: {
-              email: auth.email,
-            },
+            email: auth.email,
           });
           appState.update((s) => {
             s.auth = { ...auth, ...user };

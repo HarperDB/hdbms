@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Nav, NavItem, SelectDropdown } from '@nio/ui-kit';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 
@@ -19,11 +19,26 @@ const icon = (is_local) => ({
   },
 });
 
-const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'WAITING ON APIGATEWAY'];
+const routeIcon = (iconCode) => {
+  return {
+    alignItems: 'center',
+    display: 'flex',
+
+    ':before': {
+      content: `"\\${iconCode}"`,
+      display: 'inline-block',
+      font: 'normal normal normal 14px/1 FontAwesome',
+      marginRight: 8,
+    },
+  };
+};
+
+const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
 
 export default ({ routes = [] }) => {
   const { compute_stack_id } = useParams();
   const history = useHistory();
+  const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
   const { options, activeOption } = useStoreState(
     appState,
@@ -45,9 +60,15 @@ export default ({ routes = [] }) => {
     },
     [compute_stack_id]
   );
+  const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
+  const activeRoute = {
+    label: currentRoute.link,
+    value: currentRoute.link,
+    iconCode: currentRoute.iconCode,
+  };
 
   return (
-    <Navbar className="app-subnav" fixed="top" expand="xs">
+    <Navbar className="app-subnav">
       <Nav navbar className="instance-select">
         <SelectDropdown
           className="react-select-container"
@@ -67,7 +88,7 @@ export default ({ routes = [] }) => {
           }}
         />
       </Nav>
-      <Nav navbar className="instance-nav">
+      <Nav navbar className="instance-nav d-none d-md-flex">
         {routes.map((route) => (
           <NavItem key={route.path}>
             <NavLink className="text-capitalize nav-link" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
@@ -76,6 +97,23 @@ export default ({ routes = [] }) => {
             </NavLink>
           </NavItem>
         ))}
+      </Nav>
+      <Nav navbar className="instance-nav-select d-flex d-md-none">
+        <SelectDropdown
+          className="react-select-container"
+          classNamePrefix="react-select"
+          width="200px"
+          onChange={({ value }) => history.push(`/instance/${compute_stack_id}/${value}`)}
+          options={routes.map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
+          value={activeRoute}
+          defaultValue={activeRoute.value}
+          isSearchable={false}
+          isClearable={false}
+          styles={{
+            option: (styles, { data }) => ({ ...styles, ...routeIcon(data.iconCode) }),
+            singleValue: (styles, { data }) => ({ ...styles, ...routeIcon(data.iconCode) }),
+          }}
+        />
       </Nav>
     </Navbar>
   );

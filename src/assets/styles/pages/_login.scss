@@ -29,7 +29,6 @@
 
   .card {
     background: $faint-white-overlay !important;
-    box-shadow: 0 0 4px $lighter-grey-overlay !important;
     min-height: 186px !important;
     z-index: 2;
 
@@ -43,8 +42,8 @@
 
   input {
     background: $lighter-grey-overlay !important;
-    border: 0 !important;
-    box-shadow: inset 0 0 4px $lighter-grey-overlay !important;
+    border: 1px solid $faint-white-overlay !important;
+    box-shadow: inset 0 0 6px 1px $lighter-grey-overlay !important;
     color: $color-white !important;
     text-align: center !important;
 

@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
-import handleKeydown from '../../methods/util/handleKeydown';
+import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -30,8 +30,8 @@ export default () => {
         setFormState({
           processing: true,
         });
-        const response = await resetPassword({ payload: { email } });
-        if (response.result === false) {
+        const response = await resetPassword({ email });
+        if (response.error) {
           setFormState({
             error: response.message,
           });
@@ -92,7 +92,7 @@ export default () => {
                     email: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="text"

@@ -49,14 +49,12 @@ export default ({ setInstanceAction }) => {
 
       const response = await updateInstance({
         auth,
-        payload: {
-          compute_stack_id,
-          customer_id: customer.customer_id,
-          ...formData,
-        },
+        compute_stack_id,
+        customer_id: customer.customer_id,
+        ...formData,
       });
 
-      if (response.result === false) {
+      if (response.error) {
         alert.error('There was an error updating your instance. Please try again later.');
         setInstanceAction(false);
       } else {
@@ -80,6 +78,7 @@ export default ({ setInstanceAction }) => {
   ) : (
     <>
       <SelectDropdown
+        className="react-select-container"
         classNamePrefix="react-select"
         onChange={({ value }) =>
           setFormData({

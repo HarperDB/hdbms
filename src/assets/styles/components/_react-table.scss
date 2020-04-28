@@ -6,13 +6,17 @@
 
   .rt-thead {
     &.-header {
-      border-top: 1px solid $lighter-grey-overlay !important;
+      border-top: 1px solid $lighter-grey-overlay;
       font-weight: $font-weight-bold;
     }
 
     &.-filters {
-      input {
-        background: $lighter-grey-overlay !important;
+      input,
+      select {
+        box-shadow: none;
+        background: $lighter-grey-overlay;
+        color: $color-black;
+        height: 33px !important;
       }
     }
   }
@@ -105,12 +109,7 @@
     text-overflow: ellipsis;
   }
 
-  input,
-  select {
-    box-shadow: none;
-    color: $color-black;
-    height: 33px !important;
-  }
+
 
   .image-renderer {
     position: relative;

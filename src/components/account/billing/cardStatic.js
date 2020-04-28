@@ -33,27 +33,23 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
 
         const response = await removePaymentMethod({
           auth,
-          payload: {
-            stripe_id: customer.stripe_id,
-            payment_method_id: customerCard.id,
-          },
+          stripe_id: customer.stripe_id,
+          payment_method_id: customerCard.id,
         });
-        if (response.result) {
+        if (response.error) {
+          setFormState({
+            error: response.message,
+          });
+          setTimeout(() => setFormState({}), 2000);
+        } else {
           setFormState({
             success: true,
           });
           await getCustomer({
             auth,
-            payload: {
-              customer_id: customer.customer_id,
-            },
+            customer_id: customer.customer_id,
           });
           setEditingCard(false);
-        } else {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => setFormState({}), 2000);
         }
       }
     }
@@ -111,11 +107,6 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
-            Update Card
-          </Button>
-        </Col>
-        <Col sm="6">
           <Button
             title="Remove Card"
             disabled={formState.submitted}
@@ -129,6 +120,11 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             color="danger"
           >
             Remove Card
+          </Button>
+        </Col>
+        <Col sm="6">
+          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+            Update Card
           </Button>
         </Col>
       </Row>

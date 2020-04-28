@@ -20,7 +20,7 @@ export default () => {
 
   return (
     <>
-      <span className="text-white mb-2 floating-card-header">instance overview</span>
+      <span className="floating-card-header">instance overview</span>
       <Card className="my-3 instance-details">
         <CardBody>
           <Row>

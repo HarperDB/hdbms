@@ -1,28 +1,74 @@
 .app-subnav {
   background: $black-overlay !important;
+  display: flex;
+  flex-flow: row nowrap;
   height: 50px;
+  justify-content: flex-start;
+  left: 0;
   min-width: $min-width;
   padding: 5px 2rem;
   position: fixed;
+  right: 0;
   top: 60px !important;
-  transition: top 250ms;
   width: 100%;
   z-index: 98 !important;
 
+  @media screen and (max-width: 991px) {
+    padding: 5px 1rem;
+  }
+
   .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center !important;
     margin: 0 auto;
     width: 100%;
-    justify-content: center !important;
+
+
+    .react-select-container {
+      max-width: 287px;
+      width: 100%;
+
+      .react-select__control,
+      .react-select__control:hover,
+      .react-select__control:focus,
+      .react-select__control--menu-is-open,
+      .react-select__control--is-focused,
+      .react-select__indicator-separator {
+        background: transparent !important;
+        border-color: $faint-white-overlay !important;
+
+        .react-select__single-value {
+          color: $color-white;
+        }
+
+        .react-select__indicator-separator {
+          background: $faint-white-overlay !important;
+        }
+      }
+
+      .react-select__option,
+      .react-select__option:hover,
+      .react-select__option:focus,
+      .react-select__option--is-focused {
+        background: $color-pureblack !important;
+        color: $color-lightgrey !important;
+        border-bottom: 1px solid $faint-white-overlay;
+
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      .react-select__menu {
+        background: $color-pureblack !important;
+      }
+    }
 
     .nav-item {
       line-height: 1 !important;
       margin-bottom: 0;
       padding: 0 10px;
-
-      @media screen and (max-width: 991px) {
-        font-size: 0.875rem;
-        padding: 0 5px;
-      }
 
       &:first-child {
         padding-left: 0;
@@ -55,12 +101,14 @@
       }
     }
 
+    &.instance-nav-select {
+      justify-content: flex-end !important;
+      padding-left: 15px;
+    }
+
     &.instance-select {
       justify-content: flex-start !important;
-
-      @media screen and (max-width: 767px) {
-        display: none;
-      }
+      padding-right: 15px;
     }
 
   }

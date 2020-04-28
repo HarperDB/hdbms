@@ -8,5 +8,5 @@ export default async ({ auth, customer_id, coupon_code }) => {
     payload: { customer_id, coupon_code },
   });
 
-  return response.body;
+  return response;
 };

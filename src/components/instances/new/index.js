@@ -6,6 +6,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import useNewInstance from '../../../state/newInstance';
+import useDarkTheme from '../../../state/darkTheme';
 
 import config from '../../../../config';
 
@@ -21,6 +22,7 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
+  const [darkTheme] = useDarkTheme(false);
   const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
@@ -50,7 +52,7 @@ export default () => {
   };
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={darkTheme ? 'dark' : ''}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody>
         {!products ? (

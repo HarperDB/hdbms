@@ -8,6 +8,7 @@
 @import 'assets/styles/core/global';
 @import 'assets/styles/core/typography';
 @import 'assets/styles/core/background';
+@import 'assets/styles/core/dark';
 
 // page styles
 @import 'assets/styles/pages/instances';
@@ -29,9 +30,12 @@
 @import 'assets/styles/components/button';
 @import 'assets/styles/components/content-container';
 @import 'assets/styles/components/forms';
+@import 'assets/styles/components/topnav';
 @import 'assets/styles/components/subnav';
 @import 'assets/styles/components/tooltip';
 @import 'assets/styles/components/json-editor';
+@import 'assets/styles/components/query-window';
+@import 'assets/styles/components/query-history';
 
 
 

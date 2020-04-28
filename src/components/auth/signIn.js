@@ -10,7 +10,7 @@ import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
-import handleKeydown from '../../methods/util/handleKeydown';
+import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
@@ -38,9 +38,9 @@ export default () => {
         });
         const response = await getUser({
           auth: { email, pass },
-          payload: { email },
+          email,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: 'Invalid Credentials',
           });
@@ -103,7 +103,7 @@ export default () => {
                     email: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="text"
@@ -118,7 +118,7 @@ export default () => {
                     pass: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"

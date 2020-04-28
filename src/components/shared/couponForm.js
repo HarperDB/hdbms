@@ -33,15 +33,13 @@ export default () => {
             coupon_code,
           });
 
-          if (response.result === false) {
+          if (response.error) {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
             getCustomer({
               auth,
-              payload: {
-                customer_id: customer.customer_id,
-              },
+              customer_id: customer.customer_id,
             });
           }
         }
@@ -68,7 +66,7 @@ export default () => {
         />
       </Col>
       <Col xs="6">
-        <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+        <Button color="purple" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
           {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add Coupon</span>}
         </Button>
       </Col>

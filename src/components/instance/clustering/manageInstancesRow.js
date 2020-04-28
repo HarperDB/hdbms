@@ -45,8 +45,8 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
 
   return (
     <Row className="item-row">
-      <Col className={`text-nowrap text-truncate pt-1 ${connection?.state === 'closed' ? 'text-danger' : ''}`}>{instance_name}</Col>
-      <Col className="item-action text-right">
+      <Col className={`item-label ${connection?.state === 'closed' ? 'text-danger' : ''}`}>{instance_name}</Col>
+      <Col className="item-action">
         {itemType === 'unregistered' ? (
           <>
             <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push('/instances/new')}>

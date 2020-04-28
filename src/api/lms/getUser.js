@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, payload: { email } }) => {
+export default async ({ auth, email }) => {
   const response = await queryLMS({
     endpoint: 'getUser',
     method: 'POST',
@@ -8,5 +8,5 @@ export default async ({ auth, payload: { email } }) => {
     auth,
   });
 
-  return response.body;
+  return response;
 };

@@ -5,32 +5,18 @@
     padding: 0 15px;
 
     .item-row {
-      border-bottom: 1px solid $light-grey-overlay;
+      border-top: 1px solid $lighter-grey-overlay;
       cursor: pointer;
       height: 49px;
-      padding-bottom: 6px;
-      padding-top: 12px;
 
-      &.form {
-        padding-bottom: 6px;
-        padding-top: 7px;
-
-        .input-holder {
-          padding: 0 6px;
-        }
-      }
-
-      &:last-child {
-        border-bottom: 0;
-      }
-
-      .btn {
-        box-shadow: none !important;
+      &:first-child {
+        border-top: 0;
       }
 
       .input-holder {
         flex-grow: 1;
         flex-shrink: 0;
+        padding: 0 6px;
         width: 100%;
 
         input {
@@ -48,9 +34,23 @@
         }
       }
 
+      .item-label,
+      .item-action,
+      .input-holder {
+        align-items: center;
+        display: flex;
+      }
+
+      .item-label {
+        justify-content: flex-start;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .item-action {
         flex-grow: 0;
         flex-shrink: 1;
+        justify-content: flex-end;
         min-width: 80px;
         padding-left: 0;
       }

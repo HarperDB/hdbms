@@ -9,7 +9,7 @@ import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import handleKeydown from '../../methods/util/handleKeydown';
+import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
@@ -39,12 +39,10 @@ export default () => {
         });
         const response = await updatePassword({
           auth: lmsAuth,
-          payload: {
-            ...lmsAuth,
-            password,
-          },
+          ...lmsAuth,
+          password,
         });
-        if (response.result === false) {
+        if (response.error) {
           setFormState({
             error: response.message,
           });
@@ -101,7 +99,7 @@ export default () => {
                     password: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="password"
@@ -115,7 +113,7 @@ export default () => {
                     password2: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"

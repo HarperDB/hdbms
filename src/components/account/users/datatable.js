@@ -33,9 +33,7 @@ export default ({ lastUpdate, setLastUpdate }) => {
   useAsyncEffect(async () => {
     getUsers({
       auth: lmsAuth,
-      payload: {
-        customer_id: lmsAuth.customer_id,
-      },
+      customer_id: lmsAuth.customer_id,
     });
   }, [lastUpdate, lmsAuth.customer_id]);
 
@@ -43,12 +41,10 @@ export default ({ lastUpdate, setLastUpdate }) => {
     if (userToRemove && userToRemove !== lmsAuth.user_id) {
       const response = await removeUser({
         auth: lmsAuth,
-        payload: {
-          user_id: userToRemove,
-          customer_id: lmsAuth.customer_id,
-        },
+        user_id: userToRemove,
+        customer_id: lmsAuth.customer_id,
       });
-      if (response.result === false) {
+      if (response.error) {
         alert.error(response.message);
       } else {
         setLastUpdate(Date.now());
@@ -59,14 +55,12 @@ export default ({ lastUpdate, setLastUpdate }) => {
 
   return (
     <>
-      <Row>
-        <Col className="text-nowrap">
-          <span className="text-white mb-2 floating-card-header">existing users</span>
-        </Col>
-        <Col className="text-right text-white text-nowrap">
+      <Row className="floating-card-header">
+        <Col>existing users</Col>
+        <Col className="text-right">
           <i
             title="Filter Users"
-            className="fa fa-search floating-card-header"
+            className="fa fa-search "
             onClick={() =>
               setTableState({
                 ...tableState,

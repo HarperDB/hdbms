@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 
-export default async ({ auth, payload: { customer_id } }) => {
+export default async ({ auth, customer_id }) => {
   const response = await queryLMS({
     endpoint: 'getCustomer',
     method: 'POST',
@@ -11,8 +11,8 @@ export default async ({ auth, payload: { customer_id } }) => {
 
   let customer = { customer_id };
 
-  if (response.body.result !== false) {
-    customer = response.body;
+  if (!response.error) {
+    customer = response;
   }
 
   return appState.update((s) => {

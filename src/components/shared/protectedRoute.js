@@ -29,9 +29,7 @@ const ProtectedRoute = ({ children }) => {
       getRegions();
       getCustomer({
         auth,
-        payload: {
-          customer_id: auth.customer_id,
-        },
+        customer_id: auth.customer_id,
       });
     }
   }, []);

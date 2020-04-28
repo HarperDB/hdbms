@@ -39,13 +39,11 @@ export default ({ setInstanceAction }) => {
 
         const response = await removeInstance({
           auth,
-          payload: {
-            customer_id: customer.customer_id,
-            compute_stack_id,
-          },
+          customer_id: customer.customer_id,
+          compute_stack_id,
         });
 
-        if (response.result === false) {
+        if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
           setInstanceAction(false);
         } else {
@@ -74,7 +72,7 @@ export default ({ setInstanceAction }) => {
         type="text"
         title="instance_name"
         placeholder={`Enter "${instance_name}" here to confirm.`}
-        value={formData.instance_name}
+        value={formData.delete_instance_name || ''}
       />
 
       {formData.delete_instance_name === instance_name && (
@@ -112,7 +110,7 @@ export default ({ setInstanceAction }) => {
           </Card>
           <Row>
             <Col>
-              <Button onClick={() => setFormData({})} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

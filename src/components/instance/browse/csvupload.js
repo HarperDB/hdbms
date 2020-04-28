@@ -15,7 +15,7 @@ export default () => {
 
   return (
     <div id="csv-upload">
-      <span className="text-white mb-2 floating-card-header">
+      <span className="floating-card-header">
         {schema} &gt; {table} &gt; csv upload
       </span>
       <Card className="my-3">

@@ -61,8 +61,8 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
 
   return (
     <Row key={item} className="item-row" onClick={handleSetActive}>
-      <Col className={`text-nowrap text-truncate pt-1 ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
-      <Col className="item-action text-right">
+      <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
+      <Col className="item-action">
         {confirmedDropItem ? (
           <Button disabled color="purple" className="round" title={`Viewing ${itemType} ${item}`}>
             <i className="fa fa-spinner fa-spin" />

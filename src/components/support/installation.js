@@ -10,7 +10,7 @@ export default () => {
   return (
     <Row id="support">
       <Col lg="4" className="mb-3">
-        <span className="text-white mb-2 floating-card-header">Local Install Via NPM</span>
+        <span className="floating-card-header">Local Install Via NPM</span>
         <Card className="my-3">
           <CardBody className="installation">
             HarperDB requires NodeJS/NPM, available by{' '}
@@ -29,7 +29,7 @@ export default () => {
         </Card>
       </Col>
       <Col lg="4" className="mb-3">
-        <span className="text-white mb-2 floating-card-header">Offline Local Install</span>
+        <span className="floating-card-header">Offline Local Install</span>
         <Card className="my-3">
           <CardBody className="installation">
             If you need to install HarperDB on a device without access to NPM, you can fetch the installer using the link below.
@@ -48,7 +48,7 @@ export default () => {
         </Card>
       </Col>
       <Col lg="4" className="mb-3">
-        <span className="text-white mb-2 floating-card-header">Docker Container</span>
+        <span className="floating-card-header">Docker Container</span>
         <Card className="my-3">
           <CardBody className="installation">
             Running HarperDB in a Docker container is as easy as fetching a stick.

@@ -5,12 +5,15 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import appState from '../state/appState';
+
 import usePersistedLMSAuth from '../state/persistedLMSAuth';
+import useDarkTheme from '../state/darkTheme';
 
 const TopNav = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [darkTheme, setDarkTheme] = useDarkTheme(false);
 
   const logOut = () => {
     setPersistedLMSAuth(false);
@@ -52,6 +55,15 @@ const TopNav = () => {
               &nbsp;Support
             </span>
           </NavLink>
+        </NavItem>
+        <NavItem className="ml-3">
+          <DumbLink title="Log Out" onClick={() => setDarkTheme(!darkTheme)}>
+            <i className={`fa fa-toggle-${darkTheme ? 'on' : 'off'} fa-lg d-sm-none d-inline-block`} />
+            <span className="d-none d-sm-inline-block">
+              <i className={`fa fa-toggle-${darkTheme ? 'on' : 'off'}`} />
+              &nbsp;Dark
+            </span>
+          </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
           <DumbLink title="Log Out" onClick={logOut}>
