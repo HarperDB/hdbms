@@ -8,7 +8,6 @@ import { useStoreState } from 'pullstate';
 import config from '../../../../config';
 
 import instanceState from '../../../state/instanceState';
-import tableState from '../../../state/tableState';
 
 import DataTableHeader from './datatableHeader';
 import getQueryData from '../../../methods/instance/getQueryData';
@@ -16,65 +15,38 @@ import EmptyPrompt from './emptyPrompt';
 
 export default ({ query }) => {
   const [lastUpdate, setLastUpdate] = useState();
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
-  const { filtered, sorted, loading, tableData, totalRecords, pageSize, autoRefresh, showFilter, dataTableColumns, error, message, reload } = useStoreState(
-    tableState,
-    (s) => ({
-      filtered: s.filtered,
-      sorted: s.sorted,
-      loading: s.loading,
-      tableData: s.tableData,
-      totalRecords: s.totalRecords,
-      pageSize: s.pageSize,
-      autoRefresh: s.autoRefresh,
-      showFilter: s.showFilter,
-      dataTableColumns: s.dataTableColumns,
-      error: s.error,
-      message: s.message,
-      reload: s.reload,
-    }),
-    [query.query]
-  );
+  const { auth, url } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url }));
+  const [tableState, setTableState] = useState({});
   let controller;
 
   useAsyncEffect(() => {
     if (query.query) {
-      tableState.update((s) => {
-        s.tableData = [];
-        s.totalPages = -1;
-        s.totalRecords = 0;
-        s.loading = false;
-        s.filtered = [];
-        s.sorted = [];
-        s.autoRefresh = false;
-        s.showFilter = false;
-        s.dataTableColumns = [];
-        s.error = false;
-        s.message = false;
-        s.reload = true;
+      setTableState({
+        ...tableState,
+        tableData: [],
+        totalPages: -1,
+        totalRecords: 0,
+        loading: false,
+        filtered: [],
+        sorted: [],
+        autoRefresh: false,
+        showFilter: false,
+        dataTableColumns: [],
+        error: false,
+        message: false,
+        reload: true,
       });
     } else {
-      tableState.update((s) => {
-        s.error = false;
-        s.message = false;
-        s.reload = false;
-      });
+      setTableState({ ...tableState, error: false, message: false, reload: false });
     }
-  }, [query]);
+  }, [query.query]);
 
   useAsyncEffect(
     async () => {
       if (query.query && query.lastUpdate) {
         if (controller) controller.abort();
-
         controller = new AbortController();
-
-        tableState.update((s) => {
-          s.loading = true;
-        });
+        setTableState({ loading: true });
 
         const response = await getQueryData({
           query: query.query.replace(/\n/g, ' ').trim(),
@@ -84,46 +56,23 @@ export default ({ query }) => {
         });
 
         if (response.error) {
-          tableState.update((s) => {
-            s.loading = false;
-            s.message = `Error fetching data: ${response.message}`;
-            s.error = true;
-            s.reload = false;
-          });
+          setTableState({ message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });
         } else if (response.message) {
-          tableState.update((s) => {
-            s.loading = false;
-            s.message = response.message;
-            s.error = false;
-            s.reload = false;
-          });
+          setTableState({ message: response.message, loading: false, error: false, reload: false });
         } else if (!response.tableData.length) {
-          tableState.update((s) => {
-            s.loading = false;
-            s.message = 'Your query produced no results';
-            s.error = false;
-            s.reload = false;
-          });
+          setTableState({ message: 'Your query produced no results', loading: false, error: false, reload: false });
         } else {
-          const sortFromQuery = query.query.toLowerCase().indexOf('order by') !== -1;
-          let newSort = false;
-          if (sortFromQuery) {
-            const queryOrderBy = query.query.toLowerCase().split('order by')[1].trim().split(' ');
-            const hasTableRef = queryOrderBy[0].indexOf('.') !== -1;
-            const queryOrderId = hasTableRef ? queryOrderBy[0].split('.')[1] : queryOrderBy[0];
-            const queryOrderDesc = queryOrderBy[1]?.toLowerCase() === 'desc';
-            newSort = [{ id: queryOrderId, desc: queryOrderDesc }];
-          }
-
-          tableState.update((s) => {
-            s.tableData = response.tableData;
-            s.totalRecords = response.totalRecords;
-            s.dataTableColumns = response.dataTableColumns;
-            s.loading = false;
-            s.error = false;
-            s.message = false;
-            s.reload = false;
-            s.sorted = newSort || [{ id: response.dataTableColumns[0].accessor, desc: s.sorted[0]?.desc || false }];
+          const sortable = query.query.toLowerCase().indexOf('order by') === -1;
+          setTableState({
+            tableData: response.tableData,
+            totalRecords: response.totalRecords,
+            dataTableColumns: response.dataTableColumns,
+            loading: false,
+            error: false,
+            message: false,
+            reload: false,
+            sorted: sortable ? [{ id: response.dataTableColumns[0].accessor, desc: (tableState.sorted && tableState.sorted[0]?.desc) || false }] : [],
+            sortable,
           });
         }
       }
@@ -135,48 +84,58 @@ export default ({ query }) => {
   );
 
   useInterval(() => {
-    if (autoRefresh && !loading) {
-      setLastUpdate(Date.now());
-    }
+    if (tableState.autoRefresh && !tableState.loading) setLastUpdate(Date.now());
   }, config.instance_refresh_rate);
 
-  return reload ? (
+  return tableState.reload ? (
     <EmptyPrompt message="Executing Query" />
-  ) : message ? (
-    <EmptyPrompt error={error} message={message} />
-  ) : tableData.length ? (
+  ) : tableState.message ? (
+    <EmptyPrompt error={tableState.error} message={tableState.message} />
+  ) : tableState.tableData?.length ? (
     <>
-      <DataTableHeader totalRecords={totalRecords} loading={loading} autoRefresh={autoRefresh} showFilter={showFilter} filtered={filtered} setLastUpdate={setLastUpdate} />
+      <DataTableHeader
+        totalRecords={tableState.totalRecords}
+        loading={tableState.loading}
+        autoRefresh={tableState.autoRefresh}
+        showFilter={tableState.showFilter}
+        filtered={tableState.filtered}
+        setLastUpdate={setLastUpdate}
+      />
       <Card className="my-3">
         <CardBody className="react-table-holder">
           <ReactTable
-            loading={loading && !autoRefresh}
+            sortable={tableState.sortable}
+            loading={tableState.loading && !tableState.autoRefresh}
             loadingText="loading"
-            data={tableData}
-            columns={dataTableColumns}
+            data={tableState.tableData}
+            columns={tableState.dataTableColumns}
             onFilteredChange={(value) =>
-              tableState.update((s) => {
-                s.filtered = value;
+              setTableState({
+                ...tableState,
+                filtered: value,
               })
             }
-            filtered={filtered}
+            filtered={tableState.filtered}
             onSortedChange={(value) =>
-              tableState.update((s) => {
-                s.sorted = value;
+              setTableState({
+                ...tableState,
+                sorted: value,
               })
             }
-            sorted={sorted}
+            sorted={tableState.sorted}
             onPageChange={(value) =>
-              tableState.update((s) => {
-                s.page = value;
+              setTableState({
+                ...tableState,
+                page: value,
               })
             }
-            filterable={showFilter}
-            defaultPageSize={pageSize}
-            pageSize={pageSize}
+            filterable={tableState.showFilter}
+            defaultPageSize={tableState.pageSize}
+            pageSize={tableState.pageSize}
             onPageSizeChange={(value) =>
-              tableState.update((s) => {
-                s.pageSize = value;
+              setTableState({
+                ...tableState,
+                pageSize: value,
               })
             }
           />
