@@ -5,8 +5,10 @@ import { useAlert } from 'react-alert';
 
 import instanceState from '../../../state/instanceState';
 import dropUser from '../../../api/instance/dropUser';
+import useDarkTheme from '../../../state/darkTheme';
 
 export default ({ username, closeModal }) => {
+  const [darkTheme] = useDarkTheme(false);
   const [formState, setFormState] = useState({});
   const alert = useAlert();
   const { auth, url } = useStoreState(instanceState, (s) => ({
@@ -32,7 +34,7 @@ export default ({ username, closeModal }) => {
   };
 
   return (
-    <Modal id="new-instance-modal" isOpen toggle={closeModal}>
+    <Modal id="new-instance-modal" isOpen toggle={closeModal} className={darkTheme ? 'dark' : ''}>
       <ModalHeader toggle={closeModal}>
         Delete User &quot;
         {username}

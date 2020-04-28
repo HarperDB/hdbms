@@ -51,8 +51,6 @@ export default () => {
     setTimeout(() => history.push('/instances'), 100);
   };
 
-  console.log(newInstance);
-
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={darkTheme ? 'dark' : ''}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
