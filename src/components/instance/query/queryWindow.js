@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
 
-import handleKeydown from '../../../methods/util/handleKeydown';
+import handleQueryTabsAndEnter from '../../../methods/util/handleQueryTabsAndEnter';
 
 export default ({ setQuery, query }) => {
   const [formData, setFormData] = useState('');
@@ -31,7 +31,7 @@ export default ({ setQuery, query }) => {
             type="textarea"
             className="sql-query-textarea"
             value={formData}
-            onKeyDown={(e) => handleKeydown(e, setFormState, true)}
+            onKeyDown={(e) => handleQueryTabsAndEnter(e, setFormState)}
             onChange={(e) => setFormData(e.target.value)}
           />
           <Row>

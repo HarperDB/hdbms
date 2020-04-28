@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resendRegistrationEmail from '../../api/lms/resendRegistrationEmail';
-import handleKeydown from '../../methods/util/handleKeydown';
+import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -92,7 +92,7 @@ export default () => {
                     email: e.target.value,
                   })
                 }
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="text"

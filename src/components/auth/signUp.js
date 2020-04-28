@@ -5,7 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
-import handleKeydown from '../../methods/util/handleKeydown';
+import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const { search } = useLocation();
@@ -77,7 +77,7 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <Input
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 className="mb-2 text-center"
                 type="text"
                 title="first name"
@@ -92,7 +92,7 @@ export default () => {
                 }
               />
               <Input
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 className="mb-2 text-center"
                 type="text"
                 title="last name"
@@ -107,7 +107,7 @@ export default () => {
                 }
               />
               <Input
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 className="mb-2 text-center"
                 type="text"
                 title="email"
@@ -122,7 +122,7 @@ export default () => {
                 }
               />
               <Input
-                onKeyDown={(e) => handleKeydown(e, setFormState)}
+                onKeyDown={(e) => handleEnter(e, setFormState)}
                 className="mb-2 text-center"
                 type="text"
                 title="company name"
@@ -139,7 +139,7 @@ export default () => {
               <Row>
                 <Col className="subdomain-form">
                   <Input
-                    onKeyDown={(e) => handleKeydown(e, setFormState)}
+                    onKeyDown={(e) => handleEnter(e, setFormState)}
                     className="mb-2 text-center"
                     type="text"
                     title="subdomain"
