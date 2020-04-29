@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import useDarkTheme from '../state/darkTheme';
 
@@ -21,6 +21,11 @@ import TopNav from './topnav';
 
 const App = () => {
   const [darkTheme] = useDarkTheme(false);
+  const history = useHistory();
+  const canonical = document.querySelector('link[rel="canonical"]');
+
+  useEffect(() => history.listen(() => (canonical.href = window.location.href)), [history]);
+
   return (
     <div className={darkTheme ? 'dark' : ''}>
       <div id="app-container">

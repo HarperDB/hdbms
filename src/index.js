@@ -6,7 +6,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import Analytics from 'react-router-ga';
 
 import './methods/util/textDecoderPolyfill';
-import './methods/util/canonical';
 import stripePromise from './methods/stripe/stripePromise';
 import config from '../config';
 
