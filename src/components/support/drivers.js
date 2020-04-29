@@ -4,7 +4,7 @@ import { Card, CardBody, Row } from '@nio/ui-kit';
 import DriverCard from './driverCard';
 
 export default () => (
-  <>
+  <main id="support">
     <span className="floating-card-header">Download Drivers</span>
     <Card className="my-3">
       <CardBody>
@@ -39,5 +39,5 @@ export default () => (
         </Row>
       </CardBody>
     </Card>
-  </>
+  </main>
 );

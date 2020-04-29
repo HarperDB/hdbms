@@ -61,35 +61,8 @@ h6 {
   }
 }
 
-a {
-  color: $color-purple !important;
-  cursor: pointer !important;
-  text-decoration: none !important;
-
-  &:hover {
-    color: $color-darkpurple !important;
-    text-decoration: none !important;
-  }
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  a {
-    color: $color-black;
-
-    &:hover {
-      color: $color-black;
-    }
-  }
-}
-
 b,
-.text-bold,
-strong {
+.text-bold {
   font-weight: $font-weight-bold;
 }
 

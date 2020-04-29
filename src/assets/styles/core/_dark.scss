@@ -14,6 +14,14 @@
     z-index: -1;
   }
 
+  a {
+    color: $color-lightergrey !important;
+
+    &:hover {
+      color: $color-white !important;
+    }
+  }
+
   .card {
     background: $dark-grey-overlay;
     color: $color-lightgrey !important;
@@ -131,4 +139,5 @@
     background: $color-pureblack !important;
     color: $color-lightgrey !important;
   }
+
 }

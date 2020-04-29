@@ -1,3 +1,12 @@
+a {
+  color: $color-lightpurple !important;
+  cursor: pointer !important;
+
+  &:hover {
+    color: $color-lightpurple !important;
+  }
+}
+
 ul {
   padding-inline-start: 14px;
 
