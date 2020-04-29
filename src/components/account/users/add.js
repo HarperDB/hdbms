@@ -33,7 +33,9 @@ export default ({ setLastUpdate }) => {
 
         const response = await addUser({
           auth,
-          ...formData,
+          firstname,
+          lastname,
+          email,
           customer_id: auth.customer_id,
         });
         if (response.error) {

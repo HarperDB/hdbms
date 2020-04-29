@@ -9,6 +9,16 @@
     }
   }
 
+  a {
+    text-decoration: underline !important;
+
+    &.btn {
+      text-decoration: none !important;
+    }
+  }
+
+
+
   .alert {
     overflow-x: auto;
     white-space: nowrap;

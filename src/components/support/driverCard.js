@@ -6,8 +6,8 @@ export default ({ icon, name, docs, urls }) => (
     <Card>
       <CardBody className="text-center">
         <i className={`fa fa-2x fa-${icon} text-purple`} />
-        <b className="d-block mt-3 mb-1">{name}</b>
-        <a className="d-block mb-3" href={docs ? `http://cdn.cdata.com/help/FHD/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
+        <b className="d-block mt-3 mb-2">{name}</b>
+        <a className="d-block mb-3 text-small" href={docs ? `http://cdn.cdata.com/help/FHD/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
           documentation
         </a>
         <Row>
