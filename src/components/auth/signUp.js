@@ -19,8 +19,6 @@ export default () => {
       const newFormState = await handleSignup({ formData });
       if (newFormState) {
         setFormState(newFormState);
-      } else {
-        setFormState({ processing: true });
       }
     }
   }, [formState]);
@@ -34,7 +32,7 @@ export default () => {
   return (
     <div id="login-form" className="sign-up">
       <div id="login-logo" title="HarperDB Logo" />
-      {formState.processing ? (
+      {formState.submitted ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
