@@ -30,7 +30,7 @@ export default () => {
   }, [formData]);
 
   return (
-    <div id="login-form" className={Object.keys(formState).length ? '' : 'sign-up'}>
+    <div id="login-form" className={formState.submitted || formState.success ? '' : 'sign-up'}>
       <div id="login-logo" title="HarperDB Logo" />
       {formState.submitted ? (
         <>
