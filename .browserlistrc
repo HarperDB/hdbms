@@ -1,10 +1,7 @@
 # Browsers that we support
 
-ie >= 11
-last 1 Edge version
-last 1 Firefox version
-last 1 Chrome version
-last 1 Safari version
-last 1 iOS version
-last 1 Android version
-last 1 ChromeAndroid version
+last 4 versions
+> 1%
+maintained node versions
+not dead
+not ie < 11
