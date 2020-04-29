@@ -7,13 +7,13 @@ import { useStoreState } from 'pullstate';
 import appState from '../state/appState';
 
 import usePersistedLMSAuth from '../state/persistedLMSAuth';
-import useDarkTheme from '../state/darkTheme';
+import themeState from '../state/themeState';
 
 const TopNav = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const history = useHistory();
   const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
-  const [darkTheme, setDarkTheme] = useDarkTheme(false);
+  const [darkTheme, setDarkTheme] = themeState(false);
 
   const logOut = () => {
     setPersistedLMSAuth(false);

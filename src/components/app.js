@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
-import useDarkTheme from '../state/darkTheme';
+import themeState from '../state/themeState';
 
 import SignUp from './auth/signUp';
 import SignIn from './auth/signIn';
@@ -20,7 +20,7 @@ import Instance from './instance';
 import TopNav from './topnav';
 
 const App = () => {
-  const [darkTheme] = useDarkTheme(false);
+  const [darkTheme] = themeState(false);
   const history = useHistory();
   const canonical = document.querySelector('link[rel="canonical"]');
 

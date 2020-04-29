@@ -6,7 +6,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import useNewInstance from '../../../state/newInstance';
-import useDarkTheme from '../../../state/darkTheme';
+import themeState from '../../../state/themeState';
 
 import config from '../../../../config';
 
@@ -22,7 +22,7 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const [darkTheme] = useDarkTheme(false);
+  const [darkTheme] = themeState(false);
   const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,

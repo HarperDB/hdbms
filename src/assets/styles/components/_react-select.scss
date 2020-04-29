@@ -31,9 +31,9 @@
   .react-select__option--is-focused {
     background: $color-white;
     border-bottom: 1px solid $color-lightgrey;
-    padding-top: 10px;
-    padding-bottom: 10px;
     color: $color-black;
+    padding-bottom: 10px;
+    padding-top: 10px;
 
     &:last-child {
       border-bottom: 0;

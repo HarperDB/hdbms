@@ -1,11 +1,11 @@
 #app-nav {
   background: $gradient-purple-magenta !important;
+  border-bottom: 1px solid transparent;
   height: 60px;
   min-width: $min-width;
   padding: 0 2rem;
   position: fixed;
   z-index: 99 !important;
-  border-bottom: 1px solid transparent;
 
   @media screen and (max-width: 991px) {
     padding: 0 1rem;

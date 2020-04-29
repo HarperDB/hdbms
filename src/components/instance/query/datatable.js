@@ -6,35 +6,36 @@ import { Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
 import config from '../../../../config';
-
 import instanceState from '../../../state/instanceState';
-
 import DataTableHeader from './datatableHeader';
 import getQueryData from '../../../methods/instance/getQueryData';
 import EmptyPrompt from './emptyPrompt';
 
+const defaultTableState = {
+  tableData: [],
+  totalPages: -1,
+  totalRecords: 0,
+  loading: false,
+  filtered: [],
+  sorted: [],
+  autoRefresh: false,
+  showFilter: false,
+  dataTableColumns: [],
+  error: false,
+  message: false,
+  reload: false,
+};
+
 export default ({ query }) => {
   const [lastUpdate, setLastUpdate] = useState();
   const { auth, url } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url }));
-  const [tableState, setTableState] = useState({});
+  const [tableState, setTableState] = useState(defaultTableState);
   let controller;
 
   useAsyncEffect(() => {
-    console.log(1);
     if (query.query) {
       setTableState({
-        ...tableState,
-        tableData: [],
-        totalPages: -1,
-        totalRecords: 0,
-        loading: false,
-        filtered: [],
-        sorted: [],
-        autoRefresh: false,
-        showFilter: false,
-        dataTableColumns: [],
-        error: false,
-        message: false,
+        ...defaultTableState,
         reload: true,
       });
     } else {
@@ -113,35 +114,15 @@ export default ({ query }) => {
             loadingText="loading"
             data={tableState.tableData}
             columns={tableState.dataTableColumns}
-            onFilteredChange={(value) =>
-              setTableState({
-                ...tableState,
-                filtered: value,
-              })
-            }
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
-            onSortedChange={(value) =>
-              setTableState({
-                ...tableState,
-                sorted: value,
-              })
-            }
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             sorted={tableState.sorted}
-            onPageChange={(value) =>
-              setTableState({
-                ...tableState,
-                page: value,
-              })
-            }
+            onPageChange={(value) => setTableState({ ...tableState, page: value })}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) =>
-              setTableState({
-                ...tableState,
-                pageSize: value,
-              })
-            }
+            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
           />
         </CardBody>
       </Card>
