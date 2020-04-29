@@ -10,12 +10,11 @@
   min-width: 270px;
   overflow: visible;
   position: absolute;
-  top: 0;
   transform: translateX(-50%);
   width: 100%;
 
   &.sign-up {
-    max-width: 520px;
+    max-width: 540px;
     min-height: 553px;
 
     @media screen and (max-width: 575px) {
