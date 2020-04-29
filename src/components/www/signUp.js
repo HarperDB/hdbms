@@ -19,6 +19,8 @@ export default () => {
       const newFormState = await handleSignup({ formData });
       if (newFormState) {
         setFormState(newFormState);
+      } else {
+        setFormState({ processing: true });
       }
     }
   }, [formState]);
@@ -31,7 +33,7 @@ export default () => {
 
   return (
     <div id="standalone">
-      {formState.submitted ? (
+      {formState.processing ? (
         <div className="p-4 text-center">
           <b>creating account</b>
           <br />
