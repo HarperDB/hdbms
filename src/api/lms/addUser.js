@@ -10,6 +10,7 @@ export default async ({ auth, firstname, lastname, email, customer_id }) => {
       email,
       customer_id,
     },
+    auth,
   });
 
   return response;
