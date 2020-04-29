@@ -49,6 +49,17 @@
     color: $color-lightgrey !important;
   }
 
+  #standalone {
+    input {
+      border-color: $color-lightgrey !important;
+    }
+    a,
+    a:hover {
+      color: $color-purple !important;
+      text-decoration: underline !important;
+    }
+  }
+
   .ReactTable {
     .rt-thead {
       &.-header {
