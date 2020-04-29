@@ -12,6 +12,26 @@
     <title>Studio :: HarperDB</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="outdated">
+        <div id="content">
+          HarperDB Studio supports most modern browsers. We don't support Internet Explorer because even Microsoft has moved on.
+          <br /><br />
+          Sadly, your current browser does not appear to be supported. Please use one of the following browsers to proceed.
+          <hr />
+          <a class="btn btn-block btn-purple mb-2" href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer">Google Chrome</a>
+          <a class="btn btn-block btn-purple mb-2" href="https://www.mozilla.org/en-US/firefox/new/" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a>
+          <a class="btn btn-block btn-purple" href="https://www.microsoft.com/en-us/edge" target="_blank" rel="noopener noreferrer">Microsoft Edge</a>
+        </div>
+      </div>
+    </div>
   </body>
+  <script>
+    setTimeout(() => {
+      var outdated = document.getElementById('outdated');
+      if (outdated) {
+        outdated.style['display'] = 'block';
+      }
+    }, 1000);
+  </script>
 </html>
