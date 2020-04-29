@@ -23,7 +23,7 @@ export default (value) => {
     case '[object Object]':
       return <TextViewer value={JSON.stringify(value)} />;
     case '[object Boolean]':
-      return <TextViewer value={value ? 'True' : 'False'} />;
+      return <TextViewer value={value ? 'true' : 'false'} />;
     case '[object String]':
       return isImage(value) ? <ImageViewer src={value} /> : <TextViewer value={value} />;
     default:

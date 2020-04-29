@@ -19,8 +19,6 @@ export default () => {
       const newFormState = await handleSignup({ formData });
       if (newFormState) {
         setFormState(newFormState);
-      } else {
-        setFormState({ processing: true });
       }
     }
   }, [formState]);
@@ -32,15 +30,14 @@ export default () => {
   }, [formData]);
 
   return (
-    <div id="login-form" className="sign-up">
+    <div id="login-form" className={formState.submitted || formState.success ? '' : 'sign-up'}>
       <div id="login-logo" title="HarperDB Logo" />
-      {formState.processing ? (
+      {formState.submitted ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
               creating your account
-              <br />
-              <br />
+              <hr />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -52,12 +49,8 @@ export default () => {
             <CardBody>
               <div className="text-center text-white">
                 success!
-                <br />
-                <br />
-                check your email for your username and password.
-                <br />
-                <br />
-                be sure to check your spam folder, just in case.
+                <hr />
+                check your email for your username and password. be sure to check your spam folder, just in case.
               </div>
             </CardBody>
           </Card>

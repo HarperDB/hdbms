@@ -43,13 +43,7 @@ export default () => {
           <i
             title="Filter Instances"
             className="fa fa-search mr-3"
-            onClick={() =>
-              setTableState({
-                ...tableState,
-                filtered: tableState.showFilter ? [] : tableState.filtered,
-                showFilter: !tableState.showFilter,
-              })
-            }
+            onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
           />
         </Col>
       </Row>
@@ -58,23 +52,13 @@ export default () => {
           <ReactTable
             data={clusterDataTable}
             columns={clusterDataTableColumns}
-            onFilteredChange={(value) =>
-              setTableState({
-                ...tableState,
-                filtered: value,
-              })
-            }
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
             sortable={false}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) =>
-              setTableState({
-                ...tableState,
-                pageSize: value,
-              })
-            }
+            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
           />
         </CardBody>

@@ -24,8 +24,8 @@
 
   .card {
     background: $dark-grey-overlay;
-    color: $color-lightgrey !important;
     border: 1px solid $faint-white-overlay;
+    color: $color-lightgrey !important;
   }
 
   hr,
@@ -34,7 +34,8 @@
   .radio-button>div,
   .modal-header,
   .card.error,
-  .card.success {
+  .card.success,
+  .past-query {
     border-color: $faint-white-overlay !important;
   }
 
@@ -51,8 +52,8 @@
   .ReactTable {
     .rt-thead {
       &.-header {
-        border-top: 1px solid $faint-white-overlay !important;
         border-bottom: 1px solid $faint-white-overlay !important;
+        border-top: 1px solid $faint-white-overlay !important;
       }
 
       &.-filters {
@@ -115,8 +116,8 @@
     .react-select__option:focus,
     .react-select__option--is-focused {
       background: $color-pureblack !important;
-      color: $color-lightgrey !important;
       border-bottom: 1px solid $faint-white-overlay;
+      color: $color-lightgrey !important;
 
       &:last-child {
         border-bottom: 0;

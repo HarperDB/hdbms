@@ -52,8 +52,8 @@
       .react-select__option:focus,
       .react-select__option--is-focused {
         background: $color-pureblack !important;
-        color: $color-lightgrey !important;
         border-bottom: 1px solid $faint-white-overlay;
+        color: $color-lightgrey !important;
 
         &:last-child {
           border-bottom: 0;

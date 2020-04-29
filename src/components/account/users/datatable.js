@@ -6,7 +6,6 @@ import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
-
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
 import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
@@ -31,19 +30,12 @@ export default ({ lastUpdate, setLastUpdate }) => {
   const [userToRemove, setUserToRemove] = useState(false);
 
   useAsyncEffect(async () => {
-    getUsers({
-      auth: lmsAuth,
-      customer_id: lmsAuth.customer_id,
-    });
+    getUsers({ auth: lmsAuth, customer_id: lmsAuth.customer_id });
   }, [lastUpdate, lmsAuth.customer_id]);
 
   useAsyncEffect(async () => {
     if (userToRemove && userToRemove !== lmsAuth.user_id) {
-      const response = await removeUser({
-        auth: lmsAuth,
-        user_id: userToRemove,
-        customer_id: lmsAuth.customer_id,
-      });
+      const response = await removeUser({ auth: lmsAuth, user_id: userToRemove, customer_id: lmsAuth.customer_id });
       if (response.error) {
         alert.error(response.message);
       } else {
@@ -61,13 +53,7 @@ export default ({ lastUpdate, setLastUpdate }) => {
           <i
             title="Filter Users"
             className="fa fa-search "
-            onClick={() =>
-              setTableState({
-                ...tableState,
-                filtered: tableState.showFilter ? [] : tableState.filtered,
-                showFilter: !tableState.showFilter,
-              })
-            }
+            onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
           />
         </Col>
       </Row>
@@ -75,42 +61,18 @@ export default ({ lastUpdate, setLastUpdate }) => {
         <CardBody>
           <ReactTable
             data={users || []}
-            columns={customerUserColumns({
-              setUserToRemove,
-              userToRemove,
-              current_user_id: lmsAuth.user_id,
-            })}
+            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: lmsAuth.user_id })}
             pages={tableState.pages}
-            onFilteredChange={(value) =>
-              setTableState({
-                ...tableState,
-                filtered: value,
-              })
-            }
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
-            onSortedChange={(value) =>
-              setTableState({
-                ...tableState,
-                sorted: value,
-              })
-            }
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             sorted={tableState.sorted}
-            onPageChange={(value) =>
-              setTableState({
-                ...tableState,
-                page: value,
-              })
-            }
+            onPageChange={(value) => setTableState({ ...tableState, page: value })}
             page={tableState.page}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) =>
-              setTableState({
-                ...tableState,
-                pageSize: value,
-              })
-            }
+            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
           />
         </CardBody>

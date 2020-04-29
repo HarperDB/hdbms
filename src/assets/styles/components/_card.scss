@@ -10,9 +10,9 @@ i.floating-card-header {
 
 .card {
   background: $color-white;
+  border: 1px solid $color-lightgrey;
   border-radius: $border-radius;
   color: $color-black;
-  border: 1px solid $color-lightgrey;
 
   &.error,
   &.success {
