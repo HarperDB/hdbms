@@ -9,9 +9,9 @@ import handleSignup from '../../methods/auth/handleSignup';
 
 export default () => {
   const { search } = useLocation();
-  const { code } = queryString.parse(search);
+  const { code, htuk, pageName, pageUri } = queryString.parse(search);
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({ coupon_code: code });
+  const [formData, setFormData] = useState({ coupon_code: code, htuk, pageName, pageUri });
   const [showToolTip, setShowToolTip] = useState(false);
 
   useAsyncEffect(async () => {

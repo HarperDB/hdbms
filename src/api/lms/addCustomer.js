@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ firstname, lastname, email, customer_name, subdomain, coupon_code }) => {
-  const response = await queryLMS({
+export default async ({ firstname, lastname, email, customer_name, subdomain, coupon_code, htuk, pageName, pageUri }) =>
+  queryLMS({
     endpoint: 'addCustomer',
     method: 'POST',
     payload: {
@@ -11,8 +11,8 @@ export default async ({ firstname, lastname, email, customer_name, subdomain, co
       customer_name,
       subdomain,
       coupon_code,
+      htuk,
+      pageName,
+      pageUri,
     },
   });
-
-  return response;
-};

@@ -4,7 +4,7 @@ import checkSubdomain from '../../api/lms/checkSubdomain';
 import isAlphaNumericHyphen from '../util/isAlphaNumericHyphen';
 
 export default async ({ formData }) => {
-  const { firstname, lastname, email, customer_name, subdomain, coupon_code } = formData;
+  const { firstname, lastname, email, customer_name, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
 
   if (!firstname || !lastname || !email || !customer_name || !subdomain) {
     return {
@@ -42,6 +42,9 @@ export default async ({ formData }) => {
     customer_name,
     subdomain,
     coupon_code,
+    htuk,
+    pageName,
+    pageUri,
   });
   if (response.error) {
     return {
