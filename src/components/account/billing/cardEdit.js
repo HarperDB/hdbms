@@ -64,6 +64,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             auth,
             payment_method_id: payload.paymentMethod.id,
             stripe_id: customer.stripe_id,
+            customer_id: customer.customer_id,
           });
 
           if (response.error) {

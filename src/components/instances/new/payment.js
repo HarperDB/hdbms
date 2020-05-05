@@ -16,7 +16,7 @@ import ContentContainer from '../../shared/contentContainer';
 
 export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
   const history = useHistory();
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const [formData, setFormData] = useState({
     postal_code: false,
@@ -57,13 +57,14 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           setTimeout(() => setFormState({}), 2000);
         } else {
           await addPaymentMethod({
-            auth: lmsAuth,
+            auth,
             payment_method_id: paymentMethod.id,
             stripe_id: customer.stripe_id,
+            customer_id: customer.customer_id,
           });
           await getCustomer({
-            auth: lmsAuth,
-            customer_id: lmsAuth.customer_id,
+            auth,
+            customer_id: customer.customer_id,
           });
           setFormState({
             success: true,

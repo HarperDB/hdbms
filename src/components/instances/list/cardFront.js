@@ -20,17 +20,12 @@ const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
+  const customer_id = useStoreState(appState, (s) => s.customer.customer_id);
   const history = useHistory();
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
-  const [instanceData, setInstanceData] = useState({
-    status: 'LOADING',
-    error: false,
-    clustering: '',
-    version: '',
-    retry: false,
-  });
+  const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
   const [lastUpdate, setLastUpdate] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [clicked, handleCardClick] = useState(false);
@@ -44,12 +39,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       } else if (instanceData.status === 'OK') {
         const result = await userInfo({ auth: instanceAuth, url });
         if (result.error) {
-          setInstanceData({
-            ...instanceData,
-            status: 'UNABLE TO CONNECT',
-            error: true,
-            retry: true,
-          });
+          setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
           alert.error('Unable to connect to instance.');
         } else {
           history.push(`/instance/${compute_stack_id}/browse`);
@@ -71,23 +61,13 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     }
 
     if (!instanceAuth) {
-      return setInstanceData({
-        ...instanceData,
-        status: 'PLEASE LOG IN',
-        error: true,
-        retry: false,
-      });
+      return setInstanceData({ ...instanceData, status: 'PLEASE LOG IN', error: true, retry: false });
     }
 
     if (instanceData.status === 'APPLYING LICENSE') {
       const restartResult = await userInfo({ auth: instanceAuth, url });
       if (!restartResult.error) {
-        setInstanceData({
-          ...instanceData,
-          status: 'OK',
-          error: false,
-          retry: false,
-        });
+        setInstanceData({ ...instanceData, status: 'OK', error: false, retry: false });
       }
       return false;
     }
@@ -96,6 +76,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
     const registrationResult = await handleInstanceRegistration({
       auth,
+      customer_id,
       instanceAuth,
       url,
       is_local,
@@ -114,10 +95,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
     if (['PLEASE LOG IN', 'LOGIN FAILED'].includes(registrationResult.instance)) {
       if (instanceAuth) {
-        setInstanceAuths({
-          ...instanceAuths,
-          [compute_stack_id]: false,
-        });
+        setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
       }
       if (['PLEASE LOG IN', 'LOGIN FAILED', 'UNABLE TO CONNECT'].includes(instanceData.status)) {
         registrationResult.instance = 'LOGIN FAILED';
@@ -132,7 +110,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, config.instance_refresh_rate);
 
   return (
-    <Card className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`} onClick={handleCardClick}>
+    <Card title={`Connect to instance ${instance_name}`} className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`} onClick={handleCardClick}>
       {!flipState && (
         <CardBody>
           <Row>

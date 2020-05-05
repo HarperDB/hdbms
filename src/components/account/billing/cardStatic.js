@@ -35,6 +35,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           auth,
           stripe_id: customer.stripe_id,
           payment_method_id: customerCard.id,
+          customer_id: customer.customer_id,
         });
         if (response.error) {
           setFormState({
@@ -50,6 +51,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             customer_id: customer.customer_id,
           });
           setEditingCard(false);
+          setTimeout(() => setFormState({}), 2000);
         }
       }
     }

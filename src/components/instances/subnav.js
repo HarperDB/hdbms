@@ -8,13 +8,13 @@ import Search from './filter/search';
 const SubNav = () => (
   <Navbar className="app-subnav">
     <Nav navbar>
-      <div className="instance-toggle-holder">
+      <div title="toggle local instances" className="instance-toggle-holder">
         <Local />
       </div>
-      <div className="instance-toggle-holder">
+      <div title="toggle cloud instances" className="instance-toggle-holder">
         <Cloud />
       </div>
-      <div className="instance-filter-holder">
+      <div title="filter instances by name, host, url, or region" className="instance-filter-holder">
         <Search />
       </div>
     </Nav>

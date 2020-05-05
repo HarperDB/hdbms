@@ -28,7 +28,7 @@ export default () => {
         alert.error('Unable to log into that instance');
         history.push('/instances');
         setLoadingInstance(false);
-      } else {
+      } else if (instances) {
         const { error } = await buildActiveInstanceObject({
           instances,
           compute_stack_id,
@@ -49,7 +49,7 @@ export default () => {
     );
     refreshInstance();
     return () => cancelSub();
-  }, [compute_stack_id]);
+  }, [compute_stack_id, instances]);
 
   return (
     <>

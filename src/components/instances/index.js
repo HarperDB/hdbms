@@ -15,9 +15,10 @@ import getInstances from '../../api/lms/getInstances';
 
 const InstancesIndex = () => {
   const { action } = useParams();
-  const { auth, products, regions, instances } = useStoreState(appState, (s) => ({
+  const { auth, products, regions, instances, customer_id } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
+    customer_id: s.customer?.customer_id,
     regions: s.regions,
     lastUpdate: s.lastUpdate,
     instances: s.instances,
@@ -27,7 +28,7 @@ const InstancesIndex = () => {
     if (!action)
       getInstances({
         auth,
-        customer_id: auth?.customer_id,
+        customer_id,
         products,
         regions,
         instanceCount: instances?.length,

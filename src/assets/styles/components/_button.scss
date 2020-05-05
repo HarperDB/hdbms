@@ -35,6 +35,14 @@
     padding: 0;
   }
 
+
+
+  &.btn-danger {
+    background-color: $color-danger !important;
+    border-color: $color-danger !important;
+    color: $color-white !important;
+  }
+
   &.btn-grey {
     background-color: $color-grey !important;
     border-color: $color-grey !important;

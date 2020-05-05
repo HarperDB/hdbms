@@ -8,7 +8,7 @@ import useNewInstance from '../../../state/newInstance';
 import appState from '../../../state/appState';
 
 export default () => {
-  const customer_id = useStoreState(appState, (s) => s.auth.customer_id);
+  const customer_id = useStoreState(appState, (s) => s.customer.customer_id);
   const history = useHistory();
   const [, setNewInstance] = useNewInstance({});
   const [formData, setFormData] = useState({});

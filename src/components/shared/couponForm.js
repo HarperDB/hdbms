@@ -33,7 +33,7 @@ export default () => {
             coupon_code,
           });
 
-          if (response.error) {
+          if (response.result === false || response.error) {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {

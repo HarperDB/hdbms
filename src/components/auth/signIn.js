@@ -25,34 +25,29 @@ export default () => {
     if (submitted) {
       const { email, pass } = formData;
       if (!email || !pass) {
-        setFormState({
-          error: 'all fields are required',
-        });
+        setFormState({ error: 'all fields are required' });
       } else if (!isEmail(email)) {
-        setFormState({
-          error: 'invalid email',
-        });
+        setFormState({ error: 'invalid email' });
       } else {
-        setFormState({
-          processing: true,
-        });
-        const response = await getUser({
-          auth: { email, pass },
-          email,
-        });
+        setFormState({ processing: true });
+        const response = await getUser({ email, pass });
+
         if (response.error) {
-          setFormState({
-            error: 'Invalid Credentials',
-          });
+          setFormState({ error: 'Invalid Credentials' });
           appState.update((s) => {
             s.auth = false;
           });
           setPersistedLMSAuth({});
         } else {
-          setPersistedLMSAuth({
-            email,
-            pass,
-          });
+          setPersistedLMSAuth({ ...persistedLMSAuth, email, pass });
+
+          if (!response.orgs) {
+            response.orgs = [
+              { customer_id: response.customer_id, customer_name: 'Default', status: 'accepted' },
+              { customer_id: 16271551, customer_name: 'Fake Accepted Org', status: 'accepted' },
+              { customer_id: 16051003, customer_name: 'Fake Invited Org', status: 'invited' },
+            ];
+          }
           appState.update((s) => {
             s.auth = {
               ...response,
@@ -60,7 +55,8 @@ export default () => {
               pass,
             };
           });
-          setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 100);
+          const destination = response.update_password ? '/update-password' : returnURL === '/organizations' ? returnURL : `/organizations/load?returnURL=${returnURL}`;
+          setTimeout(() => history.push(destination), 100);
         }
       }
     }
@@ -71,9 +67,9 @@ export default () => {
   }, [formData]);
 
   useAsyncEffect(() => {
-    const { email, pass } = persistedLMSAuth;
     const { processing } = formState;
-    if (email && pass && !processing) {
+    if (persistedLMSAuth && persistedLMSAuth.email && persistedLMSAuth.pass && !processing) {
+      const { email, pass } = persistedLMSAuth;
       setFormData({ email, pass });
       setFormState({ submitted: true });
     }
@@ -97,12 +93,7 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
@@ -112,12 +103,7 @@ export default () => {
                 placeholder="email address"
               />
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    pass: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
                 onKeyDown={(e) => handleEnter(e, setFormState)}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -126,17 +112,7 @@ export default () => {
                 autoComplete="false"
                 placeholder="password"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Sign In My Account"
-                block
-                color="purple"
-                disabled={formState.submitted}
-              >
+              <Button onClick={() => setFormState({ submitted: true })} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
                 Sign In
               </Button>
             </CardBody>

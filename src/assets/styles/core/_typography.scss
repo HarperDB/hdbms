@@ -82,15 +82,19 @@ b,
 }
 
 .text-lightgrey {
-  color: $color-lightgrey;
+  color: $color-lightgrey !important;
 }
 
 .text-grey {
-  color: $color-grey;
+  color: $color-grey !important;
+}
+
+.text-danger {
+  color: $color-danger !important;
 }
 
 .text-darkgrey {
-  color: $color-darkgrey;
+  color: $color-darkgrey !important;
 }
 
 .text-white-overlay {
@@ -98,5 +102,5 @@ b,
 }
 
 .text-purple {
-  color: $color-purple;
+  color: $color-purple !important;
 }

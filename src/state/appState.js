@@ -9,6 +9,7 @@ const appState = new Store({
   instances: false,
   hasCard: false,
   lastUpdate: false,
+  orgSearch: '',
   filterSearch: '',
   filterLocal: true,
   filterCloud: true,

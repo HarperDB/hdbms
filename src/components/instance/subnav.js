@@ -43,14 +43,16 @@ export default ({ routes = [] }) => {
   const { options, activeOption } = useStoreState(
     appState,
     (s) => {
-      const selectedInstance = s.instances.find((i) => i.compute_stack_id === compute_stack_id);
-      const otherInstances = s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
+      const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
+      const otherInstances = s.instances && s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
       return {
-        options: otherInstances.map((i) => ({
-          label: i.instance_name,
-          value: i.compute_stack_id,
-          is_local: i.is_local,
-        })),
+        options:
+          otherInstances &&
+          otherInstances.map((i) => ({
+            label: i.instance_name,
+            value: i.compute_stack_id,
+            is_local: i.is_local,
+          })),
         activeOption: {
           label: selectedInstance?.instance_name,
           value: compute_stack_id,
@@ -75,7 +77,7 @@ export default ({ routes = [] }) => {
           classNamePrefix="react-select"
           width="200px"
           onChange={({ value }) => history.push(`/instance/${value}/browse`)}
-          options={options}
+          options={options || []}
           value={activeOption}
           defaultValue={activeOption.value}
           isSearchable={false}
@@ -91,7 +93,11 @@ export default ({ routes = [] }) => {
       <Nav navbar className="instance-nav d-none d-md-flex">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink className="text-capitalize nav-link" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
+            <NavLink
+              title={route.link}
+              className="text-capitalize nav-link"
+              to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+            >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
             </NavLink>

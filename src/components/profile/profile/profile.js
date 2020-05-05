@@ -44,10 +44,7 @@ export default ({ formStateHeight }) => {
             error: response.message,
           });
         } else {
-          const user = await getUser({
-            auth,
-            email: auth.email,
-          });
+          const user = await getUser({ auth });
           appState.update((s) => {
             s.auth = { ...auth, ...user };
           });

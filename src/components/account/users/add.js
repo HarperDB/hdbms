@@ -11,6 +11,7 @@ import FormStatus from '../../shared/formStatus';
 
 export default ({ setLastUpdate }) => {
   const auth = useStoreState(appState, (s) => s.auth);
+  const customer = useStoreState(appState, (s) => s.customer);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -36,7 +37,7 @@ export default ({ setLastUpdate }) => {
           firstname,
           lastname,
           email,
-          customer_id: auth.customer_id,
+          customer_id: customer.customer_id,
         });
         if (response.error) {
           setFormState({

@@ -1,0 +1,74 @@
+#organizations {
+  .navbar-nav {
+    max-width: 400px;
+  }
+
+  .card {
+    height: 170px;
+
+    .org-name {
+      line-height: 1 !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      height: 15px;
+    }
+
+    .status-icon {
+      cursor: pointer;
+      position: relative;
+      width: 15px;
+
+      i {
+        position: absolute;
+        right: 15px;
+        top: -2px;
+
+
+        &.delete {
+          right: 35px;
+          top: -3px;
+        }
+      }
+    }
+
+    .org-status {
+      font-size: $font-size-smaller;
+      height: 20px;
+      margin: 5px 0 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
+    }
+  }
+
+  .org-filter-holder {
+    max-width: 400px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    .orgs-filter {
+      background: $faint-white-overlay !important;
+      border-color: transparent !important;
+      color: $color-white !important;
+      width: 100%;
+
+      &::placeholder {
+        color: $white-overlay !important;
+      }
+    }
+
+    .clear-filter {
+      background: none !important;
+      border: 0 !important;
+      position: absolute;
+      right: 8px;
+      top: 0;
+    }
+  }
+}

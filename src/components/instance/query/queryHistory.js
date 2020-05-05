@@ -21,14 +21,14 @@ export default ({ setQuery, query }) => {
       <Row className="floating-card-header">
         <Col xs="9">query history (click to load)</Col>
         <Col xs="3" className="text-right">
-          <i onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
+          <i title="clear query history" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
         </Col>
       </Row>
       <Card className="mt-3 mb-4">
         {queries && queries[compute_stack_id]?.length ? (
           <CardBody className="query-scroller">
             {queries[compute_stack_id].map((q) => (
-              <div className="past-query" key={q.query} onClick={() => setQuery(q.query)}>
+              <div title={`Load query: ${q.query}`} className="past-query" key={q.query} onClick={() => setQuery(q.query)}>
                 {q.query}
               </div>
             ))}

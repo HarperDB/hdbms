@@ -11,7 +11,8 @@ import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
 
 export default ({ lastUpdate, setLastUpdate }) => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const auth = useStoreState(appState, (s) => s.auth);
+  const customer = useStoreState(appState, (s) => s.customer);
   const alert = useAlert();
   const users = useStoreState(appState, (s) => s.users);
   const [tableState, setTableState] = useState({
@@ -30,12 +31,12 @@ export default ({ lastUpdate, setLastUpdate }) => {
   const [userToRemove, setUserToRemove] = useState(false);
 
   useAsyncEffect(async () => {
-    getUsers({ auth: lmsAuth, customer_id: lmsAuth.customer_id });
-  }, [lastUpdate, lmsAuth.customer_id]);
+    getUsers({ auth, customer_id: customer.customer_id });
+  }, [lastUpdate, auth.customer_id]);
 
   useAsyncEffect(async () => {
-    if (userToRemove && userToRemove !== lmsAuth.user_id) {
-      const response = await removeUser({ auth: lmsAuth, user_id: userToRemove, customer_id: lmsAuth.customer_id });
+    if (userToRemove && userToRemove !== auth.user_id) {
+      const response = await removeUser({ auth, user_id: userToRemove, customer_id: customer.customer_id });
       if (response.error) {
         alert.error(response.message);
       } else {
@@ -61,7 +62,7 @@ export default ({ lastUpdate, setLastUpdate }) => {
         <CardBody>
           <ReactTable
             data={users || []}
-            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: lmsAuth.user_id })}
+            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: auth.user_id })}
             pages={tableState.pages}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}

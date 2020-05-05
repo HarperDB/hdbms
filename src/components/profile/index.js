@@ -11,7 +11,7 @@ export default () => (
       {routes.map((route) => (
         <Route key={route.path} path={route.path} component={route.component} />
       ))}
-      <Redirect to="/account/users" />
+      <Redirect to="/profile/profile" />
     </Switch>
   </>
 );

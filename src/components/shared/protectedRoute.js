@@ -3,18 +3,17 @@ import { Redirect, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import Loader from './loader';
 import appState from '../../state/appState';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
-import getCustomer from '../../api/lms/getCustomer';
 import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 
 const ProtectedRoute = ({ children }) => {
-  const { auth, products, regions, instances, lastUpdate } = useStoreState(appState, (s) => ({
+  const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
+    customer_id: s.customer?.customer_id,
     regions: s.regions,
     lastUpdate: s.lastUpdate,
     instances: s.instances,
@@ -27,32 +26,24 @@ const ProtectedRoute = ({ children }) => {
       getCurrentVersion();
       getProducts();
       getRegions();
-      getCustomer({
-        auth,
-        customer_id: auth.customer_id,
-      });
     }
   }, []);
 
   useAsyncEffect(async () => {
-    if (auth && !fetching && products && regions) {
+    if (auth && !fetching && products && regions && customer_id) {
       setFetching(true);
       await getInstances({
         auth,
-        customer_id: auth?.customer_id,
+        customer_id,
         products,
         regions,
         instanceCount: instances?.length,
       });
       setFetching(false);
     }
-  }, [products, regions, lastUpdate]);
+  }, [products, regions, customer_id, lastUpdate]);
 
-  return auth?.email && auth?.pass ? (
-    <>{instances ? children : <Loader message="loading instances" />}</>
-  ) : (
-    <Redirect to={`/sign-in${!['/', '/instances'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />
-  );
+  return auth?.email && auth?.pass ? children : <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />;
 };
 
 export default ProtectedRoute;

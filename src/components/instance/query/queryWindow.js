@@ -38,6 +38,7 @@ export default ({ setQuery, query }) => {
             <Col>
               <Button
                 color="grey"
+                title="clear query"
                 block
                 className="mt-2"
                 onClick={() => {
@@ -49,7 +50,7 @@ export default ({ setQuery, query }) => {
               </Button>
             </Col>
             <Col>
-              <Button color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
+              <Button title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
                 Execute
               </Button>
             </Col>
