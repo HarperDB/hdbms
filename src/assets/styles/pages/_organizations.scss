@@ -7,11 +7,11 @@
     height: 170px;
 
     .org-name {
+      height: 15px;
       line-height: 1 !important;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      height: 15px;
     }
 
     .status-icon {
