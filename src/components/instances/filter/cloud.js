@@ -18,7 +18,11 @@ const icons = {
 const Cloud = () => {
   const filterCloud = useStoreState(appState, (s) => s.filterCloud);
 
-  return <ToggleButton width="100%" icons={icons} checked={filterCloud} onChange={updateFilter} />;
+  return (
+    <div title={`Click to ${filterCloud ? 'hide' : 'show'} cloud instances`} className="instance-toggle-holder">
+      <ToggleButton width="100%" icons={icons} checked={filterCloud} onChange={updateFilter} />
+    </div>
+  );
 };
 
 export default Cloud;

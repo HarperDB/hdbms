@@ -56,7 +56,7 @@ const TopNav = () => {
         )}
         {auth?.orgs?.length > 1 && (
           <NavItem className="ml-3">
-            <NavLink title="View Organizations" to="/organizations">
+            <NavLink title="View or Switch Organizations" to="/organizations">
               <i className="fa fa-building-o d-inline-block" />
               <span className="d-none d-md-inline-block">&nbsp; Organizations</span>
             </NavLink>

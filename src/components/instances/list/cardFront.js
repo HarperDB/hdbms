@@ -110,7 +110,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, config.instance_refresh_rate);
 
   return (
-    <Card title={`Connect to instance ${instance_name}`} className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`} onClick={handleCardClick}>
+    <Card
+      title={`${instanceAuth ? 'Connect to' : 'Log into'} instance ${instance_name}`}
+      className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`}
+      onClick={handleCardClick}
+    >
       {!flipState && (
         <CardBody>
           <Row>
@@ -118,7 +122,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               {instance_name}
             </Col>
             <Col xs="2" className="instance-icon">
-              <CardFrontIcons isReady={isReady} showLogout={instanceAuth} setFlipState={setFlipState} compute_stack_id={compute_stack_id} />
+              <CardFrontIcons isReady={isReady} showLogout={instanceAuth} setFlipState={setFlipState} compute_stack_id={compute_stack_id} instance_name={instance_name} />
             </Col>
           </Row>
           <div className="instance-url">{url}</div>
