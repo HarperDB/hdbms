@@ -59,7 +59,7 @@ export default () => {
           });
           const destination = response.update_password
             ? '/update-password'
-            : !returnURL || returnURL === '/organizations' || returnURL === '/organizations/load'
+            : !returnURL || returnURL === '/organizations' || returnURL === '/organizations/load' || returnURL === '/organizations/undefined'
             ? '/organizations/load'
             : `/organizations/load?returnURL=${returnURL}`;
 
