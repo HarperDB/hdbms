@@ -18,12 +18,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
-  const [formData, setFormData] = useState({
-    postal_code: false,
-    card: false,
-    expire: false,
-    cvc: false,
-  });
+  const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
@@ -33,42 +28,24 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
     if (submitted && !processing) {
       const { card, expire, cvc, postal_code } = formData;
       if (!card || !expire || !cvc || !postal_code) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
         setTimeout(() => setFormState({}), 2000);
       } else {
         const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: 'card',
           card: elements.getElement(CardNumberElement),
-          billing_details: {
-            address: { postal_code },
-          },
+          billing_details: { address: { postal_code } },
         });
 
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
 
         if (error) {
-          setFormState({
-            error: error.message,
-          });
+          setFormState({ error: error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          await addPaymentMethod({
-            auth,
-            payment_method_id: paymentMethod.id,
-            stripe_id: customer.stripe_id,
-            customer_id: customer.customer_id,
-          });
-          await getCustomer({
-            auth,
-            customer_id: customer.customer_id,
-          });
-          setFormState({
-            success: true,
-          });
+          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: customer.stripe_id, customer_id: customer.customer_id });
+          await getCustomer({ auth, customer_id: customer.customer_id });
+          setFormState({ success: true });
         }
       }
     }
@@ -129,11 +106,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           <Button
             title="Add Card To Account"
             disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
+            onClick={() => setFormState({ submitted: true })}
             block
             className="mt-3"
             color="purple"

@@ -22,34 +22,18 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
     if (submitted) {
       const hasPaidInstance = instances.find((i) => i.compute?.price || i.storage?.price);
       if (hasPaidInstance) {
-        setFormState({
-          error: 'You have active, non-free instances.',
-        });
+        setFormState({ error: 'You have active, non-free instances.' });
         setTimeout(() => setFormState({}), 2000);
       } else {
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
 
-        const response = await removePaymentMethod({
-          auth,
-          stripe_id: customer.stripe_id,
-          payment_method_id: customerCard.id,
-          customer_id: customer.customer_id,
-        });
+        const response = await removePaymentMethod({ auth, stripe_id: customer.stripe_id, payment_method_id: customerCard.id, customer_id: customer.customer_id });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          setFormState({
-            success: true,
-          });
-          await getCustomer({
-            auth,
-            customer_id: customer.customer_id,
-          });
+          setFormState({ success: true });
+          await getCustomer({ auth, customer_id: customer.customer_id });
           setEditingCard(false);
           setTimeout(() => setFormState({}), 2000);
         }
@@ -109,18 +93,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button
-            title="Remove Card"
-            disabled={formState.submitted}
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            block
-            className="mt-3"
-            color="danger"
-          >
+          <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
             Remove Card
           </Button>
         </Col>

@@ -32,11 +32,9 @@ export default () => {
     hasCard: s.hasCard,
     stripeCoupons: s.customer.stripe_coupons,
   }));
-
   const history = useHistory();
   const { purchaseStep = 'type' } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
-
   const isLocal = newInstance.is_local;
 
   const closeAndResetModal = () => {

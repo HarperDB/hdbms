@@ -23,16 +23,7 @@ export default () => {
     </Row>
   ) : (
     <>
-      <Button
-        color="success"
-        block
-        onClick={() =>
-          createClusterUserRole({
-            auth,
-            url,
-          })
-        }
-      >
+      <Button color="success" block onClick={() => createClusterUserRole({ auth, url })}>
         Create Cluster Role
       </Button>
     </>

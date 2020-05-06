@@ -25,21 +25,9 @@ export default ({ newEntityColumns, hashAttribute }) => {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      const [rowData] = await queryInstance(
-        {
-          operation: 'search_by_hash',
-          schema,
-          table,
-          hash_values: [hash],
-          get_attributes: ['*'],
-        },
-        auth,
-        url
-      );
-      // eslint-disable-next-line no-underscore-dangle
-      delete rowData.__createdtime__;
-      // eslint-disable-next-line no-underscore-dangle
-      delete rowData.__updatedtime__;
+      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url);
+      delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
+      delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
       setRowValue(rowData);
     } else {
       setRowValue(newEntityColumns);
@@ -48,46 +36,19 @@ export default ({ newEntityColumns, hashAttribute }) => {
 
   const submitRecord = async (e) => {
     e.preventDefault();
-    if (!action) {
-      return false;
-    }
-    if (!rowValue) {
-      alert.error('Please insert valid JSON to proceed');
-      return false;
-    }
-
-    await queryInstance(
-      {
-        operation: action === 'edit' ? 'update' : 'insert',
-        schema,
-        table,
-        records: [rowValue],
-      },
-      auth,
-      url
-    );
-
+    if (!rowValue) alert.error('Please insert valid JSON to proceed');
+    if (!action || !rowValue) return false;
+    await queryInstance({ operation: action === 'edit' ? 'update' : 'insert', schema, table, records: [rowValue] }, auth, url);
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-
     return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
-
-    await queryInstance(
-      {
-        operation: 'delete',
-        schema,
-        table,
-        hash_values: [hash],
-      },
-      auth,
-      url
-    );
+    await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url);
     return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 

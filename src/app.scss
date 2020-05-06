@@ -8,7 +8,6 @@
 @import 'assets/styles/core/global';
 @import 'assets/styles/core/typography';
 @import 'assets/styles/core/background';
-@import 'assets/styles/core/dark';
 
 // page styles
 @import 'assets/styles/pages/instances';
@@ -38,6 +37,10 @@
 @import 'assets/styles/components/json-editor';
 @import 'assets/styles/components/query-window';
 @import 'assets/styles/components/query-history';
+
+// override styles
+@import 'assets/styles/overrides/dark';
+@import 'assets/styles/overrides/accessibility';
 
 
 

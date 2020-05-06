@@ -30,11 +30,7 @@ export default ({ setInstanceAction }) => {
     is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
   }));
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    compute_stack_id,
-    customer_id: customer.customer_id,
-    data_volume_size,
-  });
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id: customer.customer_id, data_volume_size });
 
   const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size);
   const newTotal = (compute?.price || 0) + (newStorage?.price || 0);
@@ -46,13 +42,7 @@ export default ({ setInstanceAction }) => {
     const { submitted } = formState;
     if (submitted) {
       setInstanceAction('Updating');
-
-      const response = await updateInstance({
-        auth,
-        compute_stack_id,
-        customer_id: customer.customer_id,
-        ...formData,
-      });
+      const response = await updateInstance({ auth, compute_stack_id, customer_id: customer.customer_id, ...formData });
 
       if (response.error) {
         alert.error('There was an error updating your instance. Please try again later.');
@@ -80,12 +70,7 @@ export default ({ setInstanceAction }) => {
       <SelectDropdown
         className="react-select-container"
         classNamePrefix="react-select"
-        onChange={({ value }) =>
-          setFormData({
-            ...formData,
-            data_volume_size: value,
-          })
-        }
+        onChange={({ value }) => setFormData({ ...formData, data_volume_size: value })}
         options={storageProducts}
         value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
         defaultValue={storage}
@@ -93,14 +78,7 @@ export default ({ setInstanceAction }) => {
         isClearable={false}
         isLoading={!storageProducts}
         placeholder="Select Data Volume Size"
-        styles={{
-          placeholder: (styles) => ({
-            ...styles,
-            textAlign: 'center',
-            width: '100%',
-            color: '#BCBCBC',
-          }),
-        }}
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
 
       {hasChanged && <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />}
@@ -118,33 +96,12 @@ export default ({ setInstanceAction }) => {
       ) : hasChanged ? (
         <Row>
           <Col>
-            <Button
-              onClick={() =>
-                setFormData({
-                  ...formData,
-                  data_volume_size,
-                })
-              }
-              title="Cancel"
-              block
-              disabled={formState.submitted}
-              color="grey"
-            >
+            <Button onClick={() => setFormData({ ...formData, data_volume_size })} title="Cancel" block disabled={formState.submitted} color="grey">
               Cancel
             </Button>
           </Col>
           <Col>
-            <Button
-              onClick={() =>
-                setFormState({
-                  submitted: true,
-                })
-              }
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              color="success"
-            >
+            <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
               Update Storage
             </Button>
           </Col>

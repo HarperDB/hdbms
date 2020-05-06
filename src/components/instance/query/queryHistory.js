@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { CardBody, Card, Row, Col } from '@nio/ui-kit';
 import { useParams } from 'react-router';
 
@@ -28,9 +28,12 @@ export default ({ setQuery, query }) => {
         {queries && queries[compute_stack_id]?.length ? (
           <CardBody className="query-scroller">
             {queries[compute_stack_id].map((q) => (
-              <div title={`Load query: ${q.query}`} className="past-query" key={q.query} onClick={() => setQuery(q.query)}>
-                {q.query}
-              </div>
+              <Fragment key={q.query}>
+                <button type="button" tabIndex="0" title={`Load query: ${q.query}`} className="past-query" onClick={() => setQuery(q.query)}>
+                  {q.query}
+                </button>
+                <hr className="my-0" />
+              </Fragment>
             ))}
           </CardBody>
         ) : (

@@ -75,13 +75,18 @@ const TopNav = () => {
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
-          <DumbLink title={darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'} onClick={() => setDarkTheme(!darkTheme)}>
+          <DumbLink
+            tabIndex="0"
+            title={darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            onKeyDown={(e) => e.keyCode !== 13 || setDarkTheme(!darkTheme)}
+            onClick={() => setDarkTheme(!darkTheme)}
+          >
             <i className={`fa fa-toggle-${darkTheme ? 'on' : 'off'} d-inline-block`} />
             <span className="d-none d-md-inline-block">&nbsp;Dark</span>
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
-          <DumbLink title="Log Out" onClick={logOut}>
+          <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
             <i className="fa fa-sign-out d-inline-block" />
             <span className="d-none d-md-inline-block">&nbsp;Log Out</span>
           </DumbLink>

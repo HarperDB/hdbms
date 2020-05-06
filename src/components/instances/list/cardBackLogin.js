@@ -16,55 +16,27 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
     if (submitted) {
       const { user, pass } = formData;
       if (!user || !pass) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
       } else {
         const result = await registrationInfo({ auth: { user, pass }, url });
 
         if (result.error && result.message === 'You are not authorized to perform the operation specified') {
-          setFormState({
-            error: 'Please log in as a super user',
-          });
+          setFormState({ error: 'Please log in as a super user' });
         } else if (is_ssl && result.error && result.type === 'catch') {
-          setFormState({
-            error: 'Login failed. Click to verify status?',
-            url,
-          });
+          setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
-          setFormState({
-            error: "Can't reach non-SSL instance. Enable SSL?",
-            url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
-          });
+          setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB' });
         } else if (result.error && result.message === 'Login failed' && !is_local) {
-          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
-            instance_id,
-            instanceAuth: { user, pass },
-            url,
-          });
+          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });
 
           if (handleCloudInstanceUsernameChangeResult) {
-            setInstanceAuths({
-              ...instanceAuths,
-              [compute_stack_id]: {
-                user: formData.user,
-                pass: formData.pass,
-              },
-            });
+            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
             setFlipState(false);
           } else {
-            setFormState({
-              error: 'Login failed.',
-            });
+            setFormState({ error: 'Login failed.' });
           }
         } else {
-          setInstanceAuths({
-            ...instanceAuths,
-            [compute_stack_id]: {
-              user: formData.user,
-              pass: formData.pass,
-            },
-          });
+          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
           setFlipState(false);
         }
       }
@@ -76,12 +48,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
         <CardBody>
           <Input
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                user: e.target.value,
-              })
-            }
+            onChange={(e) => setFormData({ ...formData, user: e.target.value })}
             className="text-center mb-1"
             type="text"
             title="username"
@@ -89,12 +56,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
             disabled={formState.submitted}
           />
           <Input
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                pass: e.target.value,
-              })
-            }
+            onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
             className="text-center mb-2"
             type="password"
             title="password"
@@ -118,17 +80,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
               </Button>
             </Col>
             <Col xs="6" className="pl-1">
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Log Into Instance"
-                block
-                color="purple"
-                disabled={formState.submitted}
-              >
+              <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
                 Log In
               </Button>
             </Col>

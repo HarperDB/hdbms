@@ -29,29 +29,17 @@ export default ({ instanceNames, instanceURLs }) => {
       const url = `${is_ssl ? 'https://' : 'http://'}${host}:${port}`;
 
       if (instanceNames.includes(instance_name)) {
-        setFormState({
-          error: `An instance named "${instance_name}" already exists`,
-        });
+        setFormState({ error: `An instance named "${instance_name}" already exists` });
       } else if (!instance_name) {
-        setFormState({
-          error: 'instance name is required',
-        });
+        setFormState({ error: 'instance name is required' });
       } else if (instanceURLs.includes(url)) {
-        setFormState({
-          error: `An instance at "${url}" already exists`,
-        });
+        setFormState({ error: `An instance at "${url}" already exists` });
       } else if (!isAlphaNumericHyphen(instance_name)) {
-        setFormState({
-          error: 'instance names must have only letters, numbers, and hyphen',
-        });
+        setFormState({ error: 'instance names must have only letters, numbers, and hyphen' });
       } else if (instance_name.length > 16) {
-        setFormState({
-          error: 'instance names are limited to 16 characters',
-        });
+        setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (user && !isAlphaUnderscore(user)) {
-        setFormState({
-          error: 'usernames must have only letters and underscores',
-        });
+        setFormState({ error: 'usernames must have only letters and underscores' });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         try {
           const response = await registrationInfo({ auth: { user, pass }, url });
@@ -71,13 +59,9 @@ export default ({ instanceNames, instanceURLs }) => {
           }
 
           if (response.error && response.message === 'You are not authorized to perform the operation specified') {
-            setFormState({
-              error: 'Please log in as a super user',
-            });
+            setFormState({ error: 'Please log in as a super user' });
           } else if (response.error && response.message === 'Login failed') {
-            setFormState({
-              error: 'The provided credentials cannot log into that instance.',
-            });
+            setFormState({ error: 'The provided credentials cannot log into that instance.' });
           } else if (response.error && response.type === 'catch') {
             setFormState({
               error: is_ssl ? "You may need to accept the instance's self-signed cert" : "Can't reach non-SSL instance. Enable SSL?",
@@ -87,22 +71,16 @@ export default ({ instanceNames, instanceURLs }) => {
             setTimeout(() => history.push('/instances/new/details_local'), 0);
           }
         } catch (e) {
-          setFormState({
-            error: 'We found no HarperDB at that url/port. Is it running?',
-          });
+          setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
         }
       } else {
-        setFormState({
-          error: 'All fields must be filled out.',
-        });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
 
   useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
@@ -134,24 +112,13 @@ export default ({ instanceNames, instanceURLs }) => {
               </Col>
             </Row>
           </ContentContainer>
-
           <ContentContainer header="Instance Credentials" subheader="From Installation.  250 char max.">
             <Row>
               <Col xs="4" className="pt-2">
                 Username
               </Col>
               <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      user: e.target.value.substring(0, 249),
-                    })
-                  }
-                  type="text"
-                  title="username"
-                  value={formData.user}
-                />
+                <Input onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
               </Col>
             </Row>
             <hr className="my-2" />
@@ -160,38 +127,17 @@ export default ({ instanceNames, instanceURLs }) => {
                 Password
               </Col>
               <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      pass: e.target.value.substring(0, 249),
-                    })
-                  }
-                  type="password"
-                  title="password"
-                  value={formData.pass}
-                />
+                <Input onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })} type="password" title="password" value={formData.pass} />
               </Col>
             </Row>
           </ContentContainer>
-
           <ContentContainer header="Instance Details">
             <Row>
               <Col xs="4" className="pt-2">
                 Host
               </Col>
               <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      host: e.target.value,
-                    })
-                  }
-                  type="text"
-                  title="host"
-                  value={formData.host || ''}
-                />
+                <Input onChange={(e) => setFormData({ ...formData, host: e.target.value })} type="text" title="host" value={formData.host || ''} />
               </Col>
             </Row>
             <hr className="my-2" />
@@ -200,17 +146,7 @@ export default ({ instanceNames, instanceURLs }) => {
                 Port
               </Col>
               <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      port: e.target.value,
-                    })
-                  }
-                  type="number"
-                  title="port"
-                  value={formData.port || ''}
-                />
+                <Input onChange={(e) => setFormData({ ...formData, port: e.target.value })} type="number" title="port" value={formData.port || ''} />
               </Col>
             </Row>
             <hr className="my-2" />
@@ -220,13 +156,9 @@ export default ({ instanceNames, instanceURLs }) => {
               </Col>
               <Col xs="8" className="pt-1">
                 <RadioCheckbox
+                  tabIndex="0"
                   type="checkbox"
-                  onChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      is_ssl: value || false,
-                    })
-                  }
+                  onChange={(value) => setFormData({ ...formData, is_ssl: value || false })}
                   options={{ label: '', value: true }}
                   value={formData.is_ssl || false}
                   defaultValue={formData.is_ssl ? { label: '', value: true } : undefined}
@@ -244,17 +176,7 @@ export default ({ instanceNames, instanceURLs }) => {
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            title="Instance Details"
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
             Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

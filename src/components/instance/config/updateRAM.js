@@ -32,11 +32,7 @@ export default ({ setInstanceAction }) => {
     canAddFreeCloudInstance: s.instances && config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
   }));
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    compute_stack_id,
-    customer_id: customer.customer_id,
-    stripe_plan_id,
-  });
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id: customer.customer_id, stripe_plan_id });
 
   const newCompute = computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id);
   const newTotal = (storage?.price || 0) + (newCompute?.price || 0);
@@ -48,20 +44,12 @@ export default ({ setInstanceAction }) => {
     if (submitted) {
       if (!newTotal && !canAddFreeCloudInstance) {
         alert.error(`You are limited to ${config.free_cloud_instance_limit} free cloud instance${config.free_cloud_instance_limit !== 1 ? 's' : ''}`);
-        setFormData({
-          ...formData,
-          stripe_plan_id,
-        });
+        setFormData({ ...formData, stripe_plan_id });
         setFormState({});
       } else {
         setInstanceAction('Updating');
 
-        const response = await updateInstance({
-          auth,
-          compute_stack_id,
-          customer_id: customer.customer_id,
-          ...formData,
-        });
+        const response = await updateInstance({ auth, compute_stack_id, customer_id: customer.customer_id, ...formData });
 
         if (response.error) {
           alert.error('There was an error updating your instance. Please try again later.');
@@ -94,14 +82,7 @@ export default ({ setInstanceAction }) => {
         isClearable={false}
         isLoading={!computeProducts}
         placeholder="select a RAM allotment"
-        styles={{
-          placeholder: (styles) => ({
-            ...styles,
-            textAlign: 'center',
-            width: '100%',
-            color: '#BCBCBC',
-          }),
-        }}
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
       {hasChanged && !newTotal && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">

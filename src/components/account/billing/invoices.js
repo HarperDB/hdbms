@@ -18,11 +18,7 @@ export default () => {
   useAsyncEffect(
     () => {
       controller = new AbortController();
-      getInvoices({
-        auth,
-        signal: controller.signal,
-        customer_id,
-      });
+      getInvoices({ auth, signal: controller.signal, customer_id });
     },
     () => controller?.abort(),
     []

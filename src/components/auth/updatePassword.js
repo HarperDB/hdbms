@@ -9,7 +9,6 @@ import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const lmsAuth = useStoreState(appState, (s) => s.auth);
@@ -24,43 +23,19 @@ export default () => {
       const { password, password2 } = formData;
 
       if (!password || !password2) {
-        setFormState({
-          error: 'all fields are required',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'all fields are required' });
       } else if (password !== password2) {
-        setFormState({
-          error: 'passwords must match',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'passwords must match' });
       } else {
-        setFormState({
-          processing: true,
-        });
-        const response = await updatePassword({
-          auth: lmsAuth,
-          ...lmsAuth,
-          password,
-        });
+        setFormState({ processing: true });
+        const response = await updatePassword({ auth: lmsAuth, ...lmsAuth, password });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            setFormData({});
-          }, 1000);
+          setFormState({ error: response.message });
         } else {
           appState.update((s) => {
-            s.auth = {
-              ...lmsAuth,
-              pass: password,
-            };
+            s.auth = { ...lmsAuth, pass: password };
           });
-          setPersistedLMSAuth({
-            ...lmsAuth,
-            pass: password,
-          });
+          setPersistedLMSAuth({ ...lmsAuth, pass: password });
           history.push('/sign-in');
         }
       }
@@ -68,9 +43,7 @@ export default () => {
   }, [formState]);
 
   useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
@@ -91,15 +64,9 @@ export default () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody>
+            <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    password: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="password"
@@ -107,30 +74,14 @@ export default () => {
                 placeholder="new password"
               />
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    password2: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, password2: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"
                 title="verify password"
                 placeholder="verify password"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                disabled={formState.submitted}
-                title="Update My Password"
-                block
-                color="purple"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Update My Password" block color="purple">
                 Update My Password
               </Button>
             </CardBody>

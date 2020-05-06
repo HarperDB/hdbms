@@ -16,10 +16,7 @@ export default () => {
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
-      setNewInstance({
-        customer_id,
-        is_local,
-      });
+      setNewInstance({ customer_id, is_local });
       setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
     }
   }, [formData]);
@@ -42,16 +39,7 @@ export default () => {
                 <li>Scale On Demand</li>
               </ul>
               <hr />
-              <Button
-                className="mt-3"
-                color="purple"
-                block
-                onClick={() =>
-                  setFormData({
-                    is_local: false,
-                  })
-                }
-              >
+              <Button className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false })}>
                 Create HarperDB Cloud Instance
               </Button>
             </CardBody>
@@ -76,16 +64,7 @@ export default () => {
                 <li>Instance Credentials Stay Local</li>
               </ul>
               <hr />
-              <Button
-                className="mt-3"
-                color="purple"
-                block
-                onClick={() =>
-                  setFormData({
-                    is_local: true,
-                  })
-                }
-              >
+              <Button className="mt-3" color="purple" block onClick={() => setFormData({ is_local: true })}>
                 Register User-Installed Instance
               </Button>
             </CardBody>

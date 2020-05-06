@@ -13,9 +13,7 @@ export default () => {
     auth: s.auth,
     customer: s.customer,
   }));
-  const [formData, setFormData] = useState({
-    coupon_code: '',
-  });
+  const [formData, setFormData] = useState({ coupon_code: '' });
   const [formState, setFormState] = useState({});
   let controller;
 
@@ -27,20 +25,13 @@ export default () => {
           setFormState({ error: 'Please enter a valid coupon code' });
         } else {
           controller = new AbortController();
-          const response = await addCoupon({
-            auth,
-            customer_id: customer.customer_id,
-            coupon_code,
-          });
+          const response = await addCoupon({ auth, customer_id: customer.customer_id, coupon_code });
 
           if (response.result === false || response.error) {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
-            getCustomer({
-              auth,
-              customer_id: customer.customer_id,
-            });
+            getCustomer({ auth, customer_id: customer.customer_id });
           }
         }
       }

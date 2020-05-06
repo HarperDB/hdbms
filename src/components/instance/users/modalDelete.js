@@ -17,19 +17,13 @@ export default ({ username, closeModal }) => {
   }));
 
   const deleteUser = async () => {
-    const response = await dropUser({
-      auth,
-      username,
-      url,
-    });
+    const response = await dropUser({ auth, username, url });
 
     if (response.message.indexOf('successfully') !== -1) {
       alert.success(response.message);
       closeModal({ refresh: true });
     } else {
-      setFormState({
-        error: response.message,
-      });
+      setFormState({ error: response.message });
     }
   };
 

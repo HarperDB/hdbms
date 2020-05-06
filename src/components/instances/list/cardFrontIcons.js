@@ -7,10 +7,7 @@ const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, i
 
   const logOut = useCallback((e) => {
     e.stopPropagation();
-    setInstanceAuths({
-      ...instanceAuths,
-      [compute_stack_id]: false,
-    });
+    setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
   }, []);
 
   const flipToDelete = useCallback((e) => {

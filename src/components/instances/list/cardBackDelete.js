@@ -29,21 +29,14 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           error: 'instance name is not correct',
         });
       } else {
-        const response = await removeInstance({
-          auth,
-          customer_id: customer.customer_id,
-          compute_stack_id,
-        });
+        const response = await removeInstance({ auth, customer_id: customer.customer_id, compute_stack_id });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
         } else {
           alert.success('Instance deletion initiated');
           if (instanceAuth) {
-            setInstanceAuths({
-              ...instanceAuths,
-              [compute_stack_id]: false,
-            });
+            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
           }
 
           setTimeout(
@@ -82,11 +75,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
             </ul>
           )}
           <Input
-            onChange={(e) =>
-              setFormData({
-                delete_instance_name: e.target.value,
-              })
-            }
+            onChange={(e) => setFormData({ delete_instance_name: e.target.value })}
             type="text"
             title="instance_name"
             className="my-3"
@@ -101,11 +90,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
             </Col>
             <Col>
               <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
+                onClick={() => setFormState({ submitted: true })}
                 title="Confirm Instance Details"
                 block
                 disabled={formState.submitted || instance_name?.toString() !== formData.delete_instance_name?.toString()}

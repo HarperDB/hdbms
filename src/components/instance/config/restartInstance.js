@@ -26,11 +26,7 @@ export default ({ instanceAction, setInstanceAction }) => {
     const { submitted } = formState;
     if (submitted) {
       setInstanceAction('Restarting');
-
-      const response = await restartInstance({
-        auth,
-        url,
-      });
+      const response = await restartInstance({ auth, url });
 
       if (response.error) {
         setInstanceAction(false);
@@ -50,9 +46,7 @@ export default ({ instanceAction, setInstanceAction }) => {
   };
 
   useInterval(() => {
-    if (instanceAction === 'Restarting') {
-      checkInstance();
-    }
+    if (instanceAction === 'Restarting') checkInstance();
   }, config.instance_refresh_rate);
 
   return instanceAction === 'Restarting' ? (
@@ -69,11 +63,7 @@ export default ({ instanceAction, setInstanceAction }) => {
   ) : (
     <>
       <Input
-        onChange={(e) =>
-          setFormData({
-            restart_instance_name: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ restart_instance_name: e.target.value })}
         type="text"
         title="instance_name"
         placeholder={`Enter "${instance_name}" here to confirm.`}
@@ -101,17 +91,7 @@ export default ({ instanceAction, setInstanceAction }) => {
               </Button>
             </Col>
             <Col>
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Confirm Instance Details"
-                block
-                disabled={formState.submitted}
-                color="danger"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
                 Restart Instance
               </Button>
             </Col>

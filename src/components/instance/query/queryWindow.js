@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
-
-import handleQueryTabsAndEnter from '../../../methods/util/handleQueryTabsAndEnter';
 
 export default ({ setQuery, query }) => {
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
+  const submitRef = createRef();
 
   useEffect(() => {
     if (query) {
       setFormState({ submitted: false });
       setFormData(query.query || query);
+      submitRef.current.focus();
     }
   }, [query]);
 
   useEffect(() => {
-    if (formState.submitted && formData.length) {
-      setQuery({ lastUpdate: Date.now(), query: formData });
+    const temp = formData;
+    const detabbed = temp.length ? temp.replace(/[\t\n\r]/gm, '') : '';
+
+    if (formState.submitted && detabbed.length) {
+      setQuery({ lastUpdate: Date.now(), query: formData.trim() });
       setFormData(formData.trim());
+      setFormState({ submitted: false });
+    } else if (formState.submitted) {
+      setFormData('');
       setFormState({ submitted: false });
     }
   }, [formState]);
@@ -31,7 +37,14 @@ export default ({ setQuery, query }) => {
             type="textarea"
             className="sql-query-textarea"
             value={formData}
-            onKeyDown={(e) => handleQueryTabsAndEnter(e, setFormState)}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13 && e.metaKey) {
+                setFormState({ submitted: true });
+              } else if (e.keyCode === 9) {
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '&#009');
+              }
+            }}
             onChange={(e) => setFormData(e.target.value)}
           />
           <Row>
@@ -50,7 +63,7 @@ export default ({ setQuery, query }) => {
               </Button>
             </Col>
             <Col>
-              <Button title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
+              <Button innerRef={submitRef} title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
                 Execute
               </Button>
             </Col>

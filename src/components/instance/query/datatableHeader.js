@@ -14,17 +14,7 @@ export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter
       <span className="mr-2">auto</span>
       <i title="Turn on Auto-Refresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
       <span className="mx-3 text">|</span>
-      <i
-        title="Filter Results"
-        className="fa fa-search mr-3"
-        onClick={() =>
-          toggleFilter({
-            filtered: showFilter ? [] : filtered,
-            page: 0,
-            showFilter: !showFilter,
-          })
-        }
-      />
+      <i title="Filter Results" className="fa fa-search mr-3" onClick={() => toggleFilter({ filtered: showFilter ? [] : filtered, page: 0, showFilter: !showFilter })} />
     </Col>
   </Row>
 );

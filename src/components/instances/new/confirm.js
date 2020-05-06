@@ -11,10 +11,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    tc_version: newInstance.tc_version || false,
-  });
-
+  const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
   const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
 
   useAsyncEffect(() => {
@@ -22,15 +19,10 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
-        setNewInstance({
-          ...newInstance,
-          tc_version,
-        });
+        setNewInstance({ ...newInstance, tc_version });
         setTimeout(() => history.push('/instances/new/status'), 0);
       } else {
-        setFormState({
-          error: 'Please agree to the Privacy Policy and Cloud Terms of Service.',
-        });
+        setFormState({ error: 'Please agree to the Privacy Policy and Cloud Terms of Service.' });
       }
     }
   }, [formState]);
@@ -143,7 +135,6 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
           </Row>
         </CardBody>
       </Card>
-
       <hr className="my-3" />
       {customerCoupon ? (
         <div className="px-2">
@@ -156,21 +147,9 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
         </div>
       )}
       <hr className="my-3" />
-
       <Row noGutters>
         <Col xs="1" className="text-nowrap overflow-hidden pl-2">
-          <RadioCheckbox
-            className={formState.error ? 'error' : ''}
-            type="radio"
-            onChange={(value) =>
-              setFormData({
-                tc_version: value,
-              })
-            }
-            options={{
-              value: config.tc_version,
-            }}
-          />
+          <RadioCheckbox className={formState.error ? 'error' : ''} type="radio" onChange={(value) => setFormData({ tc_version: value })} options={{ value: config.tc_version }} />
         </Col>
         <Col xs="11" className="text-small pt-1 pr-2">
           I agree to HarperDB&apos;s&nbsp;
@@ -183,9 +162,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
           </a>
         </Col>
       </Row>
-
       <hr className="my-3" />
-
       <Row>
         <Col sm="6">
           <Button
@@ -200,17 +177,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            title="Confirm Instance Details"
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block className="mt-3" color="purple">
             Add Instance
             <i className="fa fa-check-circle ml-2" />
           </Button>

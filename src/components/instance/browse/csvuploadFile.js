@@ -4,10 +4,8 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
-
 import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
-
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../methods/util/commaNumbers';
@@ -15,20 +13,14 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 export default () => {
   const history = useHistory();
   const { schema, table } = useParams();
-  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({ compute_stack_id: s.compute_stack_id, auth: s.auth, url: s.url }));
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
 
-  // query the table to determine if all the records have been processed.
   const validateData = useCallback(
     async (uploadJobId) => {
       const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
-
       if (status === 'ERROR') {
         if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
           return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
@@ -38,18 +30,13 @@ export default () => {
         }
         return setFormState({ error: message });
       }
-
       if (status !== 'COMPLETE' && mounted) {
         return setTimeout(() => validateData(uploadJobId), 2000);
       }
-
       instanceState.update((s) => {
         s.lastUpdate = Date.now();
       });
-
-      return setTimeout(() => {
-        history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
-      }, 1000);
+      return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
     },
     [mounted]
   );
@@ -74,12 +61,10 @@ export default () => {
   }, []);
 
   useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { csv_file } = formData;
-      if (csv_file) {
+    if (formState.submitted) {
+      if (formData.csv_file) {
         setFormState({ uploading: true });
-        const uploadJob = await csvDataLoad({ schema, table, csv_file, auth, url });
+        const uploadJob = await csvDataLoad({ schema, table, csv_file: formData.csv_file, auth, url });
         const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
         setTimeout(() => validateData(uploadJobId), 1000);
       } else {

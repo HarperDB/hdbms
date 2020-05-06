@@ -34,10 +34,7 @@ export default ({ query }) => {
 
   useAsyncEffect(() => {
     if (query.query) {
-      setTableState({
-        ...defaultTableState,
-        reload: true,
-      });
+      setTableState({ ...defaultTableState, reload: true });
     } else {
       setTableState({ ...tableState, error: false, message: false, reload: false });
     }
@@ -50,12 +47,7 @@ export default ({ query }) => {
         controller = new AbortController();
         setTableState({ ...tableState, loading: true });
 
-        const response = await getQueryData({
-          query: query.query.replace(/\n/g, ' ').trim(),
-          auth,
-          url,
-          signal: controller.signal,
-        });
+        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal });
 
         if (response.error) {
           setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });

@@ -4,7 +4,7 @@
     min-height: 212px;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 0 8px 0 1rem;
+    padding: 0;
 
     @media screen and (max-width: 767px) {
       height: 120px !important;
@@ -14,13 +14,16 @@
   }
 
   .past-query {
-    border-top: 1px solid $lighter-grey-overlay;
-    cursor: pointer;
+    border: 0;
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
     font-size: $font-size-small;
+    margin-bottom: 1px;
+    margin-top: 1px;
     overflow-x: auto;
-    padding: 1rem 0;
+    padding: 1rem;
+    text-align: left;
     white-space: nowrap;
+    width: 100%;
 
     &:first-child {
       border-top: 0 !important;

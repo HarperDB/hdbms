@@ -18,11 +18,7 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    await dropRole({
-      auth,
-      url,
-      id: item.id,
-    });
+    await dropRole({ auth, url, id: item.id });
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });

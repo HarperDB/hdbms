@@ -31,17 +31,11 @@ export default ({ setInstanceAction }) => {
       const { delete_instance_name } = formData;
 
       if (instance_name !== delete_instance_name) {
-        setFormState({
-          error: 'instance name is not correct',
-        });
+        setFormState({ error: 'instance name is not correct' });
       } else {
         setInstanceAction('Removing');
 
-        const response = await removeInstance({
-          auth,
-          customer_id: customer.customer_id,
-          compute_stack_id,
-        });
+        const response = await removeInstance({ auth, customer_id: customer.customer_id, compute_stack_id });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
@@ -64,11 +58,7 @@ export default ({ setInstanceAction }) => {
   ) : (
     <>
       <Input
-        onChange={(e) =>
-          setFormData({
-            delete_instance_name: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ delete_instance_name: e.target.value })}
         type="text"
         title="instance_name"
         placeholder={`Enter "${instance_name}" here to confirm.`}
@@ -115,17 +105,7 @@ export default ({ setInstanceAction }) => {
               </Button>
             </Col>
             <Col>
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Confirm Instance Details"
-                block
-                disabled={formState.submitted}
-                color="danger"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
                 Remove Instance
               </Button>
             </Col>

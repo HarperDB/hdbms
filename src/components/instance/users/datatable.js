@@ -29,12 +29,7 @@ export default () => {
     auth: s.auth,
     users: s.users,
   }));
-  const [tableColumns] = useState(
-    instanceUserColumns({
-      auth,
-      setModal,
-    })
-  );
+  const [tableColumns] = useState(instanceUserColumns({ auth, setModal }));
 
   const closeModal = ({ refresh = false }) => {
     setModal(false);
@@ -53,13 +48,7 @@ export default () => {
           <i
             title="Filter Users"
             className="fa fa-search mr-3"
-            onClick={() =>
-              setTableState({
-                ...tableState,
-                filtered: tableState.showFilter ? [] : tableState.filtered,
-                showFilter: !tableState.showFilter,
-              })
-            }
+            onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
           />
         </Col>
       </Row>
@@ -68,30 +57,15 @@ export default () => {
           <ReactTable
             data={users}
             columns={tableColumns}
-            onFilteredChange={(value) =>
-              setTableState({
-                ...tableState,
-                filtered: value,
-              })
-            }
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
-            onSortedChange={(value) =>
-              setTableState({
-                ...tableState,
-                sorted: value,
-              })
-            }
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             sorted={tableState.sorted}
             page={tableState.page}
             filterable={tableState.showFilter}
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) =>
-              setTableState({
-                ...tableState,
-                pageSize: value,
-              })
-            }
+            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
           />
         </CardBody>

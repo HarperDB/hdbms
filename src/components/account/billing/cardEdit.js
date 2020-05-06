@@ -38,49 +38,24 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
     if (submitted && !processing) {
       const { card, expire, cvc, postal_code } = formData;
       if (!card || !expire || !cvc || !postal_code) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
       } else {
-        const payload = await stripe.createPaymentMethod({
-          type: 'card',
-          card: elements.getElement(CardNumberElement),
-          billing_details: {
-            address: { postal_code },
-          },
-        });
-
-        setFormState({
-          processing: true,
-        });
+        const payload = await stripe.createPaymentMethod({ type: 'card', card: elements.getElement(CardNumberElement), billing_details: { address: { postal_code } } });
+        setFormState({ processing: true });
 
         if (payload.error) {
-          setFormState({
-            error: payload.error.message,
-          });
+          setFormState({ error: payload.error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          const response = await addPaymentMethod({
-            auth,
-            payment_method_id: payload.paymentMethod.id,
-            stripe_id: customer.stripe_id,
-            customer_id: customer.customer_id,
-          });
+          const response = await addPaymentMethod({ auth, payment_method_id: payload.paymentMethod.id, stripe_id: customer.stripe_id, customer_id: customer.customer_id });
 
           if (response.error) {
-            setFormState({
-              error: response.message,
-            });
+            setFormState({ error: response.message });
             setTimeout(() => setFormState({}), 2000);
           } else {
-            setFormState({
-              success: response.message,
-            });
+            setFormState({ success: response.message });
 
-            await getCustomer({
-              auth,
-              customer_id: customer.customer_id,
-            });
+            await getCustomer({ auth, customer_id: customer.customer_id });
 
             if (returnURL) {
               history.push(returnURL);
@@ -120,11 +95,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
               <Button
                 title={customerCard ? 'Save New Card' : 'Add Card To Account'}
                 disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
+                onClick={() => setFormState({ submitted: true })}
                 block
                 className="mt-3"
                 color="purple"

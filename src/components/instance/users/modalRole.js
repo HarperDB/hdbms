@@ -23,28 +23,17 @@ export default ({ username, role, closeModal }) => {
     const { newRole } = formData;
 
     if (!newRole) {
-      setFormState({
-        error: 'role is required',
-      });
+      setFormState({ error: 'role is required' });
     } else if (role === newRole) {
-      setFormState({
-        error: 'user already has this role',
-      });
+      setFormState({ error: 'user already has this role' });
     } else {
-      const response = await alterUser({
-        auth,
-        url,
-        username,
-        role: newRole,
-      });
+      const response = await alterUser({ auth, url, username, role: newRole });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('user role updated');
         closeModal({ refresh: true });
       } else {
-        setFormState({
-          error: response.message,
-        });
+        setFormState({ error: response.message });
       }
     }
   };
@@ -62,34 +51,14 @@ export default ({ username, role, closeModal }) => {
         <SelectDropdown
           className="react-select-container mb-2"
           classNamePrefix="react-select"
-          onChange={({ value }) =>
-            setFormData({
-              ...formData,
-              newRole: value,
-            })
-          }
-          options={
-            roles &&
-            roles
-              .filter((r) => r.id !== role)
-              .map((r) => ({
-                label: r.role,
-                value: r.id,
-              }))
-          }
+          onChange={({ value }) => setFormData({ ...formData, newRole: value })}
+          options={roles && roles.filter((r) => r.id !== role).map((r) => ({ label: r.role, value: r.id }))}
           value={roles && role && roles.find((r) => r.value === role)}
           isSearchable={false}
           isClearable={false}
           isLoading={!roles}
           placeholder="select a role"
-          styles={{
-            placeholder: (styles) => ({
-              ...styles,
-              textAlign: 'center',
-              width: '100%',
-              color: '#BCBCBC',
-            }),
-          }}
+          styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
         />
         <hr />
         <Row>

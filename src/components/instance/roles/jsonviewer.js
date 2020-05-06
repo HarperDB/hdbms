@@ -31,10 +31,7 @@ export default () => {
 
   useEffect(() => {
     if (activePermissions) {
-      setNewPermissions({
-        ...permissions,
-        ...activePermissions,
-      });
+      setNewPermissions({ ...permissions, ...activePermissions });
     }
   }, [activePermissions]);
 
@@ -46,12 +43,7 @@ export default () => {
       return false;
     }
 
-    const response = await alterRole({
-      permission: newPermissions,
-      id: role_id,
-      auth,
-      url,
-    });
+    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url });
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
       setNewPermissions(activePermissions);

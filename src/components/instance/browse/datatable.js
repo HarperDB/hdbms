@@ -31,7 +31,6 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const { compute_stack_id, schema, table } = useParams();
   const { auth, url, lastUpdate } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url, lastUpdate: s.lastUpdate }));
   const [tableState, setTableState] = useState(defaultTableState);
-
   let controller;
 
   useAsyncEffect(
@@ -40,9 +39,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
 
       if (!tableState.loading) {
         controller = new AbortController();
-
         setTableState({ ...tableState, loading: true });
-
         const { newData, newTotalPages, newTotalRecords } = await getTableData({
           schema,
           table,
@@ -54,7 +51,6 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
           url,
           signal: controller.signal,
         });
-
         setTableState({
           ...tableState,
           tableData: newData,

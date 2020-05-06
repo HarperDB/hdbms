@@ -20,37 +20,21 @@ export default ({ formStateHeight }) => {
     const { submitted } = formState;
     if (submitted) {
       if (!firstname || !lastname) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
       } else if (auth.firstname === firstname && auth.lastname === lastname) {
-        setFormState({
-          error: 'Nothing seems to have changed',
-        });
+        setFormState({ error: 'Nothing seems to have changed' });
       } else {
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
+        const response = await updateUser({ auth, firstname, lastname, customer_id, user_id });
 
-        const response = await updateUser({
-          auth,
-          firstname,
-          lastname,
-          customer_id,
-          user_id,
-        });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
         } else {
           const user = await getUser({ auth });
           appState.update((s) => {
             s.auth = { ...auth, ...user };
           });
-          setFormState({
-            success: response.message,
-          });
+          setFormState({ success: response.message });
         }
       }
       setTimeout(() => setFormState({}), 2000);
@@ -79,12 +63,7 @@ export default ({ formStateHeight }) => {
                 className="mb-0 text-center"
                 name="fname"
                 placeholder="first name"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    firstname: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
                 value={formData.firstname || ''}
                 disabled={formState.submitted}
               />
@@ -101,12 +80,7 @@ export default ({ formStateHeight }) => {
                 className="mb-0 text-center"
                 name="lname"
                 placeholder="last name"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    lastname: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
                 value={formData.lastname || ''}
                 disabled={formState.submitted}
               />
@@ -123,16 +97,7 @@ export default ({ formStateHeight }) => {
           </Row>
         </CardBody>
       </Card>
-      <Button
-        color="purple"
-        block
-        onClick={() =>
-          setFormState({
-            submitted: true,
-          })
-        }
-        disabled={formState.submitted}
-      >
+      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
         Save Profile
       </Button>
     </>

@@ -50,7 +50,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
   useAsyncEffect(async () => {
     if (processing) return false;
-
     if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(status)) {
       return setInstanceData({
         ...instanceData,
@@ -59,11 +58,9 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         retry: status === 'CONFIGURING_NETWORK',
       });
     }
-
     if (!instanceAuth) {
       return setInstanceData({ ...instanceData, status: 'PLEASE LOG IN', error: true, retry: false });
     }
-
     if (instanceData.status === 'APPLYING LICENSE') {
       const restartResult = await userInfo({ auth: instanceAuth, url });
       if (!restartResult.error) {
@@ -71,9 +68,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       }
       return false;
     }
-
     setProcessing(true);
-
     const registrationResult = await handleInstanceRegistration({
       auth,
       customer_id,
@@ -86,13 +81,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       instance_name,
       status: instanceData.status,
     });
-
     setProcessing(false);
-
     if (['UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceData.status)) {
       return false;
     }
-
     if (['PLEASE LOG IN', 'LOGIN FAILED'].includes(registrationResult.instance)) {
       if (instanceAuth) {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
@@ -101,7 +93,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         registrationResult.instance = 'LOGIN FAILED';
       }
     }
-
     return setInstanceData({ ...instanceData, ...registrationResult });
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
@@ -111,8 +102,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
   return (
     <Card
+      tabIndex="0"
       title={`${instanceAuth ? 'Connect to' : 'Log into'} instance ${instance_name}`}
       className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`}
+      onKeyDown={(e) => e.keyCode !== 13 || handleCardClick}
       onClick={handleCardClick}
     >
       {!flipState && (

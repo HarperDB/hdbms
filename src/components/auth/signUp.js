@@ -5,7 +5,6 @@ import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
-import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const { search } = useLocation();
@@ -17,16 +16,12 @@ export default () => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       const newFormState = await handleSignup({ formData });
-      if (newFormState) {
-        setFormState(newFormState);
-      }
+      if (newFormState) setFormState(newFormState);
     }
   }, [formState]);
 
   useEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
@@ -70,77 +65,56 @@ export default () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody className="px-3">
+            <CardBody className="px-3" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Row noGutters>
                 <Col sm="6" className="mb-2 px-1">
                   <Input
-                    onKeyDown={(e) => handleEnter(e, setFormState)}
                     className="text-center"
                     type="text"
                     title="first name"
                     placeholder="first name"
                     value={formData.firstname || ''}
                     disabled={formState.submitted}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        firstname: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
                   />
                 </Col>
                 <Col sm="6" className="mb-2 px-1">
                   <Input
-                    onKeyDown={(e) => handleEnter(e, setFormState)}
                     className="text-center"
                     type="text"
                     title="last name"
                     placeholder="last name"
                     value={formData.lastname || ''}
                     disabled={formState.submitted}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        lastname: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
                   />
                 </Col>
               </Row>
               <Row noGutters>
                 <Col sm="6" className="mb-2 px-1">
                   <Input
-                    onKeyDown={(e) => handleEnter(e, setFormState)}
                     className="text-center"
                     type="text"
                     title="email"
                     placeholder="email"
                     value={formData.email || ''}
                     disabled={formState.submitted}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        email: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </Col>
                 <Col sm="6" className="mb-2 px-1">
                   <Input
-                    onKeyDown={(e) => handleEnter(e, setFormState)}
                     className="text-center"
                     type="text"
                     title="company name"
                     placeholder="company name"
                     value={formData.customer_name || ''}
                     disabled={formState.submitted}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        customer_name: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
                   />
+                  <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
+                    <i className="fa fa-question-circle" />
+                  </a>
                 </Col>
               </Row>
               <Row noGutters>
@@ -148,19 +122,13 @@ export default () => {
                   <Row>
                     <Col className="subdomain-form">
                       <Input
-                        onKeyDown={(e) => handleEnter(e, setFormState)}
                         className="text-center"
                         type="text"
                         title="subdomain"
                         placeholder="subdomain"
                         value={formData.subdomain || ''}
                         disabled={formState.submitted}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            subdomain: e.target.value.substring(0, 15),
-                          })
-                        }
+                        onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
                       />
                     </Col>
                     <Col className="subdomain-label">
@@ -179,17 +147,11 @@ export default () => {
                     title="coupon code"
                     placeholder="coupon code (optional)"
                     value={formData.coupon_code || ''}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        coupon_code: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
                     disabled={formState.submitted}
                   />
                 </Col>
               </Row>
-
               <div className="px-1">
                 <div className="disclaimer">
                   By creating an account, you agree to the HarperDB&nbsp;
@@ -201,17 +163,7 @@ export default () => {
                     Terms of Service
                   </a>
                 </div>
-
-                <Button
-                  color="purple"
-                  block
-                  disabled={formState.submitted}
-                  onClick={() =>
-                    setFormState({
-                      submitted: true,
-                    })
-                  }
-                >
+                <Button color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
                   {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
                 </Button>
               </div>

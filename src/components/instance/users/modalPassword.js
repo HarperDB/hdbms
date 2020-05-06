@@ -21,24 +21,15 @@ export default ({ username, closeModal, clusterUser }) => {
     const { password } = formData;
 
     if (!password) {
-      setFormState({
-        error: 'password is required',
-      });
+      setFormState({ error: 'password is required' });
     } else {
-      const response = await alterUser({
-        auth,
-        url,
-        username,
-        password,
-      });
+      const response = await alterUser({ auth, url, username, password });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
         closeModal({ refresh: true });
       } else {
-        setFormState({
-          error: response.message,
-        });
+        setFormState({ error: response.message });
       }
     }
   };
@@ -57,12 +48,7 @@ export default ({ username, closeModal, clusterUser }) => {
           name="password"
           placeholder="enter new password"
           value={formData.password || ''}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              password: e.target.value,
-            })
-          }
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
         {clusterUser && (
           <Card>

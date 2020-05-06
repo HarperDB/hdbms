@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
-import handleEnter from '../../methods/util/handleEnter';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -17,28 +16,12 @@ export default () => {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({
-          error: 'invalid email supplied',
-        });
-        setTimeout(() => setFormData({}), 1000);
-      } else if (!email) {
-        setFormState({
-          error: 'email is required',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'valid email is required' });
       } else {
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
         const response = await resetPassword({ email });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            setFormData({});
-          }, 1000);
+          setFormState({ error: response.message });
         } else {
           setFormState({ success: true });
         }
@@ -47,9 +30,7 @@ export default () => {
   }, [formState]);
 
   useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
@@ -84,15 +65,9 @@ export default () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white">
+            <CardBody className="text-center text-white" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="text"
@@ -100,17 +75,7 @@ export default () => {
                 name="email"
                 placeholder="email address"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                disabled={formState.submitted}
-                title="Send Password Reset Email"
-                block
-                color="purple"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Send Password Reset Email" block color="purple">
                 Send Password Reset Email
               </Button>
             </CardBody>

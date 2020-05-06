@@ -42,7 +42,7 @@ const InstancesIndex = () => {
         <NewInstanceCard />
         <InstanceList />
       </Row>
-      {action === 'new' && <NewInstanceModal />}
+      {action === 'new' && instances && <NewInstanceModal />}
     </div>
   );
 };

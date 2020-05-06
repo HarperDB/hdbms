@@ -20,34 +20,18 @@ export default ({ setLastUpdate }) => {
     const { submitted } = formState;
     if (submitted) {
       if (!firstname || !lastname) {
-        setFormState({
-          error: 'All fields must be filled out',
-        });
+        setFormState({ error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
-        setFormState({
-          error: 'Please enter a valid email',
-        });
+        setFormState({ error: 'Please enter a valid email' });
       } else {
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
 
-        const response = await addUser({
-          auth,
-          firstname,
-          lastname,
-          email,
-          customer_id: customer.customer_id,
-        });
+        const response = await addUser({ auth, firstname, lastname, email, customer_id: customer.customer_id });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
         } else {
           setLastUpdate(Date.now());
-          setFormState({
-            success: response.message,
-          });
+          setFormState({ success: response.message });
         }
       }
       setTimeout(() => setFormData({}), 2000);
@@ -70,12 +54,7 @@ export default ({ setLastUpdate }) => {
         name="first name"
         placeholder="first name"
         value={formData.firstname || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            firstname: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
         disabled={formState.submitted}
       />
 
@@ -85,12 +64,7 @@ export default ({ setLastUpdate }) => {
         name="lastname"
         placeholder="last name"
         value={formData.lastname || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            lastname: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
         disabled={formState.submitted}
       />
 
@@ -100,25 +74,11 @@ export default ({ setLastUpdate }) => {
         name="email"
         placeholder="email address"
         value={formData.email || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            email: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         disabled={formState.submitted}
       />
 
-      <Button
-        color="purple"
-        block
-        onClick={() =>
-          setFormState({
-            submitted: true,
-          })
-        }
-        disabled={formState.submitted}
-      >
+      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
         Add User
       </Button>
     </>

@@ -19,10 +19,7 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
     e.preventDefault();
 
     if (!entity.name || items.includes(entity.name)) {
-      setEntity({
-        ...entity,
-        error: true,
-      });
+      setEntity({ ...entity, error: true });
       return false;
     }
 

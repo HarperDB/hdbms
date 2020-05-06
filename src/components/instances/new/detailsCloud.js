@@ -15,7 +15,6 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     instance_region: newInstance.instance_region || regions[0].value,
     instance_type: false,
   });
-
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
   const instanceType = selectedProduct?.instance_type;
@@ -28,20 +27,12 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
-        setFormState({
-          error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}`,
-        });
+        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
-        setNewInstance({
-          ...newInstance,
-          ...formData,
-          instance_type: instanceType,
-        });
+        setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
         setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
       } else {
-        setFormState({
-          error: 'All fields must be filled out.',
-        });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
@@ -55,46 +46,29 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               id="data_volume_size"
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  data_volume_size: value,
-                })
-              }
+              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
               options={storage}
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
           </ContentContainer>
-
           <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="stripe_plan_id"
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  stripe_plan_id: value,
-                })
-              }
+              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
           </ContentContainer>
-
           <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  instance_region: value,
-                })
-              }
+              onChange={(value) => setFormData({ ...formData, instance_region: value })}
               options={regions}
               value={formData.instance_region}
               defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
@@ -110,17 +84,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button onClick={() => setFormState({ submitted: true })} title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'} block className="mt-3" color="purple">
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

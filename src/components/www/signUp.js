@@ -17,16 +17,12 @@ export default () => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       const newFormState = await handleSignup({ formData });
-      if (newFormState) {
-        setFormState(newFormState);
-      }
+      if (newFormState) setFormState(newFormState);
     }
   }, [formState]);
 
   useEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
@@ -61,61 +57,31 @@ export default () => {
               type="text"
               name="firstname"
               value={formData.firstname || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  firstname: e.target.value,
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
               disabled={formState.submitted}
             />
           </ContentContainer>
-
           <ContentContainer header="Last Name" className="mb-3">
             <Input
               type="text"
               name="lastname"
               value={formData.lastname || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  lastname: e.target.value,
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
               disabled={formState.submitted}
             />
           </ContentContainer>
-
           <ContentContainer header="Email Address" className="mb-3">
-            <Input
-              type="text"
-              name="email"
-              value={formData.email || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  email: e.target.value,
-                })
-              }
-              disabled={formState.submitted}
-            />
+            <Input type="text" name="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} disabled={formState.submitted} />
           </ContentContainer>
-
           <ContentContainer header="Company" className="mb-3">
             <Input
               type="text"
               name="customer_name"
               value={formData.customer_name || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  customer_name: e.target.value,
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
               disabled={formState.submitted}
             />
           </ContentContainer>
-
           <ContentContainer header="Subdomain (16 characters max)" className="mb-3">
             <Row noGutters>
               <Col xs="8">
@@ -123,12 +89,7 @@ export default () => {
                   type="text"
                   name="customer_name"
                   value={formData.subdomain || ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      subdomain: e.target.value.substring(0, 15),
-                    })
-                  }
+                  onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
                   disabled={formState.submitted}
                 />
               </Col>
@@ -140,22 +101,15 @@ export default () => {
               </Col>
             </Row>
           </ContentContainer>
-
           <ContentContainer header="Coupon Code (optional)" className="mb-3">
             <Input
               type="text"
               name="coupon_code"
               value={formData.coupon_code || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  coupon_code: e.target.value,
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
               disabled={formState.submitted}
             />
           </ContentContainer>
-
           <div className="text-small pt-3 pb-4">
             By creating an account, I certify that I have read and agree to the HarperDB{' '}
             <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
@@ -165,19 +119,8 @@ export default () => {
             <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
               HarperDB Cloud Terms of Service
             </a>
-            .
           </div>
-
-          <Button
-            color="success"
-            block
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            disabled={formState.submitted}
-          >
+          <Button color="success" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Create A Free HarperDB Account</span>}
           </Button>
           {formState.error && (

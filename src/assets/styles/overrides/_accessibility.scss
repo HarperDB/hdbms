@@ -1,0 +1,17 @@
+.btn,
+button,
+.card {
+  &:focus {
+    box-shadow: 0 0 0 2px $color-lightpurple !important;
+  }
+}
+
+a,
+input,
+textarea,
+.past-query {
+  &:focus {
+    box-shadow: none !important;
+    outline: 2px solid $color-lightpurple !important;
+  }
+}

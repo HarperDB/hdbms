@@ -11,7 +11,7 @@ import updatePassword from '../../../api/lms/updatePassword';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ formStateHeight }) => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const auth = useStoreState(appState, (s) => s.auth);
   const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -20,46 +20,27 @@ export default ({ formStateHeight }) => {
     const { oldpassword, newpassword, newpassword2 } = formData;
     const { submitted } = formState;
     if (submitted) {
-      if (oldpassword !== lmsAuth.pass) {
-        setFormState({
-          error: 'old password is incorrect',
-        });
+      if (oldpassword !== auth.pass) {
+        setFormState({ error: 'old password is incorrect' });
       } else if (newpassword !== newpassword2) {
-        setFormState({
-          error: 'new passwords do not match',
-        });
+        setFormState({ error: 'new passwords do not match' });
       } else if (!oldpassword || !newpassword || !newpassword2) {
-        setFormState({
-          error: 'all fields are required',
-        });
+        setFormState({ error: 'all fields are required' });
       } else {
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
 
-        const response = await updatePassword({
-          auth: lmsAuth,
-          user_id: lmsAuth.user_id,
-          password: newpassword,
-        });
+        const response = await updatePassword({ auth, user_id: auth.user_id, password: newpassword });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
         } else {
-          setFormState({
-            success: response.message,
-          });
+          setFormState({ success: response.message });
           appState.update((s) => {
             s.auth = {
-              ...lmsAuth,
+              ...auth,
               pass: newpassword,
             };
           });
-          setPersistedLMSAuth({
-            ...lmsAuth,
-            pass: newpassword,
-          });
+          setPersistedLMSAuth({ ...auth, pass: newpassword });
         }
       }
       setTimeout(() => setFormData({}), 2000);
@@ -88,12 +69,7 @@ export default ({ formStateHeight }) => {
                 className="mb-0 text-center"
                 name="current password"
                 placeholder="current password"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    oldpassword: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, oldpassword: e.target.value })}
                 value={formData.oldpassword || ''}
                 disabled={formState.submitted}
               />
@@ -110,12 +86,7 @@ export default ({ formStateHeight }) => {
                 className="mb-0 text-center"
                 name="new password"
                 placeholder="new password"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    newpassword: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, newpassword: e.target.value })}
                 value={formData.newpassword || ''}
                 disabled={formState.submitted}
               />
@@ -132,12 +103,7 @@ export default ({ formStateHeight }) => {
                 className="mb-0 text-center"
                 name="verify password"
                 placeholder="verify password"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    newpassword2: e.target.value,
-                  })
-                }
+                onChange={(e) => setFormData({ ...formData, newpassword2: e.target.value })}
                 value={formData.newpassword2 || ''}
                 disabled={formState.submitted}
               />
@@ -145,16 +111,7 @@ export default ({ formStateHeight }) => {
           </Row>
         </CardBody>
       </Card>
-      <Button
-        color="purple"
-        block
-        onClick={() =>
-          setFormState({
-            submitted: true,
-          })
-        }
-        disabled={formState.submitted}
-      >
+      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
         Update Password
       </Button>
     </>
