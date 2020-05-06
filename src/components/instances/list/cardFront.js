@@ -105,7 +105,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       tabIndex="0"
       title={`${instanceAuth ? 'Connect to' : 'Log into'} instance ${instance_name}`}
       className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`}
-      onKeyDown={(e) => e.keyCode !== 13 || handleCardClick}
+      onKeyDown={(e) => e.keyCode !== 13 || handleCardClick(e)}
       onClick={handleCardClick}
     >
       {!flipState && (

@@ -7,7 +7,13 @@ const NewInstanceCard = () => {
 
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
-      <Card tabIndex="0" title="Add New Instance" className="instance new" onKeyDown={() => history.push('/instances/new')} onClick={() => history.push('/instances/new')}>
+      <Card
+        tabIndex="0"
+        title="Add New Instance"
+        className="instance new"
+        onKeyDown={(e) => e.keyCode !== 13 || history.push('/instances/new')}
+        onClick={() => history.push('/instances/new')}
+      >
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
           <span className="text-small">Create New HarperDB Cloud Instance</span>
           <div className="my-4">
