@@ -42,12 +42,14 @@ export default () => {
           setPersistedLMSAuth({ ...persistedLMSAuth, email, pass });
 
           if (!response.orgs) {
-            response.orgs = [
-              { customer_id: response.customer_id, customer_name: 'Default', status: 'accepted' },
-              { customer_id: 16271551, customer_name: 'Fake Accepted Org', status: 'accepted' },
-              { customer_id: 16051003, customer_name: 'Fake Invited Org', status: 'invited' },
-            ];
+            response.orgs = [{ customer_id: response.customer_id, customer_name: 'Default', status: 'accepted' }];
+
+            if (window.location.hostname !== 'studio.harperdb.io') {
+              response.orgs.push({ customer_id: 16271551, customer_name: 'Fake Accepted Org', status: 'accepted' });
+              response.orgs.push({ customer_id: 16051003, customer_name: 'Fake Invited Org', status: 'invited' });
+            }
           }
+
           appState.update((s) => {
             s.auth = {
               ...response,
@@ -55,8 +57,13 @@ export default () => {
               pass,
             };
           });
-          const destination = response.update_password ? '/update-password' : returnURL === '/organizations' ? returnURL : `/organizations/load?returnURL=${returnURL}`;
-          setTimeout(() => history.push(destination), 100);
+          const destination = response.update_password
+            ? '/update-password'
+            : !returnURL || returnURL === '/organizations' || returnURL === '/organizations/load'
+            ? '/organizations/load'
+            : `/organizations/load?returnURL=${returnURL}`;
+
+          history.push(destination);
         }
       }
     }
@@ -71,7 +78,7 @@ export default () => {
     if (persistedLMSAuth && persistedLMSAuth.email && persistedLMSAuth.pass && !processing) {
       const { email, pass } = persistedLMSAuth;
       setFormData({ email, pass });
-      setFormState({ submitted: true });
+      setTimeout(() => setFormState({ submitted: true }), 100);
     }
   }, [persistedLMSAuth]);
 
