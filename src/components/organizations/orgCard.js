@@ -3,9 +3,10 @@ import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../state/appState';
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
+import usePersistedUser from '../../state/persistedUser';
 
 import getCustomer from '../../api/lms/getCustomer';
 import updateUserOrgs from '../../api/lms/updateUserOrgs';
@@ -14,14 +15,14 @@ import CardFrontStatusRow from '../instances/list/cardFrontStatusRow';
 import getUser from '../../api/lms/getUser';
 
 const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
-  const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
-  const [customerError, setCustomerError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
+  const isActiveCustomer = activeCustomerId === customer_id;
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
+  const [customerError, setCustomerError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const alert = useAlert();
-  const isActiveCustomer = activeCustomerId === customer_id;
 
   const chooseOrganization = useCallback(async () => {
     setLoading(true);
@@ -36,7 +37,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
         s.hasCard = false;
         s.lastUpdate = false;
       });
-      setPersistedLMSAuth({ ...persistedLMSAuth, customer_id });
+      setPersistedUser({ ...persistedUser, customer_id });
       setTimeout(() => history.push('/instances'), 0);
     }
   }, []);

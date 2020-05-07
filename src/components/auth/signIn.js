@@ -5,14 +5,14 @@ import { useHistory } from 'react-router';
 import { NavLink, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
+import usePersistedUser from '../../state/persistedUser';
 import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
 
 export default () => {
-  const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
@@ -35,9 +35,9 @@ export default () => {
           appState.update((s) => {
             s.auth = false;
           });
-          setPersistedLMSAuth({});
+          setPersistedUser({});
         } else {
-          setPersistedLMSAuth({ ...persistedLMSAuth, email, pass });
+          setPersistedUser({ ...persistedUser, email, pass });
           if (!response.orgs) {
             response.orgs = [{ customer_id: response.customer_id, customer_name: 'Default', status: 'accepted' }];
             if (window.location.hostname !== 'studio.harperdb.io') {
@@ -64,11 +64,11 @@ export default () => {
   }, [formData]);
 
   useAsyncEffect(() => {
-    if (persistedLMSAuth && persistedLMSAuth.email && persistedLMSAuth.pass && !formState.processing) {
-      setFormData(persistedLMSAuth);
+    if (persistedUser && persistedUser.email && persistedUser.pass && !formState.processing) {
+      setFormData(persistedUser);
       setTimeout(() => setFormState({ submitted: true }), 100);
     }
-  }, [persistedLMSAuth]);
+  }, [persistedUser]);
 
   return (
     <div id="login-form">

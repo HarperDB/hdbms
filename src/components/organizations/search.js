@@ -3,18 +3,8 @@ import { Input, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../state/appState';
-
-const updateFilter = (e) => {
-  appState.update((s) => {
-    s.orgSearch = e.target.value;
-  });
-};
-
-const clearFilter = () => {
-  appState.update((s) => {
-    s.orgSearch = '';
-  });
-};
+import updateFilter from '../../methods/organizations/updateFilter';
+import clearFilter from '../../methods/organizations/clearFilter';
 
 const Search = () => {
   const orgSearch = useStoreState(appState, (s) => s.orgSearch);

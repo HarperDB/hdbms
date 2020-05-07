@@ -5,14 +5,14 @@ import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
+import usePersistedUser from '../../state/persistedUser';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
 
 export default () => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const auth = useStoreState(appState, (s) => s.auth);
+  const [, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
@@ -28,14 +28,14 @@ export default () => {
         setFormState({ error: 'passwords must match' });
       } else {
         setFormState({ processing: true });
-        const response = await updatePassword({ auth: lmsAuth, ...lmsAuth, password });
+        const response = await updatePassword({ auth, ...auth, password });
         if (response.error) {
           setFormState({ error: response.message });
         } else {
           appState.update((s) => {
-            s.auth = { ...lmsAuth, pass: password };
+            s.auth = { ...auth, pass: password };
           });
-          setPersistedLMSAuth({ ...lmsAuth, pass: password });
+          setPersistedUser({ ...auth, pass: password });
           history.push('/sign-in');
         }
       }

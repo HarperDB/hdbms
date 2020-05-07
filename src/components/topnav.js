@@ -6,12 +6,12 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../state/appState';
 
-import usePersistedLMSAuth from '../state/persistedLMSAuth';
+import usePersistedUser from '../state/persistedUser';
 import themeState from '../state/themeState';
 
 const TopNav = () => {
   const history = useHistory();
-  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [, setPersistedUser] = usePersistedUser({});
   const [darkTheme, setDarkTheme] = themeState(false);
   const { auth, customer } = useStoreState(appState, (s) => ({
     auth: s.auth,
@@ -19,7 +19,7 @@ const TopNav = () => {
   }));
 
   const logOut = useCallback(() => {
-    setPersistedLMSAuth(false);
+    setPersistedUser(false);
     appState.update((s) => {
       s.auth = false;
       s.customer = false;

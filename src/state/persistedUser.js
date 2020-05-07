@@ -1,3 +1,3 @@
 import createPersistedState from 'use-persisted-state';
 
-export default createPersistedState('lmsAuth');
+export default createPersistedState('persistedUser');

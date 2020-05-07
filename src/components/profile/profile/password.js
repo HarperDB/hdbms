@@ -5,14 +5,14 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 
-import usePersistedLMSAuth from '../../../state/persistedLMSAuth';
+import usePersistedUser from '../../../state/persistedUser';
 
 import updatePassword from '../../../api/lms/updatePassword';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const [, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -40,7 +40,7 @@ export default ({ formStateHeight }) => {
               pass: newpassword,
             };
           });
-          setPersistedLMSAuth({ ...auth, pass: newpassword });
+          setPersistedUser({ ...auth, pass: newpassword });
         }
       }
       setTimeout(() => setFormData({}), 2000);
