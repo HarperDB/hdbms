@@ -4,9 +4,9 @@ import checkSubdomain from '../../api/lms/checkSubdomain';
 import isAlphaNumericHyphen from '../util/isAlphaNumericHyphen';
 
 export default async ({ formData }) => {
-  const { firstname, lastname, email, customer_name, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
+  const { firstname, lastname, email, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
 
-  if (!firstname || !lastname || !email || !customer_name || !subdomain) {
+  if (!firstname || !lastname || !email || !subdomain) {
     return {
       error: 'All fields must be filled out',
     };
@@ -39,7 +39,7 @@ export default async ({ formData }) => {
     firstname,
     lastname,
     email,
-    customer_name,
+    customer_name: `${firstname}'s Org`,
     subdomain,
     coupon_code,
     htuk,

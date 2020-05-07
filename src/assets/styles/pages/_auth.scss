@@ -7,14 +7,6 @@
   transform: translate(-50%, -50%);
   width: 100%;
 
-  &.sign-up {
-    max-width: 540px;
-
-    @media screen and (max-width: 575px) {
-      max-width: 270px;
-    }
-  }
-
   #login-logo {
     background-image: url('https://ds5zz9rfvzuta.cloudfront.net/images/logo_vertical_white.png');
     background-position: center center;
@@ -85,7 +77,7 @@
     text-align: center;
 
     @media screen and (max-width: 575px) {
-      font-size: $font-size-smaller;
+      font-size: $font-size-small;
     }
 
     a,
