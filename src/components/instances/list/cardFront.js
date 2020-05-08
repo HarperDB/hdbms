@@ -12,7 +12,7 @@ import useInstanceAuth from '../../../state/instanceAuths';
 
 import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
 import userInfo from '../../../api/instance/userInfo';
-import CardFrontStatusRow from './cardFrontStatusRow';
+import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];

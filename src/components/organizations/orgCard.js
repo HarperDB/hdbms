@@ -3,7 +3,6 @@ import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../state/appState';
 import usePersistedUser from '../../state/persistedUser';
@@ -11,7 +10,7 @@ import usePersistedUser from '../../state/persistedUser';
 import getCustomer from '../../api/lms/getCustomer';
 import updateUserOrgs from '../../api/lms/updateUserOrgs';
 
-import CardFrontStatusRow from '../instances/list/cardFrontStatusRow';
+import CardFrontStatusRow from '../shared/cardFrontStatusRow';
 import getUser from '../../api/lms/getUser';
 
 const CardFront = ({ customer_name, customer_id, instance_count, status }) => {

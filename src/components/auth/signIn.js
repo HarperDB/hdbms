@@ -39,7 +39,7 @@ export default () => {
         } else {
           setPersistedUser({ ...persistedUser, email, pass });
           if (!response.orgs) {
-            response.orgs = [{ customer_id: response.customer_id, customer_name: 'Default', status: 'accepted' }];
+            response.orgs = [{ customer_id: response.customer_id, customer_name: `${response.firstname}'s Org`, status: 'accepted' }];
             if (window.location.hostname !== 'studio.harperdb.io') {
               response.orgs.push({ customer_id: 16271551, customer_name: 'Fake Accepted Org', status: 'accepted' });
               response.orgs.push({ customer_id: 16051003, customer_name: 'Fake Invited Org', status: 'invited' });

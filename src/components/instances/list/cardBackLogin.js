@@ -86,7 +86,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
             </Col>
           </Row>
           {formState.error && (
-            <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-smaller text-danger d-block mt-2">
+            <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2">
               {formState.error}
               {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
             </a>
