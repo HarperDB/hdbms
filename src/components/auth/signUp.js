@@ -32,7 +32,7 @@ export default () => {
           <Card className="mb-3">
             <CardBody className="text-white text-center">
               creating your account
-              <hr />
+              <hr className="white" />
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
