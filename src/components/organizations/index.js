@@ -73,11 +73,7 @@ const OrganizationsIndex = () => {
   ) : (
     <div id="organizations">
       <SubNav />
-      <Row>
-        {filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => (
-          <OrgCard key={org.customer_id} {...org} />
-        ))}
-      </Row>
+      <Row>{auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} {...org} />)}</Row>
     </div>
   );
 };

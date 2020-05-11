@@ -76,7 +76,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
               ) : null}
             </Col>
           </Row>
-          <div className="org-status">Organization</div>
+          <div className="org-status">Organization {customer_id}</div>
           <CardFrontStatusRow
             textClass={`text-bold ${customerError ? 'text-danger' : ''}`}
             label="STATUS"
@@ -84,7 +84,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
             value={isActiveCustomer ? 'ACTIVE' : customerError ? customerError.toUpperCase() : status.toUpperCase()}
             bottomDivider
           />
-          <CardFrontStatusRow label="INSTANCE COUNT" isReady value={instance_count || '...'} />
+          <CardFrontStatusRow label="INSTANCES" isReady value={instance_count || '...'} />
           <div className="action-buttons">
             {customerError ? (
               <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-status="removed" onClick={handleUpdateUserOrgs}>

@@ -30,6 +30,7 @@ export default () => {
       } else {
         setFormState({ processing: true });
         const response = await getUser({ email, pass });
+
         if (response.error) {
           setFormState({ error: 'Invalid Credentials' });
           appState.update((s) => {
@@ -38,12 +39,8 @@ export default () => {
           setPersistedUser({});
         } else {
           setPersistedUser({ ...persistedUser, email, pass });
-          if (!response.orgs) {
-            response.orgs = [{ customer_id: response.customer_id, customer_name: `${response.firstname}'s Org`, status: 'accepted' }];
-            if (window.location.hostname !== 'studio.harperdb.io') {
-              response.orgs.push({ customer_id: 16271551, customer_name: 'Fake Accepted Org', status: 'accepted' });
-              response.orgs.push({ customer_id: 16051003, customer_name: 'Fake Invited Org', status: 'invited' });
-            }
+          if (response.orgs && !Array.isArray(response.orgs)) {
+            response.orgs = [response.orgs];
           }
           appState.update((s) => {
             s.auth = { ...response, email, pass };
