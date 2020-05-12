@@ -17,7 +17,7 @@ const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, i
 
   return (
     <>
-      {isReady && <i title={`Remove instance ${instance_name}`} className="fa fa-trash rm-1 delete text-purple" onClick={flipToDelete} />}
+      {isReady && <i title={`Remove instance ${instance_name}`} className="fa fa-trash delete text-purple" onClick={flipToDelete} />}
       {!isReady ? (
         <i className="fa fa-spinner fa-spin text-purple" />
       ) : showLogout ? (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardBody, Row } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import { useStoreState } from 'pullstate';
@@ -56,7 +56,18 @@ const OrganizationsIndex = () => {
     }
   }, [auth?.orgs]);
 
-  useInterval(() => auth && getUser(auth), config.instances_refresh_rate);
+  const fetchUser = useCallback(async () => {
+    const response = await getUser(auth);
+    setPersistedUser({ ...persistedUser, ...response });
+    if (response.orgs && !Array.isArray(response.orgs)) {
+      response.orgs = [response.orgs];
+    }
+    appState.update((s) => {
+      s.auth = { ...auth, ...response };
+    });
+  }, []);
+
+  useInterval(() => auth && fetchUser(auth), config.instances_refresh_rate);
 
   return action && fetchingCustomer ? (
     <div id="login-form">
@@ -73,7 +84,7 @@ const OrganizationsIndex = () => {
   ) : (
     <div id="organizations">
       <SubNav />
-      <Row>{auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} {...org} />)}</Row>
+      <Row>{auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} fetchUser={fetchUser} {...org} />)}</Row>
     </div>
   );
 };

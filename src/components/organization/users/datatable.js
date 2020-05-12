@@ -7,10 +7,9 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
-import getUsers from '../../../api/lms/getUsers';
 import removeUser from '../../../api/lms/removeUser';
 
-export default ({ lastUpdate, setLastUpdate }) => {
+export default ({ refreshUsers }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const alert = useAlert();
@@ -31,16 +30,12 @@ export default ({ lastUpdate, setLastUpdate }) => {
   const [userToRemove, setUserToRemove] = useState(false);
 
   useAsyncEffect(async () => {
-    getUsers({ auth, customer_id: customer.customer_id });
-  }, [lastUpdate, auth.customer_id]);
-
-  useAsyncEffect(async () => {
     if (userToRemove && userToRemove !== auth.user_id) {
       const response = await removeUser({ auth, user_id: userToRemove, customer_id: customer.customer_id });
       if (response.error) {
         alert.error(response.message);
       } else {
-        setLastUpdate(Date.now());
+        refreshUsers();
       }
       setUserToRemove(false);
     }

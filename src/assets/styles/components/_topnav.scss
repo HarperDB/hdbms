@@ -36,11 +36,29 @@
       display: inline-block;
       padding: 0 !important;
       transition: color 250ms;
+      position: relative;
 
       &.active,
       &:hover {
         color: $color-white !important;
       }
+
+      .invite-badge {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $color-white;
+        width: 13px;
+        height: 13px;
+        border-radius: 10px;
+        font-size: $font-size-small;
+        background: $color-danger;
+        line-height: 1;
+      }
     }
   }
+
 }

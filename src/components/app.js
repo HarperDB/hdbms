@@ -12,7 +12,7 @@ import ResendRegistrationEmail from './auth/resendRegistrationEmail';
 import SignUpStandalone from './www/signUp';
 
 import ProtectedRoute from './shared/protectedRoute';
-import Account from './account';
+import Account from './organization';
 import Organizations from './organizations';
 import Support from './support';
 import Instances from './instances';
@@ -42,7 +42,7 @@ const App = () => {
             <Switch>
               <Route component={Organizations} path="/organizations/:action?" />
               <Route component={Instance} path="/instance/:compute_stack_id" />
-              <Route component={Account} path="/account/:view?" />
+              <Route component={Account} path="/organization/:view?" />
               <Route component={Profile} path="/profile/:view?" />
               <Route component={Support} path="/support/:view?" />
               <Route component={Instances} path="/instances/:action?/:purchaseStep?" />

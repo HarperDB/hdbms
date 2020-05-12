@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
 import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -17,6 +17,8 @@ const TopNav = () => {
     auth: s.auth,
     customer: s.customer,
   }));
+  const showOrgs = useMemo(() => auth?.orgs?.length > 1, [auth.orgs]);
+  const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
 
   const logOut = useCallback(() => {
     setPersistedUser(false);
@@ -46,7 +48,7 @@ const TopNav = () => {
               </NavLink>
             </NavItem>
             <NavItem className="ml-3">
-              <NavLink title="Manage Organization Account" to="/account">
+              <NavLink title="Manage Organization Account" to="/organization">
                 <i className="fa fa-gear d-inline-block" />
                 <span className="d-none d-md-inline-block">&nbsp;Manage Org</span>
               </NavLink>
@@ -54,11 +56,12 @@ const TopNav = () => {
             <NavItem className="ml-3 text-white">|</NavItem>
           </>
         )}
-        {auth?.orgs?.length > 1 && (
+        {showOrgs && (
           <NavItem className="ml-3">
             <NavLink title="View or Switch Organizations" to="/organizations">
               <i className="fa fa-building-o d-inline-block" />
               <span className="d-none d-md-inline-block">&nbsp; Organizations</span>
+              {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
             </NavLink>
           </NavItem>
         )}

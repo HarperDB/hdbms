@@ -25,7 +25,7 @@ export default ({ closeAndResetModal }) => {
     delete newInstanceObject.pass;
     delete newInstanceObject.tc_version;
 
-    addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version });
+    addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version, customer_id: newInstance.customer_id });
     const response = await addInstance({ auth, ...newInstanceObject });
 
     if (response.error) {

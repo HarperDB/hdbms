@@ -25,11 +25,17 @@ export default ({ current_user_id, setUserToRemove }) => [
     style: { paddingTop: 10 },
   },
   {
+    Header: 'status',
+    accessor: 'orgs[0].status',
+    Cell: ({ original: { user_id, orgs } }) => current_user_id !== user_id && orgs[0].status,
+    style: { paddingTop: 10 },
+  },
+  {
     Header: '',
     Cell: ({ original: { user_id } }) =>
       current_user_id !== user_id && (
         <Button color="danger" className="datatable" block onClick={() => setUserToRemove(user_id)}>
-          delete
+          remove
         </Button>
       ),
     width: 80,

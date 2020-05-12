@@ -85,7 +85,7 @@ export default ({ setInstanceAction }) => {
 
       {hasChanged && (newStorage.price || compute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
+          onClick={() => history.push(`/organization/billing?returnURL=/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}

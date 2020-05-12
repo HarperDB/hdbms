@@ -9,11 +9,9 @@ import usePersistedUser from '../../state/persistedUser';
 
 import getCustomer from '../../api/lms/getCustomer';
 import updateUserOrgs from '../../api/lms/updateUserOrgs';
-
 import CardFrontStatusRow from '../shared/cardFrontStatusRow';
-import getUser from '../../api/lms/getUser';
 
-const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
+const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUser }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
@@ -50,9 +48,9 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
       alert.error(result.message);
       setLoading(false);
     } else {
-      await getUser({ auth });
+      await fetchUser();
       setLoading(false);
-      alert.success(`Invitation ${newStatus} successfully`);
+      alert.success(`Organization ${newStatus} successfully`);
     }
   }, []);
 
@@ -65,6 +63,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
               {customer_name}
             </Col>
             <Col xs="2" className="status-icon text-right">
+              <i title={`Leave ${customer_name} organization`} data-status="removed" className="fa fa-trash delete text-purple" onClick={handleUpdateUserOrgs} />
               {isActiveCustomer ? (
                 <i className="fa fa-check-circle text-purple" />
               ) : customerError ? (
@@ -122,7 +121,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status }) => {
                 Return To This Organization
               </Button>
             ) : (
-              <Button title={`${activeCustomerId ? 'Switch To' : 'Select'} ${customer_name} organization`} disabled={loading} color="purple" block onClick={chooseOrganization}>
+              <Button title={`${activeCustomerId ? 'Switch To' : 'Select'} ${customer_name} organization`} disabled={!!loading} color="purple" block onClick={chooseOrganization}>
                 {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>{activeCustomerId ? 'Switch To' : 'Select'} This Organization</span>}
               </Button>
             )}

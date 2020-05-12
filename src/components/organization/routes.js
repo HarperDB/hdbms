@@ -4,13 +4,13 @@ import Billing from './billing';
 export default [
   {
     component: Users,
-    path: '/account/users/:hash?',
+    path: '/organization/users/:hash?',
     link: 'users',
     icon: 'users',
   },
   {
     component: Billing,
-    path: '/account/billing',
+    path: '/organization/billing',
     link: 'billing',
     icon: 'credit-card-alt',
   },

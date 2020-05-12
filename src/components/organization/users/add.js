@@ -9,7 +9,7 @@ import addUser from '../../../api/lms/addUser';
 import isEmail from '../../../methods/util/isEmail';
 import FormStatus from '../../shared/formStatus';
 
-export default ({ setLastUpdate }) => {
+export default ({ refreshUsers, userEmails }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const [formState, setFormState] = useState({});
@@ -23,6 +23,8 @@ export default ({ setLastUpdate }) => {
         setFormState({ error: 'All fields must be filled out' });
       } else if (!isEmail(email)) {
         setFormState({ error: 'Please enter a valid email' });
+      } else if (userEmails.includes(email)) {
+        setFormState({ error: 'User already invited' });
       } else {
         setFormState({ processing: true });
 
@@ -30,7 +32,7 @@ export default ({ setLastUpdate }) => {
         if (response.error) {
           setFormState({ error: response.message });
         } else {
-          setLastUpdate(Date.now());
+          refreshUsers();
           setFormState({ success: response.message });
         }
       }

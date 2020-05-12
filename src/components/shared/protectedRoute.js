@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
+import useInterval from 'use-interval';
 
 import appState from '../../state/appState';
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
+import getUser from '../../api/lms/getUser';
+import config from '../../../config';
 
 const ProtectedRoute = ({ children }) => {
   const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
@@ -21,12 +24,27 @@ const ProtectedRoute = ({ children }) => {
   const { pathname } = useLocation();
   const [fetching, setFetching] = useState(false);
 
+  const refreshUsers = useCallback(async () => {
+    if (auth) {
+      const response = await getUser(auth);
+      if (!response.error) {
+        appState.update((s) => {
+          s.auth = { ...auth, ...response };
+        });
+      }
+    }
+  }, [auth, customer_id]);
+
   useAsyncEffect(() => {
     if (auth && !fetching) {
       getCurrentVersion();
       getProducts();
       getRegions();
     }
+  }, []);
+
+  useEffect(() => {
+    refreshUsers();
   }, []);
 
   useAsyncEffect(async () => {
@@ -42,6 +60,8 @@ const ProtectedRoute = ({ children }) => {
       setFetching(false);
     }
   }, [products, regions, customer_id, lastUpdate]);
+
+  useInterval(() => refreshUsers(), config.instances_refresh_rate);
 
   return auth?.email && auth?.pass ? children : <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />;
 };
