@@ -50,9 +50,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-center text-white">
-              success!
-              <br />
-              <br />
+              <div className="mb-3">success!</div>
               check your email for a password reset link.
             </CardBody>
           </Card>

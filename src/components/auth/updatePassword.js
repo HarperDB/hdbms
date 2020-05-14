@@ -53,9 +53,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              updating your password
-              <br />
-              <br />
+              <div className="mb-3">updating your password</div>
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
