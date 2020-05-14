@@ -87,7 +87,7 @@ export default () => {
               <Input
                 onChange={(e) => {
                   e.currentTarget.focus();
-                  setFormData({ ...formData, email: e.target.value });
+                  setFormData({ ...formData, email: e.target.value.toLowerCase() });
                 }}
                 disabled={formState.submitted}
                 className="mb-2 text-center"

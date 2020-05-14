@@ -93,7 +93,7 @@ export default () => {
                 placeholder="email"
                 value={formData.email || ''}
                 disabled={formState.submitted}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
               />
               <Row>
                 <Col className="subdomain-form">

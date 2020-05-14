@@ -71,7 +71,13 @@ export default () => {
             />
           </ContentContainer>
           <ContentContainer header="Email Address" className="mb-3">
-            <Input type="text" name="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} disabled={formState.submitted} />
+            <Input
+              type="text"
+              name="email"
+              value={formData.email || ''}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
+              disabled={formState.submitted}
+            />
           </ContentContainer>
           <ContentContainer header="Subdomain (16 characters max)" className="mb-3">
             <Row noGutters>
