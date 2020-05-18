@@ -35,7 +35,10 @@ module.exports = {
       inlineSource: '.(js|css)$',
     }),
     new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
-    new CopyWebpackPlugin([{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }, { from: path.join(__dirname, '/src/favicon.ico') }]),
+    new CopyWebpackPlugin({
+      patterns: [{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }, { from: path.join(__dirname, '/src/favicon.ico') }],
+      options: { concurrency: 100 },
+    }),
   ],
 
   module: {

@@ -73,7 +73,7 @@ const OrganizationsIndex = () => {
     <div id="login-form">
       <Card className="mb-3">
         <CardBody className="text-white text-center">
-          <div className="mb-3 text-bold">loading instances</div>
+          <div className="mb-3">loading instances</div>
           <i className="fa fa-spinner fa-spin text-white" />
         </CardBody>
       </Card>
