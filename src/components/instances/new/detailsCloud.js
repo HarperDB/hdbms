@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Button, RadioCheckbox, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
@@ -18,7 +18,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
   const instanceType = selectedProduct?.instance_type;
-  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 'FREE';
+  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size)?.price : 'FREE';
   const isFree = !computePrice && !storagePrice;
   const needsCard = products && storage && !hasCard && !isFree;
 
@@ -46,6 +46,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               id="data_volume_size"
               className="radio-button"
               type="radio"
+              required
               onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
               options={storage}
               value={formData.data_volume_size}
@@ -57,6 +58,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               id="stripe_plan_id"
               className="radio-button"
               type="radio"
+              required
               onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products}
               value={formData.stripe_plan_id}
@@ -68,6 +70,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               id="instance_region"
               className="radio-button"
               type="radio"
+              required
               onChange={(value) => setFormData({ ...formData, instance_region: value })}
               options={regions}
               value={formData.instance_region}

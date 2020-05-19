@@ -36,6 +36,7 @@ export default ({ products, hasCard }) => {
             <RadioCheckbox
               className="radio-button"
               type="radio"
+              required
               onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products.map((p) => ({
                 ...p,

@@ -7,31 +7,8 @@ import { useHistory } from 'react-router';
 import appState from '../../state/appState';
 import instanceState from '../../state/instanceState';
 
-const icon = (is_local) => ({
-  alignItems: 'center',
-  display: 'flex',
-
-  ':before': {
-    content: is_local ? '"\f233"' : '"\f0c2"',
-    display: 'inline-block',
-    font: 'normal normal normal 14px/1 FontAwesome',
-    marginRight: 8,
-  },
-});
-
-const routeIcon = (iconCode) => {
-  return {
-    alignItems: 'center',
-    display: 'flex',
-
-    ':before': {
-      content: `"\\${iconCode}"`,
-      display: 'inline-block',
-      font: 'normal normal normal 14px/1 FontAwesome',
-      marginRight: 8,
-    },
-  };
-};
+import icon from '../../methods/select/icon';
+import routeIcon from '../../methods/select/routeIcon';
 
 const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
 
