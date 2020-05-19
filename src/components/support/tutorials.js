@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import YouTube from 'react-youtube';
 
 import config from '../../../config';
 
@@ -29,7 +28,16 @@ export default () => {
         <CardBody>
           <Row>
             <Col lg="8" className="mb-3">
-              {activeVideo && <YouTube videoId={activeVideo} opts={{ width: '100%', height: '500', playerVars: { modestbranding: 1, playsinline: 1 } }} />}
+              {activeVideo && (
+                <iframe
+                  id="player"
+                  title="HarperDB Tutorial Video"
+                  width="100%"
+                  height="500"
+                  src={`https://www.youtube.com/embed/${activeVideo}?modestbranding=1&playsinline=1&enablejsapi=1&origin=${window.location.origin}`}
+                  frameBorder="0"
+                />
+              )}
             </Col>
             <Col lg="4" className="mb-3">
               <div className="video-scroller">

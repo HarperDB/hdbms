@@ -28,7 +28,6 @@
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",
     "react-table": "^6.11.5",
-    "react-youtube": "^7.11.2",
     "text-encoding": "^0.7.0",
     "use-async-effect": "^2.2.2",
     "use-interval": "^1.2.1",
