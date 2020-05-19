@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
-import removeUser from '../../../api/lms/removeUser';
+import updateOrgUser from '../../../api/lms/updateOrgUser';
 
 export default ({ refreshUsers }) => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -31,7 +31,7 @@ export default ({ refreshUsers }) => {
 
   useAsyncEffect(async () => {
     if (userToRemove && userToRemove !== auth.user_id) {
-      const response = await removeUser({ auth, user_id: userToRemove, customer_id: customer.customer_id });
+      const response = await updateOrgUser({ auth, user_id: userToRemove, user_id_owner: auth.user_id, customer_id: customer.customer_id, status: 'removed' });
       if (response.error) {
         alert.error(response.message);
       } else {

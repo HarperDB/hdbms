@@ -66,7 +66,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
           </Button>
         </Col>
         <Col sm="6">
-          <Button title="Review Instance Details" onClick={() => history.push('/instances/new/confirm')} block color="purple" className="mt-3">
+          <Button id="reviewInstanceDetails" title="Review Instance Details" onClick={() => history.push('/instances/new/confirm')} block color="purple" className="mt-3">
             Review Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>
@@ -75,7 +75,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
     </>
   ) : (
     <>
-      <Card>
+      <Card id="paymentDetails">
         <CardBody>
           <div className="mb-4">
             {computeProduct?.price ? (
@@ -104,6 +104,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
         </Col>
         <Col sm="6">
           <Button
+            id="addCardToAccount"
             title="Add Card To Account"
             disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
             onClick={() => setFormState({ submitted: true })}

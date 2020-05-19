@@ -43,7 +43,7 @@ export default ({ instanceNames }) => {
 
   return (
     <>
-      <Card>
+      <Card id="cloudInstanceInfo">
         <CardBody>
           <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
             <Row className="mb-4">
@@ -100,7 +100,7 @@ export default ({ instanceNames }) => {
           </Button>
         </Col>
         <Col sm="6">
-          <Button onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
+          <Button id="instanceDetailsButton" onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
             Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

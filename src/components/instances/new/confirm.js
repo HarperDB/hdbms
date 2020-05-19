@@ -149,7 +149,13 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
       <hr className="my-3" />
       <Row noGutters>
         <Col xs="1" className="text-nowrap overflow-hidden pl-2">
-          <RadioCheckbox className={formState.error ? 'error' : ''} type="radio" onChange={(value) => setFormData({ tc_version: value })} options={{ value: config.tc_version }} />
+          <RadioCheckbox
+            id="agreeToTermsAndConditions"
+            className={formState.error ? 'error' : ''}
+            type="radio"
+            onChange={(value) => setFormData({ tc_version: value })}
+            options={{ value: config.tc_version }}
+          />
         </Col>
         <Col xs="11" className="text-small pt-1 pr-2">
           I agree to HarperDB&apos;s&nbsp;
@@ -177,7 +183,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
           </Button>
         </Col>
         <Col sm="6">
-          <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block className="mt-3" color="purple">
+          <Button id="addInstance" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block className="mt-3" color="purple">
             Add Instance
             <i className="fa fa-check-circle ml-2" />
           </Button>

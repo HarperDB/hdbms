@@ -9,6 +9,7 @@ const NewInstanceCard = () => {
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <Card
         tabIndex="0"
+        id="newInstanceCard"
         title="Add New Instance"
         className="instance new"
         onKeyDown={(e) => e.keyCode !== 13 || history.push('/instances/new')}

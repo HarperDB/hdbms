@@ -39,7 +39,7 @@ export default () => {
                 <li>Scale On Demand</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false })}>
+              <Button id="createCloudInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false })}>
                 Create HarperDB Cloud Instance
               </Button>
             </CardBody>

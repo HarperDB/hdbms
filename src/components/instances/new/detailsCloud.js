@@ -39,7 +39,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
 
   return (
     <>
-      <Card>
+      <Card id="cloudInstanceSpecs">
         <CardBody>
           <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
             <RadioCheckbox
@@ -87,7 +87,14 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
           </Button>
         </Col>
         <Col sm="6">
-          <Button onClick={() => setFormState({ submitted: true })} title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'} block className="mt-3" color="purple">
+          <Button
+            id={needsCard ? 'addPaymentMethod' : 'confirmInstanceDetails'}
+            onClick={() => setFormState({ submitted: true })}
+            title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
+            block
+            className="mt-3"
+            color="purple"
+          >
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>
