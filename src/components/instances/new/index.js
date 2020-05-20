@@ -23,7 +23,7 @@ import OrderStatus from './status';
 
 export default () => {
   const [darkTheme] = themeState(false);
-  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons } = useStoreState(appState, (s) => ({
+  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons, customer_id } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
@@ -31,6 +31,7 @@ export default () => {
     canAddFreeCloudInstance: config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
     hasCard: s.hasCard,
     stripeCoupons: s.customer.stripe_coupons,
+    customer_id: s.customer?.customer_id,
   }));
   const history = useHistory();
   const { purchaseStep = 'type' } = useParams();
@@ -40,13 +41,13 @@ export default () => {
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
-      setTimeout(() => history.push('/instances'), 100);
+      setTimeout(() => history.push(`/${customer_id}/instances`), 100);
     }
   };
 
   const finishOrder = () => {
     setNewInstance({});
-    setTimeout(() => history.push('/instances'), 100);
+    setTimeout(() => history.push(`/${customer_id}/instances`), 100);
   };
 
   return (
@@ -56,19 +57,20 @@ export default () => {
         {!products ? (
           <Loader />
         ) : purchaseStep === 'type' ? (
-          <InstanceTypeForm />
+          <InstanceTypeForm customerId={customer_id} />
         ) : purchaseStep === 'meta_local' ? (
-          <LocalMetadataForm instanceNames={instanceNames} instanceURLs={instanceURLs} />
+          <LocalMetadataForm instanceNames={instanceNames} instanceURLs={instanceURLs} customerId={customer_id} />
         ) : purchaseStep === 'meta_cloud' ? (
-          <CloudMetadataForm instanceNames={instanceNames} />
+          <CloudMetadataForm instanceNames={instanceNames} customerId={customer_id} />
         ) : purchaseStep === 'details_local' ? (
-          <LocalInstanceForm products={products.localCompute} hasCard={hasCard} />
+          <LocalInstanceForm products={products.localCompute} hasCard={hasCard} customerId={customer_id} />
         ) : purchaseStep === 'details_cloud' ? (
           <CloudInstanceForm
             products={products.cloudCompute}
             storage={products.cloudStorage}
             regions={regions}
             hasCard={hasCard}
+            customerId={customer_id}
             canAddFreeCloudInstance={canAddFreeCloudInstance}
             freeCloudInstanceLimit={config.free_cloud_instance_limit}
           />
@@ -76,11 +78,13 @@ export default () => {
           <CustomerPaymentForm
             hasCard={hasCard}
             isLocal={isLocal}
+            customerId={customer_id}
             computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
             storageProduct={isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
           />
         ) : purchaseStep === 'confirm' ? (
           <ConfirmOrderForm
+            customerId={customer_id}
             computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
             storageProduct={isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
             customerCoupon={stripeCoupons}

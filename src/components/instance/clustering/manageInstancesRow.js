@@ -12,9 +12,10 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
   const history = useHistory();
   const alert = useAlert();
   const [changing, setChanging] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
+  const { auth, url, customer_id } = useStoreState(instanceState, (s) => ({
     auth: s.auth,
     url: s.url,
+    customer_id: s.customer?.customer_id,
   }));
 
   const handleAddNode = async (payload) => {
@@ -49,7 +50,7 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <>
-            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push('/instances/new')}>
+            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push(`/${customer_id}/instances/new`)}>
               <i className="fa fa-plus text-white" />
             </Button>
             <Button

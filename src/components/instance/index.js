@@ -14,19 +14,20 @@ import buildActiveInstanceObject from '../../methods/instance/buildActiveInstanc
 import Loader from '../shared/loader';
 
 export default () => {
-  const { compute_stack_id } = useParams();
+  const { compute_stack_id, customer_id } = useParams();
   const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const history = useHistory();
+  const hydratedRoutes = routes({ customer_id });
 
   useEffect(() => {
     const refreshInstance = async () => {
       if (!auth) {
         alert.error('Unable to log into that instance');
-        history.push('/instances');
+        history.push(`/${customer_id}/instances`);
         setLoadingInstance(false);
       } else if (instances) {
         const { error } = await buildActiveInstanceObject({
@@ -37,7 +38,7 @@ export default () => {
         setLoadingInstance(false);
         if (error) {
           alert.error(error);
-          history.push('/instances');
+          history.push(`/${customer_id}/instances`);
         }
       }
     };
@@ -53,12 +54,12 @@ export default () => {
 
   return (
     <>
-      <SubNav routes={routes} />
+      <SubNav routes={hydratedRoutes} />
       {loadingInstance ? (
         <Loader message="loading instance" />
       ) : (
         <Switch>
-          {routes.map((route) => (
+          {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} component={route.component} />
           ))}
         </Switch>

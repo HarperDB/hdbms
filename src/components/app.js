@@ -12,7 +12,7 @@ import ResendRegistrationEmail from './auth/resendRegistrationEmail';
 import SignUpStandalone from './www/signUp';
 
 import ProtectedRoute from './shared/protectedRoute';
-import Account from './organization';
+import Organization from './organization';
 import Organizations from './organizations';
 import Support from './support';
 import Instances from './instances';
@@ -40,12 +40,12 @@ const App = () => {
           <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
           <ProtectedRoute>
             <Switch>
-              <Route component={Organizations} path="/organizations/:action?" />
-              <Route component={Instance} path="/instance/:compute_stack_id" />
-              <Route component={Account} path="/organization/:view?" />
               <Route component={Profile} path="/profile/:view?" />
               <Route component={Support} path="/support/:view?" />
-              <Route component={Instances} path="/instances/:action?/:purchaseStep?" />
+              <Route component={Organizations} path="/organizations/:action?" />
+              <Route component={Instances} path="/:customer_id/instances/:action?/:purchaseStep?" />
+              <Route component={Instance} path="/:customer_id/instance/:compute_stack_id" />
+              <Route component={Organization} path="/:customer_id/:view?" />
             </Switch>
           </ProtectedRoute>
           <Redirect to="/sign-in" />

@@ -14,7 +14,7 @@ import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
+export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId }) => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
@@ -60,13 +60,26 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
       <FormStatus height="358px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)} title="Back to Instance Details" block color="purple" className="mt-3">
+          <Button
+            onClick={() => history.push(`/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            title="Back to Instance Details"
+            block
+            color="purple"
+            className="mt-3"
+          >
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Details
           </Button>
         </Col>
         <Col sm="6">
-          <Button id="reviewInstanceDetails" title="Review Instance Details" onClick={() => history.push('/instances/new/confirm')} block color="purple" className="mt-3">
+          <Button
+            id="reviewInstanceDetails"
+            title="Review Instance Details"
+            onClick={() => history.push(`/${customerId}/instances/new/confirm`)}
+            block
+            color="purple"
+            className="mt-3"
+          >
             Review Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>
@@ -97,7 +110,13 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)} title="Back to Instance Details" block className="mt-3" color="purple">
+          <Button
+            onClick={() => history.push(`/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            title="Back to Instance Details"
+            block
+            className="mt-3"
+            color="purple"
+          >
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Details
           </Button>

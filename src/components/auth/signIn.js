@@ -39,9 +39,6 @@ export default () => {
           setPersistedUser({});
         } else {
           setPersistedUser({ ...persistedUser, email, pass });
-          if (response.orgs && !Array.isArray(response.orgs)) {
-            response.orgs = [response.orgs];
-          }
           appState.update((s) => {
             s.auth = { ...response, email, pass };
           });

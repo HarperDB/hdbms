@@ -11,9 +11,11 @@ import EntityManager from './entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
+import appState from '../../../state/appState';
 
 export default () => {
   const history = useHistory();
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const { compute_stack_id, schema, table, action } = useParams();
   const [entities, setEntities] = useState({
     schemas: false,
@@ -42,13 +44,13 @@ export default () => {
     if (entities.schemas) {
       switch (true) {
         case !entities.schemas.length && history.location.pathname !== '/browse':
-          history.push(`/instance/${compute_stack_id}/browse`);
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse`);
           break;
         case entities.schemas?.length && (!schema || !entities.schemas.includes(schema)):
-          history.push(`/instance/${compute_stack_id}/browse/${entities.schemas[0]}`);
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${entities.schemas[0]}`);
           break;
         case entities.tables?.length && (!table || !entities.tables.includes(table)):
-          history.push(`/instance/${compute_stack_id}/browse/${schema}/${entities.tables[0]}`);
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${entities.tables[0]}`);
           break;
         default:
           break;
@@ -59,9 +61,16 @@ export default () => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/instance/${compute_stack_id}/browse`} itemType="schema" showForm />
+        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/${customer_id}/instance/${compute_stack_id}/browse`} itemType="schema" showForm />
         {schema && (
-          <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`/instance/${compute_stack_id}/browse/${schema}`} itemType="table" showForm />
+          <EntityManager
+            activeItem={table}
+            items={entities.tables}
+            activeSchema={schema}
+            baseUrl={`/${customer_id}/instance/${compute_stack_id}/browse/${schema}`}
+            itemType="table"
+            showForm
+          />
         )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">

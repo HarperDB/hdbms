@@ -6,7 +6,10 @@ export default async ({ auth, customer_id, products, regions, instanceCount }) =
   const response = await queryLMS({
     endpoint: 'getInstances',
     method: 'POST',
-    payload: { customer_id },
+    payload: {
+      customer_id,
+      user_id: auth.user_id,
+    },
     auth,
   });
 

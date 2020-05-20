@@ -46,26 +46,6 @@
     }
   }
 
-  .subdomain-form {
-    padding-right: 0;
-    width: 120px;
-  }
-
-  .subdomain-label {
-    color: $color-white;
-    font-size: 0.75rem !important;
-    line-height: 1 !important;
-    padding-left: 0;
-    padding-top: 12px;
-    white-space: nowrap;
-
-    a {
-      color: $color-white !important;
-    }
-  }
-
-
-
   .disclaimer {
     border-bottom: 1px solid $faint-white-overlay;
     border-top: 1px solid $faint-white-overlay;
@@ -94,7 +74,7 @@
   .login-nav-link {
     color: $white-overlay !important;
     display: block;
-    font-size: $font-size-small;
+    font-size: 85%;
     text-transform: lowercase;
     white-space: nowrap;
 

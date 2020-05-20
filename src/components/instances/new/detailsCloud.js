@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit }) => {
+export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -30,7 +30,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
-        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
+        setTimeout(() => history.push(needsCard ? `/${customerId}/instances/new/payment` : `/${customerId}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -81,7 +81,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/meta_cloud')} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

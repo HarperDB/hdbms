@@ -1,27 +1,29 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import appState from '../../state/appState';
-import usePersistedUser from '../../state/persistedUser';
+import appState from '../../../state/appState';
+import usePersistedUser from '../../../state/persistedUser';
 
-import getCustomer from '../../api/lms/getCustomer';
-import updateUserOrgs from '../../api/lms/updateUserOrgs';
-import CardFrontStatusRow from '../shared/cardFrontStatusRow';
+import getCustomer from '../../../api/lms/getCustomer';
+import updateUserOrgs from '../../../api/lms/updateUserOrgs';
+import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 
 const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUser }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
+  const currentUserOrgStatus = useMemo(() => auth?.orgs?.find((o) => o.customer_id === activeCustomerId)?.status, [auth.orgs, activeCustomerId]);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const alert = useAlert();
 
-  const chooseOrganization = useCallback(async () => {
+  const chooseOrganization = useCallback(async (e) => {
+    const newPage = e.currentTarget.getAttribute('data-page');
     setLoading(true);
     const result = await getCustomer({ auth, customer_id });
     if (result.error) {
@@ -35,7 +37,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
         s.lastUpdate = false;
       });
       setPersistedUser({ ...persistedUser, customer_id });
-      setTimeout(() => history.push('/instances'), 0);
+      setTimeout(() => history.push(`/${customer_id}/${newPage}`), 0);
     }
   }, []);
 
@@ -63,16 +65,9 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
               {customer_name}
             </Col>
             <Col xs="2" className="status-icon text-right">
-              <i title={`Leave ${customer_name} organization`} data-status="removed" className="fa fa-trash delete text-purple" onClick={handleUpdateUserOrgs} />
-              {isActiveCustomer ? (
-                <i className="fa fa-check-circle text-purple" />
-              ) : customerError ? (
-                <i className="fa fa-exclamation-circle text-danger" />
-              ) : status === 'accepted' ? (
-                <i className="fa fa-check-circle text-purple" />
-              ) : status === 'invited' ? (
-                <i className="fa fa-question-circle text-purple" />
-              ) : null}
+              {status === 'owner' && (
+                <i title={`Leave ${customer_name} organization`} data-status="removed" className="fa fa-trash delete text-purple" onClick={handleUpdateUserOrgs} />
+              )}
             </Col>
           </Row>
           <div className="org-status">Organization {customer_id}</div>
@@ -80,7 +75,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
             textClass={`text-bold ${customerError ? 'text-danger' : ''}`}
             label="STATUS"
             isReady
-            value={isActiveCustomer ? 'ACTIVE' : customerError ? customerError.toUpperCase() : status.toUpperCase()}
+            value={customerError ? customerError.toUpperCase() : status.toUpperCase()}
             bottomDivider
           />
           <CardFrontStatusRow label="INSTANCES" isReady value={instance_count || '...'} />
@@ -116,14 +111,51 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                   </Button>
                 </Col>
               </Row>
-            ) : isActiveCustomer ? (
-              <Button title={`Return to ${customer_name} organization`} color="purple" block onClick={() => history.push('/instances')}>
-                Return To This Organization
-              </Button>
+            ) : currentUserOrgStatus === 'owner' ? (
+              <Row noGutters>
+                <Col xs="6" className="pr-1">
+                  {isActiveCustomer ? (
+                    <Button title={`Return to ${customer_name} organization`} color="purple" block onClick={() => history.push(`/${customer_id}/instances`)}>
+                      Return
+                    </Button>
+                  ) : (
+                    <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
+                      {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
+                    </Button>
+                  )}
+                </Col>
+                <Col xs="6" className="pl-1">
+                  {isActiveCustomer ? (
+                    <Button title={`Manage ${customer_name} organization`} color="purple" block data-page="users" onClick={() => history.push(`/${customer_id}/users`)}>
+                      Manage
+                    </Button>
+                  ) : (
+                    <Button title={`Manage ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="users" onClick={chooseOrganization}>
+                      {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Manage</span>}
+                    </Button>
+                  )}
+                </Col>
+              </Row>
             ) : (
-              <Button title={`${activeCustomerId ? 'Switch To' : 'Select'} ${customer_name} organization`} disabled={!!loading} color="purple" block onClick={chooseOrganization}>
-                {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>{activeCustomerId ? 'Switch To' : 'Select'} This Organization</span>}
-              </Button>
+              <Row noGutters>
+                <Col xs="6" className="pr-1">
+                  <Button
+                    title={`Remove yourself from ${customer_name} organization`}
+                    disabled={!!loading}
+                    color="danger"
+                    block
+                    data-status="removed"
+                    onClick={handleUpdateUserOrgs}
+                  >
+                    {loading === 'removed' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Leave</span>}
+                  </Button>
+                </Col>
+                <Col xs="6" className="pl-1">
+                  <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
+                    {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
+                  </Button>
+                </Col>
+              </Row>
             )}
           </div>
         </CardBody>

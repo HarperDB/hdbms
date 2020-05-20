@@ -11,7 +11,7 @@ export default async ({ auth, customer_id }) => {
 
   if (!response.error) {
     appState.update((s) => {
-      s.customer = response;
+      s.customer = { ...response, customer_id };
       s.hasCard = response.stripe_payment_methods?.[0];
     });
   }

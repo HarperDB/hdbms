@@ -31,7 +31,7 @@ export default () => {
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              <div className="mb-3 text-bold">creating your account</div>
+              <div className="mb-3">creating your account</div>
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -42,7 +42,7 @@ export default () => {
           <Card className="mb-3">
             <CardBody>
               <div className="text-center text-white">
-                <div className="mb-3 text-bold">success!</div>
+                <div className="mb-3">success!</div>
                 check your email for your username and password. be sure to check your spam folder, just in case.
               </div>
             </CardBody>

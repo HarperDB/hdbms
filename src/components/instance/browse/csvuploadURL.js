@@ -9,11 +9,13 @@ import instanceState from '../../../state/instanceState';
 import getJob from '../../../api/instance/getJob';
 import isURL from '../../../methods/util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
+import appState from '../../../state/appState';
 
 export default () => {
   const history = useHistory();
   const { schema, table } = useParams();
   const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({ compute_stack_id: s.compute_stack_id, auth: s.auth, url: s.url }));
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
@@ -33,7 +35,7 @@ export default () => {
       instanceState.update((s) => {
         s.lastUpdate = Date.now();
       });
-      return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+      return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
     },
     [mounted]
   );

@@ -12,10 +12,12 @@ import appState from '../../state/appState';
 import usePersistedUser from '../../state/persistedUser';
 
 import SubNav from './subnav';
-import OrgCard from './orgCard';
+import OrgCard from './list/orgCard';
+import NewOrgCard from './list/newOrgCard';
 import getUser from '../../api/lms/getUser';
 import filterOrgs from '../../methods/organizations/filterOrgs';
 import getCustomer from '../../api/lms/getCustomer';
+import NewOrgModal from './new';
 
 const OrganizationsIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -28,13 +30,13 @@ const OrganizationsIndex = () => {
   const { returnURL } = queryString.parse(search);
 
   useAsyncEffect(async () => {
-    if (action) {
+    if (action === 'load') {
       let customer_id = false;
       switch (true) {
         case !!persistedUser.customer_id:
           customer_id = persistedUser.customer_id;
           break;
-        case auth.orgs.length === 1:
+        case auth.orgs.length === 1 && ['accepted', 'owner', 'admin'].includes(auth.orgs[0].status):
           customer_id = auth.orgs[0].customer_id;
           break;
         default:
@@ -48,7 +50,7 @@ const OrganizationsIndex = () => {
           setFetchingCustomer(false);
         } else {
           setPersistedUser({ ...persistedUser, customer_id });
-          setTimeout(() => history.push(returnURL || '/instances'), 200);
+          setTimeout(() => history.push(returnURL || `/${customer_id}/instances`), 200);
         }
       } else {
         setFetchingCustomer(false);
@@ -57,19 +59,16 @@ const OrganizationsIndex = () => {
   }, [auth?.orgs]);
 
   const fetchUser = useCallback(async () => {
-    const response = await getUser(auth);
-    setPersistedUser({ ...persistedUser, ...response });
-    if (response.orgs && !Array.isArray(response.orgs)) {
-      response.orgs = [response.orgs];
+    if (!action) {
+      const response = await getUser(auth);
+      setPersistedUser({ ...persistedUser, ...response });
+      appState.update((s) => {
+        s.auth = { ...auth, ...response };
+      });
     }
-    appState.update((s) => {
-      s.auth = { ...auth, ...response };
-    });
-  }, []);
+  }, [action]);
 
-  useInterval(() => auth && fetchUser(auth), config.instances_refresh_rate);
-
-  return action && fetchingCustomer ? (
+  return action === 'load' && fetchingCustomer ? (
     <div id="login-form">
       <Card className="mb-3">
         <CardBody className="text-white text-center">
@@ -82,7 +81,11 @@ const OrganizationsIndex = () => {
   ) : (
     <div id="organizations">
       <SubNav />
-      <Row>{auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} fetchUser={fetchUser} {...org} />)}</Row>
+      <Row>
+        <NewOrgCard />
+        {auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} fetchUser={fetchUser} {...org} />)}
+      </Row>
+      {action === 'new' && <NewOrgModal />}
     </div>
   );
 };

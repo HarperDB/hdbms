@@ -8,6 +8,10 @@ i.floating-card-header {
   cursor: pointer;
 }
 
+.card-front-status-row {
+  font-size: 65%;
+}
+
 .card {
   background: $color-white;
   border: 1px solid $color-lightgrey;

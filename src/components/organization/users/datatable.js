@@ -12,6 +12,7 @@ import updateOrgUser from '../../../api/lms/updateOrgUser';
 export default ({ refreshUsers }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
+  const currentUserOrgStatus = auth.orgs.find((o) => o.customer_id === customer?.customer_id)?.status;
   const alert = useAlert();
   const users = useStoreState(appState, (s) => s.users);
   const [tableState, setTableState] = useState({
@@ -57,7 +58,7 @@ export default ({ refreshUsers }) => {
         <CardBody>
           <ReactTable
             data={users || []}
-            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: auth.user_id })}
+            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: auth.user_id, currentUserOrgStatus })}
             pages={tableState.pages}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}

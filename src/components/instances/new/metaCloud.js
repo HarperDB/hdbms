@@ -8,7 +8,7 @@ import ContentContainer from '../../shared/contentContainer';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
-export default ({ instanceNames }) => {
+export default ({ instanceNames, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -34,7 +34,7 @@ export default ({ instanceNames }) => {
         setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true });
-        setTimeout(() => history.push('/instances/new/details_cloud'), 0);
+        setTimeout(() => history.push(`/${customerId}/instances/new/details_cloud`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -94,7 +94,7 @@ export default ({ instanceNames }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/type')} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

@@ -16,19 +16,17 @@ export default ({ refreshUsers, userEmails }) => {
   const [formData, setFormData] = useState({});
 
   useAsyncEffect(async () => {
-    const { firstname, lastname, email } = formData;
+    const { email } = formData;
     const { submitted } = formState;
     if (submitted) {
-      if (!firstname || !lastname) {
-        setFormState({ error: 'All fields must be filled out' });
-      } else if (!isEmail(email)) {
+      if (!isEmail(email)) {
         setFormState({ error: 'Please enter a valid email' });
-      } else if (userEmails.includes(email)) {
+      } else if (userEmails && userEmails.includes(email)) {
         setFormState({ error: 'User already invited' });
       } else {
         setFormState({ processing: true });
 
-        const response = await addUser({ auth, firstname, lastname, email, customer_id: customer.customer_id });
+        const response = await addUser({ auth, email, customer_id: customer.customer_id });
         if (response.error) {
           setFormState({ error: response.message });
         } else {
@@ -50,26 +48,6 @@ export default ({ refreshUsers, userEmails }) => {
     <FormStatus height="171px" status="error" header={formState.error} subhead="Please try again" />
   ) : (
     <>
-      <Input
-        type="text"
-        className="mb-2 text-center"
-        name="first name"
-        placeholder="first name"
-        value={formData.firstname || ''}
-        onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
-        disabled={formState.submitted}
-      />
-
-      <Input
-        type="text"
-        className="mb-2 text-center"
-        name="lastname"
-        placeholder="last name"
-        value={formData.lastname || ''}
-        onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-        disabled={formState.submitted}
-      />
-
       <Input
         type="text"
         className="mb-3 text-center"

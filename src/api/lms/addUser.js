@@ -1,12 +1,10 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, firstname, lastname, email, customer_id }) =>
+export default async ({ auth, email, customer_id }) =>
   queryLMS({
     endpoint: 'addUser',
     method: 'POST',
     payload: {
-      firstname,
-      lastname,
       email,
       customer_id,
     },

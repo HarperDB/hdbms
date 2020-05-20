@@ -20,7 +20,7 @@ const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer_id = useStoreState(appState, (s) => s.customer.customer_id);
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const history = useHistory();
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -42,7 +42,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
           setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
           alert.error('Unable to connect to instance.');
         } else {
-          history.push(`/instance/${compute_stack_id}/browse`);
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse`);
         }
       }
     }

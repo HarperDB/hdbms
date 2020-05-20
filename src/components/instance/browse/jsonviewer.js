@@ -10,6 +10,7 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
 import themeState from '../../../state/themeState';
+import appState from '../../../state/appState';
 
 export default ({ newEntityColumns, hashAttribute }) => {
   const [darkTheme] = themeState(false);
@@ -21,6 +22,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
     auth: s.auth,
     url: s.url,
   }));
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {
@@ -42,14 +44,14 @@ export default ({ newEntityColumns, hashAttribute }) => {
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+    return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
     await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url);
-    return setTimeout(() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
+    return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 
   return (
@@ -95,7 +97,7 @@ export default ({ newEntityColumns, hashAttribute }) => {
           </Card>
           <Row>
             <Col className="mt-2">
-              <Button block color="black" onClick={() => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`)}>
+              <Button block color="black" onClick={() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Cancel
               </Button>
             </Col>

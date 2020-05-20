@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, hasCard }) => {
+export default ({ products, hasCard, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -21,7 +21,7 @@ export default ({ products, hasCard }) => {
     if (submitted) {
       if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
-        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
+        setTimeout(() => history.push(needsCard ? `/${customerId}/instances/new/payment` : `/${customerId}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -50,7 +50,7 @@ export default ({ products, hasCard }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/meta_local')} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/${customerId}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

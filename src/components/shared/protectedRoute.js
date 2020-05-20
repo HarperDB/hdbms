@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { Redirect, useLocation, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
@@ -11,6 +11,7 @@ import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
 import config from '../../../config';
+import usePersistedUser from '../../state/persistedUser';
 
 const ProtectedRoute = ({ children }) => {
   const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
@@ -21,30 +22,29 @@ const ProtectedRoute = ({ children }) => {
     lastUpdate: s.lastUpdate,
     instances: s.instances,
   }));
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { pathname } = useLocation();
   const [fetching, setFetching] = useState(false);
 
   const refreshUsers = useCallback(async () => {
-    if (auth) {
+    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new') {
       const response = await getUser(auth);
+      setPersistedUser({ ...persistedUser, ...response });
       if (!response.error) {
         appState.update((s) => {
           s.auth = { ...auth, ...response };
         });
       }
     }
-  }, [auth, customer_id]);
+  }, [auth, customer_id, pathname]);
 
   useAsyncEffect(() => {
     if (auth && !fetching) {
       getCurrentVersion();
       getProducts();
       getRegions();
+      refreshUsers();
     }
-  }, []);
-
-  useEffect(() => {
-    refreshUsers();
   }, []);
 
   useAsyncEffect(async () => {
@@ -61,7 +61,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [products, regions, customer_id, lastUpdate]);
 
-  useInterval(() => refreshUsers(), config.instances_refresh_rate);
+  useInterval(refreshUsers, config.instances_refresh_rate);
 
   return auth?.email && auth?.pass ? children : <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />;
 };

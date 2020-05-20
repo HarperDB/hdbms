@@ -7,7 +7,7 @@ import config from '../../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
 
-export default ({ computeProduct, storageProduct, customerCoupon }) => {
+export default ({ computeProduct, storageProduct, customerCoupon, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -20,7 +20,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
     if (submitted) {
       if (tc_version) {
         setNewInstance({ ...newInstance, tc_version });
-        setTimeout(() => history.push('/instances/new/status'), 0);
+        setTimeout(() => history.push(`/${customerId}/instances/new/status`), 0);
       } else {
         setFormState({ error: 'Please agree to the Privacy Policy and Cloud Terms of Service.' });
       }
@@ -172,7 +172,7 @@ export default ({ computeProduct, storageProduct, customerCoupon }) => {
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/${customerId}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

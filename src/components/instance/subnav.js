@@ -17,12 +17,13 @@ export default ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
-  const { options, activeOption } = useStoreState(
+  const { options, activeOption, customer_id } = useStoreState(
     appState,
     (s) => {
       const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
       const otherInstances = s.instances && s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
       return {
+        customer_id: s.customer?.customer_id,
         options:
           otherInstances &&
           otherInstances.map((i) => ({
@@ -53,7 +54,7 @@ export default ({ routes = [] }) => {
           className="react-select-container"
           classNamePrefix="react-select"
           width="200px"
-          onChange={({ value }) => history.push(`/instance/${value}/browse`)}
+          onChange={({ value }) => history.push(`/${customer_id}/instance/${value}/browse`)}
           options={options || []}
           value={activeOption}
           defaultValue={activeOption.value}
@@ -73,7 +74,7 @@ export default ({ routes = [] }) => {
             <NavLink
               title={route.link}
               className="text-capitalize nav-link"
-              to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+              to={`/${customer_id}/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
             >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
@@ -86,7 +87,7 @@ export default ({ routes = [] }) => {
           className="react-select-container"
           classNamePrefix="react-select"
           width="200px"
-          onChange={({ value }) => history.push(`/instance/${compute_stack_id}/${value}`)}
+          onChange={({ value }) => history.push(`/${customer_id}/instance/${compute_stack_id}/${value}`)}
           options={routes.map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}

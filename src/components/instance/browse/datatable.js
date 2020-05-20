@@ -10,6 +10,7 @@ import config from '../../../../config';
 import instanceState from '../../../state/instanceState';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
+import appState from '../../../state/appState';
 
 const defaultTableState = {
   tableData: [],
@@ -30,6 +31,7 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table } = useParams();
   const { auth, url, lastUpdate } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url, lastUpdate: s.lastUpdate }));
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [tableState, setTableState] = useState(defaultTableState);
   let controller;
 
@@ -121,7 +123,9 @@ export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
             defaultPageSize={tableState.pageSize}
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-            getTrProps={(state, rowInfo) => ({ onClick: () => history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`) })}
+            getTrProps={(state, rowInfo) => ({
+              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[hashAttribute]}`),
+            })}
           />
         </CardBody>
       </Card>

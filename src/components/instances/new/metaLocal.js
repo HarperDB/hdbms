@@ -9,7 +9,7 @@ import registrationInfo from '../../../api/instance/registrationInfo';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
-export default ({ instanceNames, instanceURLs }) => {
+export default ({ instanceNames, instanceURLs, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -68,7 +68,7 @@ export default ({ instanceNames, instanceURLs }) => {
               url: is_ssl ? url : 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
             });
           } else {
-            setTimeout(() => history.push('/instances/new/details_local'), 0);
+            setTimeout(() => history.push(`/${customerId}/instances/new/details_local`), 0);
           }
         } catch (e) {
           setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
@@ -170,7 +170,7 @@ export default ({ instanceNames, instanceURLs }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/type')} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

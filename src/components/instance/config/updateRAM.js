@@ -59,7 +59,7 @@ export default ({ setInstanceAction }) => {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push('/instances'), 3000);
+          setTimeout(() => history.push(`/${customer.customer_id}/instances`), 3000);
         }
       }
     }
@@ -92,7 +92,7 @@ export default ({ setInstanceAction }) => {
         </Card>
       ) : hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/organization/billing?returnURL=/instance/${compute_stack_id}/config`)}
+          onClick={() => history.push(`/${customer.customer_id}/organization/billing?returnURL=/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}
