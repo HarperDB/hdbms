@@ -43,9 +43,9 @@
 
       .item-label {
         justify-content: flex-start;
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
       }
 
       .item-action {

@@ -1,13 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Card, CardBody, Row } from '@nio/ui-kit';
-import useInterval from 'use-interval';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { useLocation, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 import { useHistory } from 'react-router';
 
-import config from '../../../config';
 import appState from '../../state/appState';
 import usePersistedUser from '../../state/persistedUser';
 

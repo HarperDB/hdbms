@@ -32,34 +32,34 @@
   }
 
   .youtube-thumbnail {
-    position: relative;
-    height: 150px;
-    width: 100%;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    overflow: hidden;
-    cursor: pointer;
     border: 3px solid $color-white;
+    border-radius: 6px;
+    cursor: pointer;
+    height: 150px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 
     &.active {
       border: 3px solid $color-lightpurple;
     }
 
     .title {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      display: flex;
-      font-weight: $font-weight-bold;
-      justify-content: center;
       align-items: center;
-      color: $color-white;
       background: $dark-grey-overlay;
       border-radius: 6px;
+      bottom: 0;
+      color: $color-white;
+      display: flex;
+      font-weight: $font-weight-bold;
+      height: 100%;
+      justify-content: center;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
     }
   }
 }

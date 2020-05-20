@@ -35,8 +35,8 @@
       color: $white-overlay !important;
       display: inline-block;
       padding: 0 !important;
-      transition: color 250ms;
       position: relative;
+      transition: color 250ms;
 
       &.active,
       &:hover {
@@ -44,19 +44,19 @@
       }
 
       .invite-badge {
-        position: absolute;
-        top: -5px;
-        right: -10px;
-        display: flex;
-        justify-content: center;
         align-items: center;
-        color: $color-white;
-        width: 13px;
-        height: 13px;
-        border-radius: 10px;
-        font-size: $font-size-small;
         background: $color-danger;
+        border-radius: 10px;
+        color: $color-white;
+        display: flex;
+        font-size: $font-size-small;
+        height: 13px;
+        justify-content: center;
         line-height: 1;
+        position: absolute;
+        right: -10px;
+        top: -5px;
+        width: 13px;
       }
     }
   }

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Redirect, useLocation, useParams } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { Redirect, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
