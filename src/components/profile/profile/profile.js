@@ -92,7 +92,7 @@ export default ({ formStateHeight }) => {
               email address (not editable)
             </Col>
             <Col md="6" xs="12">
-              <div className="fake-input">{auth.email}</div>
+              <div className="fake-input text-center">{auth.email}</div>
             </Col>
           </Row>
         </CardBody>
