@@ -47,10 +47,10 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
         <CardBody>
           <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
             <Row>
-              <Col xs="4" className="pt-2 text-nowrap">
+              <Col sm="4" className="pt-2 text-nowrap text-grey">
                 Example: &quot;cloud-1&quot;
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input
                   onChange={(e) =>
                     setFormData({
@@ -69,12 +69,12 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
                 />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2 mb-2">
+              <Col sm="4" className="pt-2 mb-2 text-grey">
                 Instance URL
               </Col>
-              <Col xs="8" className="pt-2 text-right text-nowrap overflow-hidden text-truncate">
+              <Col sm="8" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
                 {formData.instance_name ? (
                   <i className="text-grey">
                     {formData.instance_name}-{customerSubdomain}.harperdbcloud.com
@@ -88,19 +88,19 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
 
           <ContentContainer header="Create Instance Credentials" subheader="letters and underscores only. 250 char max.">
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Username
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Password
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })} type="password" title="password" value={formData.pass} />
               </Col>
             </Row>

@@ -62,46 +62,34 @@ export default () => {
           <>
             <Card className="mb-3">
               <CardBody>
-                <ContentContainer header="Organization Details">
+                <ContentContainer header="Name">
+                  <Input
+                    className="text-center"
+                    onChange={(e) => setFormData({ ...formData, org: e.target.value })}
+                    type="text"
+                    title="name"
+                    placeholder="name your organization"
+                    value={formData.org || ''}
+                  />
+                </ContentContainer>
+                <ContentContainer header="Subdomain" subheader="alphanumeric and hyphens only. 16 char max.">
                   <Row>
-                    <Col xs="4" className="pt-2">
-                      Name
-                    </Col>
-                    <Col xs="8">
+                    <Col className="subdomain-form">
                       <Input
-                        onChange={(e) => setFormData({ ...formData, org: e.target.value })}
+                        className="text-center"
                         type="text"
-                        title="name"
-                        placeholder="organization name"
-                        value={formData.org || ''}
+                        title="subdomain"
+                        placeholder="subdomain"
+                        value={formData.subdomain || ''}
+                        disabled={formState.submitted}
+                        onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
                       />
                     </Col>
-                  </Row>
-                  <hr className="my-2" />
-                  <Row>
-                    <Col xs="4" className="pt-2">
-                      Subdomain
-                    </Col>
-                    <Col xs="8">
-                      <Row>
-                        <Col className="subdomain-form">
-                          <Input
-                            className="text-center"
-                            type="text"
-                            title="subdomain"
-                            placeholder="subdomain"
-                            value={formData.subdomain || ''}
-                            disabled={formState.submitted}
-                            onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
-                          />
-                        </Col>
-                        <Col className="subdomain-label text-darkgrey">
-                          .harperdbcloud.com{' '}
-                          <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
-                            <i className="fa fa-question-circle text-purple" />
-                          </a>
-                        </Col>
-                      </Row>
+                    <Col className="subdomain-label text-darkgrey">
+                      .harperdbcloud.com{' '}
+                      <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
+                        <i className="fa fa-question-circle text-purple" />
+                      </a>
                     </Col>
                   </Row>
                 </ContentContainer>

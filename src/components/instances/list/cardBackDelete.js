@@ -56,7 +56,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
       {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
         <CardBody>
           {is_local ? (
-            <ul className="text-small my-0">
+            <ul className="text-small my-0 text-nowrap">
               <li>
                 <b>DOES NOT</b> uninstall HarperDB.
               </li>
@@ -65,7 +65,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
               </li>
             </ul>
           ) : (
-            <ul className="text-small my-0">
+            <ul className="text-small my-0 text-nowrap">
               <li>
                 <b>THIS IS</b> an irreversible process.
               </li>

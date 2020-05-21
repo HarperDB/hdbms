@@ -10,16 +10,14 @@ import appState from '../../state/appState';
 import usePersistedUser from '../../state/persistedUser';
 
 import SubNav from './subnav';
-import OrgCard from './list/orgCard';
+import OrgList from './list/orgList';
 import NewOrgCard from './list/newOrgCard';
 import getUser from '../../api/lms/getUser';
-import filterOrgs from '../../methods/organizations/filterOrgs';
 import getCustomer from '../../api/lms/getCustomer';
 import NewOrgModal from './new';
 
 const OrganizationsIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const orgSearch = useStoreState(appState, (s) => s.orgSearch);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { action } = useParams();
   const [fetchingCustomer, setFetchingCustomer] = useState(true);
@@ -81,7 +79,7 @@ const OrganizationsIndex = () => {
       <SubNav />
       <Row>
         <NewOrgCard />
-        {auth?.orgs && filterOrgs({ orgSearch, orgs: auth.orgs }).map((org) => <OrgCard key={org.customer_id} fetchUser={fetchUser} {...org} />)}
+        <OrgList fetchUser={fetchUser} />
       </Row>
       {action === 'new' && <NewOrgModal />}
     </div>

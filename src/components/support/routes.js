@@ -9,23 +9,27 @@ export default [
     path: '/support/installation',
     link: 'installation',
     icon: 'wrench',
+    iconCode: 'f0ad',
   },
   {
     component: Tutorials,
     path: '/support/tutorials',
     link: 'tutorials',
     icon: 'video-camera',
+    iconCode: 'f03d',
   },
   {
     component: Drivers,
     path: '/support/drivers',
     link: 'drivers',
     icon: 'cubes',
+    iconCode: 'f1b3',
   },
   {
     component: Resources,
     path: '/support/resources',
     link: 'resources',
-    icon: 'external-link',
+    icon: 'external',
+    iconCode: 'f08e',
   },
 ];

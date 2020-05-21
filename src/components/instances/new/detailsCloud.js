@@ -41,7 +41,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     <>
       <Card id="cloudInstanceSpecs">
         <CardBody>
-          <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Instance RAM" subheader="scroll for more" maxHeight="120px">
             <RadioCheckbox
               id="stripe_plan_id"
               className="radio-button"
@@ -53,7 +53,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
           </ContentContainer>
-          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Storage Size" subheader="scroll for more" maxHeight="120px">
             <RadioCheckbox
               id="data_volume_size"
               className="radio-button"
@@ -65,7 +65,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
           </ContentContainer>
-          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Instance Region" subheader="scroll for more" maxHeight="120px">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"
@@ -81,7 +81,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

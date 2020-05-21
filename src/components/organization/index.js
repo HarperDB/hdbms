@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import routes from './routes';
-import SubNav from './subnav';
+import SubNav from '../shared/subnav';
 import appState from '../../state/appState';
 
 export default () => {

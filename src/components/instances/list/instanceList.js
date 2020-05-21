@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
-
 import InstanceCard from './instanceCard';
-
 import filterInstances from '../../../methods/instances/filterInstances';
 
 const InstanceList = () => {

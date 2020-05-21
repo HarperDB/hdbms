@@ -89,6 +89,7 @@ export default () => {
             computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
             storageProduct={isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
             customerCoupon={stripeCoupons}
+            customerSubdomain={subdomain}
           />
         ) : purchaseStep === 'status' ? (
           <OrderStatus closeAndResetModal={finishOrder} />

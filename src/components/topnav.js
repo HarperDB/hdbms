@@ -43,27 +43,31 @@ const TopNav = () => {
         <NavItem className="ml-3">
           <NavLink title="View or Switch Organizations" to="/organizations">
             <i className="fa fa-building-o d-inline-block" />
-            <span className="d-none d-md-inline-block">&nbsp; Organizations</span>
+            <span className="d-none d-lg-inline-block">&nbsp; Orgs</span>
             {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
           </NavLink>
         </NavItem>
-        {customer && pathname !== '/organizations' && (
+        {customer && pathname.indexOf(customer?.customer_id) !== -1 && (
           <>
-            <NavItem className="ml-3 text-white">&gt;</NavItem>
-            <NavItem className="ml-3 text-white">{customer.customer_name}</NavItem>
-            <NavItem className="ml-3 text-white">|</NavItem>
+            <NavItem className="ml-2 text-white">
+              <i className="fa fa-angle-right" />
+            </NavItem>
+            <NavItem className="ml-2 text-white">{customer.customer_name}</NavItem>
+            <NavItem className="ml-2 text-white">
+              <i className="fa fa-angle-right" />
+            </NavItem>
             {showManageIcon && (
               <NavItem className="ml-3">
                 <NavLink disabled title="Manage Organization" to={`/${customer.customer_id}/users`}>
                   <i className="fa fa-gears d-inline-block" />
-                  <span className="d-none d-md-inline-block">&nbsp; Manage</span>
+                  <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
                 </NavLink>
               </NavItem>
             )}
             <NavItem className="ml-3">
               <NavLink disabled title="View Organization Instances" exact to={`/${customer.customer_id}/instances`}>
                 <i className="fa fa-th d-inline-block" />
-                <span className="d-none d-md-inline-block">&nbsp; Instances</span>
+                <span className="d-none d-lg-inline-block">&nbsp; Instances</span>
               </NavLink>
             </NavItem>
           </>
@@ -71,14 +75,12 @@ const TopNav = () => {
         <NavItem className="ml-3 text-white">|</NavItem>
         <NavItem className="ml-3">
           <NavLink title="Manage My Profile" to="/profile">
-            <i className="fa fa-user d-inline-block" />
-            <span className="d-none d-md-inline-block">&nbsp; Profile</span>
+            <i className="fa fa-user" />
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
           <NavLink title="View Support Documentation" to="/support">
-            <i className="fa fa-support d-inline-block" />
-            <span className="d-none d-md-inline-block">&nbsp;Help</span>
+            <i className="fa fa-support" />
           </NavLink>
         </NavItem>
         <NavItem className="ml-3">
@@ -88,14 +90,12 @@ const TopNav = () => {
             onKeyDown={(e) => e.keyCode !== 13 || setDarkTheme(!darkTheme)}
             onClick={() => setDarkTheme(!darkTheme)}
           >
-            <i className={`fa fa-toggle-${darkTheme ? 'on' : 'off'} d-inline-block`} />
-            <span className="d-none d-md-inline-block">&nbsp;Dark</span>
+            <i className={`fa ${darkTheme ? 'fa-moon-o' : 'fa-sun-o'}`} />
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
           <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
-            <i className="fa fa-sign-out d-inline-block" />
-            <span className="d-none d-md-inline-block">&nbsp;Log Out</span>
+            <i className="fa fa-sign-out" />
           </DumbLink>
         </NavItem>
       </Nav>

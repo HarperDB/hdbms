@@ -89,10 +89,10 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
         <CardBody>
           <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
             <Row>
-              <Col xs="4" className="pt-2 text-nowrap">
-                Example: &quot;edge-1&quot;
+              <Col sm="4" className="pt-2 text-nowrap text-grey">
+                Example: &quot;local-1&quot;
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input
                   onChange={(e) =>
                     setFormData({
@@ -114,44 +114,44 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
           </ContentContainer>
           <ContentContainer header="Instance Credentials" subheader="From Installation.  250 char max.">
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Username
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Password
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })} type="password" title="password" value={formData.pass} />
               </Col>
             </Row>
           </ContentContainer>
           <ContentContainer header="Instance Details">
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Host
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, host: e.target.value })} type="text" title="host" value={formData.host || ''} />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Port
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input onChange={(e) => setFormData({ ...formData, port: e.target.value })} type="number" title="port" value={formData.port || ''} />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col xs="4" className="pt-2 text-grey">
                 SSL
               </Col>
               <Col xs="8" className="pt-1">
