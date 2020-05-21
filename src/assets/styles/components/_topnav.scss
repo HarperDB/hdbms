@@ -34,10 +34,10 @@
     a {
       color: $white-overlay !important;
       display: inline-block;
+      min-width: 15px;
       padding: 0 !important;
       position: relative;
       transition: color 250ms;
-      min-width: 15px;
 
       &.active,
       &:hover {

@@ -3,15 +3,13 @@ import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-
 import appState from '../../../state/appState';
 import usePersistedUser from '../../../state/persistedUser';
-
 import getCustomer from '../../../api/lms/getCustomer';
 import updateUserOrgs from '../../../api/lms/updateUserOrgs';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 
-const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUser, setFlipState, flipState }) => {
+const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUser, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
@@ -49,7 +47,6 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
     const newStatus = e.currentTarget.getAttribute('data-status');
     setLoading(newStatus);
     const result = await updateUserOrgs({ auth, customer_id, user_id: auth.user_id, status: newStatus });
-
     if (result.error) {
       alert.error(result.message);
       setLoading(false);
@@ -59,8 +56,6 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
       alert.success(`Organization ${newStatus} successfully`);
     }
   }, []);
-
-  console.log(flipState);
 
   return (
     <Card className="instance">
@@ -141,5 +136,4 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
     </Card>
   );
 };
-
 export default CardFront;

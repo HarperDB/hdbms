@@ -17,6 +17,7 @@ export default () => {
         setActiveVideo(result.items[0]?.snippet?.resourceId?.videoId);
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.log('error fetching youtube playlist');
     }
   }, []);

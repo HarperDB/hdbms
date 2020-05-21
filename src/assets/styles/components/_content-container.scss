@@ -2,10 +2,10 @@
   margin-bottom: 30px;
 
   .header-container {
-    padding-bottom: .5rem;
-    margin-bottom: .5rem;
     border-bottom: 1px solid $color-lightgrey;
     font-size: $font-size-small;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
 
     .header {
       display: inline-block;
@@ -14,13 +14,13 @@
 
     .subheader {
       color: $color-lightpurple;
+      display: block;
       font-style: italic;
       text-transform: lowercase;
-      display: block;
 
       @media screen and (min-width: 576px) {
-        float: right;
         display: inline-block;
+        float: right;
       }
 
     }
