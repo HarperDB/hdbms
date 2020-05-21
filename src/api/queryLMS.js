@@ -17,7 +17,9 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
       },
     });
 
-    const { body } = await request.json();
+    const json = await request.json();
+
+    const body = json.body || json;
 
     if (body.error) {
       return {
