@@ -41,18 +41,6 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     <>
       <Card id="cloudInstanceSpecs">
         <CardBody>
-          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
-            <RadioCheckbox
-              id="data_volume_size"
-              className="radio-button"
-              type="radio"
-              required
-              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
-              options={storage}
-              value={formData.data_volume_size}
-              defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
-            />
-          </ContentContainer>
           <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
             <RadioCheckbox
               id="stripe_plan_id"
@@ -63,6 +51,18 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
               options={products}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
+            />
+          </ContentContainer>
+          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
+            <RadioCheckbox
+              id="data_volume_size"
+              className="radio-button"
+              type="radio"
+              required
+              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
+              options={storage}
+              value={formData.data_volume_size}
+              defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
           </ContentContainer>
           <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">

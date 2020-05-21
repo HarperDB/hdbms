@@ -23,7 +23,7 @@ import OrderStatus from './status';
 
 export default () => {
   const [darkTheme] = themeState(false);
-  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons, customer_id } = useStoreState(appState, (s) => ({
+  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons, customer_id, subdomain } = useStoreState(appState, (s) => ({
     products: s.products,
     regions: s.regions,
     instanceNames: s.instances.map((i) => i.instance_name),
@@ -32,6 +32,7 @@ export default () => {
     hasCard: s.hasCard,
     stripeCoupons: s.customer.stripe_coupons,
     customer_id: s.customer?.customer_id,
+    subdomain: s.customer?.subdomain,
   }));
   const history = useHistory();
   const { purchaseStep = 'type' } = useParams();
@@ -61,7 +62,7 @@ export default () => {
         ) : purchaseStep === 'meta_local' ? (
           <LocalMetadataForm instanceNames={instanceNames} instanceURLs={instanceURLs} customerId={customer_id} />
         ) : purchaseStep === 'meta_cloud' ? (
-          <CloudMetadataForm instanceNames={instanceNames} customerId={customer_id} />
+          <CloudMetadataForm instanceNames={instanceNames} customerId={customer_id} customerSubdomain={subdomain} />
         ) : purchaseStep === 'details_local' ? (
           <LocalInstanceForm products={products.localCompute} hasCard={hasCard} customerId={customer_id} />
         ) : purchaseStep === 'details_cloud' ? (

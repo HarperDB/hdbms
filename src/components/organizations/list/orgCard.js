@@ -16,6 +16,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
   const currentUserOrgStatus = useMemo(() => auth?.orgs?.find((o) => o.customer_id === activeCustomerId)?.status, [auth.orgs, activeCustomerId]);
+  const currentOrgUserStatus = useMemo(() => auth?.orgs?.find((o) => o.customer_id === customer_id)?.status, [auth.orgs, activeCustomerId]);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
 
   const chooseOrganization = useCallback(async (e) => {
     const newPage = e.currentTarget.getAttribute('data-page');
-    setLoading(true);
+    setLoading(newPage);
     const result = await getCustomer({ auth, customer_id });
     if (result.error) {
       setCustomerError(result.message);
@@ -82,7 +83,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
           <div className="action-buttons">
             {customerError ? (
               <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-status="removed" onClick={handleUpdateUserOrgs}>
-                {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove This Organization</span>}
+                {loading === 'removed' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove This Organization</span>}
               </Button>
             ) : status === 'invited' ? (
               <Row noGutters>
@@ -111,7 +112,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                   </Button>
                 </Col>
               </Row>
-            ) : currentUserOrgStatus === 'owner' ? (
+            ) : currentOrgUserStatus === 'owner' ? (
               <Row noGutters>
                 <Col xs="6" className="pr-1">
                   {isActiveCustomer ? (
@@ -120,7 +121,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                     </Button>
                   ) : (
                     <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
-                      {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
+                      {loading === 'instances' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
                     </Button>
                   )}
                 </Col>
@@ -131,7 +132,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                     </Button>
                   ) : (
                     <Button title={`Manage ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="users" onClick={chooseOrganization}>
-                      {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Manage</span>}
+                      {loading === 'users' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Manage</span>}
                     </Button>
                   )}
                 </Col>
@@ -152,7 +153,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                 </Col>
                 <Col xs="6" className="pl-1">
                   <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
-                    {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
+                    {loading === 'instances' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Select</span>}
                   </Button>
                 </Col>
               </Row>

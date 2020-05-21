@@ -8,7 +8,7 @@ import ContentContainer from '../../shared/contentContainer';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
-export default ({ instanceNames, customerId }) => {
+export default ({ instanceNames, customerId, customerSubdomain }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -46,7 +46,7 @@ export default ({ instanceNames, customerId }) => {
       <Card id="cloudInstanceInfo">
         <CardBody>
           <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
-            <Row className="mb-4">
+            <Row>
               <Col xs="4" className="pt-2 text-nowrap">
                 Example: &quot;cloud-1&quot;
               </Col>
@@ -67,6 +67,21 @@ export default ({ instanceNames, customerId }) => {
                   title="instance_name"
                   value={formData.instance_name}
                 />
+              </Col>
+            </Row>
+            <hr className="my-2" />
+            <Row>
+              <Col xs="4" className="pt-2 mb-2">
+                Instance URL
+              </Col>
+              <Col xs="8" className="pt-2 text-right text-nowrap overflow-hidden text-truncate">
+                {formData.instance_name ? (
+                  <i className="text-grey">
+                    {formData.instance_name}-{customerSubdomain}.harperdbcloud.com
+                  </i>
+                ) : (
+                  <span className="text-lightgrey">enter a name above</span>
+                )}
               </Col>
             </Row>
           </ContentContainer>

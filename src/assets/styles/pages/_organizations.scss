@@ -10,13 +10,13 @@
     &.new {
       color: $color-purple;
 
-      .new-instance-plus {
+      .new-org-plus {
         transform: rotate(-90deg);
         transition: transform 500ms ease-in-out;
       }
 
       &:hover {
-        .new-instance-plus {
+        .new-org-plus {
           transform: rotate(90deg);
         }
       }

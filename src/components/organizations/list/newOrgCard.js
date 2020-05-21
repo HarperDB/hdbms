@@ -18,7 +18,7 @@ const NewOrgCard = () => {
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
           <span>Create A New Organization</span>
           <div className="my-4">
-            <i className="fa fa-2x fa-plus-circle new-instance-plus" />
+            <i className="fa fa-2x fa-plus-circle new-org-plus" />
           </div>
           <span>With Its Own Instances And Billing</span>
         </CardBody>
