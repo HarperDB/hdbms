@@ -21,6 +21,7 @@ const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
   const history = useHistory();
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -115,7 +116,14 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               {instance_name}
             </Col>
             <Col xs="2" className="instance-icon">
-              <CardFrontIcons isReady={isReady} showLogout={instanceAuth} setFlipState={setFlipState} compute_stack_id={compute_stack_id} instance_name={instance_name} />
+              <CardFrontIcons
+                isOrgOwner={isOrgOwner}
+                isReady={isReady}
+                showLogout={instanceAuth}
+                setFlipState={setFlipState}
+                compute_stack_id={compute_stack_id}
+                instance_name={instance_name}
+              />
             </Col>
           </Row>
           <div className="instance-url">{url}</div>

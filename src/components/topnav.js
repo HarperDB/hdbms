@@ -34,7 +34,7 @@ const TopNav = ({ logOut }) => {
           <div className="text-white org-name">{customer.customer_name}</div>
           <div className="org-actions">
             <NavItem>
-              <NavLink disabled title="View Organization Instances" exact to={`/${customer.customer_id}/instances`}>
+              <NavLink title="View Organization Instances" exact to={`/${customer.customer_id}/instances`}>
                 <i className="fa fa-th d-inline-block" />
                 <span className="d-none d-lg-inline-block">&nbsp; Instances</span>
               </NavLink>
@@ -43,7 +43,11 @@ const TopNav = ({ logOut }) => {
               <>
                 <NavItem className="mr-3" />
                 <NavItem>
-                  <NavLink disabled title="Manage Organization" to={`/${customer.customer_id}/users`}>
+                  <NavLink
+                    isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/${customer.customer_id}/billing`) !== -1}
+                    title="Manage Organization"
+                    to={`/${customer.customer_id}/users`}
+                  >
                     <i className="fa fa-gears d-inline-block" />
                     <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
                   </NavLink>

@@ -29,7 +29,7 @@ export default ({ customer_id }) => [
   },
   {
     component: Users,
-    path: `/${customer_id}/instance/:compute_stack_id/users`,
+    path: `/${customer_id}/instance/:compute_stack_id/users/:username?`,
     link: 'users',
     icon: 'users',
     iconCode: 'f0c0',

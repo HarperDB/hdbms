@@ -60,7 +60,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item}`));
 
   return (
-    <Row key={item} className="item-row" onClick={handleSetActive}>
+    <Row key={item} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive}>
       <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
       <Col className="item-action">
         {confirmedDropItem ? (

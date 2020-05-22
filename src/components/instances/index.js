@@ -23,6 +23,7 @@ const InstancesIndex = () => {
     lastUpdate: s.lastUpdate,
     instances: s.instances,
   }));
+  const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
 
   useInterval(() => {
     if (!action)
@@ -39,7 +40,7 @@ const InstancesIndex = () => {
     <div id="instances">
       <SubNav />
       <Row>
-        <NewInstanceCard />
+        {isOrgOwner && <NewInstanceCard />}
         <InstanceList />
       </Row>
       {action === 'new' && instances && <NewInstanceModal />}

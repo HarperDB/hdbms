@@ -9,6 +9,11 @@
       cursor: pointer;
       height: 49px;
 
+      &.active {
+        font-weight: bold;
+        background-color: $color-lightergrey;
+      }
+
       &:first-child {
         border-top: 0;
       }

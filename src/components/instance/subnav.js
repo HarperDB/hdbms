@@ -73,6 +73,7 @@ export default ({ routes = [] }) => {
             <NavLink
               title={route.link}
               className="text-capitalize nav-link"
+              isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
               to={`/${customer_id}/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
             >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />

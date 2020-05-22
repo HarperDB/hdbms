@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
+import { useHistory, useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
+import appState from '../../../state/appState';
 
 import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
-import ModalPassword from './modalPassword';
-import ModalRole from './modalRole';
-import ModalDelete from './modalDelete';
 
 export default () => {
+  const history = useHistory();
+  const { compute_stack_id } = useParams();
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [tableState, setTableState] = useState({
     filtered: [],
     page: 0,
@@ -24,21 +26,8 @@ export default () => {
     lastUpdate: false,
     sorted: [{ id: 'username', desc: false }],
   });
-  const [modal, setModal] = useState(false);
-  const { auth, users } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    users: s.users,
-  }));
-  const [tableColumns] = useState(instanceUserColumns({ auth, setModal }));
-
-  const closeModal = ({ refresh = false }) => {
-    setModal(false);
-    if (refresh) {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-    }
-  };
+  const users = useStoreState(instanceState, (s) => s.users);
+  const [tableColumns] = useState(instanceUserColumns());
 
   return (
     <>
@@ -67,16 +56,12 @@ export default () => {
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
+            getTrProps={(state, rowInfo) => ({
+              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/users/${rowInfo.original.username}`),
+            })}
           />
         </CardBody>
       </Card>
-      {modal?.action === 'password' ? (
-        <ModalPassword closeModal={closeModal} username={modal.username} clusterUser={modal.cluster_user} />
-      ) : modal?.action === 'role' ? (
-        <ModalRole closeModal={closeModal} username={modal.username} role={modal.role} />
-      ) : modal?.action === 'delete' ? (
-        <ModalDelete closeModal={closeModal} username={modal.username} />
-      ) : null}
     </>
   );
 };

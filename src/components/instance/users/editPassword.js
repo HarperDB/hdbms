@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, Button, Input, Col, Row, CardBody, Card } from '@nio/ui-kit';
+import { Button, Input, Col, Row, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { useHistory } from 'react-router';
+import { useLocation, useParams } from 'react-router-dom';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
-import usePersistedUser from '../../../state/persistedUser';
 
-export default ({ username, closeModal, clusterUser }) => {
-  const [{ darkTheme }] = usePersistedUser({});
+export default () => {
+  const { username } = useParams();
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const thisUser = useStoreState(instanceState, (s) => s.users.find((u) => u.username === username));
+
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
@@ -27,7 +32,10 @@ export default ({ username, closeModal, clusterUser }) => {
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
-        closeModal({ refresh: true });
+        instanceState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
+        setTimeout(() => history.push(pathname.replace(`/${username}`, '')), 0);
       } else {
         setFormState({ error: response.message });
       }
@@ -35,13 +43,8 @@ export default ({ username, closeModal, clusterUser }) => {
   };
 
   return (
-    <Modal id="new-instance-modal" isOpen toggle={closeModal} className={darkTheme ? 'dark' : ''}>
-      <ModalHeader toggle={closeModal}>
-        Update Password For &quot;
-        {username}
-        &quot;
-      </ModalHeader>
-      <ModalBody>
+    <Row>
+      <Col sm="6">
         <Input
           type="text"
           className="mb-2 text-center"
@@ -50,33 +53,19 @@ export default ({ username, closeModal, clusterUser }) => {
           value={formData.password || ''}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
-        {clusterUser && (
-          <Card>
-            <CardBody className="text-danger">
-              You must <b>restart</b> the instance for the cluster user reconnect with a new password. You may do this in the <b>Config</b> section.
-            </CardBody>
-          </Card>
-        )}
-        <hr />
-        <Row>
-          <Col sm="6">
-            <Button block color="grey" onClick={closeModal}>
-              cancel
-            </Button>
-          </Col>
-          <Col sm="6">
-            <Button block color="danger" onClick={updatePassword}>
-              do it
-            </Button>
-          </Col>
-        </Row>
-
+      </Col>
+      <Col sm="6">
+        <Button block color="purple" onClick={updatePassword}>
+          Update Password (Requires Instance Restart)
+        </Button>
+      </Col>
+      <Col xs="12">
         {formState.error && (
           <Card className="mt-3 error">
             <CardBody>{formState.error}</CardBody>
           </Card>
         )}
-      </ModalBody>
-    </Modal>
+      </Col>
+    </Row>
   );
 };
