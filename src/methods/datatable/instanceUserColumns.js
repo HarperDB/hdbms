@@ -24,13 +24,10 @@ export default ({ auth, setModal }) => [
     Cell: ({
       original: {
         username,
-        role: {
-          id,
-          permission: { cluster_user, super_user },
-        },
+        role: { id },
       },
     }) =>
-      auth.user !== username && !cluster_user && !super_user ? (
+      auth.user !== username ? (
         <Button
           color="darkpurple"
           className="datatable"

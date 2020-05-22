@@ -12,11 +12,12 @@ import FormStatus from '../../shared/formStatus';
 
 export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState(auth);
+  const [formData, setFormData] = useState({ ...auth, customer_id });
 
   useAsyncEffect(async () => {
-    const { firstname, lastname, customer_id, user_id } = formData;
+    const { firstname, lastname } = formData;
     const { submitted } = formState;
     if (submitted) {
       if (!firstname || !lastname) {
@@ -25,7 +26,7 @@ export default ({ formStateHeight }) => {
         setFormState({ error: 'Nothing seems to have changed' });
       } else {
         setFormState({ processing: true });
-        const response = await updateUser({ auth, firstname, lastname, customer_id, user_id });
+        const response = await updateUser({ auth, firstname, lastname, customer_id, user_id: auth.user_id });
 
         if (response.error) {
           setFormState({ error: response.message });
