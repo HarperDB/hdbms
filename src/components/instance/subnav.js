@@ -53,7 +53,6 @@ export default ({ routes = [] }) => {
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"
-          width="200px"
           onChange={({ value }) => history.push(`/${customer_id}/instance/${value}/browse`)}
           options={options || []}
           value={activeOption}
@@ -68,7 +67,7 @@ export default ({ routes = [] }) => {
           }}
         />
       </Nav>
-      <Nav navbar className="instance-nav d-none d-md-flex">
+      <Nav navbar className="instance-nav d-none d-lg-flex">
         {routes.map((route) => (
           <NavItem key={route.path}>
             <NavLink
@@ -82,7 +81,7 @@ export default ({ routes = [] }) => {
           </NavItem>
         ))}
       </Nav>
-      <Nav navbar className="instance-nav-select d-flex d-md-none">
+      <Nav navbar className="instance-nav-select d-flex d-lg-none">
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"

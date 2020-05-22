@@ -26,7 +26,6 @@
 
 
     .react-select-container {
-      max-width: 287px;
       width: 100%;
 
       .react-select__control,
@@ -103,12 +102,20 @@
 
     &.instance-nav-select {
       justify-content: flex-end !important;
-      padding-left: 15px;
+      padding-left: 7.5px;
     }
 
     &.instance-select {
       justify-content: flex-start !important;
-      padding-right: 15px;
+      padding-right: 7.5px;
+
+      .react-select-container {
+        max-width: 287px;
+
+        @media screen and (max-width: 991px) {
+          max-width: 100%;
+        }
+      }
     }
 
   }

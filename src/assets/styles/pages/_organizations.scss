@@ -1,3 +1,44 @@
+#app-nav {
+  .active-org {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: $faint-white-overlay;
+    border-radius: 4px;
+    height: 34px;
+    overflow: hidden;
+    border-right: 1px solid $faint-white-overlay;
+    transition: flex 500ms;
+    flex: 0;
+
+    &.open {
+      border-right: 0;
+      flex: 1;
+    }
+
+    .org-name,
+    .org-actions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 15px;
+      height: 100%;
+    }
+
+    .org-name {
+      border-right: 1px solid $faint-white-overlay;
+      white-space: nowrap;
+
+      @media screen and (max-width: 550px) {
+        font-size: 10px;
+        font-weight: $font-weight-bold;
+        max-width: 75px;
+        white-space: normal;
+      }
+    }
+  }
+}
+
 #organizations {
   .navbar-nav {
     max-width: 400px;

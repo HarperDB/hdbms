@@ -6,5 +6,6 @@ export default [
     path: '/profile/profile',
     link: 'profile',
     icon: 'user',
+    iconCode: 'f007',
   },
 ];

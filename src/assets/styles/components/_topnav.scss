@@ -19,47 +19,51 @@
     height: 35px;
     width: 140px;
 
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 650px) {
       background-image: url('/images/logo_circle_only.png');
       width: 40px;
     }
   }
 
-  .nav-item {
-    display: inline-block;
-    margin-bottom: 0 !important;
-    white-space: nowrap;
+  .navbar-nav {
+    justify-content: flex-end;
 
-    .nav-link,
-    a {
-      color: $white-overlay !important;
-      display: inline-block;
-      min-width: 15px;
-      padding: 0 !important;
-      position: relative;
-      transition: color 250ms;
+    .nav-item {
+      margin-bottom: 0 !important;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
 
-      &.active,
-      &:hover {
-        color: $color-white !important;
-      }
+      .nav-link,
+      a {
+        color: $white-overlay !important;
+        display: inline-block;
+        min-width: 15px;
+        padding: 0 !important;
+        position: relative;
+        transition: color 250ms;
 
-      .invite-badge {
-        align-items: center;
-        background: $color-danger;
-        border-radius: 10px;
-        color: $color-white;
-        display: flex;
-        font-size: $font-size-small;
-        height: 13px;
-        justify-content: center;
-        line-height: 1;
-        position: absolute;
-        right: -10px;
-        top: -5px;
-        width: 13px;
+        &.active,
+        &:hover {
+          color: $color-white !important;
+        }
+
+        .invite-badge {
+          align-items: center;
+          background: $color-danger;
+          border-radius: 10px;
+          color: $color-white;
+          display: flex;
+          font-size: $font-size-small;
+          height: 13px;
+          justify-content: center;
+          line-height: 1;
+          position: absolute;
+          right: -10px;
+          top: -5px;
+          width: 13px;
+        }
       }
     }
   }
-
 }

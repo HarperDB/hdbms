@@ -43,36 +43,32 @@ const TopNav = () => {
         <NavItem className="ml-3">
           <NavLink title="View or Switch Organizations" to="/organizations">
             <i className="fa fa-building-o d-inline-block" />
-            <span className="d-none d-lg-inline-block">&nbsp; Orgs</span>
+            <span className="d-none d-lg-inline-block">&nbsp; All Organizations</span>
             {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
           </NavLink>
         </NavItem>
-        {customer && pathname.indexOf(customer?.customer_id) !== -1 && (
-          <>
-            <NavItem className="ml-2 text-white">
-              <i className="fa fa-angle-right" />
-            </NavItem>
-            <NavItem className="ml-2 text-white">{customer.customer_name}</NavItem>
-            <NavItem className="ml-2 text-white">
-              <i className="fa fa-angle-right" />
-            </NavItem>
-            {showManageIcon && (
-              <NavItem className="ml-3">
-                <NavLink disabled title="Manage Organization" to={`/${customer.customer_id}/users`}>
-                  <i className="fa fa-gears d-inline-block" />
-                  <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
-                </NavLink>
-              </NavItem>
-            )}
-            <NavItem className="ml-3">
+        <div className={`active-org ml-3 ${customer && pathname.indexOf(customer?.customer_id) !== -1 ? 'open' : ''}`}>
+          <div className="text-white org-name">{customer.customer_name}</div>
+          <div className="org-actions">
+            <NavItem>
               <NavLink disabled title="View Organization Instances" exact to={`/${customer.customer_id}/instances`}>
                 <i className="fa fa-th d-inline-block" />
                 <span className="d-none d-lg-inline-block">&nbsp; Instances</span>
               </NavLink>
             </NavItem>
-          </>
-        )}
-        <NavItem className="ml-3 text-white">|</NavItem>
+            {showManageIcon && (
+              <>
+                <NavItem className="mr-3" />
+                <NavItem>
+                  <NavLink disabled title="Manage Organization" to={`/${customer.customer_id}/users`}>
+                    <i className="fa fa-gears d-inline-block" />
+                    <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
+                  </NavLink>
+                </NavItem>
+              </>
+            )}
+          </div>
+        </div>
         <NavItem className="ml-3">
           <NavLink title="Manage My Profile" to="/profile">
             <i className="fa fa-user" />

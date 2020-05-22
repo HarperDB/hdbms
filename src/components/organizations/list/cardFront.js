@@ -13,7 +13,6 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
-  const currentOrgUserStatus = useMemo(() => auth?.orgs?.find((o) => o.customer_id === customer_id)?.status, [auth.orgs, activeCustomerId]);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const chooseOrganization = useCallback(async (e) => {
     const newPage = e.currentTarget.getAttribute('data-page');
     if (isActiveCustomer) {
-      history.push(`/${customer_id}/${newPage}`);
+      history.push(`/${customer_id}/instances`);
     } else {
       setLoading(newPage);
       const result = await getCustomer({ auth, customer_id });
@@ -38,7 +37,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
           s.lastUpdate = false;
         });
         setPersistedUser({ ...persistedUser, customer_id });
-        setTimeout(() => history.push(`/${customer_id}/${newPage}`), 0);
+        setTimeout(() => history.push(`/${customer_id}/instances`), 0);
       }
     }
   }, []);
@@ -57,8 +56,13 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
     }
   }, []);
 
+  const handleCardFlipIconClick = useCallback((e) => {
+    e.stopPropagation();
+    setFlipState(e.currentTarget.getAttribute('data-action'));
+  }, []);
+
   return (
-    <Card className="instance">
+    <Card className="instance" onClick={chooseOrganization}>
       <CardBody>
         <Row>
           <Col xs="10" className="org-name">
@@ -66,18 +70,18 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
           </Col>
           <Col xs="2" className="status-icon text-right">
             {status === 'accepted' ? (
-              <i title={`Leave ${customer_name} organization`} className="fa fa-times-circle text-purple" onClick={() => setFlipState('leave')} />
+              <i title={`Leave ${customer_name} organization`} className="fa fa-times-circle text-purple" data-action="leave" onClick={handleCardFlipIconClick} />
             ) : status === 'owner' ? (
-              <i title={`Delete ${customer_name} organization`} className="fa fa-trash delete text-purple" onClick={() => setFlipState('delete')} />
+              <i title={`Delete ${customer_name} organization`} className="fa fa-trash delete text-purple" data-action="delete" onClick={handleCardFlipIconClick} />
             ) : null}
           </Col>
         </Row>
         <div className="org-status">Organization {customer_id}</div>
         <CardFrontStatusRow
           textClass={`text-bold ${customerError ? 'text-danger' : ''}`}
-          label="STATUS"
+          label="ROLE"
           isReady
-          value={customerError ? customerError.toUpperCase() : status.toUpperCase()}
+          value={customerError ? customerError.toUpperCase() : status === 'accepted' ? 'USER' : status.toUpperCase()}
           bottomDivider
         />
         <CardFrontStatusRow label="INSTANCES" isReady value={instance_count || '...'} />
@@ -113,24 +117,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
                 </Button>
               </Col>
             </Row>
-          ) : currentOrgUserStatus === 'owner' ? (
-            <Row noGutters>
-              <Col xs="6" className="pr-1">
-                <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
-                  {loading === 'instances' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Instances</span>}
-                </Button>
-              </Col>
-              <Col xs="6" className="pl-1">
-                <Button title={`Manage ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="users" onClick={chooseOrganization}>
-                  {loading === 'users' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Manage</span>}
-                </Button>
-              </Col>
-            </Row>
-          ) : (
-            <Button title={`Select ${customer_name} organization`} disabled={!!loading} color="purple" block data-page="instances" onClick={chooseOrganization}>
-              {loading === 'instances' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Instances</span>}
-            </Button>
-          )}
+          ) : null}
         </div>
       </CardBody>
     </Card>
