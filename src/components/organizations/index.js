@@ -57,7 +57,6 @@ const OrganizationsIndex = () => {
   const fetchUser = useCallback(async () => {
     if (!action) {
       const response = await getUser(auth);
-      setPersistedUser({ ...persistedUser, ...response });
       appState.update((s) => {
         s.auth = { ...auth, ...response };
       });

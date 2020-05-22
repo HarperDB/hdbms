@@ -12,7 +12,7 @@ import FormStatus from '../../shared/formStatus';
 
 export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [, setPersistedUser] = usePersistedUser({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -40,7 +40,7 @@ export default ({ formStateHeight }) => {
               pass: newpassword,
             };
           });
-          setPersistedUser({ ...auth, pass: newpassword });
+          setPersistedUser({ ...persistedUser, pass: newpassword });
         }
       }
       setTimeout(() => setFormData({}), 2000);

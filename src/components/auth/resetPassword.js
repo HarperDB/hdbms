@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
+import AuthStateLoader from './authStateLoader';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -37,29 +38,9 @@ export default () => {
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">resetting password</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="resetting password" spinner />
       ) : formState.success ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-center text-white">
-              <div className="mb-3">success!</div>
-              check your email for a password reset link.
-            </CardBody>
-          </Card>
-          <div className="text-center">
-            <NavLink to="/sign-in" className="login-nav-link">
-              Go to Sign In
-            </NavLink>
-          </div>
-        </>
+        <AuthStateLoader header="success!" body="check your email for a password reset link." links={[{ to: '/sign-in', text: 'Go to Sign In' }]} />
       ) : (
         <>
           <Card className="mb-3">

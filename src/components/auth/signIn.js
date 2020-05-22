@@ -10,6 +10,7 @@ import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
+import AuthStateLoader from './authStateLoader';
 
 export default () => {
   const [persistedUser, setPersistedUser] = usePersistedUser({});
@@ -68,15 +69,7 @@ export default () => {
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">signing in</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="signing in" spinner />
       ) : (
         <>
           <Card className="mb-3">

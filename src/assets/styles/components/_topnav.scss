@@ -29,10 +29,10 @@
     justify-content: flex-end;
 
     .nav-item {
+      align-items: center;
+      display: inline-flex;
       margin-bottom: 0 !important;
       white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
 
       .nav-link,
       a {

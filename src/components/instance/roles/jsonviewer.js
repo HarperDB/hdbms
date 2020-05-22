@@ -8,10 +8,10 @@ import { useAlert } from 'react-alert';
 
 import alterRole from '../../../api/instance/alterRole';
 import instanceState from '../../../state/instanceState';
-import themeState from '../../../state/themeState';
+import usePersistedUser from '../../../state/persistedUser';
 
 export default () => {
-  const [darkTheme] = themeState(false);
+  const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const { role_id } = useParams();
   const { permissions, roles, auth, url } = useStoreState(instanceState, (s) => ({

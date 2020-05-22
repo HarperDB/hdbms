@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resendRegistrationEmail from '../../api/lms/resendRegistrationEmail';
+import AuthStateLoader from './authStateLoader';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -37,28 +38,9 @@ export default () => {
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">processing request</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="processing request" spinner />
       ) : formState.success ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">success!</div>
-              check your email. if you still don&apos;t see it, shoot us an email:
-              <br />
-              <br />
-              <a href="mailto:support@harperdb.io">support@harperdb.io</a>
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="success!" body="check your email. if you still don't see it, send us an email: support@harperdb.io" />
       ) : (
         <>
           <Card className="mb-3">

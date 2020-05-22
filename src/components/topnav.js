@@ -1,19 +1,15 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import appState from '../state/appState';
 
 import usePersistedUser from '../state/persistedUser';
-import themeState from '../state/themeState';
 
-const TopNav = () => {
-  const history = useHistory();
+const TopNav = ({ logOut }) => {
   const { pathname } = useLocation();
-  const [, setPersistedUser] = usePersistedUser({});
-  const [darkTheme, setDarkTheme] = themeState(false);
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { auth, customer } = useStoreState(appState, (s) => ({
     auth: s.auth,
     customer: s.customer,
@@ -21,20 +17,7 @@ const TopNav = () => {
   const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
   const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id === customer?.customer_id)?.status === 'owner', [auth.orgs, customer.customer_id]);
 
-  const logOut = useCallback(() => {
-    setPersistedUser(false);
-    appState.update((s) => {
-      s.auth = false;
-      s.customer = false;
-      s.users = false;
-      s.instances = false;
-      s.hasCard = false;
-      s.lastUpdate = false;
-    });
-    setTimeout(() => history.push('/sign-in'), 100);
-  }, []);
-
-  return auth ? (
+  return (
     <Navbar id="app-nav" dark fixed="top" expand="xs">
       <div className="navbar-brand">
         <div id="logo" title="HarperDB Logo" />
@@ -82,11 +65,11 @@ const TopNav = () => {
         <NavItem className="ml-3">
           <DumbLink
             tabIndex="0"
-            title={darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            onKeyDown={(e) => e.keyCode !== 13 || setDarkTheme(!darkTheme)}
-            onClick={() => setDarkTheme(!darkTheme)}
+            title={persistedUser.darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            onKeyDown={(e) => e.keyCode !== 13 || setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
+            onClick={() => setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
           >
-            <i className={`fa ${darkTheme ? 'fa-moon-o' : 'fa-sun-o'}`} />
+            <i className={`fa ${persistedUser.darkTheme ? 'fa-moon-o' : 'fa-sun-o'}`} />
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
@@ -96,7 +79,7 @@ const TopNav = () => {
         </NavItem>
       </Nav>
     </Navbar>
-  ) : null;
+  );
 };
 
 export default TopNav;

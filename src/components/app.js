@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
-import themeState from '../state/themeState';
+import usePersistedUser from '../state/persistedUser';
 
 import SignUp from './auth/signUp';
 import SignIn from './auth/signIn';
@@ -18,11 +18,10 @@ import Support from './support';
 import Instances from './instances';
 import Instance from './instance';
 import Profile from './profile';
-import TopNav from './topnav';
 
 const App = () => {
-  const [darkTheme] = themeState(false);
   const history = useHistory();
+  const [{ darkTheme }] = usePersistedUser({});
   const canonical = document.querySelector('link[rel="canonical"]');
 
   useEffect(() => history.listen(() => (canonical.href = window.location.href)), []);
@@ -30,7 +29,6 @@ const App = () => {
   return (
     <div className={darkTheme ? 'dark' : ''}>
       <div id="app-container">
-        <TopNav />
         <Switch>
           <Route component={SignIn} exact path="/sign-in" />
           <Route component={SignUp} exact path="/sign-up" />

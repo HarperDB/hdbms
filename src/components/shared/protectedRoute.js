@@ -5,15 +5,18 @@ import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
 import appState from '../../state/appState';
+import usePersistedUser from '../../state/persistedUser';
+
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
 import config from '../../../config';
-import usePersistedUser from '../../state/persistedUser';
+import TopNav from '../topnav';
 
 const ProtectedRoute = ({ children }) => {
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
@@ -22,14 +25,24 @@ const ProtectedRoute = ({ children }) => {
     lastUpdate: s.lastUpdate,
     instances: s.instances,
   }));
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { pathname } = useLocation();
   const [fetching, setFetching] = useState(false);
+
+  const logOut = useCallback(() => {
+    setPersistedUser({ darkTheme: persistedUser.darkTheme });
+    appState.update((s) => {
+      s.auth = false;
+      s.customer = false;
+      s.users = false;
+      s.instances = false;
+      s.hasCard = false;
+      s.lastUpdate = false;
+    });
+  }, [persistedUser.darkTheme]);
 
   const refreshUsers = useCallback(async () => {
     if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new') {
       const response = await getUser(auth);
-      setPersistedUser({ ...persistedUser, ...response });
       if (!response.error) {
         appState.update((s) => {
           s.auth = { ...auth, ...response };
@@ -63,7 +76,14 @@ const ProtectedRoute = ({ children }) => {
 
   useInterval(refreshUsers, config.instances_refresh_rate);
 
-  return auth?.email && auth?.pass ? children : <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />;
+  return auth?.email && auth?.pass ? (
+    <>
+      <TopNav logOut={logOut} />
+      {children}
+    </>
+  ) : (
+    <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />
+  );
 };
 
 export default ProtectedRoute;

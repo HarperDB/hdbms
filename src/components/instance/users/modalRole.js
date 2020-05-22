@@ -6,10 +6,10 @@ import { useAlert } from 'react-alert';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
-import themeState from '../../../state/themeState';
+import usePersistedUser from '../../../state/persistedUser';
 
 export default ({ username, role, closeModal }) => {
-  const [darkTheme] = themeState(false);
+  const [{ darkTheme }] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();

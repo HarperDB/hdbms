@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -16,7 +16,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  //const history = useHistory();
   const alert = useAlert();
 
   const chooseOrganization = useCallback(async (e) => {

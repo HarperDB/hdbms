@@ -5,10 +5,10 @@ import { useAlert } from 'react-alert';
 
 import instanceState from '../../../state/instanceState';
 import dropUser from '../../../api/instance/dropUser';
-import themeState from '../../../state/themeState';
+import usePersistedUser from '../../../state/persistedUser';
 
 export default ({ username, closeModal }) => {
-  const [darkTheme] = themeState(false);
+  const [{ darkTheme }] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const alert = useAlert();
   const { auth, url } = useStoreState(instanceState, (s) => ({

@@ -12,7 +12,7 @@ import updatePassword from '../../api/lms/updatePassword';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [, setPersistedUser] = usePersistedUser({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
@@ -35,7 +35,7 @@ export default () => {
           appState.update((s) => {
             s.auth = { ...auth, pass: password };
           });
-          setPersistedUser({ ...auth, pass: password });
+          setPersistedUser({ ...persistedUser, pass: password });
           history.push('/sign-in');
         }
       }

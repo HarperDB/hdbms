@@ -9,11 +9,11 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
-import themeState from '../../../state/themeState';
+import usePersistedUser from '../../../state/persistedUser';
 import appState from '../../../state/appState';
 
 export default ({ newEntityColumns, hashAttribute }) => {
-  const [darkTheme] = themeState(false);
+  const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const history = useHistory();
   const { schema, table, hash, action } = useParams();

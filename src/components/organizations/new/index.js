@@ -5,14 +5,15 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../state/appState';
-import themeState from '../../../state/themeState';
+import usePersistedUser from '../../../state/persistedUser';
+
 import ContentContainer from '../../shared/contentContainer';
 import handleAddOrg from '../../../methods/organizations/handleAddOrg';
 import getUser from '../../../api/lms/getUser';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [darkTheme] = themeState(false);
+  const [{ darkTheme }] = usePersistedUser({});
   const history = useHistory();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});

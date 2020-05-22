@@ -5,6 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
+import AuthStateLoader from './authStateLoader';
 
 export default () => {
   const { search } = useLocation();
@@ -28,38 +29,16 @@ export default () => {
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
       {formState.submitted ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">creating your account</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="creating your account" spinner />
       ) : formState.success ? (
-        <>
-          <Card className="mb-3">
-            <CardBody>
-              <div className="text-center text-white">
-                <div className="mb-3">success!</div>
-                check your email for your username and password. be sure to check your spam folder, just in case.
-              </div>
-            </CardBody>
-          </Card>
-          <Row>
-            <Col xs="6">
-              <NavLink to="/sign-in" className="login-nav-link">
-                Sign In
-              </NavLink>
-            </Col>
-            <Col xs="6" className="text-right">
-              <NavLink to="/resend-registration-email" className="login-nav-link">
-                Resend Email
-              </NavLink>
-            </Col>
-          </Row>
-        </>
+        <AuthStateLoader
+          header="success!"
+          body="check your email for your username and password. be sure to check your spam folder, just in case."
+          links={[
+            { to: '/sign-in', text: 'Sign In' },
+            { to: '/resend-registration-email', text: 'Resend Email' },
+          ]}
+        />
       ) : (
         <>
           <Card className="mb-3">
