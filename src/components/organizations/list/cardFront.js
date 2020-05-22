@@ -16,7 +16,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
-  //const history = useHistory();
+  const history = useHistory();
   const alert = useAlert();
 
   const chooseOrganization = useCallback(async (e) => {
