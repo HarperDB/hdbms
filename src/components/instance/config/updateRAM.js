@@ -17,18 +17,19 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 export default ({ setInstanceAction }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, hasCard, canAddFreeCloudInstance } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-    hasCard: s.hasCard,
-  }));
-  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_being_modified } = useStoreState(instanceState, (s) => ({
+  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_being_modified, is_local } = useStoreState(instanceState, (s) => ({
     compute_stack_id: s.compute_stack_id,
     stripe_plan_id: s.stripe_plan_id,
     computeProducts: s.computeProducts,
     compute: s.compute,
     storage: s.storage,
+    is_local: s.is_local,
     is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
+  }));
+  const { auth, customer, hasCard, canAddFreeCloudInstance } = useStoreState(appState, (s) => ({
+    auth: s.auth,
+    customer: s.customer,
+    hasCard: s.hasCard,
     canAddFreeCloudInstance: s.instances && config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
   }));
   const [formState, setFormState] = useState({});
@@ -42,7 +43,7 @@ export default ({ setInstanceAction }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      if (!newTotal && !canAddFreeCloudInstance) {
+      if (!newTotal && !is_local && !canAddFreeCloudInstance) {
         alert.error(`You are limited to ${config.free_cloud_instance_limit} free cloud instance${config.free_cloud_instance_limit !== 1 ? 's' : ''}`);
         setFormData({ ...formData, stripe_plan_id });
         setFormState({});
@@ -59,7 +60,7 @@ export default ({ setInstanceAction }) => {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push(`/${customer.customer_id}/instances`), 3000);
+          setTimeout(() => history.push(`/${customer.customer_id}/instances`), 100);
         }
       }
     }
@@ -84,7 +85,7 @@ export default ({ setInstanceAction }) => {
         placeholder="select a RAM allotment"
         styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
-      {hasChanged && !newTotal && !canAddFreeCloudInstance ? (
+      {hasChanged && !newTotal && !is_local && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">
           <CardBody>
             You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
@@ -92,7 +93,8 @@ export default ({ setInstanceAction }) => {
         </Card>
       ) : hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/${customer.customer_id}/organization/billing?returnURL=/instance/${compute_stack_id}/config`)}
+          className="mt-2"
+          onClick={() => history.push(`/${customer.customer_id}/billing?returnURL=/${customer.customer_id}/instance/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}

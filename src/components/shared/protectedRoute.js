@@ -41,7 +41,7 @@ const ProtectedRoute = ({ children }) => {
   }, [persistedUser.darkTheme]);
 
   const refreshUsers = useCallback(async () => {
-    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new') {
+    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new' && pathname.indexOf('/instance/') === -1) {
       const response = await getUser(auth);
       if (!response.error) {
         appState.update((s) => {
