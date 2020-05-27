@@ -14,7 +14,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
       [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, signal);
     } else {
-      const { record_count } = await describeTable({ auth, url, schema, table });
+      const { record_count } = await describeTable({ auth, url, schema, table, signal });
       newTotalRecords = record_count;
     }
 
