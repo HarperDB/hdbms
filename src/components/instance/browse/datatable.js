@@ -11,7 +11,6 @@ import instanceState from '../../../state/instanceState';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 import appState from '../../../state/appState';
-import describeTable from '../../../api/instance/describeTable';
 
 const defaultTableState = {
   tableData: [],
@@ -28,7 +27,7 @@ const defaultTableState = {
   currentHash: false,
 };
 
-export default ({ activeTable: { dataTableColumns } }) => {
+export default ({ activeTable: { hashAttribute, dataTableColumns } }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table } = useParams();
   const { auth, url, lastUpdate } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url, lastUpdate: s.lastUpdate }));
@@ -67,16 +66,16 @@ export default ({ activeTable: { dataTableColumns } }) => {
     [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate]
   );
 
-  useAsyncEffect(async () => {
-    if (table) {
-      const { hash_attribute } = await describeTable({ auth, url, schema, table });
+  useAsyncEffect(() => {
+    if (hashAttribute !== tableState.currentHash || table !== tableState.currentTable) {
       setTableState({
         ...defaultTableState,
-        hashAttribute: hash_attribute,
-        sorted: [{ id: hash_attribute, desc: false }],
+        sorted: [{ id: hashAttribute, desc: false }],
+        currentTable: table,
+        currentHash: hashAttribute,
       });
     }
-  }, [table]);
+  }, [hashAttribute, table]);
 
   useInterval(() => {
     if (tableState.autoRefresh && !tableState.loading) {
@@ -113,7 +112,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
             data={tableState.tableData}
             pages={tableState.totalPages}
             columns={dataTableColumns}
-            hashAttribute={tableState.hashAttribute}
+            hashAttribute={hashAttribute}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
