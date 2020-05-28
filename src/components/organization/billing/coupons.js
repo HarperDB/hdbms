@@ -9,8 +9,6 @@ import CouponForm from '../../shared/couponForm';
 export default () => {
   const stripe_coupons = useStoreState(appState, (s) => s.customer.stripe_coupons);
 
-  console.log(stripe_coupons);
-
   return (
     <Card>
       <CardBody>
