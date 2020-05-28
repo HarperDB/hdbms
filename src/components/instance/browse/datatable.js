@@ -73,6 +73,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
       const { hash_attribute, record_count } = await describeTable({ auth, url, schema, table, signal: controller.signal });
       setTableState({
         ...defaultTableState,
+        currentHash: hash_attribute,
         currentTable: table,
         sorted: [{ id: hash_attribute, desc: false }],
         totalRecords: record_count,
@@ -115,7 +116,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
             data={tableState.tableData}
             pages={tableState.totalPages}
             columns={dataTableColumns}
-            hashAttribute={tableState.hashAttribute}
+            hashAttribute={tableState.currentHash}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
@@ -127,7 +128,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             getTrProps={(state, rowInfo) => ({
-              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
+              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.currentHash]}`),
             })}
           />
         </CardBody>
