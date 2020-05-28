@@ -20,7 +20,7 @@ export default async ({ query, auth, url, signal }) => {
 
     const totalRecords = tableData.length;
     const attributes = totalRecords ? Object.keys(tableData[0]) : [];
-    const orderedColumns = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a));
+    const orderedColumns = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a)).sort();
     if (attributes.includes('__createdtime__')) {
       orderedColumns.push('__createdtime__');
     }
@@ -28,8 +28,9 @@ export default async ({ query, auth, url, signal }) => {
       orderedColumns.push('__updatedtime__');
     }
     const dataTableColumns = orderedColumns.map((k) => ({
+      id: k.toString(),
       Header: k.toString(),
-      accessor: k.toString(),
+      accessor: (row) => row[k.toString()],
       style: {
         height: 29,
         paddingTop: 10,
