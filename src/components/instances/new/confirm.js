@@ -145,10 +145,10 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
         </CardBody>
       </Card>
       <hr className="my-3" />
-      {customerCoupon ? (
+      {customerCoupon?.length ? (
         <div className="px-2 text-center text-success">
-          Your coupon code, <b>&apos;{customerCoupon.name}&apos;</b> grants a <b>${parseInt(customerCoupon.amount_off / 100, 10)}</b> credit across all products. Charges beyond $
-          {parseInt(customerCoupon.amount_off / 100, 10)} will be billed to your card.
+          This organization has <b>{customerCoupon.length}</b> coupon{customerCoupon.length > 1 && 's'} on file, good for a total product credit of{' '}
+          <b>${customerCoupon.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
         </div>
       ) : (
         <div className="px-2">
