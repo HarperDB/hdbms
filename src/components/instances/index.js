@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row } from '@nio/ui-kit';
-import useInterval from 'use-interval';
+
 import { Redirect, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
@@ -28,6 +28,14 @@ const InstancesIndex = () => {
       isOrgOwner: userExists?.status === 'owner',
     };
   });
+
+  useEffect(() => {
+    if (isOrgOwner) {
+      window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
+    } else {
+      console.log('you are not the mama!');
+    }
+  }, []);
 
   return isOrgUser ? (
     <div id="instances">
