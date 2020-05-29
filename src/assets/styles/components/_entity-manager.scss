@@ -7,72 +7,78 @@
     }
   }
 
-  .card-body {
-    padding: 0 15px;
+  .card {
+    overflow: hidden;
 
-    .item-row {
-      border-top: 1px solid $lighter-grey-overlay;
-      cursor: pointer;
-      height: 49px;
+    .card-body {
+      padding: 0 15px;
 
-      &:focus {
-        outline: 1px solid $color-lightpurple;
-      }
+      .item-row {
+        border-top: 1px solid $lighter-grey-overlay;
+        cursor: pointer;
+        height: 49px;
+        overflow: hidden;
 
-      &.active {
-        background-color: $color-lightergrey;
-        font-weight: bold;
-        outline: 0 !important;
-      }
+        &:focus {
+          outline: 1px solid $color-lightpurple;
+        }
 
-      &:first-child {
-        border-top: 0;
-      }
+        &.active {
+          background-color: $color-lightergrey;
+          font-weight: bold;
+          outline: 0 !important;
+        }
 
-      .input-holder {
-        flex-grow: 1;
-        flex-shrink: 0;
-        padding: 0 6px;
-        width: 100%;
+        &:first-child {
+          border-top: 0;
+        }
 
-        input {
-          background: rgba(255, 255, 255, 0.3);
-          border-color: transparent;
-          color: $color-black;
+        .input-holder {
+          flex-grow: 1;
+          flex-shrink: 0;
+          padding: 0 6px;
+          width: 100%;
 
-          &.is-invalid {
-            border-color: $color-danger;
-          }
+          input {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: transparent;
+            color: $color-black;
 
-          &.table {
-            width: 50%;
+            &.is-invalid {
+              border-color: $color-danger;
+            }
+
+            &.table {
+              width: 50%;
+            }
           }
         }
-      }
 
-      .item-label,
-      .item-action,
-      .input-holder {
-        align-items: center;
-        display: flex;
-      }
+        .item-label,
+        .item-action,
+        .input-holder {
+          align-items: center;
+          display: flex;
+        }
 
-      .item-label {
-        justify-content: flex-start;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+        .item-label {
+          justify-content: flex-start;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
-      .item-action {
-        flex-grow: 0;
-        flex-shrink: 1;
-        justify-content: flex-end;
-        min-width: 80px;
-        padding-left: 0;
+        .item-action {
+          flex-grow: 0;
+          flex-shrink: 1;
+          justify-content: flex-end;
+          min-width: 80px;
+          padding-left: 0;
+        }
       }
     }
   }
+
 
   .fa-sm {
     font-size: 0.8rem;
