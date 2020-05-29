@@ -47,6 +47,7 @@
   .card {
     cursor: pointer;
     height: 170px;
+    min-width: 288px;
 
     &.new {
       color: $color-purple;

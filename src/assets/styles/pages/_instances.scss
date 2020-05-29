@@ -7,6 +7,7 @@
     &.instance {
       cursor: pointer;
       height: 170px;
+      min-width: 288px;
 
       &.unclickable {
         cursor: not-allowed;
