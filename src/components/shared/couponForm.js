@@ -31,7 +31,9 @@ export default () => {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
-            getCustomer({ auth, customer_id: customer.customer_id });
+            await getCustomer({ auth, customer_id: customer.customer_id });
+            setFormData({ coupon_code: '' });
+            setFormState({});
           }
         }
       }
