@@ -30,7 +30,7 @@ const InstancesIndex = () => {
   });
 
   useEffect(() => {
-    if (isOrgOwner) {
+    if (isOrgOwner && window.userGuiding) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
     }
   }, []);
