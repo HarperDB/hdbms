@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
+
 import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 import getJob from '../../../api/instance/getJob';
@@ -54,11 +55,8 @@ export default () => {
         setFormData({ records: lines, csv_file: reader.result });
         setFormState({ processed: true });
       };
-      if (file.size > config.max_file_upload_size) {
-        setFormState({ error: 'File exceeds 10MB Limit. Use URL Loader Above.' });
-      } else {
-        reader.readAsText(file);
-      }
+      if (file.size > config.max_file_upload_size) setFormState({ error: 'File exceeds 10MB Limit. Use URL Loader Above.' });
+      else reader.readAsText(file);
     });
   }, []);
 

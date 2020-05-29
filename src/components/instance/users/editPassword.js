@@ -12,7 +12,6 @@ export default () => {
   const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
-  const thisUser = useStoreState(instanceState, (s) => s.users.find((u) => u.username === username));
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});

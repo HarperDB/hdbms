@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, SelectDropdown, Col, Row, CardBody, Card, Input } from '@nio/ui-kit';
+import { Button, SelectDropdown, Col, Row, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
