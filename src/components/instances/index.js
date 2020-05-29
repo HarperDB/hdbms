@@ -9,6 +9,7 @@ import appState from '../../state/appState';
 
 import InstanceList from './list/instanceList';
 import NewInstanceCard from './list/newInstanceCard';
+import NoInstancesCard from './list/noInstancesCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
@@ -41,6 +42,7 @@ const InstancesIndex = () => {
       <SubNav />
       <Row>
         {isOrgOwner && <NewInstanceCard />}
+        {!isOrgOwner && !instances?.length && <NoInstancesCard />}
         <InstanceList />
       </Row>
       {action === 'new' && instances && <NewInstanceModal />}
