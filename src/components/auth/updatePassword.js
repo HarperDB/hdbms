@@ -9,6 +9,7 @@ import usePersistedUser from '../../state/persistedUser';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
+import config from '../../../config';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -49,6 +50,7 @@ export default () => {
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
         <>
           <Card className="mb-3">

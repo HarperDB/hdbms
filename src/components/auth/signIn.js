@@ -11,6 +11,7 @@ import appState from '../../state/appState';
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
 import AuthStateLoader from './authStateLoader';
+import config from '../../../config';
 
 export default () => {
   const [persistedUser, setPersistedUser] = usePersistedUser({});
@@ -68,6 +69,7 @@ export default () => {
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
         <AuthStateLoader header="signing in" spinner />
       ) : (

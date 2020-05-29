@@ -6,6 +6,7 @@ import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
 import AuthStateLoader from './authStateLoader';
+import config from '../../../config';
 
 export default () => {
   const { search } = useLocation();
@@ -28,6 +29,7 @@ export default () => {
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.submitted ? (
         <AuthStateLoader header="creating your account" spinner />
       ) : formState.success ? (

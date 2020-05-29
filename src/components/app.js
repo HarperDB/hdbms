@@ -9,8 +9,6 @@ import ResetPassword from './auth/resetPassword';
 import UpdatePassword from './auth/updatePassword';
 import ResendRegistrationEmail from './auth/resendRegistrationEmail';
 
-import SignUpStandalone from './www/signUp';
-
 import ProtectedRoute from './shared/protectedRoute';
 import Organization from './organization';
 import Organizations from './organizations';
@@ -32,7 +30,6 @@ const App = () => {
         <Switch>
           <Route component={SignIn} exact path="/sign-in" />
           <Route component={SignUp} exact path="/sign-up" />
-          <Route component={SignUpStandalone} exact path="/sign-up-standalone" />
           <Route component={UpdatePassword} exact path="/update-password" />
           <Route component={ResetPassword} exact path="/reset-password" />
           <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />

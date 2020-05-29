@@ -29,7 +29,7 @@ export default [
     component: Resources,
     path: '/support/resources',
     link: 'resources',
-    icon: 'external',
-    iconCode: 'f08e',
+    icon: 'external-link-square',
+    iconCode: 'f14c',
   },
 ];

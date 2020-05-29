@@ -13,8 +13,15 @@
     background-repeat: no-repeat;
     background-size: cover;
     height: 100px;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     width: 80px;
+  }
+
+  .version {
+    color: $white-overlay;
+    font-size: $font-size-small;
+    margin: 0 auto 20px;
+    text-align: center;
   }
 
   .card {
@@ -69,6 +76,12 @@
 
   .btn {
     text-transform: lowercase;
+  }
+
+  .login-nav-link-holder {
+    &:last-child {
+      text-align: right;
+    }
   }
 
   .login-nav-link {
