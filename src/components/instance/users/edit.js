@@ -16,7 +16,7 @@ export default () => {
   return (
     <>
       <div className="floating-card-header">
-        existing users &gt; edit <b>{username}</b>
+        existing users &gt; edit &gt; <b>{username}</b>
       </div>
       <Card className="my-3">
         <CardBody>

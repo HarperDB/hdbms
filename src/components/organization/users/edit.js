@@ -7,7 +7,7 @@ import Role from './editRole';
 import Delete from './editDelete';
 import ContentContainer from '../../shared/contentContainer';
 
-export default () => {
+export default ({ userEmail }) => {
   const { user_id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -15,7 +15,7 @@ export default () => {
   return (
     <>
       <div className="floating-card-header">
-        existing users &gt; edit <b>{user_id}</b>
+        existing users &gt; edit &gt; <b>{userEmail}</b>
       </div>
       <Card className="my-3">
         <CardBody>

@@ -52,9 +52,11 @@ export default () => {
       />
       */}
       <Input disabled className="text-center mb-2" type="text" placeholder={`Current Status: ${currentStatus === 'accepted' ? 'user' : currentStatus || '...'}`} />
-      <Button disabled={formState.submitted} block color="purple" onClick={() => setFormState({ submitted: true })}>
-        {formState.submitted ? (
+      <Button disabled={!currentStatus || formState.submitted || currentStatus === 'invited'} block color="purple" onClick={() => setFormState({ submitted: true })}>
+        {formState.submitted || !currentStatus ? (
           <i className="fa fa-spinner fa-spin text-white" />
+        ) : currentStatus === 'invited' ? (
+          <span>User Must First Accept Invite</span>
         ) : currentStatus === 'declined' ? (
           <span>Reinvite User</span>
         ) : currentStatus === 'accepted' ? (

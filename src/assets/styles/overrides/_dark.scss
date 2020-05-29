@@ -62,6 +62,12 @@
     }
   }
 
+  .content-container {
+    .header-container {
+      border-bottom: 1px solid $faint-white-overlay;
+    }
+  }
+
   .ReactTable {
     .rt-thead {
       &.-header {
