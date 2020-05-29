@@ -2,14 +2,17 @@ import React, { useEffect, useCallback } from 'react';
 import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
+import { useParams } from 'react-router-dom';
 
-import DataTable from './datatable';
-import AddUserForm from './add';
 import appState from '../../../state/appState';
+import DataTable from './datatable';
+import EditUser from './edit';
+import AddUserForm from './add';
 import getUsers from '../../../api/lms/getUsers';
 import config from '../../../../config';
 
 export default () => {
+  const { user_id } = useParams();
   const { auth, customer, users } = useStoreState(appState, (s) => ({ auth: s.auth, customer: s.customer, users: s.users }));
 
   const refreshUsers = useCallback(() => {
@@ -33,7 +36,7 @@ export default () => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        <DataTable refreshUsers={refreshUsers} />
+        {user_id ? <EditUser /> : <DataTable refreshUsers={refreshUsers} />}
       </Col>
     </Row>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
@@ -18,31 +18,34 @@ export default () => {
   const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
-  const instances = useStoreState(appState, (s) => s.instances);
+  const { isOrgUser, instances } = useStoreState(appState, (s) => ({
+    isOrgUser: s.auth.orgs.find((o) => o.customer_id === customer_id),
+    instances: s.instances,
+  }));
   const alert = useAlert();
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id });
 
-  useEffect(() => {
-    const refreshInstance = async () => {
-      if (!auth) {
-        alert.error('Unable to log into that instance');
+  const refreshInstance = async () => {
+    if (!auth) {
+      alert.error('Unable to log into that instance');
+      history.push(`/${customer_id}/instances`);
+      setLoadingInstance(false);
+    } else if (instances) {
+      const { error } = await buildActiveInstanceObject({
+        instances,
+        compute_stack_id,
+        auth,
+      });
+      setLoadingInstance(false);
+      if (error) {
+        alert.error(error);
         history.push(`/${customer_id}/instances`);
-        setLoadingInstance(false);
-      } else if (instances) {
-        const { error } = await buildActiveInstanceObject({
-          instances,
-          compute_stack_id,
-          auth,
-        });
-        setLoadingInstance(false);
-        if (error) {
-          alert.error(error);
-          history.push(`/${customer_id}/instances`);
-        }
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     setLoadingInstance(true);
     const cancelSub = instanceState.subscribe(
       (s) => s.lastUpdate,
@@ -52,7 +55,7 @@ export default () => {
     return () => cancelSub();
   }, [compute_stack_id, instances]);
 
-  return (
+  return isOrgUser ? (
     <>
       <SubNav routes={hydratedRoutes} />
       {loadingInstance ? (
@@ -65,5 +68,7 @@ export default () => {
         </Switch>
       )}
     </>
+  ) : (
+    <Redirect to="/organizations" />
   );
 };

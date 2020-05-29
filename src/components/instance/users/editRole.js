@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, SelectDropdown, Col, Row, CardBody, Card } from '@nio/ui-kit';
+import { Button, SelectDropdown, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -49,33 +49,27 @@ export default () => {
   useAsyncEffect(() => setFormData({ ...formData, role: thisUser.role.id }), []);
 
   return (
-    <Row>
-      <Col sm="6">
-        <SelectDropdown
-          className="react-select-container mb-2"
-          classNamePrefix="react-select"
-          onChange={({ value }) => setFormData({ ...formData, newRole: value })}
-          options={roles && roles.filter((r) => r.id !== thisUser.role.id).map((r) => ({ label: r.role, value: r.id }))}
-          value={roles && thisUser.role.id && roles.find((r) => r.value === thisUser.role.id)}
-          isSearchable={false}
-          isClearable={false}
-          isLoading={!roles}
-          placeholder="select a role"
-          styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-        />
-      </Col>
-      <Col sm="6">
-        <Button block color="purple" onClick={updateRole}>
-          Update Role for {username}
-        </Button>
-      </Col>
-      <Col xs="12">
-        {formState.error && (
-          <Card className="mt-3 error">
-            <CardBody>{formState.error}</CardBody>
-          </Card>
-        )}
-      </Col>
-    </Row>
+    <>
+      <SelectDropdown
+        className="react-select-container mb-2"
+        classNamePrefix="react-select"
+        onChange={({ value }) => setFormData({ ...formData, newRole: value })}
+        options={roles && roles.filter((r) => r.id !== thisUser.role.id).map((r) => ({ label: r.role, value: r.id }))}
+        value={roles && thisUser.role.id && roles.find((r) => r.value === thisUser.role.id)}
+        isSearchable={false}
+        isClearable={false}
+        isLoading={!roles}
+        placeholder="select a role"
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+      />
+      <Button block color="purple" onClick={updateRole}>
+        Update Role
+      </Button>
+      {formState.error && (
+        <Card className="mt-3 error">
+          <CardBody>{formState.error}</CardBody>
+        </Card>
+      )}
+    </>
   );
 };

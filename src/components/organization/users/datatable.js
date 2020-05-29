@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
-import useAsyncEffect from 'use-async-effect';
-import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
+import { useHistory } from 'react-router';
 
 import appState from '../../../state/appState';
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
-import updateOrgUser from '../../../api/lms/updateOrgUser';
 
-export default ({ refreshUsers }) => {
+export default () => {
+  const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
-  const currentUserOrgStatus = auth.orgs.find((o) => o.customer_id === customer?.customer_id)?.status;
-  const alert = useAlert();
-  const users = useStoreState(appState, (s) => s.users);
+  const users = useStoreState(appState, (s) => s.users && s.users.filter((u) => u.user_id !== auth.user_id));
   const [tableState, setTableState] = useState({
     filtered: [],
     page: 0,
@@ -28,19 +25,6 @@ export default ({ refreshUsers }) => {
     lastUpdate: false,
     sorted: [{ id: 'lastname', desc: false }],
   });
-  const [userToRemove, setUserToRemove] = useState(false);
-
-  useAsyncEffect(async () => {
-    if (userToRemove && userToRemove !== auth.user_id) {
-      const response = await updateOrgUser({ auth, user_id: userToRemove, user_id_owner: auth.user_id, customer_id: customer.customer_id, status: 'removed' });
-      if (response.error) {
-        alert.error(response.message);
-      } else {
-        refreshUsers();
-      }
-      setUserToRemove(false);
-    }
-  }, [userToRemove]);
 
   return (
     <>
@@ -58,7 +42,7 @@ export default ({ refreshUsers }) => {
         <CardBody>
           <ReactTable
             data={users || []}
-            columns={customerUserColumns({ setUserToRemove, userToRemove, current_user_id: auth.user_id, currentUserOrgStatus })}
+            columns={customerUserColumns({ current_user_id: auth.user_id })}
             pages={tableState.pages}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
@@ -71,6 +55,9 @@ export default ({ refreshUsers }) => {
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
+            getTrProps={(state, rowInfo) => ({
+              onClick: () => history.push(`/${customer.customer_id}/users/${rowInfo.original.user_id}`),
+            })}
           />
         </CardBody>
       </Card>

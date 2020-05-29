@@ -4,7 +4,7 @@ export default [
   {
     component: Profile,
     path: '/profile/profile',
-    link: 'profile',
+    label: 'profile',
     icon: 'user',
     iconCode: 'f007',
   },

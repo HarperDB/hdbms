@@ -40,8 +40,8 @@ const ProtectedRoute = ({ children }) => {
     });
   }, [persistedUser.darkTheme]);
 
-  const refreshUsers = useCallback(async () => {
-    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new' && pathname.indexOf('/instance/') === -1) {
+  const refreshUsers = async () => {
+    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new') {
       const response = await getUser(auth);
       if (!response.error) {
         appState.update((s) => {
@@ -49,18 +49,9 @@ const ProtectedRoute = ({ children }) => {
         });
       }
     }
-  }, [auth, customer_id, pathname]);
+  };
 
-  useAsyncEffect(() => {
-    if (auth && !fetching) {
-      getCurrentVersion();
-      getProducts();
-      getRegions();
-      refreshUsers();
-    }
-  }, []);
-
-  useAsyncEffect(async () => {
+  const refreshInstances = async () => {
     if (auth && !fetching && products && regions && customer_id) {
       setFetching(true);
       await getInstances({
@@ -72,8 +63,19 @@ const ProtectedRoute = ({ children }) => {
       });
       setFetching(false);
     }
-  }, [products, regions, customer_id, lastUpdate]);
+  };
 
+  useAsyncEffect(() => {
+    if (auth && !fetching) {
+      getCurrentVersion();
+      getProducts();
+      getRegions();
+      refreshUsers();
+    }
+  }, []);
+
+  useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
+  useInterval(refreshInstances, config.instances_refresh_rate);
   useInterval(refreshUsers, config.instances_refresh_rate);
 
   return auth?.email && auth?.pass ? (

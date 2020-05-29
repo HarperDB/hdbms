@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Col, Row, CardBody, Card } from '@nio/ui-kit';
+import { Button, Input, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
@@ -42,29 +42,23 @@ export default () => {
   };
 
   return (
-    <Row>
-      <Col sm="6">
-        <Input
-          type="text"
-          className="mb-2 text-center"
-          name="password"
-          placeholder="enter new password"
-          value={formData.password || ''}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
-      </Col>
-      <Col sm="6">
-        <Button block color="purple" onClick={updatePassword}>
-          Update Password (Requires Instance Restart)
-        </Button>
-      </Col>
-      <Col xs="12">
-        {formState.error && (
-          <Card className="mt-3 error">
-            <CardBody>{formState.error}</CardBody>
-          </Card>
-        )}
-      </Col>
-    </Row>
+    <>
+      <Input
+        type="text"
+        className="mb-2 text-center"
+        name="password"
+        placeholder="enter new password"
+        value={formData.password || ''}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+      />
+      <Button block color="purple" onClick={updatePassword}>
+        Update Password
+      </Button>
+      {formState.error && (
+        <Card className="mt-3 error">
+          <CardBody>{formState.error}</CardBody>
+        </Card>
+      )}
+    </>
   );
 };

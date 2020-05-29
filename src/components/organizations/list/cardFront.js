@@ -3,6 +3,7 @@ import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+
 import appState from '../../../state/appState';
 import usePersistedUser from '../../../state/persistedUser';
 import getCustomer from '../../../api/lms/getCustomer';
@@ -50,8 +51,10 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
       alert.error(result.message);
       setLoading(false);
     } else {
+      appState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
       await fetchUser();
-      setLoading(false);
       alert.success(`Organization ${newStatus} successfully`);
     }
   }, []);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, CardBody, Card, Col, Input, Row } from '@nio/ui-kit';
+import { Button, CardBody, Card, Input } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useLocation, useParams } from 'react-router-dom';
@@ -39,29 +39,23 @@ export default () => {
   };
 
   return (
-    <Row>
-      <Col sm="6">
-        <Input
-          onChange={(e) => setFormData({ delete_username: e.target.value })}
-          type="text"
-          className="text-center"
-          title="confirm username to delete"
-          placeholder={`Enter "${username}" here to enable user deletion.`}
-          value={formData.delete_username || ''}
-        />
-      </Col>
-      <Col sm="6">
-        <Button block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username}>
-          Delete {username}
-        </Button>
-      </Col>
-      <Col xs="12">
-        {formState.error && (
-          <Card className="mt-3 error">
-            <CardBody>{formState.error}</CardBody>
-          </Card>
-        )}
-      </Col>
-    </Row>
+    <>
+      <Input
+        onChange={(e) => setFormData({ delete_username: e.target.value })}
+        type="text"
+        className="text-center mb-2"
+        title="confirm username to delete"
+        placeholder={`Enter "${username}" here to enable deletion.`}
+        value={formData.delete_username || ''}
+      />
+      <Button block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username}>
+        Delete {username}
+      </Button>
+      {formState.error && (
+        <Card className="mt-3 error">
+          <CardBody>{formState.error}</CardBody>
+        </Card>
+      )}
+    </>
   );
 };
