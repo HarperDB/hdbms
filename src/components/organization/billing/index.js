@@ -7,23 +7,23 @@ import Coupons from './coupons';
 
 export default () => (
   <Row>
-    <Col md="6" className="mb-4">
+    <Col md="6">
+      <span className="floating-card-header">coupons</span>
+      <Card className="mt-3 mb-4">
+        <CardBody>
+          <Coupons />
+        </CardBody>
+      </Card>
       <span className="floating-card-header">card</span>
-      <Card className="my-3">
+      <Card className="mt-3 mb-4">
         <CardBody>
           <CreditCard />
         </CardBody>
       </Card>
     </Col>
-    <Col md="6" className="mb-4">
-      <span className="floating-card-header">coupons</span>
-      <Card className="my-3">
-        <CardBody>
-          <Coupons />
-        </CardBody>
-      </Card>
+    <Col md="6">
       <span className="floating-card-header">invoices</span>
-      <Card className="my-3">
+      <Card className="mt-3 mb-4">
         <CardBody>
           <Invoices />
         </CardBody>

@@ -14,7 +14,7 @@ export default () => {
           <span className="floating-card-header">Local Install Via NPM</span>
           <Card className="my-3">
             <CardBody className="installation">
-              HarperDB requires NodeJS/NPM, available by{' '}
+              HarperDB requires NodeJS v12.x and NPM, available by{' '}
               <a target="_blank" rel="noopener noreferrer" href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">
                 clicking here
               </a>
