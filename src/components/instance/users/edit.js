@@ -21,23 +21,34 @@ export default () => {
       <Card className="my-3">
         <CardBody>
           <Row>
-            <Col lg="4">
-              <ContentContainer header="Password" subheader="must restart instance" className="mb-4">
-                <Password />
-              </ContentContainer>
+            <Col xl="4">
+              <Card className="mb-3">
+                <CardBody>
+                  <ContentContainer header="Password" subheader="must restart instance">
+                    <Password />
+                  </ContentContainer>
+                </CardBody>
+              </Card>
             </Col>
-            <Col lg="4">
-              <ContentContainer header="Role" className="mb-4">
-                <Role />
-              </ContentContainer>
+            <Col xl="4">
+              <Card className="mb-3">
+                <CardBody>
+                  <ContentContainer header="Role">
+                    <Role />
+                  </ContentContainer>
+                </CardBody>
+              </Card>
             </Col>
-            <Col lg="4">
-              <ContentContainer header="Delete User" className="mb-4">
-                <Delete />
-              </ContentContainer>
+            <Col xl="4">
+              <Card className="mb-3">
+                <CardBody>
+                  <ContentContainer header="Delete User">
+                    <Delete />
+                  </ContentContainer>
+                </CardBody>
+              </Card>
             </Col>
           </Row>
-          <hr className="mt-0 mb-4" />
           <Button block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
             cancel
           </Button>

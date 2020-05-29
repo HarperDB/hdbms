@@ -32,8 +32,6 @@ const InstancesIndex = () => {
   useEffect(() => {
     if (isOrgOwner) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
-    } else {
-      console.log('you are not the mama!');
     }
   }, []);
 

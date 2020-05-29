@@ -21,17 +21,24 @@ export default () => {
         <CardBody>
           <Row>
             <Col lg="6">
-              <ContentContainer header="Role" className="mb-4">
-                <Role />
-              </ContentContainer>
+              <Card className="mb-3">
+                <CardBody>
+                  <ContentContainer header="Update User Role">
+                    <Role />
+                  </ContentContainer>
+                </CardBody>
+              </Card>
             </Col>
             <Col lg="6">
-              <ContentContainer header="Delete User" className="mb-4">
-                <Delete />
-              </ContentContainer>
+              <Card className="mb-3">
+                <CardBody>
+                  <ContentContainer header="Delete User">
+                    <Delete />
+                  </ContentContainer>
+                </CardBody>
+              </Card>
             </Col>
           </Row>
-          <hr className="mt-0 mb-4" />
           <Button block color="grey" onClick={() => history.push(pathname.replace(`/${user_id}`, ''))}>
             cancel
           </Button>
