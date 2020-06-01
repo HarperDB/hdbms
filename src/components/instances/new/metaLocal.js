@@ -8,6 +8,7 @@ import ContentContainer from '../../shared/contentContainer';
 import registrationInfo from '../../../api/instance/registrationInfo';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
+import userInfo from '../../../api/instance/userInfo';
 
 export default ({ instanceNames, instanceURLs, customerId }) => {
   const history = useHistory();
@@ -42,32 +43,33 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         try {
-          const response = await registrationInfo({ auth: { user, pass }, url });
+          const currentUser = await userInfo({ auth: { user, pass }, url });
 
-          if (response.ram_allocation) {
-            setNewInstance({
-              ...newInstance,
-              registered: response.registered,
-              ram_allocation: response.ram_allocation,
+          if (currentUser.error && currentUser.message === 'Login failed') {
+            setFormState({ error: 'The provided credentials cannot log into that instance.' });
+          } else if (currentUser.error && currentUser.type === 'catch') {
+            setFormState({
+              error: is_ssl ? "You may need to accept the instance's self-signed cert" : "Can't reach non-SSL instance. Enable SSL?",
+              url: is_ssl ? url : 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
+            });
+          } else {
+            const instanceData = {
               instance_name: instance_name.replace(/-+$/, ''),
               user,
               pass,
               host,
               port,
               is_ssl,
-            });
-          }
+            };
+            if (currentUser.role.permission.super_user) {
+              const registrationResponse = await registrationInfo({ auth: { user, pass }, url });
 
-          if (response.error && response.message === 'You are not authorized to perform the operation specified') {
-            setFormState({ error: 'Please log in as a super user' });
-          } else if (response.error && response.message === 'Login failed') {
-            setFormState({ error: 'The provided credentials cannot log into that instance.' });
-          } else if (response.error && response.type === 'catch') {
-            setFormState({
-              error: is_ssl ? "You may need to accept the instance's self-signed cert" : "Can't reach non-SSL instance. Enable SSL?",
-              url: is_ssl ? url : 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
-            });
-          } else {
+              if (registrationResponse.ram_allocation) {
+                instanceData.registered = registrationResponse.registered;
+                instanceData.ram_allocation = registrationResponse.ram_allocation;
+              }
+            }
+            setNewInstance({ ...newInstance, ...instanceData });
             setTimeout(() => history.push(`/${customerId}/instances/new/details_local`), 0);
           }
         } catch (e) {
