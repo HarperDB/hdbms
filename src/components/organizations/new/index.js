@@ -23,6 +23,7 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
+      setShowToolTip(false);
       const newFormState = await handleAddOrg({ formData, auth });
       setFormState(newFormState);
       if (!newFormState.error) {
