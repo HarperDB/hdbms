@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
@@ -16,6 +16,7 @@ import config from '../../../config';
 import TopNav from '../topnav';
 
 const ProtectedRoute = ({ children }) => {
+  const history = useHistory();
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
     auth: s.auth,
@@ -25,8 +26,19 @@ const ProtectedRoute = ({ children }) => {
     lastUpdate: s.lastUpdate,
     instances: s.instances,
   }));
-  const { pathname } = useLocation();
   const [fetching, setFetching] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(true);
+  let shouldFetchTimeout = false;
+
+  useEffect(
+    () =>
+      history.listen(() => {
+        setShouldFetch(history.location.pathname.indexOf('/organizations/new') === -1 && history.location.pathname.indexOf('/instances/new') === -1);
+        clearTimeout(shouldFetchTimeout);
+        shouldFetchTimeout = setTimeout(() => setShouldFetch(false), config.instances_refresh_timeout);
+      }),
+    []
+  );
 
   const logOut = useCallback(() => {
     setPersistedUser({ darkTheme: persistedUser.darkTheme });
@@ -40,8 +52,8 @@ const ProtectedRoute = ({ children }) => {
     });
   }, [persistedUser.darkTheme]);
 
-  const refreshUsers = async () => {
-    if (auth && pathname !== '/organizations/new' && pathname !== '/instances/new') {
+  const refreshUser = async () => {
+    if (auth && shouldFetch) {
       const response = await getUser(auth);
       if (!response.error) {
         appState.update((s) => {
@@ -52,7 +64,7 @@ const ProtectedRoute = ({ children }) => {
   };
 
   const refreshInstances = async () => {
-    if (auth && !fetching && products && regions && customer_id) {
+    if (auth && shouldFetch && !fetching && products && regions && customer_id) {
       setFetching(true);
       await getInstances({
         auth,
@@ -70,13 +82,13 @@ const ProtectedRoute = ({ children }) => {
       getCurrentVersion();
       getProducts();
       getRegions();
-      refreshUsers();
+      refreshUser();
     }
   }, []);
 
   useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
   useInterval(refreshInstances, config.instances_refresh_rate);
-  useInterval(refreshUsers, config.instances_refresh_rate);
+  useInterval(refreshUser, config.instances_refresh_rate);
 
   return auth?.email && auth?.pass ? (
     <>
@@ -84,7 +96,7 @@ const ProtectedRoute = ({ children }) => {
       {children}
     </>
   ) : (
-    <Redirect to={`/sign-in${!['/'].includes(pathname) ? `?returnURL=${pathname}` : ''}`} />
+    <Redirect to={`/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`} />
   );
 };
 
