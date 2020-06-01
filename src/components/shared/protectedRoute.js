@@ -65,7 +65,8 @@ const ProtectedRoute = ({ children }) => {
   };
 
   const refreshInstances = async () => {
-    if (auth && shouldFetch && !fetching && products && regions && customer_id) {
+    const instanceLoading = instances && instances.find((i) => ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status));
+    if ((shouldFetch || instanceLoading) && auth && !fetching && products && regions && customer_id) {
       setFetching(true);
       await getInstances({
         auth,

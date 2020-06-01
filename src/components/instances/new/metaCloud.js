@@ -33,7 +33,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
       } else if (instance_name.length > 16) {
         setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
-        setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true });
+        setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true, super: true });
         setTimeout(() => history.push(`/${customerId}/instances/new/details_cloud`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });

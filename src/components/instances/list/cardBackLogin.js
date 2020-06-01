@@ -28,7 +28,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
           const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });
 
           if (handleCloudInstanceUsernameChangeResult) {
-            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
+            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: true } });
             setFlipState(false);
           } else {
             setFormState({ error: 'Login failed.' });
