@@ -32,6 +32,27 @@ export default async ({ instances, auth, compute_stack_id }) => {
     };
   }
 
+  const { structure, defaultBrowseURL } = browseTableColumns(schema);
+
+  const permissions = buildPermissionStructure(schema);
+
+  if (!auth.super) {
+    instanceState.update((s) => {
+      Object.entries({
+        ...thisInstance,
+        auth,
+        structure,
+        permissions,
+        defaultBrowseURL,
+        loading: false,
+      }).map(([key, value]) => (s[key] = value));
+    });
+
+    return {
+      error: false,
+    };
+  }
+
   const users = await listUsers({
     auth,
     url: thisInstance.url,
@@ -46,10 +67,6 @@ export default async ({ instances, auth, compute_stack_id }) => {
     auth,
     url: thisInstance.url,
   });
-
-  const { structure, defaultBrowseURL } = browseTableColumns(schema);
-
-  const permissions = buildPermissionStructure(schema);
 
   const network = await buildNetwork({
     users,
@@ -73,23 +90,21 @@ export default async ({ instances, auth, compute_stack_id }) => {
     url: thisInstance.url,
   });
 
-  const newInstanceState = {
-    ...thisInstance,
-    auth,
-    structure,
-    network,
-    users,
-    roles,
-    permissions,
-    defaultBrowseURL,
-    clustering,
-    clusterDataTable,
-    clusterDataTableColumns,
-    loading: false,
-  };
-
   instanceState.update((s) => {
-    Object.entries(newInstanceState).map(([key, value]) => (s[key] = value));
+    Object.entries({
+      ...thisInstance,
+      auth,
+      structure,
+      network,
+      users,
+      roles,
+      permissions,
+      defaultBrowseURL,
+      clustering,
+      clusterDataTable,
+      clusterDataTableColumns,
+      loading: false,
+    }).map(([key, value]) => (s[key] = value));
   });
 
   return {

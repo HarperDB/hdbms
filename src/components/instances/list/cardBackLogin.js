@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import useInstanceAuth from '../../../state/instanceAuths';
 import handleCloudInstanceUsernameChange from '../../../methods/instances/handleCloudInstanceUsernameChange';
-import registrationInfo from '../../../api/instance/registrationInfo';
+import userInfo from '../../../api/instance/userInfo';
 
 const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
   const [formState, setFormState] = useState({});
@@ -18,11 +18,9 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       if (!user || !pass) {
         setFormState({ error: 'All fields are required' });
       } else {
-        const result = await registrationInfo({ auth: { user, pass }, url });
+        const result = await userInfo({ auth: { user, pass }, url });
 
-        if (result.error && result.message === 'You are not authorized to perform the operation specified') {
-          setFormState({ error: 'Please log in as a super user' });
-        } else if (is_ssl && result.error && result.type === 'catch') {
+        if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB' });
@@ -30,13 +28,13 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
           const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });
 
           if (handleCloudInstanceUsernameChangeResult) {
-            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
+            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
             setFlipState(false);
           } else {
             setFormState({ error: 'Login failed.' });
           }
         } else {
-          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass } });
+          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
           setFlipState(false);
         }
       }

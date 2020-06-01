@@ -62,6 +62,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     if (!instanceAuth) {
       return setInstanceData({ ...instanceData, status: 'PLEASE LOG IN', error: true, retry: false });
     }
+
+    if (!instanceAuth.super) {
+      return setInstanceData({ ...instanceData, status: 'OK', error: false, retry: false });
+    }
+
     if (instanceData.status === 'APPLYING LICENSE') {
       const restartResult = await userInfo({ auth: instanceAuth, url });
       if (!restartResult.error) {
@@ -69,7 +74,9 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       }
       return false;
     }
+
     setProcessing(true);
+
     const registrationResult = await handleInstanceRegistration({
       auth,
       customer_id,
@@ -82,10 +89,13 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       instance_name,
       status: instanceData.status,
     });
+
     setProcessing(false);
+
     if (['UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceData.status)) {
       return false;
     }
+
     if (['PLEASE LOG IN', 'LOGIN FAILED'].includes(registrationResult.instance)) {
       if (instanceAuth) {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
