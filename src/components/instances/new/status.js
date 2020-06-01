@@ -23,6 +23,7 @@ export default ({ closeAndResetModal }) => {
     const newInstanceObject = { ...newInstance };
     delete newInstanceObject.user;
     delete newInstanceObject.pass;
+    delete newInstanceObject.super;
     delete newInstanceObject.tc_version;
 
     addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version, customer_id: newInstance.customer_id });
@@ -33,7 +34,7 @@ export default ({ closeAndResetModal }) => {
       setFormState({ submitted: false, error });
     } else {
       alert.success(response.message);
-      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass } });
+      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
       appState.update((s) => {
         s.lastUpdate = Date.now();
       });

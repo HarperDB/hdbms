@@ -62,6 +62,7 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
               is_ssl,
             };
             if (currentUser.role.permission.super_user) {
+              instanceData.super = true;
               const registrationResponse = await registrationInfo({ auth: { user, pass }, url });
 
               if (registrationResponse.ram_allocation) {
