@@ -34,13 +34,13 @@ export default () => {
           <Card className="my-3">
             <CardBody className="installation">
               If you need to install HarperDB on a device without access to NPM, you can fetch the installer using the link below.
-              <Button color="purple" block className="mt-3 mb-4" href={version.location}>
+              <Button disabled={!version.location} color="purple" block className="mt-3 mb-4" href={version?.location}>
                 Download Install Package
               </Button>
               <hr />
               Once you move the downloaded file to the device, execute the following command line operations to install HarperDB.
               <Alert className="mt-3" color="dark">
-                npm i -g harperdb-{version.number}.tgz
+                npm i -g harperdb-{version?.number || '...'}.tgz
                 <br />
                 <br />
                 harperdb install

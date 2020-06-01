@@ -53,8 +53,10 @@
     .card {
       background-color: $faint-white-overlay !important;
       border: 1px solid $color-black;
+
       .item-row {
         background-color: $dark-grey-overlay !important;
+
         &.active {
           background-color: $black-overlay !important;
         }

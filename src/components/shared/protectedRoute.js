@@ -18,13 +18,14 @@ import TopNav from '../topnav';
 const ProtectedRoute = ({ children }) => {
   const history = useHistory();
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const { auth, products, regions, instances, customer_id, lastUpdate } = useStoreState(appState, (s) => ({
+  const { auth, products, regions, instances, customer_id, lastUpdate, version } = useStoreState(appState, (s) => ({
     auth: s.auth,
     products: s.products,
     customer_id: s.customer?.customer_id,
     regions: s.regions,
     lastUpdate: s.lastUpdate,
     instances: s.instances,
+    version: s.version,
   }));
   const [fetching, setFetching] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -77,18 +78,30 @@ const ProtectedRoute = ({ children }) => {
     }
   };
 
+  const refreshProducts = () => !products && getProducts();
+
+  const refreshRegions = () => !regions && getRegions();
+
+  const refreshVersion = () => !version && getCurrentVersion();
+
   useAsyncEffect(() => {
     if (auth && !fetching) {
-      getCurrentVersion();
-      getProducts();
-      getRegions();
+      refreshVersion();
+      refreshProducts();
+      refreshRegions();
       refreshUser();
     }
   }, []);
 
   useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
-  useInterval(refreshInstances, config.instances_refresh_rate);
-  useInterval(refreshUser, config.instances_refresh_rate);
+
+  useInterval(() => {
+    refreshInstances();
+    refreshVersion();
+    refreshProducts();
+    refreshRegions();
+    refreshUser();
+  }, config.instances_refresh_rate);
 
   return auth?.email && auth?.pass ? (
     <>

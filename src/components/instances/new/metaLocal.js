@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import registrationInfo from '../../../api/instance/registrationInfo';
-import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaUnderscoreHyphen from '../../../methods/util/isAlphaUnderscoreHyphen';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 import userInfo from '../../../api/instance/userInfo';
 
@@ -39,8 +39,8 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
         setFormState({ error: 'instance names must have only letters, numbers, and hyphen' });
       } else if (instance_name.length > 16) {
         setFormState({ error: 'instance names are limited to 16 characters' });
-      } else if (user && !isAlphaUnderscore(user)) {
-        setFormState({ error: 'usernames must have only letters and underscores' });
+      } else if (user && !isAlphaUnderscoreHyphen(user)) {
+        setFormState({ error: 'usernames must have only letters, underscores, and hyphens' });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         try {
           const currentUser = await userInfo({ auth: { user, pass }, url });

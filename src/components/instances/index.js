@@ -18,11 +18,6 @@ const InstancesIndex = () => {
   const { instances, isOrgUser, isOrgOwner } = useStoreState(appState, (s) => {
     const userExists = s.auth.orgs.find((o) => o.customer_id === s.customer?.customer_id);
     return {
-      auth: s.auth,
-      products: s.products,
-      customer_id: s.customer?.customer_id,
-      regions: s.regions,
-      lastUpdate: s.lastUpdate,
       instances: s.instances,
       isOrgUser: userExists,
       isOrgOwner: userExists?.status === 'owner',

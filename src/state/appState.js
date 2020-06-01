@@ -13,7 +13,7 @@ const appState = new Store({
   filterSearch: '',
   filterLocal: true,
   filterCloud: true,
-  version: { number: '2.0.37-BETA', location: 'https://registry.npmjs.org/harperdb/-/harperdb-2.0.37-BETA.tgz' },
+  version: false,
 });
 
 export default appState;
