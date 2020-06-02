@@ -10,7 +10,7 @@ export default () => {
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const hydratedRoutes = routes({ customer_id });
   const { isOrgUser, isOrgOwner } = useStoreState(appState, (s) => {
-    const userExists = s.auth.orgs.find((o) => o.customer_id.toString() === customer_id);
+    const userExists = s.auth.orgs.find((o) => o.customer_id === customer_id);
     return {
       isOrgUser: userExists,
       isOrgOwner: userExists?.status === 'owner',
