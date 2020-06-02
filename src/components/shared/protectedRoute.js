@@ -13,6 +13,9 @@ import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
 
+let shouldFetchHistoryListener = false;
+let shouldFetchTimeout = false;
+
 const ProtectedRoute = ({ children }) => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -27,8 +30,6 @@ const ProtectedRoute = ({ children }) => {
 
   const redirectURL = `/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`;
   const showRoute = auth?.email && auth?.pass;
-  let shouldFetchHistoryListener = false;
-  let shouldFetchTimeout = false;
 
   const refreshProducts = () => !products && getProducts();
   const refreshRegions = () => !regions && getRegions();

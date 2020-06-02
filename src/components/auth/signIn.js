@@ -34,11 +34,11 @@ export default () => {
         const response = await getUser({ email, pass });
 
         if (response.error) {
-          setFormState({ error: 'Invalid Credentials' });
+          setPersistedUser({});
+          setFormState({ error: response.message });
           appState.update((s) => {
             s.auth = false;
           });
-          setPersistedUser({});
         } else {
           setPersistedUser({ ...persistedUser, email, pass });
           appState.update((s) => {

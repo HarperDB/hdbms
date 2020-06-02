@@ -21,6 +21,13 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     const body = json.body || json;
 
+    if (body.errorType) {
+      return {
+        error: true,
+        message: body.errorMessage,
+      };
+    }
+
     if (body.error) {
       return {
         error: true,
