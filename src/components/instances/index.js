@@ -25,7 +25,7 @@ const InstancesIndex = () => {
   });
 
   useEffect(() => {
-    if (isOrgOwner && window.userGuiding) {
+    if (isOrgOwner && window.userGuiding && instances && !instances.length) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
     }
   }, []);
