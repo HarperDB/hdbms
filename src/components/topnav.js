@@ -17,14 +17,16 @@ const TopNav = () => {
 
   const logOut = () => {
     setPersistedUser({ darkTheme: persistedUser.darkTheme });
-    appState.update((s) => {
-      s.auth = false;
-      s.customer = false;
-      s.users = false;
-      s.instances = false;
-      s.hasCard = false;
-      s.lastUpdate = false;
-    });
+    setTimeout(() => {
+      appState.update((s) => {
+        s.auth = false;
+        s.customer = false;
+        s.users = false;
+        s.instances = false;
+        s.hasCard = false;
+        s.lastUpdate = false;
+      });
+    }, 10);
   };
 
   return (
@@ -87,7 +89,7 @@ const TopNav = () => {
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
-          <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut({ persistedUser, setPersistedUser })} onClick={logOut}>
+          <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
             <i className="fa fa-sign-out" />
           </DumbLink>
         </NavItem>

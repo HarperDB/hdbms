@@ -32,7 +32,7 @@ const OrganizationsIndex = () => {
         case !!persistedUser.customer_id:
           customer_id = persistedUser.customer_id;
           break;
-        case auth.orgs.length === 1 && ['accepted', 'owner', 'admin'].includes(auth.orgs[0].status):
+        case auth?.orgs?.length === 1 && ['accepted', 'owner', 'admin'].includes(auth.orgs[0].status):
           customer_id = auth.orgs[0].customer_id;
           break;
         default:
