@@ -14,7 +14,8 @@ import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
 
 let shouldFetchHistoryListener = false;
-let shouldFetchTimeout = false;
+let shouldFetchInstancesTimeout = false;
+let shouldFetchUserTimeout = false;
 
 const ProtectedRoute = ({ children }) => {
   const history = useHistory();
@@ -25,8 +26,8 @@ const ProtectedRoute = ({ children }) => {
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const lastUpdate = useStoreState(appState, (s) => s.lastUpdate);
   const version = useStoreState(appState, (s) => s.version);
-  const [fetching, setFetching] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(true);
+  const [shouldFetchInstances, setShouldFetchInstances] = useState(true);
+  const [shouldFetchUser, setShouldFetchUser] = useState(true);
 
   const redirectURL = `/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`;
   const showRoute = auth?.email && auth?.pass;
@@ -36,37 +37,44 @@ const ProtectedRoute = ({ children }) => {
   const refreshVersion = () => !version && getCurrentVersion();
 
   const refreshUser = async () => {
-    if (auth) {
+    if (auth && shouldFetchUser) {
+      setShouldFetchUser(false);
       const response = await getUser(auth);
       if (!response.error) {
         appState.update((s) => {
           s.auth = { ...auth, ...response };
         });
       }
+      setShouldFetchUser(true);
     }
   };
 
   const refreshInstances = async () => {
     const anInstanceIsLoading = instances && instances.find((i) => ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status));
     const canFetchInstances = auth && products && regions && customer_id;
-    const shouldRefreshInstances = canFetchInstances && (shouldFetch || anInstanceIsLoading) && !fetching;
+    const shouldRefreshInstances = canFetchInstances && (shouldFetchInstances || anInstanceIsLoading);
     if (shouldRefreshInstances) {
-      setFetching(true);
+      setShouldFetchInstances(false);
       await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
-      setFetching(false);
+      setShouldFetchInstances(true);
     }
   };
 
   useAsyncEffect(
     () => {
       shouldFetchHistoryListener = history.listen(() => {
-        if (shouldFetchTimeout) clearTimeout(shouldFetchTimeout);
-        setShouldFetch(history.location.pathname.indexOf('/instance') !== -1);
-        shouldFetchTimeout = setTimeout(() => setShouldFetch(false), config.instances_refresh_timeout);
+        if (shouldFetchInstancesTimeout) clearTimeout(shouldFetchInstancesTimeout);
+        setShouldFetchInstances(history.location.pathname.indexOf('/instance') !== -1);
+        shouldFetchInstancesTimeout = setTimeout(() => setShouldFetchInstances(false), config.instances_refresh_timeout);
+
+        if (shouldFetchUserTimeout) clearTimeout(shouldFetchUserTimeout);
+        setShouldFetchUser(history.location.pathname.indexOf('/organizations') !== -1);
+        shouldFetchUserTimeout = setTimeout(() => setShouldFetchUser(false), config.instances_refresh_timeout);
       });
     },
     () => {
-      clearTimeout(shouldFetchTimeout);
+      clearTimeout(shouldFetchInstancesTimeout);
+      clearTimeout(shouldFetchUserTimeout);
       shouldFetchHistoryListener();
     },
     []

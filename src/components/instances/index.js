@@ -16,7 +16,7 @@ import NewInstanceModal from './new';
 const InstancesIndex = () => {
   const { action } = useParams();
   const { instances, isOrgUser, isOrgOwner } = useStoreState(appState, (s) => {
-    const userExists = s.auth.orgs.find((o) => o.customer_id === s.customer?.customer_id);
+    const userExists = s.auth?.orgs?.find((o) => o.customer_id === s.customer?.customer_id);
     return {
       instances: s.instances,
       isOrgUser: userExists,
