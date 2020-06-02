@@ -90,7 +90,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
         <CardFrontStatusRow label="INSTANCES" isReady value={instance_count || '...'} />
         <div className="action-buttons">
           {customerError ? (
-            <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-status="removed" onClick={handleUpdateUserOrgs}>
+            <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-action="delete" onClick={handleCardFlipIconClick}>
               {loading === 'removed' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove This Organization</span>}
             </Button>
           ) : status === 'invited' ? (

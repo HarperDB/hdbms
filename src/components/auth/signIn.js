@@ -35,7 +35,7 @@ export default () => {
 
         if (response.error) {
           setPersistedUser({});
-          setFormState({ error: response.message });
+          setFormState({ error: response.message === 'Unauthorized' ? 'Login Failed' : response.message });
           appState.update((s) => {
             s.auth = false;
           });

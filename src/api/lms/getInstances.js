@@ -16,8 +16,9 @@ export default async ({ auth, customer_id, products, regions, instanceCount }) =
   if (Array.isArray(response)) {
     const instances = response.map((i) => {
       const thisInstance = i;
-      const compute = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'].find((p) => p.value === thisInstance.stripe_plan_id);
-      const storage = thisInstance.is_local ? false : products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
+      const computePlans = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'];
+      const compute = computePlans && computePlans.find((p) => p.value === thisInstance.stripe_plan_id);
+      const storage = thisInstance.is_local ? false : products.cloudStorage && products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
       const totalPrice = parseFloat(compute?.price || 0) + parseFloat(storage?.price || 0);
 
       return {

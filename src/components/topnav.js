@@ -13,7 +13,10 @@ const TopNav = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
-  const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id === customer?.customer_id)?.status === 'owner', [auth.orgs, customer.customer_id]);
+  const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id.toString() === customer?.customer_id?.toString())?.status === 'owner', [
+    auth.orgs,
+    customer.customer_id,
+  ]);
 
   const logOut = () => {
     setPersistedUser({ darkTheme: persistedUser.darkTheme });

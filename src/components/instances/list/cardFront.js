@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
@@ -29,25 +29,21 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
   const [lastUpdate, setLastUpdate] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [clicked, handleCardClick] = useState(false);
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
 
-  useAsyncEffect(async () => {
-    if (clicked) {
-      handleCardClick(false);
-      if (!instanceAuth) {
-        setFlipState('login');
-      } else if (instanceData.status === 'OK') {
-        const result = await userInfo({ auth: instanceAuth, url });
-        if (result.error) {
-          setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
-          alert.error('Unable to connect to instance.');
-        } else {
-          history.push(`/${customer_id}/instance/${compute_stack_id}/browse`);
-        }
+  const handleCardClick = useCallback(async () => {
+    if (!instanceAuth) {
+      setFlipState('login');
+    } else if (instanceData.status === 'OK') {
+      const result = await userInfo({ auth: instanceAuth, url });
+      if (result.error) {
+        setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
+        alert.error('Unable to connect to instance.');
+      } else {
+        history.push(`/${customer_id}/instance/${compute_stack_id}/browse`);
       }
     }
-  }, [clicked]);
+  }, [instanceAuth, instanceData.status]);
 
   useAsyncEffect(async () => {
     if (processing) return false;
@@ -146,7 +142,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
             bottomDivider
           />
           <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-          <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+          <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram || '...'} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
           <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
           <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
         </CardBody>

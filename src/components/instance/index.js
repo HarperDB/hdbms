@@ -19,7 +19,7 @@ export default () => {
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const { isOrgUser, instances } = useStoreState(appState, (s) => ({
-    isOrgUser: s.auth?.orgs?.find((o) => o.customer_id === customer_id),
+    isOrgUser: s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id),
     instances: s.instances,
   }));
   const alert = useAlert();

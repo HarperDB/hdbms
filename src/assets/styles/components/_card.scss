@@ -10,6 +10,11 @@ i.floating-card-header {
 
 .card-front-status-row {
   font-size: 62%;
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }
 
 .card {
