@@ -51,6 +51,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
   useAsyncEffect(async () => {
     if (processing) return false;
+
     if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(status)) {
       return setInstanceData({
         ...instanceData,

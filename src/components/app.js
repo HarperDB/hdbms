@@ -16,6 +16,7 @@ import Support from './support';
 import Instances from './instances';
 import Instance from './instance';
 import Profile from './profile';
+import TopNav from './topnav';
 
 const App = () => {
   const history = useHistory();
@@ -34,6 +35,7 @@ const App = () => {
           <Route component={ResetPassword} exact path="/reset-password" />
           <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
           <ProtectedRoute>
+            <TopNav />
             <Switch>
               <Route component={Profile} path="/profile/:view?" />
               <Route component={Support} path="/support/:view?" />

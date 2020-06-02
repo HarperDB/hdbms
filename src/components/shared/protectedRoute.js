@@ -1,60 +1,41 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
 import appState from '../../state/appState';
-import usePersistedUser from '../../state/persistedUser';
+import config from '../../../config';
 
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
-import config from '../../../config';
-import TopNav from '../topnav';
 
 const ProtectedRoute = ({ children }) => {
   const history = useHistory();
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const { auth, products, regions, instances, customer_id, lastUpdate, version } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    products: s.products,
-    customer_id: s.customer?.customer_id,
-    regions: s.regions,
-    lastUpdate: s.lastUpdate,
-    instances: s.instances,
-    version: s.version,
-  }));
+  const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const lastUpdate = useStoreState(appState, (s) => s.lastUpdate);
+  const version = useStoreState(appState, (s) => s.version);
   const [fetching, setFetching] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(true);
+
+  const redirectURL = `/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`;
+  const showRoute = auth?.email && auth?.pass;
+  let shouldFetchHistoryListener = false;
   let shouldFetchTimeout = false;
 
-  useEffect(
-    () =>
-      history.listen(() => {
-        setShouldFetch(history.location.pathname.indexOf('/organizations/new') === -1 && history.location.pathname.indexOf('/instances/new') === -1);
-        clearTimeout(shouldFetchTimeout);
-        shouldFetchTimeout = setTimeout(() => setShouldFetch(false), config.instances_refresh_timeout);
-      }),
-    []
-  );
-
-  const logOut = useCallback(() => {
-    setPersistedUser({ darkTheme: persistedUser.darkTheme });
-    appState.update((s) => {
-      s.auth = false;
-      s.customer = false;
-      s.users = false;
-      s.instances = false;
-      s.hasCard = false;
-      s.lastUpdate = false;
-    });
-  }, [persistedUser.darkTheme]);
+  const refreshProducts = () => !products && getProducts();
+  const refreshRegions = () => !regions && getRegions();
+  const refreshVersion = () => !version && getCurrentVersion();
 
   const refreshUser = async () => {
-    if (auth && shouldFetch) {
+    if (auth) {
       const response = await getUser(auth);
       if (!response.error) {
         appState.update((s) => {
@@ -65,53 +46,44 @@ const ProtectedRoute = ({ children }) => {
   };
 
   const refreshInstances = async () => {
-    const instanceLoading = instances && instances.find((i) => ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status));
-    if ((shouldFetch || instanceLoading) && auth && !fetching && products && regions && customer_id) {
+    const anInstanceIsLoading = instances && instances.find((i) => ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status));
+    const canFetchInstances = auth && products && regions && customer_id;
+    const shouldRefreshInstances = canFetchInstances && (shouldFetch || anInstanceIsLoading) && !fetching;
+    if (shouldRefreshInstances) {
       setFetching(true);
-      await getInstances({
-        auth,
-        customer_id,
-        products,
-        regions,
-        instanceCount: instances?.length,
-      });
+      await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
       setFetching(false);
     }
   };
 
-  const refreshProducts = () => !products && getProducts();
+  useAsyncEffect(
+    () => {
+      shouldFetchHistoryListener = history.listen(() => {
+        if (shouldFetchTimeout) clearTimeout(shouldFetchTimeout);
+        setShouldFetch(history.location.pathname.indexOf('/instance') !== -1);
+        shouldFetchTimeout = setTimeout(() => setShouldFetch(false), config.instances_refresh_timeout);
+      });
+    },
+    () => {
+      clearTimeout(shouldFetchTimeout);
+      shouldFetchHistoryListener();
+    },
+    []
+  );
 
-  const refreshRegions = () => !regions && getRegions();
-
-  const refreshVersion = () => !version && getCurrentVersion();
-
-  useAsyncEffect(() => {
-    if (auth && !fetching) {
-      refreshVersion();
-      refreshProducts();
-      refreshRegions();
-      refreshUser();
-    }
-  }, []);
-
+  useAsyncEffect(refreshVersion, []);
+  useAsyncEffect(refreshProducts, []);
+  useAsyncEffect(refreshRegions, []);
+  useAsyncEffect(refreshUser, []);
   useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
 
-  useInterval(() => {
-    refreshInstances();
-    refreshVersion();
-    refreshProducts();
-    refreshRegions();
-    refreshUser();
-  }, config.instances_refresh_rate);
+  useInterval(refreshInstances, config.instances_refresh_rate);
+  useInterval(refreshVersion, config.instances_refresh_rate);
+  useInterval(refreshProducts, config.instances_refresh_rate);
+  useInterval(refreshRegions, config.instances_refresh_rate);
+  useInterval(refreshUser, config.instances_refresh_rate);
 
-  return auth?.email && auth?.pass ? (
-    <>
-      <TopNav logOut={logOut} />
-      {children}
-    </>
-  ) : (
-    <Redirect to={`/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`} />
-  );
+  return showRoute ? children : <Redirect to={redirectURL} />;
 };
 
 export default ProtectedRoute;

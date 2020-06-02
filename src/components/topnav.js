@@ -7,15 +7,25 @@ import appState from '../state/appState';
 
 import usePersistedUser from '../state/persistedUser';
 
-const TopNav = ({ logOut }) => {
+const TopNav = () => {
   const { pathname } = useLocation();
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const { auth, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-  }));
+  const auth = useStoreState(appState, (s) => s.auth);
+  const customer = useStoreState(appState, (s) => s.customer);
   const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
   const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id === customer?.customer_id)?.status === 'owner', [auth.orgs, customer.customer_id]);
+
+  const logOut = () => {
+    setPersistedUser({ darkTheme: persistedUser.darkTheme });
+    appState.update((s) => {
+      s.auth = false;
+      s.customer = false;
+      s.users = false;
+      s.instances = false;
+      s.hasCard = false;
+      s.lastUpdate = false;
+    });
+  };
 
   return (
     <Navbar id="app-nav" dark fixed="top" expand="xs">
@@ -77,7 +87,7 @@ const TopNav = ({ logOut }) => {
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">
-          <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
+          <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut({ persistedUser, setPersistedUser })} onClick={logOut}>
             <i className="fa fa-sign-out" />
           </DumbLink>
         </NavItem>
