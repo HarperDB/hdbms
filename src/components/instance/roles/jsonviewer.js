@@ -5,35 +5,30 @@ import { Button } from '@nio/ui-kit';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import useAsyncEffect from 'use-async-effect';
 
 import alterRole from '../../../api/instance/alterRole';
 import instanceState from '../../../state/instanceState';
 import usePersistedUser from '../../../state/persistedUser';
+import buildPermissionStructure from '../../../methods/instance/buildPermissionStructure';
 
 export default () => {
   const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const { role_id } = useParams();
-  const { permissions, roles, auth, url } = useStoreState(instanceState, (s) => ({
-    permissions: s.permissions,
-    roles: s.roles,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const roles = useStoreState(instanceState, (s) => s.roles);
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (role_id && roles) {
-      setActivePermissions(roles.find((r) => r.id === role_id).permission);
+      const defaultActivePermissions = await buildPermissionStructure({ auth, url, currentRolePermissions: roles.find((r) => r.id === role_id).permission });
+      setActivePermissions(defaultActivePermissions);
+      setNewPermissions(defaultActivePermissions);
     }
   }, [role_id, roles]);
-
-  useEffect(() => {
-    if (activePermissions) {
-      setNewPermissions({ ...permissions, ...activePermissions });
-    }
-  }, [activePermissions]);
 
   const submitRecord = async (e) => {
     e.preventDefault();

@@ -14,7 +14,7 @@ import config from '../../../../config';
 export default () => {
   const { user_id } = useParams();
   const { auth, customer, users } = useStoreState(appState, (s) => ({ auth: s.auth, customer: s.customer, users: s.users }));
-  const userEmail = user_id && users && users.find((u) => u.user_id === user_id).email;
+  const thisUser = user_id && users && users.find((u) => u.user_id === user_id);
 
   const refreshUsers = useCallback(() => {
     if (auth && customer.customer_id) {
@@ -37,7 +37,7 @@ export default () => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        {user_id ? <EditUser userEmail={userEmail} /> : <DataTable refreshUsers={refreshUsers} />}
+        {thisUser ? <EditUser userEmail={thisUser.email} /> : <DataTable refreshUsers={refreshUsers} />}
       </Col>
     </Row>
   );

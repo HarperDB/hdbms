@@ -5,12 +5,13 @@ import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 
+import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
+
 import config from '../../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../methods/util/commaNumbers';
-import appState from '../../../state/appState';
 
 export default () => {
   const history = useHistory();
@@ -23,23 +24,32 @@ export default () => {
 
   const validateData = useCallback(
     async (uploadJobId) => {
-      const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
-      if (status === 'ERROR') {
-        if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
-          return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+      try {
+        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+        if (status === 'ERROR') {
+          if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
+            return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+          }
+          if (message.indexOf('Invalid column name') !== -1) {
+            return setFormState({ error: 'The CSV file contains an invalid column name.' });
+          }
+          return setFormState({ error: message });
         }
-        if (message.indexOf('Invalid column name') !== -1) {
-          return setFormState({ error: 'The CSV file contains an invalid column name.' });
+        if (status !== 'COMPLETE' && mounted) {
+          return setTimeout(() => validateData(uploadJobId), 2000);
         }
-        return setFormState({ error: message });
+        instanceState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
+        return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+      } catch (e) {
+        return setTimeout(() => {
+          instanceState.update((s) => {
+            s.lastUpdate = Date.now();
+          });
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`);
+        }, 2000);
       }
-      if (status !== 'COMPLETE' && mounted) {
-        return setTimeout(() => validateData(uploadJobId), 2000);
-      }
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-      return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
     },
     [mounted]
   );

@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
+import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
 import getJob from '../../../api/instance/getJob';
 import isURL from '../../../methods/util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
-import appState from '../../../state/appState';
 
 export default () => {
   const history = useHistory();
@@ -22,20 +22,29 @@ export default () => {
 
   const validateData = useCallback(
     async (uploadJobId) => {
-      const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
-      if (status === 'ERROR') {
-        if (['Error: CSV Load failed from URL', 'Error downloading CSV file'].some((i) => message.indexOf(i) !== -1)) {
-          return setFormState({ error: 'The URL did not return a valid csv file' });
+      try {
+        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+        if (status === 'ERROR') {
+          if (['Error: CSV Load failed from URL', 'Error downloading CSV file'].some((i) => message.indexOf(i) !== -1)) {
+            return setFormState({ error: 'The URL did not return a valid csv file' });
+          }
+          return setFormState({ error: message.split(':')[1] });
         }
-        return setFormState({ error: message.split(':')[1] });
+        if (status !== 'COMPLETE' && mounted) {
+          return setTimeout(() => validateData(uploadJobId), 2000);
+        }
+        instanceState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
+        return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+      } catch (e) {
+        return setTimeout(() => {
+          instanceState.update((s) => {
+            s.lastUpdate = Date.now();
+          });
+          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`);
+        }, 2000);
       }
-      if (status !== 'COMPLETE' && mounted) {
-        return setTimeout(() => validateData(uploadJobId), 2000);
-      }
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-      return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
     },
     [mounted]
   );

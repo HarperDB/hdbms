@@ -26,6 +26,8 @@ const defaultTableState = {
   showFilter: false,
   currentTable: false,
   currentHash: false,
+  allowedAttributes: false,
+  dataTableColumns: false,
 };
 
 let controller;
@@ -43,7 +45,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
     if (!tableState.loading) {
       controller = new AbortController();
       setTableState({ ...tableState, loading: true });
-      const { newData, newTotalPages, newTotalRecords } = await getTableData({
+      const { newData, newTotalPages, newTotalRecords, allowedAttributes } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -59,6 +61,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
         tableData: newData,
         totalPages: newTotalPages,
         totalRecords: newTotalRecords,
+        allowedAttributes,
         loading: false,
       });
     }
@@ -81,14 +84,6 @@ export default ({ activeTable: { dataTableColumns } }) => {
     }
   }, [table]);
 
-  useInterval(() => {
-    if (tableState.autoRefresh && !tableState.loading) {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-    }
-  }, config.instance_refresh_rate);
-
   useAsyncEffect(
     () => false,
     () => {
@@ -97,6 +92,23 @@ export default ({ activeTable: { dataTableColumns } }) => {
     },
     []
   );
+
+  useAsyncEffect(() => {
+    if (tableState.allowedAttributes) {
+      setTableState({
+        ...tableState,
+        dataTableColumns: tableState.allowedAttributes ? dataTableColumns.filter((c) => tableState.allowedAttributes.includes(c.id)) : dataTableColumns,
+      });
+    }
+  }, [tableState.allowedAttributes]);
+
+  useInterval(() => {
+    if (tableState.autoRefresh && !tableState.loading) {
+      instanceState.update((s) => {
+        s.lastUpdate = Date.now();
+      });
+    }
+  }, config.instance_refresh_rate);
 
   return (
     <>
@@ -115,7 +127,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
             loadingText="loading"
             data={tableState.tableData}
             pages={tableState.totalPages}
-            columns={dataTableColumns}
+            columns={tableState.dataTableColumns || dataTableColumns}
             hashAttribute={tableState.currentHash}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}

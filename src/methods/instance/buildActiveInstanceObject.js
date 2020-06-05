@@ -7,7 +7,6 @@ import listRoles from '../../api/instance/listRoles';
 import clusterStatus from '../../api/instance/clusterStatus';
 
 import browseTableColumns from '../datatable/browseTableColumns';
-import buildPermissionStructure from './buildPermissionStructure';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from '../datatable/clusterConfigColumns';
@@ -34,15 +33,13 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   const { structure, defaultBrowseURL } = browseTableColumns(schema);
 
-  const permissions = buildPermissionStructure(schema);
-
   if (!auth.super) {
     instanceState.update((s) => {
       Object.entries({
         ...thisInstance,
         auth,
+        schema,
         structure,
-        permissions,
         defaultBrowseURL,
         loading: false,
       }).map(([key, value]) => (s[key] = value));
@@ -94,11 +91,11 @@ export default async ({ instances, auth, compute_stack_id }) => {
     Object.entries({
       ...thisInstance,
       auth,
+      schema,
       structure,
       network,
       users,
       roles,
-      permissions,
       defaultBrowseURL,
       clustering,
       clusterDataTable,

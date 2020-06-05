@@ -58,6 +58,12 @@ export default () => {
     }
   }, [entities]);
 
+  useEffect(() => {
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
+  }, []);
+
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">

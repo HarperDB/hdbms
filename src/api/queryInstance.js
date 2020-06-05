@@ -16,12 +16,19 @@ export default async (operation, auth, url, signal = undefined) => {
     });
 
     const response = await request.json();
+    let attribute_error = false;
+
+    if (response.unauthorized_access) {
+      attribute_error = [];
+      response.unauthorized_access.map((error) => attribute_error.push(error.required_attribute_permissions[0].attribute_name));
+    }
 
     if (response.error) {
       return {
         error: true,
         message: response.error,
         type: 'response',
+        attribute_error,
       };
     }
 

@@ -24,7 +24,7 @@ export default () => {
   }));
   const alert = useAlert();
   const history = useHistory();
-  const hydratedRoutes = routes({ customer_id, super_user: auth.super });
+  const hydratedRoutes = routes({ customer_id, super_user: auth?.super });
 
   const refreshInstance = async () => {
     if (!auth) {

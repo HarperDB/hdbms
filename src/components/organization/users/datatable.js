@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
+import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
 
 export default () => {
+  const alert = useAlert();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
@@ -26,6 +28,17 @@ export default () => {
     sorted: [{ id: 'lastname', desc: false }],
   });
 
+  const rowClick = useCallback(
+    (user_id) => {
+      if (auth.user_id === user_id) {
+        alert.error('Edit your own profile by clicking the user icon in the top nav');
+      } else {
+        history.push(`/${customer.customer_id}/users/${user_id}`);
+      }
+    },
+    [auth.user_id, customer.customer_id]
+  );
+
   return (
     <>
       <Row className="floating-card-header">
@@ -41,8 +54,8 @@ export default () => {
       <Card className="my-3">
         <CardBody>
           <ReactTable
-            data={users || []}
-            columns={customerUserColumns({ current_user_id: auth.user_id })}
+            data={users ? [auth, ...users] : [auth]}
+            columns={customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer.customer_id })}
             pages={tableState.pages}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
@@ -56,7 +69,7 @@ export default () => {
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
             getTrProps={(state, rowInfo) => ({
-              onClick: () => history.push(`/${customer.customer_id}/users/${rowInfo.original.user_id}`),
+              onClick: () => rowClick(rowInfo.original.user_id),
             })}
           />
         </CardBody>
