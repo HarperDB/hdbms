@@ -12,27 +12,30 @@ import instanceState from '../../../state/instanceState';
 import usePersistedUser from '../../../state/persistedUser';
 import appState from '../../../state/appState';
 
-export default ({ newEntityColumns, hashAttribute }) => {
+export default ({ newEntityAttributes, hashAttribute }) => {
   const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const history = useHistory();
-  const { schema, table, hash, action } = useParams();
-  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const { schema, table, hash, action, compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {
-    if (action === 'edit') {
-      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url);
+    if (!newEntityAttributes) {
+      history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`);
+    }
+  }, []);
+
+  useAsyncEffect(async () => {
+    if (action === 'edit' && newEntityAttributes) {
+      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: Object.keys(newEntityAttributes) }, auth, url);
       delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
       delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
       setRowValue(rowData);
     } else {
-      setRowValue(newEntityColumns);
+      setRowValue(newEntityAttributes);
     }
   }, [hash]);
 

@@ -6,46 +6,28 @@ import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import config from '../../../../config';
+import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
+
+import config from '../../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
-import appState from '../../../state/appState';
-import describeTable from '../../../api/instance/describeTable';
 
-const defaultTableState = {
-  tableData: [],
-  totalPages: 0,
-  totalRecords: 0,
-  loading: false,
-  filtered: [],
-  sorted: [],
-  page: 0,
-  pageSize: 20,
-  autoRefresh: false,
-  showFilter: false,
-  currentTable: false,
-  currentHash: false,
-  allowedAttributes: false,
-  dataTableColumns: false,
-};
-
-let controller;
-
-export default ({ activeTable: { dataTableColumns } }) => {
+export default ({ tableState, setTableState, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table } = useParams();
-  const { auth, url, lastUpdate } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url, lastUpdate: s.lastUpdate }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
-  const [tableState, setTableState] = useState(defaultTableState);
+  const [loading, setLoading] = useState(false);
+  let controller;
 
   useAsyncEffect(async () => {
     if (controller) controller.abort();
-
-    if (!tableState.loading) {
+    if (!loading) {
+      setLoading(true);
       controller = new AbortController();
-      setTableState({ ...tableState, loading: true });
-      const { newData, newTotalPages, newTotalRecords, allowedAttributes } = await getTableData({
+      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -55,66 +37,37 @@ export default ({ activeTable: { dataTableColumns } }) => {
         auth,
         url,
         signal: controller.signal,
+        time: Date.now(),
       });
       setTableState({
         ...tableState,
         tableData: newData,
         totalPages: newTotalPages,
         totalRecords: newTotalRecords,
-        allowedAttributes,
-        loading: false,
+        sorted: tableState.sorted.length ? tableState.sorted : [{ id: hashAttribute, desc: false }],
+        newEntityAttributes,
+        hashAttribute,
+        dataTableColumns,
       });
+      setLoading(false);
     }
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate]);
-
-  useAsyncEffect(async () => {
-    if (table !== tableState.currentTable) {
-      if (controller) controller.abort();
-      controller = new AbortController();
-
-      setTableState({ ...tableState, tableData: [] });
-      const { hash_attribute, record_count } = await describeTable({ auth, url, schema, table, signal: controller.signal });
-      setTableState({
-        ...defaultTableState,
-        currentHash: hash_attribute,
-        currentTable: table,
-        sorted: [{ id: hash_attribute, desc: false }],
-        totalRecords: record_count,
-      });
-    }
-  }, [table]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate]);
 
   useAsyncEffect(
     () => false,
-    () => {
-      if (controller) controller.abort();
-      setTableState(defaultTableState);
-    },
+    () => controller && controller.abort(),
     []
   );
 
-  useAsyncEffect(() => {
-    if (tableState.allowedAttributes) {
-      setTableState({
-        ...tableState,
-        dataTableColumns: tableState.allowedAttributes ? dataTableColumns.filter((c) => tableState.allowedAttributes.includes(c.id)) : dataTableColumns,
-      });
-    }
-  }, [tableState.allowedAttributes]);
+  useAsyncEffect(() => table && table !== tableState.currentTable && setTableState({ ...defaultTableState, currentTable: table, lastUpdate: Date.now() }), [table]);
 
-  useInterval(() => {
-    if (tableState.autoRefresh && !tableState.loading) {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-    }
-  }, config.instance_refresh_rate);
+  useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.instance_refresh_rate);
 
   return (
     <>
       <DataTableHeader
         totalRecords={tableState.totalRecords}
-        loading={tableState.loading}
+        loading={loading}
         autoRefresh={tableState.autoRefresh}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
@@ -127,8 +80,8 @@ export default ({ activeTable: { dataTableColumns } }) => {
             loadingText="loading"
             data={tableState.tableData}
             pages={tableState.totalPages}
-            columns={tableState.dataTableColumns || dataTableColumns}
-            hashAttribute={tableState.currentHash}
+            columns={tableState.dataTableColumns}
+            hashAttribute={tableState.hashAttribute}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             filtered={tableState.filtered}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
@@ -140,7 +93,7 @@ export default ({ activeTable: { dataTableColumns } }) => {
             pageSize={tableState.pageSize}
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             getTrProps={(state, rowInfo) => ({
-              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.currentHash]}`),
+              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
             })}
           />
         </CardBody>

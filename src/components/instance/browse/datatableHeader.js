@@ -18,8 +18,14 @@ export default ({ totalRecords, loading, autoRefresh, toggleAutoRefresh, toggleF
         {schema}
         &nbsp;
         {table && `> ${table} > `}
-        {commaNumbers(totalRecords)} record
-        {totalRecords !== 1 ? 's' : ''}
+        {!autoRefresh && loading ? (
+          <i className="fa fa-spinner fa-spin" />
+        ) : (
+          <span>
+            {commaNumbers(totalRecords)} record
+            {totalRecords !== 1 ? 's' : ''}
+          </span>
+        )}
       </Col>
       <Col xs="12" className="d-inline-flex d-md-none mb-2" />
       <Col className="text-md-right">

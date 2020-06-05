@@ -13,22 +13,29 @@ import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
 import appState from '../../../state/appState';
 
+const defaultTableState = {
+  tableData: [],
+  totalPages: 0,
+  totalRecords: 0,
+  loading: false,
+  filtered: [],
+  sorted: [],
+  page: 0,
+  pageSize: 20,
+  autoRefresh: false,
+  showFilter: false,
+  newEntityAttributes: false,
+  hashAttribute: false,
+  dataTableColumns: [],
+};
+
 export default () => {
   const history = useHistory();
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const { compute_stack_id, schema, table, action } = useParams();
-  const [entities, setEntities] = useState({
-    schemas: false,
-    tables: false,
-    activeTable: false,
-  });
-  const { structure } = useStoreState(
-    instanceState,
-    (s) => ({
-      structure: s.structure,
-    }),
-    [compute_stack_id]
-  );
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
+  const [entities, setEntities] = useState({ schemas: false, tables: false, activeTable: false });
+  const [tableState, setTableState] = useState(defaultTableState);
 
   useEffect(() => {
     if (structure) {
@@ -83,9 +90,9 @@ export default () => {
         {schema && table && action === 'csv' && entities.activeTable ? (
           <CSVUpload />
         ) : schema && table && action && entities.activeTable ? (
-          <JSONViewer newEntityColumns={entities.activeTable.newEntityColumns} hashAttribute={entities.activeTable.hashAttribute} />
+          <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
         ) : schema && table && entities.activeTable ? (
-          <DataTable activeTable={entities.activeTable} />
+          <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
         ) : (
           <EmptyPrompt
             message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
