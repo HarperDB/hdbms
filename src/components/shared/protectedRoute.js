@@ -54,6 +54,7 @@ const ProtectedRoute = ({ children }) => {
     const canFetchInstances = auth && products && regions && customer_id;
     const shouldRefreshInstances = canFetchInstances && (shouldFetchInstances || anInstanceIsLoading);
     if (shouldRefreshInstances) {
+      console.log('instances');
       setShouldFetchInstances(false);
       await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
       setShouldFetchInstances(true);
@@ -84,6 +85,7 @@ const ProtectedRoute = ({ children }) => {
   useAsyncEffect(refreshProducts, []);
   useAsyncEffect(refreshRegions, []);
   useAsyncEffect(refreshUser, []);
+  useAsyncEffect(refreshInstances, []);
   useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
 
   useInterval(refreshInstances, config.instances_refresh_rate);

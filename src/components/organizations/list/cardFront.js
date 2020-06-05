@@ -10,7 +10,7 @@ import getCustomer from '../../../api/lms/getCustomer';
 import updateUserOrgs from '../../../api/lms/updateUserOrgs';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 
-const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUser, setFlipState }) => {
+const CardFront = ({ customer_name, customer_id, free_cloud_instance_count, total_instance_count, status, fetchUser, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
   const isActiveCustomer = activeCustomerId === customer_id;
@@ -20,24 +20,23 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   const history = useHistory();
   const alert = useAlert();
 
-  const chooseOrganization = useCallback(async (e) => {
-    const newPage = e.currentTarget.getAttribute('data-page');
+  const chooseOrganization = useCallback(async () => {
     if (isActiveCustomer) {
       history.push(`/${customer_id}/instances`);
     } else {
-      setLoading(newPage);
+      setLoading(true);
       const result = await getCustomer({ auth, customer_id });
       if (result.error) {
         setCustomerError(result.message);
         setLoading(false);
       } else {
+        setPersistedUser({ ...persistedUser, customer_id });
         appState.update((s) => {
           s.users = false;
           s.instances = false;
           s.hasCard = false;
           s.lastUpdate = false;
         });
-        setPersistedUser({ ...persistedUser, customer_id });
         setTimeout(() => history.push(`/${customer_id}/instances`), 0);
       }
     }
@@ -65,14 +64,16 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
   }, []);
 
   return (
-    <Card className="instance" onClick={chooseOrganization}>
+    <Card className="instance" onClick={() => !loading && chooseOrganization()}>
       <CardBody>
         <Row>
           <Col xs="10" className="org-name">
             {customer_name}
           </Col>
           <Col xs="2" className="status-icon text-right">
-            {status === 'accepted' ? (
+            {loading ? (
+              <i className="fa fa-spinner fa-spin text-purple" />
+            ) : status === 'accepted' ? (
               <i title={`Leave ${customer_name} organization`} className="fa fa-times-circle text-purple" data-action="leave" onClick={handleCardFlipIconClick} />
             ) : status === 'owner' ? (
               <i title={`Delete ${customer_name} organization`} className="fa fa-trash delete text-purple" data-action="delete" onClick={handleCardFlipIconClick} />
@@ -87,7 +88,7 @@ const CardFront = ({ customer_name, customer_id, instance_count, status, fetchUs
           value={customerError ? customerError.toUpperCase() : status === 'accepted' ? 'USER' : status.toUpperCase()}
           bottomDivider
         />
-        <CardFrontStatusRow label="INSTANCES" isReady value={instance_count || '...'} />
+        <CardFrontStatusRow label="INSTANCES" isReady value={total_instance_count || '...'} />
         <div className="action-buttons">
           {customerError ? (
             <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-action="delete" onClick={handleCardFlipIconClick}>

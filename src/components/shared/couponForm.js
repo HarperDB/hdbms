@@ -48,20 +48,24 @@ export default () => {
 
   return (
     <Row>
-      <Col xs="6">
+      <Col md="6">
         <Input
+          className="mb-2"
           type="text"
           value={formData.coupon_code}
           invalid={!!formState.error}
           disabled={formState.submitted}
-          placeholder={formState.error || 'coupon code'}
+          placeholder="coupon code"
           onChange={(e) => setFormData({ coupon_code: e.target.value })}
         />
       </Col>
-      <Col xs="6">
+      <Col md="6">
         <Button color="purple" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
           {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add Coupon</span>}
         </Button>
+      </Col>
+      <Col xs="12" className="text-center text-danger text-small">
+        {formState.error}
       </Col>
     </Row>
   );

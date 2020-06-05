@@ -5,5 +5,5 @@ export default async ({ auth, customer_id, coupon_code }) =>
     endpoint: 'addCoupon',
     method: 'POST',
     auth,
-    payload: { customer_id, coupon_code },
+    payload: { customer_id, coupon_code, user_id: auth.user_id },
   });

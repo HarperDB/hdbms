@@ -28,6 +28,9 @@ const InstancesIndex = () => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
     }
+    appState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
   }, []);
 
   return isOrgUser ? (
