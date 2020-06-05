@@ -47,8 +47,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
-  if (newData.attribute_error) {
-    allAttributes = allAttributes.filter((a) => !newData.attribute_error.includes(a));
+  if (newData.access_errors) {
+    allAttributes = allAttributes.filter((a) => !newData.access_errors.find((e) => e.attribute.toString() === a.toString()));
     const selectString = allAttributes.map((a) => `\`${a}\``).join(', ');
 
     try {

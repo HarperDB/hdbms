@@ -24,6 +24,7 @@ const defaultTableState = {
   error: false,
   message: false,
   reload: false,
+  accessErrors: false,
 };
 
 export default ({ query }) => {
@@ -50,7 +51,7 @@ export default ({ query }) => {
         const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal });
 
         if (response.error) {
-          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });
+          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true, reload: false });
         } else if (response.message) {
           setTableState({ ...tableState, message: response.message, loading: false, error: false, reload: false });
         } else if (!response.tableData.length) {
@@ -85,7 +86,7 @@ export default ({ query }) => {
   return tableState.reload ? (
     <EmptyPrompt message="Executing Query" />
   ) : tableState.message ? (
-    <EmptyPrompt error={tableState.error} message={tableState.message} />
+    <EmptyPrompt error={tableState.error} message={tableState.message} accessErrors={tableState.access_errors} />
   ) : tableState.tableData?.length ? (
     <>
       <DataTableHeader

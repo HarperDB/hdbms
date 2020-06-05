@@ -3,23 +3,24 @@ import handleCellValues from '../datatable/handleCellValues';
 
 export default async ({ query, auth, url, signal }) => {
   try {
-    const tableData = await sql({ sql: query, auth, url, signal });
+    const response = await sql({ sql: query, auth, url, signal });
 
-    if (tableData.error) {
+    if (response.error) {
       return {
-        message: tableData.message,
+        message: response.message,
         error: true,
+        access_errors: response.access_errors,
       };
     }
 
-    if (tableData.message) {
+    if (response.message) {
       return {
-        message: tableData.message,
+        message: response.message,
       };
     }
 
-    const totalRecords = tableData.length;
-    const attributes = totalRecords ? Object.keys(tableData[0]) : [];
+    const totalRecords = response.length;
+    const attributes = totalRecords ? Object.keys(response[0]) : [];
     const orderedColumns = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a)).sort();
     if (attributes.includes('__createdtime__')) {
       orderedColumns.push('__createdtime__');
@@ -39,7 +40,7 @@ export default async ({ query, auth, url, signal }) => {
     }));
 
     return {
-      tableData,
+      tableData: response,
       totalRecords,
       dataTableColumns,
     };
