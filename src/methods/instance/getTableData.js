@@ -14,6 +14,11 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   try {
     const result = await describeTable({ auth, url, schema, table, signal });
 
+    if (result.error) {
+      allAttributes = [];
+      throw new Error('table');
+    }
+
     const { record_count, attributes, hash_attribute } = result;
     allAttributes = attributes.map((a) => a.attribute);
     hashAttribute = hash_attribute;
@@ -29,8 +34,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
-    // console.log('Failed to get row count', e);
-    fetchError = true;
+    fetchError = e;
   }
 
   if (newTotalRecords) {
@@ -41,14 +45,18 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
+
+      if (newData.error || !Array.isArray(newData)) {
+        throw new Error(newData.error || 'Unable to fetch the requested data');
+      }
     } catch (e) {
       // console.log('Failed to get table data');
-      fetchError = true;
+      fetchError = e;
     }
   }
 
-  if (newData.access_errors) {
-    allAttributes = allAttributes.filter((a) => !newData.access_errors.find((e) => e.attribute.toString() === a.toString()));
+  if (newData.access_errors && newData.access_errors.find((e) => e.type === 'attribute')) {
+    allAttributes = allAttributes.filter((a) => !newData.access_errors.find((e) => e.type === 'attribute' && e.entity.toString() === a.toString()));
     const selectString = allAttributes.map((a) => `\`${a}\``).join(', ');
 
     try {
@@ -60,7 +68,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
     } catch (e) {
       // console.log('Failed to get table data with specific attributes');
-      fetchError = true;
+      fetchError = e;
     }
   }
 
@@ -79,19 +87,14 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   }));
 
   const result = {
-    newData: [],
+    newData: newData || [],
     newTotalPages,
     newTotalRecords,
     newEntityAttributes,
     hashAttribute,
     dataTableColumns,
+    error: fetchError && fetchError.message === 'table' && `You are not authorized to view ${schema}:${table}`,
   };
-
-  if (fetchError || !Array.isArray(newData) || newData.error) {
-    return result;
-  }
-
-  if (newData) result.newData = newData;
 
   return result;
 };

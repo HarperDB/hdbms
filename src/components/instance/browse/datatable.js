@@ -12,6 +12,7 @@ import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
+import EmptyPrompt from './emptyPrompt';
 
 export default ({ tableState, setTableState, defaultTableState }) => {
   const history = useHistory();
@@ -27,7 +28,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
     if (!loading) {
       setLoading(true);
       controller = new AbortController();
-      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns } = await getTableData({
+      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -39,6 +40,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         signal: controller.signal,
         time: Date.now(),
       });
+
       setTableState({
         ...tableState,
         tableData: newData,
@@ -48,6 +50,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         newEntityAttributes,
         hashAttribute,
         dataTableColumns,
+        error,
       });
       setLoading(false);
     }
@@ -69,33 +72,38 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         totalRecords={tableState.totalRecords}
         loading={loading}
         autoRefresh={tableState.autoRefresh}
+        refresh={() => setTableState({ ...tableState, lastUpdate: Date.now() })}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
-          <ReactTable
-            manual
-            loading={tableState.loading && !tableState.autoRefresh}
-            loadingText="loading"
-            data={tableState.tableData}
-            pages={tableState.totalPages}
-            columns={tableState.dataTableColumns}
-            hashAttribute={tableState.hashAttribute}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-            filtered={tableState.filtered}
-            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
-            sorted={tableState.sorted}
-            onPageChange={(value) => setTableState({ ...tableState, page: value })}
-            page={tableState.page}
-            filterable={tableState.showFilter}
-            defaultPageSize={tableState.pageSize}
-            pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-            getTrProps={(state, rowInfo) => ({
-              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
-            })}
-          />
+          {tableState.error ? (
+            <div className="text-center py-5">{tableState.error}</div>
+          ) : (
+            <ReactTable
+              manual
+              loading={tableState.loading && !tableState.autoRefresh}
+              loadingText="loading"
+              data={tableState.tableData}
+              pages={tableState.totalPages}
+              columns={tableState.dataTableColumns}
+              hashAttribute={tableState.hashAttribute}
+              onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+              filtered={tableState.filtered}
+              onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+              sorted={tableState.sorted}
+              onPageChange={(value) => setTableState({ ...tableState, page: value })}
+              page={tableState.page}
+              filterable={tableState.showFilter}
+              defaultPageSize={tableState.pageSize}
+              pageSize={tableState.pageSize}
+              onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
+              getTrProps={(state, rowInfo) => ({
+                onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
+              })}
+            />
+          )}
         </CardBody>
       </Card>
     </>

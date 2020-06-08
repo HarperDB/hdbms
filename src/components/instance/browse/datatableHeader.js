@@ -7,7 +7,7 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 import instanceState from '../../../state/instanceState';
 import appState from '../../../state/appState';
 
-export default ({ totalRecords, loading, autoRefresh, toggleAutoRefresh, toggleFilter }) => {
+export default ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table } = useParams();
   const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
@@ -29,15 +29,7 @@ export default ({ totalRecords, loading, autoRefresh, toggleAutoRefresh, toggleF
       </Col>
       <Col xs="12" className="d-inline-flex d-md-none mb-2" />
       <Col className="text-md-right">
-        <i
-          title={`Refresh table ${table}`}
-          className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
-          onClick={() =>
-            instanceState.update((s) => {
-              s.lastUpdate = Date.now();
-            })
-          }
-        />
+        <i title={`Refresh table ${table}`} className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={refresh} />
         <span className="mr-2">auto</span>
         <i title="Turn on Auto-Refresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={toggleAutoRefresh} />
         <span className="mx-3 text">|</span>

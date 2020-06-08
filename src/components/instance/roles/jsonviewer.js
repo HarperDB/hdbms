@@ -21,6 +21,7 @@ export default () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
@@ -38,7 +39,10 @@ export default () => {
       return false;
     }
 
+    setLoading(true);
     const response = await alterRole({ permission: newPermissions, id: role_id, auth, url });
+    setLoading(false);
+
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
       setNewPermissions(activePermissions);
@@ -75,8 +79,8 @@ export default () => {
         onChange={(value) => setNewPermissions(value.jsObject)}
       />
       <hr />
-      <Button block color="success" onClick={submitRecord}>
-        Update Role Permissions
+      <Button block color="success" disabled={loading} onClick={submitRecord}>
+        {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Update Role Permissions</span>}
       </Button>
     </>
   );

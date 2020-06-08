@@ -54,7 +54,6 @@ const ProtectedRoute = ({ children }) => {
     const canFetchInstances = auth && products && regions && customer_id;
     const shouldRefreshInstances = canFetchInstances && (shouldFetchInstances || anInstanceIsLoading);
     if (shouldRefreshInstances) {
-      console.log('instances');
       setShouldFetchInstances(false);
       await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
       setShouldFetchInstances(true);
