@@ -27,7 +27,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
-        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}` });
+        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
         setTimeout(() => history.push(needsCard ? `/${customerId}/instances/new/payment` : `/${customerId}/instances/new/confirm`), 0);

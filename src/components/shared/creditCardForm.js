@@ -3,9 +3,12 @@ import { Col, Input, Row } from '@nio/ui-kit';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 
 import cardOptions from '../../methods/stripe/cardOptions';
+import usePersistedUser from '../../state/persistedUser';
 
 export default ({ setFormData, formData }) => {
   const [formState, setFormState] = useState({});
+  const [{ darkTheme }] = usePersistedUser({});
+  const themedCardOptions = cardOptions({ darkTheme });
 
   return (
     <>
@@ -16,7 +19,7 @@ export default ({ setFormData, formData }) => {
         <Col md="6" xs="12" className="text-md-right text-center">
           <div className={`fake-input ${formState.cardError ? 'error' : ''}`}>
             <CardNumberElement
-              options={cardOptions}
+              options={themedCardOptions}
               onChange={(e) => {
                 setFormState({ ...formState, cardError: e.error?.message });
                 setFormData({
@@ -36,7 +39,7 @@ export default ({ setFormData, formData }) => {
         <Col md="6" xs="12" className="text-md-right text-center">
           <div className={`fake-input ${formState.expError ? 'error' : ''}`}>
             <CardExpiryElement
-              options={cardOptions}
+              options={themedCardOptions}
               onChange={(e) => {
                 setFormState({ ...formState, expError: e.error?.message });
                 setFormData({
@@ -56,7 +59,7 @@ export default ({ setFormData, formData }) => {
         <Col md="6" xs="12" className="text-md-right text-center">
           <div className={`fake-input ${formState.cvcError ? 'error' : ''}`}>
             <CardCvcElement
-              options={cardOptions}
+              options={themedCardOptions}
               onChange={(e) => {
                 setFormState({ ...formState, cvcError: e.error?.message });
                 setFormData({

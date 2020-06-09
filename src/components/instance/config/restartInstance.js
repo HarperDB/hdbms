@@ -12,13 +12,10 @@ import restartInstance from '../../../api/instance/restartInstance';
 
 export default ({ instanceAction, setInstanceAction }) => {
   const alert = useAlert();
-  const { auth, url, instance_name, status } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    instance_name: s.instance_name,
-    status: s.status,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const status = useStoreState(instanceState, (s) => s.status);
+  const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 

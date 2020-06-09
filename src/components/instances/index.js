@@ -14,15 +14,10 @@ import SubNav from './subnav';
 import NewInstanceModal from './new';
 
 const InstancesIndex = () => {
-  const { action } = useParams();
-  const { instances, isOrgUser, isOrgOwner } = useStoreState(appState, (s) => {
-    const userExists = s.auth?.orgs?.find((o) => o.customer_id === s.customer?.customer_id);
-    return {
-      instances: s.instances,
-      isOrgUser: userExists,
-      isOrgOwner: userExists?.status === 'owner',
-    };
-  });
+  const { action, customer_id } = useParams();
+  const instances = useStoreState(appState, (s) => s.instances);
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id), [customer_id]);
+  const isOrgOwner = isOrgUser?.status === 'owner';
 
   useEffect(() => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {

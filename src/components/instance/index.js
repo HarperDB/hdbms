@@ -18,10 +18,8 @@ export default () => {
   const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
-  const { isOrgUser, instances } = useStoreState(appState, (s) => ({
-    isOrgUser: s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id),
-    instances: s.instances,
-  }));
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id));
+  const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: auth?.super });

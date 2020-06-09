@@ -18,11 +18,9 @@ export default () => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
-  const { auth, url, roles } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    roles: s.roles,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const roles = useStoreState(instanceState, (s) => s.roles);
 
   const updateRole = async () => {
     const { newRole } = formData;

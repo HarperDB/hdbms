@@ -12,10 +12,9 @@ import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId }) => {
+export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, stripeId }) => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer = useStoreState(appState, (s) => s.customer);
   const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
@@ -41,8 +40,8 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId }
           setFormState({ error: error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: customer.stripe_id, customer_id: customer.customer_id });
-          await getCustomer({ auth, customer_id: customer.customer_id });
+          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: stripeId, customer_id: customerId });
+          await getCustomer({ auth, customer_id: customerId });
           setFormState({ success: true });
         }
       }

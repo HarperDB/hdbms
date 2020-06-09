@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/instanceState';
 import appState from '../../../state/appState';
@@ -15,9 +16,9 @@ import Loader from '../../shared/loader';
 import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
+  const { customer_id } = useParams();
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
   const [instanceAction, setInstanceAction] = useState(false);
 

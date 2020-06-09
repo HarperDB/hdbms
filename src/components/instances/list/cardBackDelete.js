@@ -3,6 +3,7 @@ import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { useParams } from 'react-router-dom';
 
 import removeInstance from '../../../api/lms/removeInstance';
 import appState from '../../../state/appState';
@@ -10,10 +11,8 @@ import useInstanceAuth from '../../../state/instanceAuths';
 
 const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();
-  const { auth, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-  }));
+  const { customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [formState, setFormState] = useState({});
@@ -29,7 +28,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           error: 'instance name is not correct',
         });
       } else {
-        const response = await removeInstance({ auth, customer_id: customer.customer_id, compute_stack_id });
+        const response = await removeInstance({ auth, customer_id, compute_stack_id });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');

@@ -22,22 +22,22 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 
 export default () => {
-  const [{ darkTheme }] = usePersistedUser({});
-  const { products, regions, instanceNames, instanceURLs, canAddFreeCloudInstance, hasCard, stripeCoupons, customer_id, subdomain } = useStoreState(appState, (s) => ({
-    products: s.products,
-    regions: s.regions,
-    instanceNames: s.instances.map((i) => i.instance_name),
-    instanceURLs: s.instances.map((i) => i.url),
-    canAddFreeCloudInstance: config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
-    hasCard: s.hasCard,
-    stripeCoupons: s.customer.stripe_coupons,
-    customer_id: s.customer?.customer_id,
-    subdomain: s.customer?.subdomain,
-  }));
   const history = useHistory();
-  const { purchaseStep = 'type' } = useParams();
+  const { purchaseStep = 'type', customer_id } = useParams();
+  const [{ darkTheme }] = usePersistedUser({});
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
+  const instanceURLs = useStoreState(appState, (s) => s.instances.map((i) => i.url));
+  const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const stripeId = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
+  const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const [newInstance, setNewInstance] = useNewInstance({});
   const isLocal = newInstance.is_local;
+  const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
+  const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
 
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {
@@ -80,6 +80,7 @@ export default () => {
             hasCard={hasCard}
             isLocal={isLocal}
             customerId={customer_id}
+            stripeId={stripeId}
             computeProduct={products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id)}
             storageProduct={isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size)}
           />

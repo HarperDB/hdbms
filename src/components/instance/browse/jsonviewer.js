@@ -10,16 +10,15 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
 import usePersistedUser from '../../../state/persistedUser';
-import appState from '../../../state/appState';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
+  const { customer_id } = useParams();
   const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const history = useHistory();
   const { schema, table, hash, action, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
-import { useStoreState } from 'pullstate';
 
 import commaNumbers from '../../../methods/util/commaNumbers';
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
 
 export default ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) => {
   const history = useHistory();
-  const { compute_stack_id, schema, table } = useParams();
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { compute_stack_id, schema, table, customer_id } = useParams();
 
   return (
     <Row className="floating-card-header">

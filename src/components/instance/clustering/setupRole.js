@@ -6,11 +6,9 @@ import createClusterUserRole from '../../../methods/instance/createClusterUserRo
 import instanceState from '../../../state/instanceState';
 
 export default () => {
-  const { auth, url, cluster_role } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    cluster_role: s.network?.cluster_role,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
 
   return cluster_role ? (
     <Row>

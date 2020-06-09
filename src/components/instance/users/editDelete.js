@@ -15,10 +15,8 @@ export default () => {
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const alert = useAlert();
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const deleteUser = async () => {
     if (formData.delete_username !== username) {

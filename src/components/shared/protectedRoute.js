@@ -23,12 +23,11 @@ const ProtectedRoute = ({ children }) => {
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const lastUpdate = useStoreState(appState, (s) => s.lastUpdate);
   const version = useStoreState(appState, (s) => s.version);
+  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [shouldFetchInstances, setShouldFetchInstances] = useState(true);
   const [shouldFetchUser, setShouldFetchUser] = useState(true);
-
   const redirectURL = `/sign-in${!['/'].includes(history.location.pathname) ? `?returnURL=${history.location.pathname}` : ''}`;
   const showRoute = auth?.email && auth?.pass;
 
@@ -40,12 +39,12 @@ const ProtectedRoute = ({ children }) => {
     if (auth && shouldFetchUser) {
       setShouldFetchUser(false);
       const response = await getUser(auth);
+      setShouldFetchUser(true);
       if (!response.error) {
         appState.update((s) => {
           s.auth = { ...auth, ...response };
         });
       }
-      setShouldFetchUser(true);
     }
   };
 
@@ -65,16 +64,17 @@ const ProtectedRoute = ({ children }) => {
       shouldFetchHistoryListener = history.listen(() => {
         if (shouldFetchInstancesTimeout) clearTimeout(shouldFetchInstancesTimeout);
         setShouldFetchInstances(history.location.pathname.indexOf('/instance') !== -1);
-        shouldFetchInstancesTimeout = setTimeout(() => setShouldFetchInstances(false), config.instances_refresh_timeout);
+        shouldFetchInstancesTimeout = setTimeout(() => setShouldFetchInstances(false), config.refresh_api_timeout);
 
         if (shouldFetchUserTimeout) clearTimeout(shouldFetchUserTimeout);
-        setShouldFetchUser(history.location.pathname.indexOf('/organizations') !== -1);
-        shouldFetchUserTimeout = setTimeout(() => setShouldFetchUser(false), config.instances_refresh_timeout);
+        shouldFetchUserTimeout = setTimeout(() => setShouldFetchUser(false), config.refresh_api_timeout);
       });
     },
     () => {
       clearTimeout(shouldFetchInstancesTimeout);
       clearTimeout(shouldFetchUserTimeout);
+      setShouldFetchInstances(true);
+      setShouldFetchUser(true);
       shouldFetchHistoryListener();
     },
     []

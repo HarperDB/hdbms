@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 
 import instanceState from '../../../state/instanceState';
@@ -10,18 +10,13 @@ import appState from '../../../state/appState';
 import removeInstance from '../../../api/lms/removeInstance';
 
 export default ({ setInstanceAction }) => {
+  const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-  }));
-  const { compute_stack_id, instance_name, is_local, is_being_modified } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    instance_name: s.instance_name,
-    is_local: s.is_local,
-    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
-  }));
+  const auth = useStoreState(appState, (s) => s.auth);
+  const instance_name = useStoreState(instanceState, (s) => s.instance_name);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -35,7 +30,7 @@ export default ({ setInstanceAction }) => {
       } else {
         setInstanceAction('Removing');
 
-        const response = await removeInstance({ auth, customer_id: customer.customer_id, compute_stack_id });
+        const response = await removeInstance({ auth, customer_id, compute_stack_id });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
@@ -45,7 +40,7 @@ export default ({ setInstanceAction }) => {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push(`/${customer.customer_id}/instances`), 3000);
+          setTimeout(() => history.push(`/${customer_id}/instances`), 3000);
         }
       }
     }

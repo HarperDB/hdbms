@@ -2,17 +2,16 @@ import React, { Fragment } from 'react';
 import { Row, Col, CardBody, Card } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router';
 
 import appState from '../../../state/appState';
 
 import getInvoices from '../../../api/lms/getInvoices';
 
 export default () => {
-  const { auth, customer_id, invoices } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer_id: s.customer.customer_id,
-    invoices: s.invoices,
-  }));
+  const { customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const invoices = useStoreState(appState, (s) => s.invoices);
   let controller;
 
   useAsyncEffect(

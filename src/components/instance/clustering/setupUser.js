@@ -9,12 +9,10 @@ import instanceState from '../../../state/instanceState';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
-  const { auth, url, cluster_role, cluster_user } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    cluster_role: s.network?.cluster_role,
-    cluster_user: s.network?.cluster_user,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
+  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});

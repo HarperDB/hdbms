@@ -5,14 +5,12 @@ import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
 
 import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
 
 export default () => {
   const history = useHistory();
-  const { compute_stack_id } = useParams();
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { compute_stack_id, customer_id } = useParams();
   const [tableState, setTableState] = useState({
     filtered: [],
     page: 0,

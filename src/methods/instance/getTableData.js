@@ -2,7 +2,7 @@ import queryInstance from '../../api/queryInstance';
 import describeTable from '../../api/instance/describeTable';
 import handleCellValues from '../datatable/handleCellValues';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal, time }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal }) => {
   let fetchError = false;
   let newTotalPages = 1;
   let newTotalRecords = 0;
@@ -86,7 +86,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     Cell: (props) => handleCellValues(props.value),
   }));
 
-  const result = {
+  return {
     newData: newData || [],
     newTotalPages,
     newTotalRecords,
@@ -95,6 +95,4 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     dataTableColumns,
     error: fetchError && fetchError.message === 'table' && `You are not authorized to view ${schema}:${table}`,
   };
-
-  return result;
 };

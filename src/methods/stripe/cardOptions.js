@@ -1,9 +1,9 @@
-export default {
+export default ({ darkTheme }) => ({
   iconStyle: 'solid',
   style: {
     base: {
       iconColor: '#403b8a',
-      color: '#212121',
+      color: darkTheme ? '#ffffff' : '#212121',
       fontWeight: 100,
       fontFamily: 'Raleway, Open Sans, Segoe UI, sans-serif',
       fontSize: '14px',
@@ -17,4 +17,4 @@ export default {
       color: '#ea4c89',
     },
   },
-};
+});

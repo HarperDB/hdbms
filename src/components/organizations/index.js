@@ -7,7 +7,6 @@ import queryString from 'query-string';
 import { useHistory } from 'react-router';
 
 import appState from '../../state/appState';
-import usePersistedUser from '../../state/persistedUser';
 
 import SubNav from './subnav';
 import OrgList from './list/orgList';
@@ -17,20 +16,19 @@ import getCustomer from '../../api/lms/getCustomer';
 import NewOrgModal from './new';
 
 const OrganizationsIndex = () => {
-  const auth = useStoreState(appState, (s) => s.auth);
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const { action } = useParams();
-  const [fetchingCustomer, setFetchingCustomer] = useState(true);
   const history = useHistory();
   const { search } = useLocation();
   const { returnURL } = queryString.parse(search);
+  const auth = useStoreState(appState, (s) => s.auth);
+  const [fetchingCustomer, setFetchingCustomer] = useState(true);
 
   useAsyncEffect(async () => {
     if (action === 'load') {
       let customer_id = false;
       switch (true) {
-        case !!persistedUser.customer_id:
-          customer_id = persistedUser.customer_id;
+        case returnURL && returnURL.indexOf('/profile') === -1 && returnURL.indexOf('/support') === -1 && returnURL.indexOf('/organizations') === -1:
+          [, customer_id] = returnURL.split('/');
           break;
         case auth?.orgs?.length === 1 && ['accepted', 'owner', 'admin'].includes(auth.orgs[0].status):
           customer_id = auth.orgs[0].customer_id;
@@ -45,8 +43,7 @@ const OrganizationsIndex = () => {
         if (result.error) {
           setFetchingCustomer(false);
         } else {
-          setPersistedUser({ ...persistedUser, customer_id });
-          setTimeout(() => history.push(returnURL || `/${customer_id}/instances`), 200);
+          history.push(returnURL || `/${customer_id}/instances`);
         }
       } else {
         setFetchingCustomer(false);
@@ -59,6 +56,7 @@ const OrganizationsIndex = () => {
       const response = await getUser(auth);
       appState.update((s) => {
         s.auth = { ...auth, ...response };
+        s.lastUpdate = Date.now();
       });
     }
   }, [action]);

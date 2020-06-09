@@ -12,10 +12,8 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;

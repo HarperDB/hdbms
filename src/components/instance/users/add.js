@@ -9,12 +9,10 @@ import FormStatus from '../../shared/formStatus';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
-  const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    users: s.users,
-    roles: s.roles,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const users = useStoreState(instanceState, (s) => s.users);
+  const roles = useStoreState(instanceState, (s) => s.roles);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 

@@ -4,7 +4,7 @@ import Billing from './billing';
 export default ({ customer_id }) => [
   {
     component: Users,
-    path: `/${customer_id}/users/:user_id?`,
+    path: `/:customer_id/users/:user_id?`,
     link: `/${customer_id}/users`,
     label: 'users',
     icon: 'users',
@@ -12,7 +12,8 @@ export default ({ customer_id }) => [
   },
   {
     component: Billing,
-    path: `/${customer_id}/billing`,
+    path: `/:customer_id/billing`,
+    link: `/${customer_id}/billing`,
     label: 'billing',
     icon: 'credit-card-alt',
     iconCode: 'f283',

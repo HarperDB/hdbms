@@ -19,11 +19,9 @@ export default () => {
     showFilter: false,
     lastUpdate: false,
   });
-  const { clusterDataTable, clusterDataTableColumns, loading } = useStoreState(instanceState, (s) => ({
-    clusterDataTable: s.clusterDataTable,
-    clusterDataTableColumns: s.clusterDataTableColumns,
-    loading: s.loading,
-  }));
+  const clusterDataTable = useStoreState(instanceState, (s) => s.clusterDataTable);
+  const clusterDataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
+  const loading = useStoreState(instanceState, (s) => s.loading);
 
   return (
     <>

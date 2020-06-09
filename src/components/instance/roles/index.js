@@ -7,7 +7,6 @@ import instanceState from '../../../state/instanceState';
 
 import EntityManager from './roleManager';
 import JSONViewer from './jsonviewer';
-import appState from '../../../state/appState';
 
 const defaultState = {
   roleName: false,
@@ -19,9 +18,8 @@ const defaultState = {
 };
 
 export default () => {
-  const { compute_stack_id, role_id } = useParams();
+  const { compute_stack_id, role_id, customer_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/${customer_id}/instance/${compute_stack_id}/roles`;
 

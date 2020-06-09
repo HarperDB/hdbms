@@ -3,7 +3,7 @@ import { Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
@@ -16,16 +16,10 @@ import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
-  const { auth, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-  }));
-  const [formData, setFormData] = useState({
-    postal_code: false,
-    card: false,
-    expire: false,
-    cvc: false,
-  });
+  const { customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
@@ -47,7 +41,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           setFormState({ error: payload.error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          const response = await addPaymentMethod({ auth, payment_method_id: payload.paymentMethod.id, stripe_id: customer.stripe_id, customer_id: customer.customer_id });
+          const response = await addPaymentMethod({ auth, payment_method_id: payload.paymentMethod.id, stripe_id, customer_id });
 
           if (response.error) {
             setFormState({ error: response.message });
@@ -55,7 +49,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           } else {
             setFormState({ success: response.message });
 
-            await getCustomer({ auth, customer_id: customer.customer_id });
+            await getCustomer({ auth, customer_id });
 
             if (returnURL) {
               history.push(returnURL);

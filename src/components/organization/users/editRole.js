@@ -12,10 +12,10 @@ import getUsers from '../../../api/lms/getUsers';
 export default () => {
   const { user_id } = useParams();
   const { pathname } = useLocation();
+  const { customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const users = useStoreState(appState, (s) => s.users);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const currentUser = users && users.find((u) => u.user_id === user_id);
   const currentStatus = currentUser && currentUser.orgs?.find((o) => o.customer_id === customer_id)?.status;
 

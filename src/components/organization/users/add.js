@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import appState from '../../../state/appState';
 
@@ -10,8 +11,8 @@ import isEmail from '../../../methods/util/isEmail';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ refreshUsers, userEmails }) => {
+  const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer = useStoreState(appState, (s) => s.customer);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -26,7 +27,7 @@ export default ({ refreshUsers, userEmails }) => {
       } else {
         setFormState({ processing: true });
 
-        const response = await addUser({ auth, email, customer_id: customer.customer_id });
+        const response = await addUser({ auth, email, customer_id });
         if (response.error) {
           setFormState({ error: response.message });
         } else {

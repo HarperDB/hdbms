@@ -10,10 +10,8 @@ import dropRole from '../../../api/instance/dropRole';
 export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const history = useHistory();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;

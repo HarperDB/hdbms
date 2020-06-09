@@ -12,17 +12,15 @@ import LogRow from './instanceLogsRow';
 import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
 
 export default () => {
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const logs = useStoreState(instanceState, (s) => s.logs);
+  const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { auth, url, logs, logsError } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    logs: s.logs,
-    logsError: s.logsError,
-  }));
   let controller;
 
   useAsyncEffect(

@@ -16,10 +16,8 @@ export default () => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const updatePassword = async () => {
     const { password } = formData;

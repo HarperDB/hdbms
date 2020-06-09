@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Input } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router';
 
 import appState from '../../state/appState';
 
@@ -9,12 +10,11 @@ import addCoupon from '../../api/lms/addCoupon';
 import getCustomer from '../../api/lms/getCustomer';
 
 export default () => {
-  const { auth, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-  }));
+  const { customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
   const [formData, setFormData] = useState({ coupon_code: '' });
   const [formState, setFormState] = useState({});
+  const [mounted, setMounted] = useState(false);
   let controller;
 
   useAsyncEffect(
@@ -25,15 +25,17 @@ export default () => {
           setFormState({ error: 'Please enter a valid coupon code' });
         } else {
           controller = new AbortController();
-          const response = await addCoupon({ auth, customer_id: customer.customer_id, coupon_code });
+          const response = await addCoupon({ auth, customer_id, coupon_code });
 
           if (response.result === false || response.error) {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
-            await getCustomer({ auth, customer_id: customer.customer_id });
-            setFormData({ coupon_code: '' });
-            setFormState({});
+            await getCustomer({ auth, customer_id });
+            if (mounted) {
+              setFormData({ coupon_code: '' });
+              setFormState({});
+            }
           }
         }
       }
@@ -45,6 +47,12 @@ export default () => {
   useAsyncEffect(() => {
     if (!formState.submitted) setFormState({});
   }, [formData]);
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
+  );
 
   return (
     <Row>

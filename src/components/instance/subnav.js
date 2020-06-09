@@ -13,17 +13,16 @@ import routeIcon from '../../methods/select/routeIcon';
 const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
 
 export default ({ routes = [] }) => {
-  const { compute_stack_id } = useParams();
+  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
-  const { options, activeOption, customer_id } = useStoreState(
+  const { options, activeOption } = useStoreState(
     appState,
     (s) => {
       const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
       const otherInstances = s.instances && s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
       return {
-        customer_id: s.customer?.customer_id,
         options:
           otherInstances &&
           otherInstances.map((i) => ({

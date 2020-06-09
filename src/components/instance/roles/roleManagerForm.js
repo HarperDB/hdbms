@@ -8,10 +8,8 @@ import instanceState from '../../../state/instanceState';
 
 export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const [entity, setEntity] = useState({});
 

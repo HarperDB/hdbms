@@ -6,20 +6,17 @@ import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
 import config from '../../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
-import EmptyPrompt from './emptyPrompt';
 
 export default ({ tableState, setTableState, defaultTableState }) => {
   const history = useHistory();
-  const { compute_stack_id, schema, table } = useParams();
+  const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [loading, setLoading] = useState(false);
   let controller;
 
@@ -38,7 +35,6 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         auth,
         url,
         signal: controller.signal,
-        time: Date.now(),
       });
 
       setTableState({

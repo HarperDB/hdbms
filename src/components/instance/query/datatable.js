@@ -29,7 +29,8 @@ const defaultTableState = {
 
 export default ({ query }) => {
   const [lastUpdate, setLastUpdate] = useState();
-  const { auth, url } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [tableState, setTableState] = useState(defaultTableState);
   let controller;
 

@@ -8,8 +8,6 @@ export default async ({ auth, url, currentRolePermissions }) => {
     return permissionStructure;
   }
 
-  console.log(dbResponse, currentRolePermissions);
-
   Object.keys(dbResponse).map((schema) => {
     permissionStructure[schema] = {
       tables: {},
@@ -22,8 +20,6 @@ export default async ({ auth, url, currentRolePermissions }) => {
         .filter((a) => ![thisTable.hash_attribute, '__createdtime__', '__updatedtime__'].includes(a.attribute))
         .map((a) => a.attribute)
         .sort();
-
-      console.log(table, attributes);
 
       permissionStructure[schema].tables[table] = {
         read: extantTablePermissions ? extantTablePermissions.read : true,

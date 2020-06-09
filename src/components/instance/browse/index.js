@@ -11,7 +11,6 @@ import EntityManager from './entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
-import appState from '../../../state/appState';
 
 const defaultTableState = {
   tableData: [],
@@ -31,8 +30,7 @@ const defaultTableState = {
 
 export default () => {
   const history = useHistory();
-  const { compute_stack_id, schema, table, action } = useParams();
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { compute_stack_id, schema, table, action, customer_id } = useParams();
   const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
   const [entities, setEntities] = useState({ schemas: false, tables: false, activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);

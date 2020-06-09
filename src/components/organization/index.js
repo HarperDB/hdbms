@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import routes from './routes';
@@ -7,15 +7,10 @@ import SubNav from '../shared/subnav';
 import appState from '../../state/appState';
 
 export default () => {
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { customer_id } = useParams();
   const hydratedRoutes = routes({ customer_id });
-  const { isOrgUser, isOrgOwner } = useStoreState(appState, (s) => {
-    const userExists = s.auth.orgs.find((o) => o.customer_id === customer_id);
-    return {
-      isOrgUser: userExists,
-      isOrgOwner: userExists?.status === 'owner',
-    };
-  });
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id), [customer_id]);
+  const isOrgOwner = isOrgUser?.status === 'owner';
 
   return isOrgOwner ? (
     <>

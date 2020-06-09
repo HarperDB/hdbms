@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -19,8 +19,8 @@ const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INS
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
+  const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
   const history = useHistory();
   const alert = useAlert();

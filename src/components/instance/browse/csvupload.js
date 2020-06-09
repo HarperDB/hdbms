@@ -1,19 +1,13 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
-import { useStoreState } from 'pullstate';
-
-import instanceState from '../../../state/instanceState';
 
 import CSVUploadURL from './csvuploadURL';
 import CSVUploadFile from './csvuploadFile';
-import appState from '../../../state/appState';
 
 export default () => {
   const history = useHistory();
-  const { schema, table } = useParams();
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { schema, table, customer_id, compute_stack_id } = useParams();
 
   return (
     <div id="csv-upload">

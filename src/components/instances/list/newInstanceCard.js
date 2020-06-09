@@ -1,12 +1,10 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { Card, CardBody, Col } from '@nio/ui-kit';
-import { useStoreState } from 'pullstate';
-import appState from '../../../state/appState';
 
 const NewInstanceCard = () => {
   const history = useHistory();
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { customer_id } = useParams();
 
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">

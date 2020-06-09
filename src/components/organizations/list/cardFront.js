@@ -5,40 +5,32 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
-import usePersistedUser from '../../../state/persistedUser';
+
 import getCustomer from '../../../api/lms/getCustomer';
 import updateUserOrgs from '../../../api/lms/updateUserOrgs';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 
-const CardFront = ({ customer_name, customer_id, free_cloud_instance_count, total_instance_count, status, fetchUser, setFlipState }) => {
+const CardFront = ({ customer_name, customer_id, total_instance_count, status, fetchUser, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const activeCustomerId = useStoreState(appState, (s) => s.customer?.customer_id);
-  const isActiveCustomer = activeCustomerId === customer_id;
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const alert = useAlert();
 
   const chooseOrganization = useCallback(async () => {
-    if (isActiveCustomer) {
-      history.push(`/${customer_id}/instances`);
+    setLoading(true);
+    const result = await getCustomer({ auth, customer_id });
+    if (result.error) {
+      setCustomerError(result.message);
+      setLoading(false);
     } else {
-      setLoading(true);
-      const result = await getCustomer({ auth, customer_id });
-      if (result.error) {
-        setCustomerError(result.message);
-        setLoading(false);
-      } else {
-        setPersistedUser({ ...persistedUser, customer_id });
-        appState.update((s) => {
-          s.users = false;
-          s.instances = false;
-          s.hasCard = false;
-          s.lastUpdate = false;
-        });
-        setTimeout(() => history.push(`/${customer_id}/instances`), 0);
-      }
+      appState.update((s) => {
+        s.users = false;
+        s.instances = false;
+        s.hasCard = false;
+        s.lastUpdate = false;
+      });
+      setTimeout(() => history.push(`/${customer_id}/instances`), 0);
     }
   }, []);
 
@@ -50,9 +42,6 @@ const CardFront = ({ customer_name, customer_id, free_cloud_instance_count, tota
       alert.error(result.message);
       setLoading(false);
     } else {
-      appState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
       await fetchUser();
       alert.success(`Organization ${newStatus} successfully`);
     }

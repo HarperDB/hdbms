@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Input } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
 import getJob from '../../../api/instance/getJob';
@@ -13,9 +12,9 @@ import csvURLLoad from '../../../api/instance/csvURLLoad';
 
 export default () => {
   const history = useHistory();
-  const { schema, table } = useParams();
-  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({ compute_stack_id: s.compute_stack_id, auth: s.auth, url: s.url }));
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
+  const { schema, table, customer_id, compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
@@ -72,7 +71,7 @@ export default () => {
   return (
     <>
       <b className="text-small">Specify A Hosted CSV File</b>
-      <hr className="my-1" />
+      <hr className="mt-1 mb-3" />
       {formState.error ? (
         <div className="text-danger csv-status">
           <i className="fa fa-exclamation-triangle mr-3" />

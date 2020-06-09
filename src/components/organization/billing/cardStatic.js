@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import appState from '../../../state/appState';
 
@@ -10,11 +11,10 @@ import FormStatus from '../../shared/formStatus';
 import getCustomer from '../../../api/lms/getCustomer';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
-  const { auth, instances, customer } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    instances: s.instances,
-    customer: s.customer,
-  }));
+  const { customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const stripeId = useStoreState(appState, (s) => s.customer?.stripe_id);
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
@@ -27,13 +27,13 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       } else {
         setFormState({ processing: true });
 
-        const response = await removePaymentMethod({ auth, stripe_id: customer.stripe_id, payment_method_id: customerCard.id, customer_id: customer.customer_id });
+        const response = await removePaymentMethod({ auth, stripe_id: stripeId, payment_method_id: customerCard.id, customer_id });
         if (response.error) {
           setFormState({ error: response.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
           setFormState({ success: true });
-          await getCustomer({ auth, customer_id: customer.customer_id });
+          await getCustomer({ auth, customer_id });
           setEditingCard(false);
           setTimeout(() => setFormState({}), 2000);
         }

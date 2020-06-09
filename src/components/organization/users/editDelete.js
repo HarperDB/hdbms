@@ -11,14 +11,13 @@ import updateOrgUser from '../../../api/lms/updateOrgUser';
 import getUsers from '../../../api/lms/getUsers';
 
 export default () => {
-  const { user_id } = useParams();
+  const { user_id, customer_id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;

@@ -12,15 +12,16 @@ import getUsers from '../../../api/lms/getUsers';
 import config from '../../../../config';
 
 export default () => {
-  const { user_id } = useParams();
-  const { auth, customer, users } = useStoreState(appState, (s) => ({ auth: s.auth, customer: s.customer, users: s.users }));
+  const { user_id, customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const users = useStoreState(appState, (s) => s.users);
   const thisUser = user_id && users && users.find((u) => u.user_id === user_id);
 
   const refreshUsers = useCallback(() => {
-    if (auth && customer.customer_id) {
-      getUsers({ auth, customer_id: customer.customer_id });
+    if (auth && customer_id) {
+      getUsers({ auth, customer_id });
     }
-  }, [auth, customer.customer_id]);
+  }, [auth, customer_id]);
 
   useEffect(() => refreshUsers(), []);
 
