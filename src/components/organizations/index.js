@@ -24,20 +24,16 @@ const OrganizationsIndex = () => {
   const [fetchingCustomer, setFetchingCustomer] = useState(true);
 
   useAsyncEffect(async () => {
+    appState.update((s) => {
+      s.customer = false;
+      s.users = false;
+      s.instances = false;
+      s.hasCard = false;
+      s.lastUpdate = false;
+    });
     if (action === 'load') {
-      let customer_id = false;
-      switch (true) {
-        case returnURL && returnURL.indexOf('/profile') === -1 && returnURL.indexOf('/support') === -1 && returnURL.indexOf('/organizations') === -1:
-          [, customer_id] = returnURL.split('/');
-          break;
-        case auth?.orgs?.length === 1 && ['accepted', 'owner', 'admin'].includes(auth.orgs[0].status):
-          customer_id = auth.orgs[0].customer_id;
-          break;
-        default:
-          break;
-      }
-
-      if (customer_id) {
+      if (returnURL && returnURL.indexOf('/profile') === -1 && returnURL.indexOf('/support') === -1 && returnURL.indexOf('/organizations') === -1) {
+        const [, customer_id] = returnURL.split('/');
         const result = await getCustomer({ auth, customer_id });
 
         if (result.error) {
@@ -49,17 +45,15 @@ const OrganizationsIndex = () => {
         setFetchingCustomer(false);
       }
     }
-  }, [auth?.orgs]);
+  }, []);
 
   const fetchUser = useCallback(async () => {
-    if (!action) {
-      const response = await getUser(auth);
-      appState.update((s) => {
-        s.auth = { ...auth, ...response };
-        s.lastUpdate = Date.now();
-      });
-    }
-  }, [action]);
+    const response = await getUser(auth);
+    appState.update((s) => {
+      s.auth = { ...auth, ...response };
+      s.lastUpdate = Date.now();
+    });
+  }, [auth]);
 
   return action === 'load' && fetchingCustomer ? (
     <div id="login-form">

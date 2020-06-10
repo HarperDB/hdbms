@@ -24,8 +24,8 @@ export default () => {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
-  const cluster_role = useStoreState(instanceState, (s) => s.s.network?.cluster_role, [compute_stack_id]);
-  const cluster_user = useStoreState(instanceState, (s) => s.s.network?.cluster_user, [compute_stack_id]);
+  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
+  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
   const [nodeNameMatch, setNodeNameMatch] = useState(compute_stack_id === name);
   const [formState, setFormState] = useState({});

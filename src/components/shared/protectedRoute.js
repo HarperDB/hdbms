@@ -3,6 +3,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
+import { useAlert } from 'react-alert';
 
 import appState from '../../state/appState';
 import config from '../../../config';
@@ -19,6 +20,7 @@ let shouldFetchUserTimeout = false;
 
 const ProtectedRoute = ({ children }) => {
   const history = useHistory();
+  const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
@@ -40,10 +42,15 @@ const ProtectedRoute = ({ children }) => {
       setShouldFetchUser(false);
       const response = await getUser(auth);
       setShouldFetchUser(true);
+
       if (!response.error) {
         appState.update((s) => {
           s.auth = { ...auth, ...response };
         });
+        if (customer_id && !response.orgs.find((o) => o.customer_id.toString() === customer_id)) {
+          alert.error('You no longer have access to that organization');
+          setTimeout(history.push('/organizations'), 0);
+        }
       }
     }
   };
@@ -87,11 +94,11 @@ const ProtectedRoute = ({ children }) => {
   useAsyncEffect(refreshInstances, []);
   useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
 
-  useInterval(refreshInstances, config.instances_refresh_rate);
   useInterval(refreshVersion, config.instances_refresh_rate);
   useInterval(refreshProducts, config.instances_refresh_rate);
   useInterval(refreshRegions, config.instances_refresh_rate);
   useInterval(refreshUser, config.instances_refresh_rate);
+  useInterval(refreshInstances, config.instances_refresh_rate);
 
   return showRoute ? children : <Redirect to={redirectURL} />;
 };

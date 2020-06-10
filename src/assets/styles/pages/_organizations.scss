@@ -84,6 +84,10 @@
         position: absolute;
         right: 15px;
         top: -2px;
+
+        &.disabled {
+          color: $color-grey !important;
+        }
       }
     }
 

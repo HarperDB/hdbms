@@ -54,7 +54,6 @@ export default ({ refreshUsers, userEmails }) => {
         className="mb-3 text-center"
         name="email"
         placeholder="email address"
-        value={formData.email || ''}
         onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
         disabled={formState.submitted}
       />

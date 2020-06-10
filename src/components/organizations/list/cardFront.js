@@ -35,7 +35,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
         setTimeout(() => history.push(`/${customer_id}/instances`), 0);
       }
     }
-  }, []);
+  }, [canChooseOrganization]);
 
   const handleUpdateUserOrgs = useCallback(async (e) => {
     const newStatus = e.currentTarget.getAttribute('data-status');
@@ -45,7 +45,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
       alert.error(result.message);
       setLoading(false);
     } else {
-      fetchUser();
+      await fetchUser();
       setLoading(false);
       alert.success(`Organization ${newStatus} successfully`);
     }
@@ -53,7 +53,12 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
 
   const handleCardFlipIconClick = useCallback((e) => {
     e.stopPropagation();
-    setFlipState(e.currentTarget.getAttribute('data-action'));
+    const action = e.currentTarget.getAttribute('data-action');
+    if (action === 'delete' && total_instance_count) {
+      alert.error('You must remove all instances from an Organization before deleting it.');
+    } else {
+      setFlipState(action);
+    }
   }, []);
 
   return (
@@ -69,7 +74,12 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
             ) : status === 'accepted' ? (
               <i title={`Leave ${customer_name} organization`} className="fa fa-times-circle text-purple" data-action="leave" onClick={handleCardFlipIconClick} />
             ) : status === 'owner' ? (
-              <i title={`Delete ${customer_name} organization`} className="fa fa-trash delete text-purple" data-action="delete" onClick={handleCardFlipIconClick} />
+              <i
+                title={`Delete ${customer_name} organization`}
+                className={`fa fa-trash delete text-purple ${total_instance_count ? 'disabled' : ''}`}
+                data-action="delete"
+                onClick={handleCardFlipIconClick}
+              />
             ) : null}
           </Col>
         </Row>
