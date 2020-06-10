@@ -55,7 +55,7 @@ export default ({ refreshUsers, userEmails }) => {
         name="email"
         placeholder="email address"
         value={formData.email || ''}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
         disabled={formState.submitted}
       />
 

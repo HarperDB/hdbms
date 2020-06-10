@@ -45,9 +45,12 @@
   }
 
   .card {
-    cursor: pointer;
     height: 170px;
     min-width: 288px;
+
+    &.clickable {
+      cursor: pointer;
+    }
 
     &.new {
       color: $color-purple;

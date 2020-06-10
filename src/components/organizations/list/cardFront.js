@@ -16,21 +16,24 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const alert = useAlert();
+  const canChooseOrganization = !loading && ['owner', 'accepted'].includes(status);
 
   const chooseOrganization = useCallback(async () => {
-    setLoading(true);
-    const result = await getCustomer({ auth, customer_id });
-    if (result.error) {
-      setCustomerError(result.message);
-      setLoading(false);
-    } else {
-      appState.update((s) => {
-        s.users = false;
-        s.instances = false;
-        s.hasCard = false;
-        s.lastUpdate = false;
-      });
-      setTimeout(() => history.push(`/${customer_id}/instances`), 0);
+    if (canChooseOrganization) {
+      setLoading(true);
+      const result = await getCustomer({ auth, customer_id });
+      if (result.error) {
+        setCustomerError(result.message);
+        setLoading(false);
+      } else {
+        appState.update((s) => {
+          s.users = false;
+          s.instances = false;
+          s.hasCard = false;
+          s.lastUpdate = false;
+        });
+        setTimeout(() => history.push(`/${customer_id}/instances`), 0);
+      }
     }
   }, []);
 
@@ -42,7 +45,8 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
       alert.error(result.message);
       setLoading(false);
     } else {
-      await fetchUser();
+      fetchUser();
+      setLoading(false);
       alert.success(`Organization ${newStatus} successfully`);
     }
   }, []);
@@ -53,7 +57,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
   }, []);
 
   return (
-    <Card className="instance" onClick={() => !loading && chooseOrganization()}>
+    <Card className={`instance ${canChooseOrganization ? 'clickable' : ''}`} onClick={chooseOrganization}>
       <CardBody>
         <Row>
           <Col xs="10" className="org-name">

@@ -81,6 +81,7 @@ export default () => {
                   e.currentTarget.focus();
                   setFormData({ ...formData, email: e.target.value.toLowerCase() });
                 }}
+                value={formData.email || ''}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="text"
@@ -93,6 +94,7 @@ export default () => {
                   e.currentTarget.focus();
                   setFormData({ ...formData, pass: e.target.value });
                 }}
+                value={formData.pass || ''}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"

@@ -48,7 +48,7 @@ export default () => {
           <Card className="mb-3">
             <CardBody className="text-center text-white" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="text"
