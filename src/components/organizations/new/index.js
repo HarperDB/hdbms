@@ -27,10 +27,7 @@ export default () => {
       const newFormState = await handleAddOrg({ formData, auth });
       setFormState(newFormState);
       if (!newFormState.error) {
-        const response = await getUser(auth);
-        appState.update((s) => {
-          s.auth = { ...auth, ...response };
-        });
+        await getUser(auth);
         closeModal();
       }
     }

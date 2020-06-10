@@ -30,10 +30,7 @@ export default ({ formStateHeight }) => {
         if (response.error) {
           setFormState({ error: response.message });
         } else {
-          const user = await getUser({ auth });
-          appState.update((s) => {
-            s.auth = { ...auth, ...user };
-          });
+          await getUser(auth);
           setFormState({ success: response.message });
         }
       }

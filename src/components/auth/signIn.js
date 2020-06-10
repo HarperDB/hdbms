@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import { NavLink, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
+import { NavLink } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
 
 import usePersistedUser from '../../state/persistedUser';
-import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
-import AuthStateLoader from './authStateLoader';
+import AuthStateLoader from '../shared/authStateLoader';
 import config from '../../../config';
+import appState from '../../state/appState';
 
 export default () => {
+  const auth = useStoreState(appState, (s) => s.auth);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
-  const { search } = useLocation();
-  const { returnURL } = queryString.parse(search);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -31,40 +30,34 @@ export default () => {
         setFormState({ error: 'password is required' });
       } else {
         setFormState({ processing: true });
-        const response = await getUser({ email, pass });
-
-        if (response.error) {
-          setPersistedUser({});
-          setFormState({ error: response.message === 'Unauthorized' ? 'Login Failed' : response.message });
-          appState.update((s) => {
-            s.auth = false;
-          });
-        } else {
-          setPersistedUser({ ...persistedUser, email, pass });
-          appState.update((s) => {
-            s.auth = { ...response, email, pass };
-          });
-          const destination = response.update_password
-            ? '/update-password'
-            : !returnURL || returnURL === '/organizations' || returnURL === '/organizations/load' || returnURL === '/organizations/undefined'
-            ? '/organizations/load'
-            : `/organizations/load?returnURL=${returnURL}`;
-          history.push(destination);
-        }
+        getUser({ email, pass });
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => {
-    if (!formState.submitted) setFormState({});
-  }, [formData]);
+  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   useAsyncEffect(() => {
-    if (persistedUser && persistedUser.email && persistedUser.pass && !formState.processing) {
-      setFormData(persistedUser);
-      setTimeout(() => setFormState({ submitted: true }), 100);
+    appState.update((s) => {
+      s.auth = false;
+      s.customer = false;
+      s.users = false;
+      s.instances = false;
+      s.hasCard = false;
+      s.lastUpdate = false;
+    });
+    setPersistedUser({});
+  }, []);
+
+  useAsyncEffect(() => {
+    if (auth?.error) {
+      setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
+      setTimeout(() => setFormState({}), 3000);
+    } else if (auth?.email && auth?.pass) {
+      setPersistedUser({ ...persistedUser, email: auth.email, pass: auth.pass });
+      history.push(auth.update_password ? '/update-password' : '/organizations');
     }
-  }, [persistedUser]);
+  }, [auth]);
 
   return (
     <div id="login-form">

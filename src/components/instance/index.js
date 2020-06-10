@@ -18,7 +18,7 @@ export default () => {
   const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
-  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id));
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id));
   const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const history = useHistory();
@@ -27,8 +27,8 @@ export default () => {
   const refreshInstance = async () => {
     if (!auth) {
       alert.error('Unable to log into that instance');
-      history.push(`/${customer_id}/instances`);
       setLoadingInstance(false);
+      setTimeout(() => history.push(`/${customer_id}/instances`), 10);
     } else if (instances) {
       const { error } = await buildActiveInstanceObject({
         instances,
@@ -38,7 +38,7 @@ export default () => {
       setLoadingInstance(false);
       if (error) {
         alert.error(error);
-        history.push(`/${customer_id}/instances`);
+        setTimeout(() => history.push(`/${customer_id}/instances`), 10);
       }
     }
   };

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../state/appState';
@@ -8,28 +8,20 @@ import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
 
 const TopNav = () => {
+  const history = useHistory();
   const { pathname } = useLocation();
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
-  const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id.toString() === customer?.customer_id?.toString())?.status === 'owner', [
+  const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner', [
     auth.orgs,
     customer.customer_id,
   ]);
 
   const logOut = () => {
     setPersistedUser({ darkTheme: persistedUser.darkTheme });
-    setTimeout(() => {
-      appState.update((s) => {
-        s.auth = false;
-        s.customer = false;
-        s.users = false;
-        s.instances = false;
-        s.hasCard = false;
-        s.lastUpdate = false;
-      });
-    }, 10);
+    setTimeout(() => history.push('/sign-in'), 0);
   };
 
   return (

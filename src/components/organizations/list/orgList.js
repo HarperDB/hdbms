@@ -5,7 +5,7 @@ import appState from '../../../state/appState';
 import OrgCard from './orgCard';
 import filterOrgs from '../../../methods/organizations/filterOrgs';
 
-const OrgList = ({ fetchUser }) => {
+const OrgList = () => {
   const [flippedCard, setFlippedCard] = useState(false);
   const orgs = useStoreState(appState, (s) =>
     filterOrgs({
@@ -14,7 +14,7 @@ const OrgList = ({ fetchUser }) => {
     })
   );
 
-  return orgs.map((org) => <OrgCard key={org.customer_id} fetchUser={fetchUser} {...org} flippedCard={flippedCard} setFlippedCard={setFlippedCard} />);
+  return orgs.map((org) => <OrgCard key={org.customer_id} {...org} flippedCard={flippedCard} setFlippedCard={setFlippedCard} />);
 };
 
 export default OrgList;

@@ -1,14 +1,17 @@
 import queryLMS from '../queryLMS';
+import appState from '../../state/appState';
 
 export default async ({ email, pass }) => {
-  const response = queryLMS({
+  const response = await queryLMS({
     endpoint: 'getUser',
     method: 'POST',
     payload: { email, password: pass },
   });
 
   if (response.error) {
-    return response;
+    return appState.update((s) => {
+      s.auth = response;
+    });
   }
 
   if (!response.orgs) {
@@ -23,5 +26,7 @@ export default async ({ email, pass }) => {
     response.orgs = [response.orgs];
   }
 
-  return response;
+  return appState.update((s) => {
+    s.auth = { email, pass, ...response };
+  });
 };

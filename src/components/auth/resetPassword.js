@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
-import AuthStateLoader from './authStateLoader';
+import AuthStateLoader from '../shared/authStateLoader';
 import config from '../../../config';
 
 export default () => {

@@ -5,7 +5,7 @@ import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
-import AuthStateLoader from './authStateLoader';
+import AuthStateLoader from '../shared/authStateLoader';
 import config from '../../../config';
 
 export default () => {

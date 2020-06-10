@@ -9,7 +9,7 @@ import appState from '../../state/appState';
 export default () => {
   const { customer_id } = useParams();
   const hydratedRoutes = routes({ customer_id });
-  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id.toString() === customer_id), [customer_id]);
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
 
   return isOrgOwner ? (

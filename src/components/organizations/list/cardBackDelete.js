@@ -6,8 +6,9 @@ import { useAlert } from 'react-alert';
 
 import removeOrg from '../../../api/lms/removeOrg';
 import appState from '../../../state/appState';
+import getUser from '../../../api/lms/getUser';
 
-const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState, fetchUser }) => {
+const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState }) => {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -29,7 +30,7 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState, f
           setFormState({ error: response.message });
         } else {
           alert.success('Organization removed successfully');
-          fetchUser();
+          getUser(auth);
         }
       }
     }

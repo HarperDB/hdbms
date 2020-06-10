@@ -3,17 +3,20 @@ import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../state/appState';
 
 import getCustomer from '../../../api/lms/getCustomer';
 import updateUserOrgs from '../../../api/lms/updateUserOrgs';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
+import getUser from '../../../api/lms/getUser';
 
-const CardFront = ({ customer_name, customer_id, total_instance_count, status, fetchUser, setFlipState }) => {
+const CardFront = ({ customer_name, customer_id, total_instance_count, status, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const history = useHistory();
   const alert = useAlert();
   const canChooseOrganization = !loading && ['owner', 'accepted'].includes(status);
@@ -37,19 +40,22 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
     }
   }, [canChooseOrganization]);
 
-  const handleUpdateUserOrgs = useCallback(async (e) => {
-    const newStatus = e.currentTarget.getAttribute('data-status');
-    setLoading(newStatus);
-    const result = await updateUserOrgs({ auth, customer_id, user_id: auth.user_id, status: newStatus });
-    if (result.error) {
-      alert.error(result.message);
-      setLoading(false);
-    } else {
-      await fetchUser();
-      setLoading(false);
-      alert.success(`Organization ${newStatus} successfully`);
-    }
-  }, []);
+  const handleUpdateUserOrgs = useCallback(
+    async (e) => {
+      const newStatus = e.currentTarget.getAttribute('data-status');
+      setLoading(newStatus);
+      const result = await updateUserOrgs({ auth, customer_id, user_id: auth.user_id, status: newStatus });
+      if (result.error) {
+        alert.error(result.message);
+        setLoading(false);
+      } else {
+        await getUser(auth);
+        if (mounted) setLoading(false);
+        alert.success(`Organization ${newStatus} successfully`);
+      }
+    },
+    [mounted]
+  );
 
   const handleCardFlipIconClick = useCallback((e) => {
     e.stopPropagation();
@@ -60,6 +66,12 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, f
       setFlipState(action);
     }
   }, []);
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
+  );
 
   return (
     <Card className={`instance ${canChooseOrganization ? 'clickable' : ''}`} onClick={chooseOrganization}>
