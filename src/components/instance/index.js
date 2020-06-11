@@ -24,10 +24,7 @@ export default () => {
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: auth?.super });
 
-  console.log(compute_stack_id);
-
-  const refreshInstance = async (why) => {
-    console.log('buildActiveInstanceObject', why, compute_stack_id);
+  const refreshInstance = async () => {
     if (!auth) {
       alert.error('Unable to log into that instance');
       setLoadingInstance(false);
@@ -41,38 +38,24 @@ export default () => {
       }
     }
   };
-  /*
-
-  useEffect(() => {
-    if (compute_stack_id && instances) {
-      console.log('buildActiveInstanceObject', 1, compute_stack_id);
-      refreshInstance();
-    }
-  }, [compute_stack_id, instances]);
-*/
 
   useEffect(() => {
     let cancelSub = () => false;
-
     if (compute_stack_id && instances && !loadingInstance) {
       setLoadingInstance(true);
       cancelSub = instanceState.subscribe(
         (s) => s.lastUpdate,
-        () => refreshInstance('sub')
+        () => refreshInstance()
       );
-      refreshInstance('load');
+      setTimeout(refreshInstance, 250);
     }
-
-    return () => {
-      console.log('cancel sub', compute_stack_id);
-      cancelSub();
-    };
+    return () => cancelSub();
   }, [compute_stack_id, instances]);
 
   return isOrgUser ? (
     <>
       <SubNav routes={hydratedRoutes} />
-      {!compute_stack_id || !instances || loadingInstance ? (
+      {!instances || loadingInstance ? (
         <Loader message="loading instance" />
       ) : (
         <Switch>
