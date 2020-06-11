@@ -9,7 +9,6 @@ import config from '../../../config';
 
 import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
-import getInstances from '../../api/lms/getInstances';
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
 import getUser from '../../api/lms/getUser';
 import AuthStateLoader from './authStateLoader';
@@ -21,10 +20,7 @@ const ProtectedRoute = ({ children }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
-  const instances = useStoreState(appState, (s) => s.instances);
-  const lastUpdate = useStoreState(appState, (s) => s.lastUpdate);
   const version = useStoreState(appState, (s) => s.version);
-  const customer_id = useStoreState(appState, (s) => s.customer?.customer_id);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [shouldFetchUser, setShouldFetchUser] = useState(true);
   const [loggingIn, setLoggingIn] = useState(true);
@@ -49,7 +45,7 @@ const ProtectedRoute = ({ children }) => {
     if (auth.orgs) {
       setPersistedUser({ ...persistedUser, email: auth.email, pass: auth.pass });
       const { pathname } = history.location;
-      if (['/profile', '/support', '/organizations'].some((s) => !pathname.includes(s))) {
+      if (!['/profile', '/support', '/organizations'].some((s) => pathname.includes(s))) {
         const [, customer_id_from_url] = pathname.split('/');
         getCustomer({ auth, customer_id: customer_id_from_url });
       }
@@ -64,19 +60,12 @@ const ProtectedRoute = ({ children }) => {
     }
   };
 
-  const refreshInstances = async () => {
-    if (auth && products && regions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
-    }
-  };
-
   useAsyncEffect(logInFromPersistedUser, [auth.email, auth.pass, persistedUser.email, persistedUser.pass]);
   useAsyncEffect(getCustomerFromURLOnReload, [auth.orgs]);
   useAsyncEffect(refreshVersion, []);
   useAsyncEffect(refreshProducts, []);
   useAsyncEffect(refreshRegions, []);
   useAsyncEffect(refreshUser, []);
-  useAsyncEffect(refreshInstances, [products, regions, customer_id, lastUpdate]);
 
   useInterval(refreshVersion, config.instances_refresh_rate);
   useInterval(refreshProducts, config.instances_refresh_rate);
