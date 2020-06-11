@@ -52,7 +52,7 @@ export default ({ routes = [] }) => {
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"
-          onChange={({ value }) => history.push(`/${customer_id}/instance/${value}/browse`)}
+          onChange={({ value }) => history.push(`/${customer_id}/instance/${value}/${currentRoute.link}`)}
           options={options || []}
           value={activeOption}
           defaultValue={activeOption.value}
