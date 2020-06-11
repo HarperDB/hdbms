@@ -7,5 +7,5 @@ export default ({ orgSearch, orgs }) => {
 
   if (!orgSearch || orgSearch === '') return uniqueOrgs;
 
-  return uniqueOrgs.filter((i) => i.customer_name && i.customer_name.indexOf(orgSearch) !== -1);
+  return uniqueOrgs.filter((i) => i.customer_name && i.customer_name.toLowerCase().indexOf(orgSearch.toLowerCase()) !== -1);
 };
