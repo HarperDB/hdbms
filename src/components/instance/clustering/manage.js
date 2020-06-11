@@ -1,41 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, ModalHeader, ModalBody, Modal, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 
+import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
 import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
 import ManageEmptyPrompt from './manageEmptyPrompt';
+import getInstances from '../../../api/lms/getInstances';
+import config from '../../../../config';
 
 export default () => {
-  const { compute_stack_id } = useParams();
+  const { compute_stack_id, customer_id } = useParams();
   const [showModal, setShowModal] = useState(false);
+  const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const instance_name = useStoreState(instanceState, (s) => s.instance_name, [compute_stack_id]);
+  const clustering = useStoreState(instanceState, (s) => s.clustering, [compute_stack_id]);
 
-  const { instance_name, clustering } = useStoreState(
-    instanceState,
-    (s) => ({
-      instance_name: s.instance_name,
-      clustering: s.clustering,
-    }),
-    [compute_stack_id]
-  );
+  const refreshInstances = useCallback(() => {
+    if (auth && products && regions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+    }
+  }, [auth, products, regions, customer_id]);
 
-  useEffect(
-    () =>
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      }),
-    []
-  );
+  useEffect(refreshInstances, []);
+
+  useInterval(refreshInstances, config.instances_refresh_rate);
+
+  const refreshInstance = useCallback(() => {
+    instanceState.update((s) => {
+      s.lastUpdate = Date.now();
+    });
+  });
+
+  useEffect(refreshInstance, []);
 
   useInterval(() => {
     if (clustering?.connected?.find((i) => i.connection.state === 'connecting')) {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
+      refreshInstance();
     }
   }, 1000);
 

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Row } from '@nio/ui-kit';
 import { Redirect, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import useInterval from 'use-interval';
 
 import config from '../../../config';
 import appState from '../../state/appState';
@@ -13,10 +14,14 @@ import NoInstancesCard from './list/noInstancesCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
 import AuthStateLoader from '../shared/authStateLoader';
+import getInstances from '../../api/lms/getInstances';
 
 const InstancesIndex = () => {
   const { action, customer_id } = useParams();
   const alert = useAlert();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
@@ -33,11 +38,15 @@ const InstancesIndex = () => {
     }
   }, [isOrgUser]);
 
-  useEffect(() => {
-    appState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-  }, [customer_id]);
+  const refreshInstances = useCallback(() => {
+    if (auth && products && regions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+    }
+  }, [auth, products, regions, customer_id]);
+
+  useEffect(() => refreshInstances(), []);
+
+  useInterval(() => refreshInstances(), config.instances_refresh_rate);
 
   return !instances ? (
     <div id="login-form">

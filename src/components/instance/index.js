@@ -15,7 +15,7 @@ import Loader from '../shared/loader';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
-  const [loadingInstance, setLoadingInstance] = useState(true);
+  const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id));
@@ -24,17 +24,16 @@ export default () => {
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: auth?.super });
 
-  const refreshInstance = async () => {
+  console.log(compute_stack_id);
+
+  const refreshInstance = async (why) => {
+    console.log('buildActiveInstanceObject', why, compute_stack_id);
     if (!auth) {
       alert.error('Unable to log into that instance');
       setLoadingInstance(false);
       setTimeout(() => history.push(`/${customer_id}/instances`), 10);
     } else if (instances) {
-      const { error } = await buildActiveInstanceObject({
-        instances,
-        compute_stack_id,
-        auth,
-      });
+      const { error } = await buildActiveInstanceObject({ auth, compute_stack_id, instances });
       setLoadingInstance(false);
       if (error) {
         alert.error(error);
@@ -42,21 +41,38 @@ export default () => {
       }
     }
   };
+  /*
 
   useEffect(() => {
-    setLoadingInstance(true);
-    const cancelSub = instanceState.subscribe(
-      (s) => s.lastUpdate,
-      () => refreshInstance()
-    );
-    refreshInstance();
-    return () => cancelSub();
+    if (compute_stack_id && instances) {
+      console.log('buildActiveInstanceObject', 1, compute_stack_id);
+      refreshInstance();
+    }
+  }, [compute_stack_id, instances]);
+*/
+
+  useEffect(() => {
+    let cancelSub = () => false;
+
+    if (compute_stack_id && instances && !loadingInstance) {
+      setLoadingInstance(true);
+      cancelSub = instanceState.subscribe(
+        (s) => s.lastUpdate,
+        () => refreshInstance('sub')
+      );
+      refreshInstance('load');
+    }
+
+    return () => {
+      console.log('cancel sub', compute_stack_id);
+      cancelSub();
+    };
   }, [compute_stack_id, instances]);
 
   return isOrgUser ? (
     <>
       <SubNav routes={hydratedRoutes} />
-      {loadingInstance ? (
+      {!compute_stack_id || !instances || loadingInstance ? (
         <Loader message="loading instance" />
       ) : (
         <Switch>

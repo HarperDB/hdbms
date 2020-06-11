@@ -2,7 +2,7 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import commaNumbers from '../../methods/util/commaNumbers';
 
-export default async ({ auth, customer_id, products, regions, instanceCount }) => {
+export default async ({ auth, customer_id, products, regions, instanceCount = 0 }) => {
   const response = await queryLMS({
     endpoint: 'getInstances',
     method: 'POST',

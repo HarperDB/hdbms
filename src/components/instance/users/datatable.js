@@ -24,7 +24,7 @@ export default () => {
     lastUpdate: false,
     sorted: [{ id: 'username', desc: false }],
   });
-  const users = useStoreState(instanceState, (s) => s.users);
+  const users = useStoreState(instanceState, (s) => s.users, [compute_stack_id]);
   const [tableColumns] = useState(instanceUserColumns());
 
   return (
