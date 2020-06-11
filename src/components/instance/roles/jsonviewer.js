@@ -17,6 +17,7 @@ export default () => {
   const alert = useAlert();
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const [newPermissions, setNewPermissions] = useState({});
@@ -29,7 +30,7 @@ export default () => {
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
     }
-  }, [role_id, roles]);
+  }, [role_id, roles, lastUpdate]);
 
   const submitRecord = async (e) => {
     e.preventDefault();

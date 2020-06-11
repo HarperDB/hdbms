@@ -11,7 +11,6 @@ import JSONViewer from './jsonviewer';
 const defaultState = {
   roleName: false,
   canEdit: false,
-  editJSON: true,
   superUsers: [],
   clusterUsers: [],
   standardUsers: [],
@@ -50,9 +49,25 @@ export default () => {
       <Col xl="9" lg="8" md="7" xs="12">
         {formState.canEdit ? (
           <>
-            <span className="floating-card-header">edit role &gt; {formState.roleName}</span>
+            <Row className="floating-card-header">
+              <Col>edit role &gt; {formState.roleName}</Col>
+              <Col className="text-md-right">
+                <i
+                  title="Refresh Structure"
+                  className="fa mr-2 fa-refresh"
+                  onClick={() =>
+                    instanceState.update((s) => {
+                      s.lastUpdate = Date.now();
+                    })
+                  }
+                />
+                refresh structure
+              </Col>
+            </Row>
             <Card className="my-3">
-              <CardBody className="full-height">{formState.editJSON ? <JSONViewer /> : <div className="text-center py-5">table editor coming soon!</div>}</CardBody>
+              <CardBody className="full-height">
+                <JSONViewer />
+              </CardBody>
             </Card>
           </>
         ) : (
