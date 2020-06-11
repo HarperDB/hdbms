@@ -38,9 +38,8 @@ export default () => {
 
   const refreshInstance = async () => {
     if (!instanceAuth) {
-      alert.error('Unable to log into that instance');
-      setLoadingInstance(false);
-      setTimeout(() => history.push(`/${customer_id}/instances`), 10);
+      alert.error('Please log into that instance');
+      history.push(`/${customer_id}/instances`);
     } else if (instances) {
       const { error } = await buildActiveInstanceObject({ auth: instanceAuth, compute_stack_id, instances });
       setLoadingInstance(false);
