@@ -37,7 +37,7 @@ const App = () => {
           <ProtectedRoute>
             <TopNav />
             <Switch>
-              <Route component={Profile} path="/profile/:view?" />
+              <Route component={Profile} path="/profile" />
               <Route component={Support} path="/support/:view?" />
               <Route component={Organizations} path="/organizations/:action?" />
               <Route component={Instances} path="/:customer_id/instances/:action?/:purchaseStep?" />

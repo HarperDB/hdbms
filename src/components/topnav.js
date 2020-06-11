@@ -80,7 +80,7 @@ const TopNav = () => {
             onKeyDown={(e) => e.keyCode !== 13 || setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
             onClick={() => setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
           >
-            <i className={`fa ${persistedUser.darkTheme ? 'fa-moon-o' : 'fa-sun-o'}`} />
+            <i className={`fa ${persistedUser.darkTheme ? 'fa-sun-o' : 'fa-moon-o'}`} />
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">

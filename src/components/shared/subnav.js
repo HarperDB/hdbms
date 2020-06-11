@@ -8,9 +8,10 @@ import routeIcon from '../../methods/select/routeIcon';
 export default ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
+
   const currentRoute = routes?.find((r) => r.link === location.pathname) || routes[0];
   const activeRoute = {
-    label: currentRoute.link,
+    label: currentRoute.label,
     value: currentRoute.link,
     iconCode: currentRoute.iconCode,
   };
@@ -33,7 +34,7 @@ export default ({ routes = [] }) => {
           classNamePrefix="react-select"
           width="200px"
           onChange={({ value }) => history.push(value)}
-          options={routes.map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
+          options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}
           isSearchable={false}

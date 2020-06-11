@@ -87,7 +87,7 @@ export default ({ routes = [] }) => {
           classNamePrefix="react-select"
           width="200px"
           onChange={({ value }) => history.push(`/${customer_id}/instance/${compute_stack_id}/${value}`)}
-          options={routes.map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
+          options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}
           isSearchable={false}

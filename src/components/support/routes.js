@@ -7,6 +7,7 @@ export default [
   {
     component: Installation,
     path: '/support/installation',
+    link: '/support/installation',
     label: 'installation',
     icon: 'wrench',
     iconCode: 'f0ad',
@@ -14,6 +15,7 @@ export default [
   {
     component: Tutorials,
     path: '/support/tutorials',
+    link: '/support/tutorials',
     label: 'tutorials',
     icon: 'video-camera',
     iconCode: 'f03d',
@@ -21,6 +23,7 @@ export default [
   {
     component: Drivers,
     path: '/support/drivers',
+    link: '/support/drivers',
     label: 'drivers',
     icon: 'cubes',
     iconCode: 'f1b3',
@@ -28,6 +31,7 @@ export default [
   {
     component: Resources,
     path: '/support/resources',
+    link: '/support/resources',
     label: 'resources',
     icon: 'external-link-square',
     iconCode: 'f14c',
