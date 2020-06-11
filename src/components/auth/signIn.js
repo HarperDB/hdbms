@@ -27,7 +27,7 @@ export default () => {
       setFormState({ error: 'password is required' });
     } else {
       setFormState({ processing: true });
-      const response = getUser({ email, pass });
+      const response = await getUser({ email, pass });
       if (response.error) {
         setFormState({ error: response.message === 'Unauthorized' ? 'Login Failed' : response.message });
         setTimeout(() => setFormState({}), 3000);
@@ -61,7 +61,7 @@ export default () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+            <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
               <Input
                 onChange={(e) => {
                   e.currentTarget.focus();

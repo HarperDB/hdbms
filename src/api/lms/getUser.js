@@ -27,7 +27,9 @@ export default async ({ email, pass }) => {
     response.orgs = [response.orgs];
   }
 
-  return appState.update((s) => {
+  appState.update((s) => {
     s.auth = { email, pass, ...response };
   });
+
+  return response;
 };

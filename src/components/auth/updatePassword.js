@@ -37,7 +37,7 @@ export default () => {
             s.auth = { ...auth, pass: password };
           });
           setPersistedUser({ ...persistedUser, pass: password });
-          history.push('/sign-in');
+          history.push('/organizations');
         }
       }
     }
