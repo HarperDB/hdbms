@@ -46,7 +46,10 @@ const InstancesIndex = () => {
   ) : isOrgUser ? (
     <div id="instances">
       <SubNav />
-      <Row>{isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : <InstanceList />}</Row>
+      <Row>
+        {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
+        <InstanceList />
+      </Row>
       {action === 'new' && instances && <NewInstanceModal />}
     </div>
   ) : (
