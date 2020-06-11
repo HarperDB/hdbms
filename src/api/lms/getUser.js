@@ -9,9 +9,10 @@ export default async ({ email, pass }) => {
   });
 
   if (response.error) {
-    return appState.update((s) => {
+    appState.update((s) => {
       s.auth = response;
     });
+    return response;
   }
 
   if (!response.orgs) {

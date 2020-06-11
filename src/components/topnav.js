@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -19,10 +19,7 @@ const TopNav = () => {
     customer.customer_id,
   ]);
 
-  const logOut = () => {
-    setPersistedUser({ darkTheme: persistedUser.darkTheme });
-    setTimeout(() => history.push('/sign-in'), 0);
-  };
+  const logOut = useCallback(() => history.push('/sign-in'), []);
 
   return (
     <Navbar id="app-nav" dark fixed="top" expand="xs">

@@ -45,7 +45,7 @@ const App = () => {
               <Route component={Organization} path="/:customer_id/:view?" />
             </Switch>
           </ProtectedRoute>
-          <Redirect to="/sign-in" />
+          <Redirect to="/organizations" />
         </Switch>
       </div>
       <div id="app-bg-color" />

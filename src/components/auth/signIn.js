@@ -3,7 +3,6 @@ import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { useStoreState } from 'pullstate';
 
 import usePersistedUser from '../../state/persistedUser';
 
@@ -14,30 +13,33 @@ import config from '../../../config';
 import appState from '../../state/appState';
 
 export default () => {
-  const auth = useStoreState(appState, (s) => s.auth);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
 
-  useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { email, pass } = formData;
-      if (!isEmail(email)) {
-        setFormState({ error: 'a valid email is required' });
-      } else if (!pass) {
-        setFormState({ error: 'password is required' });
+  const submit = async () => {
+    setFormState({ submitted: true });
+    const { email, pass } = formData;
+    if (!isEmail(email)) {
+      setFormState({ error: 'a valid email is required' });
+    } else if (!pass) {
+      setFormState({ error: 'password is required' });
+    } else {
+      setFormState({ processing: true });
+      const response = getUser({ email, pass });
+      if (response.error) {
+        setFormState({ error: response.message === 'Unauthorized' ? 'Login Failed' : response.message });
+        setTimeout(() => setFormState({}), 3000);
       } else {
-        setFormState({ processing: true });
-        getUser({ email, pass });
+        setPersistedUser({ ...persistedUser, email, pass });
+        setTimeout(() => history.push(response.update_password ? '/update-password' : '/organizations'), 100);
       }
     }
-  }, [formState]);
-
-  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
+  };
 
   useAsyncEffect(() => {
+    setPersistedUser({ darkTheme: persistedUser.darkTheme });
     appState.update((s) => {
       s.auth = false;
       s.customer = false;
@@ -46,18 +48,9 @@ export default () => {
       s.hasCard = false;
       s.lastUpdate = false;
     });
-    setPersistedUser({});
   }, []);
 
-  useAsyncEffect(() => {
-    if (auth?.error) {
-      setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
-      setTimeout(() => setFormState({}), 3000);
-    } else if (auth?.email && auth?.pass) {
-      setPersistedUser({ ...persistedUser, email: auth.email, pass: auth.pass });
-      history.push(auth.update_password ? '/update-password' : '/organizations');
-    }
-  }, [auth]);
+  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">
@@ -95,7 +88,7 @@ export default () => {
                 autoComplete="current-password"
                 placeholder="password"
               />
-              <Button onClick={() => setFormState({ submitted: true })} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
+              <Button onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
                 Sign In
               </Button>
             </CardBody>
