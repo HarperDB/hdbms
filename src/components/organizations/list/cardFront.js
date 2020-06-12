@@ -17,17 +17,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
   const alert = useAlert();
   const canChooseOrganization = !loading && ['owner', 'accepted'].includes(status);
 
-  const chooseOrganization = async () => {
-    if (canChooseOrganization) {
-      appState.update((s) => {
-        s.users = false;
-        s.instances = false;
-        s.hasCard = false;
-        s.lastUpdate = false;
-      });
-      setTimeout(() => history.push(`/o/${customer_id}/instances`), 0);
-    }
-  };
+  const chooseOrganization = async () => canChooseOrganization && history.push(`/o/${customer_id}/instances`);
 
   const handleUpdateUserOrgs = async (e) => {
     const newStatus = e.currentTarget.getAttribute('data-status');

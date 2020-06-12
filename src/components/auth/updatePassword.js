@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../state/appState';
@@ -14,7 +13,6 @@ export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
-  const history = useHistory();
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -33,11 +31,11 @@ export default () => {
   }, [formState]);
 
   useEffect(() => {
-    if (auth?.error) {
+    if (auth?.passwordError) {
       setFormState({ error: auth.message });
       setTimeout(() => setFormState({}), 3000);
     }
-  }, [auth?.error]);
+  }, [auth?.passwordError]);
 
   useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
 

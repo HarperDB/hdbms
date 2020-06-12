@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, CardBody, Card } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
@@ -13,34 +12,40 @@ export default ({ formStateHeight }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
-  useAsyncEffect(async () => {
+  const submit = () => {
+    setFormState({ submitted: true });
     const { oldpassword, newpassword, newpassword2 } = formData;
-    const { submitted } = formState;
-    if (submitted) {
-      if (oldpassword !== auth.pass) {
-        setFormState({ error: 'old password is incorrect' });
-      } else if (newpassword !== newpassword2) {
-        setFormState({ error: 'new passwords do not match' });
-      } else if (!oldpassword || !newpassword || !newpassword2) {
-        setFormState({ error: 'all fields are required' });
-      } else {
-        setFormState({ processing: true });
-
-        const response = await updatePassword({ auth, user_id: auth.user_id, password: newpassword });
-        if (response.error) {
-          setFormState({ error: response.message });
-        } else {
-          setFormState({ success: response.message });
-          appState.update((s) => {
-            s.auth = { ...auth, pass: newpassword };
-          });
-        }
-      }
-      setTimeout(() => setFormData({}), 2000);
+    if (oldpassword !== auth.pass) {
+      setFormState({ error: 'old password is incorrect' });
+    } else if (newpassword !== newpassword2) {
+      setFormState({ error: 'new passwords do not match' });
+    } else if (!oldpassword || !newpassword || !newpassword2) {
+      setFormState({ error: 'all fields are required' });
+    } else {
+      setFormState({ processing: true });
+      updatePassword({ auth, user_id: auth.user_id, password: newpassword });
     }
-  }, [formState]);
+  };
 
-  useAsyncEffect(() => setFormState({}), [formData]);
+  useEffect(() => {
+    if (auth?.passwordError) {
+      setFormState({ error: auth.message });
+    } else if (auth?.passwordSuccess) {
+      setFormState({ success: auth.message });
+    }
+  }, [auth.passwordError, auth.passwordSuccess]);
+
+  useEffect(() => {
+    let mounted = true;
+    if (formState.error || formState.success) {
+      setTimeout(() => {
+        if (mounted) setFormState({});
+      }, 2000);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [formState.error, formState.success]);
 
   return formState.processing ? (
     <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
@@ -104,7 +109,7 @@ export default ({ formStateHeight }) => {
           </Row>
         </CardBody>
       </Card>
-      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+      <Button color="purple" block onClick={submit} disabled={formState.submitted}>
         Update Password
       </Button>
     </>

@@ -44,7 +44,7 @@ export default () => {
   const refreshRegions = () => !regions && getRegions();
   const refreshVersion = () => !version && getCurrentVersion();
   const refreshUser = async ({ email, pass }) => {
-    if (email && pass) {
+    if (email && pass && !showPasswordUpdate) {
       controller = new AbortController();
       setFetchingUser(true);
       await getUser({ email, pass, signal: controller.signal });
@@ -55,11 +55,8 @@ export default () => {
   useEffect(() => {
     history.listen(() => (canonical.href = window.location.href));
 
-    if (!persistedUser?.email) {
-      setFetchingUser(false);
-    } else {
-      refreshUser(persistedUser);
-    }
+    if (!persistedUser?.email) setFetchingUser(false);
+    else refreshUser(persistedUser);
 
     refreshVersion();
     refreshProducts();

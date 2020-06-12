@@ -2,7 +2,6 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 
 export default async ({ email, pass, signal }) => {
-  console.log(signal);
   const response = await queryLMS({
     endpoint: 'getUser',
     method: 'POST',

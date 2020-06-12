@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
-import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
@@ -15,9 +14,8 @@ export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
-  const history = useHistory();
 
-  const submit = async () => {
+  const submit = () => {
     setFormState({ submitted: true });
     const { email, pass } = formData;
     if (!isEmail(email)) {

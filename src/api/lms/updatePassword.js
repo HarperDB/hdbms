@@ -11,11 +11,11 @@ export default async ({ auth, user_id, password }) => {
 
   if (response.error) {
     return appState.update((s) => {
-      s.auth = { ...auth, ...response, time: Date.now() };
+      s.auth = { ...auth, ...response, passwordError: Date.now() };
     });
   }
 
   return appState.update((s) => {
-    s.auth = { ...auth, update_password: false, password };
+    s.auth = { ...auth, passwordSuccess: Date.now(), update_password: false, ...response, pass: password };
   });
 };

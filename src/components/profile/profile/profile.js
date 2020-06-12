@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, CardBody, Card } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
-
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 
 import updateUser from '../../../api/lms/updateUser';
-import getUser from '../../../api/lms/getUser';
 import FormStatus from '../../shared/formStatus';
 
 export default ({ formStateHeight }) => {
@@ -15,30 +12,42 @@ export default ({ formStateHeight }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState(auth);
 
-  useAsyncEffect(async () => {
+  const submit = () => {
+    setFormState({ submitted: true });
     const { firstname, lastname } = formData;
-    const { submitted } = formState;
-    if (submitted) {
-      if (!firstname || !lastname) {
-        setFormState({ error: 'All fields are required' });
-      } else if (auth.firstname === firstname && auth.lastname === lastname) {
-        setFormState({ error: 'Nothing seems to have changed' });
-      } else {
-        setFormState({ processing: true });
-        const response = await updateUser({ auth, firstname, lastname, user_id: auth.user_id });
-
-        if (response.error) {
-          setFormState({ error: response.message });
-        } else {
-          await getUser(auth);
-          setFormState({ success: response.message });
-        }
-      }
-      setTimeout(() => setFormState({}), 2000);
+    if (!firstname || !lastname) {
+      setFormState({ error: 'All fields are required' });
+    } else if (auth.firstname === firstname && auth.lastname === lastname) {
+      setFormState({ error: 'Nothing seems to have changed' });
+    } else {
+      setFormState({ processing: true });
+      updateUser({ auth, firstname, lastname, user_id: auth.user_id });
     }
-  }, [formState]);
+  };
 
-  useAsyncEffect(() => setFormState({}), [formData]);
+  useEffect(() => {
+    let mounted = true;
+    if (mounted && auth?.profileError) {
+      setFormState({ error: auth.message });
+    } else if (mounted && auth?.profileSuccess) {
+      setFormState({ success: auth.message });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [auth.profileError, auth.profileSuccess]);
+
+  useEffect(() => {
+    let mounted = true;
+    if (formState.error || formState.success) {
+      setTimeout(() => {
+        if (mounted) setFormState({});
+      }, 2000);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [formState.error, formState.success]);
 
   return formState.processing ? (
     <FormStatus height={formStateHeight} status="processing" header="Updating Profile" subhead="The Profile Poodle is doing his thing." />
@@ -94,7 +103,7 @@ export default ({ formStateHeight }) => {
           </Row>
         </CardBody>
       </Card>
-      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+      <Button color="purple" block onClick={submit} disabled={formState.submitted}>
         Save Profile
       </Button>
     </>
