@@ -6,14 +6,12 @@ import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
 
-import getCustomer from '../../../api/lms/getCustomer';
 import updateUserOrgs from '../../../api/lms/updateUserOrgs';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 import getUser from '../../../api/lms/getUser';
 
 const CardFront = ({ customer_name, customer_id, total_instance_count, status, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const alert = useAlert();
@@ -21,20 +19,13 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
 
   const chooseOrganization = async () => {
     if (canChooseOrganization) {
-      setLoading(true);
-      const result = await getCustomer({ auth, customer_id });
-      if (result.error) {
-        setCustomerError(result.message);
-        setLoading(false);
-      } else {
-        appState.update((s) => {
-          s.users = false;
-          s.instances = false;
-          s.hasCard = false;
-          s.lastUpdate = false;
-        });
-        setTimeout(() => history.push(`/o/${customer_id}/instances`), 0);
-      }
+      appState.update((s) => {
+        s.users = false;
+        s.instances = false;
+        s.hasCard = false;
+        s.lastUpdate = false;
+      });
+      setTimeout(() => history.push(`/o/${customer_id}/instances`), 0);
     }
   };
 
@@ -85,20 +76,10 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
           </Col>
         </Row>
         <div className="org-status">Organization {customer_id}</div>
-        <CardFrontStatusRow
-          textClass={`text-bold ${customerError ? 'text-danger' : ''}`}
-          label="ROLE"
-          isReady
-          value={customerError ? customerError.toUpperCase() : status === 'accepted' ? 'USER' : status.toUpperCase()}
-          bottomDivider
-        />
+        <CardFrontStatusRow textClass="text-bold" label="ROLE" isReady value={status === 'accepted' ? 'USER' : status.toUpperCase()} bottomDivider />
         <CardFrontStatusRow label="INSTANCES" isReady value={total_instance_count || '...'} />
         <div className="action-buttons">
-          {customerError ? (
-            <Button title={`Remove ${customer_name} Organization`} disabled={!!loading} color="danger" block data-action="delete" onClick={handleCardFlipIconClick}>
-              {loading === 'removed' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Remove This Organization</span>}
-            </Button>
-          ) : status === 'invited' ? (
+          {status === 'invited' && (
             <Row noGutters>
               <Col xs="6" className="pr-1">
                 <Button
@@ -125,7 +106,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
                 </Button>
               </Col>
             </Row>
-          ) : null}
+          )}
         </div>
       </CardBody>
     </Card>
