@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
@@ -27,22 +27,19 @@ export default () => {
         setFormState({ error: 'passwords must match' });
       } else {
         setFormState({ processing: true });
-        const response = await updatePassword({ auth, ...auth, password });
-        if (response.error) {
-          setFormState({ error: response.message });
-        } else {
-          appState.update((s) => {
-            s.auth = { ...auth, pass: password };
-          });
-          history.push('/');
-        }
+        updatePassword({ auth, ...auth, password });
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => {
-    if (!formState.submitted) setFormState({});
-  }, [formData]);
+  useEffect(() => {
+    if (auth?.error) {
+      setFormState({ error: auth.message });
+      setTimeout(() => setFormState({}), 3000);
+    }
+  }, [auth?.error]);
+
+  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">

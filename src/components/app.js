@@ -26,6 +26,8 @@ import config from '../../config';
 import getUser from '../api/lms/getUser';
 import Loader from './shared/loader';
 
+let controller;
+
 export default () => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -35,14 +37,17 @@ export default () => {
   const [fetchingUser, setFetchingUser] = useState(true);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const canonical = document.querySelector('link[rel="canonical"]');
+  const showPasswordUpdate = auth?.user_id && auth?.update_password;
+  const loggedIn = auth?.user_id;
 
   const refreshProducts = () => !products && getProducts();
   const refreshRegions = () => !regions && getRegions();
   const refreshVersion = () => !version && getCurrentVersion();
   const refreshUser = async ({ email, pass }) => {
     if (email && pass) {
+      controller = new AbortController();
       setFetchingUser(true);
-      await getUser({ email, pass });
+      await getUser({ email, pass, signal: controller.signal });
       setFetchingUser(false);
     }
   };
@@ -62,6 +67,8 @@ export default () => {
         setPersistedUser({ email, pass, darkTheme: newDarkTheme });
         if (email && pass) {
           refreshUser({ email, pass });
+        } else if (controller) {
+          controller.abort();
         }
       }
     );
@@ -84,7 +91,9 @@ export default () => {
   return (
     <div className={persistedUser?.darkTheme ? 'dark' : ''}>
       <div id="app-container">
-        {auth?.email && auth?.pass && auth?.user_id ? (
+        {showPasswordUpdate ? (
+          <UpdatePassword />
+        ) : loggedIn ? (
           <>
             <TopNav />
             <Switch>
@@ -103,7 +112,6 @@ export default () => {
           <Switch>
             <Route component={SignIn} exact path="/" />
             <Route component={SignUp} exact path="/sign-up" />
-            <Route component={UpdatePassword} exact path="/update-password" />
             <Route component={ResetPassword} exact path="/reset-password" />
             <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
             <Redirect to="/" />
