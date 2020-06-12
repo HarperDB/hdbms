@@ -55,7 +55,11 @@ export default () => {
   useEffect(() => {
     history.listen(() => (canonical.href = window.location.href));
 
-    if (!persistedUser?.email) setFetchingUser(false);
+    if (!persistedUser?.email) {
+      setFetchingUser(false);
+    } else {
+      refreshUser(persistedUser);
+    }
 
     refreshVersion();
     refreshProducts();
@@ -65,11 +69,7 @@ export default () => {
       (s) => ({ newAuth: s.auth, newDarkTheme: s.darkTheme }),
       ({ newAuth: { email, pass }, newDarkTheme }) => {
         setPersistedUser({ email, pass, darkTheme: newDarkTheme });
-        if (email && pass) {
-          refreshUser({ email, pass });
-        } else if (controller) {
-          controller.abort();
-        }
+        if (!email && controller) controller.abort();
       }
     );
 

@@ -35,7 +35,7 @@ export default () => {
       setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
       setTimeout(() => setFormState({}), 3000);
     }
-  }, [auth?.error]);
+  }, [auth]);
 
   useEffect(() => !formState.submitted && setFormState({}), [formData]);
 
