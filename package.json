@@ -18,7 +18,7 @@
     "@stripe/stripe-js": "^1.7.0",
     "deepmerge": "^4.2.2",
     "pullstate": "^1.13.2",
-    "query-string": "^6.13.0",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-alert": "^7.0.1",
     "react-card-flip": "^1.0.10",

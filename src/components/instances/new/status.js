@@ -3,7 +3,6 @@ import { Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
 
 import appState from '../../../state/appState';
 

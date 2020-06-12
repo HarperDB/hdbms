@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Col, Row, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../state/appState';
 
