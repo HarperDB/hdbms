@@ -5,7 +5,6 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../state/appState';
-import usePersistedUser from '../../../state/persistedUser';
 
 import ContentContainer from '../../shared/contentContainer';
 import handleAddOrg from '../../../methods/organizations/handleAddOrg';
@@ -13,13 +12,13 @@ import getUser from '../../../api/lms/getUser';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [{ darkTheme }] = usePersistedUser({});
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const history = useHistory();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  const closeModal = () => history.push(`/organizations`);
+  const closeModal = () => history.push(`/`);
 
   useAsyncEffect(async () => {
     if (formState.submitted) {

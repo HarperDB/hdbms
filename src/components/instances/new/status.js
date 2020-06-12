@@ -3,6 +3,7 @@ import { Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import appState from '../../../state/appState';
 
@@ -11,9 +12,13 @@ import useNewInstance from '../../../state/newInstance';
 
 import addInstance from '../../../api/lms/addInstance';
 import addTCAcceptance from '../../../api/lms/addTCAcceptance';
+import getInstances from '../../../api/lms/getInstances';
 
 export default ({ closeAndResetModal }) => {
   const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const [newInstance] = useNewInstance({});
   const [formState, setFormState] = useState({ error: false });
@@ -33,12 +38,10 @@ export default ({ closeAndResetModal }) => {
       const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
       setFormState({ submitted: false, error });
     } else {
-      alert.success(response.message);
       setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
-      appState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-      setTimeout(() => closeAndResetModal(), 0);
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, instanceCount: instances?.length });
+      alert.success(response.message);
+      closeAndResetModal();
     }
   }, []);
 

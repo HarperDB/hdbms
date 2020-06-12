@@ -25,7 +25,7 @@ export default () => {
             </Col>
           </Row>
           <hr className="mt-2 mb-4" />
-          <Button block color="black" onClick={() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`)}>
+          <Button block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
             Cancel
           </Button>
         </CardBody>

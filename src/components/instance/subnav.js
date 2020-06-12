@@ -52,7 +52,7 @@ export default ({ routes = [] }) => {
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"
-          onChange={({ value }) => history.push(`/${customer_id}/instance/${value}/${currentRoute.link}`)}
+          onChange={({ value }) => history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`)}
           options={options || []}
           value={activeOption}
           defaultValue={activeOption.value}
@@ -73,7 +73,7 @@ export default ({ routes = [] }) => {
               title={route.link}
               className="text-capitalize nav-link"
               isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
-              to={`/${customer_id}/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+              to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
             >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
@@ -86,7 +86,7 @@ export default ({ routes = [] }) => {
           className="react-select-container"
           classNamePrefix="react-select"
           width="200px"
-          onChange={({ value }) => history.push(`/${customer_id}/instance/${compute_stack_id}/${value}`)}
+          onChange={({ value }) => history.push(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
           options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}

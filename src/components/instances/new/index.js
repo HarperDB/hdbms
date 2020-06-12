@@ -6,7 +6,6 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import useNewInstance from '../../../state/newInstance';
-import usePersistedUser from '../../../state/persistedUser';
 
 import config from '../../../../config';
 
@@ -24,7 +23,7 @@ import OrderStatus from './status';
 export default () => {
   const history = useHistory();
   const { purchaseStep = 'type', customer_id } = useParams();
-  const [{ darkTheme }] = usePersistedUser({});
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
@@ -42,13 +41,13 @@ export default () => {
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
-      setTimeout(() => history.push(`/${customer_id}/instances`), 100);
+      setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
     }
   };
 
   const finishOrder = () => {
     setNewInstance({});
-    setTimeout(() => history.push(`/${customer_id}/instances`), 100);
+    setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
   };
 
   return (

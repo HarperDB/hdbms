@@ -49,7 +49,7 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <>
-            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push(`/${customer_id}/instances/new`)}>
+            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push(`/o/${customer_id}/instances/new`)}>
               <i className="fa fa-plus text-white" />
             </Button>
             <Button

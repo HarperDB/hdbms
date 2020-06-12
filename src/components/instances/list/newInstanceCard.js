@@ -13,8 +13,8 @@ const NewInstanceCard = () => {
         id="newInstanceCard"
         title="Add New Instance"
         className="instance new"
-        onKeyDown={(e) => e.keyCode !== 13 || history.push(`/${customer_id}/instances/new`)}
-        onClick={() => history.push(`/${customer_id}/instances/new`)}
+        onKeyDown={(e) => e.keyCode !== 13 || history.push(`/o/${customer_id}/instances/new`)}
+        onClick={() => history.push(`/o/${customer_id}/instances/new`)}
       >
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
           <span>Create New HarperDB Cloud Instance</span>

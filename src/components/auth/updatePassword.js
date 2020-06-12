@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import usePersistedUser from '../../state/persistedUser';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
@@ -13,7 +12,6 @@ import config from '../../../config';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
@@ -36,8 +34,7 @@ export default () => {
           appState.update((s) => {
             s.auth = { ...auth, pass: password };
           });
-          setPersistedUser({ ...persistedUser, pass: password });
-          history.push('/organizations');
+          history.push('/');
         }
       }
     }
@@ -94,7 +91,7 @@ export default () => {
           ) : (
             <Row>
               <Col xs="6">
-                <NavLink to="/sign-in" className="login-nav-link">
+                <NavLink to="/" className="login-nav-link">
                   Back to Sign In
                 </NavLink>
               </Col>

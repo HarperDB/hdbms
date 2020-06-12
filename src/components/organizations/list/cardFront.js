@@ -16,12 +16,11 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
   const auth = useStoreState(appState, (s) => s.auth);
   const [customerError, setCustomerError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const history = useHistory();
   const alert = useAlert();
   const canChooseOrganization = !loading && ['owner', 'accepted'].includes(status);
 
-  const chooseOrganization = useCallback(async () => {
+  const chooseOrganization = async () => {
     if (canChooseOrganization) {
       setLoading(true);
       const result = await getCustomer({ auth, customer_id });
@@ -35,29 +34,26 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
           s.hasCard = false;
           s.lastUpdate = false;
         });
-        setTimeout(() => history.push(`/${customer_id}/instances`), 0);
+        setTimeout(() => history.push(`/o/${customer_id}/instances`), 0);
       }
     }
-  }, [canChooseOrganization]);
+  };
 
-  const handleUpdateUserOrgs = useCallback(
-    async (e) => {
-      const newStatus = e.currentTarget.getAttribute('data-status');
-      setLoading(newStatus);
-      const result = await updateUserOrgs({ auth, customer_id, user_id: auth.user_id, status: newStatus });
-      if (result.error) {
-        alert.error(result.message);
-        setLoading(false);
-      } else {
-        await getUser(auth);
-        if (mounted) setLoading(false);
-        alert.success(`Organization ${newStatus} successfully`);
-      }
-    },
-    [mounted]
-  );
+  const handleUpdateUserOrgs = async (e) => {
+    const newStatus = e.currentTarget.getAttribute('data-status');
+    setLoading(newStatus);
+    const result = await updateUserOrgs({ auth, customer_id, user_id: auth.user_id, status: newStatus });
+    if (result.error) {
+      alert.error(result.message);
+      setLoading(false);
+    } else {
+      await getUser(auth);
+      if (newStatus !== 'declined') setLoading(false);
+      alert.success(`Organization ${newStatus} successfully`);
+    }
+  };
 
-  const handleCardFlipIconClick = useCallback((e) => {
+  const handleCardFlipIconClick = (e) => {
     e.stopPropagation();
     const action = e.currentTarget.getAttribute('data-action');
     if (action === 'delete' && total_instance_count) {
@@ -65,13 +61,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
     } else {
       setFlipState(action);
     }
-  }, []);
-
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+  };
 
   return (
     <Card className={`instance ${canChooseOrganization ? 'clickable' : ''}`} onClick={chooseOrganization}>

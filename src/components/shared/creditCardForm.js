@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Col, Input, Row } from '@nio/ui-kit';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
+import { useStoreState } from 'pullstate';
 
 import cardOptions from '../../methods/stripe/cardOptions';
-import usePersistedUser from '../../state/persistedUser';
+import appState from '../../state/appState';
 
 export default ({ setFormData, formData }) => {
   const [formState, setFormState] = useState({});
-  const [{ darkTheme }] = usePersistedUser({});
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const themedCardOptions = cardOptions({ darkTheme });
 
   return (

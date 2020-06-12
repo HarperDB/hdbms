@@ -16,7 +16,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   if (!thisInstance) {
     return {
-      error: 'Unable to access that instance',
+      error: true,
     };
   }
 

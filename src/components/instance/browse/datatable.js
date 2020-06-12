@@ -96,7 +96,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
               pageSize={tableState.pageSize}
               onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
               getTrProps={(state, rowInfo) => ({
-                onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
+                onClick: () => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
               })}
             />
           )}

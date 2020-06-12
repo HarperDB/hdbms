@@ -35,13 +35,13 @@ export default () => {
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+        return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
       } catch (e) {
         return setTimeout(() => {
           instanceState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`);
+          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
         }, 2000);
       }
     },

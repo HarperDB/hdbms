@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Row } from '@nio/ui-kit';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
+import { useAlert } from 'react-alert';
+import { useHistory } from 'react-router';
 
 import config from '../../../config';
 import appState from '../../state/appState';
@@ -13,17 +14,19 @@ import NewInstanceCard from './list/newInstanceCard';
 import NoInstancesCard from './list/noInstancesCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
-import AuthStateLoader from '../shared/authStateLoader';
 import getInstances from '../../api/lms/getInstances';
+import Loader from '../shared/loader';
+import getCustomer from '../../api/lms/getCustomer';
 
 const InstancesIndex = () => {
+  const history = useHistory();
   const { action, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
-  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
 
   useEffect(() => {
@@ -32,37 +35,50 @@ const InstancesIndex = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isOrgUser) {
-      alert.error('You have been removed from that organization');
+  const refreshCustomer = () => {
+    if (auth && customer_id) {
+      getCustomer({ auth, customer_id });
     }
-  }, [isOrgUser]);
+  };
 
-  const refreshInstances = useCallback(() => {
+  useEffect(refreshCustomer, []);
+
+  const refreshInstances = () => {
     if (auth && products && regions && customer_id) {
       getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
     }
-  }, [auth, products, regions, customer_id]);
+  };
 
-  useEffect(() => refreshInstances(), []);
+  useEffect(refreshInstances, [auth, products, regions, customer_id]);
 
-  useInterval(() => refreshInstances(), config.instances_refresh_rate);
+  useInterval(refreshInstances, config.instances_refresh_rate);
 
-  return !instances ? (
-    <div id="login-form">
-      <AuthStateLoader header="loading instances" spinner />
-    </div>
-  ) : isOrgUser ? (
+  useEffect(() => {
+    if (instances && isOrgOwner) {
+      alert.success('You have been made an owner of this organization');
+    } else if (instances && !isOrgUser) {
+      alert.error('You have been removed from this organization');
+      history.push('/');
+    } else if (instances) {
+      alert.success('You are no longer an owner of this organization');
+    }
+  }, [isOrgOwner, isOrgUser?.status]);
+
+  return (
     <div id="instances">
       <SubNav />
-      <Row>
-        {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
-        <InstanceList />
-      </Row>
-      {action === 'new' && instances && <NewInstanceModal />}
+      {isOrgUser && instances ? (
+        <>
+          <Row>
+            {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
+            <InstanceList />
+          </Row>
+          {action === 'new' && instances && <NewInstanceModal />}
+        </>
+      ) : (
+        <Loader message="loading instances" />
+      )}
     </div>
-  ) : (
-    <Redirect to="/organizations" />
   );
 };
 

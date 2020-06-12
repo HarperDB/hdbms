@@ -68,7 +68,7 @@ export default () => {
             </div>
           ) : (
             <div className="text-center">
-              <NavLink to="/sign-in" className="login-nav-link">
+              <NavLink to="/" className="login-nav-link">
                 Go to Sign In
               </NavLink>
             </div>

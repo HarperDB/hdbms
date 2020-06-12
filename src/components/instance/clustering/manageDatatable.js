@@ -4,6 +4,7 @@ import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';
+import StructureReloader from '../../shared/structureReloader';
 
 export default () => {
   const [tableState, setTableState] = useState({
@@ -21,22 +22,13 @@ export default () => {
   });
   const clusterDataTable = useStoreState(instanceState, (s) => s.clusterDataTable);
   const clusterDataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
-  const loading = useStoreState(instanceState, (s) => s.loading);
 
   return (
     <>
       <Row className="floating-card-header">
         <Col>manage clustering</Col>
         <Col className="text-right">
-          <i
-            title="Refresh instance schema and tables"
-            className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`}
-            onClick={() =>
-              instanceState.update((s) => {
-                s.lastUpdate = Date.now();
-              })
-            }
-          />
+          <StructureReloader label="refresh cluster config" />
           <span className="mx-3 text">|</span>
           <i
             title="Filter Instances"

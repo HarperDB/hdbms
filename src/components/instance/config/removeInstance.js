@@ -40,7 +40,7 @@ export default ({ setInstanceAction }) => {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push(`/${customer_id}/instances`), 3000);
+          setTimeout(() => history.push(`/o/${customer_id}/instances`), 3000);
         }
       }
     }

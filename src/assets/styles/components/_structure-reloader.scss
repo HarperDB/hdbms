@@ -1,0 +1,16 @@
+.structure-reloader {
+  color: $color-white !important;
+  cursor: pointer;
+  display: inline-block;
+
+  i {
+    width: 14px;
+  }
+
+  &:hover {
+    color: $color-white !important;
+  }
+}
+
+
+

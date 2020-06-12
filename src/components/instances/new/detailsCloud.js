@@ -30,7 +30,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
-        setTimeout(() => history.push(needsCard ? `/${customerId}/instances/new/payment` : `/${customerId}/instances/new/confirm`), 0);
+        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -81,7 +81,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

@@ -7,19 +7,20 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
 
+import appState from '../../../state/appState';
+
 import alterRole from '../../../api/instance/alterRole';
 import instanceState from '../../../state/instanceState';
-import usePersistedUser from '../../../state/persistedUser';
 import buildPermissionStructure from '../../../methods/instance/buildPermissionStructure';
 
 export default () => {
-  const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
   const [loading, setLoading] = useState(false);

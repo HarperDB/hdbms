@@ -33,12 +33,12 @@ export default ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh
         <i
           title={`Add new record to table ${table}`}
           className="fa fa-plus mr-3"
-          onClick={() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/add`)}
+          onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
         />
         <i
           title={`Bulk Upload CSV to ${table}`}
           className="fa fa-file-text-o"
-          onClick={() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}/csv`)}
+          onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
         />
       </Col>
     </Row>

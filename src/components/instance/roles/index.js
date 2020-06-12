@@ -7,6 +7,7 @@ import instanceState from '../../../state/instanceState';
 
 import EntityManager from './roleManager';
 import JSONViewer from './jsonviewer';
+import StructureReloader from '../../shared/structureReloader';
 
 const defaultState = {
   roleName: false,
@@ -20,7 +21,7 @@ export default () => {
   const { compute_stack_id, role_id, customer_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const [formState, setFormState] = useState(defaultState);
-  const baseUrl = `/${customer_id}/instance/${compute_stack_id}/roles`;
+  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
 
   useEffect(() => {
     if (roles) {
@@ -47,42 +48,28 @@ export default () => {
         <EntityManager showForm activeItem={role_id} items={formState.standardUsers} baseUrl={baseUrl} itemType="standard role" />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
+        <Row className="floating-card-header">
+          {formState.canEdit && <Col>edit role &gt; {formState.roleName}</Col>}
+          <Col className="text-md-right">
+            <StructureReloader label="refresh schemas, tables, and roles" />
+          </Col>
+        </Row>
         {formState.canEdit ? (
-          <>
-            <Row className="floating-card-header">
-              <Col>edit role &gt; {formState.roleName}</Col>
-              <Col className="text-md-right">
-                <i
-                  title="Refresh Structure"
-                  className="fa mr-2 fa-refresh"
-                  onClick={() =>
-                    instanceState.update((s) => {
-                      s.lastUpdate = Date.now();
-                    })
-                  }
-                />
-                refresh structure
-              </Col>
-            </Row>
-            <Card className="my-3">
-              <CardBody className="full-height">
-                <JSONViewer />
-              </CardBody>
-            </Card>
-          </>
+          <Card className="my-3">
+            <CardBody className="full-height">
+              <JSONViewer />
+            </CardBody>
+          </Card>
         ) : (
-          <>
-            <span className="floating-card-header">&nbsp;</span>
-            <Card className="my-3 py-5">
-              <CardBody>
-                {role_id ? (
-                  <div className="text-center">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
-                ) : (
-                  <div className="text-center">Please choose or add a role to manage it.</div>
-                )}
-              </CardBody>
-            </Card>
-          </>
+          <Card className="my-3 py-5">
+            <CardBody>
+              {role_id ? (
+                <div className="text-center">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
+              ) : (
+                <div className="text-center">Please choose or add a role to manage it.</div>
+              )}
+            </CardBody>
+          </Card>
         )}
       </Col>
     </Row>

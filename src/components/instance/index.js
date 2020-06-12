@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect, Route, Switch, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
@@ -13,6 +13,7 @@ import routes from './routes';
 import buildActiveInstanceObject from '../../methods/instance/buildActiveInstanceObject';
 import Loader from '../shared/loader';
 import getInstances from '../../api/lms/getInstances';
+import getCustomer from '../../api/lms/getCustomer';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -28,24 +29,31 @@ export default () => {
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
 
-  const refreshInstances = useCallback(() => {
+  const refreshCustomer = () => {
+    if (auth && customer_id) {
+      getCustomer({ auth, customer_id });
+    }
+  };
+
+  useEffect(refreshCustomer, []);
+
+  const refreshInstances = () => {
     if (auth && products && regions && customer_id) {
       getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
     }
-  }, [auth, products, regions, customer_id]);
+  };
 
-  useEffect(() => refreshInstances(), []);
+  useEffect(refreshInstances, [auth, products, regions, customer_id]);
 
   const refreshInstance = async () => {
     if (!instanceAuth) {
       alert.error('Please log into that instance');
-      history.push(`/${customer_id}/instances`);
+      history.push(`/o/${customer_id}/instances`);
     } else if (instances) {
       const { error } = await buildActiveInstanceObject({ auth: instanceAuth, compute_stack_id, instances });
       setLoadingInstance(false);
       if (error) {
-        alert.error(error);
-        setTimeout(() => history.push(`/${customer_id}/instances`), 10);
+        setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
       }
     }
   };
@@ -63,20 +71,18 @@ export default () => {
     return () => cancelSub();
   }, [compute_stack_id, instances]);
 
-  return isOrgUser ? (
+  return (
     <>
       <SubNav routes={hydratedRoutes} />
-      {!instances || loadingInstance ? (
-        <Loader message="loading instance" />
-      ) : (
+      {isOrgUser && instances && !loadingInstance ? (
         <Switch>
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} component={route.component} />
           ))}
         </Switch>
+      ) : (
+        <Loader message="loading instance" />
       )}
     </>
-  ) : (
-    <Redirect to="/organizations" />
   );
 };

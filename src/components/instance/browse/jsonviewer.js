@@ -7,23 +7,24 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
-import usePersistedUser from '../../../state/persistedUser';
+import appState from '../../../state/appState';
+
+import queryInstance from '../../../api/queryInstance';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
   const { customer_id } = useParams();
-  const [{ darkTheme }] = usePersistedUser({});
   const alert = useAlert();
   const history = useHistory();
   const { schema, table, hash, action, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
-      history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`);
+      history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
     }
   }, []);
 
@@ -46,14 +47,14 @@ export default ({ newEntityAttributes, hashAttribute }) => {
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-    return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+    return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
     await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url);
-    return setTimeout(() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`), 100);
+    return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 
   return (
@@ -99,7 +100,7 @@ export default ({ newEntityAttributes, hashAttribute }) => {
           </Card>
           <Row>
             <Col className="mt-2">
-              <Button block color="black" onClick={() => history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${table}`)}>
+              <Button block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Cancel
               </Button>
             </Col>

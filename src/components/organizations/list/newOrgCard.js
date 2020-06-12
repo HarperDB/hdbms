@@ -12,8 +12,8 @@ const NewOrgCard = () => {
         id="newOrgCard"
         title="Add New Organization"
         className="instance new"
-        onKeyDown={(e) => e.keyCode !== 13 || history.push(`/organizations/new`)}
-        onClick={() => history.push(`/organizations/new`)}
+        onKeyDown={(e) => e.keyCode !== 13 || history.push(`/new`)}
+        onClick={() => history.push(`/new`)}
       >
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
           <span>Create A New Organization</span>

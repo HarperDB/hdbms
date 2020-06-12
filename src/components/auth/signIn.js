@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
 
-import usePersistedUser from '../../state/persistedUser';
+import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
 import AuthStateLoader from '../shared/authStateLoader';
 import config from '../../../config';
-import appState from '../../state/appState';
 
 export default () => {
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
+  const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const history = useHistory();
@@ -27,30 +26,20 @@ export default () => {
       setFormState({ error: 'password is required' });
     } else {
       setFormState({ processing: true });
-      const response = await getUser({ email, pass });
-      if (response.error) {
-        setFormState({ error: response.message === 'Unauthorized' ? 'Login Failed' : response.message });
-        setTimeout(() => setFormState({}), 3000);
-      } else {
-        setPersistedUser({ ...persistedUser, email, pass });
-        setTimeout(() => history.push(response.update_password ? '/update-password' : '/organizations'), 100);
-      }
+      getUser({ email, pass });
     }
   };
 
-  useAsyncEffect(() => {
-    setPersistedUser({ darkTheme: persistedUser.darkTheme });
-    appState.update((s) => {
-      s.auth = false;
-      s.customer = false;
-      s.users = false;
-      s.instances = false;
-      s.hasCard = false;
-      s.lastUpdate = false;
-    });
-  }, []);
+  useEffect(() => {
+    if (auth?.error) {
+      setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
+      setTimeout(() => setFormState({}), 3000);
+    } else if (auth?.update_password) {
+      history.push('/update-password');
+    }
+  }, [auth]);
 
-  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
+  useEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">

@@ -58,7 +58,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             color="purple"
@@ -72,7 +72,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
           <Button
             id="reviewInstanceDetails"
             title="Review Instance Details"
-            onClick={() => history.push(`/${customerId}/instances/new/confirm`)}
+            onClick={() => history.push(`/o/${customerId}/instances/new/confirm`)}
             block
             color="purple"
             className="mt-3"
@@ -108,7 +108,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

@@ -33,7 +33,7 @@ export default () => {
       if (auth.user_id === user_id) {
         alert.error('Edit your own profile by clicking the user icon in the top nav');
       } else {
-        history.push(`/${customer_id}/users/${user_id}`);
+        history.push(`/o/${customer_id}/users/${user_id}`);
       }
     },
     [auth.user_id, customer_id]

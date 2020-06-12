@@ -20,7 +20,7 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
     if (submitted) {
       if (tc_version) {
         setNewInstance({ ...newInstance, tc_version });
-        setTimeout(() => history.push(`/${customerId}/instances/new/status`), 0);
+        setTimeout(() => history.push(`/o/${customerId}/instances/new/status`), 0);
       } else {
         setFormState({ error: 'Please agree to the Privacy Policy and Cloud Terms of Service.' });
       }
@@ -181,7 +181,7 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/${customerId}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customerId}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

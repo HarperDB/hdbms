@@ -14,7 +14,7 @@ export default ({ customerId }) => {
     const { is_local } = formData;
     if (is_local !== undefined) {
       setNewInstance({ customer_id: customerId, is_local });
-      setTimeout(() => history.push(is_local ? `/${customerId}/instances/new/meta_local` : `/${customerId}/instances/new/meta_cloud`), 0);
+      setTimeout(() => history.push(is_local ? `/o/${customerId}/instances/new/meta_local` : `/o/${customerId}/instances/new/meta_cloud`), 0);
     }
   }, [formData]);
 

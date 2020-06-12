@@ -9,10 +9,9 @@ export default async ({ email, pass }) => {
   });
 
   if (response.error) {
-    appState.update((s) => {
-      s.auth = response;
+    return appState.update((s) => {
+      s.auth = { ...response, time: Date.now() };
     });
-    return response;
   }
 
   if (!response.orgs) {
@@ -27,9 +26,7 @@ export default async ({ email, pass }) => {
     response.orgs = [response.orgs];
   }
 
-  appState.update((s) => {
+  return appState.update((s) => {
     s.auth = { email, pass, ...response };
   });
-
-  return response;
 };

@@ -34,7 +34,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
         setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true, super: true });
-        setTimeout(() => history.push(`/${customerId}/instances/new/details_cloud`), 0);
+        setTimeout(() => history.push(`/o/${customerId}/instances/new/details_cloud`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -109,7 +109,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

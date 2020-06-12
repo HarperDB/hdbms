@@ -48,7 +48,6 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             setTimeout(() => setFormState({}), 2000);
           } else {
             setFormState({ success: response.message });
-
             await getCustomer({ auth, customer_id });
 
             if (returnURL) {

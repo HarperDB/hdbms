@@ -11,6 +11,7 @@ import EntityManager from './entityManager';
 import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
+import StructureReloader from '../../shared/structureReloader';
 
 const defaultTableState = {
   tableData: [],
@@ -49,13 +50,13 @@ export default () => {
     if (entities.schemas) {
       switch (true) {
         case !entities.schemas.length && history.location.pathname !== '/browse':
-          history.push(`/${customer_id}/instance/${compute_stack_id}/browse`);
+          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
           break;
         case entities.schemas?.length && (!schema || !entities.schemas.includes(schema)):
-          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${entities.schemas[0]}`);
+          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${entities.schemas[0]}`);
           break;
         case entities.tables?.length && (!table || !entities.tables.includes(table)):
-          history.push(`/${customer_id}/instance/${compute_stack_id}/browse/${schema}/${entities.tables[0]}`);
+          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${entities.tables[0]}`);
           break;
         default:
           break;
@@ -66,17 +67,20 @@ export default () => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/${customer_id}/instance/${compute_stack_id}/browse`} itemType="schema" showForm />
+        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse`} itemType="schema" showForm />
         {schema && (
           <EntityManager
             activeItem={table}
             items={entities.tables}
             activeSchema={schema}
-            baseUrl={`/${customer_id}/instance/${compute_stack_id}/browse/${schema}`}
+            baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}`}
             itemType="table"
             showForm
           />
         )}
+        <div className="text-center">
+          <StructureReloader label="refresh schemas and tables" />
+        </div>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         {schema && table && action === 'csv' && entities.activeTable ? (

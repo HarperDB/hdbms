@@ -14,6 +14,7 @@ const appState = new Store({
   filterLocal: true,
   filterCloud: true,
   version: false,
+  darkTheme: false,
 });
 
 export default appState;

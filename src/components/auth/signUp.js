@@ -37,7 +37,7 @@ export default () => {
           header="success!"
           body="check your email for your username and password. be sure to check your spam folder, just in case."
           links={[
-            { to: '/sign-in', text: 'Sign In' },
+            { to: '/', text: 'Sign In' },
             { to: '/resend-registration-email', text: 'Resend Email' },
           ]}
         />
@@ -123,7 +123,7 @@ export default () => {
             </div>
           ) : (
             <div className="text-center">
-              <NavLink to="/sign-in" className="login-nav-link">
+              <NavLink to="/" className="login-nav-link">
                 Already Have An Account? Sign In Instead.
               </NavLink>
             </div>

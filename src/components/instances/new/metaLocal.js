@@ -71,7 +71,7 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
               }
             }
             setNewInstance({ ...newInstance, ...instanceData });
-            setTimeout(() => history.push(`/${customerId}/instances/new/details_local`), 0);
+            setTimeout(() => history.push(`/o/${customerId}/instances/new/details_local`), 0);
           }
         } catch (e) {
           setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
@@ -173,7 +173,7 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

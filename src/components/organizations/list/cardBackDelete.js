@@ -29,8 +29,8 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
         if (response.error) {
           setFormState({ error: response.message });
         } else {
+          await getUser(auth);
           alert.success('Organization removed successfully');
-          getUser(auth);
         }
       }
     }
@@ -44,7 +44,7 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
             <>
               There was an error processing your request:
               <hr className="mt-3 mb-2" />
-              <div className="text-danger">{formState.error}</div>
+              <div className="text-danger text-small">{formState.error}</div>
               <hr className="mt-2 mb-3" />
               <Button onClick={() => setFlipState(false)} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel

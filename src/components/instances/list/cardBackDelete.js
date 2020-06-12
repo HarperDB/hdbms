@@ -8,11 +8,15 @@ import { useParams } from 'react-router-dom';
 import removeInstance from '../../../api/lms/removeInstance';
 import appState from '../../../state/appState';
 import useInstanceAuth from '../../../state/instanceAuths';
+import getInstances from '../../../api/lms/getInstances';
 
 const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [formState, setFormState] = useState({});
@@ -34,18 +38,9 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           alert.error('There was an error removing your instance. Please try again later.');
           setFlipState(false);
         } else {
-          alert.success('Instance deletion initiated');
-          if (instanceAuth) {
-            setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
-          }
-
-          setTimeout(
-            () =>
-              appState.update((s) => {
-                s.lastUpdate = Date.now();
-              }),
-            1000
-          );
+          if (instanceAuth) setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
+          await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+          alert.success('Instance deletion complete');
         }
       }
     }

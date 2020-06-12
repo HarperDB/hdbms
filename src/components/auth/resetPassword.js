@@ -42,7 +42,7 @@ export default () => {
       {formState.processing ? (
         <AuthStateLoader header="resetting password" spinner />
       ) : formState.success ? (
-        <AuthStateLoader header="success!" body="check your email for a password reset link." links={[{ to: '/sign-in', text: 'Go to Sign In' }]} />
+        <AuthStateLoader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} />
       ) : (
         <>
           <Card className="mb-3">
@@ -69,7 +69,7 @@ export default () => {
           ) : (
             <Row>
               <Col xs="6">
-                <NavLink to="/sign-in" className="login-nav-link">
+                <NavLink to="/" className="login-nav-link">
                   Back to Sign In
                 </NavLink>
               </Col>

@@ -21,7 +21,7 @@ export default ({ products, hasCard, customerId }) => {
     if (submitted) {
       if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
-        setTimeout(() => history.push(needsCard ? `/${customerId}/instances/new/payment` : `/${customerId}/instances/new/confirm`), 0);
+        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -50,7 +50,7 @@ export default ({ products, hasCard, customerId }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/${customerId}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

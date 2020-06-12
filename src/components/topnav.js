@@ -1,25 +1,30 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
-import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../state/appState';
 
-import usePersistedUser from '../state/persistedUser';
-
 const TopNav = () => {
-  const history = useHistory();
   const { pathname } = useLocation();
-  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
   const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner', [
     auth.orgs,
     customer.customer_id,
   ]);
 
-  const logOut = useCallback(() => history.push('/sign-in'), []);
+  const toggleDarkTheme = () =>
+    appState.update((s) => {
+      s.darkTheme = !darkTheme;
+    });
+
+  const logOut = () =>
+    appState.update((s) => {
+      s.auth = false;
+    });
 
   return (
     <Navbar id="app-nav" dark fixed="top" expand="xs">
@@ -38,7 +43,7 @@ const TopNav = () => {
           <div className="text-white org-name">{customer.customer_name}</div>
           <div className="org-actions">
             <NavItem>
-              <NavLink title="View Organization Instances" exact to={`/${customer.customer_id}/instances`}>
+              <NavLink title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
                 <i className="fa fa-th d-inline-block" />
                 <span className="d-none d-lg-inline-block">&nbsp; Instances</span>
               </NavLink>
@@ -48,9 +53,9 @@ const TopNav = () => {
                 <NavItem className="mr-3" />
                 <NavItem>
                   <NavLink
-                    isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/${customer.customer_id}/billing`) !== -1}
+                    isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
                     title="Manage Organization"
-                    to={`/${customer.customer_id}/users`}
+                    to={`/o/${customer.customer_id}/users`}
                   >
                     <i className="fa fa-gears d-inline-block" />
                     <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
@@ -73,11 +78,11 @@ const TopNav = () => {
         <NavItem className="ml-3">
           <DumbLink
             tabIndex="0"
-            title={persistedUser.darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            onKeyDown={(e) => e.keyCode !== 13 || setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
-            onClick={() => setPersistedUser({ ...persistedUser, darkTheme: !persistedUser.darkTheme })}
+            title={darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            onKeyDown={(e) => e.keyCode !== 13 || toggleDarkTheme()}
+            onClick={toggleDarkTheme}
           >
-            <i className={`fa ${persistedUser.darkTheme ? 'fa-sun-o' : 'fa-moon-o'}`} />
+            <i className={`fa ${darkTheme ? 'fa-sun-o' : 'fa-moon-o'}`} />
           </DumbLink>
         </NavItem>
         <NavItem className="ml-3">

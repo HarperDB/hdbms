@@ -7,6 +7,7 @@ import { useHistory, useParams } from 'react-router';
 import instanceState from '../../../state/instanceState';
 
 import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
+import StructureReloader from '../../shared/structureReloader';
 
 export default () => {
   const history = useHistory();
@@ -32,6 +33,8 @@ export default () => {
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">
+          <StructureReloader label="refresh users" />
+          <span className="mx-3 text">|</span>
           <i
             title="Filter Users"
             className="fa fa-search mr-3"
@@ -55,7 +58,7 @@ export default () => {
             onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
             resizable={false}
             getTrProps={(state, rowInfo) => ({
-              onClick: () => history.push(`/${customer_id}/instance/${compute_stack_id}/users/${rowInfo.original.username}`),
+              onClick: () => history.push(`/o/${customer_id}/i/${compute_stack_id}/users/${rowInfo.original.username}`),
             })}
           />
         </CardBody>

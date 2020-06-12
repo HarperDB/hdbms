@@ -9,14 +9,14 @@ export default ({ super_user }) => {
   const standardRoutes = [
     {
       component: Browse,
-      path: `/:customer_id/instance/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,
+      path: `/o/:customer_id/i/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,
       link: 'browse',
       icon: 'list',
       iconCode: 'f03a',
     },
     {
       component: Query,
-      path: `/:customer_id/instance/:compute_stack_id/query`,
+      path: `/o/:customer_id/i/:compute_stack_id/query`,
       link: 'query',
       icon: 'code',
       iconCode: 'f121',
@@ -26,28 +26,28 @@ export default ({ super_user }) => {
   const superUserRoutes = [
     {
       component: Clustering,
-      path: `/:customer_id/instance/:compute_stack_id/clustering`,
+      path: `/o/:customer_id/i/:compute_stack_id/clustering`,
       link: 'clustering',
       icon: 'share-alt',
       iconCode: 'f1e0',
     },
     {
       component: Users,
-      path: `/:customer_id/instance/:compute_stack_id/users/:username?`,
+      path: `/o/:customer_id/i/:compute_stack_id/users/:username?`,
       link: 'users',
       icon: 'users',
       iconCode: 'f0c0',
     },
     {
       component: Roles,
-      path: `/:customer_id/instance/:compute_stack_id/roles/:role_id?`,
+      path: `/o/:customer_id/i/:compute_stack_id/roles/:role_id?`,
       link: 'roles',
       icon: 'check-square',
       iconCode: 'f14a',
     },
     {
       component: Config,
-      path: `/:customer_id/instance/:compute_stack_id/config`,
+      path: `/o/:customer_id/i/:compute_stack_id/config`,
       link: 'config',
       icon: 'wrench',
       iconCode: 'f0ad',
