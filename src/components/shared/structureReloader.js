@@ -3,7 +3,7 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../state/instanceState';
 
-export default ({ label = 'instance' }) => {
+export default ({ label = 'instance', centerText = false }) => {
   const [loading, setLoading] = useState(false);
   const structure = useStoreState(instanceState, (s) => s.structure);
 
@@ -17,7 +17,7 @@ export default ({ label = 'instance' }) => {
   useEffect(() => setLoading(false), [structure]);
 
   return (
-    <a className="structure-reloader" onClick={refresh}>
+    <a className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`} onClick={refresh}>
       <i title="Refresh Structure" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
       {label}
     </a>

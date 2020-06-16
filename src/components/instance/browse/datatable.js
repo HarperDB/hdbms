@@ -80,7 +80,7 @@ export default ({ tableState, setTableState, activeTable }) => {
               manual
               loading={tableState.loading && !tableState.autoRefresh}
               loadingText="loading"
-              data={tableState.loading ? [] : tableState.tableData}
+              data={tableState.tableData}
               pages={tableState.totalPages}
               columns={tableState.dataTableColumns}
               hashAttribute={tableState.hashAttribute}

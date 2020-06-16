@@ -78,9 +78,7 @@ export default () => {
             showForm
           />
         )}
-        <div className="text-center">
-          <StructureReloader label="refresh schemas and tables" />
-        </div>
+        <StructureReloader centerText label="refresh schemas and tables" />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         {schema && table && action === 'csv' && entities.activeTable ? (
