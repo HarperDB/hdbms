@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -12,25 +12,24 @@ import config from '../../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 
-export default ({ tableState, setTableState, defaultTableState }) => {
+export default ({ tableState, setTableState, activeTable }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const [loading, setLoading] = useState(false);
   let controller;
 
   useAsyncEffect(async () => {
     if (controller) controller.abort();
-    if (!loading) {
-      setLoading(true);
+    if (activeTable && !tableState.loading) {
+      setTableState({ ...tableState, loading: true });
       controller = new AbortController();
-      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+      const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
         pageSize: tableState.pageSize,
-        sorted: table !== tableState.currentTable ? [] : tableState.sorted,
+        sorted: tableState.sorted,
         page: tableState.page,
         auth,
         url,
@@ -42,14 +41,13 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         tableData: newData,
         totalPages: newTotalPages,
         totalRecords: newTotalRecords,
-        sorted: tableState.sorted.length ? tableState.sorted : [{ id: hashAttribute, desc: false }],
+        sorted: newSorted,
         newEntityAttributes,
         hashAttribute,
         dataTableColumns,
-        currentTable: table,
         error,
+        loading: false,
       });
-      setLoading(false);
     }
   }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate]);
 
@@ -59,7 +57,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
     []
   );
 
-  useAsyncEffect(() => table && table !== tableState.currentTable && setTableState({ ...defaultTableState, lastUpdate: Date.now() }), [table, schema]);
+  useAsyncEffect(() => activeTable && setTableState({ ...tableState, lastUpdate: Date.now() }), [activeTable]);
 
   useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.instance_refresh_rate);
 
@@ -67,7 +65,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
     <>
       <DataTableHeader
         totalRecords={tableState.totalRecords}
-        loading={loading}
+        loading={tableState.loading}
         autoRefresh={tableState.autoRefresh}
         refresh={() => setTableState({ ...tableState, lastUpdate: Date.now() })}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
@@ -82,7 +80,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
               manual
               loading={tableState.loading && !tableState.autoRefresh}
               loadingText="loading"
-              data={tableState.tableData}
+              data={tableState.loading ? [] : tableState.tableData}
               pages={tableState.totalPages}
               columns={tableState.dataTableColumns}
               hashAttribute={tableState.hashAttribute}

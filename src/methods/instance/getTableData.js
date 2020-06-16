@@ -9,6 +9,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   let newData = [];
   let allAttributes = false;
   let hashAttribute = false;
+  let newSorted = sorted;
   const newEntityAttributes = {};
 
   try {
@@ -23,8 +24,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     allAttributes = attributes.map((a) => a.attribute);
     hashAttribute = hash_attribute;
 
-    if (!sorted.length || !allAttributes.includes(sorted[0].id)) {
-      sorted = [{ id: hash_attribute, desc: false }];
+    if (!newSorted.length || !allAttributes.includes(newSorted[0].id)) {
+      newSorted = [{ id: hash_attribute, desc: false }];
     }
 
     if (filtered.length) {
@@ -43,7 +44,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     try {
       let dataSQL = `SELECT * FROM \`${schema}\`.\`${table}\` `;
       if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-      if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+      if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
@@ -64,7 +65,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     try {
       let dataSQL = `SELECT ${selectString} FROM \`${schema}\`.\`${table}\` `;
       if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-      if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
+      if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
@@ -95,6 +96,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     newEntityAttributes,
     hashAttribute,
     dataTableColumns,
+    newSorted,
     error: fetchError && fetchError.message === 'table' && `You are not authorized to view ${schema}:${table}`,
   };
 };
