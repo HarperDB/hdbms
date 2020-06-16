@@ -6,6 +6,8 @@ import useInterval from 'use-interval';
 import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
 
+import config from '../../config';
+
 import SignUp from './auth/signUp';
 import SignIn from './auth/signIn';
 import ResetPassword from './auth/resetPassword';
@@ -22,9 +24,9 @@ import TopNav from './topnav';
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
 import getCurrentVersion from '../api/lms/getCurrentVersion';
-import config from '../../config';
 import getUser from '../api/lms/getUser';
 import Loader from './shared/loader';
+import Maintenance from './shared/maintenance';
 
 let controller;
 
@@ -88,7 +90,9 @@ export default () => {
   return (
     <div className={persistedUser?.darkTheme ? 'dark' : ''}>
       <div id="app-container">
-        {showPasswordUpdate ? (
+        {config.maintenance ? (
+          <Maintenance />
+        ) : showPasswordUpdate ? (
           <UpdatePassword />
         ) : loggedIn ? (
           <>
