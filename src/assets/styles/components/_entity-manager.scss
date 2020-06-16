@@ -12,6 +12,9 @@
 
     .card-body {
       padding: 0 15px;
+      max-height: calc(50vh - 155px);
+      overflow-x: hidden;
+      overflow-y: auto;
 
       .item-row {
         border-top: 1px solid $lighter-grey-overlay;
