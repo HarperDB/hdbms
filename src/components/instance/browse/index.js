@@ -87,8 +87,8 @@ export default () => {
           <CSVUpload />
         ) : schema && table && action && entities.activeTable ? (
           <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
-        ) : schema && table && entities.activeTable ? (
-          <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
+        ) : schema ? (
+          <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
         ) : (
           <EmptyPrompt
             message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
