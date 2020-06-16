@@ -13,10 +13,9 @@ import appState from '../../../state/appState';
 import queryInstance from '../../../api/queryInstance';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
-  const { customer_id } = useParams();
+  const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
   const alert = useAlert();
   const history = useHistory();
-  const { schema, table, hash, action, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
@@ -43,6 +42,7 @@ export default ({ newEntityAttributes, hashAttribute }) => {
     e.preventDefault();
     if (!rowValue) alert.error('Please insert valid JSON to proceed');
     if (!action || !rowValue) return false;
+    if (action === 'edit') rowValue[hashAttribute] = hash;
     await queryInstance({ operation: action === 'edit' ? 'update' : 'insert', schema, table, records: [rowValue] }, auth, url);
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
