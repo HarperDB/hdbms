@@ -18,8 +18,8 @@ import ContentContainer from '../../shared/contentContainer';
 export default () => {
   const { customer_id } = useParams();
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const auth = useStoreState(appState, (s) => s.auth);
-  const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
+  const isOrgOwner = isOrgUser?.status === 'owner';
   const [instanceAction, setInstanceAction] = useState(false);
 
   return instanceAction && instanceAction !== 'Restarting' ? (
