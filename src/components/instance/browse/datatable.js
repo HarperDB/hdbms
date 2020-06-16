@@ -30,7 +30,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         table,
         filtered: tableState.filtered,
         pageSize: tableState.pageSize,
-        sorted: tableState.sorted,
+        sorted: table !== tableState.currentTable ? [] : tableState.sorted,
         page: tableState.page,
         auth,
         url,
@@ -46,6 +46,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
         newEntityAttributes,
         hashAttribute,
         dataTableColumns,
+        currentTable: table,
         error,
       });
       setLoading(false);
@@ -58,7 +59,7 @@ export default ({ tableState, setTableState, defaultTableState }) => {
     []
   );
 
-  useAsyncEffect(() => table && table !== tableState.currentTable && setTableState({ ...defaultTableState, currentTable: table, lastUpdate: Date.now() }), [table]);
+  useAsyncEffect(() => table && table !== tableState.currentTable && setTableState({ ...defaultTableState, lastUpdate: Date.now() }), [table]);
 
   useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.instance_refresh_rate);
 
