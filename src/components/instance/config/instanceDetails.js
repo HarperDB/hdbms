@@ -1,22 +1,21 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/instanceState';
 import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
-  const { url, totalPriceStringWithInterval, compute, instance_name, creation_date, instance_region, storage, is_local, compute_stack_id } = useStoreState(instanceState, (s) => ({
-    url: s.url,
-    totalPriceStringWithInterval: s.totalPriceStringWithInterval,
-    compute: s.compute,
-    instance_name: s.instance_name,
-    creation_date: s.creation_date,
-    instance_region: s.instance_region,
-    storage: s.storage,
-    is_local: s.is_local,
-    compute_stack_id: s.compute_stack_id,
-  }));
+  const { compute_stack_id } = useParams();
+  const url = useStoreState(instanceState, (s) => s.url);
+  const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
+  const compute = useStoreState(instanceState, (s) => s.compute);
+  const instance_name = useStoreState(instanceState, (s) => s.instance_name);
+  const creation_date = useStoreState(instanceState, (s) => s.creation_date);
+  const instance_region = useStoreState(instanceState, (s) => s.instance_region);
+  const storage = useStoreState(instanceState, (s) => s.storage);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   return (
     <>

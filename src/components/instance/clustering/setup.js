@@ -22,17 +22,11 @@ import userInfo from '../../../api/instance/userInfo';
 
 export default () => {
   const { compute_stack_id } = useParams();
-  const { cluster_role, cluster_user, name, auth, url } = useStoreState(
-    instanceState,
-    (s) => ({
-      cluster_role: s.network.cluster_role,
-      cluster_user: s.network.cluster_user,
-      name: s.network.name,
-      auth: s.auth,
-      url: s.url,
-    }),
-    [compute_stack_id]
-  );
+  const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
+  const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
+  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
+  const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
   const [nodeNameMatch, setNodeNameMatch] = useState(compute_stack_id === name);
   const [formState, setFormState] = useState({});
 

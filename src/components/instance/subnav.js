@@ -7,50 +7,29 @@ import { useHistory } from 'react-router';
 import appState from '../../state/appState';
 import instanceState from '../../state/instanceState';
 
-const icon = (is_local) => ({
-  alignItems: 'center',
-  display: 'flex',
-
-  ':before': {
-    content: is_local ? '"\f233"' : '"\f0c2"',
-    display: 'inline-block',
-    font: 'normal normal normal 14px/1 FontAwesome',
-    marginRight: 8,
-  },
-});
-
-const routeIcon = (iconCode) => {
-  return {
-    alignItems: 'center',
-    display: 'flex',
-
-    ':before': {
-      content: `"\\${iconCode}"`,
-      display: 'inline-block',
-      font: 'normal normal normal 14px/1 FontAwesome',
-      marginRight: 8,
-    },
-  };
-};
+import icon from '../../methods/select/icon';
+import routeIcon from '../../methods/select/routeIcon';
 
 const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
 
 export default ({ routes = [] }) => {
-  const { compute_stack_id } = useParams();
+  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
   const { options, activeOption } = useStoreState(
     appState,
     (s) => {
-      const selectedInstance = s.instances.find((i) => i.compute_stack_id === compute_stack_id);
-      const otherInstances = s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
+      const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
+      const otherInstances = s.instances && s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
       return {
-        options: otherInstances.map((i) => ({
-          label: i.instance_name,
-          value: i.compute_stack_id,
-          is_local: i.is_local,
-        })),
+        options:
+          otherInstances &&
+          otherInstances.map((i) => ({
+            label: i.instance_name,
+            value: i.compute_stack_id,
+            is_local: i.is_local,
+          })),
         activeOption: {
           label: selectedInstance?.instance_name,
           value: compute_stack_id,
@@ -73,9 +52,8 @@ export default ({ routes = [] }) => {
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"
-          width="200px"
-          onChange={({ value }) => history.push(`/instance/${value}/browse`)}
-          options={options}
+          onChange={({ value }) => history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`)}
+          options={options || []}
           value={activeOption}
           defaultValue={activeOption.value}
           isSearchable={false}
@@ -88,23 +66,28 @@ export default ({ routes = [] }) => {
           }}
         />
       </Nav>
-      <Nav navbar className="instance-nav d-none d-md-flex">
+      <Nav navbar className="instance-nav d-none d-lg-flex">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink className="text-capitalize nav-link" to={`/instance/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}>
+            <NavLink
+              title={route.link}
+              className="text-capitalize nav-link"
+              isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
+              to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+            >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.link}
             </NavLink>
           </NavItem>
         ))}
       </Nav>
-      <Nav navbar className="instance-nav-select d-flex d-md-none">
+      <Nav navbar className="instance-nav-select d-flex d-lg-none">
         <SelectDropdown
           className="react-select-container"
           classNamePrefix="react-select"
           width="200px"
-          onChange={({ value }) => history.push(`/instance/${compute_stack_id}/${value}`)}
-          options={routes.map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
+          onChange={({ value }) => history.push(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
+          options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}
           isSearchable={false}

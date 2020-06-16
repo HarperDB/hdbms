@@ -7,7 +7,6 @@ import listRoles from '../../api/instance/listRoles';
 import clusterStatus from '../../api/instance/clusterStatus';
 
 import browseTableColumns from '../datatable/browseTableColumns';
-import buildPermissionStructure from './buildPermissionStructure';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from '../datatable/clusterConfigColumns';
@@ -17,7 +16,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   if (!thisInstance) {
     return {
-      error: 'Instance does not exist',
+      error: true,
     };
   }
 
@@ -29,6 +28,25 @@ export default async ({ instances, auth, compute_stack_id }) => {
   if (schema.error) {
     return {
       error: 'Could not log into instance',
+    };
+  }
+
+  const { structure, defaultBrowseURL } = browseTableColumns(schema);
+
+  if (!auth.super) {
+    instanceState.update((s) => {
+      Object.entries({
+        ...thisInstance,
+        auth,
+        schema,
+        structure,
+        defaultBrowseURL,
+        loading: false,
+      }).map(([key, value]) => (s[key] = value));
+    });
+
+    return {
+      error: false,
     };
   }
 
@@ -46,10 +64,6 @@ export default async ({ instances, auth, compute_stack_id }) => {
     auth,
     url: thisInstance.url,
   });
-
-  const { structure, defaultBrowseURL } = browseTableColumns(schema);
-
-  const permissions = buildPermissionStructure(schema);
 
   const network = await buildNetwork({
     users,
@@ -73,23 +87,21 @@ export default async ({ instances, auth, compute_stack_id }) => {
     url: thisInstance.url,
   });
 
-  const newInstanceState = {
-    ...thisInstance,
-    auth,
-    structure,
-    network,
-    users,
-    roles,
-    permissions,
-    defaultBrowseURL,
-    clustering,
-    clusterDataTable,
-    clusterDataTableColumns,
-    loading: false,
-  };
-
   instanceState.update((s) => {
-    Object.entries(newInstanceState).map(([key, value]) => (s[key] = value));
+    Object.entries({
+      ...thisInstance,
+      auth,
+      schema,
+      structure,
+      network,
+      users,
+      roles,
+      defaultBrowseURL,
+      clustering,
+      clusterDataTable,
+      clusterDataTableColumns,
+      loading: false,
+    }).map(([key, value]) => (s[key] = value));
   });
 
   return {

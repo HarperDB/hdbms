@@ -18,7 +18,11 @@ const icons = {
 const Local = () => {
   const filterLocal = useStoreState(appState, (s) => s.filterLocal);
 
-  return <ToggleButton width="100%" icons={icons} checked={filterLocal} id="filterLocal" onChange={updateFilter} />;
+  return (
+    <div title={`Click to ${filterLocal ? 'hide' : 'show'} local instances`} className="instance-toggle-holder">
+      <ToggleButton width="100%" icons={icons} checked={filterLocal} id="filterLocal" onChange={updateFilter} />
+    </div>
+  );
 };
 
 export default Local;

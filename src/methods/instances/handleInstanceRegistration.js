@@ -8,7 +8,7 @@ import createLicense from '../../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 import clusterStatus from '../../api/instance/clusterStatus';
 
-export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
+export default async ({ auth, customer_id, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
@@ -80,7 +80,7 @@ export default async ({ auth, instanceAuth, url, is_local, instance_id, compute_
     const license = await createLicense({
       auth,
       compute_stack_id,
-      customer_id: auth.customer_id,
+      customer_id,
       fingerprint,
     });
 

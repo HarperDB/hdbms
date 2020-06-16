@@ -7,22 +7,21 @@
   transform: translate(-50%, -50%);
   width: 100%;
 
-  &.sign-up {
-    max-width: 540px;
-
-    @media screen and (max-width: 575px) {
-      max-width: 270px;
-    }
-  }
-
   #login-logo {
     background-image: url('https://ds5zz9rfvzuta.cloudfront.net/images/logo_vertical_white.png');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 100px;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     width: 80px;
+  }
+
+  .version {
+    color: $white-overlay;
+    font-size: $font-size-small;
+    margin: 0 auto 20px;
+    text-align: center;
   }
 
   .card {
@@ -54,26 +53,6 @@
     }
   }
 
-  .subdomain-form {
-    padding-right: 0;
-    width: 120px;
-  }
-
-  .subdomain-label {
-    color: $color-white;
-    font-size: 0.75rem !important;
-    line-height: 1 !important;
-    padding-left: 0;
-    padding-top: 12px;
-    white-space: nowrap;
-
-    a {
-      color: $color-white !important;
-    }
-  }
-
-
-
   .disclaimer {
     border-bottom: 1px solid $faint-white-overlay;
     border-top: 1px solid $faint-white-overlay;
@@ -85,7 +64,7 @@
     text-align: center;
 
     @media screen and (max-width: 575px) {
-      font-size: $font-size-smaller;
+      font-size: $font-size-small;
     }
 
     a,
@@ -99,10 +78,16 @@
     text-transform: lowercase;
   }
 
+  .login-nav-link-holder {
+    &:last-child {
+      text-align: right;
+    }
+  }
+
   .login-nav-link {
     color: $white-overlay !important;
     display: block;
-    font-size: $font-size-small;
+    font-size: 85%;
     text-transform: lowercase;
     white-space: nowrap;
 
@@ -114,6 +99,7 @@
       color: $color-danger !important;
       font-weight: $font-weight-bold;
       text-align: center;
+      white-space: normal;
     }
   }
 }

@@ -10,19 +10,13 @@ import dropRole from '../../../api/instance/dropRole';
 export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const history = useHistory();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    await dropRole({
-      auth,
-      url,
-      id: item.id,
-    });
+    await dropRole({ auth, url, id: item.id });
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
@@ -47,7 +41,7 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item.id}`));
 
   return (
-    <Row key={item} className="item-row" onClick={handleSetActive}>
+    <Row key={item} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive}>
       <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item.role}?` : item.role}</Col>
       <Col className="item-action">
         {isConfirmingDropItem ? (

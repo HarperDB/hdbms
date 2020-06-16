@@ -1,24 +1,39 @@
 import Resources from './resources';
 import Installation from './installation';
 import Drivers from './drivers';
+import Tutorials from './tutorials';
 
 export default [
   {
     component: Installation,
     path: '/support/installation',
-    link: 'installation',
+    link: '/support/installation',
+    label: 'installation',
     icon: 'wrench',
+    iconCode: 'f0ad',
+  },
+  {
+    component: Tutorials,
+    path: '/support/tutorials',
+    link: '/support/tutorials',
+    label: 'tutorials',
+    icon: 'video-camera',
+    iconCode: 'f03d',
   },
   {
     component: Drivers,
     path: '/support/drivers',
-    link: 'drivers',
+    link: '/support/drivers',
+    label: 'drivers',
     icon: 'cubes',
+    iconCode: 'f1b3',
   },
   {
     component: Resources,
     path: '/support/resources',
-    link: 'resources',
-    icon: 'external-link',
+    link: '/support/resources',
+    label: 'resources',
+    icon: 'external-link-square',
+    iconCode: 'f14c',
   },
 ];

@@ -4,15 +4,11 @@
   font-family: $font-family-sans;
   font-weight: $font-weight-light;
   line-height: 1 !important;
-  outline: none !important;
   padding-left: 5px;
   padding-right: 5px;
   transition: none !important;
 
-  &:active,
-  &:hover {
-    outline: none !important;
-  }
+
 
   &.no-shadow {
     box-shadow: none !important;
@@ -35,16 +31,22 @@
     padding: 0;
   }
 
+  &.btn-danger {
+    background-color: $color-danger !important;
+    border-color: $color-danger !important;
+    color: $color-white !important;
+  }
+
   &.btn-grey {
-    background-color: $color-grey !important;
-    border-color: $color-grey !important;
+    background-color: $color-darkgrey !important;
+    border-color: $color-darkgrey !important;
     color: $color-white !important;
   }
 
   &.btn-outline-grey {
     background-color: $color-white !important;
-    border-color: $color-grey !important;
-    color: $color-grey !important;
+    border-color: $color-darkgrey !important;
+    color: $color-darkgrey !important;
   }
 
   &.btn-black {
@@ -64,5 +66,7 @@
     border-color: $color-darkpurple !important;
     color: $color-white !important;
   }
+
+
 }
 

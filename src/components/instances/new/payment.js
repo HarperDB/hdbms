@@ -6,24 +6,16 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
-
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
-
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
+export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, stripeId }) => {
   const history = useHistory();
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const customer = useStoreState(appState, (s) => s.customer);
-  const [formData, setFormData] = useState({
-    postal_code: false,
-    card: false,
-    expire: false,
-    cvc: false,
-  });
+  const auth = useStoreState(appState, (s) => s.auth);
+  const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
@@ -33,41 +25,24 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
     if (submitted && !processing) {
       const { card, expire, cvc, postal_code } = formData;
       if (!card || !expire || !cvc || !postal_code) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
         setTimeout(() => setFormState({}), 2000);
       } else {
         const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: 'card',
           card: elements.getElement(CardNumberElement),
-          billing_details: {
-            address: { postal_code },
-          },
+          billing_details: { address: { postal_code } },
         });
 
-        setFormState({
-          processing: true,
-        });
+        setFormState({ processing: true });
 
         if (error) {
-          setFormState({
-            error: error.message,
-          });
+          setFormState({ error: error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          await addPaymentMethod({
-            auth: lmsAuth,
-            payment_method_id: paymentMethod.id,
-            stripe_id: customer.stripe_id,
-          });
-          await getCustomer({
-            auth: lmsAuth,
-            customer_id: lmsAuth.customer_id,
-          });
-          setFormState({
-            success: true,
-          });
+          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: stripeId, customer_id: customerId });
+          await getCustomer({ auth, customer_id: customerId });
+          setFormState({ success: true });
         }
       }
     }
@@ -82,13 +57,26 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
       <FormStatus height="358px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)} title="Back to Instance Details" block color="purple" className="mt-3">
+          <Button
+            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            title="Back to Instance Details"
+            block
+            color="purple"
+            className="mt-3"
+          >
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Details
           </Button>
         </Col>
         <Col sm="6">
-          <Button title="Review Instance Details" onClick={() => history.push('/instances/new/confirm')} block color="purple" className="mt-3">
+          <Button
+            id="reviewInstanceDetails"
+            title="Review Instance Details"
+            onClick={() => history.push(`/o/${customerId}/instances/new/confirm`)}
+            block
+            color="purple"
+            className="mt-3"
+          >
             Review Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>
@@ -97,7 +85,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
     </>
   ) : (
     <>
-      <Card>
+      <Card id="paymentDetails">
         <CardBody>
           <div className="mb-4">
             {computeProduct?.price ? (
@@ -119,20 +107,23 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/instances/new/details_${isLocal ? 'local' : 'cloud'}`)} title="Back to Instance Details" block className="mt-3" color="purple">
+          <Button
+            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            title="Back to Instance Details"
+            block
+            className="mt-3"
+            color="purple"
+          >
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Details
           </Button>
         </Col>
         <Col sm="6">
           <Button
+            id="addCardToAccount"
             title="Add Card To Account"
             disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
+            onClick={() => setFormState({ submitted: true })}
             block
             className="mt-3"
             color="purple"

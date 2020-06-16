@@ -9,10 +9,10 @@ export default ({ filterSearch, filterCloud, filterLocal, instances }) => {
     if (filterSearch === '') return true;
 
     let pass = false;
-    if (i.instance_name && i.instance_name.indexOf(filterSearch) !== -1) pass = true;
-    if (i.host && i.host.indexOf(filterSearch) !== -1) pass = true;
-    if (i.url && i.url.indexOf(filterSearch) !== -1) pass = true;
-    if (i.instance_region && i.instance_region.indexOf(filterSearch) !== -1) pass = true;
+    if (i.instance_name && i.instance_name.toLowerCase().indexOf(filterSearch.toLowerCase()) !== -1) pass = true;
+    if (i.host && i.host.toLowerCase().indexOf(filterSearch.toLowerCase()) !== -1) pass = true;
+    if (i.url && i.url.toLowerCase().indexOf(filterSearch.toLowerCase()) !== -1) pass = true;
+    if (i.instance_region && i.instance_region.toLowerCase().indexOf(filterSearch.toLowerCase()) !== -1) pass = true;
     return pass;
   });
 };

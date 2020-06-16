@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import handleEnter from '../../methods/util/handleEnter';
+import config from '../../../config';
 
 export default () => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
-  const [, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
-  const history = useHistory();
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -24,65 +20,34 @@ export default () => {
       const { password, password2 } = formData;
 
       if (!password || !password2) {
-        setFormState({
-          error: 'all fields are required',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'all fields are required' });
       } else if (password !== password2) {
-        setFormState({
-          error: 'passwords must match',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'passwords must match' });
       } else {
-        setFormState({
-          processing: true,
-        });
-        const response = await updatePassword({
-          auth: lmsAuth,
-          ...lmsAuth,
-          password,
-        });
-        if (response.error) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            setFormData({});
-          }, 1000);
-        } else {
-          appState.update((s) => {
-            s.auth = {
-              ...lmsAuth,
-              pass: password,
-            };
-          });
-          setPersistedLMSAuth({
-            ...lmsAuth,
-            pass: password,
-          });
-          history.push('/sign-in');
-        }
+        setFormState({ processing: true });
+        updatePassword({ auth, ...auth, password });
       }
     }
   }, [formState]);
 
-  useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
+  useEffect(() => {
+    if (auth?.passwordError) {
+      setFormState({ error: auth.message });
+      setTimeout(() => setFormState({}), 3000);
     }
-  }, [formData]);
+  }, [auth?.passwordError]);
+
+  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
         <>
           <Card className="mb-3">
             <CardBody className="text-white text-center">
-              updating your password
-              <br />
-              <br />
+              <div className="mb-3">updating your password</div>
               <i className="fa fa-spinner fa-spin text-white" />
             </CardBody>
           </Card>
@@ -91,15 +56,9 @@ export default () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody>
+            <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    password: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="password"
@@ -107,30 +66,14 @@ export default () => {
                 placeholder="new password"
               />
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    password2: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, password2: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"
                 title="verify password"
                 placeholder="verify password"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                disabled={formState.submitted}
-                title="Update My Password"
-                block
-                color="purple"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Update My Password" block color="purple">
                 Update My Password
               </Button>
             </CardBody>
@@ -143,7 +86,7 @@ export default () => {
           ) : (
             <Row>
               <Col xs="6">
-                <NavLink to="/sign-in" className="login-nav-link">
+                <NavLink to="/" className="login-nav-link">
                   Back to Sign In
                 </NavLink>
               </Col>

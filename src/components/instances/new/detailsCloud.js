@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Button, RadioCheckbox, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit }) => {
+export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -15,11 +15,10 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     instance_region: newInstance.instance_region || regions[0].value,
     instance_type: false,
   });
-
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
   const instanceType = selectedProduct?.instance_type;
-  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size).price : 'FREE';
+  const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size)?.price : 'FREE';
   const isFree = !computePrice && !storagePrice;
   const needsCard = products && storage && !hasCard && !isFree;
 
@@ -28,73 +27,51 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
-        setFormState({
-          error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''}`,
-        });
+        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
-        setNewInstance({
-          ...newInstance,
-          ...formData,
-          instance_type: instanceType,
-        });
-        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
+        setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
+        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
       } else {
-        setFormState({
-          error: 'All fields must be filled out.',
-        });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
 
   return (
     <>
-      <Card>
+      <Card id="cloudInstanceSpecs">
         <CardBody>
-          <ContentContainer header="Storage Size (scroll for more)" maxHeight="120px">
-            <RadioCheckbox
-              id="data_volume_size"
-              className="radio-button"
-              type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  data_volume_size: value,
-                })
-              }
-              options={storage}
-              value={formData.data_volume_size}
-              defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
-            />
-          </ContentContainer>
-
-          <ContentContainer header="Instance RAM (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Instance RAM" subheader="scroll for more" maxHeight="120px">
             <RadioCheckbox
               id="stripe_plan_id"
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  stripe_plan_id: value,
-                })
-              }
+              required
+              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
           </ContentContainer>
-
-          <ContentContainer header="Instance Region (scroll for more)" maxHeight="120px">
+          <ContentContainer header="Storage Size" subheader="scroll for more" maxHeight="120px">
+            <RadioCheckbox
+              id="data_volume_size"
+              className="radio-button"
+              type="radio"
+              required
+              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
+              options={storage}
+              value={formData.data_volume_size}
+              defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
+            />
+          </ContentContainer>
+          <ContentContainer header="Instance Region" subheader="scroll for more" maxHeight="120px">
             <RadioCheckbox
               id="instance_region"
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  instance_region: value,
-                })
-              }
+              required
+              onChange={(value) => setFormData({ ...formData, instance_region: value })}
               options={regions}
               value={formData.instance_region}
               defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
@@ -104,18 +81,15 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/meta_cloud')} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>
         </Col>
         <Col sm="6">
           <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
+            id={needsCard ? 'addPaymentMethod' : 'confirmInstanceDetails'}
+            onClick={() => setFormState({ submitted: true })}
             title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             block
             className="mt-3"

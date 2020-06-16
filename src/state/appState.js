@@ -9,10 +9,12 @@ const appState = new Store({
   instances: false,
   hasCard: false,
   lastUpdate: false,
+  orgSearch: '',
   filterSearch: '',
   filterLocal: true,
   filterCloud: true,
-  version: { number: '2.0.37-BETA', location: 'https://registry.npmjs.org/harperdb/-/harperdb-2.0.37-BETA.tgz' },
+  version: false,
+  darkTheme: false,
 });
 
 export default appState;

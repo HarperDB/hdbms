@@ -12,10 +12,8 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;
@@ -60,11 +58,11 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item}`));
 
   return (
-    <Row key={item} className="item-row" onClick={handleSetActive}>
+    <Row key={item} title={`View${isActive ? 'ing' : ''} ${itemType} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive} tabIndex="0">
       <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
       <Col className="item-action">
         {confirmedDropItem ? (
-          <Button disabled color="purple" className="round" title={`Viewing ${itemType} ${item}`}>
+          <Button tabIndex="-1" disabled color="purple" className="round">
             <i className="fa fa-spinner fa-spin" />
           </Button>
         ) : isConfirmingDropItem ? (
@@ -81,12 +79,10 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
             <i className="fa fa-minus text-white" />
           </Button>
         ) : isActive ? (
-          <Button color="purple" className="round" title={`Viewing ${itemType} ${item}`}>
+          <Button tabIndex="-1" color="purple" className="round">
             <i className="fa fa-chevron-right" />
           </Button>
-        ) : (
-          <Button color="link" className="round" title={`View ${itemType} ${item}`} />
-        )}
+        ) : null}
       </Col>
     </Row>
   );

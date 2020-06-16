@@ -12,7 +12,6 @@ textarea,
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
-  outline: none !important;
   transition: none;
 
   &::placeholder {
@@ -88,6 +87,24 @@ textarea {
 #__lpform_input_idx_3_numspan,
 #__lpform_input_idx_4_numspan {
   display: none !important;
+}
+
+.subdomain-form {
+  padding-right: 0;
+  width: 120px;
+}
+
+.subdomain-label {
+  color: $color-white;
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+  padding-left: 0;
+  padding-top: 12px;
+  white-space: nowrap;
+
+  a {
+    color: $color-white !important;
+  }
 }
 
 

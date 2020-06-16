@@ -24,13 +24,14 @@ export default (dbResponse) => {
             hashAttribute: thisTable.hash_attribute,
             newEntityColumns: {},
             dataTableColumns: orderedColumns.map((k) => ({
+              id: k.toString(),
               Header: k.toString(),
-              accessor: k.toString(),
+              accessor: (row) => row[k.toString()],
               style: {
                 height: 29,
                 paddingTop: 10,
               },
-              Cell: (props) => handleCellValues(props.value),
+              Cell: ({ value }) => handleCellValues(value),
             })),
           };
 

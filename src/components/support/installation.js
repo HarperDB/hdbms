@@ -14,7 +14,7 @@ export default () => {
           <span className="floating-card-header">Local Install Via NPM</span>
           <Card className="my-3">
             <CardBody className="installation">
-              HarperDB requires NodeJS/NPM, available by{' '}
+              HarperDB requires NodeJS v12.x and NPM, available by{' '}
               <a target="_blank" rel="noopener noreferrer" href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">
                 clicking here
               </a>
@@ -34,13 +34,13 @@ export default () => {
           <Card className="my-3">
             <CardBody className="installation">
               If you need to install HarperDB on a device without access to NPM, you can fetch the installer using the link below.
-              <Button color="purple" block className="mt-3 mb-4" href={version.location}>
+              <Button disabled={!version.location} color="purple" block className="mt-3 mb-4" href={version?.location}>
                 Download Install Package
               </Button>
               <hr />
               Once you move the downloaded file to the device, execute the following command line operations to install HarperDB.
               <Alert className="mt-3" color="dark">
-                npm i -g harperdb-{version.number}.tgz
+                npm i -g harperdb-{version?.number || '...'}.tgz
                 <br />
                 <br />
                 harperdb install

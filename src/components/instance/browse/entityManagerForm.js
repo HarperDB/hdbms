@@ -12,10 +12,8 @@ import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnders
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
   const alert = useAlert();
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const [entityName, setEntityName] = useState(false);
   const [nameError, toggleNameError] = useState(false);
@@ -111,8 +109,8 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           </Button>
         ) : (
           <>
-            <Button color="success" className="round mr-1">
-              <i className="fa fa-check text-white" onClick={createItem} />
+            <Button color="success" className="round mr-1" onClick={createItem} onKeyDown={createItem}>
+              <i className="fa fa-check text-white" />
             </Button>
             <Button color="black" className="round" onClick={() => toggleCreate(false)}>
               <i className="fa fa-times text-white" />

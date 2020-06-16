@@ -7,6 +7,7 @@
     &.instance {
       cursor: pointer;
       height: 170px;
+      min-width: 278px;
 
       &.unclickable {
         cursor: not-allowed;
@@ -14,6 +15,7 @@
 
       &.new {
         color: $color-purple;
+        font-size: 95%;
 
         .new-instance-plus {
           transform: rotate(-90deg);
@@ -30,6 +32,7 @@
 
 
       .instance-name {
+        height: 15px;
         line-height: 1 !important;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -55,7 +58,7 @@
       }
 
       .instance-url {
-        font-size: $font-size-smaller;
+        font-size: $font-size-small;
         height: 20px;
         margin: 5px 0 10px;
         overflow: hidden;

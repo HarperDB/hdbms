@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, SelectDropdown, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -15,28 +15,21 @@ import updateInstance from '../../../api/lms/updateInstance';
 import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default ({ setInstanceAction }) => {
+  const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, hasCard, canAddFreeCloudInstance } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-    hasCard: s.hasCard,
-  }));
-  const { compute_stack_id, stripe_plan_id, computeProducts, compute, storage, is_being_modified } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    stripe_plan_id: s.stripe_plan_id,
-    computeProducts: s.computeProducts,
-    compute: s.compute,
-    storage: s.storage,
-    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
-    canAddFreeCloudInstance: s.instances && config.free_cloud_instance_limit > s.instances.filter((i) => !i.is_local && !i.compute.price).length,
-  }));
+  const stripe_plan_id = useStoreState(instanceState, (s) => s.stripe_plan_id);
+  const computeProducts = useStoreState(instanceState, (s) => s.computeProducts);
+  const compute = useStoreState(instanceState, (s) => s.compute);
+  const storage = useStoreState(instanceState, (s) => s.storage);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
+  const auth = useStoreState(appState, (s) => s.auth);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
+  const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    compute_stack_id,
-    customer_id: customer.customer_id,
-    stripe_plan_id,
-  });
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id, stripe_plan_id });
 
   const newCompute = computeProducts && computeProducts.find((p) => p.value === formData.stripe_plan_id);
   const newTotal = (storage?.price || 0) + (newCompute?.price || 0);
@@ -46,22 +39,14 @@ export default ({ setInstanceAction }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      if (!newTotal && !canAddFreeCloudInstance) {
+      if (!newTotal && !is_local && !canAddFreeCloudInstance) {
         alert.error(`You are limited to ${config.free_cloud_instance_limit} free cloud instance${config.free_cloud_instance_limit !== 1 ? 's' : ''}`);
-        setFormData({
-          ...formData,
-          stripe_plan_id,
-        });
+        setFormData({ ...formData, stripe_plan_id });
         setFormState({});
       } else {
         setInstanceAction('Updating');
 
-        const response = await updateInstance({
-          auth,
-          compute_stack_id,
-          customer_id: customer.customer_id,
-          ...formData,
-        });
+        const response = await updateInstance({ auth, compute_stack_id, customer_id, ...formData });
 
         if (response.error) {
           alert.error('There was an error updating your instance. Please try again later.');
@@ -71,7 +56,7 @@ export default ({ setInstanceAction }) => {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push('/instances'), 3000);
+          setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
         }
       }
     }
@@ -94,16 +79,9 @@ export default ({ setInstanceAction }) => {
         isClearable={false}
         isLoading={!computeProducts}
         placeholder="select a RAM allotment"
-        styles={{
-          placeholder: (styles) => ({
-            ...styles,
-            textAlign: 'center',
-            width: '100%',
-            color: '#BCBCBC',
-          }),
-        }}
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
-      {hasChanged && !newTotal && !canAddFreeCloudInstance ? (
+      {hasChanged && !newTotal && !is_local && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">
           <CardBody>
             You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
@@ -111,7 +89,8 @@ export default ({ setInstanceAction }) => {
         </Card>
       ) : hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
+          className="mt-2"
+          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}

@@ -3,19 +3,19 @@ import { Row, Col, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/instanceState';
 import removeNode from '../../../api/instance/removeNode';
 import addNode from '../../../api/instance/addNode';
 
 export default ({ setShowModal, item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort }, itemType }) => {
+  const { customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const [changing, setChanging] = useState(false);
-  const { auth, url } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
 
   const handleAddNode = async (payload) => {
     setChanging(true);
@@ -49,7 +49,7 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <>
-            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push('/instances/new')}>
+            <Button color="success" className="round mr-1" title="Add Instance To Studio" onClick={() => history.push(`/o/${customer_id}/instances/new`)}>
               <i className="fa fa-plus text-white" />
             </Button>
             <Button

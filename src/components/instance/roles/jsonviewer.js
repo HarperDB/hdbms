@@ -1,42 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button } from '@nio/ui-kit';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import useAsyncEffect from 'use-async-effect';
+
+import appState from '../../../state/appState';
 
 import alterRole from '../../../api/instance/alterRole';
 import instanceState from '../../../state/instanceState';
-import themeState from '../../../state/themeState';
+import buildPermissionStructure from '../../../methods/instance/buildPermissionStructure';
 
 export default () => {
-  const [darkTheme] = themeState(false);
   const alert = useAlert();
   const { role_id } = useParams();
-  const { permissions, roles, auth, url } = useStoreState(instanceState, (s) => ({
-    permissions: s.permissions,
-    roles: s.roles,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const roles = useStoreState(instanceState, (s) => s.roles);
+  const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (role_id && roles) {
-      setActivePermissions(roles.find((r) => r.id === role_id).permission);
+      const defaultActivePermissions = await buildPermissionStructure({ auth, url, currentRolePermissions: roles.find((r) => r.id === role_id).permission });
+      setActivePermissions(defaultActivePermissions);
+      setNewPermissions(defaultActivePermissions);
     }
-  }, [role_id, roles]);
-
-  useEffect(() => {
-    if (activePermissions) {
-      setNewPermissions({
-        ...permissions,
-        ...activePermissions,
-      });
-    }
-  }, [activePermissions]);
+  }, [role_id, roles, lastUpdate]);
 
   const submitRecord = async (e) => {
     e.preventDefault();
@@ -46,12 +41,10 @@ export default () => {
       return false;
     }
 
-    const response = await alterRole({
-      permission: newPermissions,
-      id: role_id,
-      auth,
-      url,
-    });
+    setLoading(true);
+    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url });
+    setLoading(false);
+
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
       setNewPermissions(activePermissions);
@@ -88,8 +81,8 @@ export default () => {
         onChange={(value) => setNewPermissions(value.jsObject)}
       />
       <hr />
-      <Button block color="success" onClick={submitRecord}>
-        Update Role Permissions
+      <Button block color="success" disabled={loading} onClick={submitRecord}>
+        {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Update Role Permissions</span>}
       </Button>
     </>
   );

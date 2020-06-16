@@ -71,26 +71,20 @@ b,
   line-height: 1 !important;
 }
 
-.text-smaller {
-  font-size: $font-size-smaller;
-  line-height: 1 !important;
-}
-
-.text-smallest {
-  font-size: $font-size-smallest;
-  line-height: 1 !important;
-}
-
 .text-lightgrey {
-  color: $color-lightgrey;
+  color: $color-lightgrey !important;
 }
 
 .text-grey {
-  color: $color-grey;
+  color: $color-grey !important;
+}
+
+.text-danger {
+  color: $color-danger !important;
 }
 
 .text-darkgrey {
-  color: $color-darkgrey;
+  color: $color-darkgrey !important;
 }
 
 .text-white-overlay {
@@ -98,5 +92,5 @@ b,
 }
 
 .text-purple {
-  color: $color-purple;
+  color: $color-purple !important;
 }

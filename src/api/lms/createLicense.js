@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, compute_stack_id, customer_id, fingerprint }) => {
-  const response = await queryLMS({
+export default async ({ auth, compute_stack_id, customer_id, fingerprint }) =>
+  queryLMS({
     endpoint: 'createLicense',
     method: 'POST',
     payload: {
@@ -11,6 +11,3 @@ export default async ({ auth, compute_stack_id, customer_id, fingerprint }) => {
     },
     auth,
   });
-
-  return response;
-};

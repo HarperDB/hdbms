@@ -9,12 +9,10 @@ import instanceState from '../../../state/instanceState';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
-  const { auth, url, cluster_role, cluster_user } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    cluster_role: s.network?.cluster_role,
-    cluster_user: s.network?.cluster_user,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
+  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -24,25 +22,13 @@ export default () => {
     if (submitted) {
       const { username, password } = formData;
       if (!username || !password) {
-        setFormState({
-          error: 'All fields are required',
-        });
+        setFormState({ error: 'All fields are required' });
       } else if (!isAlphaUnderscore(username)) {
-        setFormState({
-          error: 'usernames must have only letters and underscores',
-        });
+        setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
-        const response = await createClusterUser({
-          username,
-          password,
-          role: cluster_role,
-          auth,
-          url,
-        });
+        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
         if (response) {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
         }
       }
     }
@@ -69,38 +55,20 @@ export default () => {
       <hr />
       <div className="text-nowrap mb-3">Create Cluster User</div>
       <Input
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            username: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
         className={`mb-1 ${formState.error && !formData.username ? 'error' : ''}`}
         type="text"
         title="username"
         placeholder="username"
       />
       <Input
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            password: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         className={`mb-3 ${formState.error && !formData.password ? 'error' : ''}`}
         type="password"
         title="password"
         placeholder="password"
       />
-      <Button
-        color="success"
-        block
-        onClick={() =>
-          setFormState({
-            submitted: true,
-          })
-        }
-      >
+      <Button color="success" block onClick={() => setFormState({ submitted: true })}>
         Create Cluster User
       </Button>
       {formState.error && (

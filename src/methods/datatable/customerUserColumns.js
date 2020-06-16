@@ -1,38 +1,14 @@
 import React from 'react';
-import { Button } from '@nio/ui-kit';
 
-const toggleCellPadding = {
-  paddingTop: 3,
-  paddingBottom: 0,
-  paddingLeft: 0,
-  paddingRight: 2,
-};
-
-export default ({ current_user_id, setUserToRemove }) => [
-  {
-    Header: 'last name',
-    accessor: 'lastname',
-    style: { paddingTop: 10 },
-  },
-  {
-    Header: 'first name',
-    accessor: 'firstname',
-    style: { paddingTop: 10 },
-  },
+export default ({ current_user_id }) => [
   {
     Header: 'email address',
     accessor: 'email',
-    style: { paddingTop: 10 },
+    Cell: ({ original: { user_id, email } }) => <div className={current_user_id !== user_id ? '' : 'text-grey'}>{email}</div>,
   },
   {
-    Header: '',
-    Cell: ({ original: { user_id } }) =>
-      current_user_id !== user_id && (
-        <Button color="danger" className="datatable" block onClick={() => setUserToRemove(user_id)}>
-          delete
-        </Button>
-      ),
-    width: 80,
-    style: toggleCellPadding,
+    Header: 'status',
+    accessor: 'orgs[0].status',
+    Cell: ({ original: { user_id, orgs } }) => <div className={current_user_id !== user_id ? '' : 'text-grey'}>{orgs[0].status}</div>,
   },
 ];

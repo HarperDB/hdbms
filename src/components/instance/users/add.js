@@ -9,12 +9,10 @@ import FormStatus from '../../shared/formStatus';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
-  const { auth, url, users, roles } = useStoreState(instanceState, (s) => ({
-    auth: s.auth,
-    url: s.url,
-    users: s.users,
-    roles: s.roles,
-  }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const users = useStoreState(instanceState, (s) => s.users);
+  const roles = useStoreState(instanceState, (s) => s.roles);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -24,43 +22,23 @@ export default () => {
       const { username, password, role } = formData;
 
       if (!username || !role || !password) {
-        setFormState({
-          error: 'All fields must be filled out',
-        });
+        setFormState({ error: 'All fields must be filled out' });
       } else if (!isAlphaUnderscore(username)) {
-        setFormState({
-          error: 'usernames must have only letters and underscores',
-        });
+        setFormState({ error: 'usernames must have only letters and underscores' });
         setTimeout(() => setFormState({}), 2000);
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
-        setFormState({
-          error: 'User already exists',
-        });
+        setFormState({ error: 'User already exists' });
       } else {
-        setFormState({
-          processing: true,
-        });
-
-        const response = await addUser({
-          auth,
-          role,
-          username,
-          password,
-          url,
-        });
+        setFormState({ processing: true });
+        const response = await addUser({ auth, role, username, password, url });
 
         if (response.message.indexOf('successfully') !== -1) {
           instanceState.update((s) => {
             s.lastUpdate = Date.now();
           });
-
-          setFormState({
-            success: response.message,
-          });
+          setFormState({ success: response.message });
         } else {
-          setFormState({
-            error: response.message,
-          });
+          setFormState({ error: response.message });
         }
       }
       setTimeout(() => setFormData({}), 2000);
@@ -70,11 +48,7 @@ export default () => {
   useAsyncEffect(() => setFormState({}), [formData]);
 
   useAsyncEffect(() => {
-    if (roles)
-      setFormData({
-        ...formData,
-        role: false,
-      });
+    if (roles) setFormData({ ...formData, role: false });
   }, [roles]);
 
   return formState.processing ? (
@@ -90,70 +64,32 @@ export default () => {
         className="mb-2 text-center"
         name="username"
         placeholder="username"
+        autoComplete="false"
         value={formData.username || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            username: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
       />
-
       <Input
         type="text"
         className="mb-2 text-center"
         name="password"
+        autoComplete="false"
         placeholder="password"
         value={formData.password || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            password: e.target.value,
-          })
-        }
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
       />
-
       <SelectDropdown
         className="react-select-container"
         classNamePrefix="react-select"
-        onChange={({ value }) =>
-          setFormData({
-            ...formData,
-            role: value,
-          })
-        }
-        options={
-          roles &&
-          roles.map((r) => ({
-            label: r.role,
-            value: r.id,
-          }))
-        }
+        onChange={({ value }) => setFormData({ ...formData, role: value })}
+        options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
         value={roles && formData.role && roles.find((r) => r.value === formData.role)}
         isSearchable={false}
         isClearable={false}
         isLoading={!roles}
         placeholder="select a role"
-        styles={{
-          placeholder: (styles) => ({
-            ...styles,
-            textAlign: 'center',
-            width: '100%',
-            color: '#BCBCBC',
-          }),
-        }}
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
-
-      <Button
-        color="purple"
-        className="mt-3"
-        block
-        onClick={() =>
-          setFormState({
-            submitted: true,
-          })
-        }
-      >
+      <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
         Add User
       </Button>
     </>

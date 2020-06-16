@@ -11,52 +11,36 @@ import useNewInstance from '../../../state/newInstance';
 
 import addInstance from '../../../api/lms/addInstance';
 import addTCAcceptance from '../../../api/lms/addTCAcceptance';
+import getInstances from '../../../api/lms/getInstances';
 
 export default ({ closeAndResetModal }) => {
-  const lmsAuth = useStoreState(appState, (s) => s.auth);
+  const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const [newInstance] = useNewInstance({});
   const [formState, setFormState] = useState({ error: false });
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
-    const newInstanceObject = {
-      ...newInstance,
-    };
+    const newInstanceObject = { ...newInstance };
     delete newInstanceObject.user;
     delete newInstanceObject.pass;
+    delete newInstanceObject.super;
     delete newInstanceObject.tc_version;
 
-    addTCAcceptance({
-      auth: lmsAuth,
-      ...lmsAuth,
-      tc_version: newInstance.tc_version,
-    });
-
-    const response = await addInstance({
-      auth: lmsAuth,
-      ...newInstanceObject,
-    });
+    addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version, customer_id: newInstance.customer_id });
+    const response = await addInstance({ auth, ...newInstanceObject });
 
     if (response.error) {
       const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
-      setFormState({
-        submitted: false,
-        error,
-      });
+      setFormState({ submitted: false, error });
     } else {
+      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, instanceCount: instances?.length });
       alert.success(response.message);
-      setInstanceAuths({
-        ...instanceAuths,
-        [response.instance_id]: {
-          user: newInstance.user,
-          pass: newInstance.pass,
-        },
-      });
-      appState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-      setTimeout(() => closeAndResetModal(), 0);
+      closeAndResetModal();
     }
   }, []);
 

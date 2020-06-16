@@ -8,7 +8,7 @@ import ContentContainer from '../../shared/contentContainer';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
-export default ({ instanceNames }) => {
+export default ({ instanceNames, customerId, customerSubdomain }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -23,52 +23,34 @@ export default ({ instanceNames }) => {
     const { instance_name, user, pass } = formData;
     if (submitted) {
       if (instanceNames.includes(instance_name)) {
-        setFormState({
-          error: `An instance named "${instance_name}" already exists`,
-        });
+        setFormState({ error: `An instance named "${instance_name}" already exists` });
       } else if (!instance_name) {
-        setFormState({
-          error: 'instance name is required',
-        });
+        setFormState({ error: 'instance name is required' });
       } else if (!isAlphaNumericHyphen(instance_name)) {
-        setFormState({
-          error: 'instance names must have only letters, numbers, and hyphens',
-        });
+        setFormState({ error: 'instance names must have only letters, numbers, and hyphens' });
       } else if (user && !isAlphaUnderscore(user)) {
-        setFormState({
-          error: 'usernames must have only letters and underscores',
-        });
+        setFormState({ error: 'usernames must have only letters and underscores' });
       } else if (instance_name.length > 16) {
-        setFormState({
-          error: 'instance names are limited to 16 characters',
-        });
+        setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
-        setNewInstance({
-          ...newInstance,
-          instance_name: instance_name.replace(/-+$/, ''),
-          user,
-          pass,
-          is_ssl: true,
-        });
-        setTimeout(() => history.push('/instances/new/details_cloud'), 0);
+        setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true, super: true });
+        setTimeout(() => history.push(`/o/${customerId}/instances/new/details_cloud`), 0);
       } else {
-        setFormState({
-          error: 'All fields must be filled out.',
-        });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
 
   return (
     <>
-      <Card>
+      <Card id="cloudInstanceInfo">
         <CardBody>
           <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
-            <Row className="mb-4">
-              <Col xs="4" className="pt-2 text-nowrap">
+            <Row>
+              <Col sm="4" className="pt-2 text-nowrap text-grey">
                 Example: &quot;cloud-1&quot;
               </Col>
-              <Col xs="8">
+              <Col sm="8">
                 <Input
                   onChange={(e) =>
                     setFormData({
@@ -87,44 +69,39 @@ export default ({ instanceNames }) => {
                 />
               </Col>
             </Row>
+            <hr className="my-2 d-none d-sm-block" />
+            <Row>
+              <Col sm="4" className="pt-2 mb-2 text-grey">
+                Instance URL
+              </Col>
+              <Col sm="8" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
+                {formData.instance_name ? (
+                  <i className="text-grey">
+                    {formData.instance_name}-{customerSubdomain}.harperdbcloud.com
+                  </i>
+                ) : (
+                  <span className="text-lightgrey">enter a name above</span>
+                )}
+              </Col>
+            </Row>
           </ContentContainer>
 
           <ContentContainer header="Create Instance Credentials" subheader="letters and underscores only. 250 char max.">
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Username
               </Col>
-              <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      user: e.target.value.substring(0, 249),
-                    })
-                  }
-                  type="text"
-                  title="username"
-                  value={formData.user}
-                />
+              <Col sm="8">
+                <Input onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
               </Col>
             </Row>
-            <hr className="my-2" />
+            <hr className="my-2 d-none d-sm-block" />
             <Row>
-              <Col xs="4" className="pt-2">
+              <Col sm="4" className="pt-2 text-grey">
                 Password
               </Col>
-              <Col xs="8">
-                <Input
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      pass: e.target.value.substring(0, 249),
-                    })
-                  }
-                  type="password"
-                  title="password"
-                  value={formData.pass}
-                />
+              <Col sm="8">
+                <Input onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })} type="password" title="password" value={formData.pass} />
               </Col>
             </Row>
           </ContentContainer>
@@ -132,23 +109,13 @@ export default ({ instanceNames }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/type')} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            title="Instance Details"
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button id="instanceDetailsButton" onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
             Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

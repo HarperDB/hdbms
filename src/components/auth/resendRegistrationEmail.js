@@ -5,7 +5,8 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resendRegistrationEmail from '../../api/lms/resendRegistrationEmail';
-import handleEnter from '../../methods/util/handleEnter';
+import AuthStateLoader from '../shared/authStateLoader';
+import config from '../../../config';
 
 export default () => {
   const [formState, setFormState] = useState({});
@@ -17,82 +18,37 @@ export default () => {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({
-          error: 'invalid email supplied',
-        });
-        setTimeout(() => setFormData({}), 1000);
-      } else if (!email) {
-        setFormState({
-          error: 'email is required',
-        });
-        setTimeout(() => setFormData({}), 1000);
+        setFormState({ error: 'valid email is required' });
       } else {
-        setFormState({
-          ...formState,
-          processing: true,
-        });
+        setFormState({ processing: true });
         const response = await resendRegistrationEmail({ email });
         if (response.error) {
-          setFormState({
-            error: response.message,
-          });
-          setTimeout(() => {
-            setFormState({});
-            setFormData({});
-          }, 1000);
+          setFormState({ error: response.message });
         } else {
-          setFormState({
-            success: response.message,
-          });
+          setFormState({ success: response.message });
         }
       }
     }
   }, [formState]);
 
   useAsyncEffect(() => {
-    if (!formState.submitted) {
-      setFormState({});
-    }
+    if (!formState.submitted) setFormState({});
   }, [formData]);
 
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">processing request</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="processing request" spinner />
       ) : formState.success ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">success!</div>
-              check your email. if you still don&apos;t see it, shoot us an email:
-              <br />
-              <br />
-              <a href="mailto:support@harperdb.io">support@harperdb.io</a>
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="success!" body="check your email. if you still don't see it, send us an email: support@harperdb.io" />
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white">
+            <CardBody className="text-center text-white" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="text"
@@ -100,17 +56,7 @@ export default () => {
                 name="email"
                 placeholder="email address"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                disabled={formState.submitted}
-                title="Resend Registration Email"
-                block
-                color="purple"
-              >
+              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Resend Registration Email" block color="purple">
                 Resend Registration Email
               </Button>
             </CardBody>
@@ -122,7 +68,7 @@ export default () => {
             </div>
           ) : (
             <div className="text-center">
-              <NavLink to="/sign-in" className="login-nav-link">
+              <NavLink to="/" className="login-nav-link">
                 Go to Sign In
               </NavLink>
             </div>

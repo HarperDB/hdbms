@@ -1,142 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
-import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { NavLink, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
+import { NavLink } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
 
-import usePersistedLMSAuth from '../../state/persistedLMSAuth';
 import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
-import handleEnter from '../../methods/util/handleEnter';
+import AuthStateLoader from '../shared/authStateLoader';
+import config from '../../../config';
 
 export default () => {
-  const [persistedLMSAuth, setPersistedLMSAuth] = usePersistedLMSAuth({});
+  const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
-  const history = useHistory();
-  const { search } = useLocation();
-  const { returnURL } = queryString.parse(search);
 
-  useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { email, pass } = formData;
-      if (!email || !pass) {
-        setFormState({
-          error: 'all fields are required',
-        });
-      } else if (!isEmail(email)) {
-        setFormState({
-          error: 'invalid email',
-        });
-      } else {
-        setFormState({
-          processing: true,
-        });
-        const response = await getUser({
-          auth: { email, pass },
-          email,
-        });
-        if (response.error) {
-          setFormState({
-            error: 'Invalid Credentials',
-          });
-          appState.update((s) => {
-            s.auth = false;
-          });
-          setPersistedLMSAuth({});
-        } else {
-          setPersistedLMSAuth({
-            email,
-            pass,
-          });
-          appState.update((s) => {
-            s.auth = {
-              ...response,
-              email,
-              pass,
-            };
-          });
-          setTimeout(() => history.push(response.update_password ? '/update-password' : returnURL || '/instances'), 100);
-        }
-      }
+  const submit = () => {
+    setFormState({ submitted: true });
+    const { email, pass } = formData;
+    if (!isEmail(email)) {
+      setFormState({ error: 'a valid email is required' });
+    } else if (!pass) {
+      setFormState({ error: 'password is required' });
+    } else {
+      setFormState({ processing: true });
+      getUser({ email, pass });
     }
-  }, [formState]);
+  };
 
-  useAsyncEffect(() => {
-    if (!formState.submitted) setFormState({});
-  }, [formData]);
-
-  useAsyncEffect(() => {
-    const { email, pass } = persistedLMSAuth;
-    const { processing } = formState;
-    if (email && pass && !processing) {
-      setFormData({ email, pass });
-      setFormState({ submitted: true });
+  useEffect(() => {
+    if (auth?.error) {
+      setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
+      setTimeout(() => setFormState({}), 3000);
     }
-  }, [persistedLMSAuth]);
+  }, [auth]);
+
+  useEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">
       <div id="login-logo" title="HarperDB Logo" />
+      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">signing in</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <AuthStateLoader header="signing in" spinner />
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody>
+            <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => {
+                  e.currentTarget.focus();
+                  setFormData({ ...formData, email: e.target.value.toLowerCase() });
+                }}
+                value={formData.email || ''}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
                 type="text"
                 title="email"
-                autoComplete="false"
+                autoComplete="username"
                 placeholder="email address"
               />
               <Input
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    pass: e.target.value,
-                  })
-                }
-                onKeyDown={(e) => handleEnter(e, setFormState)}
+                onChange={(e) => {
+                  e.currentTarget.focus();
+                  setFormData({ ...formData, pass: e.target.value });
+                }}
+                value={formData.pass || ''}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
                 type="password"
                 title="password"
-                autoComplete="false"
+                autoComplete="current-password"
                 placeholder="password"
               />
-              <Button
-                onClick={() =>
-                  setFormState({
-                    submitted: true,
-                  })
-                }
-                title="Sign In My Account"
-                block
-                color="purple"
-                disabled={formState.submitted}
-              >
+              <Button onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
                 Sign In
               </Button>
             </CardBody>

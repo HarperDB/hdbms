@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ auth, customer_id, compute_stack_id }) => {
-  const response = await queryLMS({
+export default async ({ auth, customer_id, compute_stack_id }) =>
+  queryLMS({
     endpoint: 'removeInstance',
     method: 'POST',
     payload: {
@@ -10,6 +10,3 @@ export default async ({ auth, customer_id, compute_stack_id }) => {
     },
     auth,
   });
-
-  return response;
-};

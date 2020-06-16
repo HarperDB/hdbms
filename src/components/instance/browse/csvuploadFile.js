@@ -6,50 +6,49 @@ import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
-import config from '../../../../config';
 
+import config from '../../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default () => {
   const history = useHistory();
-  const { schema, table } = useParams();
-  const { compute_stack_id, auth, url } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    auth: s.auth,
-    url: s.url,
-  }));
+  const { schema, table, customer_id, compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
 
-  // query the table to determine if all the records have been processed.
   const validateData = useCallback(
     async (uploadJobId) => {
-      const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
-
-      if (status === 'ERROR') {
-        if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
-          return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+      try {
+        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+        if (status === 'ERROR') {
+          if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
+            return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
+          }
+          if (message.indexOf('Invalid column name') !== -1) {
+            return setFormState({ error: 'The CSV file contains an invalid column name.' });
+          }
+          return setFormState({ error: message });
         }
-        if (message.indexOf('Invalid column name') !== -1) {
-          return setFormState({ error: 'The CSV file contains an invalid column name.' });
+        if (status !== 'COMPLETE' && mounted) {
+          return setTimeout(() => validateData(uploadJobId), 2000);
         }
-        return setFormState({ error: message });
+        instanceState.update((s) => {
+          s.lastUpdate = Date.now();
+        });
+        return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+      } catch (e) {
+        return setTimeout(() => {
+          instanceState.update((s) => {
+            s.lastUpdate = Date.now();
+          });
+          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
+        }, 2000);
       }
-
-      if (status !== 'COMPLETE' && mounted) {
-        return setTimeout(() => validateData(uploadJobId), 2000);
-      }
-
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
-
-      return setTimeout(() => {
-        history.push(`/instance/${compute_stack_id}/browse/${schema}/${table}`);
-      }, 1000);
     },
     [mounted]
   );
@@ -65,21 +64,16 @@ export default () => {
         setFormData({ records: lines, csv_file: reader.result });
         setFormState({ processed: true });
       };
-      if (file.size > config.max_file_upload_size) {
-        setFormState({ error: 'File exceeds 10MB Limit. Use URL Loader Above.' });
-      } else {
-        reader.readAsText(file);
-      }
+      if (file.size > config.max_file_upload_size) setFormState({ error: 'File exceeds 10MB Limit. Use URL Loader Above.' });
+      else reader.readAsText(file);
     });
   }, []);
 
   useAsyncEffect(async () => {
-    const { submitted } = formState;
-    if (submitted) {
-      const { csv_file } = formData;
-      if (csv_file) {
+    if (formState.submitted) {
+      if (formData.csv_file) {
         setFormState({ uploading: true });
-        const uploadJob = await csvDataLoad({ schema, table, csv_file, auth, url });
+        const uploadJob = await csvDataLoad({ schema, table, csv_file: formData.csv_file, auth, url });
         const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
         setTimeout(() => validateData(uploadJobId), 1000);
       } else {
@@ -97,7 +91,7 @@ export default () => {
   return (
     <>
       <b className="text-small">Upload A CSV FIle (10MB Limit)</b>
-      <hr className="my-1" />
+      <hr className="mt-1 mb-3" />
       {formState.error ? (
         <div className="text-danger csv-status">{formState.error}</div>
       ) : formState.uploading ? (

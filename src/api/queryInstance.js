@@ -22,6 +22,13 @@ export default async (operation, auth, url, signal = undefined) => {
         error: true,
         message: response.error,
         type: 'response',
+        access_errors: response.unauthorized_access?.map((e) => ({
+          schema: e.schema,
+          table: e.table,
+          type: e.required_attribute_permissions.length ? 'attribute' : 'table',
+          entity: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].attribute_name : e.table,
+          permission: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].required_permissions.join(', ') : e.required_table_permissions.join(', '),
+        })),
       };
     }
 

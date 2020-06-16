@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { CardBody, Card, Row, Col } from '@nio/ui-kit';
 import { useParams } from 'react-router';
 
@@ -21,16 +21,19 @@ export default ({ setQuery, query }) => {
       <Row className="floating-card-header">
         <Col xs="9">query history (click to load)</Col>
         <Col xs="3" className="text-right">
-          <i onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
+          <i title="clear query history" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
         </Col>
       </Row>
       <Card className="mt-3 mb-4">
         {queries && queries[compute_stack_id]?.length ? (
           <CardBody className="query-scroller">
             {queries[compute_stack_id].map((q) => (
-              <div className="past-query" key={q.query} onClick={() => setQuery(q.query)}>
-                {q.query}
-              </div>
+              <Fragment key={q.query}>
+                <button type="button" tabIndex="0" title={`Load query: ${q.query}`} className="past-query" onClick={() => setQuery(q.query)}>
+                  {q.query}
+                </button>
+                <hr className="my-0" />
+              </Fragment>
             ))}
           </CardBody>
         ) : (

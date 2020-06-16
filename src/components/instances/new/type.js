@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
-import { useStoreState } from 'pullstate';
 
 import useNewInstance from '../../../state/newInstance';
-import appState from '../../../state/appState';
 
-export default () => {
-  const customer_id = useStoreState(appState, (s) => s.auth.customer_id);
+export default ({ customerId }) => {
   const history = useHistory();
   const [, setNewInstance] = useNewInstance({});
   const [formData, setFormData] = useState({});
@@ -16,11 +13,8 @@ export default () => {
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
-      setNewInstance({
-        customer_id,
-        is_local,
-      });
-      setTimeout(() => history.push(is_local ? '/instances/new/meta_local' : '/instances/new/meta_cloud'), 0);
+      setNewInstance({ customer_id: customerId, is_local });
+      setTimeout(() => history.push(is_local ? `/o/${customerId}/instances/new/meta_local` : `/o/${customerId}/instances/new/meta_cloud`), 0);
     }
   }, [formData]);
 
@@ -42,16 +36,7 @@ export default () => {
                 <li>Scale On Demand</li>
               </ul>
               <hr />
-              <Button
-                className="mt-3"
-                color="purple"
-                block
-                onClick={() =>
-                  setFormData({
-                    is_local: false,
-                  })
-                }
-              >
+              <Button id="createCloudInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false })}>
                 Create HarperDB Cloud Instance
               </Button>
             </CardBody>
@@ -76,16 +61,7 @@ export default () => {
                 <li>Instance Credentials Stay Local</li>
               </ul>
               <hr />
-              <Button
-                className="mt-3"
-                color="purple"
-                block
-                onClick={() =>
-                  setFormData({
-                    is_local: true,
-                  })
-                }
-              >
+              <Button className="mt-3" color="purple" block onClick={() => setFormData({ is_local: true })}>
                 Register User-Installed Instance
               </Button>
             </CardBody>

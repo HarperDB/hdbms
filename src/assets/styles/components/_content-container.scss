@@ -1,18 +1,31 @@
 .content-container {
   margin-bottom: 30px;
 
-  .header {
-    display: inline-block;
-    font-weight: 700;
+  .header-container {
+    border-bottom: 1px solid $color-lightgrey;
+    font-size: $font-size-small;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    .header {
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .subheader {
+      color: $color-lightpurple;
+      display: block;
+      font-style: italic;
+      text-transform: lowercase;
+
+      @media screen and (min-width: 576px) {
+        display: inline-block;
+        float: right;
+      }
+
+    }
   }
 
-  .subheader {
-    color: $color-lightpurple;
-    display: inline-block;
-    float: right;
-    font-style: italic;
-    text-transform: lowercase;
-  }
 
   &:last-child {
     margin-bottom: 0;

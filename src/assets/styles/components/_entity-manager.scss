@@ -1,61 +1,84 @@
 .entity-manager {
   padding-bottom: 10px;
 
-  .card-body {
-    padding: 0 15px;
+  .add-remove {
+    &:focus {
+      outline: 1px solid $faint-white-overlay !important;
+    }
+  }
 
-    .item-row {
-      border-top: 1px solid $lighter-grey-overlay;
-      cursor: pointer;
-      height: 49px;
+  .card {
+    overflow: hidden;
 
-      &:first-child {
-        border-top: 0;
-      }
+    .card-body {
+      padding: 0 15px;
 
-      .input-holder {
-        flex-grow: 1;
-        flex-shrink: 0;
-        padding: 0 6px;
-        width: 100%;
+      .item-row {
+        border-top: 1px solid $lighter-grey-overlay;
+        cursor: pointer;
+        height: 49px;
+        overflow: hidden;
 
-        input {
-          background: rgba(255, 255, 255, 0.3);
-          border-color: transparent;
-          color: $color-black;
+        &:focus {
+          outline: 1px solid $color-lightpurple;
+        }
 
-          &.is-invalid {
-            border-color: $color-danger;
-          }
+        &.active {
+          background-color: $color-lightergrey;
+          font-weight: bold;
+          outline: 0 !important;
+        }
 
-          &.table {
-            width: 50%;
+        &:first-child {
+          border-top: 0;
+        }
+
+        .input-holder {
+          flex-grow: 1;
+          flex-shrink: 0;
+          padding: 0 6px;
+          width: 100%;
+
+          input {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: transparent;
+            color: $color-black;
+
+            &.is-invalid {
+              border-color: $color-danger;
+            }
+
+            &.table {
+              width: 50%;
+            }
           }
         }
-      }
 
-      .item-label,
-      .item-action,
-      .input-holder {
-        align-items: center;
-        display: flex;
-      }
+        .item-label,
+        .item-action,
+        .input-holder {
+          align-items: center;
+          display: flex;
+        }
 
-      .item-label {
-        justify-content: flex-start;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+        .item-label {
+          justify-content: flex-start;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
-      .item-action {
-        flex-grow: 0;
-        flex-shrink: 1;
-        justify-content: flex-end;
-        min-width: 80px;
-        padding-left: 0;
+        .item-action {
+          flex-grow: 0;
+          flex-shrink: 1;
+          justify-content: flex-end;
+          min-width: 80px;
+          padding-left: 0;
+        }
       }
     }
   }
+
 
   .fa-sm {
     font-size: 0.8rem;

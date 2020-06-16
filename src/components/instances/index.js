@@ -1,47 +1,83 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row } from '@nio/ui-kit';
-import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import useInterval from 'use-interval';
+import { useAlert } from 'react-alert';
+import { useHistory } from 'react-router';
 
 import config from '../../../config';
 import appState from '../../state/appState';
 
 import InstanceList from './list/instanceList';
 import NewInstanceCard from './list/newInstanceCard';
+import NoInstancesCard from './list/noInstancesCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
+import Loader from '../shared/loader';
+import getCustomer from '../../api/lms/getCustomer';
 
 const InstancesIndex = () => {
-  const { action } = useParams();
-  const { auth, products, regions, instances } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    products: s.products,
-    regions: s.regions,
-    lastUpdate: s.lastUpdate,
-    instances: s.instances,
-  }));
+  const history = useHistory();
+  const { action, customer_id } = useParams();
+  const alert = useAlert();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
+  const isOrgOwner = isOrgUser?.status === 'owner';
 
-  useInterval(() => {
-    if (!action)
-      getInstances({
-        auth,
-        customer_id: auth?.customer_id,
-        products,
-        regions,
-        instanceCount: instances?.length,
-      });
-  }, config.instances_refresh_rate);
+  useEffect(() => {
+    if (isOrgOwner && window.userGuiding && instances && !instances.length) {
+      window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
+    }
+  }, []);
+
+  const refreshCustomer = () => {
+    if (auth && customer_id) {
+      getCustomer({ auth, customer_id });
+    }
+  };
+
+  useEffect(refreshCustomer, []);
+
+  const refreshInstances = () => {
+    if (auth && products && regions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+    }
+  };
+
+  useEffect(refreshInstances, [auth, products, regions, customer_id]);
+
+  useInterval(refreshInstances, config.instances_refresh_rate);
+
+  useEffect(() => {
+    if (instances && isOrgOwner) {
+      alert.success('You have been made an owner of this organization');
+    } else if (instances && !isOrgUser) {
+      alert.error('You have been removed from this organization');
+      history.push('/');
+    } else if (instances) {
+      alert.success('You are no longer an owner of this organization');
+    }
+  }, [isOrgOwner, isOrgUser?.status]);
 
   return (
     <div id="instances">
       <SubNav />
-      <Row>
-        <NewInstanceCard />
-        <InstanceList />
-      </Row>
-      {action === 'new' && <NewInstanceModal />}
+      {isOrgUser && instances ? (
+        <>
+          <Row>
+            {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
+            <InstanceList />
+          </Row>
+          {action === 'new' && instances && <NewInstanceModal />}
+        </>
+      ) : (
+        <Loader message="loading instances" />
+      )}
     </div>
   );
 };

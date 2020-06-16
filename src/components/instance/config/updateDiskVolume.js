@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Row, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -11,30 +11,25 @@ import instanceState from '../../../state/instanceState';
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';
 import commaNumbers from '../../../methods/util/commaNumbers';
+import config from '../../../../config';
 
 export default ({ setInstanceAction }) => {
+  const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
-  const { auth, customer, hasCard } = useStoreState(appState, (s) => ({
-    auth: s.auth,
-    customer: s.customer,
-    hasCard: s.hasCard,
-  }));
-  const { compute_stack_id, data_volume_size, storageProducts, storage, compute, last_volume_resize, is_being_modified } = useStoreState(instanceState, (s) => ({
-    compute_stack_id: s.compute_stack_id,
-    data_volume_size: s.data_volume_size,
-    storageProducts: s.storageProducts,
-    storage: s.storage,
-    compute: s.compute,
-    last_volume_resize: s.last_volume_resize,
-    is_being_modified: !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status),
-  }));
+  const auth = useStoreState(appState, (s) => s.auth);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const data_volume_size = useStoreState(instanceState, (s) => s.data_volume_size);
+  const storageProducts = useStoreState(instanceState, (s) => s.storageProducts);
+  const storage = useStoreState(instanceState, (s) => s.storage);
+  const compute = useStoreState(instanceState, (s) => s.compute);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const last_volume_resize = useStoreState(instanceState, (s) => s.last_volume_resize);
+  const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
+  const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
+  const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    compute_stack_id,
-    customer_id: customer.customer_id,
-    data_volume_size,
-  });
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id, data_volume_size });
 
   const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size);
   const newTotal = (compute?.price || 0) + (newStorage?.price || 0);
@@ -46,13 +41,7 @@ export default ({ setInstanceAction }) => {
     const { submitted } = formState;
     if (submitted) {
       setInstanceAction('Updating');
-
-      const response = await updateInstance({
-        auth,
-        compute_stack_id,
-        customer_id: customer.customer_id,
-        ...formData,
-      });
+      const response = await updateInstance({ auth, compute_stack_id, customer_id, ...formData });
 
       if (response.error) {
         alert.error('There was an error updating your instance. Please try again later.');
@@ -62,7 +51,7 @@ export default ({ setInstanceAction }) => {
         appState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        setTimeout(() => history.push('/instances'), 3000);
+        setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
       }
     }
   }, [formState]);
@@ -80,12 +69,7 @@ export default ({ setInstanceAction }) => {
       <SelectDropdown
         className="react-select-container"
         classNamePrefix="react-select"
-        onChange={({ value }) =>
-          setFormData({
-            ...formData,
-            data_volume_size: value,
-          })
-        }
+        onChange={({ value }) => setFormData({ ...formData, data_volume_size: value })}
         options={storageProducts}
         value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
         defaultValue={storage}
@@ -93,21 +77,18 @@ export default ({ setInstanceAction }) => {
         isClearable={false}
         isLoading={!storageProducts}
         placeholder="Select Data Volume Size"
-        styles={{
-          placeholder: (styles) => ({
-            ...styles,
-            textAlign: 'center',
-            width: '100%',
-            color: '#BCBCBC',
-          }),
-        }}
+        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
 
-      {hasChanged && <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />}
-
-      {hasChanged && (newStorage.price || compute.price) && !hasCard ? (
+      {hasChanged && !newTotal && !is_local && !canAddFreeCloudInstance ? (
+        <Card className="error mt-2">
+          <CardBody>
+            You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
+          </CardBody>
+        </Card>
+      ) : hasChanged && (newStorage.price || compute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/account/billing?returnURL=/instance/${compute_stack_id}/config`)}
+          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}
@@ -116,39 +97,21 @@ export default ({ setInstanceAction }) => {
           Add Credit Card To Account
         </Button>
       ) : hasChanged ? (
-        <Row>
-          <Col>
-            <Button
-              onClick={() =>
-                setFormData({
-                  ...formData,
-                  data_volume_size,
-                })
-              }
-              title="Cancel"
-              block
-              disabled={formState.submitted}
-              color="grey"
-            >
-              Cancel
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              onClick={() =>
-                setFormState({
-                  submitted: true,
-                })
-              }
-              title="Confirm Instance Details"
-              block
-              disabled={!hasChanged || formState.submitted}
-              color="success"
-            >
-              Update Storage
-            </Button>
-          </Col>
-        </Row>
+        <>
+          <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />
+          <Row>
+            <Col>
+              <Button onClick={() => setFormData({ ...formData, data_volume_size })} title="Cancel" block disabled={formState.submitted} color="grey">
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
+                Update Storage
+              </Button>
+            </Col>
+          </Row>
+        </>
       ) : null}
     </>
   );

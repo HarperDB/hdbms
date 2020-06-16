@@ -43,3 +43,12 @@ ul {
 .clickable {
   cursor: pointer;
 }
+
+hr {
+  border-top: 1px solid $color-lightgrey !important;
+  width: 100%;
+
+  &.white {
+    border-top: 1px solid $light-white-overlay !important;
+  }
+}

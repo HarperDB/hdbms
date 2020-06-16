@@ -24,20 +24,19 @@ const defaultTableState = {
   error: false,
   message: false,
   reload: false,
+  accessErrors: false,
 };
 
 export default ({ query }) => {
   const [lastUpdate, setLastUpdate] = useState();
-  const { auth, url } = useStoreState(instanceState, (s) => ({ auth: s.auth, url: s.url }));
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [tableState, setTableState] = useState(defaultTableState);
   let controller;
 
   useAsyncEffect(() => {
     if (query.query) {
-      setTableState({
-        ...defaultTableState,
-        reload: true,
-      });
+      setTableState({ ...defaultTableState, reload: true });
     } else {
       setTableState({ ...tableState, error: false, message: false, reload: false });
     }
@@ -50,15 +49,10 @@ export default ({ query }) => {
         controller = new AbortController();
         setTableState({ ...tableState, loading: true });
 
-        const response = await getQueryData({
-          query: query.query.replace(/\n/g, ' ').trim(),
-          auth,
-          url,
-          signal: controller.signal,
-        });
+        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal });
 
         if (response.error) {
-          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, loading: false, error: true, reload: false });
+          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true, reload: false });
         } else if (response.message) {
           setTableState({ ...tableState, message: response.message, loading: false, error: false, reload: false });
         } else if (!response.tableData.length) {
@@ -93,7 +87,7 @@ export default ({ query }) => {
   return tableState.reload ? (
     <EmptyPrompt message="Executing Query" />
   ) : tableState.message ? (
-    <EmptyPrompt error={tableState.error} message={tableState.message} />
+    <EmptyPrompt error={tableState.error} message={tableState.message} accessErrors={tableState.access_errors} />
   ) : tableState.tableData?.length ? (
     <>
       <DataTableHeader

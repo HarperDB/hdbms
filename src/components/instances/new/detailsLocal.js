@@ -5,14 +5,11 @@ import { useHistory } from 'react-router';
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, hasCard }) => {
+export default ({ products, hasCard, customerId }) => {
   const history = useHistory();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({
-    stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
-  });
-
+  const [formData, setFormData] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
   const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
   const computePrice = selectedProduct?.price;
   const isFree = !computePrice;
@@ -23,15 +20,10 @@ export default ({ products, hasCard }) => {
     const { stripe_plan_id } = formData;
     if (submitted) {
       if (stripe_plan_id) {
-        setNewInstance({
-          ...newInstance,
-          stripe_plan_id,
-        });
-        setTimeout(() => history.push(needsCard ? '/instances/new/payment' : '/instances/new/confirm'), 0);
+        setNewInstance({ ...newInstance, stripe_plan_id });
+        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
       } else {
-        setFormState({
-          error: 'All fields must be filled out.',
-        });
+        setFormState({ error: 'All fields must be filled out.' });
       }
     }
   }, [formState]);
@@ -44,12 +36,8 @@ export default ({ products, hasCard }) => {
             <RadioCheckbox
               className="radio-button"
               type="radio"
-              onChange={(value) =>
-                setFormData({
-                  ...formData,
-                  stripe_plan_id: value,
-                })
-              }
+              required
+              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products.map((p) => ({
                 ...p,
                 label: `${p.label} ${p.ram_allocation === newInstance.ram_allocation ? `(${newInstance.registered ? 'Current' : 'Default'} License)` : ''}`,
@@ -62,23 +50,13 @@ export default ({ products, hasCard }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push('/instances/new/meta_local')} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            onClick={() =>
-              setFormState({
-                submitted: true,
-              })
-            }
-            title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button onClick={() => setFormState({ submitted: true })} title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'} block className="mt-3" color="purple">
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

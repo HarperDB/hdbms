@@ -9,14 +9,12 @@ export default async ({ auth, customer_id }) => {
     auth,
   });
 
-  let customer = { customer_id };
-
   if (!response.error) {
-    customer = response;
+    appState.update((s) => {
+      s.customer = { ...response, customer_id };
+      s.hasCard = response.stripe_payment_methods?.[0];
+    });
   }
 
-  return appState.update((s) => {
-    s.customer = customer;
-    s.hasCard = customer.stripe_payment_methods?.[0];
-  });
+  return response;
 };
