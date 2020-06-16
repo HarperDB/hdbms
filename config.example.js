@@ -14,4 +14,5 @@ export default {
   max_file_upload_size: 10380902,
   studio_version: '1.0.1',
   user_guide_id: 16032,
+  maintenance: 0,
 };
