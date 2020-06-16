@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
-import commaNumbers from '../../methods/util/commaNumbers';
+import generateInstanceProductDetails from '../../methods/instances/generateInstanceProductDetails';
 
 export default async ({ auth, customer_id, products, regions, instanceCount = 0 }) => {
   const response = await queryLMS({
@@ -14,24 +14,11 @@ export default async ({ auth, customer_id, products, regions, instanceCount = 0 
   });
 
   if (Array.isArray(response)) {
-    const instances = response.map((i) => {
-      const thisInstance = i;
-      const computePlans = products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'];
-      const compute = computePlans && computePlans.find((p) => p.value === thisInstance.stripe_plan_id);
-      const storage = thisInstance.is_local ? false : products.cloudStorage && products.cloudStorage.find((p) => p.value === thisInstance.data_volume_size);
-      const totalPrice = parseFloat(compute?.price || 0) + parseFloat(storage?.price || 0);
-
-      return {
-        ...thisInstance,
-        compute,
-        computeProducts: products[thisInstance.is_local ? 'localCompute' : 'cloudCompute'],
-        storage,
-        storageProducts: thisInstance.is_local ? false : products.cloudStorage,
-        totalPrice,
-        totalPriceString: totalPrice ? `$${commaNumbers(totalPrice.toFixed(2))}` : 'FREE',
-        totalPriceStringWithInterval: totalPrice ? `$${commaNumbers(totalPrice.toFixed(2))}/${compute.interval}` : 'FREE',
-        region: thisInstance.is_local ? false : regions.find((r) => r.value === i.instance_region),
-      };
+    const instances = response.map((instance) => {
+      const thisInstance = instance;
+      const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions });
+      /* TODO: Move the licensing, loading, etc. management here. */
+      return { ...thisInstance, ...instanceProductDetails };
     });
 
     return appState.update((s) => {
