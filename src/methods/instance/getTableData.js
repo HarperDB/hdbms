@@ -23,7 +23,9 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     allAttributes = attributes.map((a) => a.attribute);
     hashAttribute = hash_attribute;
 
-    if (!sorted.length) sorted.push({ id: hash_attribute, desc: false });
+    if (!sorted.length || !allAttributes.includes(sorted[0].id)) {
+      sorted = [{ id: hash_attribute, desc: false }];
+    }
 
     if (filtered.length) {
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
@@ -47,10 +49,10 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
 
       if (newData.error || !Array.isArray(newData)) {
-        throw new Error(newData.error || 'Unable to fetch the requested data');
+        throw new Error(newData.message || 'Unable to fetch the requested data');
       }
     } catch (e) {
-      // console.log('Failed to get table data');
+      // console.log('Failed to get table data', e);
       fetchError = e;
     }
   }
