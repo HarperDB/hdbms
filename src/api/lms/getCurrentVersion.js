@@ -1,5 +1,6 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
+import config from '../../../config';
 
 export default async () => {
   const response = await queryLMS({
@@ -9,6 +10,10 @@ export default async () => {
 
   if (!response.number) {
     return false;
+  }
+
+  if (!response.studio) {
+    response.studio = config.studio_version;
   }
 
   return appState.update((s) => {

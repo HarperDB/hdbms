@@ -29,7 +29,7 @@ export default () => {
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        setTimeout(() => history.push(pathname.replace(`/${username}`, '')), 0);
+        setTimeout(() => history.push(pathname.replace(`/users/${username}`, '/users')), 0);
       } else {
         setFormState({ error: response.message });
       }

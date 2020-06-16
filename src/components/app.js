@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
+import { useAlert } from 'react-alert';
 
 import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
@@ -32,6 +33,7 @@ let controller;
 
 export default () => {
   const history = useHistory();
+  const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
@@ -41,10 +43,12 @@ export default () => {
   const canonical = document.querySelector('link[rel="canonical"]');
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
+  const newStudioVersionAvailable = config.studio_version !== version.studio;
 
   const refreshProducts = () => !products && getProducts();
   const refreshRegions = () => !regions && getRegions();
-  const refreshVersion = () => !version && getCurrentVersion();
+  const refreshVersion = () => getCurrentVersion();
+
   const refreshUser = async ({ email, pass }) => {
     if (email && pass && !showPasswordUpdate) {
       controller = new AbortController();
@@ -53,6 +57,12 @@ export default () => {
       setFetchingUser(false);
     }
   };
+
+  useEffect(() => {
+    if (newStudioVersionAvailable && version.studio) {
+      alert.show(`HarperDB Studio v${version.studio} is now available. Refresh the page to update.`, { timeout: 0 });
+    }
+  }, [newStudioVersionAvailable, version.studio]);
 
   useEffect(() => {
     history.listen(() => (canonical.href = window.location.href));
@@ -81,11 +91,12 @@ export default () => {
   }, []);
 
   useInterval(() => {
-    refreshVersion();
     refreshProducts();
     refreshRegions();
     refreshUser(auth);
   }, config.instances_refresh_rate);
+
+  useInterval(() => refreshVersion(), config.check_version_interval);
 
   return (
     <div className={persistedUser?.darkTheme ? 'dark' : ''}>

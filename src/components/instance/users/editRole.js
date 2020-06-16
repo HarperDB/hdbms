@@ -13,7 +13,7 @@ export default () => {
   const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
-  const thisUser = useStoreState(instanceState, (s) => s.users.find((u) => u.username === username));
+  const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -44,7 +44,9 @@ export default () => {
     }
   };
 
-  useAsyncEffect(() => setFormData({ ...formData, role: thisUser.role.id }), []);
+  useAsyncEffect(() => setFormData({ ...formData, role: thisUser?.role?.id }), []);
+
+  console.log(username, thisUser);
 
   return (
     <>
@@ -52,8 +54,8 @@ export default () => {
         className="react-select-container mb-2"
         classNamePrefix="react-select"
         onChange={({ value }) => setFormData({ ...formData, newRole: value })}
-        options={roles && roles.filter((r) => r.id !== thisUser.role.id).map((r) => ({ label: r.role, value: r.id }))}
-        value={roles && thisUser.role.id && roles.find((r) => r.value === thisUser.role.id)}
+        options={roles && thisUser?.role?.id && roles.filter((r) => r.id !== thisUser.role.id).map((r) => ({ label: r.role, value: r.id }))}
+        value={roles && thisUser?.role?.id && roles.find((r) => r.value === thisUser.role.id)}
         isSearchable={false}
         isClearable={false}
         isLoading={!roles}
