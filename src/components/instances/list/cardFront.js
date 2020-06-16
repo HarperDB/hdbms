@@ -21,7 +21,7 @@ const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
-  const isOrgOwner = auth?.orgs?.find((o) => o.customer_id === customer_id)?.status === 'owner';
+  const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
   const history = useHistory();
   const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});

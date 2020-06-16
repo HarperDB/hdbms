@@ -1,8 +1,8 @@
 export default {
-  stripe_public_key: 'pk_test_replacethiswithyourtestkey',
-  lms_api_url: 'https://dev.harperdbcloudservices.com/',
-  google_analytics_code: 'UA-98232508-3',
-  youtube_api_key: 'AIzaSyDcAYCF6FFfEvZ45lzyizdQOeb5-daqLWc',
+  stripe_public_key: 'pk_test_XXXXXXXXXXXXXXXXXXXXXX',
+  lms_api_url: 'XXXXXXXXXXXXXXXXXXXXXXXX',
+  google_analytics_code: 'UA-XXXXXXXXXXXXX-3',
+  youtube_api_key: 'XXXXXXXXXXXXXXXXXXXXXX',
   tc_version: '2020-01-01',
   refresh_api_timeout: 300000,
   instances_refresh_rate: 10000,
