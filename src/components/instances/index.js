@@ -5,6 +5,7 @@ import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
+import useAsyncEffect from 'use-async-effect';
 
 import config from '../../../config';
 import appState from '../../state/appState';
@@ -17,7 +18,6 @@ import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../api/lms/getCustomer';
-import useAsyncEffect from 'use-async-effect';
 
 const InstancesIndex = () => {
   const history = useHistory();
