@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row } from '@nio/ui-kit';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -17,6 +17,7 @@ import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../api/lms/getCustomer';
+import useAsyncEffect from 'use-async-effect';
 
 const InstancesIndex = () => {
   const history = useHistory();
@@ -28,6 +29,7 @@ const InstancesIndex = () => {
   const instances = useStoreState(appState, (s) => s.instances);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {
@@ -54,15 +56,21 @@ const InstancesIndex = () => {
   useInterval(refreshInstances, config.instances_refresh_rate);
 
   useEffect(() => {
-    if (instances && isOrgOwner) {
+    if (mounted && instances && isOrgOwner) {
       alert.success('You have been made an owner of this organization');
-    } else if (instances && !isOrgUser) {
+    } else if (mounted && instances && !isOrgUser) {
       alert.error('You have been removed from this organization');
       history.push('/');
-    } else if (instances) {
+    } else if (mounted && instances) {
       alert.success('You are no longer an owner of this organization');
     }
   }, [isOrgOwner, isOrgUser?.status]);
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
+  );
 
   return (
     <div id="instances">
