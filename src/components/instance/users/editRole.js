@@ -46,8 +46,6 @@ export default () => {
 
   useAsyncEffect(() => setFormData({ ...formData, role: thisUser?.role?.id }), []);
 
-  console.log(username, thisUser);
-
   return (
     <>
       <SelectDropdown
