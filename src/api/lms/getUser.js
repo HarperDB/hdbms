@@ -9,16 +9,20 @@ export default async ({ email, pass, signal }) => {
     payload: { email, password: pass },
   });
 
-  if (response.error) {
+  if (response.error && response.message === 'Unauthorized') {
     return appState.update((s) => {
       s.auth = { ...response, time: Date.now() };
     });
   }
 
+  if (response.error) {
+    return false;
+  }
+
   if (!response.orgs) {
     response.orgs = [
       {
-        customer_id: response.customer_id,
+        customer_id: response.customer_id.toString(),
         customer_name: `${response.firstname}'s Org`,
         status: 'owner',
       },

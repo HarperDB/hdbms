@@ -2,16 +2,27 @@ import React, { useState } from 'react';
 import { Col, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../../state/appState';
 
 import config from '../../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
 
-export default ({ computeProduct, storageProduct, customerCoupon, customerId, customerSubdomain }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
+  const products = useStoreState(appState, (s) => s.products);
+  const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
+  const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
+  const isLocal = newInstance.is_local;
+  const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
+  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size);
   const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
 
   useAsyncEffect(() => {
@@ -20,7 +31,7 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
     if (submitted) {
       if (tc_version) {
         setNewInstance({ ...newInstance, tc_version });
-        setTimeout(() => history.push(`/o/${customerId}/instances/new/status`), 0);
+        setTimeout(() => history.push(`/o/${customer_id}/instances/new/status`), 0);
       } else {
         setFormState({ error: 'Please agree to the Privacy Policy and Cloud Terms of Service.' });
       }
@@ -95,7 +106,7 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
                   Instance URL
                 </Col>
                 <Col sm="8" className="text-sm-right text-nowrap">
-                  {newInstance.instance_name}-{customerSubdomain}.harperdbcloud.com
+                  {newInstance.instance_name}-{subdomain}.harperdbcloud.com
                 </Col>
               </Row>
               <hr />
@@ -145,10 +156,10 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
         </CardBody>
       </Card>
       <hr className="my-3" />
-      {customerCoupon?.length ? (
+      {stripeCoupons?.length ? (
         <div className="px-2 text-center text-success">
-          This organization has <b>{customerCoupon.length}</b> coupon{customerCoupon.length > 1 && 's'} on file, good for a total product credit of{' '}
-          <b>${customerCoupon.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
+          This organization has <b>{stripeCoupons.length}</b> coupon{stripeCoupons.length > 1 && 's'} on file, good for a total product credit of{' '}
+          <b>${stripeCoupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
         </div>
       ) : (
         <div className="px-2">
@@ -181,7 +192,7 @@ export default ({ computeProduct, storageProduct, customerCoupon, customerId, cu
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/o/${customerId}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../../state/appState';
 
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
@@ -10,8 +14,11 @@ import isAlphaUnderscoreHyphen from '../../../methods/util/isAlphaUnderscoreHyph
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 import userInfo from '../../../api/instance/userInfo';
 
-export default ({ instanceNames, instanceURLs, customerId }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
+  const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
+  const instanceURLs = useStoreState(appState, (s) => s.instances.map((i) => i.url));
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -71,7 +78,7 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
               }
             }
             setNewInstance({ ...newInstance, ...instanceData });
-            setTimeout(() => history.push(`/o/${customerId}/instances/new/details_local`), 0);
+            setTimeout(() => history.push(`/o/${customer_id}/instances/new/details_local`), 0);
           }
         } catch (e) {
           setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
@@ -173,7 +180,7 @@ export default ({ instanceNames, instanceURLs, customerId }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

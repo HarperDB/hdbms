@@ -38,56 +38,83 @@ export default () => {
 
   return (
     <Modal id="new-org-modal" isOpen className={darkTheme ? 'dark' : ''}>
-      <ModalHeader toggle={closeModal}>Add New Organization</ModalHeader>
-      <ModalBody>
-        {formState.submitted ? (
-          <Card className="mb-3">
-            <CardBody className="text-center">
-              <div className="mb-3">creating your organization</div>
-              <i className="fa fa-spinner fa-spin text-purple" />
-            </CardBody>
-          </Card>
-        ) : formState.success ? (
-          <Card className="mb-3">
+      {formState.submitted ? (
+        <ModalBody>
+          <Card>
             <CardBody>
-              <div className="text-center">
-                <div className="mb-3">success!</div>
-                your organization was created successfully
+              <div className="p-4 text-center">
+                <b>Creating Your Organizaation</b>
+                <br />
+                <br />
+                <br />
+                <i className="fa fa-lg fa-spinner fa-spin text-purple mb-4" />
+                <br />
+                <br />
+                The Organization Otterhound is fetching your stuff.
               </div>
             </CardBody>
           </Card>
-        ) : (
-          <>
+        </ModalBody>
+      ) : formState.success ? (
+        <ModalBody>
+          <Card>
+            <CardBody>
+              <div className="p-4 text-center">
+                <b>Success</b>
+                <br />
+                <br />
+                <br />
+                <i className="fa fa-lg fa-thumbs-up text-purple mb-4" />
+                <br />
+                <br />
+                Your organization was created successfully.
+              </div>
+            </CardBody>
+          </Card>
+        </ModalBody>
+      ) : (
+        <>
+          <ModalHeader toggle={closeModal}>Add New Organization</ModalHeader>
+          <ModalBody>
             <Card className="mb-3">
               <CardBody>
                 <ContentContainer header="Name">
-                  <Input
-                    className="text-center"
-                    onChange={(e) => setFormData({ ...formData, org: e.target.value })}
-                    type="text"
-                    title="name"
-                    placeholder="name your organization"
-                    value={formData.org || ''}
-                  />
+                  <Row>
+                    <Col sm="4" className="pt-2 text-nowrap text-grey">
+                      Ex: &quot;My Org&quot;
+                    </Col>
+                    <Col sm="8">
+                      <Input className="text-center" onChange={(e) => setFormData({ ...formData, org: e.target.value })} type="text" title="name" value={formData.org || ''} />
+                    </Col>
+                  </Row>
                 </ContentContainer>
                 <ContentContainer header="Subdomain" subheader="alphanumeric and hyphens only. 16 char max.">
                   <Row>
-                    <Col className="subdomain-form">
+                    <Col sm="4" className="pt-2 text-nowrap text-grey">
+                      Ex: &quot;myorg&quot;&nbsp;
+                      <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
+                        <i className="fa fa-question-circle text-purple" />
+                      </a>
+                    </Col>
+                    <Col sm="8">
                       <Input
                         className="text-center"
                         type="text"
                         title="subdomain"
-                        placeholder="subdomain"
                         value={formData.subdomain || ''}
                         disabled={formState.submitted}
                         onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
                       />
                     </Col>
-                    <Col className="subdomain-label text-darkgrey">
-                      .harperdbcloud.com{' '}
-                      <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
-                        <i className="fa fa-question-circle text-purple" />
-                      </a>
+                  </Row>
+                  <hr className="my-2 d-none d-sm-block" />
+                  <Row>
+                    <Col xs="12" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
+                      {formData.subdomain ? (
+                        <i className="text-grey">INSTANCE_NAME-{formData.subdomain}.harperdbcloud.com</i>
+                      ) : (
+                        <span className="text-lightgrey">INSTANCE_NAME-SUBDOMAIN.harperdbcloud.com</span>
+                      )}
                     </Col>
                   </Row>
                 </ContentContainer>
@@ -104,9 +131,9 @@ export default () => {
                 <CardBody>{formState.error}</CardBody>
               </Card>
             )}
-          </>
-        )}
-      </ModalBody>
+          </ModalBody>
+        </>
+      )}
     </Modal>
   );
 };
