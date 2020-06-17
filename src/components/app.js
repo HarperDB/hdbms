@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
-import { useAlert } from 'react-alert';
+import { useAlert, positions } from 'react-alert';
 
 import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
@@ -43,7 +43,6 @@ export default () => {
   const canonical = document.querySelector('link[rel="canonical"]');
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
-  const newStudioVersionAvailable = config.studio_version !== version.studio;
 
   const refreshProducts = () => !products && getProducts();
   const refreshRegions = () => !regions && getRegions();
@@ -59,10 +58,10 @@ export default () => {
   };
 
   useEffect(() => {
-    if (newStudioVersionAvailable && version.studio) {
-      alert.show(`HarperDB Studio v${version.studio} is now available. Refresh the page to update.`, { timeout: 0 });
+    if (version.studio && config.studio_version !== version.studio) {
+      alert.info(`HarperDB Studio v${version.studio} is now available. Refresh to update.`, { timeout: 0, position: positions.BOTTOM_CENTER });
     }
-  }, [newStudioVersionAvailable, version.studio]);
+  }, [config.studio_version, version.studio]);
 
   useEffect(() => {
     history.listen(() => (canonical.href = window.location.href));
@@ -94,7 +93,7 @@ export default () => {
     refreshProducts();
     refreshRegions();
     refreshUser(auth);
-  }, config.instances_refresh_rate);
+  }, config.refresh_content_interval);
 
   useInterval(() => refreshVersion(), config.check_version_interval);
 

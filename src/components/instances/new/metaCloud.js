@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../../state/appState';
 
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
 
-export default ({ instanceNames, customerId, customerSubdomain }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
+  const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
+  const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -34,7 +41,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
         setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true, super: true });
-        setTimeout(() => history.push(`/o/${customerId}/instances/new/details_cloud`), 0);
+        setTimeout(() => history.push(`/o/${customer_id}/instances/new/details_cloud`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -77,7 +84,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
               <Col sm="8" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
                 {formData.instance_name ? (
                   <i className="text-grey">
-                    {formData.instance_name}-{customerSubdomain}.harperdbcloud.com
+                    {formData.instance_name}-{subdomain}.harperdbcloud.com
                   </i>
                 ) : (
                   <span className="text-lightgrey">enter a name above</span>
@@ -109,7 +116,7 @@ export default ({ instanceNames, customerId, customerSubdomain }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customerId}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>

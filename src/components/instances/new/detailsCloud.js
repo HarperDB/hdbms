@@ -2,11 +2,23 @@ import React, { useState } from 'react';
 import { Button, RadioCheckbox, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../../state/appState';
+
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
+import config from '../../../../config';
 
-export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, freeCloudInstanceLimit, customerId }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
+  const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
+  const products = useStoreState(appState, (s) => s.products.cloudCompute);
+  const storage = useStoreState(appState, (s) => s.products.cloudStorage);
+  const regions = useStoreState(appState, (s) => s.regions);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
@@ -21,6 +33,9 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
   const storagePrice = storage && formData.data_volume_size ? storage.find((p) => p.value === formData.data_volume_size)?.price : 'FREE';
   const isFree = !computePrice && !storagePrice;
   const needsCard = products && storage && !hasCard && !isFree;
+  const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
+  const freeCloudInstanceLimit = config.free_cloud_instance_limit;
+  const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
 
   useAsyncEffect(() => {
     const { submitted } = formState;
@@ -30,7 +45,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
       } else if (stripe_plan_id && instance_region && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData, instance_type: instanceType });
-        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
+        setTimeout(() => history.push(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -81,7 +96,7 @@ export default ({ products, storage, regions, hasCard, canAddFreeCloudInstance, 
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

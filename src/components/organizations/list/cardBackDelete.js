@@ -24,7 +24,7 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
           error: 'organization name is not correct',
         });
       } else {
-        const response = await removeOrg({ auth, customer_id, user_id: auth.user_id });
+        const response = await removeOrg({ auth, customer_id: customer_id.toString(), user_id: auth.user_id });
 
         if (response.error) {
           setFormState({ error: response.message });

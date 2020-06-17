@@ -4,21 +4,32 @@ import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import appState from '../../../state/appState';
+import useNewInstance from '../../../state/newInstance';
+
 import addPaymentMethod from '../../../api/lms/addPaymentMethod';
 import getCustomer from '../../../api/lms/getCustomer';
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, stripeId }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const stripeId = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const products = useStoreState(appState, (s) => s.products);
+  const [newInstance] = useNewInstance({});
   const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
+  const isLocal = newInstance.is_local;
+  const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
+  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -40,8 +51,8 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
           setFormState({ error: error.message });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: stripeId, customer_id: customerId });
-          await getCustomer({ auth, customer_id: customerId });
+          await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: stripeId, customer_id });
+          await getCustomer({ auth, customer_id });
           setFormState({ success: true });
         }
       }
@@ -58,7 +69,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             color="purple"
@@ -72,7 +83,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
           <Button
             id="reviewInstanceDetails"
             title="Review Instance Details"
-            onClick={() => history.push(`/o/${customerId}/instances/new/confirm`)}
+            onClick={() => history.push(`/o/${customer_id}/instances/new/confirm`)}
             block
             color="purple"
             className="mt-3"
@@ -108,7 +119,7 @@ export default ({ hasCard, computeProduct, isLocal, storageProduct, customerId, 
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/o/${customerId}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

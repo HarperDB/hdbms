@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { RadioCheckbox, Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+
+import appState from '../../../state/appState';
+
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 
-export default ({ products, hasCard, customerId }) => {
+export default () => {
   const history = useHistory();
+  const { customer_id } = useParams();
+  const products = useStoreState(appState, (s) => s.products.localCompute);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
@@ -21,7 +29,7 @@ export default ({ products, hasCard, customerId }) => {
     if (submitted) {
       if (stripe_plan_id) {
         setNewInstance({ ...newInstance, stripe_plan_id });
-        setTimeout(() => history.push(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
+        setTimeout(() => history.push(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -50,7 +58,7 @@ export default ({ products, hasCard, customerId }) => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customerId}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

@@ -57,7 +57,7 @@ export default () => {
     if (formState.restarting) {
       checkInstance();
     }
-  }, config.instance_refresh_rate);
+  }, config.refresh_content_interval);
 
   return (
     <Row id="clustering">
