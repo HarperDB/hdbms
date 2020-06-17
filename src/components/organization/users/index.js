@@ -25,7 +25,7 @@ export default () => {
 
   useEffect(() => refreshUsers(), []);
 
-  useInterval(() => refreshUsers(), config.instances_refresh_rate);
+  useInterval(() => refreshUsers(), config.refresh_content_interval);
 
   return (
     <Row>

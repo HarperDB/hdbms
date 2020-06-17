@@ -44,7 +44,7 @@ export default () => {
 
   useInterval(() => {
     if (autoRefresh) setLastUpdate(Date.now());
-  }, config.instance_refresh_rate);
+  }, config.refresh_content_interval);
 
   return (
     <>

@@ -59,7 +59,7 @@ export default ({ tableState, setTableState, activeTable }) => {
 
   useAsyncEffect(() => activeTable && setTableState({ ...tableState, lastUpdate: Date.now() }), [activeTable]);
 
-  useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.instance_refresh_rate);
+  useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 
   return (
     <>

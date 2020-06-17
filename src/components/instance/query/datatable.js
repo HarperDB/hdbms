@@ -82,7 +82,7 @@ export default ({ query }) => {
 
   useInterval(() => {
     if (tableState.autoRefresh && !tableState.loading) setLastUpdate(Date.now());
-  }, config.instance_refresh_rate);
+  }, config.refresh_content_interval);
 
   return tableState.reload ? (
     <EmptyPrompt message="Executing Query" />

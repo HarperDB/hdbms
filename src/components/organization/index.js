@@ -24,7 +24,7 @@ export default () => {
 
   useEffect(refreshCustomer, []);
 
-  useInterval(refreshCustomer, config.instances_refresh_rate);
+  useInterval(refreshCustomer, config.refresh_content_interval);
 
   return isOrgOwner ? (
     <>

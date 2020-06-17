@@ -53,7 +53,7 @@ const InstancesIndex = () => {
 
   useEffect(refreshInstances, [auth, products, regions, customer_id]);
 
-  useInterval(refreshInstances, config.instances_refresh_rate);
+  useInterval(refreshInstances, config.refresh_content_interval);
 
   useEffect(() => {
     if (mounted && instances && isOrgOwner) {

@@ -57,7 +57,7 @@ export default () => {
 
   useAsyncEffect(refreshUser, []);
 
-  useInterval(refreshUser, config.instances_refresh_rate);
+  useInterval(refreshUser, config.refresh_content_interval);
 
   const refreshInstances = () => {
     if (auth && products && regions && customer_id) {

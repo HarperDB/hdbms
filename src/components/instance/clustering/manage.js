@@ -31,7 +31,7 @@ export default () => {
 
   useEffect(refreshInstances, []);
 
-  useInterval(refreshInstances, config.instances_refresh_rate);
+  useInterval(refreshInstances, config.refresh_content_interval);
 
   const refreshInstance = useCallback(() => {
     instanceState.update((s) => {

@@ -106,7 +106,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
 
   useInterval(() => {
     if (instanceData.retry) setLastUpdate(Date.now());
-  }, config.instance_refresh_rate);
+  }, config.refresh_content_interval);
 
   return (
     <Card

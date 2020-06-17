@@ -44,7 +44,7 @@ export default ({ instanceAction, setInstanceAction }) => {
 
   useInterval(() => {
     if (instanceAction === 'Restarting') checkInstance();
-  }, config.instance_refresh_rate);
+  }, config.refresh_content_interval);
 
   return instanceAction === 'Restarting' ? (
     <Card className="error">
