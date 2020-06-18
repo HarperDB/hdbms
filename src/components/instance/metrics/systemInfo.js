@@ -13,6 +13,7 @@ export default () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
@@ -24,7 +25,7 @@ export default () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        await systemInformation({ auth, signal: controller.signal, url, refresh: !!systemInfo });
+        await systemInformation({ auth, signal: controller.signal, url, refresh: !!systemInfo, is_local });
         setLoading(false);
       }
     },

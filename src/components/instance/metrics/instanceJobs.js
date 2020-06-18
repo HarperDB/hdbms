@@ -20,12 +20,12 @@ export default () => {
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
   const today = new Date();
-  const defaultStartDate = new Date();
-  defaultStartDate.setFullYear(defaultStartDate.getFullYear() - 1);
-  const fromDate = `${defaultStartDate.getFullYear()}-${defaultStartDate.getMonth() < 10 ? '0' : ''}${defaultStartDate.getMonth()}-${
-    defaultStartDate.getDate() < 10 ? '0' : ''
-  }${defaultStartDate.getDate()}`;
-  const toDate = `${today.getFullYear()}-${today.getMonth() < 10 ? '0' : ''}${today.getMonth()}-${today.getDate() < 10 ? '0' : ''}${today.getDate()}`;
+  const day = `0${today.getDate() + 1}`.slice(-2);
+  const month = `0${today.getMonth() + 1}`.slice(-2);
+  const to_year = today.getFullYear();
+  const from_year = parseInt(today.getFullYear(), 10) - 1;
+  const fromDate = `${from_year}-${month}-${day}`;
+  const toDate = `${to_year}-${month}-${day}`;
   let controller;
 
   useAsyncEffect(

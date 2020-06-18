@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal, refresh }) => {
+export default async ({ auth, url, signal, is_local, refresh }) => {
   const result = await queryInstance({ operation: 'system_information' }, auth, url, signal);
 
   if (result.error && refresh) {
@@ -41,7 +41,7 @@ export default async ({ auth, url, signal, refresh }) => {
   const memoryStatus = freeMemory / totalMemory < 0.1 ? 'danger' : freeMemory / totalMemory < 0.25 ? 'warning' : 'success';
 
   const diskB2GB = 1000000000;
-  const totalDisk = result.disk.size[0].size / diskB2GB;
+  const totalDisk = is_local ? result.disk.size[0].size / diskB2GB : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / diskB2GB;
   const usedDisk = result.disk.size.reduce((a, b) => a + b.used, 0) / diskB2GB;
   const freeDisk = totalDisk - usedDisk;
   const diskStatus = freeDisk / totalDisk < 0.1 ? 'danger' : freeDisk / totalDisk < 0.25 ? 'warning' : 'success';
