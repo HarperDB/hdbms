@@ -2,6 +2,7 @@ import Browse from './browse';
 import Query from './query';
 import Clustering from './clustering';
 import Config from './config';
+import Metrics from './metrics';
 import Users from './users';
 import Roles from './roles';
 
@@ -18,7 +19,7 @@ export default ({ super_user }) => {
       component: Query,
       path: `/o/:customer_id/i/:compute_stack_id/query`,
       link: 'query',
-      icon: 'code',
+      icon: 'search',
       iconCode: 'f121',
     },
   ];
@@ -28,7 +29,7 @@ export default ({ super_user }) => {
       component: Clustering,
       path: `/o/:customer_id/i/:compute_stack_id/clustering`,
       link: 'clustering',
-      icon: 'share-alt',
+      icon: 'cubes',
       iconCode: 'f1e0',
     },
     {
@@ -51,6 +52,13 @@ export default ({ super_user }) => {
       link: 'config',
       icon: 'wrench',
       iconCode: 'f0ad',
+    },
+    {
+      component: Metrics,
+      path: `/o/:customer_id/i/:compute_stack_id/metrics`,
+      link: 'metrics',
+      icon: 'tachometer',
+      iconCode: 'f0e4',
     },
   ];
 

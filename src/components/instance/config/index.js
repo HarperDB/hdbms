@@ -11,9 +11,7 @@ import UpdateRAM from './updateRAM';
 import RemoveInstance from './removeInstance';
 import RestartInstance from './restartInstance';
 import InstanceDetails from './instanceDetails';
-import InstanceLogs from './instanceLogs';
 import Loader from '../../shared/loader';
-import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
   const { customer_id } = useParams();
@@ -29,33 +27,43 @@ export default () => {
       <Col xs="12">
         <InstanceDetails />
       </Col>
-      <Col lg="4" xs="12">
-        <span className="floating-card-header">instance actions</span>
+      {isOrgOwner && (
+        <Col lg="3" sm="6" xs="12">
+          <span className="floating-card-header">update instance ram</span>
+          <Card className="my-3">
+            <CardBody>
+              <UpdateRAM setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+            </CardBody>
+          </Card>
+        </Col>
+      )}
+      {isOrgOwner && !is_local && (
+        <Col lg="3" sm="6" xs="12">
+          <span className="floating-card-header">update instance storage</span>
+          <Card className="my-3">
+            <CardBody>
+              <UpdateDiskVolume setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+            </CardBody>
+          </Card>
+        </Col>
+      )}
+      {isOrgOwner && (
+        <Col lg="3" sm="6" xs="12">
+          <span className="floating-card-header">remove instance</span>
+          <Card className="my-3">
+            <CardBody>
+              <RemoveInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+            </CardBody>
+          </Card>
+        </Col>
+      )}
+      <Col lg="3" sm="6" xs="12">
+        <span className="floating-card-header">restart instance</span>
         <Card className="my-3">
           <CardBody>
-            {isOrgOwner && (
-              <>
-                <ContentContainer header="Update Instance RAM" className="mb-3">
-                  <UpdateRAM setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
-                </ContentContainer>
-                {!is_local && (
-                  <ContentContainer header="Update Instance Storage" className="mb-3">
-                    <UpdateDiskVolume setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
-                  </ContentContainer>
-                )}
-                <ContentContainer header="Remove Instance" className="mb-3">
-                  <RemoveInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
-                </ContentContainer>
-              </>
-            )}
-            <ContentContainer header="Restart Instance">
-              <RestartInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
-            </ContentContainer>
+            <RestartInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
           </CardBody>
         </Card>
-      </Col>
-      <Col lg="8" xs="12">
-        <InstanceLogs />
       </Col>
     </Row>
   );
