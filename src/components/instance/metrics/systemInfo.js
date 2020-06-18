@@ -118,7 +118,7 @@ export default () => {
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Network latency" className="mb-3">
+                <ContentContainer header="Network Latency" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo.networkLatencyStatus}`}>{systemInfo.networkLatency}ms</div>
                 </ContentContainer>
               </Col>
