@@ -18,9 +18,10 @@ export default () => {
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
   let controller;
 
   useAsyncEffect(
@@ -49,7 +50,7 @@ export default () => {
   return (
     <>
       <Row className="floating-card-header">
-        <Col>logs</Col>
+        <Col>instance logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
           <i title="Update Logs" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
@@ -64,21 +65,37 @@ export default () => {
         <CardBody className="text-small">
           <Row>
             <Col xs="3">
+              <b>status</b>
+            </Col>
+            <Col xs="3">
               <b>date</b>
             </Col>
-            <Col xs="9" className="text-right text-danger">
-              {logsError && <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>}
-            </Col>
+            {logsError ? (
+              <Col xs="6" className="text-right text-danger">
+                <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
+              </Col>
+            ) : (
+              <Col xs="6">
+                <b>time</b>
+              </Col>
+            )}
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="log-scroller">
-            {logs &&
-              logs
-                .filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1))
-                .map((l, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <LogRow key={i} {...l} />
-                ))}
+            {(loading || !filteredLogs) && !autoRefresh ? (
+              <div className="pt-5 text-center">
+                <i className="fa fa-spinner fa-spin text-lightgrey" />
+              </div>
+            ) : filteredLogs.length ? (
+              filteredLogs.map((l, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <LogRow key={i} {...l} />
+              ))
+            ) : logs && !logs.length ? (
+              <div className="pt-5 text-center">no logs found</div>
+            ) : (
+              <div className="pt-5 text-center">no logs found in this view</div>
+            )}
           </div>
         </CardBody>
       </Card>

@@ -1,5 +1,7 @@
 #config {
   .instance-details {
+    min-height: 168px;
+
     .nowrap-scroll {
       overflow: hidden;
       overflow-x: auto;
@@ -17,18 +19,17 @@
     }
 
     .log-row {
-      border-bottom: 1px solid $lightest-grey-overlay !important;
-      color: $color-grey;
+      border-bottom: 1px solid $lightest-grey-overlay;
       padding: 8px 0;
 
-      &.error,
-      &.fatal {
+      .error,
+      .fatal {
         color: $color-danger;
       }
 
-      &.pinned {
-        background: $color-danger;
-        color: $color-white;
+      .complete,
+      .notify {
+        color: $color-success;
       }
     }
   }
