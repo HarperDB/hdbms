@@ -5,6 +5,7 @@ import Config from './config';
 import Metrics from './metrics';
 import Users from './users';
 import Roles from './roles';
+import Examples from './examples';
 
 export default ({ super_user }) => {
   const standardRoutes = [
@@ -20,7 +21,7 @@ export default ({ super_user }) => {
       path: `/o/:customer_id/i/:compute_stack_id/query`,
       link: 'query',
       icon: 'search',
-      iconCode: 'f121',
+      iconCode: 'f002',
     },
   ];
 
@@ -53,6 +54,9 @@ export default ({ super_user }) => {
       icon: 'wrench',
       iconCode: 'f0ad',
     },
+  ];
+
+  const trailingRoutes = [
     {
       component: Metrics,
       path: `/o/:customer_id/i/:compute_stack_id/metrics`,
@@ -60,7 +64,14 @@ export default ({ super_user }) => {
       icon: 'tachometer',
       iconCode: 'f0e4',
     },
+    {
+      component: Examples,
+      path: `/o/:customer_id/i/:compute_stack_id/examples/:folder?/:method?`,
+      link: 'examples',
+      icon: 'code',
+      iconCode: 'f121',
+    },
   ];
 
-  return super_user ? [...standardRoutes, ...superUserRoutes] : standardRoutes;
+  return super_user ? [...standardRoutes, ...superUserRoutes, ...trailingRoutes] : [...standardRoutes, ...trailingRoutes];
 };

@@ -15,6 +15,7 @@ const appState = new Store({
   filterCloud: true,
   version: false,
   darkTheme: false,
+  postmanCollection: false,
 });
 
 export default appState;
