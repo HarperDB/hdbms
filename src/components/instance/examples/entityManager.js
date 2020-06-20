@@ -20,18 +20,20 @@ export default ({ type }) => {
   const baseUrl = type === 'folder' ? `/o/${customer_id}/i/${compute_stack_id}/examples` : `/o/${customer_id}/i/${compute_stack_id}/examples/${folder}`;
 
   useEffect(() => {
-    if (postmanCollection && type === 'folder') {
-      const newItems = generateFolderLinks(postmanCollection);
-      setItems(newItems);
-    }
-  }, [postmanCollection]);
-
-  useEffect(() => {
-    if (postmanCollection && folder && type === 'method') {
-      const newItems = generateMethodLinks(postmanCollection, folder);
-      setItems(newItems);
-      if (!method) {
-        history.push(`${baseUrl}/${newItems[0]}`);
+    if (postmanCollection) {
+      if (type === 'folder') {
+        const newItems = generateFolderLinks(postmanCollection);
+        setItems(newItems);
+        if (!folder) {
+          history.push(`${baseUrl}/${newItems[0]}`);
+        }
+      }
+      if (folder && type === 'method') {
+        const newItems = generateMethodLinks(postmanCollection, folder);
+        setItems(newItems);
+        if (!method) {
+          history.push(`${baseUrl}/${newItems[0]}`);
+        }
       }
     }
   }, [postmanCollection, folder]);
