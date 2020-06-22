@@ -9,7 +9,7 @@ export default async ({ email, pass, signal }) => {
     payload: { email, password: pass },
   });
 
-  if (response.error && response.message === 'Unauthorized') {
+  if (response.error && ['Unauthorized', 'User does not exist'].includes(response.message)) {
     return appState.update((s) => {
       s.auth = { ...response, time: Date.now() };
     });
