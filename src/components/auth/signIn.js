@@ -30,7 +30,7 @@ export default () => {
 
   useEffect(() => {
     if (auth?.error) {
-      setFormState({ error: auth.message === 'Unauthorized' ? 'Login Failed' : auth.message });
+      setFormState({ error: ['Unauthorized', 'User does not exist'].includes(auth.message) ? 'Login Failed' : auth.message });
       setTimeout(() => setFormState({}), 3000);
     }
   }, [auth]);

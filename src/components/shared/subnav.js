@@ -21,7 +21,7 @@ export default ({ routes = [] }) => {
       <Nav navbar className="instance-nav d-none d-md-flex">
         {routes.map((route) => (
           <NavItem key={route.path}>
-            <NavLink title={route.link} className="text-capitalize nav-link" to={route.link || route.path}>
+            <NavLink title={route.link} className="nav-link" to={route.link || route.path}>
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
               {route.label}
             </NavLink>

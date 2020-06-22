@@ -35,7 +35,7 @@ const TopNav = () => {
         <NavItem className="ml-3">
           <NavLink title="View or Switch Organizations" to="/organizations">
             <i className="fa fa-building-o d-inline-block" />
-            <span className="d-none d-lg-inline-block">&nbsp; All Organizations</span>
+            <span className="d-none d-lg-inline-block">&nbsp; all organizations</span>
             {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
           </NavLink>
         </NavItem>
@@ -45,7 +45,7 @@ const TopNav = () => {
             <NavItem>
               <NavLink title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
                 <i className="fa fa-th d-inline-block" />
-                <span className="d-none d-lg-inline-block">&nbsp; Instances</span>
+                <span className="d-none d-lg-inline-block">&nbsp; instances</span>
               </NavLink>
             </NavItem>
             {showManageIcon && (
@@ -58,7 +58,7 @@ const TopNav = () => {
                     to={`/o/${customer.customer_id}/users`}
                   >
                     <i className="fa fa-gears d-inline-block" />
-                    <span className="d-none d-lg-inline-block">&nbsp; Manage</span>
+                    <span className="d-none d-lg-inline-block">&nbsp; manage</span>
                   </NavLink>
                 </NavItem>
               </>

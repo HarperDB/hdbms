@@ -58,7 +58,7 @@ export default () => {
         <CardBody>
           {(loading || !systemInfo) && !autoRefresh ? (
             <div className="pt-5 text-center">
-              <i className="fa fa-spinner fa-spin text-lightgrey" />
+              <i className="fa fa-spinner fa-spin text-purple" />
             </div>
           ) : (
             <Row>
