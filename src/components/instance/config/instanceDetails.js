@@ -19,8 +19,6 @@ export default () => {
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const authHeader = auth?.user ? `Basic ${btoa(`${auth.user}:${auth.pass}`)}` : '...';
 
-  console.log(auth);
-
   return (
     <>
       <span className="floating-card-header">instance overview</span>
