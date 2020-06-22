@@ -41,23 +41,6 @@ export default () => {
               </ContentContainer>
             </Col>
             <Col md="2" sm="4" xs="6">
-              <ContentContainer header="Total Price" className="mb-3">
-                <div className="nowrap-scroll">{totalPriceStringWithInterval}</div>
-              </ContentContainer>
-            </Col>
-            <Col md="2" sm="4" xs="6">
-              <ContentContainer header="RAM" className="mb-3">
-                <div className="nowrap-scroll">{compute?.label}</div>
-              </ContentContainer>
-            </Col>
-            {!is_local && (
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Storage" className="mb-3 text-nowrap">
-                  <div className="nowrap-scroll">{storage?.label}</div>
-                </ContentContainer>
-              </Col>
-            )}
-            <Col md="2" sm="4" xs="6">
               <ContentContainer header="Name" className="mb-3">
                 <div className="nowrap-scroll">{instance_name}</div>
               </ContentContainer>
@@ -71,6 +54,23 @@ export default () => {
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Region" className="mb-3">
                   <div className="nowrap-scroll">{instance_region}</div>
+                </ContentContainer>
+              </Col>
+            )}
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="Total Price" className="mb-3">
+                <div className="nowrap-scroll">{totalPriceStringWithInterval}</div>
+              </ContentContainer>
+            </Col>
+            <Col md="2" sm="4" xs="6">
+              <ContentContainer header="RAM" className="mb-3">
+                <div className="nowrap-scroll">{compute?.label}</div>
+              </ContentContainer>
+            </Col>
+            {!is_local && (
+              <Col md="2" sm="4" xs="6">
+                <ContentContainer header="Storage" className="mb-3 text-nowrap">
+                  <div className="nowrap-scroll">{storage?.label}</div>
                 </ContentContainer>
               </Col>
             )}

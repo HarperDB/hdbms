@@ -34,15 +34,15 @@ export default async ({ auth, url, signal, is_local, refresh }) => {
     });
   }
 
-  const memoryB2GB = 1073741824;
-  const totalMemory = result.memory.total / memoryB2GB;
-  const usedMemory = result.memory.used / memoryB2GB;
-  const freeMemory = result.memory.free / memoryB2GB;
+  const B2GB = 1073741824;
+
+  const totalMemory = result.memory.total / B2GB;
+  const usedMemory = result.memory.used / B2GB;
+  const freeMemory = result.memory.free / B2GB;
   const memoryStatus = freeMemory / totalMemory < 0.1 ? 'danger' : freeMemory / totalMemory < 0.25 ? 'warning' : 'success';
 
-  const diskB2GB = 1000000000;
-  const totalDisk = is_local ? result.disk.size[0].size / diskB2GB : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / diskB2GB;
-  const usedDisk = result.disk.size.reduce((a, b) => a + b.used, 0) / diskB2GB;
+  const totalDisk = is_local ? result.disk.size[0].size / 1073741824 : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB;
+  const usedDisk = is_local ? result.disk.size.reduce((a, b) => a + b.used, 0) / B2GB : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB;
   const freeDisk = totalDisk - usedDisk;
   const diskStatus = freeDisk / totalDisk < 0.1 ? 'danger' : freeDisk / totalDisk < 0.25 ? 'warning' : 'success';
 
@@ -51,8 +51,10 @@ export default async ({ auth, url, signal, is_local, refresh }) => {
   const cpuLoad = result.cpu.current_load.currentload;
   const cpuStatus = cpuLoad > 90 ? 'danger' : cpuLoad > 75 ? 'warning' : 'success';
 
-  const networkTransfered = result.network.stats.reduce((a, b) => a + b.tx_bytes, 0) / diskB2GB;
-  const networkReceived = result.network.stats.reduce((a, b) => a + b.rx_bytes, 0) / diskB2GB;
+  const transferB2GB = 1000000000;
+
+  const networkTransfered = result.network.stats.reduce((a, b) => a + b.tx_bytes, 0) / transferB2GB;
+  const networkReceived = result.network.stats.reduce((a, b) => a + b.rx_bytes, 0) / transferB2GB;
   const networkLatency = result.network.latency.ms;
   const networkLatencyStatus = networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
 
