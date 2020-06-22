@@ -70,8 +70,20 @@ export default () => {
   useEffect(() => {
     history.listen(() => (canonical.href = window.location.href));
 
-    if (!persistedUser?.email) setFetchingUser(false);
-    else refreshUser(persistedUser);
+    if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(history.location.pathname)) {
+      setFetchingUser(false);
+      return setPersistedUser({});
+    }
+
+    if (['/sign-in'].includes(history.location.pathname)) {
+      history.push('/');
+    }
+
+    if (!persistedUser?.email) {
+      setFetchingUser(false);
+    } else {
+      refreshUser(persistedUser);
+    }
 
     refreshVersion();
     refreshProducts();
