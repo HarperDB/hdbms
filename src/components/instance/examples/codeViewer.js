@@ -65,17 +65,24 @@ export default ({ showCustomMessage }) => {
             </>
           )}
           <Row>
-            <Col>
-              <SelectDropdown
-                className="react-select-container"
-                classNamePrefix="react-select"
-                onChange={({ value }) => setLanguage(value)}
-                options={languages && languages.map((l) => ({ label: `${l.lang} - ${l.variant}`, value: l }))}
-                value={{ label: language ? `${language.lang || ''} - ${language.variant}` : '', value: language }}
-                isSearchable={false}
-                isClearable={false}
-                isLoading={!languages}
-              />
+            <Col xl="6" xs="12">
+              <Row>
+                <Col xl="6" xs="12" className="text-nowrap py-2 text-bold">
+                  Choose Programming Language
+                </Col>
+                <Col xl="6" xs="12">
+                  <SelectDropdown
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    onChange={({ value }) => setLanguage(value)}
+                    options={languages && languages.map((l) => ({ label: `${l.lang} - ${l.variant}`, value: l }))}
+                    value={{ label: language ? `${language.lang || ''} - ${language.variant}` : '', value: language }}
+                    isSearchable={false}
+                    isClearable={false}
+                    isLoading={!languages}
+                  />
+                </Col>
+              </Row>
               {methodObject?.request?.description && (
                 <>
                   <hr />
@@ -83,7 +90,7 @@ export default ({ showCustomMessage }) => {
                 </>
               )}
             </Col>
-            <Col>
+            <Col xl="6" xs="12">
               {codeText && language ? (
                 <SyntaxHighlighter language={language.syntax_mode} style={atomDark}>
                   {codeText}
