@@ -9,6 +9,7 @@ import ContentContainer from '../../shared/contentContainer';
 export default () => {
   const { compute_stack_id } = useParams();
   const url = useStoreState(instanceState, (s) => s.url);
+  const auth = useStoreState(instanceState, (s) => s.auth);
   const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
   const compute = useStoreState(instanceState, (s) => s.compute);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
@@ -16,6 +17,9 @@ export default () => {
   const instance_region = useStoreState(instanceState, (s) => s.instance_region);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const authHeader = auth?.user ? `Basic ${btoa(`${auth.user}:${auth.pass}`)}` : '...';
+
+  console.log(auth);
 
   return (
     <>
@@ -23,14 +27,19 @@ export default () => {
       <Card className="my-3 instance-details">
         <CardBody>
           <Row>
-            <Col md="6" xs="12">
+            <Col md="4" xs="12">
               <ContentContainer header="Instance URL" className="mb-3">
                 <div className="nowrap-scroll">{url}</div>
               </ContentContainer>
             </Col>
-            <Col md="6" xs="12">
+            <Col md="4" xs="12">
               <ContentContainer header="Instance Node Name (for clustering)" className="mb-3">
                 <div className="nowrap-scroll">{compute_stack_id}</div>
+              </ContentContainer>
+            </Col>
+            <Col md="4" xs="12">
+              <ContentContainer header="Instance API Auth Header (this user)" className="mb-3">
+                <div className="nowrap-scroll">&quot;{authHeader}&quot;</div>
               </ContentContainer>
             </Col>
             <Col md="2" sm="4" xs="6">
