@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import EntityManager from './entityManager';
 import CodeViewer from './codeViewer';
 
-export default () => {
+export default ({ showCustomMessage }) => {
   const { folder } = useParams();
 
   return (
@@ -15,7 +15,7 @@ export default () => {
         {folder && <EntityManager type="method" />}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        <CodeViewer />
+        <CodeViewer showCustomMessage={showCustomMessage} />
       </Col>
     </Row>
   );

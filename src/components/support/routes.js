@@ -2,6 +2,7 @@ import Resources from './resources';
 import Installation from './installation';
 import Drivers from './drivers';
 import Tutorials from './tutorials';
+import Examples from './examples';
 
 export default [
   {
@@ -35,5 +36,13 @@ export default [
     label: 'resources',
     icon: 'external-link-square',
     iconCode: 'f14c',
+  },
+  {
+    component: Examples,
+    path: '/support/examples/:folder?/:method?',
+    link: '/support/examples',
+    label: 'example code',
+    icon: 'code',
+    iconCode: 'f121',
   },
 ];

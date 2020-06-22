@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardBody, Row, Col, Alert, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../state/appState';
+import appState from '../../../state/appState';
 
 export default () => {
   const version = useStoreState(appState, (s) => s.version);

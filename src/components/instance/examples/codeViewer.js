@@ -12,7 +12,7 @@ import useCodeExampleLanguage from '../../../state/codeExampleLanguage';
 import languages from '../../../methods/examples/languages';
 import getMethodObject from '../../../methods/examples/getMethodObject';
 
-export default () => {
+export default ({ showCustomMessage }) => {
   const { folder, method } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -39,7 +39,9 @@ export default () => {
     if (methodObject && language) {
       const thisLanguage = languages.find((l) => l.lang === language.lang && l.variant === language.variant);
       if (thisLanguage.snippet) {
-        const newCodeText = thisLanguage.snippet({ url, auth: btoa(`${auth.user}:${auth.pass}`), body: methodObject.request.body.raw });
+        const yourAuthHeader = auth ? btoa(`${auth.user}:${auth.pass}`) : 'YOUR-AUTH-HEADER';
+        const yourInstanceURL = url || 'YOUR-INSTANCE-URL';
+        const newCodeText = thisLanguage.snippet({ url: yourInstanceURL, auth: yourAuthHeader, body: methodObject.request.body.raw });
         setCodeText(newCodeText);
       } else {
         setCodeText('You do not yet have a valid snippet generator for this language.');
@@ -54,6 +56,14 @@ export default () => {
       </div>
       <Card className="my-3">
         <CardBody>
+          {showCustomMessage && (
+            <>
+              <b className="d-block text-danger text-center">
+                For examples pre-populated with the URL and Auth Header, choose an Organization, select an Instance, and click &quot;Example Code&quot;
+              </b>
+              <hr />
+            </>
+          )}
           <Row>
             <Col>
               <SelectDropdown

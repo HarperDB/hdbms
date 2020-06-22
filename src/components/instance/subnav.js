@@ -41,7 +41,7 @@ export default ({ routes = [] }) => {
   );
   const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
   const activeRoute = {
-    label: currentRoute.link,
+    label: currentRoute.label,
     value: currentRoute.link,
     iconCode: currentRoute.iconCode,
   };
@@ -71,12 +71,12 @@ export default ({ routes = [] }) => {
           <NavItem key={route.path}>
             <NavLink
               title={route.link}
-              className="text-capitalize nav-link"
+              className="nav-link"
               isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
               to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
             >
               <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
-              {route.link}
+              {route.label || route.link}
             </NavLink>
           </NavItem>
         ))}
@@ -87,7 +87,7 @@ export default ({ routes = [] }) => {
           classNamePrefix="react-select"
           width="200px"
           onChange={({ value }) => history.push(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
-          options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.link, value: route.link, iconCode: route.iconCode }))}
+          options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode }))}
           value={activeRoute}
           defaultValue={activeRoute.value}
           isSearchable={false}

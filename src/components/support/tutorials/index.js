@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 
-import config from '../../../config';
+import config from '../../../../config';
 
 export default () => {
   const [playlist, setPlaylist] = useState([]);

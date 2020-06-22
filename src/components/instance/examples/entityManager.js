@@ -17,7 +17,13 @@ export default ({ type }) => {
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [items, setItems] = useState([]);
   const activeItem = type === 'folder' ? folder : method;
-  const baseUrl = type === 'folder' ? `/o/${customer_id}/i/${compute_stack_id}/examples` : `/o/${customer_id}/i/${compute_stack_id}/examples/${folder}`;
+  const baseUrl = customer_id
+    ? type === 'folder'
+      ? `/o/${customer_id}/i/${compute_stack_id}/examples`
+      : `/o/${customer_id}/i/${compute_stack_id}/examples/${folder}`
+    : type === 'folder'
+    ? `/support/examples`
+    : `/support/examples/${folder}`;
 
   useEffect(() => {
     if (postmanCollection) {
