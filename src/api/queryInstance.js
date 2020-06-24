@@ -1,4 +1,5 @@
 import { fetch } from 'whatwg-fetch';
+import addError from './lms/addError';
 
 export default async (operation, auth, url, signal = undefined) => {
   // eslint-disable-next-line no-console
@@ -18,6 +19,14 @@ export default async (operation, auth, url, signal = undefined) => {
     const response = await request.json();
 
     if (response.error) {
+      addError({
+        type: 'instance api',
+        url,
+        operation: operation.operation,
+        request: operation,
+        error: response,
+      });
+
       return {
         error: true,
         message: response.error,
@@ -33,6 +42,14 @@ export default async (operation, auth, url, signal = undefined) => {
     }
 
     if (request.status !== 200) {
+      addError({
+        type: 'instance api',
+        url,
+        operation: operation.operation,
+        request: operation,
+        error: { status: `Error of type ${request.status}` },
+      });
+
       return {
         error: true,
         message: `Error of type ${request.status}`,
@@ -42,9 +59,21 @@ export default async (operation, auth, url, signal = undefined) => {
 
     return response;
   } catch (e) {
+    /*
+    if (e.toString() !== 'AbortError: Aborted') {
+      addError({
+        type: 'instance api',
+        url,
+        operation: operation.operation,
+        request: operation,
+        error: { catch: e.toString() },
+      });
+    }
+    */
+
     return {
       error: true,
-      message: e,
+      message: e.toString(),
       type: 'catch',
     };
   }

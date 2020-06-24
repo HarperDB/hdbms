@@ -1,22 +1,37 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
+import addError from './addError';
+import config from '../../../config';
 
 export default async ({ auth, signal, customer_id }) => {
-  const response = await queryLMS({
-    endpoint: 'getInvoices',
-    method: 'POST',
-    payload: { customer_id },
-    signal,
-    auth,
-  });
+  let response = null;
 
-  let invoices = [];
+  try {
+    response = await queryLMS({
+      endpoint: 'getInvoices',
+      method: 'POST',
+      payload: { customer_id },
+      signal,
+      auth,
+    });
 
-  if (Array.isArray(response)) {
-    invoices = response;
+    let invoices = [];
+
+    if (Array.isArray(response)) {
+      invoices = response;
+    }
+
+    return appState.update((s) => {
+      s.invoices = invoices.filter((i) => i.amount_paid);
+    });
+  } catch (e) {
+    return addError({
+      type: 'lms data',
+      url: config.lms_api_url,
+      operation: 'getInvoices',
+      request: { customer_id },
+      error: { catch: e.toString(), response },
+      customer_id,
+    });
   }
-
-  return appState.update((s) => {
-    s.invoices = invoices.filter((i) => i.amount_paid);
-  });
 };

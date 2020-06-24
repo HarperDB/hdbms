@@ -5,10 +5,10 @@ import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
-import AuthStateLoader from '../shared/authStateLoader';
+import Loader from '../shared/loader';
 import config from '../../../config';
 
-export default () => {
+const SignUp = () => {
   const { search } = useLocation();
   const { code, htuk, pageName, pageUri } = queryString.parse(search);
   const [formState, setFormState] = useState({});
@@ -31,9 +31,9 @@ export default () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.submitted ? (
-        <AuthStateLoader header="creating your account" spinner />
+        <Loader header="creating your account" spinner />
       ) : formState.success ? (
-        <AuthStateLoader
+        <Loader
           header="success!"
           body="check your email for your username and password. be sure to check your spam folder, just in case."
           links={[
@@ -136,3 +136,5 @@ export default () => {
     </div>
   );
 };
+
+export default SignUp;

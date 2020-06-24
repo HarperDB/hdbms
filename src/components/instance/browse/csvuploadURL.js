@@ -10,7 +10,7 @@ import getJob from '../../../api/instance/getJob';
 import isURL from '../../../methods/util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
 
-export default () => {
+const CSVUploadURL = () => {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -114,3 +114,4 @@ export default () => {
     </>
   );
 };
+export default CSVUploadURL;

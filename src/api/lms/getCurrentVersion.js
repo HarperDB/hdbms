@@ -1,22 +1,34 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import config from '../../../config';
+import addError from './addError';
 
 export default async () => {
-  const response = await queryLMS({
-    endpoint: 'getCurrentVersion',
-    method: 'POST',
-  });
+  let response = null;
 
-  if (!response.number) {
-    return false;
+  try {
+    response = await queryLMS({
+      endpoint: 'getCurrentVersion',
+      method: 'POST',
+    });
+
+    if (!response.number) {
+      return false;
+    }
+
+    if (!response.studio) {
+      response.studio = config.studio_version;
+    }
+
+    return appState.update((s) => {
+      s.version = response;
+    });
+  } catch (e) {
+    return addError({
+      type: 'lms data',
+      url: config.lms_api_url,
+      operation: 'getCurrentVersion',
+      error: { catch: e.toString(), response },
+    });
   }
-
-  if (!response.studio) {
-    response.studio = config.studio_version;
-  }
-
-  return appState.update((s) => {
-    s.version = response;
-  });
 };

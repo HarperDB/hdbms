@@ -5,6 +5,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 40%;
+  transform: translate(-50%, -50%);
+
+  &.relative {
+    left: auto;
+    position: relative;
+    top: auto;
+    transform: none;
+  }
 
   .card {
     background: $faint-white-overlay !important;

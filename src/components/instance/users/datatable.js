@@ -3,11 +3,14 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import ReactTable from 'react-table';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 
 import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
 import StructureReloader from '../../shared/structureReloader';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
   const history = useHistory();
@@ -29,7 +32,10 @@ export default () => {
   const [tableColumns] = useState(instanceUserColumns());
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">
@@ -63,6 +69,6 @@ export default () => {
           />
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

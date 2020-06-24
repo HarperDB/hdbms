@@ -3,14 +3,19 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
 
 import searchJobsByStartDate from '../../../api/instance/searchJobsByStartDate';
 import JobRow from './instanceJobsRow';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
+  const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const jobs = useStoreState(instanceState, (s) => s.jobs);
@@ -48,11 +53,14 @@ export default () => {
   );
 
   useInterval(() => {
-    if (autoRefresh) setLastUpdate(Date.now());
+    if (autoRefresh && mounted) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Row className="floating-card-header">
         <Col>instance jobs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
@@ -100,6 +108,6 @@ export default () => {
           </div>
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

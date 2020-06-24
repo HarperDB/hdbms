@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
@@ -11,9 +12,11 @@ import useCodeExampleLanguage from '../../../state/codeExampleLanguage';
 
 import languages from '../../../methods/examples/languages';
 import getMethodObject from '../../../methods/examples/getMethodObject';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default ({ showCustomMessage }) => {
-  const { folder, method } = useParams();
+  const { customer_id, compute_stack_id, folder, method } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
@@ -50,7 +53,10 @@ export default ({ showCustomMessage }) => {
   }, [methodObject, language]);
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <div className="floating-card-header">
         {instance_name} instance &gt; {folder?.toLowerCase()} {method && `> ${method.toLowerCase()}`}
       </div>
@@ -59,7 +65,8 @@ export default ({ showCustomMessage }) => {
           {showCustomMessage && (
             <>
               <b className="d-block text-danger text-center">
-                For examples pre-populated with the URL and Auth Header, choose an Organization, select an Instance, and click &quot;Example Code&quot;
+                <span className="custom-example-prompt">For examples pre-populated with the URL and Auth Header,</span>{' '}
+                <span className="custom-example-prompt">choose an Organization, select an Instance, and click &quot;Example Code&quot;</span>
               </b>
               <hr />
             </>
@@ -104,6 +111,6 @@ export default ({ showCustomMessage }) => {
           </Row>
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

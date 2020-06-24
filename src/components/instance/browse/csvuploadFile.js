@@ -12,7 +12,7 @@ import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../methods/util/commaNumbers';
 
-export default () => {
+const CSVUploadFile = () => {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -146,3 +146,4 @@ export default () => {
     </>
   );
 };
+export default CSVUploadFile;

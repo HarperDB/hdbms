@@ -4,12 +4,17 @@ import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router';
 
 import config from '../../../../config';
 import instanceState from '../../../state/instanceState';
+
 import DataTableHeader from './datatableHeader';
 import getQueryData from '../../../methods/instance/getQueryData';
 import EmptyPrompt from './emptyPrompt';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 const defaultTableState = {
   tableData: [],
@@ -28,6 +33,7 @@ const defaultTableState = {
 };
 
 export default ({ query }) => {
+  const { customer_id, compute_stack_id } = useParams();
   const [lastUpdate, setLastUpdate] = useState();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -89,7 +95,10 @@ export default ({ query }) => {
   ) : tableState.message ? (
     <EmptyPrompt error={tableState.error} message={tableState.message} accessErrors={tableState.access_errors} />
   ) : tableState.tableData?.length ? (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <DataTableHeader
         totalRecords={tableState.totalRecords}
         loading={tableState.loading}
@@ -120,7 +129,7 @@ export default ({ query }) => {
           />
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   ) : (
     <EmptyPrompt message="Please execute a SQL query to proceed" />
   );

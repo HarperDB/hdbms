@@ -101,7 +101,7 @@ export default ({ setInstanceAction }) => {
             </Col>
             <Col>
               <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
-                Remove Instance
+                Remove
               </Button>
             </Col>
           </Row>

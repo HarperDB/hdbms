@@ -3,6 +3,7 @@ import { Row, Col, Card, CardBody, ModalHeader, ModalBody, Modal, Button } from 
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
@@ -12,6 +13,8 @@ import DataTable from './manageDatatable';
 import ManageEmptyPrompt from './manageEmptyPrompt';
 import getInstances from '../../../api/lms/getInstances';
 import config from '../../../../config';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -51,12 +54,26 @@ export default () => {
     <>
       <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
-          <InstanceManager items={clustering?.connected || []} setShowModal={setShowModal} itemType="connected" />
-          {clustering?.unconnected?.length ? <InstanceManager items={clustering.unconnected} itemType="unconnected" /> : null}
-          {clustering?.unregistered?.length ? <InstanceManager items={clustering.unregistered} itemType="unregistered" /> : null}
+          <ErrorBoundary
+            onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+            FallbackComponent={ErrorFallback}
+          >
+            <InstanceManager items={clustering?.connected || []} setShowModal={setShowModal} itemType="connected" />
+            {clustering?.unconnected?.length ? <InstanceManager items={clustering.unconnected} itemType="unconnected" /> : null}
+            {clustering?.unregistered?.length ? <InstanceManager items={clustering.unregistered} itemType="unregistered" /> : null}
+          </ErrorBoundary>
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
-          {clustering?.connected?.length ? <DataTable /> : <ManageEmptyPrompt message="Please connect at least one instance to configure clustering" />}
+          {clustering?.connected?.length ? (
+            <ErrorBoundary
+              onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+              FallbackComponent={ErrorFallback}
+            >
+              <DataTable />
+            </ErrorBoundary>
+          ) : (
+            <ManageEmptyPrompt message="Please connect at least one instance to configure clustering" />
+          )}
         </Col>
       </Row>
       <Modal id="cluster-state-modal" isOpen={!!showModal} toggle={() => setShowModal(false)}>

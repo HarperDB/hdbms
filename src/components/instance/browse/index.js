@@ -3,6 +3,7 @@ import { Row, Col } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 
@@ -12,6 +13,8 @@ import JSONViewer from './jsonviewer';
 import CSVUpload from './csvupload';
 import EmptyPrompt from './emptyPrompt';
 import StructureReloader from '../../shared/structureReloader';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 const defaultTableState = {
   tableData: [],
@@ -67,31 +70,41 @@ export default () => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse`} itemType="schema" showForm />
-        {schema && (
-          <EntityManager
-            activeItem={table}
-            items={entities.tables}
-            activeSchema={schema}
-            baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}`}
-            itemType="table"
-            showForm
-          />
-        )}
-        <StructureReloader centerText label="refresh schemas and tables" />
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+          FallbackComponent={ErrorFallback}
+        >
+          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse`} itemType="schema" showForm />
+          {schema && (
+            <EntityManager
+              activeItem={table}
+              items={entities.tables}
+              activeSchema={schema}
+              baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}`}
+              itemType="table"
+              showForm
+            />
+          )}
+          <StructureReloader centerText label="refresh schemas and tables" />
+        </ErrorBoundary>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {schema && table && action === 'csv' && entities.activeTable ? (
-          <CSVUpload />
-        ) : schema && table && action && entities.activeTable ? (
-          <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
-        ) : schema ? (
-          <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
-        ) : (
-          <EmptyPrompt
-            message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
-          />
-        )}
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+          FallbackComponent={ErrorFallback}
+        >
+          {schema && table && action === 'csv' && entities.activeTable ? (
+            <CSVUpload />
+          ) : schema && table && action && entities.activeTable ? (
+            <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
+          ) : schema ? (
+            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
+          ) : (
+            <EmptyPrompt
+              message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
+            />
+          )}
+        </ErrorBoundary>
       </Col>
     </Row>
   );

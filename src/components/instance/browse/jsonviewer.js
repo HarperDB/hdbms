@@ -6,11 +6,14 @@ import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 import appState from '../../../state/appState';
 
 import queryInstance from '../../../api/queryInstance';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
@@ -58,7 +61,10 @@ export default ({ newEntityAttributes, hashAttribute }) => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <span className="floating-card-header">
         {schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> ${hash}` : ''}
         &nbsp;
@@ -119,6 +125,6 @@ export default ({ newEntityAttributes, hashAttribute }) => {
           </Row>
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

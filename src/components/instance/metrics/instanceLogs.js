@@ -3,6 +3,8 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
 import config from '../../../../config';
@@ -10,8 +12,11 @@ import config from '../../../../config';
 import readLog from '../../../api/instance/readLog';
 import LogRow from './instanceLogsRow';
 import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
+  const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const logs = useStoreState(instanceState, (s) => s.logs);
@@ -44,11 +49,14 @@ export default () => {
   );
 
   useInterval(() => {
-    if (autoRefresh) setLastUpdate(Date.now());
+    if (autoRefresh && mounted) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Row className="floating-card-header">
         <Col>instance logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
@@ -99,6 +107,6 @@ export default () => {
           </div>
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

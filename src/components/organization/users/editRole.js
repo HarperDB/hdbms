@@ -9,7 +9,7 @@ import appState from '../../../state/appState';
 import updateOrgUser from '../../../api/lms/updateOrgUser';
 import getUsers from '../../../api/lms/getUsers';
 
-export default () => {
+const EditOrgUserRole = () => {
   const { user_id } = useParams();
   const { pathname } = useLocation();
   const { customer_id } = useParams();
@@ -37,20 +37,6 @@ export default () => {
 
   return (
     <>
-      {/*
-      <SelectDropdown
-        className="react-select-container mb-2"
-        classNamePrefix="react-select"
-        onChange={({ value }) => setFormData({ ...formData, newRole: value })}
-        options={options.filter((o) => o.value !== currentStatus)}
-        value={options.find((o) => o.value === formData.newRole)}
-        isSearchable={false}
-        isClearable={false}
-        isLoading={!users}
-        placeholder="select a role"
-        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-      />
-      */}
       <Input disabled className="text-center mb-2" type="text" placeholder={`Current Status: ${currentStatus === 'accepted' ? 'user' : currentStatus || '...'}`} />
       <Button disabled={!currentStatus || formState.submitted || currentStatus === 'invited'} block color="purple" onClick={() => setFormState({ submitted: true })}>
         {formState.submitted || !currentStatus ? (
@@ -73,3 +59,5 @@ export default () => {
     </>
   );
 };
+
+export default EditOrgUserRole;

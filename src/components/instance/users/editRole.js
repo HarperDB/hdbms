@@ -5,12 +5,15 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useLocation, useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
-  const { username } = useParams();
+  const { customer_id, compute_stack_id, username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
   const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
@@ -47,7 +50,10 @@ export default () => {
   useAsyncEffect(() => setFormData({ ...formData, role: thisUser?.role?.id }), []);
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <SelectDropdown
         className="react-select-container mb-2"
         classNamePrefix="react-select"
@@ -68,6 +74,6 @@ export default () => {
           <CardBody>{formState.error}</CardBody>
         </Card>
       )}
-    </>
+    </ErrorBoundary>
   );
 };

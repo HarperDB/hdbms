@@ -5,6 +5,7 @@ import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import config from '../../../../config';
 import appState from '../../../state/appState';
@@ -14,6 +15,8 @@ import handleInstanceRegistration from '../../../methods/instances/handleInstanc
 import userInfo from '../../../api/instance/userInfo';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
@@ -109,45 +112,50 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   }, config.refresh_content_interval);
 
   return (
-    <Card
-      tabIndex="0"
-      title={`${instanceAuth ? 'Connect to' : 'Log into'} instance ${instance_name}`}
-      className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`}
-      onKeyDown={(e) => e.keyCode !== 13 || handleCardClick(e)}
-      onClick={handleCardClick}
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
     >
-      {!flipState && (
-        <CardBody>
-          <Row>
-            <Col xs="10" className="instance-name">
-              {instance_name}
-            </Col>
-            <Col xs="2" className="instance-icon">
-              <CardFrontIcons
-                isOrgOwner={isOrgOwner}
-                isReady={isReady}
-                showLogout={instanceAuth}
-                setFlipState={setFlipState}
-                compute_stack_id={compute_stack_id}
-                instance_name={instance_name}
-              />
-            </Col>
-          </Row>
-          <div className="instance-url">{url}</div>
-          <CardFrontStatusRow
-            label="STATUS"
-            isReady
-            textClass={`text-bold text-${instanceData.error ? 'danger' : 'success'}`}
-            value={instanceData.status?.toUpperCase()}
-            bottomDivider
-          />
-          <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-          <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram || '...'} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
-          <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-          <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
-        </CardBody>
-      )}
-    </Card>
+      <Card
+        tabIndex="0"
+        title={`${instanceAuth ? 'Connect to' : 'Log into'} instance ${instance_name}`}
+        className={`instance ${clickableStatus.includes(instanceData.status) ? '' : 'unclickable'}`}
+        onKeyDown={(e) => e.keyCode !== 13 || handleCardClick(e)}
+        onClick={handleCardClick}
+      >
+        {!flipState && (
+          <CardBody>
+            <Row>
+              <Col xs="10" className="instance-name">
+                {instance_name}
+              </Col>
+              <Col xs="2" className="instance-icon">
+                <CardFrontIcons
+                  isOrgOwner={isOrgOwner}
+                  isReady={isReady}
+                  showLogout={instanceAuth}
+                  setFlipState={setFlipState}
+                  compute_stack_id={compute_stack_id}
+                  instance_name={instance_name}
+                />
+              </Col>
+            </Row>
+            <div className="instance-url">{url}</div>
+            <CardFrontStatusRow
+              label="STATUS"
+              isReady
+              textClass={`text-bold text-${instanceData.error ? 'danger' : 'success'}`}
+              value={instanceData.status?.toUpperCase()}
+              bottomDivider
+            />
+            <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
+            <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram || '...'} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+            <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
+            <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
+          </CardBody>
+        )}
+      </Card>
+    </ErrorBoundary>
   );
 };
 

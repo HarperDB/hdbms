@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import useInstanceAuth from '../../../state/instanceAuths';
 import handleCloudInstanceUsernameChange from '../../../methods/instances/handleCloudInstanceUsernameChange';
 import userInfo from '../../../api/instance/userInfo';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
-const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
+const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -44,56 +47,61 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
   }, [formState]);
 
   return (
-    <Card className="instance">
-      {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
-        <CardBody>
-          <Input
-            onChange={(e) => setFormData({ ...formData, user: e.target.value })}
-            className="text-center mb-1"
-            type="text"
-            title="username"
-            placeholder="user"
-            disabled={formState.submitted}
-          />
-          <Input
-            onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
-            className="text-center mb-2"
-            type="password"
-            title="password"
-            placeholder="password"
-            disabled={formState.submitted}
-          />
-          <Row noGutters>
-            <Col xs="6" className="pr-1">
-              <Button
-                onClick={() => {
-                  setFormData({});
-                  setFormState({});
-                  setFlipState(false);
-                }}
-                title="Cancel"
-                block
-                color="grey"
-                disabled={formState.submitted}
-              >
-                Cancel
-              </Button>
-            </Col>
-            <Col xs="6" className="pl-1">
-              <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
-                Log In
-              </Button>
-            </Col>
-          </Row>
-          {formState.error && (
-            <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
-              {formState.error}
-              {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
-            </a>
-          )}
-        </CardBody>
-      )}
-    </Card>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
+      <Card className="instance">
+        {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
+          <CardBody>
+            <Input
+              onChange={(e) => setFormData({ ...formData, user: e.target.value })}
+              className="text-center mb-1"
+              type="text"
+              title="username"
+              placeholder="user"
+              disabled={formState.submitted}
+            />
+            <Input
+              onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
+              className="text-center mb-2"
+              type="password"
+              title="password"
+              placeholder="password"
+              disabled={formState.submitted}
+            />
+            <Row noGutters>
+              <Col xs="6" className="pr-1">
+                <Button
+                  onClick={() => {
+                    setFormData({});
+                    setFormState({});
+                    setFlipState(false);
+                  }}
+                  title="Cancel"
+                  block
+                  color="grey"
+                  disabled={formState.submitted}
+                >
+                  Cancel
+                </Button>
+              </Col>
+              <Col xs="6" className="pl-1">
+                <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
+                  Log In
+                </Button>
+              </Col>
+            </Row>
+            {formState.error && (
+              <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
+                {formState.error}
+                {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
+              </a>
+            )}
+          </CardBody>
+        )}
+      </Card>
+    </ErrorBoundary>
   );
 };
 

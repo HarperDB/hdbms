@@ -117,7 +117,7 @@ export default () => {
           ))}
         </Switch>
       ) : (
-        <Loader message="loading instance" />
+        <Loader header="loading instance" spinner />
       )}
     </>
   );

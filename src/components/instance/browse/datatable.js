@@ -12,7 +12,7 @@ import config from '../../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 
-export default ({ tableState, setTableState, activeTable }) => {
+const DataTable = ({ tableState, setTableState, activeTable }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -104,3 +104,5 @@ export default ({ tableState, setTableState, activeTable }) => {
     </>
   );
 };
+
+export default DataTable;

@@ -5,10 +5,10 @@ import { NavLink } from 'react-router-dom';
 
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
-import AuthStateLoader from '../shared/authStateLoader';
+import Loader from '../shared/loader';
 import config from '../../../config';
 
-export default () => {
+const ResetPassword = () => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -40,9 +40,9 @@ export default () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <AuthStateLoader header="resetting password" spinner />
+        <Loader header="resetting password" spinner />
       ) : formState.success ? (
-        <AuthStateLoader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} />
+        <Loader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} />
       ) : (
         <>
           <Card className="mb-3">
@@ -85,3 +85,5 @@ export default () => {
     </div>
   );
 };
+
+export default ResetPassword;

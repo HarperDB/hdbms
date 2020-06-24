@@ -1,8 +1,9 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, Loader } from '@nio/ui-kit';
+import { Modal, ModalHeader, ModalBody } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 import useNewInstance from '../../../state/newInstance';
@@ -16,12 +17,13 @@ import CloudInstanceForm from './detailsCloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
   const history = useHistory();
   const { purchaseStep = 'type', customer_id } = useParams();
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
-  const products = useStoreState(appState, (s) => s.products);
   const [, setNewInstance] = useNewInstance({});
 
   const closeAndResetModal = () => {
@@ -39,26 +41,26 @@ export default () => {
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={darkTheme ? 'dark' : ''}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
-      <ModalBody>
-        {!products ? (
-          <Loader />
-        ) : purchaseStep === 'type' ? (
-          <InstanceTypeForm />
-        ) : purchaseStep === 'meta_local' ? (
-          <LocalMetadataForm />
-        ) : purchaseStep === 'meta_cloud' ? (
-          <CloudMetadataForm />
-        ) : purchaseStep === 'details_local' ? (
-          <LocalInstanceForm />
-        ) : purchaseStep === 'details_cloud' ? (
-          <CloudInstanceForm />
-        ) : purchaseStep === 'payment' ? (
-          <CustomerPaymentForm />
-        ) : purchaseStep === 'confirm' ? (
-          <ConfirmOrderForm />
-        ) : purchaseStep === 'status' ? (
-          <OrderStatus closeAndResetModal={finishOrder} />
-        ) : null}
+      <ModalBody className="position-relative">
+        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+          {purchaseStep === 'type' ? (
+            <InstanceTypeForm />
+          ) : purchaseStep === 'meta_local' ? (
+            <LocalMetadataForm />
+          ) : purchaseStep === 'meta_cloud' ? (
+            <CloudMetadataForm />
+          ) : purchaseStep === 'details_local' ? (
+            <LocalInstanceForm />
+          ) : purchaseStep === 'details_cloud' ? (
+            <CloudInstanceForm />
+          ) : purchaseStep === 'payment' ? (
+            <CustomerPaymentForm />
+          ) : purchaseStep === 'confirm' ? (
+            <ConfirmOrderForm />
+          ) : purchaseStep === 'status' ? (
+            <OrderStatus closeAndResetModal={finishOrder} />
+          ) : null}
+        </ErrorBoundary>
       </ModalBody>
     </Modal>
   );

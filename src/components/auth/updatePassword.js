@@ -9,7 +9,7 @@ import appState from '../../state/appState';
 import updatePassword from '../../api/lms/updatePassword';
 import config from '../../../config';
 
-export default () => {
+const UpdatePassword = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -102,3 +102,5 @@ export default () => {
     </div>
   );
 };
+
+export default UpdatePassword;

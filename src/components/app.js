@@ -3,10 +3,10 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useAlert, positions } from 'react-alert';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
-
 import config from '../../config';
 
 import SignUp from './auth/signUp';
@@ -18,8 +18,10 @@ import ResendRegistrationEmail from './auth/resendRegistrationEmail';
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
 import getCurrentVersion from '../api/lms/getCurrentVersion';
-import getUser from '../api/lms/getUser';
 import getPostManCollection from '../methods/examples/getPostManCollection';
+import checkVersion from '../methods/app/checkVersion';
+import init from '../methods/app/init';
+import refreshUser from '../methods/app/refreshUser';
 
 import Organization from './organization';
 import Organizations from './organizations';
@@ -30,8 +32,8 @@ import Profile from './profile';
 import TopNav from './topnav';
 import Loader from './shared/loader';
 import Maintenance from './shared/maintenance';
-
-let controller;
+import ErrorFallback from './shared/errorFallback';
+import ErrorFallbackAuth from './shared/errorFallbackAuth';
 
 export default () => {
   const history = useHistory();
@@ -43,108 +45,65 @@ export default () => {
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const canonical = document.querySelector('link[rel="canonical"]');
+
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
+  let controller;
 
-  const refreshProducts = () => !products && getProducts();
-  const refreshRegions = () => !regions && getRegions();
-  const refreshPostmanCollection = () => !postmanCollection && getPostManCollection();
-  const refreshVersion = () => getCurrentVersion();
+  useEffect(() => checkVersion({ localVersion: config.studio_version, apiVersion: version.studio, alert, position: positions.BOTTOM_CENTER }), [
+    config.studio_version,
+    version.studio,
+  ]);
 
-  const refreshUser = async ({ email, pass }) => {
-    if (email && pass && !showPasswordUpdate) {
-      controller = new AbortController();
-      setFetchingUser(true);
-      await getUser({ email, pass, signal: controller.signal });
-      setFetchingUser(false);
-    }
-  };
-
-  useEffect(() => {
-    if (version.studio && config.studio_version !== version.studio) {
-      alert.info(`HarperDB Studio v${version.studio} is now available. Refresh to update.`, { timeout: 0, position: positions.BOTTOM_CENTER });
-    }
-  }, [config.studio_version, version.studio]);
-
-  useEffect(() => {
-    history.listen(() => (canonical.href = window.location.href));
-
-    if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(history.location.pathname)) {
-      setFetchingUser(false);
-      return setPersistedUser({});
-    }
-
-    if (['/sign-in'].includes(history.location.pathname)) {
-      history.push('/');
-    }
-
-    if (!persistedUser?.email) {
-      setFetchingUser(false);
-    } else {
-      refreshUser(persistedUser);
-    }
-
-    refreshVersion();
-    refreshProducts();
-    refreshRegions();
-    refreshPostmanCollection();
-
-    const unsubscribeAuth = appState.subscribe(
-      (s) => ({ newAuth: s.auth, newDarkTheme: s.darkTheme }),
-      ({ newAuth: { email, pass }, newDarkTheme }) => {
-        setPersistedUser({ email, pass, darkTheme: newDarkTheme });
-        if (!email && controller) controller.abort();
-      }
-    );
-
-    appState.update((s) => {
-      s.auth = { email: persistedUser?.email, pass: persistedUser?.pass };
-      s.darkTheme = persistedUser?.darkTheme;
-    });
-
-    return unsubscribeAuth;
-  }, []);
+  useEffect(() => init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate }), []);
 
   useInterval(() => {
-    refreshProducts();
-    refreshRegions();
-    refreshPostmanCollection();
-    refreshUser(auth);
+    if (!products) getProducts();
+    if (!regions) getRegions();
+    if (!postmanCollection) getPostManCollection();
+    refreshUser({ auth, showPasswordUpdate, controller, setFetchingUser });
   }, config.refresh_content_interval);
 
-  useInterval(() => refreshVersion(), config.check_version_interval);
+  useInterval(() => getCurrentVersion(), config.check_version_interval);
 
   return (
     <div className={persistedUser?.darkTheme ? 'dark' : ''}>
       <div id="app-container">
         {config.maintenance ? (
-          <Maintenance />
+          <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
+            <Maintenance />
+          </ErrorBoundary>
         ) : showPasswordUpdate ? (
-          <UpdatePassword />
+          <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
+            <UpdatePassword />
+          </ErrorBoundary>
         ) : loggedIn ? (
           <>
             <TopNav />
-            <Switch>
-              <Route component={Profile} path="/profile" />
-              <Route component={Support} path="/support/:view?" />
-              <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
-              <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-              <Route component={Organization} path="/o/:customer_id/:view?" />
-              <Route component={Organizations} path="/:action?" />
-              <Redirect to="/" />
-            </Switch>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Switch>
+                <Route component={Profile} path="/profile" />
+                <Route component={Support} path="/support/:view?" />
+                <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
+                <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                <Route component={Organization} path="/o/:customer_id/:view?" />
+                <Route component={Organizations} path="/:action?" />
+                <Redirect to="/" />
+              </Switch>
+            </ErrorBoundary>
           </>
         ) : fetchingUser ? (
-          <Loader message="signing in" />
+          <Loader header="signing in" spinner />
         ) : (
-          <Switch>
-            <Route component={SignIn} exact path="/" />
-            <Route component={SignUp} exact path="/sign-up" />
-            <Route component={ResetPassword} exact path="/reset-password" />
-            <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
-            <Redirect to="/" />
-          </Switch>
+          <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
+            <Switch>
+              <Route component={SignIn} exact path="/" />
+              <Route component={SignUp} exact path="/sign-up" />
+              <Route component={ResetPassword} exact path="/reset-password" />
+              <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
+              <Redirect to="/" />
+            </Switch>
+          </ErrorBoundary>
         )}
       </div>
       <div id="app-bg-color" />

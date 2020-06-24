@@ -84,7 +84,7 @@ const InstancesIndex = () => {
           {action === 'new' && instances && <NewInstanceModal />}
         </>
       ) : (
-        <Loader message="loading instances" />
+        <Loader header="loading instances" spinner />
       )}
     </div>
   );

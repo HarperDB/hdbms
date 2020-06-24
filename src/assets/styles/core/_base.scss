@@ -2,6 +2,7 @@ body {
   background: $color-purple;
   min-width: $min-width;
   overflow-x: hidden;
+  position: relative;
 
   #app {
     min-width: $min-width;

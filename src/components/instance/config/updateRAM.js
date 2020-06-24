@@ -89,12 +89,12 @@ export default ({ setInstanceAction }) => {
         </Card>
       ) : hasChanged && (storage.price || newCompute.price) && !hasCard ? (
         <Button
-          className="mt-2"
           onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}
           color="danger"
+          className="mt-2"
         >
           Add Credit Card To Account
         </Button>
@@ -109,7 +109,7 @@ export default ({ setInstanceAction }) => {
             </Col>
             <Col>
               <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
-                Update RAM
+                Update
               </Button>
             </Col>
           </Row>

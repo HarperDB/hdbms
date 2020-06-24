@@ -4,12 +4,15 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import { useLocation, useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
-  const { username } = useParams();
+  const { customer_id, compute_stack_id, username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
 
@@ -40,7 +43,10 @@ export default () => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Input
         type="text"
         className="mb-2 text-center"
@@ -57,6 +63,6 @@ export default () => {
           <CardBody>{formState.error}</CardBody>
         </Card>
       )}
-    </>
+    </ErrorBoundary>
   );
 };

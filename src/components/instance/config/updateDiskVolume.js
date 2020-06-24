@@ -93,6 +93,7 @@ export default ({ setInstanceAction }) => {
           block
           disabled={!hasChanged || formState.submitted}
           color="danger"
+          className="mt-2"
         >
           Add Credit Card To Account
         </Button>
@@ -107,7 +108,7 @@ export default ({ setInstanceAction }) => {
             </Col>
             <Col>
               <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
-                Update Storage
+                Update
               </Button>
             </Col>
           </Row>

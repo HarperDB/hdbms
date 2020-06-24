@@ -89,7 +89,7 @@ export default ({ instanceAction, setInstanceAction }) => {
             </Col>
             <Col>
               <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
-                Restart Instance
+                Restart
               </Button>
             </Col>
           </Row>

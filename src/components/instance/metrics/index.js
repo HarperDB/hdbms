@@ -6,15 +6,17 @@ import InstanceLogs from './instanceLogs';
 import InstanceJobs from './instanceJobs';
 
 export default () => (
-  <Row id="config">
-    <Col xs="12">
-      <SystemInfo />
-    </Col>
-    <Col lg="6" xs="12">
-      <InstanceLogs />
-    </Col>
-    <Col lg="6" xs="12">
-      <InstanceJobs />
-    </Col>
-  </Row>
+  <>
+    <Row id="config">
+      <Col xs="12">
+        <SystemInfo />
+      </Col>
+      <Col lg="6" xs="12">
+        <InstanceLogs />
+      </Col>
+      <Col lg="6" xs="12">
+        <InstanceJobs />
+      </Col>
+    </Row>
+  </>
 );
