@@ -59,8 +59,7 @@ export default async (operation, auth, url, signal = undefined) => {
 
     return response;
   } catch (e) {
-    /*
-    if (e.toString() !== 'AbortError: Aborted') {
+    if (e.toString() !== 'AbortError: Aborted' && !['registration_info', 'user_info'].includes(operation.operation)) {
       addError({
         type: 'instance api',
         url,
@@ -69,7 +68,6 @@ export default async (operation, auth, url, signal = undefined) => {
         error: { catch: e.toString() },
       });
     }
-    */
 
     return {
       error: true,

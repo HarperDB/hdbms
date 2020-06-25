@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -16,7 +16,7 @@
     "@nio/ui-kit": "^2.2.7",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.7.0",
-    "pullstate": "^1.14.0",
+    "pullstate": "^1.15.2",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-alert": "^7.0.1",
