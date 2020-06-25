@@ -35,9 +35,11 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       return alert.error(result.error);
     }
 
-    return instanceState.update((s) => {
+    instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
+
+    return setTimeout(() => history.push(baseUrl), 100);
   };
 
   const selectItemForDrop = () => {

@@ -25,7 +25,7 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     if (response.errorType) {
       addError({
-        type: 'instance api',
+        type: 'lms api',
         url: config.lms_api_url,
         operation: endpoint,
         request: payload,
@@ -42,7 +42,7 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     if (response.error) {
       addError({
-        type: 'instance api',
+        type: 'lms api',
         url: config.lms_api_url,
         operation: endpoint,
         request: payload,

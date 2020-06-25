@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactTable from 'react-table';
 import { useHistory, useParams } from 'react-router';
-import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
 
@@ -17,12 +17,15 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const canFetch = mounted && !loading && !!activeTable && !!table;
   let controller;
 
-  useAsyncEffect(async () => {
+  const fetchData = async () => {
     if (controller) controller.abort();
-    if (activeTable && !tableState.loading) {
-      setTableState({ ...tableState, loading: true });
+    if (canFetch) {
+      setLoading(true);
       controller = new AbortController();
       const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
@@ -46,26 +49,29 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
         hashAttribute,
         dataTableColumns,
         error,
-        loading: false,
       });
     }
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate]);
+  };
+
+  useEffect(() => {
+    if (mounted) setLoading(false);
+  }, [tableState.tableData, mounted]);
+
+  useAsyncEffect(fetchData, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, activeTable, mounted]);
+
+  useInterval(() => tableState.autoRefresh && fetchData(), config.refresh_content_interval);
 
   useAsyncEffect(
-    () => false,
-    () => controller && controller.abort(),
+    () => setMounted(true),
+    () => setMounted(false),
     []
   );
-
-  useAsyncEffect(() => activeTable && setTableState({ ...tableState, lastUpdate: Date.now() }), [activeTable]);
-
-  useInterval(() => tableState.autoRefresh && !tableState.loading && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 
   return (
     <>
       <DataTableHeader
         totalRecords={tableState.totalRecords}
-        loading={tableState.loading}
+        loading={loading}
         autoRefresh={tableState.autoRefresh}
         refresh={() => setTableState({ ...tableState, lastUpdate: Date.now() })}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
@@ -78,7 +84,7 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
           ) : (
             <ReactTable
               manual
-              loading={tableState.loading && !tableState.autoRefresh}
+              loading={loading && !tableState.autoRefresh}
               loadingText="loading"
               data={tableState.tableData}
               pages={tableState.totalPages}
