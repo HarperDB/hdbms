@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
-import { useAlert, positions } from 'react-alert';
+import { positions, useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../state/appState';
@@ -35,6 +35,8 @@ import Maintenance from './shared/maintenance';
 import ErrorFallback from './shared/errorFallback';
 import ErrorFallbackAuth from './shared/errorFallbackAuth';
 
+const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
+
 export default () => {
   const history = useHistory();
   const alert = useAlert();
@@ -44,18 +46,24 @@ export default () => {
   const version = useStoreState(appState, (s) => s.version);
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
+  const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
 
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
   let controller;
 
-  useEffect(() => checkVersion({ localVersion: config.studio_version, apiVersion: version.studio, alert, position: positions.BOTTOM_CENTER }), [
-    config.studio_version,
-    version.studio,
-  ]);
+  useEffect(() => {
+    setShowVersionAlert(checkVersion({ apiVersion: version.studio }));
+  }, [version.studio]);
 
-  useEffect(() => init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate }), []);
+  useEffect(() => {
+    if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
+  }, [showVersionAlert]);
+
+  useEffect(() => {
+    init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate });
+  }, []);
 
   useInterval(() => {
     if (!products) getProducts();
