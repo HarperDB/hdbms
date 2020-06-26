@@ -1,5 +1,5 @@
 import { fetch } from 'whatwg-fetch';
-import config from '../../../config';
+import config from '../../config';
 
 export default async ({ type = 'studio component', url = undefined, operation = undefined, request = undefined, error, customer_id = undefined, compute_stack_id = undefined }) => {
   const user = JSON.parse(localStorage.getItem('persistedUser'));

@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
-import config from '../../../config';
+import config from '../../config';
 import appState from '../../state/appState';
 
 import InstanceList from './list/instanceList';

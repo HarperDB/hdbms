@@ -2,7 +2,7 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import generateInstanceProductDetails from '../../methods/instances/generateInstanceProductDetails';
 import addError from './addError';
-import config from '../../../config';
+import config from '../../config';
 
 export default async ({ auth, customer_id, products, regions, instanceCount = 0 }) => {
   let response = null;

@@ -16,7 +16,7 @@ import buildActiveInstanceObject from '../../methods/instance/buildActiveInstanc
 import Loader from '../shared/loader';
 import getInstances from '../../api/lms/getInstances';
 import getCustomer from '../../api/lms/getCustomer';
-import config from '../../../config';
+import config from '../../config';
 import userInfo from '../../api/instance/userInfo';
 
 export default () => {

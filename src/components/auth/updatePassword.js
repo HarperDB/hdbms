@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import config from '../../../config';
+import config from '../../config';
 
 const UpdatePassword = () => {
   const auth = useStoreState(appState, (s) => s.auth);

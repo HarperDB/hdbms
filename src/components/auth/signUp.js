@@ -6,7 +6,7 @@ import queryString from 'query-string';
 
 import handleSignup from '../../methods/auth/handleSignup';
 import Loader from '../shared/loader';
-import config from '../../../config';
+import config from '../../config';
 
 const SignUp = () => {
   const { search } = useLocation();

@@ -11,7 +11,7 @@ import instanceState from '../../../state/instanceState';
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';
 import commaNumbers from '../../../methods/util/commaNumbers';
-import config from '../../../../config';
+import config from '../../../config';
 
 export default ({ setInstanceAction }) => {
   const { customer_id, compute_stack_id } = useParams();

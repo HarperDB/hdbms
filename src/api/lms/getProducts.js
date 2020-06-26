@@ -4,7 +4,7 @@ import appState from '../../state/appState';
 import buildRadioSelectProductOptions from '../../methods/products/buildRadioSelectProductOptions';
 import buildRadioSelectStorageOptions from '../../methods/products/buildRadioSelectStorageOptions';
 import addError from './addError';
-import config from '../../../config';
+import config from '../../config';
 
 export default async () => {
   let response = null;

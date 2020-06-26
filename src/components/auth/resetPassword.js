@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import isEmail from '../../methods/util/isEmail';
 import resetPassword from '../../api/lms/resetPassword';
 import Loader from '../shared/loader';
-import config from '../../../config';
+import config from '../../config';
 
 const ResetPassword = () => {
   const [formState, setFormState] = useState({});

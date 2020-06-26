@@ -23,10 +23,10 @@ Follow these steps to run a local version of HarperDB Studio.
     ```
 
 1. Create your local config file.
-    - Create a copy of the root level file `config.example.js`, named `config.js`.
+    - Create a copy of the file `/src/config/index.example.js`, renaming it `index.js`.
     - update the `stripe_public_key` and/or other variables in that file as desired
     - save the file
-    - **Never commit `config.js` to GitHub!**
+    - **Never commit `/src/config/index.js` to GitHub!**
 
 1. Start the project.
     ```

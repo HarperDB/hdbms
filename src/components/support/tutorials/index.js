@@ -3,7 +3,7 @@ import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import config from '../../../../config';
+import config from '../../../config';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 

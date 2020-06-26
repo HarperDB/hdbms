@@ -1,7 +1,7 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import addError from './addError';
-import config from '../../../config';
+import config from '../../config';
 
 export default async ({ email, pass, loggingIn = false, signal }) => {
   let response = null;

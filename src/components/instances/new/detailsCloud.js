@@ -9,7 +9,7 @@ import appState from '../../../state/appState';
 
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
-import config from '../../../../config';
+import config from '../../../config';
 
 export default () => {
   const history = useHistory();

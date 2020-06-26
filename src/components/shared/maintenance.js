@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Loader from './loader';
-import config from '../../../config';
+import config from '../../config';
 
 export default () => (
   <>

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import ErrorFallback from './errorFallback';
-import config from '../../../config';
+import config from '../../config';
 
 export default ({ error, componentStack, resetErrorBoundary }) => (
   <div id="login-form">

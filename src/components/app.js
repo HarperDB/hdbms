@@ -7,7 +7,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
-import config from '../../config';
+import config from '../config';
 
 import SignUp from './auth/signUp';
 import SignIn from './auth/signIn';

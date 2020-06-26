@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import isEmail from '../../methods/util/isEmail';
 import resendRegistrationEmail from '../../api/lms/resendRegistrationEmail';
 import Loader from '../shared/loader';
-import config from '../../../config';
+import config from '../../config';
 
 export default () => {
   const [formState, setFormState] = useState({});

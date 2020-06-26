@@ -7,7 +7,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
-import config from '../../../../config';
+import config from '../../../config';
 
 import readLog from '../../../api/instance/readLog';
 import LogRow from './instanceLogsRow';

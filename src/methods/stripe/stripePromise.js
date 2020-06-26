@@ -1,5 +1,5 @@
 import { loadStripe } from '@stripe/stripe-js';
-import config from '../../../config';
+import config from '../../config';
 
 const stripePromise = loadStripe(config.stripe_public_key);
 

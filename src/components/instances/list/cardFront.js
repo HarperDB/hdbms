@@ -7,7 +7,7 @@ import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import config from '../../../../config';
+import config from '../../../config';
 import appState from '../../../state/appState';
 import useInstanceAuth from '../../../state/instanceAuths';
 

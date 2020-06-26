@@ -8,7 +8,7 @@ import appState from '../../state/appState';
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
 import Loader from '../shared/loader';
-import config from '../../../config';
+import config from '../../config';
 
 const SignIn = () => {
   const auth = useStoreState(appState, (s) => s.auth);

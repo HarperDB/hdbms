@@ -12,7 +12,7 @@ import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
 import ManageEmptyPrompt from './manageEmptyPrompt';
 import getInstances from '../../../api/lms/getInstances';
-import config from '../../../../config';
+import config from '../../../config';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 

@@ -6,4 +6,4 @@ public
 
 # Editor
 .idea
-config.js
+src/config/index.js

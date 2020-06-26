@@ -8,7 +8,7 @@ import { useAlert } from 'react-alert';
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
-import config from '../../../../config';
+import config from '../../../config';
 
 import ChangeSummary from './changeSummary';
 import updateInstance from '../../../api/lms/updateInstance';

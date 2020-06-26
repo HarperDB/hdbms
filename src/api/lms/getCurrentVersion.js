@@ -1,6 +1,6 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
-import config from '../../../config';
+import config from '../../config';
 import addError from './addError';
 
 export default async () => {

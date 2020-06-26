@@ -10,7 +10,7 @@ import DataTable from './datatable';
 import EditUser from './edit';
 import AddUserForm from './add';
 import getUsers from '../../../api/lms/getUsers';
-import config from '../../../../config';
+import config from '../../../config';
 import addError from '../../../api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 

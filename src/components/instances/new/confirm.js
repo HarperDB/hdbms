@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 
-import config from '../../../../config';
+import config from '../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
 

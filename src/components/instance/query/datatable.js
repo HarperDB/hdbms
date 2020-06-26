@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import config from '../../../../config';
+import config from '../../../config';
 import instanceState from '../../../state/instanceState';
 
 import DataTableHeader from './datatableHeader';

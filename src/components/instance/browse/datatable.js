@@ -8,7 +8,7 @@ import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
 
-import config from '../../../../config';
+import config from '../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 

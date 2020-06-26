@@ -1,6 +1,6 @@
 import { fetch } from 'whatwg-fetch';
 
-import config from '../../config';
+import config from '../config';
 
 import addError from './lms/addError';
 
