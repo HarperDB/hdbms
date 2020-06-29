@@ -4,6 +4,8 @@ import instanceState from '../../state/instanceState';
 export default async ({ auth, url, signal, refresh, is_local, compute_stack_id, customer_id }) => {
   const result = await queryInstance({ operation: 'system_information' }, auth, url, is_local, compute_stack_id, customer_id, signal);
 
+  console.log(result);
+
   if (result.error && refresh) {
     return instanceState.update((s) => {
       s.systemInfoError = true;
@@ -38,8 +40,8 @@ export default async ({ auth, url, signal, refresh, is_local, compute_stack_id, 
   const B2GB1024 = 1073741824; // for non-mac disk
 
   const totalMemory = result.memory.total / B2GB1024;
-  const usedMemory = result.memory.used / B2GB1024;
-  const freeMemory = result.memory.free / B2GB1024;
+  const usedMemory = result.memory.active / B2GB1024;
+  const freeMemory = result.memory.available / B2GB1024;
   const memoryStatus = freeMemory / totalMemory < 0.1 ? 'danger' : freeMemory / totalMemory < 0.25 ? 'warning' : 'success';
 
   const totalDisk = result.system.platform === 'darwin' ? result.disk.size[0].size / B2GB1000 : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024;

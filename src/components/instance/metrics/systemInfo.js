@@ -83,12 +83,12 @@ export default () => {
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Used Memory" className="mb-3">
+                <ContentContainer header="Active Memory" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo.usedMemory}GB</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Free Memory" className="mb-3">
+                <ContentContainer header="Available Memory" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo.memoryStatus}`}>{systemInfo.freeMemory}GB</div>
                 </ContentContainer>
               </Col>
