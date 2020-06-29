@@ -55,16 +55,18 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
     }
 
     if (response.error) {
-      addError({
-        type: 'lms api',
-        status: 'error',
-        url: config.lms_api_url,
-        operation: endpoint,
-        request: payload,
-        error: response,
-        customer_id: payload?.customer_id,
-        compute_stack_id: payload?.compute_stack_id,
-      });
+      if (!payload.loggingIn) {
+        addError({
+          type: 'lms api',
+          status: 'error',
+          url: config.lms_api_url,
+          operation: endpoint,
+          request: payload,
+          error: response,
+          customer_id: payload?.customer_id,
+          compute_stack_id: payload?.compute_stack_id,
+        });
+      }
 
       return {
         error: true,

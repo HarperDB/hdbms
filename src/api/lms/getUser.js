@@ -11,7 +11,7 @@ export default async ({ email, pass, loggingIn = false, signal }) => {
       endpoint: 'getUser',
       method: 'POST',
       signal,
-      payload: { email, password: pass },
+      payload: { email, password: pass, loggingIn },
     });
 
     if (response.error && loggingIn) {
@@ -40,16 +40,19 @@ export default async ({ email, pass, loggingIn = false, signal }) => {
       s.auth = { email, pass, ...response };
     });
   } catch (e) {
-    addError({
-      type: 'lms data',
-      status: 'error',
-      url: config.lms_api_url,
-      operation: 'getUser',
-      error: { catch: e.toString(), response },
-    });
+    console.log(loggingIn);
+    if (!loggingIn) {
+      addError({
+        type: 'lms data',
+        status: 'error',
+        url: config.lms_api_url,
+        operation: 'getUser',
+        error: { catch: e.message, response },
+      });
+    }
 
     return appState.update((s) => {
-      s.auth = { error: true, message: e.toString(), time: Date.now() };
+      s.auth = { error: true, message: e.message, time: Date.now() };
     });
   }
 };
