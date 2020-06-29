@@ -11,13 +11,18 @@ export default async ({
   customer_id = undefined,
   compute_stack_id = undefined,
 }) => {
-  const user = JSON.parse(localStorage.getItem('persistedUser'));
+  let user = false;
+  try {
+    user = JSON.parse(localStorage.getItem('persistedUser'));
+  } catch (e) {
+    console.log(e);
+  }
 
   const body = {
     type,
     status: type === 'studio component' ? 'warn' : status,
     environment: config.env,
-    user: user?.email,
+    user: user?.email || 'unknown',
     customer_id,
     compute_stack_id,
     url,
@@ -42,6 +47,6 @@ export default async ({
 
   if (!response.error) {
     // eslint-disable-next-line no-console
-    console.log('Reported error: ', config.env, type, operation, status);
+    console.log('Reported ', config.env, body.status, type, operation);
   }
 };
