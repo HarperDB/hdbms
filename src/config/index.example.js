@@ -1,4 +1,5 @@
 export default {
+  env: 'dev',
   stripe_public_key: 'pk_test_XXXXXXXXXXXXXXXXXXXXXX',
   lms_api_url: 'XXXXXXXXXXXXXXXXXXXXXXXX',
   google_analytics_code: 'UA-XXXXXXXXXXXXX-3',
@@ -12,7 +13,7 @@ export default {
   total_local_instance_limit: false,
   free_local_instance_limit: false,
   max_file_upload_size: 10380902,
-  studio_version: '1.1.12',
+  studio_version: '1.1.15',
   user_guide_id: 16032,
   maintenance: 0,
 };
