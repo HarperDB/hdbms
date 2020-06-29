@@ -56,8 +56,6 @@ export default () => {
     }
   };
 
-  useAsyncEffect(refreshUser, []);
-
   useInterval(refreshUser, config.refresh_content_interval);
 
   const refreshInstances = () => {

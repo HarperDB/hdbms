@@ -37,7 +37,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
-    newData = [];
     fetchError = e.message;
   }
 
@@ -54,7 +53,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
         throw new Error(newData.message);
       }
     } catch (e) {
-      newData = [];
       fetchError = e.message;
     }
   }
@@ -75,7 +73,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
         throw new Error(newData.message);
       }
     } catch (e) {
-      newData = [];
       fetchError = e.message;
     }
   }
