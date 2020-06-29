@@ -20,12 +20,13 @@ export default () => {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const deleteUser = async () => {
     if (formData.delete_username !== username) {
       alert.error('Please type the username to delete this user');
     } else {
-      const response = await dropUser({ auth, username, url });
+      const response = await dropUser({ auth, username, url, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('successfully') !== -1) {
         alert.success(response.message);

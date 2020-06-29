@@ -38,6 +38,7 @@ export default () => {
   const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
+  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
 
   useEffect(() => {
     if (structure) {
@@ -69,17 +70,8 @@ export default () => {
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
           FallbackComponent={ErrorFallback}
         >
-          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse`} itemType="schema" showForm />
-          {schema && (
-            <EntityManager
-              activeItem={table}
-              items={entities.tables}
-              activeSchema={schema}
-              baseUrl={`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}`}
-              itemType="table"
-              showForm
-            />
-          )}
+          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm />
+          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm />}
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>
@@ -92,7 +84,7 @@ export default () => {
             <CSVUpload />
           ) : schema && table && action && entities.activeTable ? (
             <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
-          ) : entities.activeTable ? (
+          ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
           ) : (
             <EmptyPrompt

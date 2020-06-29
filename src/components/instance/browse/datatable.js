@@ -12,17 +12,23 @@ import config from '../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 
+let controller;
+
 const DataTable = ({ tableState, setTableState, activeTable }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const canFetch = mounted && !loading && !!activeTable && !!table;
-  let controller;
 
-  const fetchData = async () => {
+  useEffect(() => {
+    if (mounted) setLoading(false);
+  }, [tableState.tableData, mounted]);
+
+  useAsyncEffect(async () => {
     if (controller) controller.abort();
     if (canFetch) {
       setLoading(true);
@@ -37,6 +43,9 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
         auth,
         url,
         signal: controller.signal,
+        is_local,
+        compute_stack_id,
+        customer_id,
       });
 
       setTableState({
@@ -51,19 +60,16 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
         error,
       });
     }
-  };
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, schema, table, mounted]);
 
-  useEffect(() => {
-    if (mounted) setLoading(false);
-  }, [tableState.tableData, mounted]);
-
-  useAsyncEffect(fetchData, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, activeTable, mounted]);
-
-  useInterval(() => tableState.autoRefresh && fetchData(), config.refresh_content_interval);
+  useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 
   useAsyncEffect(
     () => setMounted(true),
-    () => setMounted(false),
+    () => {
+      if (controller) controller.abort();
+      setMounted(false);
+    },
     []
   );
 

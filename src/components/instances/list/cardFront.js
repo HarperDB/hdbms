@@ -38,7 +38,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     if (!instanceAuth) {
       setFlipState('login');
     } else if (instanceData.status === 'OK') {
-      const result = await userInfo({ auth: instanceAuth, url });
+      const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       if (result.error) {
         setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
         alert.error('Unable to connect to instance.');
@@ -68,7 +68,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
     }
 
     if (instanceData.status === 'APPLYING LICENSE') {
-      const restartResult = await userInfo({ auth: instanceAuth, url });
+      const restartResult = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       if (!restartResult.error) {
         setInstanceData({ ...instanceData, status: 'OK', error: false, retry: false });
       }

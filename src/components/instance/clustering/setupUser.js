@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Input, Card, CardBody } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import createClusterUser from '../../../methods/instance/createClusterUser';
 import instanceState from '../../../state/instanceState';
@@ -9,8 +10,10 @@ import instanceState from '../../../state/instanceState';
 import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
 
 export default () => {
+  const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
 
@@ -26,7 +29,7 @@ export default () => {
       } else if (!isAlphaUnderscore(username)) {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
-        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
+        const response = await createClusterUser({ username, password, role: cluster_role, auth, url, is_local, compute_stack_id, customer_id });
         if (response) {
           setFormState({ error: response.message });
         }

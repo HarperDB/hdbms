@@ -1,7 +1,7 @@
 import describeAll from '../../api/instance/describeAll';
 
-export default async ({ auth, url, currentRolePermissions }) => {
-  const dbResponse = await describeAll({ auth, url });
+export default async ({ auth, url, currentRolePermissions, is_local, compute_stack_id, customer_id }) => {
+  const dbResponse = await describeAll({ auth, url, is_local, compute_stack_id, customer_id });
   const permissionStructure = {};
 
   if (dbResponse.error) {

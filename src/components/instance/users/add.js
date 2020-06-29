@@ -19,6 +19,7 @@ export default () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -36,7 +37,7 @@ export default () => {
         setFormState({ error: 'User already exists' });
       } else {
         setFormState({ processing: true });
-        const response = await addUser({ auth, role, username, password, url });
+        const response = await addUser({ auth, role, username, password, url, is_local, compute_stack_id, customer_id });
 
         if (response.message.indexOf('successfully') !== -1) {
           instanceState.update((s) => {

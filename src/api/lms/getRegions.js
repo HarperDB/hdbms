@@ -24,6 +24,7 @@ export default async () => {
   } catch (e) {
     return addError({
       type: 'lms data',
+      status: 'error',
       url: config.lms_api_url,
       operation: 'getRegions',
       error: { catch: e.toString(), response },

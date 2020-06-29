@@ -24,6 +24,7 @@ export default () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const updateRole = async () => {
     const { newRole } = formData;
@@ -33,7 +34,7 @@ export default () => {
     } else if (thisUser.role.id === newRole) {
       setFormState({ error: 'user already has this role' });
     } else {
-      const response = await alterUser({ auth, url, username, role: newRole });
+      const response = await alterUser({ auth, url, username, role: newRole, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('user role updated');

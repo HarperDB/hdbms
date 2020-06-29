@@ -35,6 +35,9 @@ const InstancesIndex = () => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
     }
+    if (action === 'login') {
+      alert.error('Please log in to that instance');
+    }
   }, []);
 
   const refreshCustomer = () => {

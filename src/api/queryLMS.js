@@ -23,15 +23,29 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     const response = json.body || json;
 
+    /*
+    addError({
+      type: 'lms api',
+      status: 'error',
+      url: config.lms_api_url,
+      operation: endpoint,
+      request: payload,
+      error: response,
+      customer_id: payload?.customer_id,
+      compute_stack_id: payload?.compute_stack_id,
+    });
+    */
+
     if (response.errorType) {
       addError({
         type: 'lms api',
+        status: 'error',
         url: config.lms_api_url,
         operation: endpoint,
         request: payload,
         error: response,
-        customer_id: payload.customer_id,
-        compute_stack_id: payload.compute_stack_id,
+        customer_id: payload?.customer_id,
+        compute_stack_id: payload?.compute_stack_id,
       });
 
       return {
@@ -43,12 +57,13 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
     if (response.error) {
       addError({
         type: 'lms api',
+        status: 'error',
         url: config.lms_api_url,
         operation: endpoint,
         request: payload,
         error: response,
-        customer_id: payload.customer_id,
-        compute_stack_id: payload.compute_stack_id,
+        customer_id: payload?.customer_id,
+        compute_stack_id: payload?.compute_stack_id,
       });
 
       return {
@@ -61,24 +76,22 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     return response;
   } catch (e) {
-    if (e.toString() !== 'AbortError: Aborted') {
+    if (e.message !== 'Aborted') {
       addError({
         type: 'lms api',
+        status: 'error',
         url: config.lms_api_url,
         operation: endpoint,
         request: payload,
-        error: { catch: e.toString() },
-        customer_id: payload.customer_id,
-        compute_stack_id: payload.compute_stack_id,
+        error: { catch: e.message },
+        customer_id: payload?.customer_id,
+        compute_stack_id: payload?.compute_stack_id,
       });
     }
 
     return {
       error: true,
-      message: e
-        .toString()
-        .replace(/Validation error:|Throttling error:|Bad request:|Internal Server Error:|Unauthorized:|StripeInvalidRequestError:|TypeError:/g, '')
-        .trim(),
+      message: e.message,
     };
   }
 };

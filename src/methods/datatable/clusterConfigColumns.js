@@ -10,7 +10,7 @@ const toggleCellPadding = {
   paddingRight: 2,
 };
 
-export default ({ auth, url }) => [
+export default ({ auth, url, is_local, customer_id }) => [
   {
     Header: 'instance',
     Cell: ({ original: { is_first_instance, instance_name } }) => <div className={`${is_first_instance ? 'text-bold' : 'text-grey'}`}>{instance_name}</div>,
@@ -46,6 +46,8 @@ export default ({ auth, url }) => [
             buttonState: 'togglePublish',
             auth,
             url,
+            is_local,
+            customer_id,
           })
         }
       />
@@ -70,6 +72,8 @@ export default ({ auth, url }) => [
             buttonState: 'toggleSubscribe',
             auth,
             url,
+            is_local,
+            customer_id,
           })
         }
       />

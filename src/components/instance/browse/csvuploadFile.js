@@ -17,6 +17,7 @@ const CSVUploadFile = () => {
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
@@ -24,7 +25,7 @@ const CSVUploadFile = () => {
   const validateData = useCallback(
     async (uploadJobId) => {
       try {
-        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId, is_local, compute_stack_id, customer_id });
         if (status === 'ERROR') {
           if (message.indexOf('transaction aborted due to record(s) with a hash value that contains a forward slash') !== -1) {
             return setFormState({ error: 'The CSV file contains a row with a forward slash in the hash field.' });
@@ -73,7 +74,7 @@ const CSVUploadFile = () => {
     if (formState.submitted) {
       if (formData.csv_file) {
         setFormState({ uploading: true });
-        const uploadJob = await csvDataLoad({ schema, table, csv_file: formData.csv_file, auth, url });
+        const uploadJob = await csvDataLoad({ schema, table, csv_file: formData.csv_file, auth, url, is_local, compute_stack_id, customer_id });
         const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
         setTimeout(() => validateData(uploadJobId), 1000);
       } else {

@@ -14,6 +14,9 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
+  const customer_id = useStoreState(instanceState, (s) => s.customer_id);
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;
@@ -29,7 +32,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       operation.schema = item;
     }
 
-    const result = await queryInstance(operation, auth, url);
+    const result = await queryInstance(operation, auth, url, is_local, compute_stack_id, customer_id);
 
     if (result.error) {
       return alert.error(result.error);

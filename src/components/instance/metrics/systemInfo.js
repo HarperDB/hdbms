@@ -14,6 +14,8 @@ import ContentContainer from '../../shared/contentContainer';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
+let controller;
+
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -24,14 +26,13 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
-  let controller;
 
   useAsyncEffect(
     () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        systemInformation({ auth, signal: controller.signal, url, refresh: !!systemInfo, is_local });
+        systemInformation({ auth, signal: controller.signal, url, refresh: !!systemInfo, is_local, compute_stack_id, customer_id });
       }
     },
     () => controller?.abort(),

@@ -42,6 +42,7 @@ export default async ({ email, pass, loggingIn = false, signal }) => {
   } catch (e) {
     addError({
       type: 'lms data',
+      status: 'error',
       url: config.lms_api_url,
       operation: 'getUser',
       error: { catch: e.toString(), response },

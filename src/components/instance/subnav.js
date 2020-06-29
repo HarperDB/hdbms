@@ -12,11 +12,13 @@ import icon from '../../methods/select/icon';
 import routeIcon from '../../methods/select/routeIcon';
 import ErrorFallback from '../shared/errorFallback';
 import addError from '../../api/lms/addError';
+import useInstanceAuth from '../../state/instanceAuths';
 
 const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
 
 export default ({ routes = [] }) => {
   const { compute_stack_id, customer_id } = useParams();
+  const [instanceAuths] = useInstanceAuth({});
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
@@ -32,6 +34,7 @@ export default ({ routes = [] }) => {
             label: i.instance_name,
             value: i.compute_stack_id,
             is_local: i.is_local,
+            has_auth: instanceAuths[i.compute_stack_id],
           })),
         activeOption: {
           label: selectedInstance?.instance_name,
@@ -59,7 +62,7 @@ export default ({ routes = [] }) => {
           <SelectDropdown
             className="react-select-container"
             classNamePrefix="react-select"
-            onChange={({ value }) => history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`)}
+            onChange={({ value, has_auth }) => (has_auth ? history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`) : history.push(`/o/${customer_id}/instances/login`))}
             options={options || []}
             value={activeOption}
             defaultValue={activeOption.value}

@@ -27,6 +27,7 @@ export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
@@ -41,14 +42,16 @@ export default () => {
         port: 12345,
         auth,
         url,
+        is_local,
+        customer_id,
       });
-      await restartInstance({ auth, url });
+      await restartInstance({ auth, url, is_local, compute_stack_id, customer_id });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
 
   const checkInstance = async () => {
-    const response = await userInfo({ auth, url });
+    const response = await userInfo({ auth, url, is_local, compute_stack_id, customer_id });
     if (!response.error) {
       instanceState.update((s) => {
         s.lastUpdate = Date.now();

@@ -32,13 +32,15 @@ const defaultTableState = {
   accessErrors: false,
 };
 
+let controller;
+
 export default ({ query }) => {
   const { customer_id, compute_stack_id } = useParams();
   const [lastUpdate, setLastUpdate] = useState();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [tableState, setTableState] = useState(defaultTableState);
-  let controller;
 
   useAsyncEffect(() => {
     if (query.query) {
@@ -55,7 +57,7 @@ export default ({ query }) => {
         controller = new AbortController();
         setTableState({ ...tableState, loading: true });
 
-        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal });
+        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal, is_local, compute_stack_id, customer_id });
 
         if (response.error) {
           setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true, reload: false });

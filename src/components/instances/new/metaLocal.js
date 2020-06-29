@@ -50,7 +50,7 @@ export default () => {
         setFormState({ error: 'usernames must have only letters, underscores, and hyphens' });
       } else if (instance_name.length && user.length && pass.length && host.length && port.length) {
         try {
-          const currentUser = await userInfo({ auth: { user, pass }, url });
+          const currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
 
           if (currentUser.error && currentUser.message === 'Login failed') {
             setFormState({ error: 'The provided credentials cannot log into that instance.' });
@@ -70,7 +70,7 @@ export default () => {
             };
             if (currentUser.role.permission.super_user) {
               instanceData.super = true;
-              const registrationResponse = await registrationInfo({ auth: { user, pass }, url });
+              const registrationResponse = await registrationInfo({ auth: { user, pass }, url, is_local: true, customer_id });
 
               if (registrationResponse.ram_allocation) {
                 instanceData.registered = registrationResponse.registered;

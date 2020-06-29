@@ -23,6 +23,7 @@ export default () => {
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
@@ -30,7 +31,14 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
-      const defaultActivePermissions = await buildPermissionStructure({ auth, url, currentRolePermissions: roles.find((r) => r.id === role_id).permission });
+      const defaultActivePermissions = await buildPermissionStructure({
+        auth,
+        url,
+        currentRolePermissions: roles.find((r) => r.id === role_id).permission,
+        is_local,
+        compute_stack_id,
+        customer_id,
+      });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
     }
@@ -45,7 +53,7 @@ export default () => {
     }
 
     setLoading(true);
-    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url });
+    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 
     if (response.error) {

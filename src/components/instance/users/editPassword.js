@@ -21,6 +21,7 @@ export default () => {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const updatePassword = async () => {
     const { password } = formData;
@@ -28,7 +29,7 @@ export default () => {
     if (!password) {
       setFormState({ error: 'password is required' });
     } else {
-      const response = await alterUser({ auth, url, username, password });
+      const response = await alterUser({ auth, url, username, password, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');

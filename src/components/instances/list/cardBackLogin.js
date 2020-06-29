@@ -21,14 +21,21 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       if (!user || !pass) {
         setFormState({ error: 'All fields are required' });
       } else {
-        const result = await userInfo({ auth: { user, pass }, url });
+        const result = await userInfo({ auth: { user, pass }, url, is_local, compute_stack_id, customer_id });
 
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB' });
         } else if (result.error && result.message === 'Login failed' && !is_local) {
-          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });
+          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
+            instance_id,
+            instanceAuth: { user, pass },
+            url,
+            is_local,
+            compute_stack_id,
+            customer_id,
+          });
 
           if (handleCloudInstanceUsernameChangeResult) {
             setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: true } });

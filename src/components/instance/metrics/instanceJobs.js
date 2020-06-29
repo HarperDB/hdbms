@@ -14,10 +14,13 @@ import JobRow from './instanceJobsRow';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
+let controller;
+
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const jobs = useStoreState(instanceState, (s) => s.jobs);
   const jobsError = useStoreState(instanceState, (s) => s.jobsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
@@ -31,14 +34,23 @@ export default () => {
   const from_year = parseInt(today.getFullYear(), 10) - 1;
   const fromDate = `${from_year}-${month}-${day}`;
   const toDate = `${to_year}-${month}-${day}`;
-  let controller;
 
   useAsyncEffect(
     async () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        await searchJobsByStartDate({ auth, signal: controller.signal, url, currentJobCount: jobs?.length || 0, from_date: fromDate, to_date: toDate });
+        await searchJobsByStartDate({
+          auth,
+          signal: controller.signal,
+          url,
+          currentJobCount: jobs?.length || 0,
+          from_date: fromDate,
+          to_date: toDate,
+          is_local,
+          compute_stack_id,
+          customer_id,
+        });
         setLoading(false);
       }
     },

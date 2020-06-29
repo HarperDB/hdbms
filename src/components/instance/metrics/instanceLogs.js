@@ -15,10 +15,13 @@ import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
+let controller;
+
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const logs = useStoreState(instanceState, (s) => s.logs);
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
@@ -27,14 +30,13 @@ export default () => {
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
   const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
-  let controller;
 
   useAsyncEffect(
     async () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0, is_local, compute_stack_id, customer_id });
         setLoading(false);
       }
     },

@@ -1,11 +1,22 @@
 import { fetch } from 'whatwg-fetch';
 import config from '../../config';
 
-export default async ({ type = 'studio component', url = undefined, operation = undefined, request = undefined, error, customer_id = undefined, compute_stack_id = undefined }) => {
+export default async ({
+  type = 'studio component',
+  status = 'warn',
+  url = undefined,
+  operation = undefined,
+  request = undefined,
+  error,
+  customer_id = undefined,
+  compute_stack_id = undefined,
+}) => {
   const user = JSON.parse(localStorage.getItem('persistedUser'));
 
   const body = {
     type,
+    status: type === 'studio component' ? 'warn' : status,
+    environment: config.env,
     user: user?.email,
     customer_id,
     compute_stack_id,
@@ -31,6 +42,6 @@ export default async ({ type = 'studio component', url = undefined, operation = 
 
   if (!response.error) {
     // eslint-disable-next-line no-console
-    console.log('Reported error: ', type, operation);
+    console.log('Reported error: ', config.env, type, operation, status);
   }
 };

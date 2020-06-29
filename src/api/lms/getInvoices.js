@@ -27,6 +27,7 @@ export default async ({ auth, signal, customer_id }) => {
   } catch (e) {
     return addError({
       type: 'lms data',
+      status: 'error',
       url: config.lms_api_url,
       operation: 'getInvoices',
       request: { customer_id },

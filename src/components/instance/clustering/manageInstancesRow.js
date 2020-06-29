@@ -16,6 +16,7 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
   const [changing, setChanging] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const handleAddNode = async (payload) => {
     setChanging(true);
@@ -62,6 +63,8 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
                   compute_stack_id,
                   auth,
                   url,
+                  is_local,
+                  customer_id,
                 })
               }
             >
@@ -85,6 +88,8 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
                 clusterPort,
                 auth,
                 url,
+                is_local,
+                customer_id,
               })
             }
           >
@@ -105,6 +110,8 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
                   compute_stack_id,
                   auth,
                   url,
+                  is_local,
+                  customer_id,
                 })
               }
             >
@@ -122,6 +129,8 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
                 compute_stack_id,
                 auth,
                 url,
+                is_local,
+                customer_id,
               })
             }
           >

@@ -30,6 +30,7 @@ export default () => {
   const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
@@ -45,7 +46,7 @@ export default () => {
 
   const refreshUser = async () => {
     if (url) {
-      const result = await userInfo({ auth: instanceAuth, url });
+      const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       if (result.error) {
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
@@ -68,10 +69,7 @@ export default () => {
   useEffect(refreshInstances, [auth, products, regions, customer_id]);
 
   const refreshInstance = async () => {
-    if (!instanceAuth) {
-      alert.error('Please log into that instance');
-      history.push(`/o/${customer_id}/instances`);
-    } else if (instances) {
+    if (instances && instanceAuth) {
       const { error } = await buildActiveInstanceObject({ auth: instanceAuth, compute_stack_id, instances });
       setLoadingInstance(false);
       if (error) {
@@ -94,12 +92,12 @@ export default () => {
   }, [compute_stack_id, instances]);
 
   useEffect(() => {
-    if (mounted && url && instanceAuth.super) {
+    if (mounted && url && instanceAuth?.super) {
       alert.success('Your instance user role has been upgraded to super_user');
     } else if (mounted && url) {
       alert.success('Your instance user role has been downgraded to standard');
     }
-  }, [instanceAuth.super]);
+  }, [instanceAuth?.super]);
 
   useAsyncEffect(
     () => setMounted(true),

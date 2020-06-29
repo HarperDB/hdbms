@@ -37,6 +37,8 @@ import ErrorFallbackAuth from './shared/errorFallbackAuth';
 
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 
+let controller;
+
 export default () => {
   const history = useHistory();
   const alert = useAlert();
@@ -51,7 +53,6 @@ export default () => {
 
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
-  let controller;
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));

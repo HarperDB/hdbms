@@ -11,11 +11,12 @@ import getInvoices from '../../../api/lms/getInvoices';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
+let controller;
+
 export default () => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const invoices = useStoreState(appState, (s) => s.invoices);
-  let controller;
 
   useAsyncEffect(
     () => {

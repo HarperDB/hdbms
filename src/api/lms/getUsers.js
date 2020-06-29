@@ -26,6 +26,7 @@ export default async ({ auth, customer_id }) => {
   } catch (e) {
     return addError({
       type: 'lms data',
+      status: 'error',
       url: config.lms_api_url,
       operation: 'getUsers',
       request: { customer_id },

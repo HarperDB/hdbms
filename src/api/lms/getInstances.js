@@ -41,6 +41,7 @@ export default async ({ auth, customer_id, products, regions, instanceCount = 0 
   } catch (e) {
     return addError({
       type: 'lms data',
+      status: 'error',
       url: config.lms_api_url,
       operation: 'getInstances',
       request: { customer_id },

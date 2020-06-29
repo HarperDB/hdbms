@@ -10,17 +10,20 @@ import clusterStatus from '../../api/instance/clusterStatus';
 
 export default async ({ auth, customer_id, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
-    let registration = await registrationInfo({ auth: instanceAuth, url });
+    let registration = await registrationInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
 
     if (registration.error && registration.message === 'Login failed' && !is_local) {
       const result = await handleCloudInstanceUsernameChange({
         instance_id,
         instanceAuth,
         url,
+        is_local,
+        compute_stack_id,
+        customer_id,
       });
 
       if (result) {
-        registration = await registrationInfo({ auth: instanceAuth, url });
+        registration = await registrationInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       } else {
         return {
           status: 'LOGIN FAILED',
@@ -62,7 +65,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       };
     }
 
-    const cluster_status = await clusterStatus({ auth: instanceAuth, url });
+    const cluster_status = await clusterStatus({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
     const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.ram_allocation);
 
@@ -76,7 +79,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       };
     }
 
-    const fingerprint = await getFingerprint({ auth: instanceAuth, url });
+    const fingerprint = await getFingerprint({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
     const license = await createLicense({
       auth,
       compute_stack_id,
@@ -89,6 +92,9 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       key: license.key,
       company: license.company.toString(),
       url,
+      is_local,
+      compute_stack_id,
+      customer_id,
     });
 
     if (apply.error) {
@@ -104,6 +110,9 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
     restartInstance({
       auth: instanceAuth,
       url,
+      is_local,
+      compute_stack_id,
+      customer_id,
     });
 
     return {

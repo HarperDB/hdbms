@@ -12,13 +12,14 @@ import getCustomer from '../../api/lms/getCustomer';
 import ErrorFallback from './errorFallback';
 import addError from '../../api/lms/addError';
 
+let controller;
+
 export default () => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formData, setFormData] = useState({ coupon_code: '' });
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
-  let controller;
 
   useAsyncEffect(
     async () => {
