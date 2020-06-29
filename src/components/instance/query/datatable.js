@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactTable from 'react-table';
+import ReactTable from 'react-table-6';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';

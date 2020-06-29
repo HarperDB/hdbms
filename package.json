@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -29,12 +29,12 @@
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",
     "react-syntax-highlighter": "^12.2.1",
-    "react-table": "^6.11.5",
+    "react-table-6": "^6.11.0",
     "text-encoding": "^0.7.0",
     "use-async-effect": "^2.2.2",
     "use-interval": "^1.2.1",
     "use-persisted-state": "^0.3.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
@@ -52,10 +52,10 @@
     "eslint": "^7.3.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react": "^7.20.2",
     "eslint-plugin-react-hooks": "^4.0.4",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",

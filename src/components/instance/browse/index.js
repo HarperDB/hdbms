@@ -85,7 +85,7 @@ export default () => {
           ) : schema && table && action && entities.activeTable ? (
             <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
           ) : schema && table && entities.activeTable ? (
-            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
+            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
           ) : (
             <EmptyPrompt
               message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ReactTable from 'react-table';
+import ReactTable from 'react-table-6';
 import { useHistory, useParams } from 'react-router';
 import useInterval from 'use-interval';
 import { Card, CardBody } from '@nio/ui-kit';
@@ -14,7 +14,7 @@ import getTableData from '../../../methods/instance/getTableData';
 
 let controller;
 
-const DataTable = ({ tableState, setTableState, activeTable }) => {
+const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -27,6 +27,12 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
   useEffect(() => {
     if (mounted) setLoading(false);
   }, [tableState.tableData, mounted]);
+
+  useEffect(() => {
+    if (schema && table && activeTable) {
+      setTableState(defaultTableState);
+    }
+  }, [schema, table]);
 
   useAsyncEffect(async () => {
     if (controller) controller.abort();
@@ -60,7 +66,7 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
         error,
       });
     }
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, schema, table, mounted]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, mounted]);
 
   useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 
@@ -104,11 +110,15 @@ const DataTable = ({ tableState, setTableState, activeTable }) => {
               page={tableState.page}
               filterable={tableState.showFilter}
               defaultPageSize={tableState.pageSize}
+              showPageJump={!loading}
               pageSize={tableState.pageSize}
               onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
               getTrProps={(state, rowInfo) => ({
                 onClick: () => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
               })}
+              collapseOnSortingChange={false}
+              collapseOnPageChange={false}
+              collapseOnDataChange={false}
             />
           )}
         </CardBody>
