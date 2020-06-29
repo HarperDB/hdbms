@@ -1,6 +1,8 @@
 import React from 'react';
-import { Card, CardBody, Row, Col, Alert, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import appState from '../../../state/appState';
 
@@ -20,12 +22,10 @@ export default () => {
               </a>
               <hr />
               Once you&apos;ve installed NodeJS and NPM, execute the following command line operations to install HarperDB.
-              <Alert className="mt-3" color="dark">
-                npm i -g harperdb
-                <br />
-                <br />
-                harperdb install
-              </Alert>
+              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+                {`npm i -g harperdb
+harperdb install`}
+              </SyntaxHighlighter>
             </CardBody>
           </Card>
         </Col>
@@ -39,12 +39,10 @@ export default () => {
               </Button>
               <hr />
               Once you move the downloaded file to the device, execute the following command line operations to install HarperDB.
-              <Alert className="mt-3" color="dark">
-                npm i -g harperdb-{version?.number || '...'}.tgz
-                <br />
-                <br />
-                harperdb install
-              </Alert>
+              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+                {`npm i -g harperdb-${version?.number || '...'}.tgz
+harperdb install`}
+              </SyntaxHighlighter>
             </CardBody>
           </Card>
         </Col>
@@ -53,27 +51,23 @@ export default () => {
           <Card className="my-3">
             <CardBody className="installation">
               Running HarperDB in a Docker container is as easy as fetching a stick.
-              <Alert className="mt-3" color="dark">
+              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
                 docker run -d -p harperdb/hdb
-              </Alert>
+              </SyntaxHighlighter>
               <hr />
               Add a volume to persist data
-              <Alert className="mt-3" color="dark">
+              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
                 -v &lt;host-data-path&gt;:/opt/harperdb/hdb
-              </Alert>
+              </SyntaxHighlighter>
               <hr />
               Add initial config arguments (default):
-              <Alert className="mt-3" color="dark">
-                --INIT_HDB_USERNAME (&quot;HDB_ADMIN&quot;)
-                <br />
-                --INIT_HDB_PASSWORD (&quot;password&quot;)
-                <br />
-                --INIT_CLUSTER_USERNAME (&quot;cluster_user&quot;)
-                <br />
-                --INIT_CLUSTER_PASSWORD(&quot;password&quot;)
-                <br />
-                --INIT_NODE_NAME (&quot;docker_node&quot;)
-              </Alert>
+              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+                {`--INIT_HDB_USERNAME ("HDB_ADMIN")
+--INIT_HDB_PASSWORD ("password")
+--INIT_CLUSTER_USERNAME ("cluster_user")
+--INIT_CLUSTER_PASSWORD("password")
+--INIT_NODE_NAME ("docker_node")`}
+              </SyntaxHighlighter>
             </CardBody>
           </Card>
         </Col>
