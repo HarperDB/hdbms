@@ -23,6 +23,7 @@ export default () => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
     data_volume_size: newInstance.data_volume_size || storage[0].value,
+    stripe_storage_plan_id: newInstance.stripe_storage_plan_id || storage[0].plan_id,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
     instance_region: newInstance.instance_region || regions[0].value,
     instance_type: false,
@@ -74,7 +75,7 @@ export default () => {
               className="radio-button"
               type="radio"
               required
-              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
+              onChange={(value) => setFormData({ ...formData, data_volume_size: value, stripe_storage_plan_id: storage[0].plan_id })}
               options={storage.filter((s) => s.active)}
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
