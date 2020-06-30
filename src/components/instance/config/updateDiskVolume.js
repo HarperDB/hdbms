@@ -20,6 +20,7 @@ export default ({ setInstanceAction }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const data_volume_size = useStoreState(instanceState, (s) => s.data_volume_size);
+  const stripe_storage_plan_id = useStoreState(instanceState, (s) => s.stripe_storage_plan_id);
   const storageProducts = useStoreState(instanceState, (s) => s.storageProducts);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const compute = useStoreState(instanceState, (s) => s.compute);
@@ -29,12 +30,12 @@ export default ({ setInstanceAction }) => {
   const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({ compute_stack_id, customer_id, data_volume_size });
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id, data_volume_size, stripe_storage_plan_id });
 
-  const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size);
+  const newStorage = storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size && p.plan_id === formData.stripe_storage_plan_id);
   const newTotal = (compute?.price || 0) + (newStorage?.price || 0);
   const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.interval}` : 'FREE';
-  const hasChanged = data_volume_size !== formData.data_volume_size;
+  const hasChanged = data_volume_size !== formData.data_volume_size || stripe_storage_plan_id !== formData.stripe_storage_plan_id;
   const canChange = last_volume_resize ? (Date.now() - new Date(last_volume_resize).getTime()) / 1000 / 3600 > 6 : true;
 
   useAsyncEffect(async () => {
@@ -69,9 +70,9 @@ export default ({ setInstanceAction }) => {
       <SelectDropdown
         className="react-select-container"
         classNamePrefix="react-select"
-        onChange={({ value }) => setFormData({ ...formData, data_volume_size: value })}
+        onChange={({ value, plan_id }) => setFormData({ ...formData, data_volume_size: value, stripe_storage_plan_id: plan_id })}
         options={storageProducts}
-        value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size)}
+        value={storageProducts && storageProducts.find((p) => p.value === formData.data_volume_size && p.plan_id === formData.stripe_storage_plan_id)}
         defaultValue={storage}
         isSearchable={false}
         isClearable={false}
@@ -88,7 +89,7 @@ export default ({ setInstanceAction }) => {
         </Card>
       ) : hasChanged && (newStorage.price || compute.price) && !hasCard ? (
         <Button
-          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
+          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/i/${compute_stack_id}/config`)}
           title="Confirm Instance Details"
           block
           disabled={!hasChanged || formState.submitted}
@@ -102,7 +103,7 @@ export default ({ setInstanceAction }) => {
           <ChangeSummary which="storage" compute={compute?.priceStringWithInterval || 'FREE'} storage={newStorage?.priceStringWithInterval} total={newTotalString} />
           <Row>
             <Col>
-              <Button onClick={() => setFormData({ ...formData, data_volume_size })} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={() => setFormData({ ...formData, data_volume_size, stripe_storage_plan_id })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

@@ -18,8 +18,13 @@ export default () => {
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
-  const selectedProduct = products && formData.stripe_plan_id && products.find((p) => p.value === formData.stripe_plan_id);
-  const computePrice = selectedProduct?.price;
+  const defaultValue =
+    products && newInstance.stripe_plan_id
+      ? products.find((p) => p.value === newInstance.stripe_plan_id)
+      : newInstance.ram_allocation
+      ? products.find((p) => p.ram_allocation === newInstance.ram_allocation)
+      : products[0];
+  const computePrice = defaultValue?.price;
   const isFree = !computePrice;
   const needsCard = products && !hasCard && !isFree;
 
@@ -46,12 +51,9 @@ export default () => {
               type="radio"
               required
               onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
-              options={products.map((p) => ({
-                ...p,
-                label: `${p.label} ${p.ram_allocation === newInstance.ram_allocation ? `(${newInstance.registered ? 'Current' : 'Default'} License)` : ''}`,
-              }))}
+              options={products}
               value={formData.stripe_plan_id}
-              defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
+              defaultValue={defaultValue}
             />
           </ContentContainer>
         </CardBody>

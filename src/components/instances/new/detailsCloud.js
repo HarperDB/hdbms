@@ -62,8 +62,8 @@ export default () => {
               className="radio-button"
               type="radio"
               required
-              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
-              options={products}
+              onChange={({ value }) => setFormData({ ...formData, stripe_plan_id: value })}
+              options={products.filter((p) => p.active)}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
@@ -75,7 +75,7 @@ export default () => {
               type="radio"
               required
               onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
-              options={storage}
+              options={storage.filter((s) => s.active)}
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
