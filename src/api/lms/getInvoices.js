@@ -31,7 +31,7 @@ export default async ({ auth, signal, customer_id }) => {
       url: config.lms_api_url,
       operation: 'getInvoices',
       request: { customer_id },
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
       customer_id,
     });
   }

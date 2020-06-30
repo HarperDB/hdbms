@@ -40,14 +40,13 @@ export default async ({ email, pass, loggingIn = false, signal }) => {
       s.auth = { email, pass, ...response };
     });
   } catch (e) {
-    console.log(loggingIn);
     if (!loggingIn) {
       addError({
         type: 'lms data',
         status: 'error',
         url: config.lms_api_url,
         operation: 'getUser',
-        error: { catch: e.message, response },
+        error: { catch: e.message },
       });
     }
 

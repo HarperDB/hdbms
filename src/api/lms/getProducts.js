@@ -44,13 +44,12 @@ export default async () => {
       s.products = products;
     });
   } catch (e) {
-    console.log('error', e.toString());
     return addError({
       type: 'lms data',
       status: 'error',
       url: config.lms_api_url,
       operation: 'getProducts',
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
     });
   }
 };

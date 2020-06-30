@@ -29,7 +29,7 @@ export default async () => {
       status: 'error',
       url: config.lms_api_url,
       operation: 'getCurrentVersion',
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
     });
   }
 };

@@ -45,7 +45,7 @@ export default async ({ auth, customer_id, products, regions, instanceCount = 0 
       url: config.lms_api_url,
       operation: 'getInstances',
       request: { customer_id },
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
       customer_id,
     });
   }

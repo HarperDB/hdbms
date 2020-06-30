@@ -14,39 +14,40 @@ export default async ({
   let user = false;
   try {
     user = JSON.parse(localStorage.getItem('persistedUser'));
+
+    const body = {
+      type,
+      status: type === 'studio component' ? 'warn' : status,
+      environment: config.env,
+      user: user?.email || 'unknown',
+      customer_id,
+      compute_stack_id,
+      url,
+      operation,
+      request: { ...request, password: request?.password ? 'xxxxxxxxx' : undefined },
+      error,
+      timestamp: Date.now(),
+    };
+
+    const result = await fetch(`${config.lms_api_url}addError`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: undefined,
+      },
+    });
+
+    const json = await result.json();
+
+    const response = json.body || json;
+
+    if (!response.error) {
+      // eslint-disable-next-line no-console
+      console.log('Reported ', config.env, body.status, type, operation);
+    }
   } catch (e) {
-    console.log(e);
-  }
-
-  const body = {
-    type,
-    status: type === 'studio component' ? 'warn' : status,
-    environment: config.env,
-    user: user?.email || 'unknown',
-    customer_id,
-    compute_stack_id,
-    url,
-    operation,
-    request,
-    error,
-    timestamp: Date.now(),
-  };
-
-  const result = await fetch(`${config.lms_api_url}addError`, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: undefined,
-    },
-  });
-
-  const json = await result.json();
-
-  const response = json.body || json;
-
-  if (!response.error) {
     // eslint-disable-next-line no-console
-    console.log('Reported ', config.env, body.status, type, operation);
+    console.log(e);
   }
 };

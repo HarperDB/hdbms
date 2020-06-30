@@ -30,7 +30,7 @@ export default async ({ auth, user_id, password }) => {
       url: config.lms_api_url,
       operation: 'updatePassword',
       request: { user_id },
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
     });
   }
 };

@@ -1,9 +1,19 @@
 import { fetch } from 'whatwg-fetch';
 import addError from './lms/addError';
+import config from '../config';
 
 export default async (operation, auth, url, is_local = false, compute_stack_id = false, customer_id = false, signal = undefined) => {
   // eslint-disable-next-line no-console
   // console.log('Querying Instance API', operation.operation);
+  const errorObject = {
+    type: 'instance api',
+    status: is_local ? 'warn' : 'error',
+    url,
+    operation: operation.operation,
+    request: operation,
+    compute_stack_id,
+    customer_id,
+  };
 
   try {
     const request = await fetch(url, {
@@ -18,30 +28,12 @@ export default async (operation, auth, url, is_local = false, compute_stack_id =
 
     const response = await request.json();
 
-    /*
-    addError({
-      type: 'instance api TEST',
-      status: is_local ? 'warn' : 'error',
-      url,
-      operation: operation.operation,
-      request: operation,
-      error: { error: true, message: 'this is a test error' },
-      compute_stack_id,
-      customer_id,
-    });
-    */
+    if (config.errortest) {
+      addError({ ...errorObject, error: { error: true, message: 'this is a test error' } });
+    }
 
     if (response.error) {
-      addError({
-        type: 'instance api',
-        status: is_local ? 'warn' : 'error',
-        url,
-        operation: operation.operation,
-        request: operation,
-        error: response,
-        compute_stack_id,
-        customer_id,
-      });
+      addError({ ...errorObject, error: response });
 
       return {
         error: true,
@@ -58,16 +50,7 @@ export default async (operation, auth, url, is_local = false, compute_stack_id =
     }
 
     if (request.status !== 200) {
-      addError({
-        type: 'instance api',
-        status: is_local ? 'warn' : 'error',
-        url,
-        operation: operation.operation,
-        request: operation,
-        error: { status: `Error of type ${request.status}` },
-        compute_stack_id,
-        customer_id,
-      });
+      addError({ ...errorObject, error: { status: `Error of type ${request.status}` } });
 
       return {
         error: true,
@@ -79,16 +62,7 @@ export default async (operation, auth, url, is_local = false, compute_stack_id =
     return response;
   } catch (e) {
     if (e.message !== 'Aborted' && !['registration_info', 'user_info'].includes(operation.operation)) {
-      addError({
-        type: 'instance api',
-        status: is_local ? 'warn' : 'error',
-        url,
-        operation: operation.operation,
-        request: operation,
-        error: { catch: e.message },
-        compute_stack_id,
-        customer_id,
-      });
+      addError({ ...errorObject, error: { catch: e.message } });
     }
 
     return {

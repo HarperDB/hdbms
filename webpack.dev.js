@@ -15,7 +15,7 @@ module.exports = merge(common, {
     filename: '[chunkhash].min.js',
     https: true,
     disableHostCheck: true,
-    inline: false,
+    hot: true,
   },
   output: {
     publicPath: '/',

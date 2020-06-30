@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const postCssFlexbugFixes = require('postcss-flexbugs-fixes');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -16,7 +15,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'build'),
-    filename: '[contenthash].js',
+    filename: '[hash].js',
   },
 
   optimization: {
@@ -34,7 +33,7 @@ module.exports = {
       inject: 'body',
       inlineSource: '.(js|css)$',
     }),
-    new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
+    new MiniCssExtractPlugin({ filename: '[hash].css' }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }, { from: path.join(__dirname, '/src/favicon.ico') }],
       options: { concurrency: 100 },
@@ -66,7 +65,8 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: process.env.NODE_ENV === 'development',
+              hmr: true,
+              reloadAll: true,
             },
           },
           {

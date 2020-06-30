@@ -30,7 +30,7 @@ export default async ({ auth, customer_id }) => {
       url: config.lms_api_url,
       operation: 'getUsers',
       request: { customer_id },
-      error: { catch: e.toString(), response },
+      error: { catch: e.toString() },
       customer_id,
     });
   }

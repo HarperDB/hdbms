@@ -16,4 +16,5 @@ export default {
   studio_version: '1.1.15',
   user_guide_id: 16032,
   maintenance: 0,
+  errortest: 0,
 };
