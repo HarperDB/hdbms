@@ -51,14 +51,22 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   useAsyncEffect(async () => {
     if (processing) return false;
 
-    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(status)) {
+    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK', 'CREATE_FAILED'].includes(status)) {
       return setInstanceData({
         ...instanceData,
-        status: status === 'CREATE_IN_PROGRESS' ? 'CREATING INSTANCE' : status === 'UPDATE_IN_PROGRESS' ? 'UPDATING INSTANCE' : 'CONFIGURING NETWORK',
-        error: false,
+        status:
+          status === 'CREATE_IN_PROGRESS'
+            ? 'CREATING INSTANCE'
+            : status === 'UPDATE_IN_PROGRESS'
+            ? 'UPDATING INSTANCE'
+            : status === 'CREATE_FAILED'
+            ? 'CREATE FAILED'
+            : 'CONFIGURING NETWORK',
+        error: status === 'CREATE_FAILED',
         retry: status === 'CONFIGURING_NETWORK',
       });
     }
+
     if (!instanceAuth) {
       return setInstanceData({ ...instanceData, status: 'PLEASE LOG IN', error: true, retry: false });
     }
@@ -137,6 +145,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                   setFlipState={setFlipState}
                   compute_stack_id={compute_stack_id}
                   instance_name={instance_name}
+                  onlyDelete={instanceData.status === 'CREATE FAILED'}
                 />
               </Col>
             </Row>

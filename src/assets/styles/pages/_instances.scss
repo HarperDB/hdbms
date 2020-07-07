@@ -29,8 +29,6 @@
         }
       }
 
-
-
       .instance-name {
         height: 15px;
         line-height: 1 !important;
@@ -46,13 +44,12 @@
 
         i {
           position: absolute;
-          right: 15px;
-          top: -2px;
+          right: 35px;
+          top: -3px;
 
-
-          &.delete {
-            right: 35px;
-            top: -3px;
+          &:first-child {
+            right: 15px;
+            top: -2px;
           }
         }
       }

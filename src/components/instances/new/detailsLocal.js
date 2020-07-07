@@ -24,6 +24,7 @@ export default () => {
       : newInstance.ram_allocation
       ? products.find((p) => p.ram_allocation === newInstance.ram_allocation)
       : products[0];
+
   const computePrice = defaultValue?.price;
   const isFree = !computePrice;
   const needsCard = products && !hasCard && !isFree;

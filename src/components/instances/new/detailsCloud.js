@@ -41,6 +41,7 @@ export default () => {
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
+
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
@@ -53,8 +54,6 @@ export default () => {
     }
   }, [formState]);
 
-  console.log(storage);
-
   return (
     <>
       <Card id="cloudInstanceSpecs">
@@ -65,7 +64,7 @@ export default () => {
               className="radio-button"
               type="radio"
               required
-              onChange={({ value }) => setFormData({ ...formData, stripe_plan_id: value })}
+              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
               options={products}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
