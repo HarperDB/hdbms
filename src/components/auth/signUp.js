@@ -31,7 +31,7 @@ const SignUp = () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.submitted ? (
-        <Loader header="creating your account" spinner />
+        <Loader header="creating your account" spinner relative />
       ) : formState.success ? (
         <Loader
           header="success!"
@@ -40,6 +40,7 @@ const SignUp = () => {
             { to: '/', text: 'Sign In' },
             { to: '/resend-registration-email', text: 'Resend Email' },
           ]}
+          relative
         />
       ) : (
         <>
