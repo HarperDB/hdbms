@@ -40,9 +40,9 @@ export default () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <Loader header="processing request" spinner />
+        <Loader header="processing request" spinner relative />
       ) : formState.success ? (
-        <Loader header="success!" body="check your email. if you still don't see it, send us an email: support@harperdb.io" />
+        <Loader header="success!" body="check your email. if you still don't see it, send us an email: support@harperdb.io" relative />
       ) : (
         <>
           <Card className="mb-3">

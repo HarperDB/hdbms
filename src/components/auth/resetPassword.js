@@ -40,9 +40,9 @@ const ResetPassword = () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <Loader header="resetting password" spinner />
+        <Loader header="resetting password" spinner relative />
       ) : formState.success ? (
-        <Loader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} />
+        <Loader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} relative />
       ) : (
         <>
           <Card className="mb-3">
