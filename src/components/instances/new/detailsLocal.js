@@ -13,7 +13,7 @@ import ContentContainer from '../../shared/contentContainer';
 export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
-  const products = useStoreState(appState, (s) => s.products.localCompute);
+  const products = useStoreState(appState, (s) => s.products.localCompute.filter((p) => p.active));
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});

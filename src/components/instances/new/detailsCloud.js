@@ -15,8 +15,8 @@ export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
-  const products = useStoreState(appState, (s) => s.products.cloudCompute);
-  const storage = useStoreState(appState, (s) => s.products.cloudStorage);
+  const products = useStoreState(appState, (s) => s.products.cloudCompute.filter((p) => p.active));
+  const storage = useStoreState(appState, (s) => s.products.cloudStorage.filter((s) => s.active));
   const regions = useStoreState(appState, (s) => s.regions);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -53,6 +53,8 @@ export default () => {
     }
   }, [formState]);
 
+  console.log(storage);
+
   return (
     <>
       <Card id="cloudInstanceSpecs">
@@ -64,7 +66,7 @@ export default () => {
               type="radio"
               required
               onChange={({ value }) => setFormData({ ...formData, stripe_plan_id: value })}
-              options={products.filter((p) => p.active)}
+              options={products}
               value={formData.stripe_plan_id}
               defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value === newInstance.stripe_plan_id) : products[0]}
             />
@@ -76,7 +78,7 @@ export default () => {
               type="radio"
               required
               onChange={(value) => setFormData({ ...formData, data_volume_size: value, stripe_storage_plan_id: storage[0].plan_id })}
-              options={storage.filter((s) => s.active)}
+              options={storage}
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}
             />
