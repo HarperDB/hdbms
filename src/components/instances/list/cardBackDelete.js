@@ -42,8 +42,10 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           setFlipState(false);
         } else {
           if (instanceAuth) setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
-          await getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
-          alert.success('Instance deletion complete');
+          setTimeout(() => {
+            alert.success('Instance deletion complete');
+            getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+          }, 100);
         }
       }
     }
