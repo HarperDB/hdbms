@@ -2,7 +2,7 @@ import queryInstance from '../../api/queryInstance';
 import describeTable from '../../api/instance/describeTable';
 import handleCellValues from '../datatable/handleCellValues';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
   let fetchError = false;
   let newTotalPages = 1;
   let newTotalRecords = 0;
@@ -13,7 +13,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   const newEntityAttributes = {};
 
   try {
-    const result = await describeTable({ auth, url, schema, table, signal });
+    const result = await describeTable({ auth, url, schema, table, signal, is_local, compute_stack_id, customer_id });
 
     if (result.error) {
       allAttributes = [];
@@ -30,14 +30,14 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
     if (filtered.length) {
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
-      [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, signal);
+      [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
     } else {
       newTotalRecords = record_count;
     }
 
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
-    fetchError = e;
+    fetchError = e.message;
   }
 
   if (newTotalRecords) {
@@ -47,14 +47,13 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
+      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
 
       if (newData.error || !Array.isArray(newData)) {
-        throw new Error(newData.message || 'Unable to fetch the requested data');
+        throw new Error(newData.message);
       }
     } catch (e) {
-      // console.log('Failed to get table data', e);
-      fetchError = e;
+      fetchError = e.message;
     }
   }
 
@@ -68,10 +67,13 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, signal);
+      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
+
+      if (newData.error || !Array.isArray(newData)) {
+        throw new Error(newData.message);
+      }
     } catch (e) {
-      // console.log('Failed to get table data with specific attributes');
-      fetchError = e;
+      fetchError = e.message;
     }
   }
 
@@ -97,6 +99,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     hashAttribute,
     dataTableColumns,
     newSorted,
-    error: fetchError && fetchError.message === 'table' && `You are not authorized to view ${schema}:${table}`,
+    error: fetchError?.message === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError?.message,
   };
 };

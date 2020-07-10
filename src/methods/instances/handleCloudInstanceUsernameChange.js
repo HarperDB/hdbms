@@ -2,13 +2,16 @@ import listRoles from '../../api/instance/listRoles';
 import addUser from '../../api/instance/addUser';
 import dropUser from '../../api/instance/dropUser';
 
-export default async ({ instance_id, instanceAuth, url }) => {
+export default async ({ instance_id, instanceAuth, url, is_local, compute_stack_id, customer_id }) => {
   const roles = await listRoles({
     auth: {
       user: instance_id,
       pass: instance_id,
     },
     url,
+    is_local,
+    compute_stack_id,
+    customer_id,
   });
 
   if (roles.error) {
@@ -26,11 +29,17 @@ export default async ({ instance_id, instanceAuth, url }) => {
     username: instanceAuth.user,
     password: instanceAuth.pass,
     url,
+    is_local,
+    compute_stack_id,
+    customer_id,
   });
   await dropUser({
     auth: instanceAuth,
     username: instance_id,
     url,
+    is_local,
+    compute_stack_id,
+    customer_id,
   });
 
   return true;

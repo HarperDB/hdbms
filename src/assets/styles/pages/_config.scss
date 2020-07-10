@@ -1,6 +1,6 @@
 #config {
   .instance-details {
-    min-height: 168px;
+    min-height: 174px;
 
     .nowrap-scroll {
       overflow: hidden;
@@ -25,6 +25,10 @@
       .error,
       .fatal {
         color: $color-danger;
+      }
+
+      .warn {
+        color: $color-warning;
       }
 
       .complete,

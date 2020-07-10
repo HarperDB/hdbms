@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { Row, Col, Button } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/instanceState';
 
 import dropRole from '../../../api/instance/dropRole';
 
 export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
+  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    await dropRole({ auth, url, id: item.id });
+    await dropRole({ auth, url, id: item.id, is_local, compute_stack_id, customer_id });
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });

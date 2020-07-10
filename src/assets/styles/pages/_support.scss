@@ -62,4 +62,12 @@
       width: 100%;
     }
   }
+
+  .custom-example-prompt {
+    white-space: nowrap;
+
+    @media only screen and (max-width: 991px) {
+      white-space: normal;
+    }
+  }
 }

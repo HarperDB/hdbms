@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import { Col, Input, Row } from '@nio/ui-kit';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import cardOptions from '../../methods/stripe/cardOptions';
 import appState from '../../state/appState';
+import ErrorFallback from './errorFallback';
+import addError from '../../api/lms/addError';
 
 export default ({ setFormData, formData }) => {
+  const { customer_id } = useParams();
   const [formState, setFormState] = useState({});
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const themedCardOptions = cardOptions({ darkTheme });
 
   return (
-    <>
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
       <Row>
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           card number
@@ -88,6 +93,6 @@ export default ({ setFormData, formData }) => {
           />
         </Col>
       </Row>
-    </>
+    </ErrorBoundary>
   );
 };

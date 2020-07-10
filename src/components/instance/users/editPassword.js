@@ -4,12 +4,15 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import { useLocation, useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import alterUser from '../../../api/instance/alterUser';
 import instanceState from '../../../state/instanceState';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
-  const { username } = useParams();
+  const { customer_id, compute_stack_id, username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
 
@@ -18,6 +21,7 @@ export default () => {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const updatePassword = async () => {
     const { password } = formData;
@@ -25,7 +29,7 @@ export default () => {
     if (!password) {
       setFormState({ error: 'password is required' });
     } else {
-      const response = await alterUser({ auth, url, username, password });
+      const response = await alterUser({ auth, url, username, password, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
@@ -40,7 +44,10 @@ export default () => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Input
         type="text"
         className="mb-2 text-center"
@@ -57,6 +64,6 @@ export default () => {
           <CardBody>{formState.error}</CardBody>
         </Card>
       )}
-    </>
+    </ErrorBoundary>
   );
 };

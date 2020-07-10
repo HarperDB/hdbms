@@ -6,6 +6,7 @@ import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 
@@ -14,6 +15,8 @@ import getCustomer from '../../../api/lms/getCustomer';
 
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();
@@ -62,7 +65,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
   }, [formState]);
 
   return (
-    <>
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
       {formState.processing ? (
         <FormStatus height={formStateHeight} status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
       ) : formState.success ? (
@@ -99,6 +102,6 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
           </Row>
         </>
       )}
-    </>
+    </ErrorBoundary>
   );
 };

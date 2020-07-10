@@ -7,7 +7,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 
-import config from '../../../../config';
+import config from '../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
 
@@ -22,7 +22,7 @@ export default () => {
   const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
   const isLocal = newInstance.is_local;
   const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
-  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size);
+  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size && p.plan_id === newInstance.stripe_storage_plan_id);
   const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
 
   useAsyncEffect(() => {

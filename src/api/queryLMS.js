@@ -1,10 +1,19 @@
 import { fetch } from 'whatwg-fetch';
-
-import config from '../../config';
+import config from '../config';
+import addError from './lms/addError';
 
 export default async ({ endpoint, payload, auth, signal = undefined }) => {
   // eslint-disable-next-line no-console
   // console.log('Querying LMS API', endpoint);
+  const errorObject = {
+    type: 'lms api',
+    status: 'error',
+    url: config.lms_api_url,
+    operation: endpoint,
+    request: payload,
+    customer_id: payload?.customer_id,
+    compute_stack_id: payload?.compute_stack_id,
+  };
 
   try {
     const request = await fetch(`${config.lms_api_url}${endpoint}`, {
@@ -19,29 +28,43 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     const json = await request.json();
 
-    const body = json.body || json;
+    const response = json.body || json;
 
-    if (body.errorType) {
+    if (config.errortest) {
+      addError({ ...errorObject, error: { error: true, message: 'this is a test error' } });
+    }
+
+    if (response.errorType) {
+      addError({ ...errorObject, error: response });
+
       return {
         error: true,
-        message: body.errorMessage,
+        message: response.errorMessage,
       };
     }
 
-    if (body.error) {
+    if (response.error) {
+      if (!payload.loggingIn) {
+        addError({ ...errorObject, error: response });
+      }
+
       return {
         error: true,
         message:
-          body.message.replace(/Validation error:|Throttling error:|Bad request:|Internal Server Error:|Unauthorized:|StripeInvalidRequestError:/g, '') ||
+          response.message.replace(/Validation error:|Throttling error:|Bad request:|Internal Server Error:|Unauthorized:|StripeInvalidRequestError:|TypeError:/g, '').trim() ||
           'The server did not respond',
       };
     }
 
-    return body;
+    return response;
   } catch (e) {
+    if (e.message !== 'Aborted') {
+      addError({ ...errorObject, error: { catch: e.message } });
+    }
+
     return {
       error: true,
-      message: e.toString(),
+      message: e.message,
     };
   }
 };

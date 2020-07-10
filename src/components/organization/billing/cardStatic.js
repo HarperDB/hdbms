@@ -3,12 +3,15 @@ import useAsyncEffect from 'use-async-effect';
 import { Row, Col, Button, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 
 import removePaymentMethod from '../../../api/lms/removePaymentMethod';
 import FormStatus from '../../shared/formStatus';
 import getCustomer from '../../../api/lms/getCustomer';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();
@@ -41,68 +44,72 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
     }
   }, [formState]);
 
-  return formState.processing ? (
-    <FormStatus height={formStateHeight} status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
-  ) : formState.success ? (
-    <FormStatus height={formStateHeight} status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
-  ) : formState.error ? (
-    <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." />
-  ) : (
-    <>
-      <Card className="credit-card-form">
-        <CardBody>
+  return (
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+      {formState.processing ? (
+        <FormStatus height={formStateHeight} status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+      ) : formState.success ? (
+        <FormStatus height={formStateHeight} status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
+      ) : formState.error ? (
+        <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." />
+      ) : (
+        <>
+          <Card className="credit-card-form">
+            <CardBody>
+              <Row>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  card number
+                </Col>
+                <Col md="6" xs="12">
+                  <div className="input-static">
+                    **** **** ****
+                    {customerCard?.card?.last4}
+                  </div>
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  expiration
+                </Col>
+                <Col md="6" xs="12">
+                  <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  cvcc
+                </Col>
+                <Col md="6" xs="12">
+                  <div className="input-static">***</div>
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  billing postal code
+                </Col>
+                <Col md="6" xs="12">
+                  <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
           <Row>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              card number
+            <Col sm="6">
+              <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
+                Remove Card
+              </Button>
             </Col>
-            <Col md="6" xs="12">
-              <div className="input-static">
-                **** **** ****
-                {customerCard?.card?.last4}
-              </div>
-            </Col>
-            <Col xs="12">
-              <hr className="my-2" />
-            </Col>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              expiration
-            </Col>
-            <Col md="6" xs="12">
-              <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
-            </Col>
-            <Col xs="12">
-              <hr className="my-2" />
-            </Col>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              cvcc
-            </Col>
-            <Col md="6" xs="12">
-              <div className="input-static">***</div>
-            </Col>
-            <Col xs="12">
-              <hr className="my-2" />
-            </Col>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              billing postal code
-            </Col>
-            <Col md="6" xs="12">
-              <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
+            <Col sm="6">
+              <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+                Update Card
+              </Button>
             </Col>
           </Row>
-        </CardBody>
-      </Card>
-      <Row>
-        <Col sm="6">
-          <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
-            Remove Card
-          </Button>
-        </Col>
-        <Col sm="6">
-          <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
-            Update Card
-          </Button>
-        </Col>
-      </Row>
-    </>
+        </>
+      )}
+    </ErrorBoundary>
   );
 };

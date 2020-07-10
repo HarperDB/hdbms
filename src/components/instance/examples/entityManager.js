@@ -3,13 +3,16 @@ import { Card, CardBody } from '@nio/ui-kit';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 
 import EntityManagerRow from './entityManagerRow';
+import ErrorFallback from '../../shared/errorFallback';
 
 import generateFolderLinks from '../../../methods/examples/generateFolderLinks';
 import generateMethodLinks from '../../../methods/examples/generateMethodLinks';
+import addError from '../../../api/lms/addError';
 
 export default ({ type }) => {
   const history = useHistory();
@@ -45,11 +48,16 @@ export default ({ type }) => {
   }, [postmanCollection, folder]);
 
   return (
-    <div className="entity-manager">
-      <div className="floating-card-header">{type === 'folder' ? 'category' : 'operations'}</div>
-      <Card className="mt-3 mb-4">
-        <CardBody>{items && items.length ? items.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />) : null}</CardBody>
-      </Card>
-    </div>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
+      <div className="entity-manager">
+        <div className="floating-card-header">{type === 'folder' ? 'category' : 'operations'}</div>
+        <Card className="mt-3 mb-4">
+          <CardBody>{items && items.length ? items.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />) : null}</CardBody>
+        </Card>
+      </div>
+    </ErrorBoundary>
   );
 };

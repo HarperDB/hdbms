@@ -9,20 +9,21 @@ import appState from '../../../state/appState';
 
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
-import config from '../../../../config';
+import config from '../../../config';
 
 export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
-  const products = useStoreState(appState, (s) => s.products.cloudCompute);
-  const storage = useStoreState(appState, (s) => s.products.cloudStorage);
+  const products = useStoreState(appState, (s) => s.products.cloudCompute.filter((p) => p.active));
+  const storage = useStoreState(appState, (s) => s.products.cloudStorage.filter((s) => s.active));
   const regions = useStoreState(appState, (s) => s.regions);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({
     data_volume_size: newInstance.data_volume_size || storage[0].value,
+    stripe_storage_plan_id: newInstance.stripe_storage_plan_id || storage[0].plan_id,
     stripe_plan_id: newInstance.stripe_plan_id || products[0].value,
     instance_region: newInstance.instance_region || regions[0].value,
     instance_type: false,
@@ -40,6 +41,7 @@ export default () => {
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id, instance_region, data_volume_size } = formData;
+
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
@@ -74,7 +76,7 @@ export default () => {
               className="radio-button"
               type="radio"
               required
-              onChange={(value) => setFormData({ ...formData, data_volume_size: value })}
+              onChange={(value) => setFormData({ ...formData, data_volume_size: value, stripe_storage_plan_id: storage[0].plan_id })}
               options={storage}
               value={formData.data_volume_size}
               defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value === newInstance.data_volume_size) : storage[0]}

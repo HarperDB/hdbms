@@ -8,6 +8,7 @@ import EditUser from './edit';
 
 export default () => {
   const { username } = useParams();
+
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">

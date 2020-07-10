@@ -1,9 +1,9 @@
 import sql from '../../api/instance/sql';
 import handleCellValues from '../datatable/handleCellValues';
 
-export default async ({ query, auth, url, signal }) => {
+export default async ({ query, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
   try {
-    const response = await sql({ sql: query, auth, url, signal });
+    const response = await sql({ sql: query, auth, url, signal, is_local, compute_stack_id, customer_id });
 
     if (response.error) {
       return {

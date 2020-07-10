@@ -6,20 +6,24 @@ import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
+import instanceState from '../../../state/instanceState';
 
 import alterRole from '../../../api/instance/alterRole';
-import instanceState from '../../../state/instanceState';
 import buildPermissionStructure from '../../../methods/instance/buildPermissionStructure';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
   const alert = useAlert();
-  const { role_id } = useParams();
+  const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
@@ -27,7 +31,14 @@ export default () => {
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
-      const defaultActivePermissions = await buildPermissionStructure({ auth, url, currentRolePermissions: roles.find((r) => r.id === role_id).permission });
+      const defaultActivePermissions = await buildPermissionStructure({
+        auth,
+        url,
+        currentRolePermissions: roles.find((r) => r.id === role_id).permission,
+        is_local,
+        compute_stack_id,
+        customer_id,
+      });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
     }
@@ -42,7 +53,7 @@ export default () => {
     }
 
     setLoading(true);
-    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url });
+    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 
     if (response.error) {
@@ -60,7 +71,10 @@ export default () => {
   };
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <JSONInput
         placeholder={newPermissions}
         height="calc(100vh - 340px)"
@@ -84,6 +98,6 @@ export default () => {
       <Button block color="success" disabled={loading} onClick={submitRecord}>
         {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Update Role Permissions</span>}
       </Button>
-    </>
+    </ErrorBoundary>
   );
 };

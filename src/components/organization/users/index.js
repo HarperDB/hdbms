@@ -3,13 +3,16 @@ import { Row, Col, Card, CardBody } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 import DataTable from './datatable';
 import EditUser from './edit';
 import AddUserForm from './add';
 import getUsers from '../../../api/lms/getUsers';
-import config from '../../../../config';
+import config from '../../../config';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 export default () => {
   const { user_id, customer_id } = useParams();
@@ -33,7 +36,9 @@ export default () => {
         <span className="floating-card-header">add user</span>
         <Card className="my-3">
           <CardBody>
-            <AddUserForm refreshUsers={refreshUsers} userEmails={users && users.map((u) => u.orgs[0].status !== 'declined' && u)} />
+            <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+              <AddUserForm refreshUsers={refreshUsers} userEmails={users && users.map((u) => u.orgs[0].status !== 'declined' && u)} />
+            </ErrorBoundary>
           </CardBody>
         </Card>
       </Col>

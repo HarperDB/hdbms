@@ -3,17 +3,25 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router';
 
 import instanceState from '../../../state/instanceState';
-import config from '../../../../config';
+import config from '../../../config';
 
 import readLog from '../../../api/instance/readLog';
 import LogRow from './instanceLogsRow';
 import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
+
+let controller;
 
 export default () => {
+  const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const logs = useStoreState(instanceState, (s) => s.logs);
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
@@ -22,14 +30,13 @@ export default () => {
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
   const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
-  let controller;
 
   useAsyncEffect(
     async () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0 });
+        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0, is_local, compute_stack_id, customer_id });
         setLoading(false);
       }
     },
@@ -44,11 +51,14 @@ export default () => {
   );
 
   useInterval(() => {
-    if (autoRefresh) setLastUpdate(Date.now());
+    if (autoRefresh && mounted) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
   return (
-    <>
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
       <Row className="floating-card-header">
         <Col>instance logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
@@ -99,6 +109,6 @@ export default () => {
           </div>
         </CardBody>
       </Card>
-    </>
+    </ErrorBoundary>
   );
 };

@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
 import addRole from '../../../api/instance/addRole';
 import instanceState from '../../../state/instanceState';
 
 export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
+  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const [entity, setEntity] = useState({});
 
@@ -24,6 +27,9 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
     const response = await addRole({
       auth,
       url,
+      is_local,
+      compute_stack_id,
+      customer_id,
       role: entity.name,
       permission: {
         cluster_user: itemType === 'cluster user',

@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
-import config from '../../../config';
+import config from '../../config';
 import appState from '../../state/appState';
 
 import InstanceList from './list/instanceList';
@@ -34,6 +34,9 @@ const InstancesIndex = () => {
   useEffect(() => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {
       window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
+    }
+    if (action === 'login') {
+      alert.error('Please log in to that instance');
     }
   }, []);
 
@@ -84,7 +87,7 @@ const InstancesIndex = () => {
           {action === 'new' && instances && <NewInstanceModal />}
         </>
       ) : (
-        <Loader message="loading instances" />
+        <Loader header="loading instances" spinner />
       )}
     </div>
   );

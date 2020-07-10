@@ -7,7 +7,7 @@ import routes from './routes';
 import SubNav from '../shared/subnav';
 import appState from '../../state/appState';
 import getCustomer from '../../api/lms/getCustomer';
-import config from '../../../config';
+import config from '../../config';
 
 export default () => {
   const { customer_id } = useParams();

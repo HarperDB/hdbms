@@ -7,10 +7,10 @@ import appState from '../../state/appState';
 
 import getUser from '../../api/lms/getUser';
 import isEmail from '../../methods/util/isEmail';
-import AuthStateLoader from '../shared/authStateLoader';
-import config from '../../../config';
+import Loader from '../shared/loader';
+import config from '../../config';
 
-export default () => {
+const SignIn = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -24,7 +24,7 @@ export default () => {
       setFormState({ error: 'password is required' });
     } else {
       setFormState({ processing: true });
-      getUser({ email, pass });
+      getUser({ email, pass, loggingIn: true });
     }
   };
 
@@ -42,7 +42,7 @@ export default () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <AuthStateLoader header="signing in" spinner />
+        <Loader header="signing in" spinner relative />
       ) : (
         <>
           <Card className="mb-3">
@@ -99,3 +99,5 @@ export default () => {
     </div>
   );
 };
+
+export default SignIn;

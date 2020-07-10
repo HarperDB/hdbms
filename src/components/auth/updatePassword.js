@@ -7,9 +7,10 @@ import { useStoreState } from 'pullstate';
 import appState from '../../state/appState';
 
 import updatePassword from '../../api/lms/updatePassword';
-import config from '../../../config';
+import config from '../../config';
+import Loader from '../shared/loader';
 
-export default () => {
+const UpdatePassword = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -44,15 +45,7 @@ export default () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <>
-          <Card className="mb-3">
-            <CardBody className="text-white text-center">
-              <div className="mb-3">updating your password</div>
-              <i className="fa fa-spinner fa-spin text-white" />
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
+        <Loader header="updating password" spinner relative />
       ) : (
         <>
           <Card className="mb-3">
@@ -102,3 +95,5 @@ export default () => {
     </div>
   );
 };
+
+export default UpdatePassword;

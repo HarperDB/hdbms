@@ -3,7 +3,8 @@ node_modules
 
 # Build directories
 public
+build
 
 # Editor
 .idea
-config.js
+src/config/index.js

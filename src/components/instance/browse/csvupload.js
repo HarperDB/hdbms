@@ -1,9 +1,12 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useHistory, useParams } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import CSVUploadURL from './csvuploadURL';
 import CSVUploadFile from './csvuploadFile';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 export default () => {
   const history = useHistory();
@@ -18,10 +21,20 @@ export default () => {
         <CardBody>
           <Row>
             <Col sm="6" className="mb-2">
-              <CSVUploadURL />
+              <ErrorBoundary
+                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+                FallbackComponent={ErrorFallback}
+              >
+                <CSVUploadURL />
+              </ErrorBoundary>
             </Col>
             <Col sm="6">
-              <CSVUploadFile />
+              <ErrorBoundary
+                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+                FallbackComponent={ErrorFallback}
+              >
+                <CSVUploadFile />
+              </ErrorBoundary>
             </Col>
           </Row>
           <hr className="mt-2 mb-4" />

@@ -3,6 +3,7 @@ import { Row, Col, Button, Input } from '@nio/ui-kit';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { useParams } from 'react-router-dom';
 
 import queryInstance from '../../../api/queryInstance';
 import instanceState from '../../../state/instanceState';
@@ -10,10 +11,12 @@ import instanceState from '../../../state/instanceState';
 import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
+  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const [entityName, setEntityName] = useState(false);
   const [nameError, toggleNameError] = useState(false);
@@ -57,7 +60,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth, url);
+    await queryInstance(operation, auth, url, is_local, compute_stack_id, customer_id);
 
     return instanceState.update((s) => {
       s.lastUpdate = Date.now();

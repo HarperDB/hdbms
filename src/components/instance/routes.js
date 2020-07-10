@@ -60,9 +60,6 @@ export default ({ super_user }) => {
       icon: 'wrench',
       iconCode: 'f0ad',
     },
-  ];
-
-  const trailingRoutes = [
     {
       component: Metrics,
       path: `/o/:customer_id/i/:compute_stack_id/metrics`,
@@ -71,6 +68,9 @@ export default ({ super_user }) => {
       icon: 'tachometer',
       iconCode: 'f0e4',
     },
+  ];
+
+  const trailingRoutes = [
     {
       component: Examples,
       path: `/o/:customer_id/i/:compute_stack_id/examples/:folder?/:method?`,

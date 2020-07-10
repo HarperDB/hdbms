@@ -20,10 +20,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
     };
   }
 
-  const schema = await describeAll({
-    auth,
-    url: thisInstance.url,
-  });
+  const schema = await describeAll({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
   if (schema.error) {
     return {
@@ -50,26 +47,13 @@ export default async ({ instances, auth, compute_stack_id }) => {
     };
   }
 
-  const users = await listUsers({
-    auth,
-    url: thisInstance.url,
-  });
+  const users = await listUsers({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
-  const roles = await listRoles({
-    auth,
-    url: thisInstance.url,
-  });
+  const roles = await listRoles({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
-  const cluster_status = await clusterStatus({
-    auth,
-    url: thisInstance.url,
-  });
+  const cluster_status = await clusterStatus({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
-  const network = await buildNetwork({
-    users,
-    roles,
-    cluster_status,
-  });
+  const network = await buildNetwork({ users, roles, cluster_status });
 
   const clustering = buildInstanceClusterPartners({
     instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
@@ -77,15 +61,9 @@ export default async ({ instances, auth, compute_stack_id }) => {
     instance_region: thisInstance.instance_region,
   });
 
-  const clusterDataTable = buildClusteringTable({
-    instances: clustering.connected.filter((i) => i.connection.state !== 'closed'),
-    structure,
-  });
+  const clusterDataTable = buildClusteringTable({ instances: clustering.connected.filter((i) => i.connection.state !== 'closed'), structure });
 
-  const clusterDataTableColumns = clusterConfigColumns({
-    auth,
-    url: thisInstance.url,
-  });
+  const clusterDataTableColumns = clusterConfigColumns({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id });
 
   instanceState.update((s) => {
     Object.entries({

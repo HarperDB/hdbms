@@ -5,7 +5,7 @@ import EntityManagerForm from './entityManagerForm';
 import EntityManagerRow from './entityManagerRow';
 import EntityManagerHeader from './entityManagerHeader';
 
-export default ({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) => {
+const EntityManager = ({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) => {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -58,3 +58,5 @@ export default ({ items, activeItem, activeSchema = false, showForm, baseUrl, it
     </div>
   );
 };
+
+export default EntityManager;

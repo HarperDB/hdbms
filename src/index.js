@@ -7,7 +7,7 @@ import Analytics from 'react-router-ga';
 
 import './methods/util/textDecoderPolyfill';
 import stripePromise from './methods/stripe/stripePromise';
-import config from '../config';
+import config from './config';
 
 import AlertTemplate from './components/shared/alert';
 import App from './components/app';

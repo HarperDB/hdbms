@@ -4,8 +4,9 @@ import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import config from '../../../../config';
+import config from '../../../config';
 import instanceState from '../../../state/instanceState';
 
 import Role from './setupRole';
@@ -19,11 +20,14 @@ import Loader from '../../shared/loader';
 import configureCluster from '../../../api/instance/configureCluster';
 import restartInstance from '../../../api/instance/restartInstance';
 import userInfo from '../../../api/instance/userInfo';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
-  const { compute_stack_id } = useParams();
+  const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
@@ -38,14 +42,16 @@ export default () => {
         port: 12345,
         auth,
         url,
+        is_local,
+        customer_id,
       });
-      await restartInstance({ auth, url });
+      await restartInstance({ auth, url, is_local, compute_stack_id, customer_id });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
 
   const checkInstance = async () => {
-    const response = await userInfo({ auth, url });
+    const response = await userInfo({ auth, url, is_local, compute_stack_id, customer_id });
     if (!response.error) {
       instanceState.update((s) => {
         s.lastUpdate = Date.now();
@@ -59,23 +65,30 @@ export default () => {
     }
   }, config.refresh_content_interval);
 
-  return (
+  return formState.restarting ? (
+    <Loader header="configuring clustering" spinner />
+  ) : (
     <Row id="clustering">
       <Col xl="3" lg="4" md="5" xs="12">
         <span className="floating-card-header">enable clustering</span>
         <Card className="my-3">
           <CardBody>
-            <Role />
-            {cluster_role && <User />}
-            {cluster_user && <Port port={12345} />}
-            {cluster_role && cluster_user && <NodeName nodeNameMatch={nodeNameMatch} setNodeNameMatch={setNodeNameMatch} />}
-            {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} disabled={formState.submitted || formState.restarting} />}
+            <ErrorBoundary
+              onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+              FallbackComponent={ErrorFallback}
+            >
+              <Role />
+              {cluster_role && <User />}
+              {cluster_user && <Port port={12345} />}
+              {cluster_role && cluster_user && <NodeName nodeNameMatch={nodeNameMatch} setNodeNameMatch={setNodeNameMatch} />}
+              {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} disabled={formState.submitted || formState.restarting} />}
+            </ErrorBoundary>
           </CardBody>
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
         <span className="floating-card-header">&nbsp;</span>
-        {formState.restarting ? <Loader message="configuring clustering" /> : <Instructions showNodeNameInstructions={compute_stack_id !== name} />}
+        <Instructions showNodeNameInstructions={compute_stack_id !== name} />
       </Col>
     </Row>
   );

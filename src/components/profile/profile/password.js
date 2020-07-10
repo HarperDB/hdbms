@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, CardBody, Card } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 
 import updatePassword from '../../../api/lms/updatePassword';
 import FormStatus from '../../shared/formStatus';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -47,71 +50,76 @@ export default ({ formStateHeight }) => {
     };
   }, [formState.error, formState.success]);
 
-  return formState.processing ? (
-    <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
-  ) : formState.success ? (
-    <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
-  ) : formState.error ? (
-    <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
-  ) : (
-    <>
-      <Card className="mb-3">
-        <CardBody>
-          <Row>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              current password
-            </Col>
-            <Col md="6" xs="12">
-              <Input
-                type="password"
-                className="mb-0 text-center"
-                name="current password"
-                placeholder="current password"
-                onChange={(e) => setFormData({ ...formData, oldpassword: e.target.value })}
-                value={formData.oldpassword || ''}
-                disabled={formState.submitted}
-              />
-            </Col>
-            <Col xs="12">
-              <hr className="my-2" />
-            </Col>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              new password
-            </Col>
-            <Col md="6" xs="12">
-              <Input
-                type="password"
-                className="mb-0 text-center"
-                name="new password"
-                placeholder="new password"
-                onChange={(e) => setFormData({ ...formData, newpassword: e.target.value })}
-                value={formData.newpassword || ''}
-                disabled={formState.submitted}
-              />
-            </Col>
-            <Col xs="12">
-              <hr className="my-2" />
-            </Col>
-            <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-              verify password
-            </Col>
-            <Col md="6" xs="12">
-              <Input
-                type="password"
-                className="mb-0 text-center"
-                name="verify password"
-                placeholder="verify password"
-                onChange={(e) => setFormData({ ...formData, newpassword2: e.target.value })}
-                value={formData.newpassword2 || ''}
-                disabled={formState.submitted}
-              />
-            </Col>
-          </Row>
-        </CardBody>
-      </Card>
-      <Button color="purple" block onClick={submit} disabled={formState.submitted}>
-        Update Password
-      </Button>
-    </>
+  return (
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+      {' '}
+      {formState.processing ? (
+        <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
+      ) : formState.success ? (
+        <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
+      ) : formState.error ? (
+        <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
+      ) : (
+        <>
+          <Card className="mb-3">
+            <CardBody>
+              <Row>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  current password
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    type="password"
+                    className="mb-0 text-center"
+                    name="current password"
+                    placeholder="current password"
+                    onChange={(e) => setFormData({ ...formData, oldpassword: e.target.value })}
+                    value={formData.oldpassword || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  new password
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    type="password"
+                    className="mb-0 text-center"
+                    name="new password"
+                    placeholder="new password"
+                    onChange={(e) => setFormData({ ...formData, newpassword: e.target.value })}
+                    value={formData.newpassword || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  verify password
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    type="password"
+                    className="mb-0 text-center"
+                    name="verify password"
+                    placeholder="verify password"
+                    onChange={(e) => setFormData({ ...formData, newpassword2: e.target.value })}
+                    value={formData.newpassword2 || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+          <Button color="purple" block onClick={submit} disabled={formState.submitted}>
+            Update Password
+          </Button>
+        </>
+      )}{' '}
+    </ErrorBoundary>
   );
 };

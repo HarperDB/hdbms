@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ schema, table, csv_url, auth, url }) =>
+export default async ({ schema, table, csv_url, auth, url, is_local, compute_stack_id, customer_id }) =>
   queryInstance(
     {
       operation: 'csv_url_load',
@@ -11,5 +11,8 @@ export default async ({ schema, table, csv_url, auth, url }) =>
       csv_url,
     },
     auth,
-    url
+    url,
+    is_local,
+    compute_stack_id,
+    customer_id
   );

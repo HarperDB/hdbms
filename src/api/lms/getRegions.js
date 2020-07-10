@@ -1,19 +1,33 @@
 import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
+import addError from './addError';
+import config from '../../config';
 
 export default async () => {
-  const response = await queryLMS({
-    endpoint: 'getRegions',
-    method: 'POST',
-  });
+  let response = null;
 
-  let regions = [];
+  try {
+    response = await queryLMS({
+      endpoint: 'getRegions',
+      method: 'POST',
+    });
 
-  if (Array.isArray(response)) {
-    regions = response; // .sort((a, b) => (a.label < b.label ? 1 : -1));
+    let regions = [];
+
+    if (Array.isArray(response)) {
+      regions = response; // .sort((a, b) => (a.label < b.label ? 1 : -1));
+    }
+
+    return appState.update((s) => {
+      s.regions = regions;
+    });
+  } catch (e) {
+    return addError({
+      type: 'lms data',
+      status: 'error',
+      url: config.lms_api_url,
+      operation: 'getRegions',
+      error: { catch: e.toString() },
+    });
   }
-
-  return appState.update((s) => {
-    s.regions = regions;
-  });
 };

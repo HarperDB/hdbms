@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactTable from 'react-table';
+import ReactTable from 'react-table-6';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 import { useStoreState } from 'pullstate';
 

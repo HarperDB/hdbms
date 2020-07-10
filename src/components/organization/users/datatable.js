@@ -1,12 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
-import ReactTable from 'react-table';
+import ReactTable from 'react-table-6';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 import customerUserColumns from '../../../methods/datatable/customerUserColumns';
+import ErrorFallback from '../../shared/errorFallback';
+import addError from '../../../api/lms/addError';
 
 export default () => {
   const { customer_id } = useParams();
@@ -53,25 +56,27 @@ export default () => {
       </Row>
       <Card className="my-3">
         <CardBody>
-          <ReactTable
-            data={users ? [auth, ...users] : [auth]}
-            columns={customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer_id })}
-            pages={tableState.pages}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-            filtered={tableState.filtered}
-            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
-            sorted={tableState.sorted}
-            onPageChange={(value) => setTableState({ ...tableState, page: value })}
-            page={tableState.page}
-            filterable={tableState.showFilter}
-            defaultPageSize={tableState.pageSize}
-            pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-            resizable={false}
-            getTrProps={(state, rowInfo) => ({
-              onClick: () => rowClick(rowInfo.original.user_id),
-            })}
-          />
+          <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+            <ReactTable
+              data={users ? [auth, ...users] : [auth]}
+              columns={customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer_id })}
+              pages={tableState.pages}
+              onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+              filtered={tableState.filtered}
+              onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+              sorted={tableState.sorted}
+              onPageChange={(value) => setTableState({ ...tableState, page: value })}
+              page={tableState.page}
+              filterable={tableState.showFilter}
+              defaultPageSize={tableState.pageSize}
+              pageSize={tableState.pageSize}
+              onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
+              resizable={false}
+              getTrProps={(state, rowInfo) => ({
+                onClick: () => rowClick(rowInfo.original.user_id),
+              })}
+            />
+          </ErrorBoundary>
         </CardBody>
       </Card>
     </>

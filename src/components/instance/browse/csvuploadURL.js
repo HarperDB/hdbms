@@ -10,11 +10,12 @@ import getJob from '../../../api/instance/getJob';
 import isURL from '../../../methods/util/isURL';
 import csvURLLoad from '../../../api/instance/csvURLLoad';
 
-export default () => {
+const CSVUploadURL = () => {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
@@ -22,7 +23,7 @@ export default () => {
   const validateData = useCallback(
     async (uploadJobId) => {
       try {
-        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId });
+        const [{ status, message }] = await getJob({ auth, url, id: uploadJobId, is_local, compute_stack_id, customer_id });
         if (status === 'ERROR') {
           if (['Error: CSV Load failed from URL', 'Error downloading CSV file'].some((i) => message.indexOf(i) !== -1)) {
             return setFormState({ error: 'The URL did not return a valid csv file' });
@@ -52,7 +53,7 @@ export default () => {
     if (formState.submitted) {
       if (isURL(formData.csv_url)) {
         setFormState({ uploading: true });
-        const uploadJob = await csvURLLoad({ schema, table, csv_url: formData.csv_url, auth, url });
+        const uploadJob = await csvURLLoad({ schema, table, csv_url: formData.csv_url, auth, url, is_local, compute_stack_id, customer_id });
         const uploadJobId = uploadJob.message.replace('Starting job with id ', '');
         setTimeout(() => validateData(uploadJobId), 1000);
       } else {
@@ -114,3 +115,4 @@ export default () => {
     </>
   );
 };
+export default CSVUploadURL;
