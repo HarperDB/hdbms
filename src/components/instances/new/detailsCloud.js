@@ -16,7 +16,7 @@ export default () => {
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products.cloudCompute.filter((p) => p.active));
-  const storage = useStoreState(appState, (s) => s.products.cloudStorage.filter((s) => s.active));
+  const storage = useStoreState(appState, (s) => s.products.cloudStorage.filter((p) => p.active));
   const regions = useStoreState(appState, (s) => s.regions);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});

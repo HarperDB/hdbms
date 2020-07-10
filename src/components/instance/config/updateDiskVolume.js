@@ -21,7 +21,7 @@ export default ({ setInstanceAction }) => {
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const data_volume_size = useStoreState(instanceState, (s) => s.data_volume_size);
   const stripe_storage_plan_id = useStoreState(instanceState, (s) => s.stripe_storage_plan_id);
-  const storageProducts = useStoreState(instanceState, (s) => s.storageProducts?.filter((s) => s.value > data_volume_size && s.active));
+  const storageProducts = useStoreState(instanceState, (s) => s.storageProducts?.filter((p) => p.value > data_volume_size && p.active));
   const storage = useStoreState(instanceState, (s) => s.storage);
   const compute = useStoreState(instanceState, (s) => s.compute);
   const is_local = useStoreState(instanceState, (s) => s.is_local);

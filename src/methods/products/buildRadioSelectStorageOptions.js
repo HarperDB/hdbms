@@ -5,10 +5,10 @@ export default (plans) => {
 
   plans.map(({ tiers, interval, active, id }) => {
     const sizes = [...new Set([tiers.find((t) => !t.unit_amount).up_to, 10, 100, 250, 500, 1000])];
-    sizes.map((size) => {
+    return sizes.map((size) => {
       const pricingTier = tiers.find((p) => (p.up_to && size <= p.up_to) || !p.up_to);
       const price = size * (pricingTier.unit_amount / 100);
-      storageOptionsArray.push({
+      return storageOptionsArray.push({
         plan_id: id,
         active,
         price,
