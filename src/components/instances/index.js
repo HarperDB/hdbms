@@ -18,6 +18,7 @@ import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../api/lms/getCustomer';
+import getSubscriptions from '../../api/lms/getSubscriptions';
 
 const InstancesIndex = () => {
   const history = useHistory();
@@ -27,6 +28,7 @@ const InstancesIndex = () => {
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const [mounted, setMounted] = useState(false);
@@ -47,6 +49,14 @@ const InstancesIndex = () => {
   };
 
   useEffect(refreshCustomer, []);
+
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getSubscriptions({ auth, customer_id, stripe_id });
+    }
+  };
+
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   const refreshInstances = () => {
     if (auth && products && regions && customer_id) {
