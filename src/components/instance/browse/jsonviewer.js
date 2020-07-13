@@ -37,7 +37,6 @@ export default ({ newEntityAttributes, hashAttribute }) => {
         { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: Object.keys(newEntityAttributes) },
         auth,
         url,
-        is_local,
         compute_stack_id,
         customer_id
       );
@@ -54,7 +53,7 @@ export default ({ newEntityAttributes, hashAttribute }) => {
     if (!rowValue) alert.error('Please insert valid JSON to proceed');
     if (!action || !rowValue) return false;
     if (action === 'edit') rowValue[hashAttribute] = hash;
-    await queryInstance({ operation: action === 'edit' ? 'update' : 'insert', schema, table, records: [rowValue] }, auth, url, is_local, compute_stack_id, customer_id);
+    await queryInstance({ operation: action === 'edit' ? 'update' : 'insert', schema, table, records: [rowValue] }, auth, url, compute_stack_id, customer_id);
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
@@ -64,7 +63,7 @@ export default ({ newEntityAttributes, hashAttribute }) => {
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
-    await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url, is_local, compute_stack_id, customer_id);
+    await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url, compute_stack_id, customer_id);
     return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 

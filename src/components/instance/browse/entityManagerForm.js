@@ -60,7 +60,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth, url, is_local, compute_stack_id, customer_id);
+    await queryInstance(operation, auth, url, compute_stack_id, customer_id);
 
     return instanceState.update((s) => {
       s.lastUpdate = Date.now();
