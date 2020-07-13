@@ -91,8 +91,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     Cell: (props) => handleCellValues(props.value),
   }));
 
-  console.log(newData);
-
   return {
     newData: newData || [],
     newTotalPages,
