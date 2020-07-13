@@ -2,12 +2,12 @@ import { fetch } from 'whatwg-fetch';
 import addError from './lms/addError';
 import config from '../config';
 
-export default async (operation, auth, url, is_local = false, compute_stack_id = false, customer_id = false, signal = undefined) => {
+export default async (operation, auth, url, compute_stack_id = false, customer_id = false, signal = undefined) => {
   // eslint-disable-next-line no-console
   // console.log('Querying Instance API', operation.operation);
   const errorObject = {
     type: 'instance api',
-    status: is_local ? 'warn' : 'error',
+    status: 'warn',
     url,
     operation: operation.operation,
     request: operation,
