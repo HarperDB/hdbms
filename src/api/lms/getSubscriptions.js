@@ -24,7 +24,7 @@ export default async ({ auth, customer_id, stripe_id }) => {
     }
 
     return appState.update((s) => {
-      s.regions = subscriptions;
+      s.subscriptions = subscriptions;
     });
   } catch (e) {
     return addError({
