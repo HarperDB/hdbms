@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ compute_stack_id, auth, url, is_local, customer_id }) =>
+export default async ({ compute_stack_id, auth, url, customer_id }) =>
   queryInstance(
     {
       operation: 'remove_node',
@@ -8,7 +8,6 @@ export default async ({ compute_stack_id, auth, url, is_local, customer_id }) =>
     },
     auth,
     url,
-    is_local,
     compute_stack_id,
     customer_id
   );
