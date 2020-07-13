@@ -30,7 +30,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
     if (filtered.length) {
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
-      [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
+      [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, compute_stack_id, customer_id, signal);
     } else {
       newTotalRecords = record_count;
     }
@@ -47,7 +47,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
+      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, compute_stack_id, customer_id, signal);
 
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
@@ -67,7 +67,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, is_local, compute_stack_id, customer_id, signal);
+      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, compute_stack_id, customer_id, signal);
 
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
@@ -90,6 +90,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     style: { height: 29, paddingTop: 10 },
     Cell: (props) => handleCellValues(props.value),
   }));
+
+  console.log(newData);
 
   return {
     newData: newData || [],

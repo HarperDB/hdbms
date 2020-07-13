@@ -32,7 +32,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
       operation.schema = item;
     }
 
-    const result = await queryInstance(operation, auth, url, is_local, compute_stack_id, customer_id);
+    const result = await queryInstance(operation, auth, url, compute_stack_id, customer_id);
 
     if (result.error) {
       return alert.error(result.error);
