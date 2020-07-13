@@ -7,7 +7,7 @@ export default async (operation, auth, url, is_local = false, compute_stack_id =
   // console.log('Querying Instance API', operation.operation);
   const errorObject = {
     type: 'instance api',
-    status: is_local ? 'warn' : 'error',
+    status: 'warn',
     url,
     operation: operation.operation,
     request: operation,
