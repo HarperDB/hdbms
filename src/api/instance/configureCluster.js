@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ compute_stack_id, cluster_user, port, auth, url, is_local, customer_id }) =>
+export default async ({ compute_stack_id, cluster_user, port, auth, url, customer_id }) =>
   queryInstance(
     {
       operation: 'configure_cluster',
@@ -11,7 +11,6 @@ export default async ({ compute_stack_id, cluster_user, port, auth, url, is_loca
     },
     auth,
     url,
-    is_local,
     compute_stack_id,
     customer_id
   );

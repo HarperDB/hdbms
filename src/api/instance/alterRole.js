@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, url, id, permission, is_local, compute_stack_id, customer_id }) =>
+export default async ({ auth, url, id, permission, compute_stack_id, customer_id }) =>
   queryInstance(
     {
       operation: 'alter_role',
@@ -9,7 +9,6 @@ export default async ({ auth, url, id, permission, is_local, compute_stack_id, c
     },
     auth,
     url,
-    is_local,
     compute_stack_id,
     customer_id
   );
