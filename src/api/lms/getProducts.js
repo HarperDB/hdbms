@@ -28,9 +28,9 @@ export default async () => {
       const cloudComputeOptions = response.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)');
       const cloudStorageOptions = response.find((p) => p.name === 'HarperDB Cloud Storage');
 
-      const cloudStorage = cloudStorageOptions && buildRadioSelectStorageOptions(cloudStorageOptions.plans).sort((a, b) => a.value - b.value);
-      const cloudCompute = cloudComputeOptions && cloudComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram_allocation - b.ram_allocation);
-      const localCompute = localComputeOptions && localComputeOptions.plans.map((p) => buildRadioSelectProductOptions(p)).sort((a, b) => a.ram_allocation - b.ram_allocation);
+      const cloudStorage = cloudStorageOptions && buildRadioSelectStorageOptions(cloudStorageOptions.plans).sort((a, b) => a.value.data_volume_size - b.value.data_volume_size);
+      const cloudCompute = cloudComputeOptions && buildRadioSelectProductOptions(cloudComputeOptions.plans).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
+      const localCompute = localComputeOptions && buildRadioSelectProductOptions(localComputeOptions.plans).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
 
       products = {
         cloudStorage,
@@ -43,6 +43,7 @@ export default async () => {
       s.products = products;
     });
   } catch (e) {
+    console.log('getProducts', e);
     return addError({
       type: 'lms data',
       status: 'error',

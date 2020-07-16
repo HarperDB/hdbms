@@ -14,16 +14,15 @@ import CouponForm from '../../shared/couponForm';
 export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
-  const products = useStoreState(appState, (s) => s.products);
-  const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
-  const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
-  const isLocal = newInstance.is_local;
-  const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
-  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size && p.plan_id === newInstance.stripe_storage_plan_id);
-  const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
+  const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
+  const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
+  const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
+  const allPrePaid = newInstance.compute_subscription_id && newInstance.storage_subscription_id;
+  const somePrePaid = newInstance.compute_subscription_id || newInstance.storage_subscription_id;
+  const totalPriceString = allPrePaid ? 'PREPAID' : totalPrice ? `$${totalPrice.toFixed(2)}/${newInstance.compute_interval}` : somePrePaid ? 'PREPAID / FREE' : 'FREE';
 
   useAsyncEffect(() => {
     const { submitted } = formState;
@@ -124,10 +123,10 @@ export default () => {
                   Instance Storage
                 </Col>
                 <Col xs="4" sm="2" className="text-sm-right text-nowrap">
-                  {storageProduct && storageProduct.disk_space}
+                  {newInstance.data_volume_size_string}
                 </Col>
                 <Col xs="8" sm="4" className="text-sm-right text-nowrap">
-                  {storageProduct && storageProduct.priceStringWithInterval}
+                  {newInstance.storage_price_string_with_interval}
                 </Col>
               </Row>
               <hr />
@@ -138,10 +137,10 @@ export default () => {
               Instance RAM
             </Col>
             <Col xs="4" sm="2" className="text-sm-right text-nowrap">
-              {computeProduct?.ram}
+              {newInstance.compute_ram_string}
             </Col>
             <Col xs="8" sm="4" className="text-sm-right text-nowrap">
-              {computeProduct?.priceStringWithInterval}
+              {newInstance.compute_price_string_with_interval}
             </Col>
           </Row>
           <hr />
@@ -150,7 +149,7 @@ export default () => {
               Instance Total Price
             </Col>
             <Col sm="4" className="text-sm-right text-nowrap">
-              <b>{totalPrice ? `$${totalPrice.toFixed(2)}/${computeProduct && computeProduct.interval}` : 'FREE'}</b>
+              <b>{totalPriceString}</b>
             </Col>
           </Row>
         </CardBody>

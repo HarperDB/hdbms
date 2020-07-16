@@ -1,22 +1,53 @@
 import commaNumbers from '../util/commaNumbers';
 
-export default ({ id, amount_decimal, interval, amount, active, metadata: { ram_allocation, instance_type } }) => {
-  const price = parseInt(amount_decimal, 10) / 100;
-  const ramAllocation = ram_allocation ? parseInt(ram_allocation, 10) : false;
-  const commaAmount = commaNumbers(amount);
-  return (
-    ramAllocation && {
-      plan_id: id,
-      active,
-      price,
-      priceString: amount_decimal === '0' ? 'FREE' : `${commaAmount}`,
-      priceStringWithInterval: amount_decimal === '0' ? 'FREE' : `${commaAmount}/${interval}`,
-      ram: `${ramAllocation / 1024}GB`,
-      ram_allocation: ramAllocation,
-      instance_type,
+export default (plans) => {
+  const computeOptionsArray = [];
+
+  plans.map(
+    ({
+      id,
+      amount_decimal,
       interval,
-      label: `${ramAllocation / 1024}GB RAM | ${amount_decimal !== '0' ? `${commaAmount}/${interval}` : 'FREE'} ${!active ? '(legacy)' : ''}`,
-      value: id,
+      amount,
+      active,
+      subscription_id = undefined,
+      subscription_name = undefined,
+      quantity = undefined,
+      metadata: { ram_allocation, instance_type },
+    }) => {
+      const compute_price = subscription_id ? 0 : parseInt(amount_decimal, 10) / 100;
+      const compute_comma_amount = commaNumbers(amount);
+      const compute_price_string = subscription_id ? subscription_name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}`;
+      const compute_price_string_with_interval = subscription_id ? subscription_name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}/${interval}`;
+      const compute_ram = ram_allocation ? parseInt(ram_allocation, 10) : false;
+      const compute_ram_string = `${compute_ram / 1024}GB`;
+      const label = `${compute_ram_string} RAM | ${
+        subscription_id ? `${subscription_name} (${quantity} available)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
+      } ${!active ? '(legacy)' : ''}`;
+
+      return (
+        compute_ram &&
+        computeOptionsArray.push({
+          label,
+          value: {
+            active,
+            instance_type,
+            stripe_plan_id: id,
+            compute_interval: interval,
+            compute_subscription_name: subscription_name,
+            compute_subscription_id: subscription_id,
+            compute_quantity: quantity,
+            compute_ram,
+            compute_ram_string,
+            compute_price,
+            compute_comma_amount,
+            compute_price_string,
+            compute_price_string_with_interval,
+          },
+        })
+      );
     }
   );
+
+  return computeOptionsArray;
 };

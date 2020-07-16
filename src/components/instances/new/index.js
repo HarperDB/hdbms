@@ -29,13 +29,13 @@ export default () => {
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
-      setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
+      setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
     }
   };
 
   const finishOrder = () => {
     setNewInstance({});
-    setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
+    setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
   };
 
   return (

@@ -24,14 +24,8 @@ export default ({ closeAndResetModal }) => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
-    const newInstanceObject = { ...newInstance };
-    delete newInstanceObject.user;
-    delete newInstanceObject.pass;
-    delete newInstanceObject.super;
-    delete newInstanceObject.tc_version;
-
     addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version, customer_id: newInstance.customer_id });
-    const response = await addInstance({ auth, ...newInstanceObject });
+    const response = await addInstance({ auth, ...newInstance });
 
     if (response.error) {
       const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
