@@ -30,7 +30,17 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
     if (filtered.length) {
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
-      [{ newTotalRecords }] = await queryInstance({ operation: 'sql', sql: countSQL }, auth, url, compute_stack_id, customer_id, signal);
+      [{ newTotalRecords }] = await queryInstance(
+        {
+          operation: 'sql',
+          sql: countSQL,
+        },
+        auth,
+        url,
+        compute_stack_id,
+        customer_id,
+        signal
+      );
     } else {
       newTotalRecords = record_count;
     }
@@ -47,7 +57,17 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, compute_stack_id, customer_id, signal);
+      newData = await queryInstance(
+        {
+          operation: 'sql',
+          sql: dataSQL,
+        },
+        auth,
+        url,
+        compute_stack_id,
+        customer_id,
+        signal
+      );
 
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
@@ -67,7 +87,17 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance({ operation: 'sql', sql: dataSQL }, auth, url, compute_stack_id, customer_id, signal);
+      newData = await queryInstance(
+        {
+          operation: 'sql',
+          sql: dataSQL,
+        },
+        auth,
+        url,
+        compute_stack_id,
+        customer_id,
+        signal
+      );
 
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
@@ -77,19 +107,23 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
-  const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
-  orderedColumns.map((k) => (newEntityAttributes[k] = null));
-  orderedColumns.unshift(hashAttribute);
-  orderedColumns.push('__createdtime__');
-  orderedColumns.push('__updatedtime__');
+  const orderedColumns = allAttributes && allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
+  let dataTableColumns = null;
 
-  const dataTableColumns = orderedColumns.map((k) => ({
-    id: k.toString(),
-    Header: k.toString(),
-    accessor: (row) => row[k.toString()],
-    style: { height: 29, paddingTop: 10 },
-    Cell: (props) => handleCellValues(props.value),
-  }));
+  if (orderedColumns) {
+    orderedColumns.map((k) => (newEntityAttributes[k] = null));
+    orderedColumns.unshift(hashAttribute);
+    orderedColumns.push('__createdtime__');
+    orderedColumns.push('__updatedtime__');
+
+    dataTableColumns = orderedColumns.map((k) => ({
+      id: k.toString(),
+      Header: k.toString(),
+      accessor: (row) => row[k.toString()],
+      style: { height: 29, paddingTop: 10 },
+      Cell: (props) => handleCellValues(props.value),
+    }));
+  }
 
   return {
     newData: newData || [],
@@ -99,6 +133,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     hashAttribute,
     dataTableColumns,
     newSorted,
-    error: fetchError?.message === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError?.message,
+    error: fetchError === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError,
   };
 };
