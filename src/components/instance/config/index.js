@@ -47,7 +47,7 @@ export default () => {
               <span className="floating-card-header">update ram</span>
             </Col>
             <Col className="text-right">
-              {hasUnusedCompute && (
+              {!!hasUnusedCompute && (
                 <span className="floating-card-header">
                   show prepaid: <i onClick={() => setShowPrepaidCompute(!showPrepaidCompute)} className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
                 </span>
@@ -73,7 +73,7 @@ export default () => {
               <span className="floating-card-header">update storage</span>
             </Col>
             <Col className="text-right">
-              {hasUnusedStorage && (
+              {!!hasUnusedStorage && (
                 <span className="floating-card-header">
                   show prepaid: <i onClick={() => setShowPrepaidStorage(!showPrepaidStorage)} className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
                 </span>

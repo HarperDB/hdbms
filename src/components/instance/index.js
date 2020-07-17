@@ -58,6 +58,8 @@ export default () => {
     }
   };
 
+  useInterval(refreshUser, config.refresh_content_interval);
+
   const refreshSubscriptions = () => {
     if (auth && customer_id && stripe_id) {
       getSubscriptions({ auth, customer_id, stripe_id });
@@ -66,7 +68,7 @@ export default () => {
 
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
-  useInterval(refreshUser, config.refresh_content_interval);
+  useInterval(refreshSubscriptions, config.refresh_content_interval);
 
   const refreshInstances = () => {
     if (auth && products && regions && customer_id) {

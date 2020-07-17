@@ -58,6 +58,8 @@ const InstancesIndex = () => {
 
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
+  useInterval(refreshSubscriptions, config.refresh_content_interval);
+
   const refreshInstances = () => {
     if (auth && products && regions && customer_id) {
       getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
