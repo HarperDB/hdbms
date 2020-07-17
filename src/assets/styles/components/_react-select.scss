@@ -35,6 +35,9 @@
     color: $color-black;
     padding-bottom: 10px;
     padding-top: 10px;
+    white-space: nowrap !important;
+    overflow-y: hidden;
+    overflow-x: auto;
 
     &:last-child {
       border-bottom: 0;
@@ -45,5 +48,3 @@
     margin-top: 1px !important;
   }
 }
-
-

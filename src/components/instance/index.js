@@ -18,6 +18,7 @@ import getInstances from '../../api/lms/getInstances';
 import getCustomer from '../../api/lms/getCustomer';
 import config from '../../config';
 import userInfo from '../../api/instance/userInfo';
+import getSubscriptions from '../../api/lms/getSubscriptions';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -29,6 +30,7 @@ export default () => {
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
@@ -55,6 +57,14 @@ export default () => {
       }
     }
   };
+
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getSubscriptions({ auth, customer_id, stripe_id });
+    }
+  };
+
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   useInterval(refreshUser, config.refresh_content_interval);
 

@@ -6,10 +6,8 @@ import buildRadioSelectStorageOptions from '../../methods/products/buildRadioSel
 import buildRadioSelectProductOptions from '../../methods/products/buildRadioSelectProductOptions';
 
 export default async ({ auth, customer_id, stripe_id }) => {
-  let response = null;
-
   try {
-    response = await queryLMS({
+    const response = await queryLMS({
       endpoint: 'getSubscriptions',
       method: 'POST',
       payload: {
@@ -66,21 +64,12 @@ export default async ({ auth, customer_id, stripe_id }) => {
         )
     );
 
-    const cloudStorage =
-      subscriptions.cloudStorage.length && buildRadioSelectStorageOptions(subscriptions.cloudStorage).sort((a, b) => a.value.data_volume_size - b.value.data_volume_size);
-    const cloudCompute =
-      subscriptions.cloudCompute.length && buildRadioSelectProductOptions(subscriptions.cloudCompute).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
-    const localCompute =
-      subscriptions.localCompute.length && buildRadioSelectProductOptions(subscriptions.localCompute).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
-
-    subscriptions = {
-      cloudStorage,
-      cloudCompute,
-      localCompute,
-    };
-
     return appState.update((s) => {
-      s.subscriptions = subscriptions;
+      s.subscriptions = {
+        cloudStorage: buildRadioSelectStorageOptions(subscriptions.cloudStorage || []),
+        cloudCompute: buildRadioSelectProductOptions(subscriptions.cloudCompute || []),
+        localCompute: buildRadioSelectProductOptions(subscriptions.localCompute || []),
+      };
     });
   } catch (e) {
     console.log('getSubscriptions', e);

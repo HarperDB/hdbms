@@ -125,7 +125,7 @@ export default () => {
                 <Col xs="4" sm="2" className="text-sm-right text-nowrap">
                   {newInstance.data_volume_size_string}
                 </Col>
-                <Col xs="8" sm="4" className="text-sm-right text-nowrap">
+                <Col xs="8" sm="4" className="text-sm-right text-nowrap text-truncate">
                   {newInstance.storage_price_string_with_interval}
                 </Col>
               </Row>
@@ -139,7 +139,7 @@ export default () => {
             <Col xs="4" sm="2" className="text-sm-right text-nowrap">
               {newInstance.compute_ram_string}
             </Col>
-            <Col xs="8" sm="4" className="text-sm-right text-nowrap">
+            <Col xs="8" sm="4" className="text-sm-right text-nowrap text-truncate">
               {newInstance.compute_price_string_with_interval}
             </Col>
           </Row>

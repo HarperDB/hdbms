@@ -39,7 +39,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
         structure,
         defaultBrowseURL,
         loading: false,
-      }).map(([key, value]) => (s[key] = value));
+      }).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {});
     });
 
     return {

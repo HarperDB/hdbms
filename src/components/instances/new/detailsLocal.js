@@ -13,28 +13,44 @@ import ContentContainer from '../../shared/contentContainer';
 export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
-  const products = useStoreState(appState, (s) => s.products.localCompute.filter((p) => p.active));
-  const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [newInstance, setNewInstance] = useNewInstance({});
+  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.localCompute?.length);
+  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.localCompute || [] : s.products.localCompute.filter((p) => p.value.active)), [
+    newInstance.showPrepaidCompute,
+  ]);
+  const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({ stripe_plan_id: newInstance.stripe_plan_id || products[0].value });
-  const defaultValue =
-    products && newInstance.stripe_plan_id
-      ? products.find((p) => p.value === newInstance.stripe_plan_id)
-      : newInstance.ram_allocation
-      ? products.find((p) => p.ram_allocation === newInstance.ram_allocation)
-      : products[0];
+  const [formData, setFormData] = useState({ ...products[0]?.value, ...newInstance });
 
-  const computePrice = defaultValue?.price;
+  const selectedCompute =
+    products &&
+    formData.stripe_plan_id &&
+    products.find(
+      (p) => p.value.stripe_plan_id === formData.stripe_plan_id && (!formData.compute_subscription_id || p.value.storage_subscription_id === formData.compute_subscription_id)
+    );
+  const computePrice = selectedCompute?.value.compute_price;
   const isFree = !computePrice;
   const needsCard = products && !hasCard && !isFree;
+
+  const computeSubheader =
+    unusedProducts || newInstance.showPrepaidCompute ? (
+      <span>
+        show prepaid options:{' '}
+        <i
+          onClick={() => setNewInstance({ ...newInstance, showPrepaidCompute: !newInstance.showPrepaidCompute })}
+          className={`fa fa-lg fa-toggle-${newInstance.showPrepaidCompute ? 'on' : 'off'}`}
+        />
+      </span>
+    ) : (
+      ''
+    );
 
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id } = formData;
     if (submitted) {
       if (stripe_plan_id) {
-        setNewInstance({ ...newInstance, stripe_plan_id });
+        setNewInstance({ ...newInstance, ...formData });
         setTimeout(() => history.push(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
@@ -46,15 +62,15 @@ export default () => {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance RAM">
+          <ContentContainer header="Instance RAM" subheader={computeSubheader}>
             <RadioCheckbox
               className="radio-button"
               type="radio"
               required
-              onChange={(value) => setFormData({ ...formData, stripe_plan_id: value })}
+              onChange={(value) => setFormData({ ...formData, ...value })}
               options={products}
               value={formData.stripe_plan_id}
-              defaultValue={defaultValue}
+              defaultValue={selectedCompute || products[0]}
             />
           </ContentContainer>
         </CardBody>

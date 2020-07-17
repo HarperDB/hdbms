@@ -11,8 +11,6 @@ const InstanceList = () => {
     filterInstances({ filterSearch: s.filterSearch, filterCloud: s.filterCloud, filterLocal: s.filterLocal, instances: s.instances })
   );
 
-  console.log(instances);
-
   return instances.map((i) => <InstanceCard key={i.compute_stack_id} {...i} flippedCard={flippedCard} setFlippedCard={setFlippedCard} />);
 };
 

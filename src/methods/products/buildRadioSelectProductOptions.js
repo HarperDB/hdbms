@@ -22,7 +22,7 @@ export default (plans) => {
       const compute_ram = ram_allocation ? parseInt(ram_allocation, 10) : false;
       const compute_ram_string = `${compute_ram / 1024}GB`;
       const label = `${compute_ram_string} RAM | ${
-        subscription_id ? `${subscription_name} (${quantity} available)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
+        subscription_id ? `${subscription_name} (of ${quantity})` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return (
@@ -49,5 +49,5 @@ export default (plans) => {
     }
   );
 
-  return computeOptionsArray;
+  return computeOptionsArray.sort((a, b) => a.value.compute_ram - b.value.compute_ram);
 };

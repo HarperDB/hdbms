@@ -7,40 +7,20 @@ import addError from './addError';
 import config from '../../config';
 
 export default async () => {
-  let response = null;
-
   try {
-    response = await queryLMS({
+    const response = await queryLMS({
       endpoint: 'getProducts',
       method: 'POST',
     });
 
     if (response.error) return false;
 
-    let products = {
-      cloudStorage: [],
-      cloudCompute: [],
-      localCompute: [],
-    };
-
-    if (Array.isArray(response)) {
-      const localComputeOptions = response.find((p) => p.name === 'HarperDB Local Annual');
-      const cloudComputeOptions = response.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)');
-      const cloudStorageOptions = response.find((p) => p.name === 'HarperDB Cloud Storage');
-
-      const cloudStorage = cloudStorageOptions && buildRadioSelectStorageOptions(cloudStorageOptions.plans).sort((a, b) => a.value.data_volume_size - b.value.data_volume_size);
-      const cloudCompute = cloudComputeOptions && buildRadioSelectProductOptions(cloudComputeOptions.plans).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
-      const localCompute = localComputeOptions && buildRadioSelectProductOptions(localComputeOptions.plans).sort((a, b) => a.value.ram_allocation - b.value.ram_allocation);
-
-      products = {
-        cloudStorage,
-        cloudCompute,
-        localCompute,
-      };
-    }
-
     return appState.update((s) => {
-      s.products = products;
+      s.products = {
+        cloudStorage: buildRadioSelectStorageOptions(response.find((p) => p.name === 'HarperDB Cloud Storage')?.plans || []),
+        cloudCompute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)')?.plans || []),
+        localCompute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Local Annual')?.plans || []),
+      };
     });
   } catch (e) {
     console.log('getProducts', e);

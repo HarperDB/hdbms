@@ -15,7 +15,7 @@ export default (plans) => {
       const data_volume_size_string = data_volume_size === 1000 ? '1TB' : `${data_volume_size}GB`;
       const prepaid_disk_space = !quantity ? undefined : quantity > 1000 ? `${(quantity / 1024).toFixed(2)}TB` : `${quantity}GB`;
       const label = `${data_volume_size_string} | ${
-        subscription_id ? `${subscription_name} (${prepaid_disk_space} available)` : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE'
+        subscription_id ? `${subscription_name} (of ${prepaid_disk_space})` : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return storageOptionsArray.push({
@@ -36,5 +36,5 @@ export default (plans) => {
     });
   });
 
-  return storageOptionsArray;
+  return storageOptionsArray.sort((a, b) => a.value.data_volume_size - b.value.data_volume_size);
 };
