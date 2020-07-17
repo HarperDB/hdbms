@@ -13,7 +13,7 @@
   "author": "harperdb",
   "license": "UNLICENSED",
   "dependencies": {
-    "@nio/ui-kit": "^2.2.7",
+    "@nio/ui-kit": "^2.2.8",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
     "pullstate": "^1.15.4",
@@ -22,7 +22,7 @@
     "react-alert": "^7.0.2",
     "react-card-flip": "^1.0.10",
     "react-dom": "^16.13.1",
-    "react-dropzone": "^11.0.1",
+    "react-dropzone": "^11.0.2",
     "react-error-boundary": "^2.2.3",
     "react-json-editor-ajrm": "^2.5.9",
     "react-router": "^5.2.0",
@@ -37,7 +37,7 @@
     "whatwg-fetch": "^3.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/plugin-proposal-optional-chaining": "^7.10.4",
     "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
