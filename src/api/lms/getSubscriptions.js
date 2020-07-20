@@ -19,7 +19,7 @@ export default async ({ auth, customer_id, stripe_id }) => {
 
     if (response.error) return false;
 
-    let subscriptions = {
+    const subscriptions = {
       cloudCompute: [],
       cloudStorage: [],
       localCompute: [],
@@ -72,7 +72,6 @@ export default async ({ auth, customer_id, stripe_id }) => {
       };
     });
   } catch (e) {
-    console.log('getSubscriptions', e);
     return addError({
       type: 'lms data',
       status: 'error',

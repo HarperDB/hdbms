@@ -21,7 +21,6 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
   const stripe_storage_plan_id = useStoreState(instanceState, (s) => s.stripe_storage_plan_id);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ compute_stack_id, customer_id, data_volume_size, stripe_storage_plan_id });
-
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const compute = useStoreState(instanceState, (s) => s.compute);
@@ -31,17 +30,11 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
   const filteredSubscriptions = useStoreState(appState, (s) =>
     s.subscriptions.cloudStorage ? s.subscriptions.cloudStorage.filter((p) => p.value.data_volume_size >= data_volume_size) : []
   );
+  const products = showPrepaidStorage ? [...filteredSubscriptions, ...filteredProducts].sort((a, b) => a.value.data_volume_size - b.value.data_volume_size) : filteredProducts;
   const last_volume_resize = useStoreState(instanceState, (s) => s.last_volume_resize);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
-
-  const products = useStoreState(
-    appState,
-    (s) => (showPrepaidStorage ? [...filteredSubscriptions, ...filteredProducts].sort((a, b) => a.value.data_volume_size - b.value.data_volume_size) : filteredProducts),
-    [showPrepaidStorage]
-  );
-
   const selectedProduct =
     products &&
     formData.data_volume_size &&
@@ -52,7 +45,6 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
         p.value.stripe_storage_plan_id === formData.stripe_storage_plan_id &&
         ((!formData.storage_subscription_id && !p.value.storage_subscription_id) || p.value.storage_subscription_id === formData.storage_subscription_id)
     );
-
   const newTotal = (formData?.storage_price || 0) + (compute?.compute_price || 0);
   const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
   const hasChanged =
@@ -67,7 +59,6 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
     if (submitted) {
       setInstanceAction('Updating');
       const response = await updateInstance({ auth, ...formData });
-
       if (response.error) {
         alert.error('There was an error updating your instance. Please try again later.');
         setInstanceAction(false);
@@ -106,7 +97,6 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
         placeholder="Select Data Volume Size"
         styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
-
       {hasChanged && !newTotal && !is_local && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">
           <CardBody>

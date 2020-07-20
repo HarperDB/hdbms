@@ -21,7 +21,6 @@ export default ({ newEntityAttributes, hashAttribute }) => {
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
   const [rowValue, setRowValue] = useState({});
 

@@ -31,7 +31,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
   const { structure, defaultBrowseURL } = browseTableColumns(schema);
 
   if (!auth.super) {
-    instanceState.update((s) => {
+    instanceState.update(() => {
       Object.entries({
         ...thisInstance,
         auth,

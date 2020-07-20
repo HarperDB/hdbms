@@ -14,6 +14,7 @@ export default ({ instance, products, regions }) => {
 
     return { compute: compute.value, storage: storage.value, totalPrice, totalPriceString, totalPriceStringWithInterval, region };
   } catch (e) {
-    console.log(e);
+    // eslint-disable-next-line no-console
+    return console.log(e);
   }
 };

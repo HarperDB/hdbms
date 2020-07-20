@@ -15,7 +15,6 @@ import InstanceDetails from './instanceDetails';
 import Loader from '../../shared/loader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
-import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();

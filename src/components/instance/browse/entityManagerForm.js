@@ -16,7 +16,6 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const [entityName, setEntityName] = useState(false);
   const [nameError, toggleNameError] = useState(false);

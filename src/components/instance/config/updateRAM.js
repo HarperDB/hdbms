@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, SelectDropdown, Row, Col, RadioCheckbox } from '@nio/ui-kit';
+import { Button, Card, CardBody, SelectDropdown, Row, Col } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -30,11 +30,7 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'localCompute' : 'cloudCompute'].filter((p) => p.value.active));
   const filteredSubscriptions = useStoreState(appState, (s) => s.subscriptions[is_local ? 'localCompute' : 'cloudCompute'] || []);
-  const products = useStoreState(
-    appState,
-    (s) => (showPrepaidCompute ? [...filteredSubscriptions, ...filteredProducts].sort((a, b) => a.value.compute_ram - b.value.compute_ram) : filteredProducts),
-    [showPrepaidCompute]
-  );
+  const products = showPrepaidCompute ? [...filteredSubscriptions, ...filteredProducts].sort((a, b) => a.value.compute_ram - b.value.compute_ram) : filteredProducts;
   const selectedProduct =
     products &&
     formData.stripe_plan_id &&

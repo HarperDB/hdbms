@@ -6,7 +6,6 @@ import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
-
 import config from '../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';

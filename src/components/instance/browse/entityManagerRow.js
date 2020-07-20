@@ -14,7 +14,6 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const customer_id = useStoreState(instanceState, (s) => s.customer_id);
 

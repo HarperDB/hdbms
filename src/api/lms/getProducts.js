@@ -23,7 +23,6 @@ export default async () => {
       };
     });
   } catch (e) {
-    console.log('getProducts', e);
     return addError({
       type: 'lms data',
       status: 'error',
