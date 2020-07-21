@@ -12,7 +12,7 @@ export default ({ instance, products, regions }) => {
     const totalPriceStringWithInterval = totalPrice ? `$${commaNumbers(totalPrice.toFixed(2))}/${compute.value.compute_interval}` : 'FREE';
     const region = instance.is_local ? false : regions.find((r) => r.value === instance.instance_region);
 
-    return { compute: compute.value, storage: storage.value, totalPrice, totalPriceString, totalPriceStringWithInterval, region };
+    return { compute: compute?.value, storage: storage?.value, totalPrice, totalPriceString, totalPriceStringWithInterval, region };
   } catch (e) {
     // eslint-disable-next-line no-console
     return console.log(e);
