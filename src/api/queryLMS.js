@@ -35,7 +35,7 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
     }
 
     if (response.errorType) {
-      addError({ ...errorObject, error: response });
+      addError({ ...errorObject, status: 'warn', error: response });
 
       return {
         error: true,
