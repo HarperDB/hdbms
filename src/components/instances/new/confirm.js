@@ -20,7 +20,7 @@ export default () => {
   const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
   const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
-  const allPrePaid = newInstance.compute_subscription_id && newInstance.storage_subscription_id;
+  const allPrePaid = newInstance.compute_subscription_id && (newInstance.is_local || newInstance.storage_subscription_id);
   const somePrePaid = newInstance.compute_subscription_id || newInstance.storage_subscription_id;
   const totalPriceString = allPrePaid ? 'PREPAID' : totalPrice ? `$${totalPrice.toFixed(2)}/${newInstance.compute_interval}` : somePrePaid ? 'PREPAID / FREE' : 'FREE';
 
