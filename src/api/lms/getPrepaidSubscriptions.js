@@ -5,20 +5,25 @@ import buildRadioSelectProductOptions from '../../methods/products/buildRadioSel
 import buildRadioSelectStorageOptions from '../../methods/products/buildRadioSelectStorageOptions';
 import config from '../../config';
 
-export default async () => {
+export default async ({ auth, customer_id, stripe_id }) => {
   try {
     const response = await queryLMS({
-      endpoint: 'getProducts',
+      endpoint: 'getPrepaidSubscriptions',
       method: 'POST',
+      payload: {
+        customer_id,
+        stripe_id,
+      },
+      auth,
     });
 
     if (response.error) return false;
 
     return appState.update((s) => {
-      s.products = {
-        cloud_storage: buildRadioSelectStorageOptions(response.find((p) => p.name === 'HarperDB Cloud Storage')?.plans || []),
-        cloud_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)')?.plans || []),
-        local_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Local Annual')?.plans || []),
+      s.subscriptions = {
+        cloud_storage: buildRadioSelectStorageOptions(response.cloud_storage || []),
+        cloud_compute: buildRadioSelectProductOptions(response.cloud_compute || []),
+        local_compute: buildRadioSelectProductOptions(response.local_compute || []),
       };
     });
   } catch (e) {
@@ -26,7 +31,7 @@ export default async () => {
       type: 'lms data',
       status: 'error',
       url: config.lms_api_url,
-      operation: 'getProducts',
+      operation: 'getPrepaidSubscriptions',
       error: { catch: e.toString() },
     });
   }

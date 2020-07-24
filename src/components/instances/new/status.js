@@ -17,6 +17,7 @@ export default ({ closeAndResetModal }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const [newInstance] = useNewInstance({});
@@ -32,7 +33,7 @@ export default ({ closeAndResetModal }) => {
       setFormState({ submitted: false, error });
     } else {
       setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
-      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, instanceCount: instances?.length });
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length });
       alert.success(response.message);
       closeAndResetModal();
     }

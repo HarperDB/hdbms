@@ -14,10 +14,12 @@ export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
-  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.localCompute?.length);
-  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.localCompute || [] : s.products.localCompute.filter((p) => p.value.active)), [
-    newInstance.showPrepaidCompute,
-  ]);
+  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.local_compute?.length);
+  const products = useStoreState(
+    appState,
+    (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.local_compute || [] : s.products.local_compute.filter((p) => p.value.active)),
+    [newInstance.showPrepaidCompute]
+  );
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...products[0]?.value, ...newInstance });

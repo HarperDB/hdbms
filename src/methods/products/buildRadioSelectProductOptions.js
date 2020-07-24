@@ -11,18 +11,19 @@ export default (plans) => {
       amount,
       active,
       subscription_id = undefined,
-      subscription_name = undefined,
+      name = undefined,
       quantity = undefined,
+      available = undefined,
       metadata: { ram_allocation, instance_type },
     }) => {
       const compute_price = subscription_id ? 0 : parseInt(amount_decimal, 10) / 100;
       const compute_comma_amount = commaNumbers(amount);
-      const compute_price_string = subscription_id ? subscription_name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}`;
-      const compute_price_string_with_interval = subscription_id ? subscription_name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}/${interval}`;
+      const compute_price_string = subscription_id ? name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}`;
+      const compute_price_string_with_interval = subscription_id ? name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}/${interval}`;
       const compute_ram = ram_allocation ? parseInt(ram_allocation, 10) : false;
       const compute_ram_string = `${compute_ram / 1024}GB`;
       const label = `${compute_ram_string} RAM | ${
-        subscription_id ? `${subscription_name} (of ${quantity})` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
+        subscription_id ? `${name} (${available} of ${quantity} remaining)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return (
@@ -34,7 +35,7 @@ export default (plans) => {
             instance_type,
             stripe_plan_id: id,
             compute_interval: interval,
-            compute_subscription_name: subscription_name,
+            compute_subscription_name: name,
             compute_subscription_id: subscription_id,
             compute_quantity: quantity,
             compute_ram,

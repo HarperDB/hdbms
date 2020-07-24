@@ -16,12 +16,15 @@ export default () => {
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const [newInstance, setNewInstance] = useNewInstance({});
-  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.cloudCompute?.length);
-  const unusedStorage = useStoreState(appState, (s) => s.subscriptions?.cloudStorage?.length);
-  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.cloudCompute || [] : s.products.cloudCompute.filter((p) => p.value.active)), [
-    newInstance.showPrepaidCompute,
-  ]);
-  const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? s.subscriptions?.cloudStorage || [] : s.products.cloudStorage.filter((p) => p.value.active)), [
+  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.length);
+  const unusedStorage = useStoreState(appState, (s) => s.subscriptions?.cloud_storage?.length);
+  const products = useStoreState(
+    appState,
+    (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.cloud_compute || [] : s.products.cloud_compute.filter((p) => p.value.active)),
+    [newInstance.showPrepaidCompute]
+  );
+
+  const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? s.subscriptions?.cloud_storage || [] : s.products.cloud_storage.filter((p) => p.value.active)), [
     newInstance.showPrepaidStorage,
   ]);
   const regions = useStoreState(appState, (s) => s.regions);

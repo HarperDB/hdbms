@@ -22,15 +22,16 @@ export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name, [compute_stack_id]);
   const clustering = useStoreState(instanceState, (s) => s.clustering, [compute_stack_id]);
 
   const refreshInstances = useCallback(() => {
-    if (auth && products && regions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+    if (auth && products && regions && subscriptions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
     }
-  }, [auth, products, regions, customer_id]);
+  }, [auth, products, regions, customer_id, subscriptions]);
 
   useEffect(refreshInstances, []);
 

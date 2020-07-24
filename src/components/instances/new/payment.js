@@ -28,8 +28,8 @@ export default () => {
   const stripe = useStripe();
   const elements = useElements();
   const isLocal = newInstance.is_local;
-  const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
-  const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size);
+  const computeProduct = products[isLocal ? 'local_compute' : 'cloud_compute'].find((p) => p.value === newInstance.stripe_plan_id);
+  const storageProduct = isLocal ? { price: 0 } : products.cloud_storage.find((p) => p.value === newInstance.data_volume_size);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;

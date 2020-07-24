@@ -4,7 +4,7 @@ import generateInstanceProductDetails from '../../methods/instances/generateInst
 import addError from './addError';
 import config from '../../config';
 
-export default async ({ auth, customer_id, products, regions, instanceCount = 0 }) => {
+export default async ({ auth, customer_id, products, regions, subscriptions, instanceCount = 0 }) => {
   let response = null;
 
   try {
@@ -21,7 +21,7 @@ export default async ({ auth, customer_id, products, regions, instanceCount = 0 
     if (Array.isArray(response)) {
       const instances = response.map((instance) => {
         const thisInstance = instance;
-        const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions });
+        const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
         /* TODO: Move the licensing, loading, etc. management here. */
         return { ...thisInstance, ...instanceProductDetails };
       });

@@ -12,6 +12,8 @@ export default () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
   const compute = useStoreState(instanceState, (s) => s.compute);
+  const prepaid_compute = useStoreState(instanceState, (s) => !!s.compute_subscription_id);
+  const prepaid_storage = useStoreState(instanceState, (s) => !!s.storage_subscription_id);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const creation_date = useStoreState(instanceState, (s) => s.creation_date);
   const instance_region = useStoreState(instanceState, (s) => s.instance_region);
@@ -64,13 +66,17 @@ export default () => {
             </Col>
             <Col md="2" sm="4" xs="6">
               <ContentContainer header="RAM" className="mb-3">
-                <div className="nowrap-scroll">{compute?.compute_ram_string}</div>
+                <div className="nowrap-scroll">
+                  {compute?.compute_ram_string} {prepaid_compute && '(PREPAID)'}
+                </div>
               </ContentContainer>
             </Col>
             {!is_local && (
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Storage" className="mb-3 text-nowrap">
-                  <div className="nowrap-scroll">{storage?.data_volume_size_string}</div>
+                  <div className="nowrap-scroll">
+                    {storage?.data_volume_size_string} {prepaid_storage && '(PREPAID)'}
+                  </div>
                 </ContentContainer>
               </Col>
             )}

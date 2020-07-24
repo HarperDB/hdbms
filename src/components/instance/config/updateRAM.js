@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, SelectDropdown, Row, Col } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Row, SelectDropdown } from '@nio/ui-kit';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -7,7 +7,6 @@ import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
-
 import config from '../../../config';
 
 import ChangeSummary from './changeSummary';
@@ -18,40 +17,36 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
-  const stripe_plan_id = useStoreState(instanceState, (s) => s.stripe_plan_id);
-  const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({ compute_stack_id, customer_id, stripe_plan_id });
-
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const compute = useStoreState(instanceState, (s) => s.compute);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
-  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'localCompute' : 'cloudCompute'].filter((p) => p.value.active));
-  const filteredSubscriptions = useStoreState(appState, (s) => s.subscriptions[is_local ? 'localCompute' : 'cloudCompute'] || []);
-  const products = showPrepaidCompute ? [...filteredSubscriptions, ...filteredProducts].sort((a, b) => a.value.compute_ram - b.value.compute_ram) : filteredProducts;
-  const selectedProduct =
-    products &&
-    formData.stripe_plan_id &&
-    products.find(
-      (p) =>
-        p.value.stripe_plan_id === formData.stripe_plan_id &&
-        ((!formData.compute_subscription_id && !p.value.compute_subscription_id) || p.value.compute_subscription_id === formData.compute_subscription_id)
-    );
 
+  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : 'cloud_compute'].filter((p) => p.value.active));
+  const filteredSubscriptions = useStoreState(appState, (s) => s.subscriptions[is_local ? 'local_compute' : 'cloud_compute']);
+  const [formState, setFormState] = useState({});
+  const [formData, setFormData] = useState({ compute_stack_id, customer_id, ...compute });
+
+  const products = showPrepaidCompute ? filteredSubscriptions : filteredProducts;
+  const selectedProduct = products.find((p) => p.value.stripe_plan_id === formData.stripe_plan_id && p.value.compute_subscription_id === formData.compute_subscription_id);
   const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const newTotal = (storage?.storage_price || 0) + (formData?.compute_price || 0);
   const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
-  const hasChanged = stripe_plan_id !== formData.stripe_plan_id || (compute?.compute_subscription_id && formData.compute_subscription_id !== compute?.compute_subscription_id);
+  const hasChanged = compute?.stripe_plan_id !== formData.stripe_plan_id || formData.compute_subscription_id !== compute?.compute_subscription_id;
+
+  const resetFormData = () => setFormData({ compute_stack_id, customer_id, ...compute });
+
+  useAsyncEffect(resetFormData, [showPrepaidCompute]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
       if (!newTotal && !is_local && !canAddFreeCloudInstance) {
         alert.error(`You are limited to ${config.free_cloud_instance_limit} free cloud instance${config.free_cloud_instance_limit !== 1 ? 's' : ''}`);
-        setFormData({ ...formData, stripe_plan_id });
+        resetFormData();
         setFormState({});
       } else {
         setInstanceAction('Updating');
@@ -70,8 +65,6 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
       }
     }
   }, [formState]);
-
-  useAsyncEffect(() => setFormData({ compute_stack_id, customer_id, stripe_plan_id }), [showPrepaidCompute]);
 
   return is_being_modified ? (
     <Card className="error">
@@ -119,7 +112,7 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
           />
           <Row>
             <Col>
-              <Button onClick={() => setFormData({ compute_stack_id, customer_id, stripe_plan_id })} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button onClick={resetFormData} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

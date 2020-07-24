@@ -3,19 +3,24 @@ import commaNumbers from '../util/commaNumbers';
 export default (plans) => {
   const storageOptionsArray = [];
 
-  plans.map(({ tiers, interval, active, id, subscription_id = undefined, subscription_name = undefined, quantity = undefined }) => {
+  plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, quantity = undefined, available = undefined }) => {
     const freeTier = tiers.find((t) => !t.unit_amount).up_to;
     const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])].filter((s) => !quantity || (s !== freeTier && s <= quantity));
 
     return sizes.map((data_volume_size) => {
       const pricing_tier = tiers.find((p) => (p.up_to && data_volume_size <= p.up_to) || !p.up_to);
       const storage_price = subscription_id ? 0 : data_volume_size * (pricing_tier.unit_amount / 100);
-      const storage_price_string = subscription_id ? subscription_name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}` : 'FREE';
-      const storage_price_string_with_interval = subscription_id ? subscription_name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE';
+      const storage_price_string = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}` : 'FREE';
+      const storage_price_string_with_interval = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE';
       const data_volume_size_string = data_volume_size === 1000 ? '1TB' : `${data_volume_size}GB`;
       const prepaid_disk_space = !quantity ? undefined : quantity > 1000 ? `${(quantity / 1024).toFixed(2)}TB` : `${quantity}GB`;
+      const prepaid_disk_space_available = !available ? undefined : available > 1000 ? `${(available / 1024).toFixed(2)}` : available;
       const label = `${data_volume_size_string} | ${
-        subscription_id ? `${subscription_name} (of ${prepaid_disk_space})` : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE'
+        subscription_id
+          ? `${name} (${prepaid_disk_space_available} of ${prepaid_disk_space} remaining)`
+          : storage_price
+          ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}`
+          : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return storageOptionsArray.push({
@@ -26,7 +31,7 @@ export default (plans) => {
           storage_interval: interval,
           stripe_storage_plan_id: id,
           storage_subscription_id: subscription_id,
-          storage_subscription_name: subscription_name,
+          storage_subscription_name: name,
           storage_price,
           storage_price_string,
           storage_price_string_with_interval,
