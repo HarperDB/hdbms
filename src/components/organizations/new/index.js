@@ -107,7 +107,7 @@ export default () => {
                           title="subdomain"
                           value={formData.subdomain || ''}
                           disabled={formState.submitted}
-                          onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15) })}
+                          onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
                         />
                       </Col>
                     </Row>
