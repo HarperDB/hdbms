@@ -24,8 +24,14 @@ export default () => {
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const [instanceAction, setInstanceAction] = useState(false);
-  const hasUnusedCompute = useStoreState(appState, (s) => s.subscriptions && s.subscriptions[is_local ? 'cloud_compute' : 'cloud_compute']?.length);
-  const hasUnusedStorage = useStoreState(appState, (s) => s.subscriptions && s.subscriptions?.cloud_storage?.length);
+  const unusedCompute = useStoreState(
+    appState,
+    (s) => s.subscriptions[is_local ? 'local_compute' : 'cloud_compute']?.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || []
+  );
+  const unusedStorage = useStoreState(
+    appState,
+    (s) => s.subscriptions?.cloud_storage?.filter((p) => !p.value.storage_subscription_name || p.value.storage_quantity_available) || []
+  );
   const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
   const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
 
@@ -48,7 +54,7 @@ export default () => {
               <span className="floating-card-header">update ram</span>
             </Col>
             <Col className="text-right">
-              {!!hasUnusedCompute && (
+              {(!!compute_subscription_id || !!unusedCompute.length) && (
                 <span className="floating-card-header">
                   prepaid: <i onClick={() => setShowPrepaidCompute(!showPrepaidCompute)} className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
                 </span>
@@ -74,7 +80,7 @@ export default () => {
               <span className="floating-card-header">update storage</span>
             </Col>
             <Col className="text-right">
-              {!!hasUnusedStorage && (
+              {(!!storage_subscription_id || !!unusedStorage.length) && (
                 <span className="floating-card-header">
                   prepaid: <i onClick={() => setShowPrepaidStorage(!showPrepaidStorage)} className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
                 </span>

@@ -38,6 +38,7 @@ export default (plans) => {
             compute_subscription_name: name,
             compute_subscription_id: subscription_id,
             compute_quantity: quantity,
+            compute_quantity_available: available,
             compute_ram,
             compute_ram_string,
             compute_price,

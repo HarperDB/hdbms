@@ -14,12 +14,13 @@ export default () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
-  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.local_compute?.length);
-  const products = useStoreState(
+  const unusedCompute = useStoreState(
     appState,
-    (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.local_compute || [] : s.products.local_compute.filter((p) => p.value.active)),
-    [newInstance.showPrepaidCompute]
+    (s) => s.subscriptions?.local_compute.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || []
   );
+  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? unusedCompute : s.products.local_compute.filter((p) => p.value.active)), [
+    newInstance.showPrepaidCompute,
+  ]);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...products[0]?.value, ...newInstance });
@@ -35,7 +36,7 @@ export default () => {
   const needsCard = products && !hasCard && !isFree;
 
   const computeSubheader =
-    unusedProducts || newInstance.showPrepaidCompute ? (
+    unusedCompute.length || newInstance.showPrepaidCompute ? (
       <span>
         show prepaid options:{' '}
         <i

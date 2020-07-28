@@ -13,8 +13,8 @@ export default (plans) => {
       const storage_price_string = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}` : 'FREE';
       const storage_price_string_with_interval = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE';
       const data_volume_size_string = data_volume_size === 1000 ? '1TB' : `${data_volume_size}GB`;
-      const prepaid_disk_space = !quantity ? undefined : quantity > 1000 ? `${(quantity / 1024).toFixed(2)}TB` : `${quantity}GB`;
-      const prepaid_disk_space_available = !available ? undefined : available > 1000 ? `${(available / 1024).toFixed(2)}` : available;
+      const prepaid_disk_space = !quantity ? 0 : quantity > 1000 ? `${(quantity / 1024).toFixed(2)}TB` : `${quantity}GB`;
+      const prepaid_disk_space_available = !available ? 0 : available > 1000 ? `${(available / 1024).toFixed(2)}` : available;
       const label = `${data_volume_size_string} | ${
         subscription_id
           ? `${name} (${prepaid_disk_space_available} of ${prepaid_disk_space} remaining)`
@@ -32,6 +32,7 @@ export default (plans) => {
           stripe_storage_plan_id: id,
           storage_subscription_id: subscription_id,
           storage_subscription_name: name,
+          storage_quantity_available: available,
           storage_price,
           storage_price_string,
           storage_price_string_with_interval,

@@ -16,15 +16,21 @@ export default () => {
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const [newInstance, setNewInstance] = useNewInstance({});
-  const unusedProducts = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.length);
-  const unusedStorage = useStoreState(appState, (s) => s.subscriptions?.cloud_storage?.length);
-  const products = useStoreState(
+
+  const unusedCompute = useStoreState(
     appState,
-    (s) => (newInstance.showPrepaidCompute ? s.subscriptions?.cloud_compute || [] : s.products.cloud_compute.filter((p) => p.value.active)),
-    [newInstance.showPrepaidCompute]
+    (s) => s.subscriptions?.cloud_compute?.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || []
+  );
+  const unusedStorage = useStoreState(
+    appState,
+    (s) => s.subscriptions?.cloud_storage?.filter((p) => !p.value.storage_subscription_name || p.value.storage_quantity_available) || []
   );
 
-  const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? s.subscriptions?.cloud_storage || [] : s.products.cloud_storage.filter((p) => p.value.active)), [
+  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? unusedCompute : s.products.cloud_compute.filter((p) => p.value.active)), [
+    newInstance.showPrepaidCompute,
+  ]);
+
+  const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)), [
     newInstance.showPrepaidStorage,
   ]);
   const regions = useStoreState(appState, (s) => s.regions);
@@ -58,7 +64,7 @@ export default () => {
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
 
   const computeSubheader =
-    unusedProducts || newInstance.showPrepaidCompute ? (
+    unusedCompute.length || newInstance.showPrepaidCompute ? (
       <span>
         show prepaid options:{' '}
         <i
@@ -70,7 +76,7 @@ export default () => {
       'scroll for more'
     );
   const storageSubheader =
-    unusedStorage || newInstance.showPrepaidStorage ? (
+    unusedStorage.length || newInstance.showPrepaidStorage ? (
       <span>
         show prepaid options:{' '}
         <i

@@ -70,7 +70,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
 
   return !canChange ? (
     <Card className="error">
-      <CardBody>Limit 1 volume resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
+      <CardBody>1 resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
     </Card>
   ) : is_being_modified ? (
     <Card className="error">
@@ -91,7 +91,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
         placeholder="Select Data Volume Size"
         styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
-      {hasChanged && !newTotal && !is_local && !canAddFreeCloudInstance ? (
+      {hasChanged && !formData.storage_subscription_id && !newTotal && !is_local && !canAddFreeCloudInstance ? (
         <Card className="error mt-2">
           <CardBody>
             You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
