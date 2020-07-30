@@ -55,7 +55,7 @@ textarea {
 }
 
 .nio::before {
-  font-family: 'FontAwesome' !important;
+  font-family: 'FontAwesome', serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-style: normal;
@@ -106,8 +106,3 @@ textarea {
     color: $color-white !important;
   }
 }
-
-
-
-
-

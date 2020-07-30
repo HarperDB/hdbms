@@ -11,7 +11,7 @@ import getUser from '../../../api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
-const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState }) => {
+export default ({ customer_id, customer_name, setFlipState, flipState }) => {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -85,5 +85,3 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
     </ErrorBoundary>
   );
 };
-
-export default CardBackDelete;
