@@ -31,16 +31,16 @@ export default async ({ instances, auth, compute_stack_id }) => {
   const { structure, defaultBrowseURL } = browseTableColumns(schema);
 
   if (!auth.super) {
-    instanceState.update(() => {
-      Object.entries({
-        ...thisInstance,
-        auth,
-        schema,
-        structure,
-        defaultBrowseURL,
-        loading: false,
-      }).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {});
-    });
+    const activeInstanceObject = Object.entries({
+      ...thisInstance,
+      auth,
+      schema,
+      structure,
+      defaultBrowseURL,
+      loading: false,
+    }).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {});
+
+    instanceState.update(() => activeInstanceObject);
 
     return {
       error: false,
