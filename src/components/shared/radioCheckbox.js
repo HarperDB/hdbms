@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 export default ({ required, onChange, options, type, defaultValue, ...rest }) => {
-  const [optionsArray, setOptionsArray] = useState([]);
+  const optionsArray = !options.length ? [options] : options;
   const [value, setValue] = useState([]);
 
   const handleClick = (v) => {
@@ -23,16 +23,11 @@ export default ({ required, onChange, options, type, defaultValue, ...rest }) =>
 
   useEffect(() => {
     if (defaultValue) {
+      console.log('defaultValue', defaultValue);
       const valueArray = !defaultValue.length ? [defaultValue] : defaultValue;
       valueArray.forEach((v) => handleClick(v.value));
     }
-  }, [defaultValue]);
-
-  useEffect(() => {
-    if (options) {
-      setOptionsArray(!options.length ? [options] : options);
-    }
-  }, [options]);
+  }, []);
 
   return (
     <div {...rest}>
