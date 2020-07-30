@@ -15,7 +15,6 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
-    "bootstrap": "^4.5.0",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
     "pullstate": "^1.16.0",
     "query-string": "^6.13.1",
