@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router';
-import { Card, CardBody, Col } from '@nio/ui-kit';
+import { Card, CardBody, Col } from 'reactstrap';
 
 const NewInstanceCard = () => {
   const history = useHistory();

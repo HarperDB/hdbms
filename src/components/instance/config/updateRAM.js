@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Col, Row, SelectDropdown } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Row } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';

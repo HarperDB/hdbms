@@ -8,6 +8,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const cssNano = require('cssnano');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = {
@@ -38,6 +39,7 @@ module.exports = {
       patterns: [{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }, { from: path.join(__dirname, '/src/favicon.ico') }],
       options: { concurrency: 100 },
     }),
+    new BundleAnalyzerPlugin(),
   ],
 
   module: {
@@ -101,6 +103,8 @@ module.exports = {
     alias: {
       '/images/logo_circle.png': path.resolve(__dirname, 'src/assets/images/logo_circle.png'),
       '/images/logo_circle_only.png': path.resolve(__dirname, 'src/assets/images/logo_circle_only.png'),
+      react$: path.resolve(__dirname, 'node_modules/react/cjs/react.production.min.js'),
+      'react-dom$': path.resolve(__dirname, 'node_modules/react-dom/cjs/react-dom.production.min.js'),
     },
   },
 };

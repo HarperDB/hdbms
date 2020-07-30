@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, ModalHeader, ModalBody, Input, Button, Row, Col, Tooltip, Card, CardBody } from '@nio/ui-kit';
+import { Modal, ModalHeader, ModalBody, Input, Button, Row, Col, Tooltip, Card, CardBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';

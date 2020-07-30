@@ -1,5 +1,6 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, SelectDropdown } from '@nio/ui-kit';
+import { Navbar, Nav, NavItem } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';

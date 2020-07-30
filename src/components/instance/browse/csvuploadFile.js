@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Button } from '@nio/ui-kit';
+import { Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';

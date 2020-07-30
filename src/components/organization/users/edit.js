@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { CardBody, Card, Button, Col, Row } from '@nio/ui-kit';
+import { CardBody, Card, Button, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 

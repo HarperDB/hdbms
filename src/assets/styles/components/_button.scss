@@ -7,8 +7,11 @@
   padding-left: 5px;
   padding-right: 5px;
   transition: none !important;
-
-
+  height: 38px;
+  font-size: $font-size-root;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.no-shadow {
     box-shadow: none !important;
@@ -66,7 +69,4 @@
     border-color: $color-darkpurple !important;
     color: $color-white !important;
   }
-
-
 }
-

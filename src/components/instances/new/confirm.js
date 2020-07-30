@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
+import { Col, Row, Button, Card, CardBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import { useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import appState from '../../../state/appState';
 import config from '../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
+import RadioCheckbox from '../../shared/radioCheckbox';
 
 export default () => {
   const history = useHistory();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { Card, CardBody, Col } from '@nio/ui-kit';
+import { Card, CardBody, Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import addError from '../../../api/lms/addError';

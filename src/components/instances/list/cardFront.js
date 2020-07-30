@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';

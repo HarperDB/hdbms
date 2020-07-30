@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navbar, Nav, NavItem, NavLink as DumbLink } from '@nio/ui-kit';
+import { Navbar, Nav, NavItem, NavLink as DumbLink } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';

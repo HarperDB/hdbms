@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Input, Button, Row, Col, CardBody, Card } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 

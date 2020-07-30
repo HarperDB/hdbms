@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';

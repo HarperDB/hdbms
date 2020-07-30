@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';

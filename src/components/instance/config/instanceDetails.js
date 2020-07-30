@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../state/instanceState';

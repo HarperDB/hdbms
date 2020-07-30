@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav } from '@nio/ui-kit';
+import { Navbar, Nav } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import Local from './filter/local';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardBody, Card } from '@nio/ui-kit';
+import { CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';

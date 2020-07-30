@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody } from '@nio/ui-kit';
+import { Card, CardBody } from 'reactstrap';
 
 export default ({ header, subhead = ' ', height, status }) => (
   <Card className="form-status">

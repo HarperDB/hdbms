@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { Button, Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Input, Row, Button, Card, CardBody, RadioCheckbox } from '@nio/ui-kit';
+import { Col, Input, Row, Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import appState from '../../../state/appState';
 
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
+import RadioCheckbox from '../../shared/radioCheckbox';
 import registrationInfo from '../../../api/instance/registrationInfo';
 import isAlphaUnderscoreHyphen from '../../../methods/util/isAlphaUnderscoreHyphen';
 import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';

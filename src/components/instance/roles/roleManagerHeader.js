@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col } from 'reactstrap';
 
 export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
   <Row className="floating-card-header">

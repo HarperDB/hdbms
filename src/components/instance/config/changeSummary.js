@@ -1,4 +1,4 @@
-import { Col, Row, Card, CardBody } from '@nio/ui-kit';
+import { Col, Row, Card, CardBody } from 'reactstrap';
 import React from 'react';
 
 export default ({ which, compute, storage, total }) => (

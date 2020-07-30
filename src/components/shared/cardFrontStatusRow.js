@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from '@nio/ui-kit';
+import { Col, Row } from 'reactstrap';
 
 const CardFrontStatusRow = ({ label, value, textClass = '', isReady, bottomDivider = false }) => (
   <Row className="card-front-status-row text-darkgrey">

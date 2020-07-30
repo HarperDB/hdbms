@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
