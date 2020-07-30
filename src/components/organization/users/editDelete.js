@@ -10,7 +10,7 @@ import appState from '../../../state/appState';
 import updateOrgUser from '../../../api/lms/updateOrgUser';
 import getUsers from '../../../api/lms/getUsers';
 
-const DeleteOrgUser = () => {
+export default () => {
   const { user_id, customer_id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -57,5 +57,3 @@ const DeleteOrgUser = () => {
     </>
   );
 };
-
-export default DeleteOrgUser;

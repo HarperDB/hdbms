@@ -31,12 +31,11 @@
   hr,
   .item-row,
   .log-row,
-  .radio-button>div,
+  .radio-button > div,
   .modal-header,
   .card.error,
   .card.success,
-  .past-query,
-  .log-row {
+  .past-query {
     border-color: $faint-white-overlay !important;
   }
 
@@ -130,7 +129,6 @@
       .react-select__indicator-separator {
         background: $faint-white-overlay !important;
       }
-
     }
 
     .react-select__option,
@@ -149,7 +147,6 @@
     .react-select__menu {
       background: $color-pureblack !important;
     }
-
   }
 
   .drop-zone {
@@ -162,5 +159,4 @@
     background: $color-pureblack !important;
     color: $color-lightgrey !important;
   }
-
 }
