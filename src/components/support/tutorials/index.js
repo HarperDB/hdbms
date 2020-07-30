@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 

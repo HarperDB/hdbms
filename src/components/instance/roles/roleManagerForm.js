@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Input, Form } from '@nio/ui-kit';
+import { Row, Col, Button, Input, Form } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';

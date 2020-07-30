@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Button } from '@nio/ui-kit';
+import { Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
-
 import config from '../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';

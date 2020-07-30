@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col } from 'reactstrap';
 
 export default ({ end_datetime, start_datetime, status, message }) => (
   <div className="log-row">

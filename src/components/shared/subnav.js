@@ -1,5 +1,6 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, SelectDropdown } from '@nio/ui-kit';
+import { Navbar, Nav, NavItem } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';

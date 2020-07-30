@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button } from '@nio/ui-kit';
+import { Row, Col, Button } from 'reactstrap';
 
 export default ({ nodeNameMatch, setNodeNameMatch }) =>
   nodeNameMatch ? (

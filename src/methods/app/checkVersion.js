@@ -7,11 +7,15 @@ export default ({ apiVersion }) => {
     try {
       const localVersionArray = config.studio_version.split('.');
       const apiVersionArray = apiVersion.split('.');
+      const majorVersionUpdate = parseInt(localVersionArray[0], 10) < parseInt(apiVersionArray[0], 10);
+      const minorVersionUpdate = parseInt(localVersionArray[0], 10) === parseInt(apiVersionArray[0], 10) && parseInt(localVersionArray[1], 10) < parseInt(apiVersionArray[1], 10);
+      const patchVersionUpdate =
+        parseInt(localVersionArray[0], 10) === parseInt(apiVersionArray[0], 10) &&
+        parseInt(localVersionArray[1], 10) === parseInt(apiVersionArray[1], 10) &&
+        parseInt(localVersionArray[2], 10) < parseInt(apiVersionArray[2], 10);
 
-      for (let i = 0; i < localVersionArray.length; i += 1) {
-        if (parseInt(localVersionArray[i], 10) < parseInt(apiVersionArray[i], 10)) {
-          showVersionAlert = apiVersion;
-        }
+      if (majorVersionUpdate || minorVersionUpdate || patchVersionUpdate) {
+        showVersionAlert = apiVersion;
       }
     } catch (e) {
       return false;

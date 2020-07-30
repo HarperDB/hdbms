@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Row, Col, Card, CardBody, Tooltip } from '@nio/ui-kit';
+import { Input, Button, Row, Col, Card, CardBody, Tooltip } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button } from '@nio/ui-kit';
+import { Input, Button } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';

@@ -18,6 +18,7 @@ import getInstances from '../../api/lms/getInstances';
 import getCustomer from '../../api/lms/getCustomer';
 import config from '../../config';
 import userInfo from '../../api/instance/userInfo';
+import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -28,7 +29,9 @@ export default () => {
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id));
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
@@ -58,13 +61,23 @@ export default () => {
 
   useInterval(refreshUser, config.refresh_content_interval);
 
-  const refreshInstances = () => {
-    if (auth && products && regions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getPrepaidSubscriptions({ auth, customer_id, stripe_id });
     }
   };
 
-  useEffect(refreshInstances, [auth, products, regions, customer_id]);
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
+
+  useInterval(refreshSubscriptions, config.check_version_interval);
+
+  const refreshInstances = () => {
+    if (auth && products && regions && subscriptions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+    }
+  };
+
+  useEffect(refreshInstances, [auth, products, regions, customer_id, subscriptions]);
 
   const refreshInstance = async () => {
     if (instances && instanceAuth) {

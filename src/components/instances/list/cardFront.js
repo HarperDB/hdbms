@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
@@ -158,7 +158,12 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               bottomDivider
             />
             <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-            <CardFrontStatusRow label="LICENSE" isReady={isReady} value={`${compute?.ram || '...'} RAM / ${storage?.disk_space || 'DEVICE'} DISK`} bottomDivider />
+            <CardFrontStatusRow
+              label="LICENSE"
+              isReady={isReady}
+              value={`${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`}
+              bottomDivider
+            />
             <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
             <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
           </CardBody>

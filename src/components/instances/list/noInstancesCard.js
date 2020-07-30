@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Col } from '@nio/ui-kit';
+import { Card, CardBody, Col } from 'reactstrap';
 
 const NoInstancesCard = () => (
   <Col xs="12" md="6" lg="4" xl="3" className="mb-4">

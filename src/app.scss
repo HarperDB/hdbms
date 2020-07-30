@@ -1,5 +1,5 @@
 // external resources
-@import '~@nio/ui-kit/dist/nio';
+@import '~bootstrap/scss/bootstrap';
 @import '~react-table-6/react-table';
 
 // core styles
@@ -39,6 +39,8 @@
 @import 'assets/styles/components/structure-reloader';
 @import 'assets/styles/components/error-boundary';
 @import 'assets/styles/components/code';
+@import 'assets/styles/components/radio-checkbox';
+@import 'assets/styles/components/react-toggle';
 
 // override styles
 @import 'assets/styles/overrides/dark';

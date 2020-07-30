@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Button } from '@nio/ui-kit';
+import { Input, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';

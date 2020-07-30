@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Row, Col, Card, CardBody } from 'reactstrap';
 
 import CreditCard from './card';
 import Invoices from './invoices';

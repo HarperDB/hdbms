@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col } from 'reactstrap';
 
 export default ({ level, timestamp, message }) => (
   <div className="log-row">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, CardBody, Card } from '@nio/ui-kit';
+import { Button, Input, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';

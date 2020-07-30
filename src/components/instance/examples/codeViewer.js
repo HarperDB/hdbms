@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, SelectDropdown, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ErrorBoundary } from 'react-error-boundary';
 

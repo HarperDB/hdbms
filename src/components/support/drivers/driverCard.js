@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import ErrorFallback from '../../shared/errorFallback';

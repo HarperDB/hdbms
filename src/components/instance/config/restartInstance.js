@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Col, Input, Row } from '@nio/ui-kit';
+import { Button, Card, CardBody, Col, Input, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';

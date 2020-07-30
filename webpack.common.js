@@ -87,6 +87,22 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(png)$/i,
+        loader: 'url-loader',
+        options: {
+          limit: 8192,
+        },
+      },
     ],
+  },
+
+  resolve: {
+    alias: {
+      '/images/logo_circle.png': path.resolve(__dirname, 'src/assets/images/logo_circle.png'),
+      '/images/logo_circle_only.png': path.resolve(__dirname, 'src/assets/images/logo_circle_only.png'),
+      react$: path.resolve(__dirname, 'node_modules/react/cjs/react.production.min.js'),
+      'react-dom$': path.resolve(__dirname, 'node_modules/react-dom/cjs/react-dom.production.min.js'),
+    },
   },
 };

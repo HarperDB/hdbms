@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row } from '@nio/ui-kit';
+import { Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -18,6 +18,7 @@ import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../api/lms/getCustomer';
+import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
 
 const InstancesIndex = () => {
   const history = useHistory();
@@ -26,7 +27,9 @@ const InstancesIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const [mounted, setMounted] = useState(false);
@@ -48,13 +51,23 @@ const InstancesIndex = () => {
 
   useEffect(refreshCustomer, []);
 
-  const refreshInstances = () => {
-    if (auth && products && regions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getPrepaidSubscriptions({ auth, customer_id, stripe_id });
     }
   };
 
-  useEffect(refreshInstances, [auth, products, regions, customer_id]);
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
+
+  useInterval(refreshSubscriptions, config.refresh_content_interval);
+
+  const refreshInstances = () => {
+    if (auth && products && regions && subscriptions && customer_id) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+    }
+  };
+
+  useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
 
   useInterval(refreshInstances, config.refresh_content_interval);
 

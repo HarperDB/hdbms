@@ -1,4 +1,4 @@
-import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 

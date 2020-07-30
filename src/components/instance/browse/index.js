@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -15,6 +15,7 @@ import EmptyPrompt from './emptyPrompt';
 import StructureReloader from '../../shared/structureReloader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import useInstanceAuth from '../../../state/instanceAuths';
 
 const defaultTableState = {
   tableData: [],
@@ -39,6 +40,8 @@ export default () => {
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
+  const [instanceAuths] = useInstanceAuth({});
+  const showForm = instanceAuths[compute_stack_id]?.super;
 
   useEffect(() => {
     if (structure) {
@@ -70,8 +73,8 @@ export default () => {
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
           FallbackComponent={ErrorFallback}
         >
-          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm />
-          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm />}
+          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
+          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showForm} />}
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>

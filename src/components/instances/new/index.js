@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody } from '@nio/ui-kit';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -29,13 +29,13 @@ export default () => {
   const closeAndResetModal = () => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
-      setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
+      setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
     }
   };
 
   const finishOrder = () => {
     setNewInstance({});
-    setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
+    setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
   };
 
   return (

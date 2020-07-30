@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactCardFlip from 'react-card-flip';
-import { Col } from '@nio/ui-kit';
+import { Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import CardFront from './cardFront';

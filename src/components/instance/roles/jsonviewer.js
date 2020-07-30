@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
-import { Button } from '@nio/ui-kit';
+import { Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';

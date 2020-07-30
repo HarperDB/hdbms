@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Input, Button, SelectDropdown } from '@nio/ui-kit';
+import { Input, Button } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';

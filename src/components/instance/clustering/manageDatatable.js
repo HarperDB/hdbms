@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table-6';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';

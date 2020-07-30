@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
-import { Row, Col, Button, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col, Button, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
