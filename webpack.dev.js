@@ -2,6 +2,7 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = merge(common, {
@@ -20,4 +21,5 @@ module.exports = merge(common, {
   output: {
     publicPath: '/',
   },
+  plugins: [new BundleAnalyzerPlugin()],
 });

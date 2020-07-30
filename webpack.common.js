@@ -8,7 +8,6 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const cssNano = require('cssnano');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = {
@@ -39,7 +38,6 @@ module.exports = {
       patterns: [{ from: path.join(__dirname, '/src/assets/images/'), to: 'images/' }, { from: path.join(__dirname, '/src/favicon.ico') }],
       options: { concurrency: 100 },
     }),
-    new BundleAnalyzerPlugin(),
   ],
 
   module: {
