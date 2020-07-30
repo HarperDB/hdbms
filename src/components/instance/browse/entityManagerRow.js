@@ -52,7 +52,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
   const confirmItemForDrop = () => {
     toggleConfirmDropItem(false);
     setConfirmedDropItem(true);
-    handleDropItem(item);
+    handleDropItem();
   };
 
   const cancelConfirmDrop = () => {

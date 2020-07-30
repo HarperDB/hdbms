@@ -68,11 +68,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
     }
   }, [formState]);
 
-  return !canChange ? (
-    <Card className="error">
-      <CardBody>1 resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
-    </Card>
-  ) : is_being_modified ? (
+  return is_being_modified ? (
     <Card className="error">
       <CardBody>this instance is being modified. please wait.</CardBody>
     </Card>
@@ -96,6 +92,10 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
           <CardBody>
             You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
           </CardBody>
+        </Card>
+      ) : hasChanged && !canChange ? (
+        <Card className="error mt-2">
+          <CardBody>1 resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
         </Card>
       ) : hasChanged && (formData?.storage_price || compute?.compute_price) && !hasCard ? (
         <Button

@@ -9,7 +9,7 @@ import appState from '../../../state/appState';
 import updateOrgUser from '../../../api/lms/updateOrgUser';
 import getUsers from '../../../api/lms/getUsers';
 
-const EditOrgUserRole = () => {
+export default () => {
   const { user_id } = useParams();
   const { pathname } = useLocation();
   const { customer_id } = useParams();
@@ -59,5 +59,3 @@ const EditOrgUserRole = () => {
     </>
   );
 };
-
-export default EditOrgUserRole;

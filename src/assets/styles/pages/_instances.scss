@@ -96,7 +96,7 @@
       &::after {
         color: $color-danger;
         content: '\f00d';
-        font-family: 'FontAwesome' !important;
+        font-family: 'FontAwesome', monospace !important;
         font-size: 14px;
         left: 0;
         position: absolute;
