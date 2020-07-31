@@ -9,7 +9,6 @@ import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
 import config from '../config';
 
-import TopNav from './topnav';
 import Loader from './shared/loader';
 import Maintenance from './shared/maintenance';
 import ErrorFallback from './shared/errorFallback';
@@ -23,6 +22,7 @@ import checkVersion from '../methods/app/checkVersion';
 import init from '../methods/app/init';
 import refreshUser from '../methods/app/refreshUser';
 
+const TopNav = lazy(() => import('./topnav'));
 const SignUp = lazy(() => import('./auth/signUp'));
 const SignIn = lazy(() => import('./auth/signIn'));
 const ResetPassword = lazy(() => import('./auth/resetPassword'));
@@ -89,7 +89,9 @@ export default () => {
           </ErrorBoundary>
         ) : loggedIn ? (
           <>
-            <TopNav />
+            <Suspense fallback={<Loader header=" " spinner />}>
+              <TopNav />
+            </Suspense>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Suspense fallback={<Loader header=" " spinner />}>
                 <Switch>

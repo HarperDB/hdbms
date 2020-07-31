@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -122,11 +122,13 @@ export default () => {
     <>
       <SubNav routes={hydratedRoutes} />
       {isOrgUser && instances && !loadingInstance ? (
-        <Switch>
-          {hydratedRoutes.map((route) => (
-            <Route key={route.path} path={route.path} component={route.component} />
-          ))}
-        </Switch>
+        <Suspense fallback={<Loader header=" " spinner />}>
+          <Switch>
+            {hydratedRoutes.map((route) => (
+              <Route key={route.path} path={route.path} component={route.component} />
+            ))}
+          </Switch>
+        </Suspense>
       ) : (
         <Loader header="loading instance" spinner />
       )}

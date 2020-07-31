@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -7,15 +7,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 
-import DataTable from './datatable';
-import EntityManager from './entityManager';
-import JSONViewer from './jsonviewer';
-import CSVUpload from './csvupload';
-import EmptyPrompt from './emptyPrompt';
-import StructureReloader from '../../shared/structureReloader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 import useInstanceAuth from '../../../state/instanceAuths';
+
+const DataTable = lazy(() => import('./datatable'));
+const EntityManager = lazy(() => import('./entityManager'));
+const JSONViewer = lazy(() => import('./jsonviewer'));
+const CSVUpload = lazy(() => import('./csvupload'));
+const EmptyPrompt = lazy(() => import('./emptyPrompt'));
+const StructureReloader = lazy(() => import('../../shared/structureReloader'));
 
 const defaultTableState = {
   tableData: [],

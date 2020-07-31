@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
-import DataTable from './datatable';
 import AddUserForm from './add';
-import EditUser from './edit';
+import Loader from '../../shared/loader';
+
+const DataTable = lazy(() => import('./datatable'));
+const EditUser = lazy(() => import('./edit'));
 
 export default () => {
   const { username } = useParams();
@@ -20,7 +22,7 @@ export default () => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        {username ? <EditUser /> : <DataTable />}
+        <Suspense fallback={<Loader header=" " spinner />}>{username ? <EditUser /> : <DataTable />}</Suspense>
       </Col>
     </Row>
   );

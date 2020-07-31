@@ -1,5 +1,7 @@
-import Users from './users';
-import Billing from './billing';
+import { lazy } from 'react';
+
+const Users = lazy(() => import('./users'));
+const Billing = lazy(() => import('./billing'));
 
 export default ({ customer_id }) => [
   {

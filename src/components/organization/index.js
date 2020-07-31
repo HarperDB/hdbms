@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -8,6 +8,7 @@ import SubNav from '../shared/subnav';
 import appState from '../../state/appState';
 import getCustomer from '../../api/lms/getCustomer';
 import config from '../../config';
+import Loader from '../shared/loader';
 
 export default () => {
   const { customer_id } = useParams();
@@ -29,12 +30,14 @@ export default () => {
   return isOrgOwner ? (
     <>
       <SubNav routes={hydratedRoutes} />
-      <Switch>
-        {hydratedRoutes.map((route) => (
-          <Route key={route.path} path={route.path} component={route.component} />
-        ))}
-        <Redirect to={`/o/${customer_id}/users`} />
-      </Switch>
+      <Suspense fallback={<Loader header=" " spinner />}>
+        <Switch>
+          {hydratedRoutes.map((route) => (
+            <Route key={route.path} path={route.path} component={route.component} />
+          ))}
+          <Redirect to={`/o/${customer_id}/users`} />
+        </Switch>
+      </Suspense>
     </>
   ) : isOrgUser ? (
     <Redirect to={`/o/${customer_id}/instances`} />

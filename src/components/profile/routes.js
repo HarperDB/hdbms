@@ -1,4 +1,6 @@
-import Profile from './profile';
+import { lazy } from 'react';
+
+const Profile = lazy(() => import('./profile'));
 
 export default [
   {

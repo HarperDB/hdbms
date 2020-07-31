@@ -96,7 +96,7 @@ export default ({ showCustomMessage }) => {
               {methodObject?.request?.description && (
                 <>
                   <hr />
-                  <div dangerouslySetInnerHTML={{ __html: methodObject?.request?.description }} />
+                  <div className="mb-3" dangerouslySetInnerHTML={{ __html: methodObject?.request?.description }} />
                 </>
               )}
             </Col>

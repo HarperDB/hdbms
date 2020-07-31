@@ -1,8 +1,10 @@
-import Resources from './resources';
-import Installation from './installation';
-import Drivers from './drivers';
-import Tutorials from './tutorials';
-import Examples from './examples';
+import { lazy } from 'react';
+
+const Resources = lazy(() => import('./resources'));
+const Installation = lazy(() => import('./installation'));
+const Drivers = lazy(() => import('./drivers'));
+const Tutorials = lazy(() => import('./tutorials'));
+const Examples = lazy(() => import('./examples'));
 
 export default [
   {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Row, Col, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
@@ -6,8 +6,10 @@ import { useStoreState } from 'pullstate';
 import instanceState from '../../../state/instanceState';
 
 import EntityManager from './roleManager';
-import JSONViewer from './jsonviewer';
 import StructureReloader from '../../shared/structureReloader';
+import Loader from '../../shared/loader';
+
+const JSONViewer = lazy(() => import('./jsonviewer'));
 
 const defaultState = {
   roleName: false,
@@ -58,7 +60,9 @@ export default () => {
         {formState.canEdit ? (
           <Card className="my-3">
             <CardBody className="full-height">
-              <JSONViewer />
+              <Suspense fallback={<Loader header=" " spinner />}>
+                <JSONViewer />
+              </Suspense>
             </CardBody>
           </Card>
         ) : (
