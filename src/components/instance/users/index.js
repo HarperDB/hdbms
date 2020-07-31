@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom';
 import AddUserForm from './add';
 import Loader from '../../shared/loader';
 
-const DataTable = lazy(() => import('./datatable'));
-const EditUser = lazy(() => import('./edit'));
+const DataTable = lazy(() => import(/* webpackChunkName: "instance-users-datatable" */ './datatable'));
+const EditUser = lazy(() => import(/* webpackChunkName: "instance-users-edit" */ './edit'));
 
 export default () => {
   const { username } = useParams();

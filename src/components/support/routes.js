@@ -1,10 +1,10 @@
 import { lazy } from 'react';
 
-const Resources = lazy(() => import('./resources'));
-const Installation = lazy(() => import('./installation'));
-const Drivers = lazy(() => import('./drivers'));
-const Tutorials = lazy(() => import('./tutorials'));
-const Examples = lazy(() => import('./examples'));
+const Resources = lazy(() => import(/* webpackChunkName: "support-resources" */ './resources'));
+const Installation = lazy(() => import(/* webpackChunkName: "support-installation" */ './installation'));
+const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './drivers'));
+const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ './tutorials'));
+const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ './examples'));
 
 export default [
   {

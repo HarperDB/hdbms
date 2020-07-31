@@ -11,12 +11,12 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 import useInstanceAuth from '../../../state/instanceAuths';
 
-const DataTable = lazy(() => import('./datatable'));
-const EntityManager = lazy(() => import('./entityManager'));
-const JSONViewer = lazy(() => import('./jsonviewer'));
-const CSVUpload = lazy(() => import('./csvupload'));
-const EmptyPrompt = lazy(() => import('./emptyPrompt'));
-const StructureReloader = lazy(() => import('../../shared/structureReloader'));
+const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './datatable'));
+const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './entityManager'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './jsonviewer'));
+const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './csvupload'));
+const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './emptyPrompt'));
+const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/structureReloader'));
 
 const defaultTableState = {
   tableData: [],

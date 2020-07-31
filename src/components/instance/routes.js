@@ -1,14 +1,13 @@
 import { lazy } from 'react';
 
-const Browse = lazy(() => import('./browse'));
-const Query = lazy(() => import('./query'));
-const Clustering = lazy(() => import('./clustering'));
-const Config = lazy(() => import('./config'));
-const Metrics = lazy(() => import('./metrics'));
-const Users = lazy(() => import('./users'));
-const Roles = lazy(() => import('./roles'));
-const Examples = lazy(() => import('./examples'));
-
+const Browse = lazy(() => import(/* webpackChunkName: "instance-browse" */ './browse'));
+const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
+const Clustering = lazy(() => import(/* webpackChunkName: "instance-clustering" */ './clustering'));
+const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
+const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './metrics'));
+const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
+const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
+const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 export default ({ super_user }) => {
   const standardRoutes = [

@@ -9,7 +9,7 @@ import EntityManager from './roleManager';
 import StructureReloader from '../../shared/structureReloader';
 import Loader from '../../shared/loader';
 
-const JSONViewer = lazy(() => import('./jsonviewer'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './jsonviewer'));
 
 const defaultState = {
   roleName: false,

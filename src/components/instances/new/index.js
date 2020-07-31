@@ -13,14 +13,14 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 import Loader from '../../shared/loader';
 
-const InstanceTypeForm = lazy(() => import('./type'));
-const CloudMetadataForm = lazy(() => import('./metaCloud'));
-const LocalMetadataForm = lazy(() => import('./metaLocal'));
-const LocalInstanceForm = lazy(() => import('./detailsLocal'));
-const CloudInstanceForm = lazy(() => import('./detailsCloud'));
-const CustomerPaymentForm = lazy(() => import('./payment'));
-const ConfirmOrderForm = lazy(() => import('./confirm'));
-const OrderStatus = lazy(() => import('./status'));
+const InstanceTypeForm = lazy(() => import(/* webpackChunkName: "newinstance-type" */ './type'));
+const CloudMetadataForm = lazy(() => import(/* webpackChunkName: "newinstance-metaCloud" */ './metaCloud'));
+const LocalMetadataForm = lazy(() => import(/* webpackChunkName: "newinstance-metaLocal" */ './metaLocal'));
+const LocalInstanceForm = lazy(() => import(/* webpackChunkName: "newinstance-detailsLocal" */ './detailsLocal'));
+const CloudInstanceForm = lazy(() => import(/* webpackChunkName: "newinstance-detailsCloud" */ './detailsCloud'));
+const CustomerPaymentForm = lazy(() => import(/* webpackChunkName: "newinstance-payment" */ './payment'));
+const ConfirmOrderForm = lazy(() => import(/* webpackChunkName: "newinstance-confirm" */ './confirm'));
+const OrderStatus = lazy(() => import(/* webpackChunkName: "newinstance-status" */ './status'));
 
 export default () => {
   const history = useHistory();
