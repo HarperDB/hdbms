@@ -23,9 +23,7 @@ export default ({ required, onChange, options, type, defaultValue, ...rest }) =>
 
   useEffect(() => {
     if (defaultValue) {
-      console.log('defaultValue', defaultValue);
-      const valueArray = !defaultValue.length ? [defaultValue] : defaultValue;
-      valueArray.forEach((v) => handleClick(v.value));
+      handleClick(defaultValue.value);
     }
   }, []);
 
