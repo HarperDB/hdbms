@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import appState from '../../../state/appState';
+import Code from '../../shared/code';
 
 export default () => {
   const version = useStoreState(appState, (s) => s.version);
@@ -22,10 +21,10 @@ export default () => {
               </a>
               <hr />
               Once you&apos;ve installed NodeJS and NPM, execute the following command line operations to install HarperDB.
-              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+              <Code className="mt-3">
                 {`npm i -g harperdb
 harperdb install`}
-              </SyntaxHighlighter>
+              </Code>
             </CardBody>
           </Card>
         </Col>
@@ -39,10 +38,10 @@ harperdb install`}
               </Button>
               <hr />
               Once you move the downloaded file to the device, execute the following command line operations to install HarperDB.
-              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+              <Code className="mt-3">
                 {`npm i -g harperdb-${version?.number || '...'}.tgz
 harperdb install`}
-              </SyntaxHighlighter>
+              </Code>
             </CardBody>
           </Card>
         </Col>
@@ -51,23 +50,19 @@ harperdb install`}
           <Card className="my-3">
             <CardBody className="installation">
               Running HarperDB in a Docker container is as easy as fetching a stick.
-              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
-                docker run -d -p harperdb/hdb
-              </SyntaxHighlighter>
+              <Code className="mt-3">docker run -d -p harperdb/hdb</Code>
               <hr />
               Add a volume to persist data
-              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
-                -v &lt;host-data-path&gt;:/opt/harperdb/hdb
-              </SyntaxHighlighter>
+              <Code className="mt-3">-v &lt;host-data-path&gt;:/opt/harperdb/hdb</Code>
               <hr />
               Add initial config arguments (default):
-              <SyntaxHighlighter className="mt-3" language="bash" style={atomDark}>
+              <Code className="mt-3">
                 {`--INIT_HDB_USERNAME ("HDB_ADMIN")
 --INIT_HDB_PASSWORD ("password")
 --INIT_CLUSTER_USERNAME ("cluster_user")
 --INIT_CLUSTER_PASSWORD("password")
 --INIT_NODE_NAME ("docker_node")`}
-              </SyntaxHighlighter>
+              </Code>
             </CardBody>
           </Card>
         </Col>

@@ -11,6 +11,7 @@ import config from '../../../config';
 import useNewInstance from '../../../state/newInstance';
 import CouponForm from '../../shared/couponForm';
 import RadioCheckbox from '../../shared/radioCheckbox';
+import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default () => {
   const history = useHistory();
@@ -23,7 +24,13 @@ export default () => {
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
   const allPrePaid = newInstance.compute_subscription_id && (newInstance.is_local || newInstance.storage_subscription_id);
   const somePrePaid = newInstance.compute_subscription_id || newInstance.storage_subscription_id;
-  const totalPriceString = allPrePaid ? 'PREPAID' : totalPrice ? `$${totalPrice.toFixed(2)}/${newInstance.compute_interval}` : somePrePaid ? 'PREPAID / FREE' : 'FREE';
+  const totalPriceString = allPrePaid
+    ? 'PREPAID'
+    : totalPrice
+    ? `$${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
+    : somePrePaid
+    ? 'PREPAID / FREE'
+    : 'FREE';
 
   useAsyncEffect(() => {
     const { submitted } = formState;

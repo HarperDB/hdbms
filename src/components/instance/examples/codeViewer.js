@@ -3,8 +3,6 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
@@ -15,6 +13,7 @@ import languages from '../../../methods/examples/languages';
 import getMethodObject from '../../../methods/examples/getMethodObject';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import Code from '../../shared/code';
 
 export default ({ showCustomMessage }) => {
   const { customer_id, compute_stack_id, folder, method } = useParams();
@@ -100,9 +99,7 @@ export default ({ showCustomMessage }) => {
             </Col>
             <Col xl="6" xs="12">
               {codeText && language ? (
-                <SyntaxHighlighter language={language.syntax_mode} style={atomDark}>
-                  {codeText}
-                </SyntaxHighlighter>
+                <Code>{codeText}</Code>
               ) : (
                 <div className="py-5 text-center">
                   <i className="fa fa-spinner fa-spin text-purple" />
