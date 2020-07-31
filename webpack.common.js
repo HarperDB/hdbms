@@ -31,7 +31,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html'),
       inject: 'body',
-      inlineSource: '.(js|css)$',
     }),
     new MiniCssExtractPlugin({ filename: '[hash].css' }),
     new CopyWebpackPlugin({
@@ -64,10 +63,6 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: true,
-              reloadAll: true,
-            },
           },
           {
             loader: 'css-loader',
