@@ -26,7 +26,11 @@ export default () => {
     }
   }, [auth, customer_id]);
 
-  useEffect(() => refreshUsers(), []);
+  useEffect(
+    () => refreshUsers(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useInterval(() => refreshUsers(), config.refresh_content_interval);
 

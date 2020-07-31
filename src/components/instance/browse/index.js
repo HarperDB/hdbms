@@ -64,6 +64,7 @@ export default () => {
           setEntities({ schemas, tables, activeTable });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
 
   return (

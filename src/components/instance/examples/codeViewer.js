@@ -30,12 +30,14 @@ export default ({ showCustomMessage }) => {
       const newMethodObject = getMethodObject(postmanCollection, folder, method);
       setMethodObject(newMethodObject);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postmanCollection, method]);
 
   useEffect(() => {
     if (!language) {
       setLanguage(languages[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export default ({ showCustomMessage }) => {
         setCodeText('You do not yet have a valid snippet generator for this language.');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methodObject, language]);
 
   return (

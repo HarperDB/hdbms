@@ -18,6 +18,7 @@ export default ({ setQuery, query }) => {
       setFormData(query.query || query);
       submitRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default ({ setQuery, query }) => {
       setFormData('');
       setFormState({ submitted: false });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formState]);
 
   return (

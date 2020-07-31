@@ -1,35 +1,35 @@
 .radio-checkbox {
-  display: inline-block;
   border: 1px solid $color-lightgrey;
   border-radius: 10px;
-  height: 20px;
-  width: 20px;
   box-shadow: none !important;
-  text-align: center;
   color: $color-white;
-  position: relative;
   cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  position: relative;
+  text-align: center;
+  width: 20px;
 
   .dot {
-    visibility: hidden;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 0;
     background: $color-purple;
     border: 5px solid $color-white;
+    border-radius: 50%;
+    height: 18px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    width: 18px;
   }
 
   .checkmark {
-    visibility: hidden;
     font-size: 12px;
-    position: absolute;
-    top: 1px;
-    right: 0;
-    left: 0;
     font-weight: bold;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 1px;
+    visibility: hidden;
   }
 
   &.show {
@@ -48,9 +48,9 @@
 
 .radio-checkbox-label {
   display: inline-block;
-  margin-left: 20px;
-  line-height: 1;
-  margin-top: 3px;
   height: 20px;
+  line-height: 1;
+  margin-left: 20px;
+  margin-top: 3px;
   vertical-align: top;
 }

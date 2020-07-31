@@ -1,11 +1,14 @@
-import Browse from './browse';
-import Query from './query';
-import Clustering from './clustering';
-import Config from './config';
-import Metrics from './metrics';
-import Users from './users';
-import Roles from './roles';
-import Examples from './examples';
+import { lazy } from 'react';
+
+const Browse = lazy(() => import('./browse'));
+const Query = lazy(() => import('./query'));
+const Clustering = lazy(() => import('./clustering'));
+const Config = lazy(() => import('./config'));
+const Metrics = lazy(() => import('./metrics'));
+const Users = lazy(() => import('./users'));
+const Roles = lazy(() => import('./roles'));
+const Examples = lazy(() => import('./examples'));
+
 
 export default ({ super_user }) => {
   const standardRoutes = [

@@ -72,6 +72,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     if (entityName && items.find((i) => i === entityName)) {
       history.push(`${baseUrl}/${entityName}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   return (

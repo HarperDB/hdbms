@@ -45,6 +45,7 @@ export default ({ type }) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postmanCollection, folder]);
 
   return (

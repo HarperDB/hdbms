@@ -41,6 +41,7 @@ const InstancesIndex = () => {
     if (action === 'login') {
       alert.error('Please log in to that instance');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const refreshCustomer = () => {
@@ -80,6 +81,7 @@ const InstancesIndex = () => {
     } else if (mounted && instances) {
       alert.success('You are no longer an owner of this organization');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOrgOwner, isOrgUser?.status]);
 
   useAsyncEffect(

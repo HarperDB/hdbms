@@ -36,6 +36,7 @@ const UpdatePassword = () => {
       setFormState({ error: auth.message });
       setTimeout(() => setFormState({}), 3000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.passwordError]);
 
   useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);

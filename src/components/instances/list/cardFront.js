@@ -46,6 +46,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instanceAuth, instanceData.status]);
 
   useAsyncEffect(async () => {

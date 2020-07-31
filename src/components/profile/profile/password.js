@@ -36,6 +36,7 @@ export default ({ formStateHeight }) => {
     } else if (auth?.passwordSuccess) {
       setFormState({ success: auth.message });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.passwordError, auth.passwordSuccess]);
 
   useEffect(() => {

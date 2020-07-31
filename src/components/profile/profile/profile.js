@@ -38,6 +38,7 @@ export default ({ formStateHeight }) => {
     return () => {
       mounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.profileError, auth.profileSuccess]);
 
   useEffect(() => {

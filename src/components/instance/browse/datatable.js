@@ -32,6 +32,7 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
     if (schema && table && activeTable) {
       setTableState(defaultTableState);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schema, table]);
 
   useAsyncEffect(async () => {

@@ -9,6 +9,7 @@ export default ({ required, onChange, options, type, defaultValue, ...rest }) =>
     let newValue = [...value];
 
     if (newValue.indexOf(v) !== -1 && isRadio && required) {
+      // eslint-disable-next-line no-console
       console.log('not unsetting required radio');
     } else if (newValue.indexOf(v) === -1 && isRadio) {
       newValue = [v];
@@ -25,6 +26,7 @@ export default ({ required, onChange, options, type, defaultValue, ...rest }) =>
     if (defaultValue) {
       handleClick(defaultValue.value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

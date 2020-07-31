@@ -17,6 +17,7 @@ export default ({ setQuery, query }) => {
       newQueries.unshift(query);
       setQueries({ ...queries, [compute_stack_id]: newQueries });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (

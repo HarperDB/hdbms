@@ -100,6 +100,7 @@ export default () => {
       setTimeout(refreshInstance, 250);
     }
     return () => cancelSub();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compute_stack_id, instances]);
 
   useEffect(() => {
@@ -108,6 +109,7 @@ export default () => {
     } else if (mounted && url) {
       alert.success('Your instance user role has been downgraded to standard');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instanceAuth?.super]);
 
   useAsyncEffect(

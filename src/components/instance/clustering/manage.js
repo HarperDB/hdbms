@@ -31,17 +31,18 @@ export default () => {
     if (auth && products && regions && subscriptions && customer_id) {
       getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, products, regions, customer_id, subscriptions]);
 
   useEffect(refreshInstances, []);
 
   useInterval(refreshInstances, config.refresh_content_interval);
 
-  const refreshInstance = useCallback(() => {
+  const refreshInstance = () => {
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-  });
+  };
 
   useEffect(refreshInstance, []);
 

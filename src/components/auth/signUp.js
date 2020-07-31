@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Row, Col, Card, CardBody, Tooltip } from 'reactstrap';
+import { Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
@@ -24,6 +24,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (!formState.submitted) setFormState({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   return (
@@ -86,12 +87,14 @@ const SignUp = () => {
                   />
                 </Col>
                 <Col className="subdomain-label">
-                  .harperdbcloud.com{' '}
-                  <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
-                    <i className="fa fa-question-circle" />
-                  </a>
+                  .harperdbcloud.com <i className="fa fa-question-circle" onClick={() => setShowToolTip(!showToolTip)} />
                 </Col>
               </Row>
+              {showToolTip && (
+                <div className="text-center pb-2 text-white text-small">
+                  <i>The URL of your HarperDB Cloud Instances</i>
+                </div>
+              )}
               <Input
                 type="text"
                 className="text-center mb-2"
@@ -129,9 +132,6 @@ const SignUp = () => {
               </NavLink>
             </div>
           )}
-          <Tooltip isOpen={showToolTip} placement="top-end" target="subdomainHelp" className="subdomain-tooltip">
-            The URL you will use to reach HarperDB Cloud Instances.
-          </Tooltip>
         </>
       )}
     </div>

@@ -35,7 +35,11 @@ const SignIn = () => {
     }
   }, [auth]);
 
-  useEffect(() => !formState.submitted && setFormState({}), [formData]);
+  useEffect(
+    () => !formState.submitted && setFormState({}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [formData]
+  );
 
   return (
     <div id="login-form">

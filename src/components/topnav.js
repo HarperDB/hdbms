@@ -14,11 +14,17 @@ const TopNav = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const darkTheme = useStoreState(appState, (s) => s.darkTheme);
-  const showInviteBadge = useMemo(() => auth?.orgs?.filter((org) => org.status === 'invited').length, [auth.orgs]);
-  const showManageIcon = useMemo(() => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner', [
-    auth.orgs,
-    customer.customer_id,
-  ]);
+  const showInviteBadge = useMemo(
+    () => auth?.orgs?.filter((org) => org.status === 'invited').length,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [auth.orgs]
+  );
+
+  const showManageIcon = useMemo(
+    () => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner',
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [auth.orgs, customer.customer_id]
+  );
 
   const toggleDarkTheme = () =>
     appState.update((s) => {
@@ -32,7 +38,13 @@ const TopNav = () => {
 
   return (
     <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id: customer?.customer_id, compute_stack_id: null })}
+      onError={(error, componentStack) =>
+        addError({
+          error: { message: error.message, componentStack },
+          customer_id: customer?.customer_id,
+          compute_stack_id: null,
+        })
+      }
       FallbackComponent={ErrorFallback}
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">

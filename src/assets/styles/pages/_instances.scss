@@ -68,11 +68,11 @@
   .instance-toggle-holder {
     display: inline-block;
     font-size: 12px;
+    margin-right: 10px;
     overflow: hidden;
     padding-top: 6px;
     position: relative;
     width: 170px;
-    margin-right: 10px;
 
     @media screen and (max-width: 575px) {
       width: 160px !important;

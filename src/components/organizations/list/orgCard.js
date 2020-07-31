@@ -15,12 +15,14 @@ const OrgCard = ({ flippedCard, setFlippedCard, customer_id, ...rest }) => {
     if (flippedCard !== customer_id) {
       setFlipState(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flippedCard]);
 
   useEffect(() => {
     if (flipState) {
       setFlippedCard(customer_id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flipState]);
 
   return (

@@ -39,6 +39,7 @@ export default () => {
         history.push(`/o/${customer_id}/users/${user_id}`);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [auth.user_id, customer_id]
   );
 
