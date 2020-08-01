@@ -23,24 +23,6 @@
   <body>
     <div id="app"></div>
   </body>
-  <script>
-    setTimeout(() => {
-      var outdated = document.getElementById('outdated');
-      if (outdated) {
-        outdated.style['display'] = 'block';
-      }
-    }, 1000);
-    (function (u, s, e, r, g) {
-      u[r] = u[r] || [];
-      u[r].push({
-        'ug.start': new Date().getTime(), event: 'embed.js',
-      });
-      var f = s.getElementsByTagName(e)[0],
-        j = s.createElement(e);
-      j.async = true;
-      j.src = 'https://static.userguiding.com/media/user-guiding-'
-        + g + '-embedded.js';
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'userGuidingLayer', '08963898ID');
-  </script>
+  <script src="%PUBLIC_URL%/js/outdated.js"></script>
+  <script src="%PUBLIC_URL%/js/userGuide.js"></script>
 </html>
