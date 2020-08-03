@@ -15,11 +15,11 @@
     "lint": "eslint --fix src && npx stylelint --fix \"src/**/*.scss\""
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.8.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@stripe/react-stripe-js": "^1.1.2",
-    "@stripe/stripe-js": "^1.8.0",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
     "lolight": "^1.4.0",
     "pullstate": "^1.16.0",
