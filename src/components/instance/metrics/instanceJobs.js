@@ -27,19 +27,17 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const today = new Date();
-  const day = `0${today.getDate() + 1}`.slice(-2);
-  const month = `0${today.getMonth() + 1}`.slice(-2);
-  const to_year = today.getFullYear();
-  const from_year = parseInt(today.getFullYear(), 10) - 1;
-  const fromDate = `${from_year}-${month}-${day}`;
-  const toDate = `${to_year}-${month}-${day}`;
 
   useAsyncEffect(
     async () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const toDate = tomorrow.toISOString().split('T')[0];
+        tomorrow.setFullYear(tomorrow.getFullYear() - 1);
+        const fromDate = tomorrow.toISOString().split('T')[0];
         await searchJobsByStartDate({
           auth,
           signal: controller.signal,
