@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { positions, Provider } from 'react-alert';
@@ -9,12 +9,11 @@ import './methods/util/textDecoderPolyfill';
 import stripePromise from './methods/stripe/stripePromise';
 import config from './config';
 
+import App from './components/app';
 import AlertTemplate from './components/shared/alert';
 import * as serviceWorker from './serviceWorker';
 
 import './app.scss';
-
-const App = lazy(() => import(/* webpackChunkName: "app" */ './components/app'));
 
 render(
   <Elements stripe={stripePromise} options={{ fonts: [{ cssSrc: 'https://fonts.googleapis.com/css?family=Raleway&display=swap' }] }}>
@@ -22,9 +21,7 @@ render(
       <BrowserRouter>
         <Analytics id={config.google_analytics_code}>
           {/* <React.StrictMode> */}
-          <Suspense fallback={null}>
-            <App />
-          </Suspense>
+          <App />
           {/* </React.StrictMode> */}
         </Analytics>
       </BrowserRouter>
