@@ -50,8 +50,7 @@ const CSVUploadFile = () => {
         }, 2000);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mounted]
+    [mounted] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const onDrop = useCallback((acceptedFiles) => {
