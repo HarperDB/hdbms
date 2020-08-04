@@ -1,4 +1,4 @@
-(function (u, s, e, r, g) {
+const userGuide = function (u, s, e, r, g) {
   u[r] = u[r] || [];
   u[r].push({
     'ug.start': new Date().getTime(),
@@ -9,4 +9,8 @@
   j.async = true;
   j.src = 'https://static.userguiding.com/media/user-guiding-' + g + '-embedded.js';
   f.parentNode.insertBefore(j, f);
-})(window, document, 'script', 'userGuidingLayer', '08963898ID');
+};
+
+setTimeout(() => {
+  userGuide(window, document, 'script', 'userGuidingLayer', '08963898ID');
+}, 1000);
