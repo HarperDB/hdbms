@@ -5,7 +5,7 @@ export default (plans) => {
 
   plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, quantity = undefined, available = undefined, metadata: { prepaid } }) => {
     const freeTier = tiers.find((t) => !!t.up_to).up_to;
-    const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])].filter((s) => prepaid || !quantity || (s !== freeTier && s <= available));
+    const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])];
 
     return sizes.map((data_volume_size) => {
       const pricing_tier = tiers.find((p) => (p.up_to && data_volume_size <= p.up_to) || !p.up_to);
