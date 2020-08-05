@@ -37,5 +37,10 @@ export default (plans) => {
     });
   });
 
-  return storageOptionsArray.sort((a, b) => a.value.data_volume_size - b.value.data_volume_size);
+  return storageOptionsArray.sort((a, b) => {
+    if (a.value.data_volume_size === b.value.data_volume_size) {
+      return a.value.storage_subscription_name > b.value.storage_subscription_name ? 1 : -1;
+    }
+    return a.value.data_volume_size - b.value.data_volume_size;
+  });
 };

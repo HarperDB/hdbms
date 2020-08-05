@@ -51,5 +51,10 @@ export default (plans) => {
     }
   );
 
-  return computeOptionsArray.sort((a, b) => a.value.compute_ram - b.value.compute_ram);
+  return computeOptionsArray.sort((a, b) => {
+    if (a.value.compute_ram === b.value.compute_ram) {
+      return a.value.compute_subscription_name > b.value.compute_subscription_name ? 1 : -1;
+    }
+    return a.value.compute_ram - b.value.compute_ram;
+  });
 };
