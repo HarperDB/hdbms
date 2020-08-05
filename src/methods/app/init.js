@@ -1,4 +1,5 @@
 import getCurrentVersion from '../../api/lms/getCurrentVersion';
+import getProducts from '../../api/lms/getProducts';
 import getRegions from '../../api/lms/getRegions';
 import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../../state/appState';
@@ -25,6 +26,7 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller, 
   }
 
   getCurrentVersion();
+  getProducts();
   getRegions();
   getPostManCollection();
 

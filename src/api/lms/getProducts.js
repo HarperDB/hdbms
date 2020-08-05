@@ -5,15 +5,11 @@ import buildRadioSelectProductOptions from '../../methods/products/buildRadioSel
 import buildRadioSelectStorageOptions from '../../methods/products/buildRadioSelectStorageOptions';
 import config from '../../config';
 
-export default async ({ auth, customer_id }) => {
+export default async () => {
   try {
     const response = await queryLMS({
       endpoint: 'getProducts',
       method: 'POST',
-      payload: {
-        customer_id,
-      },
-      auth,
     });
 
     if (response.error) return false;
