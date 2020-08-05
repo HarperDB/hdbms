@@ -3,7 +3,7 @@ import commaNumbers from '../util/commaNumbers';
 export default (plans) => {
   const storageOptionsArray = [];
 
-  plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, quantity = undefined, available = undefined, metadata: { prepaid } }) => {
+  plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, available = undefined }) => {
     const freeTier = tiers.find((t) => !!t.up_to).up_to;
     const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])];
 
