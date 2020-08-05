@@ -25,8 +25,16 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const last_volume_resize = useStoreState(instanceState, (s) => s.last_volume_resize);
+  const data_volume_size = useStoreState(instanceState, (s) => s.data_volume_size);
+
   const filteredProducts = useStoreState(appState, (s) => s.products.cloud_storage.filter((p) => p.value.active && p.value.data_volume_size >= storage?.data_volume_size));
-  const filteredSubscriptions = useStoreState(appState, (s) => s.subscriptions.cloud_storage.filter((p) => p.value.data_volume_size >= storage?.data_volume_size));
+  const filteredSubscriptions = useStoreState(appState, (s) =>
+    s.subscriptions.cloud_storage.filter(
+      (p) =>
+        (p.value.data_volume_size === data_volume_size || p.value.storage_quantity_available >= p.value.data_volume_size) && p.value.data_volume_size >= storage?.data_volume_size
+    )
+  );
+
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ compute_stack_id, customer_id, ...storage });
 
