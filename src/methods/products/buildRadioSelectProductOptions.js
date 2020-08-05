@@ -22,8 +22,8 @@ export default (plans) => {
       const compute_price_string_with_interval = subscription_id ? name : amount_decimal === '0' ? 'FREE' : `${compute_comma_amount}/${interval}`;
       const compute_ram = ram_allocation ? parseInt(ram_allocation, 10) : false;
       const compute_ram_string = `${compute_ram / 1024}GB`;
-      const label = `${compute_ram_string} RAM | ${
-        subscription_id ? `${name} (${available} remaining)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
+      const label = `${compute_ram_string} RAM  •  ${
+        subscription_id ? `${name}  •  ${available} remaining` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return (
