@@ -19,6 +19,7 @@ import getCustomer from '../../api/lms/getCustomer';
 import config from '../../config';
 import userInfo from '../../api/instance/userInfo';
 import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
+import getProducts from '../../api/lms/getProducts';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -70,6 +71,16 @@ export default () => {
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   useInterval(refreshSubscriptions, config.check_version_interval);
+
+  const refreshProducts = () => {
+    if (auth && customer_id) {
+      getProducts({ auth, customer_id });
+    }
+  };
+
+  useEffect(refreshProducts, [auth, customer_id]);
+
+  useInterval(refreshProducts, config.refresh_content_interval);
 
   const refreshInstances = () => {
     if (auth && products && regions && subscriptions && customer_id) {

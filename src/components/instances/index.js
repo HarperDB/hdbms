@@ -18,6 +18,7 @@ import NewInstanceModal from './new';
 import getInstances from '../../api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../api/lms/getCustomer';
+import getProducts from '../../api/lms/getProducts';
 import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
 
 const InstancesIndex = () => {
@@ -71,6 +72,16 @@ const InstancesIndex = () => {
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
 
   useInterval(refreshInstances, config.refresh_content_interval);
+
+  const refreshProducts = () => {
+    if (auth && customer_id) {
+      getProducts({ auth, customer_id });
+    }
+  };
+
+  useEffect(refreshProducts, [auth, customer_id]);
+
+  useInterval(refreshProducts, config.refresh_content_interval);
 
   useEffect(() => {
     if (mounted && instances && isOrgOwner) {

@@ -23,7 +23,7 @@ export default (plans) => {
       const compute_ram = ram_allocation ? parseInt(ram_allocation, 10) : false;
       const compute_ram_string = `${compute_ram / 1024}GB`;
       const label = `${compute_ram_string} RAM | ${
-        subscription_id ? `${name} (${available} remaining)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
+        subscription_id ? `${name} (${available}/${quantity} remaining)` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
       } ${!active ? '(legacy)' : ''}`;
 
       return (
