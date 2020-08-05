@@ -15,8 +15,6 @@ import ErrorFallback from '../shared/errorFallback';
 import addError from '../../api/lms/addError';
 import useInstanceAuth from '../../state/instanceAuths';
 
-const excludeFromDropdown = ['CREATE_IN_PROGRESS', 'DELETE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'];
-
 export default ({ routes = [] }) => {
   const { compute_stack_id, customer_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
@@ -27,15 +25,18 @@ export default ({ routes = [] }) => {
     appState,
     (s) => {
       const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
-      const otherInstances = s.instances && s.instances.filter((i) => !excludeFromDropdown.includes(i.status) && i.compute_stack_id !== compute_stack_id);
+      const otherInstances = s.instances && s.instances.filter((i) => i.compute_stack_id !== compute_stack_id);
       return {
         options:
           otherInstances &&
           otherInstances.map((i) => ({
-            label: i.instance_name,
+            label: `${i.instance_name} ${
+              ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) ? `(${i.status.replace(/_/g, ' ').toLowerCase()})` : ''
+            }`,
             value: i.compute_stack_id,
             is_local: i.is_local,
             has_auth: instanceAuths[i.compute_stack_id],
+            is_unavailable: ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status),
           })),
         activeOption: {
           label: selectedInstance?.instance_name,
@@ -63,7 +64,9 @@ export default ({ routes = [] }) => {
           <SelectDropdown
             className="react-select-container"
             classNamePrefix="react-select"
-            onChange={({ value, has_auth }) => (has_auth ? history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`) : history.push(`/o/${customer_id}/instances/login`))}
+            onChange={({ value, has_auth, is_unavailable }) =>
+              is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`) : history.push(`/o/${customer_id}/instances/login`)
+            }
             options={options || []}
             value={activeOption}
             defaultValue={activeOption.value}
@@ -72,8 +75,8 @@ export default ({ routes = [] }) => {
             isLoading={!options}
             noOptionsMessage={() => 'No other instances available'}
             styles={{
-              option: (styles, { data }) => ({ ...styles, ...icon(data.is_local) }),
-              singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local) }),
+              option: (styles, { data }) => ({ ...styles, opacity: data.is_unavailable ? 0.5 : 1, ...icon(data.is_local, data.is_unavailable) }),
+              singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local, data.is_unavailable) }),
             }}
           />
         </Nav>
