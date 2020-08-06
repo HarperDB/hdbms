@@ -26,7 +26,7 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
   const compute_subscription_id = useStoreState(instanceState, (s) => s.compute_subscription_id);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
 
-  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : 'cloud_compute'].filter((p) => p.value.active));
+  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : 'cloud_compute']);
   const filteredSubscriptions = useStoreState(appState, (s) =>
     s.subscriptions[is_local ? 'local_compute' : 'cloud_compute'].filter((p) => p.value.compute_subscription_id === compute_subscription_id || p.value.compute_quantity_available)
   );
@@ -80,7 +80,7 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
         className="react-select-container"
         classNamePrefix="react-select"
         onChange={({ value }) => setFormData({ ...formData, ...value })}
-        options={products}
+        options={products.filter((p) => p.value.active)}
         value={selectedProduct}
         defaultValue={compute}
         isSearchable={false}

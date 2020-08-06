@@ -27,7 +27,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
   const last_volume_resize = useStoreState(instanceState, (s) => s.last_volume_resize);
   const data_volume_size = useStoreState(instanceState, (s) => s.data_volume_size);
 
-  const filteredProducts = useStoreState(appState, (s) => s.products.cloud_storage.filter((p) => p.value.active && p.value.data_volume_size >= storage?.data_volume_size));
+  const filteredProducts = useStoreState(appState, (s) => s.products.cloud_storage.filter((p) => p.value.data_volume_size >= storage?.data_volume_size));
   const filteredSubscriptions = useStoreState(appState, (s) =>
     s.subscriptions.cloud_storage.filter(
       (p) =>
@@ -87,7 +87,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
         className="react-select-container"
         classNamePrefix="react-select"
         onChange={({ value }) => setFormData({ ...formData, ...value })}
-        options={products}
+        options={products.filter((p) => p.value.active)}
         value={selectedProduct}
         defaultValue={storage}
         isSearchable={false}
