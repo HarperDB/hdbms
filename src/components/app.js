@@ -59,6 +59,12 @@ export default () => {
   }, [version.studio]);
 
   useEffect(() => {
+    if (window.ORIBI && auth?.email) {
+      window.ORIBI.api('setUserEmail', auth.email);
+    }
+  }, [auth?.email]);
+
+  useEffect(() => {
     if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
   }, [showVersionAlert]);
 
