@@ -52,7 +52,7 @@ export default async ({ formData }) => {
     };
   }
   if (window.ORIBI) {
-    window.ORIBI.api('setUserEmail', 'email');
+    window.ORIBI.api('setUserEmail', email);
     window.ORIBI.api('track', 'successful_signup');
   }
   return { success: true };
