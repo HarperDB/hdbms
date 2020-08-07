@@ -24,12 +24,17 @@ export default () => {
   const computeProduct = products[isLocal ? 'localCompute' : 'cloudCompute'].find((p) => p.value === newInstance.stripe_plan_id);
   const storageProduct = isLocal ? { price: 0 } : products.cloudStorage.find((p) => p.value === newInstance.data_volume_size && p.plan_id === newInstance.stripe_storage_plan_id);
   const totalPrice = (computeProduct?.price || 0) + (storageProduct?.price || 0);
+  const oribiProductsArray = [{ name: 'compute', id: computeProduct.ram, price: computeProduct.price }];
+  if (!isLocal) {
+    oribiProductsArray.push({ name: 'storage', id: storageProduct.disk_space, price: storageProduct.price });
+  }
 
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
+        window.ORIBI.api('trackPurchase', { totalPrice, currency: 'USD', products: oribiProductsArray });
         setNewInstance({ ...newInstance, tc_version });
         setTimeout(() => history.push(`/o/${customer_id}/instances/new/status`), 0);
       } else {
