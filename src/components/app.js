@@ -61,6 +61,7 @@ export default () => {
     if (window.ORIBI && auth?.email) {
       window.ORIBI.api('setUserEmail', auth.email);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.email]);
 
   useEffect(() => {
