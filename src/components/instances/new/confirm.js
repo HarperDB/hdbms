@@ -31,12 +31,17 @@ export default () => {
     : somePrePaid
     ? 'PREPAID / FREE'
     : 'FREE';
+  const oribiProductsArray = [{ name: 'compute', id: newInstance.compute_ram_string, price: newInstance?.compute_price || 0 }];
+  if (!newInstance.is_local) {
+    oribiProductsArray.push({ name: 'storage', id: newInstance.data_volume_size_string, price: newInstance?.storage_price || 0 });
+  }
 
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
+        if (window.ORIBI) window.ORIBI.api('trackPurchase', { totalPrice, currency: 'USD', products: oribiProductsArray });
         setNewInstance({ ...newInstance, tc_version });
         setTimeout(() => history.push(`/o/${customer_id}/instances/new/status`), 0);
       } else {
