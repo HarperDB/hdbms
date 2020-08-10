@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from '@nio/ui-kit';
+import { Col, Row } from 'reactstrap';
 
 import SystemInfo from './systemInfo';
 import InstanceLogs from './instanceLogs';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Row } from '@nio/ui-kit';
+import { Card, CardBody, Row } from 'reactstrap';
 
 import DriverCard from './driverCard';
 

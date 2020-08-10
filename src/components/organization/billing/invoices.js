@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col, CardBody, Card } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';

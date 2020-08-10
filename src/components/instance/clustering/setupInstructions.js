@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Row, Col, Card, CardBody } from 'reactstrap';
 
 export default ({ showNodeNameInstructions }) => (
   <Card className="my-3">

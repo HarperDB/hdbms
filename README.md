@@ -6,10 +6,9 @@ The comprehensive management suite for HarperDB.
 ## What’s in the box
 
 - Third party software (click to review each library's licensing)
-    - [ReactJS](https://reactjs.org/) site scaffold
+    - [ReactJS](https://reactjs.org/) site scaffold via Create React App
     - [react-router](https://reacttraining.com/react-router/) for navigation
     - [pullstate](https://lostpebble.github.io/pullstate/) for global state management
-    - [webpack 4](https://webpack.js.org/) module bundling and development webserver
 
 ## Magic... how does it work?
 
@@ -19,7 +18,7 @@ Follow these steps to run a local version of HarperDB Studio.
     ```
     git clone https://github.com/harperdb/hdbms.git
     cd hdbms
-    npm i -s
+    yarn
     ```
 
 1. Create your local config file.
@@ -30,7 +29,7 @@ Follow these steps to run a local version of HarperDB Studio.
 
 1. Start the project.
     ```
-    npm start
+    yarn start
     ```
 
 1. Visit the project at https://localhost:3000.

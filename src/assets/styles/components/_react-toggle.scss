@@ -1,0 +1,95 @@
+.react-toggle {
+  background-color: transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  touch-action: pan-x;
+  user-select: none;
+  width: 100%;
+
+  &-screenreader-only {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+  }
+
+  &-track {
+    border-radius: 30px;
+    display: inline-block;
+    height: 100%;
+    transition: all 0.2s ease;
+    width: 100%;
+  }
+
+  &-track-check,
+  &-track-x {
+    align-items: center;
+    color: $color-white;
+    display: flex;
+    font-weight: 700;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    line-height: 1;
+    position: absolute;
+    right: 0;
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
+  }
+
+  &-track-check {
+    opacity: 0;
+    padding-left: 10px;
+    padding-right: 30px;
+  }
+
+  &-track-x {
+    opacity: 1;
+    padding-left: 30px;
+    padding-right: 10px;
+  }
+
+  &-thumb {
+    background-color: $color-white;
+    border-radius: 50%;
+    box-shadow: none;
+    box-sizing: border-box;
+    height: 22px;
+    left: 1px;
+    outline: none;
+    position: absolute;
+    top: 1px;
+    transition: all 0.25s ease;
+    width: 22px;
+  }
+
+  &--checked {
+    .react-toggle-track {
+      background-color: $color-success;
+    }
+
+    .react-toggle-track-check {
+      opacity: 1;
+    }
+
+    .react-toggle-track-x {
+      opacity: 0;
+    }
+
+    .react-toggle-thumb {
+      left: calc(100% - 23px);
+    }
+  }
+}

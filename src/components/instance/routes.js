@@ -1,11 +1,13 @@
-import Browse from './browse';
-import Query from './query';
-import Clustering from './clustering';
-import Config from './config';
-import Metrics from './metrics';
-import Users from './users';
-import Roles from './roles';
-import Examples from './examples';
+import { lazy } from 'react';
+
+const Browse = lazy(() => import(/* webpackChunkName: "instance-browse" */ './browse'));
+const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
+const Clustering = lazy(() => import(/* webpackChunkName: "instance-clustering" */ './clustering'));
+const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
+const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './metrics'));
+const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
+const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
+const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 export default ({ super_user }) => {
   const standardRoutes = [
@@ -53,20 +55,20 @@ export default ({ super_user }) => {
       iconCode: 'f14a',
     },
     {
-      component: Config,
-      path: `/o/:customer_id/i/:compute_stack_id/config`,
-      link: 'config',
-      label: 'config',
-      icon: 'wrench',
-      iconCode: 'f0ad',
-    },
-    {
       component: Metrics,
       path: `/o/:customer_id/i/:compute_stack_id/metrics`,
       link: 'metrics',
       label: 'metrics',
       icon: 'tachometer',
       iconCode: 'f0e4',
+    },
+    {
+      component: Config,
+      path: `/o/:customer_id/i/:compute_stack_id/config`,
+      link: 'config',
+      label: 'config',
+      icon: 'wrench',
+      iconCode: 'f0ad',
     },
   ];
 

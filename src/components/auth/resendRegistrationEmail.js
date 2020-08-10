@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Input, Button } from '@nio/ui-kit';
+import { Card, CardBody, Input, Button } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 

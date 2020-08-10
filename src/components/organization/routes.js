@@ -1,5 +1,7 @@
-import Users from './users';
-import Billing from './billing';
+import { lazy } from 'react';
+
+const Users = lazy(() => import(/* webpackChunkName: "organization-users" */ './users'));
+const Billing = lazy(() => import(/* webpackChunkName: "organization-billing" */ './billing'));
 
 export default ({ customer_id }) => [
   {

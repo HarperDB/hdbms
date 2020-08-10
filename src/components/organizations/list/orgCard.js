@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactCardFlip from 'react-card-flip';
-import { Col } from '@nio/ui-kit';
+import { Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import CardFront from './cardFront';
@@ -15,12 +15,14 @@ const OrgCard = ({ flippedCard, setFlippedCard, customer_id, ...rest }) => {
     if (flippedCard !== customer_id) {
       setFlipState(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flippedCard]);
 
   useEffect(() => {
     if (flipState) {
       setFlippedCard(customer_id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flipState]);
 
   return (

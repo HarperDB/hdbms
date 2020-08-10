@@ -30,10 +30,6 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     const response = json.body || json;
 
-    if (config.errortest) {
-      addError({ ...errorObject, error: { error: true, message: 'this is a test error' } });
-    }
-
     if (response.errorType) {
       addError({ ...errorObject, status: 'warn', error: response });
 

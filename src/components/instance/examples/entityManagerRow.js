@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button } from '@nio/ui-kit';
+import { Row, Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router';
 
 export default ({ item, baseUrl, isActive }) => {

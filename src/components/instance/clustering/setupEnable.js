@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@nio/ui-kit';
+import { Button } from 'reactstrap';
 
 export default ({ setFormState, disabled }) => (
   <>

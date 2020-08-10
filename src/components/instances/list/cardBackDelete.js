@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Card, CardBody, Input, Row, Col } from '@nio/ui-kit';
+import { Button, Card, CardBody, Input, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -19,6 +19,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
@@ -44,7 +45,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           if (instanceAuth) setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
           setTimeout(() => {
             alert.success('Instance deletion complete');
-            getInstances({ auth, customer_id, products, regions, instanceCount: instances?.length });
+            getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
           }, 100);
         }
       }

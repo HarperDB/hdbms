@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactTable from 'react-table-6';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
-import { Card, CardBody } from '@nio/ui-kit';
+import { Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';

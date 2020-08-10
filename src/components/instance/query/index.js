@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import { Row, Col } from 'reactstrap';
 
 import DataTable from './datatable';
 import QueryWindow from './queryWindow';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, ModalHeader, ModalBody, Input, Button, Row, Col, Tooltip, Card, CardBody } from '@nio/ui-kit';
+import { Modal, ModalHeader, ModalBody, Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
@@ -37,6 +37,7 @@ export default () => {
 
   useEffect(() => {
     if (!formState.submitted) setFormState({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   return (
@@ -96,9 +97,7 @@ export default () => {
                     <Row>
                       <Col sm="4" className="pt-2 text-nowrap text-grey">
                         Ex: &quot;myorg&quot;&nbsp;
-                        <a id="subdomainHelp" onClick={() => setShowToolTip(!showToolTip)}>
-                          <i className="fa fa-question-circle text-purple" />
-                        </a>
+                        <i className="fa fa-question-circle text-purple" onClick={() => setShowToolTip(!showToolTip)} />
                       </Col>
                       <Col sm="8">
                         <Input
@@ -111,6 +110,11 @@ export default () => {
                         />
                       </Col>
                     </Row>
+                    {showToolTip && (
+                      <div className="text-center pt-2 pb-1 text-lightpurple text-small">
+                        <i>Part of the URL of your HarperDB Cloud Instances- see below.</i>
+                      </div>
+                    )}
                     <hr className="my-2 d-none d-sm-block" />
                     <Row>
                       <Col xs="12" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
@@ -127,9 +131,6 @@ export default () => {
               <Button onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="purple">
                 Create Organization
               </Button>
-              <Tooltip isOpen={showToolTip} placement="top-end" target="subdomainHelp" className="subdomain-tooltip">
-                The URL you will use to reach HarperDB Cloud Instances.
-              </Tooltip>
               {formState.error && (
                 <Card className="mt-3 error">
                   <CardBody>{formState.error}</CardBody>

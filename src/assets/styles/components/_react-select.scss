@@ -33,8 +33,11 @@
     background: $color-white;
     border-bottom: 1px solid $color-lightgrey;
     color: $color-black;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding-bottom: 10px;
     padding-top: 10px;
+    white-space: nowrap !important;
 
     &:last-child {
       border-bottom: 0;
@@ -45,5 +48,3 @@
     margin-top: 1px !important;
   }
 }
-
-

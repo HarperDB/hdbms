@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from '@nio/ui-kit';
+import { Col, Row } from 'reactstrap';
 
 import commaNumbers from '../../../methods/util/commaNumbers';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Row, Col, Button } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 
 export default () => (
   <main id="support">

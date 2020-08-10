@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -19,9 +19,21 @@ import addError from '../../../api/lms/addError';
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const compute_subscription_id = useStoreState(instanceState, (s) => s.compute_subscription_id);
+  const storage_subscription_id = useStoreState(instanceState, (s) => s.storage_subscription_id);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const [instanceAction, setInstanceAction] = useState(false);
+  const unusedCompute = useStoreState(
+    appState,
+    (s) => s.subscriptions[is_local ? 'local_compute' : 'cloud_compute']?.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || []
+  );
+  const unusedStorage = useStoreState(
+    appState,
+    (s) => s.subscriptions?.cloud_storage?.filter((p) => !p.value.storage_subscription_name || p.value.storage_quantity_available) || []
+  );
+  const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
+  const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
 
   return instanceAction && instanceAction !== 'Restarting' ? (
     <Loader header={`${instanceAction} Instance`} spinner />
@@ -37,14 +49,25 @@ export default () => {
       </Col>
       {isOrgOwner && (
         <Col lg="3" sm="6" xs="12">
-          <span className="floating-card-header">update instance ram</span>
+          <Row>
+            <Col>
+              <span className="floating-card-header">update ram</span>
+            </Col>
+            <Col className="text-right">
+              {(!!compute_subscription_id || !!unusedCompute.length) && (
+                <span className="floating-card-header">
+                  prepaid: <i onClick={() => setShowPrepaidCompute(!showPrepaidCompute)} className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
+                </span>
+              )}
+            </Col>
+          </Row>
           <Card className="my-3">
             <CardBody>
               <ErrorBoundary
                 onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
                 FallbackComponent={ErrorFallback}
               >
-                <UpdateRAM setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+                <UpdateRAM setInstanceAction={setInstanceAction} showPrepaidCompute={showPrepaidCompute} />
               </ErrorBoundary>
             </CardBody>
           </Card>
@@ -52,14 +75,25 @@ export default () => {
       )}
       {isOrgOwner && !is_local && (
         <Col lg="3" sm="6" xs="12">
-          <span className="floating-card-header">update instance storage</span>
+          <Row>
+            <Col>
+              <span className="floating-card-header">update storage</span>
+            </Col>
+            <Col className="text-right">
+              {(!!storage_subscription_id || !!unusedStorage.length) && (
+                <span className="floating-card-header">
+                  prepaid: <i onClick={() => setShowPrepaidStorage(!showPrepaidStorage)} className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
+                </span>
+              )}
+            </Col>
+          </Row>
           <Card className="my-3">
             <CardBody>
               <ErrorBoundary
                 onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
                 FallbackComponent={ErrorFallback}
               >
-                <UpdateDiskVolume setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+                <UpdateDiskVolume setInstanceAction={setInstanceAction} showPrepaidStorage={showPrepaidStorage} />
               </ErrorBoundary>
             </CardBody>
           </Card>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody, Input, Button, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Input, Button, Row, Col } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
@@ -35,7 +35,11 @@ const SignIn = () => {
     }
   }, [auth]);
 
-  useEffect(() => !formState.submitted && setFormState({}), [formData]);
+  useEffect(
+    () => !formState.submitted && setFormState({}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [formData]
+  );
 
   return (
     <div id="login-form">

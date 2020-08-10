@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
@@ -26,7 +26,11 @@ export default () => {
     }
   }, [auth, customer_id]);
 
-  useEffect(() => refreshUsers(), []);
+  useEffect(
+    () => refreshUsers(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useInterval(() => refreshUsers(), config.refresh_content_interval);
 

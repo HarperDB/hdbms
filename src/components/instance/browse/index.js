@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col } from '@nio/ui-kit';
+import React, { useState, useEffect, lazy } from 'react';
+import { Row, Col } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -7,14 +7,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 
-import DataTable from './datatable';
-import EntityManager from './entityManager';
-import JSONViewer from './jsonviewer';
-import CSVUpload from './csvupload';
-import EmptyPrompt from './emptyPrompt';
-import StructureReloader from '../../shared/structureReloader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import useInstanceAuth from '../../../state/instanceAuths';
+
+const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './datatable'));
+const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './entityManager'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './jsonviewer'));
+const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './csvupload'));
+const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './emptyPrompt'));
+const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/structureReloader'));
 
 const defaultTableState = {
   tableData: [],
@@ -39,6 +41,8 @@ export default () => {
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
+  const [instanceAuths] = useInstanceAuth({});
+  const showForm = instanceAuths[compute_stack_id]?.super;
 
   useEffect(() => {
     if (structure) {
@@ -61,6 +65,7 @@ export default () => {
           setEntities({ schemas, tables, activeTable });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
 
   return (
@@ -70,8 +75,8 @@ export default () => {
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
           FallbackComponent={ErrorFallback}
         >
-          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm />
-          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm />}
+          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
+          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showForm} />}
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>

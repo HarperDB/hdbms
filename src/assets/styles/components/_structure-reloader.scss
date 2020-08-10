@@ -1,15 +1,25 @@
 .structure-reloader {
-  color: $color-white !important;
-  cursor: pointer;
   display: inline-block;
 
-  i {
-    width: 14px;
+  button {
+    background: none !important;
+    border: 0;
+    color: $color-white !important;
+    cursor: pointer;
+    display: inline-block;
+    outline: 0;
+    padding: 0 !important;
+    text-decoration: none !important;
+
+    i {
+      width: 14px;
+    }
+
+    &:hover {
+      color: $color-white !important;
+    }
   }
 
-  &:hover {
-    color: $color-white !important;
-  }
 }
 
 

@@ -13,9 +13,11 @@ export default ({ label = 'instance', centerText = false }) => {
     });
 
   return (
-    <a className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`} onClick={refresh}>
-      <i title="Refresh Structure" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
-      {label}
-    </a>
+    <span className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`}>
+      <button type="button" onClick={refresh}>
+        <i title="Refresh Structure" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+        {label}
+      </button>
+    </span>
   );
 };

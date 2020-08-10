@@ -68,6 +68,7 @@
   .instance-toggle-holder {
     display: inline-block;
     font-size: 12px;
+    margin-right: 10px;
     overflow: hidden;
     padding-top: 6px;
     position: relative;
@@ -78,7 +79,7 @@
     }
 
     .react-toggle-track {
-      background-color: $light-grey-overlay !important;
+      background-color: $faint-white-overlay !important;
 
       .react-toggle-track-x,
       .react-toggle-track-check {
@@ -96,7 +97,7 @@
       &::after {
         color: $color-danger;
         content: '\f00d';
-        font-family: 'FontAwesome', serif !important;
+        font-family: 'FontAwesome', monospace !important;
         font-size: 14px;
         left: 0;
         position: absolute;
@@ -120,7 +121,6 @@
   }
 
   .instance-filter-holder {
-    margin-left: 15px;
     max-width: 280px;
     overflow: hidden;
     position: relative;

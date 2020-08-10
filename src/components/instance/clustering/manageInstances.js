@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 
 import InstanceManagerRow from './manageInstancesRow';
 

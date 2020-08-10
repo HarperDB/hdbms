@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, SelectDropdown, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
+import SelectDropdown from 'react-select';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
@@ -14,6 +13,7 @@ import languages from '../../../methods/examples/languages';
 import getMethodObject from '../../../methods/examples/getMethodObject';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import Code from '../../shared/code';
 
 export default ({ showCustomMessage }) => {
   const { customer_id, compute_stack_id, folder, method } = useParams();
@@ -30,12 +30,14 @@ export default ({ showCustomMessage }) => {
       const newMethodObject = getMethodObject(postmanCollection, folder, method);
       setMethodObject(newMethodObject);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postmanCollection, method]);
 
   useEffect(() => {
     if (!language) {
       setLanguage(languages[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export default ({ showCustomMessage }) => {
         setCodeText('You do not yet have a valid snippet generator for this language.');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methodObject, language]);
 
   return (
@@ -93,15 +96,13 @@ export default ({ showCustomMessage }) => {
               {methodObject?.request?.description && (
                 <>
                   <hr />
-                  <div dangerouslySetInnerHTML={{ __html: methodObject?.request?.description }} />
+                  <div className="mb-3" dangerouslySetInnerHTML={{ __html: methodObject?.request?.description }} />
                 </>
               )}
             </Col>
             <Col xl="6" xs="12">
               {codeText && language ? (
-                <SyntaxHighlighter language={language.syntax_mode} style={atomDark}>
-                  {codeText}
-                </SyntaxHighlighter>
+                <Code>{codeText}</Code>
               ) : (
                 <div className="py-5 text-center">
                   <i className="fa fa-spinner fa-spin text-purple" />

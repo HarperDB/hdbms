@@ -1,14 +1,17 @@
 .btn {
+  align-items: center;
   border-radius: $border-radius;
   box-shadow: none !important;
+  display: inline-flex;
   font-family: $font-family-sans;
+  font-size: $font-size-root;
   font-weight: $font-weight-light;
+  height: 38px;
+  justify-content: center;
   line-height: 1 !important;
   padding-left: 5px;
   padding-right: 5px;
   transition: none !important;
-
-
 
   &.no-shadow {
     box-shadow: none !important;
@@ -29,6 +32,12 @@
 
   &.btn-link {
     padding: 0;
+  }
+
+  &.btn-success {
+    background-color: $color-success !important;
+    border-color: $color-success !important;
+    color: $color-white !important;
   }
 
   &.btn-danger {
@@ -66,7 +75,4 @@
     border-color: $color-darkpurple !important;
     color: $color-white !important;
   }
-
-
 }
-

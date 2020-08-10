@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Input, Button, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col, Input, Button, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -38,6 +38,7 @@ export default ({ formStateHeight }) => {
     return () => {
       mounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.profileError, auth.profileSuccess]);
 
   useEffect(() => {

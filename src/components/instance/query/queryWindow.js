@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { Input, Button, Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Input, Button, Row, Col, CardBody, Card } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
@@ -18,6 +18,7 @@ export default ({ setQuery, query }) => {
       setFormData(query.query || query);
       submitRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default ({ setQuery, query }) => {
       setFormData('');
       setFormState({ submitted: false });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formState]);
 
   return (

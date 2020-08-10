@@ -67,7 +67,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
 
     const cluster_status = await clusterStatus({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
     const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
-    const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.ram_allocation);
+    const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.compute_ram);
 
     if (registration_matches_stripe_plan) {
       return {

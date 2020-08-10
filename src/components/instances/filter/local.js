@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToggleButton } from '@nio/ui-kit';
+import ToggleButton from 'react-toggle';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';

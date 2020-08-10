@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardBody, Card } from '@nio/ui-kit';
+import { CardBody, Card } from 'reactstrap';
 
 export default ({ message, error = false, accessErrors }) => {
   const tableErrors = accessErrors && accessErrors.filter((t) => t.type === 'table');

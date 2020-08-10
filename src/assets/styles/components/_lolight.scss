@@ -1,0 +1,44 @@
+.lolight {
+  background: $color-black;
+  border-radius: $border-radius;
+  font-size: 12px !important;
+  line-height: 1.3;
+  padding: 20px;
+
+  .ll-nam {
+    /* words */
+    color: $color-lightgrey;
+  }
+
+  .ll-num {
+    /* numbers */
+    color: $color-danger;
+  }
+
+  .ll-str {
+    /* strings */
+    color: $color-success;
+  }
+
+  .ll-rex {
+    /* regular expressions */
+    color: $color-warning;
+  }
+
+  .ll-pct {
+    /* operators, punctation */
+    color: $color-lightergrey;
+  }
+
+  .ll-key {
+    /* keywords */
+    color: $color-lightpurple;
+    font-weight: bold;
+  }
+
+  .ll-com {
+    /* comments */
+    color: $color-lightgrey;
+    font-style: italic;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Card, CardBody, Row, Col } from '@nio/ui-kit';
+import { Card, CardBody, Row, Col } from 'reactstrap';
 import ReactTable from 'react-table-6';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
@@ -39,6 +39,7 @@ export default () => {
         history.push(`/o/${customer_id}/users/${user_id}`);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [auth.user_id, customer_id]
   );
 

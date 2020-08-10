@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Input, Button, Col, Row } from '@nio/ui-kit';
+import { Card, CardBody, Input, Button, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -36,6 +36,7 @@ const UpdatePassword = () => {
       setFormState({ error: auth.message });
       setTimeout(() => setFormState({}), 3000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.passwordError]);
 
   useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);

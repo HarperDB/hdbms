@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Card, CardBody } from '@nio/ui-kit';
+import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';

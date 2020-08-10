@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody } from '@nio/ui-kit';
+import { Card, CardBody } from 'reactstrap';
 
 import EntityManagerForm from './entityManagerForm';
 import EntityManagerRow from './entityManagerRow';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Card, CardBody, Button } from '@nio/ui-kit';
+import { Row, Col, Card, CardBody, Button } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';

@@ -1,6 +1,5 @@
 import { fetch } from 'whatwg-fetch';
 import addError from './lms/addError';
-import config from '../config';
 
 export default async (operation, auth, url, compute_stack_id = false, customer_id = false, signal = undefined) => {
   // eslint-disable-next-line no-console
@@ -27,10 +26,6 @@ export default async (operation, auth, url, compute_stack_id = false, customer_i
     });
 
     const response = await request.json();
-
-    if (config.errortest) {
-      addError({ ...errorObject, error: { error: true, message: 'this is a test error' } });
-    }
 
     if (response.error) {
       addError({ ...errorObject, error: response });

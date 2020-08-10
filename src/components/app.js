@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -9,11 +9,10 @@ import appState from '../state/appState';
 import usePersistedUser from '../state/persistedUser';
 import config from '../config';
 
-import SignUp from './auth/signUp';
-import SignIn from './auth/signIn';
-import ResetPassword from './auth/resetPassword';
-import UpdatePassword from './auth/updatePassword';
-import ResendRegistrationEmail from './auth/resendRegistrationEmail';
+import Loader from './shared/loader';
+import Maintenance from './shared/maintenance';
+import ErrorFallback from './shared/errorFallback';
+import ErrorFallbackAuth from './shared/errorFallbackAuth';
 
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
@@ -23,20 +22,20 @@ import checkVersion from '../methods/app/checkVersion';
 import init from '../methods/app/init';
 import refreshUser from '../methods/app/refreshUser';
 
-import Organization from './organization';
-import Organizations from './organizations';
-import Support from './support';
-import Instances from './instances';
-import Instance from './instance';
-import Profile from './profile';
-import TopNav from './topnav';
-import Loader from './shared/loader';
-import Maintenance from './shared/maintenance';
-import ErrorFallback from './shared/errorFallback';
-import ErrorFallbackAuth from './shared/errorFallbackAuth';
+const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './topnav'));
+const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/signUp'));
+const SignIn = lazy(() => import(/* webpackChunkName: "signIn" */ './auth/signIn'));
+const ResetPassword = lazy(() => import(/* webpackChunkName: "resetPassword" */ './auth/resetPassword'));
+const UpdatePassword = lazy(() => import(/* webpackChunkName: "updatePassword" */ './auth/updatePassword'));
+const ResendRegistrationEmail = lazy(() => import(/* webpackChunkName: "resendRegistrationEmail" */ './auth/resendRegistrationEmail'));
+const Organization = lazy(() => import(/* webpackChunkName: "organization" */ './organization'));
+const Organizations = lazy(() => import(/* webpackChunkName: "organizations" */ './organizations'));
+const Support = lazy(() => import(/* webpackChunkName: "support" */ './support'));
+const Instances = lazy(() => import(/* webpackChunkName: "instances" */ './instances'));
+const Instance = lazy(() => import(/* webpackChunkName: "instance" */ './instance'));
+const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
 
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
-
 let controller;
 
 export default () => {
@@ -62,14 +61,17 @@ export default () => {
     if (window.ORIBI && auth?.email) {
       window.ORIBI.api('setUserEmail', auth.email);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.email]);
 
   useEffect(() => {
     if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showVersionAlert]);
 
   useEffect(() => {
     init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useInterval(() => {
@@ -94,30 +96,36 @@ export default () => {
           </ErrorBoundary>
         ) : loggedIn ? (
           <>
-            <TopNav />
+            <Suspense fallback={<Loader header=" " spinner />}>
+              <TopNav />
+            </Suspense>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Switch>
-                <Route component={Profile} path="/profile" />
-                <Route component={Support} path="/support/:view?" />
-                <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
-                <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route component={Organization} path="/o/:customer_id/:view?" />
-                <Route component={Organizations} path="/:action?" />
-                <Redirect to="/" />
-              </Switch>
+              <Suspense fallback={<Loader header=" " spinner />}>
+                <Switch>
+                  <Route component={Profile} path="/profile" />
+                  <Route component={Support} path="/support/:view?" />
+                  <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
+                  <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                  <Route component={Organization} path="/o/:customer_id/:view?" />
+                  <Route component={Organizations} path="/:action?" />
+                  <Redirect to="/" />
+                </Switch>
+              </Suspense>
             </ErrorBoundary>
           </>
         ) : fetchingUser ? (
           <Loader header="signing in" spinner />
         ) : (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-            <Switch>
-              <Route component={SignIn} exact path="/" />
-              <Route component={SignUp} exact path="/sign-up" />
-              <Route component={ResetPassword} exact path="/reset-password" />
-              <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
-              <Redirect to="/" />
-            </Switch>
+            <Suspense fallback={<Loader header=" " spinner />}>
+              <Switch>
+                <Route component={SignIn} exact path="/" />
+                <Route component={SignUp} exact path="/sign-up" />
+                <Route component={ResetPassword} exact path="/reset-password" />
+                <Route component={ResendRegistrationEmail} exact path="/resend-registration-email" />
+                <Redirect to="/" />
+              </Switch>
+            </Suspense>
           </ErrorBoundary>
         )}
       </div>

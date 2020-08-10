@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Input } from '@nio/ui-kit';
+import { Row, Col, Button, Input } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -72,6 +72,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     if (entityName && items.find((i) => i === entityName)) {
       history.push(`${baseUrl}/${entityName}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   return (
@@ -111,7 +112,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           </Button>
         ) : (
           <>
-            <Button color="success" className="round mr-1" onClick={createItem} onKeyDown={createItem}>
+            <Button color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button color="black" className="round" onClick={() => toggleCreate(false)}>

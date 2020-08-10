@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody } from '@nio/ui-kit';
+import { Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
@@ -17,6 +17,7 @@ export default ({ closeAndResetModal }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const alert = useAlert();
   const [newInstance] = useNewInstance({});
@@ -24,21 +25,15 @@ export default ({ closeAndResetModal }) => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   useAsyncEffect(async () => {
-    const newInstanceObject = { ...newInstance };
-    delete newInstanceObject.user;
-    delete newInstanceObject.pass;
-    delete newInstanceObject.super;
-    delete newInstanceObject.tc_version;
-
     addTCAcceptance({ auth, ...auth, tc_version: newInstance.tc_version, customer_id: newInstance.customer_id });
-    const response = await addInstance({ auth, ...newInstanceObject });
+    const response = await addInstance({ auth, ...newInstance });
 
     if (response.error) {
       const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
       setFormState({ submitted: false, error });
     } else {
       setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
-      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, instanceCount: instances?.length });
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length });
       alert.success(response.message);
       closeAndResetModal();
     }

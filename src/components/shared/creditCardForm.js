@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Input, Row } from '@nio/ui-kit';
+import { Col, Input, Row } from 'reactstrap';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';

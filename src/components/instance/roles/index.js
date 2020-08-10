@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Row, Col, CardBody, Card } from '@nio/ui-kit';
+import { Row, Col, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';
 
 import EntityManager from './roleManager';
-import JSONViewer from './jsonviewer';
 import StructureReloader from '../../shared/structureReloader';
+import Loader from '../../shared/loader';
+
+const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './jsonviewer'));
 
 const defaultState = {
   roleName: false,
@@ -38,6 +40,7 @@ export default () => {
     } else {
       setFormState(defaultState);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role_id, roles]);
 
   return (
@@ -57,7 +60,9 @@ export default () => {
         {formState.canEdit ? (
           <Card className="my-3">
             <CardBody className="full-height">
-              <JSONViewer />
+              <Suspense fallback={<Loader header=" " spinner />}>
+                <JSONViewer />
+              </Suspense>
             </CardBody>
           </Card>
         ) : (
