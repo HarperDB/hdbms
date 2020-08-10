@@ -30,13 +30,13 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     const response = json.body || json;
 
-    if (response.errorType || payload?.customer_id === '5a98ebe9') {
+    if (response.errorType) {
       addError({ ...errorObject, status: 'warn', error: response });
 
-      //return {
-      //error: true,
-      //message: response.errorMessage,
-      //};
+      return {
+        error: true,
+        message: response.errorMessage,
+      };
     }
 
     if (response.error) {
