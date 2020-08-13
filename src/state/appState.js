@@ -6,6 +6,7 @@ const appState = new Store({
   users: false,
   products: false,
   regions: false,
+  integrations: false,
   subscriptions: false,
   instances: false,
   hasCard: false,

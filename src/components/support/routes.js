@@ -3,6 +3,7 @@ import { lazy } from 'react';
 const Resources = lazy(() => import(/* webpackChunkName: "support-resources" */ './resources'));
 const Installation = lazy(() => import(/* webpackChunkName: "support-installation" */ './installation'));
 const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './drivers'));
+const Marketplace = lazy(() => import(/* webpackChunkName: "support-marketplace" */ './marketplace'));
 const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ './tutorials'));
 const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ './examples'));
 
@@ -22,6 +23,14 @@ export default [
     label: 'tutorials',
     icon: 'video-camera',
     iconCode: 'f03d',
+  },
+  {
+    component: Marketplace,
+    path: '/support/marketplace/:id?',
+    link: '/support/marketplace',
+    label: 'marketplace',
+    icon: 'shopping-cart',
+    iconCode: 'f07a',
   },
   {
     component: Drivers,

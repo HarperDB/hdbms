@@ -35,7 +35,6 @@ export default () => (
           <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe' }]} />
           <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe' }]} />
           <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe' }]} />
-          <DriverCard icon="sitemap" name="Node-Red (Plugin)" urls={[{ label: 'Visit Plugin Site', link: 'https://flows.nodered.org/node/node-red-contrib-harperdb' }]} />
         </Row>
       </CardBody>
     </Card>
