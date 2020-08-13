@@ -10,17 +10,19 @@ import Code from '../../shared/code';
 import appState from '../../../state/appState';
 import getIntegrations from '../../../api/lms/getIntegrations';
 
-export default ({ id, avg_rating, user_rating, meta: { name, description, category, language, homepage, install_command } }) => {
+export default ({ id, avg_rating, user_rating, meta: { name, description, language, homepage, install_command } }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [sendingRating, setSendingRating] = useState(false);
   const [userRating, setUserRating] = useState(user_rating);
 
   const addRating = async (rating) => {
-    setSendingRating(true);
-    setUserRating(rating);
-    await addIntegrationEngagement({ auth, integration_id: id, rating });
-    await getIntegrations({ auth });
-    setSendingRating(false);
+    if (rating !== user_rating) {
+      setSendingRating(true);
+      setUserRating(rating);
+      await addIntegrationEngagement({ auth, integration_id: id, rating });
+      await getIntegrations({ auth });
+      setSendingRating(false);
+    }
   };
 
   const addEngagement = async (type) => {

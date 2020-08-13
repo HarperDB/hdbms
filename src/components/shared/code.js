@@ -5,8 +5,6 @@ import { useAlert } from 'react-alert';
 export default ({ children, className, ...rest }) => {
   const alert = useAlert();
 
-  console.log(rest.onClick);
-
   useEffect(() => {
     if (children) {
       lolight();
