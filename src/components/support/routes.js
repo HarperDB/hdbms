@@ -24,6 +24,7 @@ export default [
     icon: 'video-camera',
     iconCode: 'f03d',
   },
+  /*
   {
     component: Marketplace,
     path: '/support/marketplace/:id?',
@@ -32,6 +33,7 @@ export default [
     icon: 'shopping-cart',
     iconCode: 'f07a',
   },
+  */
   {
     component: Drivers,
     path: '/support/drivers',
