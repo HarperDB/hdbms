@@ -6,16 +6,18 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
 export default ({ icon, name, docs, urls }) => (
-  <Col lg="3" md="4" sm="6" xs="12" className="mb-3">
+  <Col xl="4" lg="6" xs="12" className="mb-3">
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-      <Card>
-        <CardBody className="text-center">
-          <i className={`fa fa-2x fa-${icon} text-purple`} />
-          <b className="d-block mt-3 mb-2">{name}</b>
-          <a className="d-block mb-3 text-small" href={docs ? `http://cdn.cdata.com/help/FHE/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
-            documentation
-          </a>
-          <Row>
+      <Card className="integration-driver-card">
+        <CardBody className="pt-3">
+          <b className="d-block">{name}</b>
+          <div className="d-block text-truncate">
+            <a className="text-small text-darkgrey" href={docs ? `http://cdn.cdata.com/help/FHE/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
+              {docs ? `http://cdn.cdata.com/help/FHE/${docs}/default.htm` : urls[0].link}
+            </a>
+          </div>
+          <i className={`card-icon fa fa-lg fa-${icon} text-darkgrey`} />
+          <Row className="mt-3">
             {urls.map((u) => (
               <Col key={u.link}>
                 <Button href={u.link} block color="purple">

@@ -92,7 +92,7 @@ const TopNav = () => {
           </NavItem>
           <NavItem className="ml-3">
             <NavLink title="View Support Documentation" to="/support">
-              <i className="fa fa-support" />
+              <i className="far fa-life-ring" />
             </NavLink>
           </NavItem>
           <NavItem className="ml-3">
@@ -102,7 +102,7 @@ const TopNav = () => {
               onKeyDown={(e) => e.keyCode !== 13 || toggleDarkTheme()}
               onClick={toggleDarkTheme}
             >
-              <i className={`fa ${darkTheme ? 'fa-sun-o' : 'fa-moon-o'}`} />
+              <i className={`fas ${darkTheme ? 'fa-sun' : 'fa-moon'}`} />
             </DumbLink>
           </NavItem>
           <NavItem className="ml-3">

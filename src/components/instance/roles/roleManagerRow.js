@@ -64,9 +64,7 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
           <Button color="purple" className="round" title={`Viewing ${item.role}`}>
             <i className="fa fa-chevron-right" />
           </Button>
-        ) : (
-          <Button color="link" className="round" title={`View ${item.role}`} />
-        )}
+        ) : null}
       </Col>
     </Row>
   );
