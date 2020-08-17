@@ -32,7 +32,7 @@ export default () => {
               <i className="fa fa-spinner fa-spin text-purple" />
             </div>
           ) : !integrations.length ? (
-            <div className="py-5 text-center">We were unable to find any marketplace apps</div>
+            <div className="py-5 text-center">We were unable to find any marketplace apps at this time. Please try again later.</div>
           ) : (
             <Row>
               {integrations.map((integration) => (
