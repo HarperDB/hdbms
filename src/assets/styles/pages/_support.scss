@@ -71,8 +71,31 @@
     }
   }
 
-  .integration-card {
+  .integration-driver-card {
     height: 100%;
+    position:relative;
+
+    .card-icon {
+      position: absolute;
+      top: 15px;
+      right: 1.25rem;
+      font-size: 1.5rem;
+    }
+
+    .star-rating-container {
+      .your-rating {
+        display:none;
+      }
+
+      &:hover {
+        .avg-rating {
+          display: none;
+        }
+        .your-rating {
+          display:block;
+        }
+      }
+    }
 
     .marketplace-description {
       margin-top: 15px;

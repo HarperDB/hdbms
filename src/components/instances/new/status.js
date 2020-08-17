@@ -51,7 +51,9 @@ export default ({ closeAndResetModal }) => {
           {formState.error || 'there was an error creating your instance'}
           <br />
           <hr className="mt-4" />
-          <Button onClick={closeAndResetModal}>Click Here To Try Again</Button>
+          <Button className="px-3" color="danger" onClick={closeAndResetModal}>
+            Click Here To Try Again
+          </Button>
           <hr className="mb-4" />
           If the issue persists, please contact <a href="mailto:support@harperdb.io">support@harperdb.io</a>.
         </div>

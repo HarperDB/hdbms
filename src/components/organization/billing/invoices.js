@@ -29,7 +29,7 @@ export default () => {
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-      <Card className="no-shadow">
+      <Card>
         <CardBody>
           {!invoices ? (
             <div className="py-5 text-center">

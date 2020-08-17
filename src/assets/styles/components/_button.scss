@@ -1,7 +1,8 @@
 .btn {
   align-items: center;
   border-radius: $border-radius;
-  box-shadow: none !important;
+  box-shadow: 0 0 3px $grey-overlay !important;
+  border: 1px solid $faintest-white-overlay !important;
   display: inline-flex;
   font-family: $font-family-sans;
   font-size: $font-size-root;
@@ -12,6 +13,12 @@
   padding-left: 5px;
   padding-right: 5px;
   transition: none !important;
+  position: relative;
+  background: linear-gradient(to bottom,  rgba(255, 255, 255, 0.05) 31%, rgba(0, 0, 0, 0.05) 100%);
+
+  &:active {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05)  31%, rgba(255, 255, 255, 0.05) 100%);
+  }
 
   &.no-shadow {
     box-shadow: none !important;
@@ -36,43 +43,36 @@
 
   &.btn-success {
     background-color: $color-success !important;
-    border-color: $color-success !important;
     color: $color-white !important;
   }
 
   &.btn-danger {
     background-color: $color-danger !important;
-    border-color: $color-danger !important;
     color: $color-white !important;
   }
 
   &.btn-grey {
     background-color: $color-darkgrey !important;
-    border-color: $color-darkgrey !important;
     color: $color-white !important;
   }
 
   &.btn-outline-grey {
     background-color: $color-white !important;
-    border-color: $color-darkgrey !important;
     color: $color-darkgrey !important;
   }
 
   &.btn-black {
     background-color: $color-black !important;
-    border-color: $color-black !important;
     color: $color-white !important;
   }
 
   &.btn-purple {
     background-color: $color-purple !important;
-    border-color: $color-purple !important;
     color: $color-white !important;
   }
 
   &.btn-darkpurple {
     background-color: $color-darkpurple !important;
-    border-color: $color-darkpurple !important;
     color: $color-white !important;
   }
 }

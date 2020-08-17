@@ -37,8 +37,13 @@ export default ({ children, className, ...rest }) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-    <pre {...rest} className={`lolight ${className}`} onClick={() => copyToClipboard(children)}>
-      {children}
-    </pre>
+    <div className="code-holder">
+      <div className="copy-icon">
+        <i className="fa fa-copy" onClick={() => copyToClipboard(children)} />
+      </div>
+      <pre {...rest} className={`lolight ${className}`}>
+        {children}
+      </pre>
+    </div>
   );
 };

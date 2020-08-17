@@ -32,45 +32,42 @@ export default ({ id, avg_rating, user_rating, meta: { name, description, langua
   return (
     <Col xl="4" lg="6" xs="12" className="mb-3">
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-        <Card className="integration-card">
-          <CardBody>
-            <b className="d-block mb-2">{name}</b>
-            <hr />
-            <i className="fa fa-code" /> {language}
-            <br />
+        <Card className="integration-driver-card">
+          <CardBody className="pt-3">
+            <b className="d-block">{name}</b>
             <div className="d-block text-truncate">
-              <i className="fa fa-home" />{' '}
-              <a href={homepage} target="_blank" rel="noopener noreferrer" onClick={() => addEngagement('go_to_homepage')}>
+              <a href={homepage} className="text-small text-darkgrey" target="_blank" rel="noopener noreferrer" onClick={() => addEngagement('go_to_homepage')}>
                 {homepage}
               </a>
             </div>
-            <hr className="mb-1" />
-            <Row>
-              <Col sm="6" className="text-nowrap">
-                <span className="d-inline-block mr-2">avg rating</span>
-                {sendingRating ? (
-                  <i className="fa-spinner fa fa-spin text-small text-purple" />
-                ) : (
-                  [1, 2, 3, 4, 5].map((star) => <i key={star} className={`text-warning fa fa-star${!avg_rating || avg_rating < star ? '-o' : ''}`} />)
-                )}
-              </Col>
-              <Col sm="6" className="text-nowrap text-sm-right">
-                <span className="d-inline-block mr-2">your rating</span>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                  <i
-                    key={star}
-                    onMouseOver={() => setUserRating(star)}
-                    onMouseOut={() => {
-                      if (!sendingRating) setUserRating(user_rating);
-                    }}
-                    onClick={() => addRating(star)}
-                    className={`text-purple fa fa-star${!userRating || userRating < star ? '-o' : ''}`}
-                  />
-                ))}
-              </Col>
-            </Row>
-            <hr className="mt-1" />
+            <i className={`card-icon text-darkgrey fab fa-lg fa-${language.toLowerCase()}`} />
+            {sendingRating ? (
+              <div className="my-3 star-rating-container">
+                <i className="fa-spinner fa fa-spin text-small text-purple" />
+              </div>
+            ) : (
+              <Row className="my-3 star-rating-container">
+                <Col sm="6" className="text-nowrap avg-rating">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i key={star} className={`text-purple fa fa-star${!avg_rating || avg_rating < star ? '-o' : ''}`} />
+                  ))}
+                </Col>
+                <Col sm="6" className="text-nowrap your-rating">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+                    <i
+                      key={star}
+                      onMouseOver={() => setUserRating(star)}
+                      onMouseOut={() => {
+                        if (!sendingRating) setUserRating(user_rating);
+                      }}
+                      onClick={() => addRating(star)}
+                      className={`text-purple fa fa-star${!userRating || userRating < star ? '-o' : ''}`}
+                    />
+                  ))}
+                </Col>
+              </Row>
+            )}
             {install_command ? (
               <Code onClick={() => addEngagement('copy_install_command')}>{install_command}</Code>
             ) : (

@@ -39,6 +39,11 @@
     border-color: $faint-white-overlay !important;
   }
 
+  .lolight {
+    border: 1px solid $faint-white-overlay !important;
+    background-color: $faint-white-overlay !important;
+  }
+
   input,
   select,
   textarea,
