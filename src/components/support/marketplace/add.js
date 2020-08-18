@@ -129,12 +129,12 @@ export default () => {
               />
               {auth && !auth.github_repo && (
                 <>
-                  <span className="text-small d-block my-3">Provide your GitHub profile URL:</span>
                   <Input
                     type="text"
+                    className="mb-2 text-center"
                     name="author_github_repo"
                     autoComplete="false"
-                    placeholder="https://github.com/awesomedeveloper"
+                    placeholder="your GitHub profile URL"
                     value={formData.author_github_repo || ''}
                     onChange={(e) => setFormData({ ...formData, author_github_repo: e.target.value })}
                   />
