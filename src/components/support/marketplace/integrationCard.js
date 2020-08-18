@@ -70,17 +70,23 @@ export default ({ id, avg_rating, user_rating, author_user_id, meta: { name, des
                   {[1, 2, 3, 4, 5].map((star) => (
                     // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                     <i
+                      title={user_rating === star ? `Current rating: ${star} star${star !== 1 ? 's' : ''}` : `Rate ${star} star${star !== 1 ? 's' : ''}`}
                       key={star}
                       onMouseOver={() => setUserRating(star)}
                       onMouseOut={() => {
                         if (!sendingRating) setUserRating(user_rating);
                       }}
                       onClick={() => {
-                        console.log('hi');
                         addRating(star);
                       }}
-                      className={`star-icon text-purple ${
-                        !userRating || userRating < star - 0.5 ? 'far fa-star' : userRating === star - 0.5 ? 'fas fa-star-half-alt' : 'fas fa-star'
+                      className={`star-icon ${
+                        user_rating === star
+                          ? 'fas fa-star text-warning'
+                          : !userRating || userRating < star - 0.5
+                          ? 'far fa-star text-purple'
+                          : userRating === star - 0.5
+                          ? 'fas fa-star-half-alt text-purple'
+                          : 'fas fa-star text-purple'
                       }`}
                     />
                   ))}
