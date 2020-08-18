@@ -80,19 +80,30 @@
       top: 15px;
       right: 1.25rem;
       font-size: 1.5rem;
+      max-height: 22px;
+      max-width: 50px;
     }
 
     .star-rating-container {
+      .star-icon {
+        width: 16px;
+      }
       .your-rating {
         display:none;
       }
 
-      &:hover {
-        .avg-rating {
-          display: none;
-        }
-        .your-rating {
-          display:block;
+      &.disabled {
+        cursor: not-allowed;
+      }
+
+      &.enabled {
+        &:hover {
+          .avg-rating {
+            display: none;
+          }
+          .your-rating {
+            display:block;
+          }
         }
       }
     }

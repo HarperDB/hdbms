@@ -26,8 +26,8 @@ export default [
   },
   {
     component: Marketplace,
-    path: '/support/marketplace/:id?',
-    link: '/support/marketplace',
+    path: '/support/marketplace/:type?',
+    link: '/support/marketplace/active',
     label: 'marketplace',
     icon: 'shopping-cart',
     iconCode: 'f07a',

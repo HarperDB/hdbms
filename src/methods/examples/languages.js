@@ -30,7 +30,7 @@ export default [
   { lang: 'java', variant: 'OkHttp', syntax_mode: 'java', snippet: javaOkHttp },
   { lang: 'java', variant: 'Unirest', syntax_mode: 'java', snippet: javaUnirest },
   { lang: 'JavaScript', variant: 'Fetch', syntax_mode: 'javascript', snippet: javascriptFetch },
-  { lang: 'javascript', variant: 'jQuery', syntax_mode: 'javascript', snippet: javascriptjQuery },
+  { lang: 'JavaScript', variant: 'jQuery', syntax_mode: 'javascript', snippet: javascriptjQuery },
   { lang: 'JavaScript', variant: 'XHR', syntax_mode: 'javascript', snippet: javascriptXHR },
   { lang: 'C', variant: 'libcurl', syntax_mode: 'cpp', snippet: cLibcurl },
   { lang: 'nodejs', variant: 'Request', syntax_mode: 'javascript', snippet: nodejsRequest },

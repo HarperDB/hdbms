@@ -50,21 +50,6 @@ textarea {
   white-space: nowrap;
 }
 
-.nio-check-mark::before {
-  content: '\f00c';
-}
-
-.nio::before {
-  font-family: 'FontAwesome', monospace !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400 !important;
-  text-transform: none;
-  vertical-align: top;
-}
-
 .radio-button > div {
   border-bottom: 1px solid $color-lightergrey;
   padding: 8px 0;

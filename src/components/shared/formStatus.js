@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
 
-export default ({ header, subhead = ' ', height, status }) => (
-  <Card className="form-status">
+export default ({ header, subhead = ' ', height, status, className }) => (
+  <Card className={`form-status ${className}`}>
     <CardBody className="text-center" style={{ height }}>
       <div className="text-bold">{header}</div>
       <div className="py-4">

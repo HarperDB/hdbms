@@ -15,10 +15,16 @@ export default async ({ auth, signal }) => {
       auth,
     });
 
-    let integrations = [];
+    let integrations = {
+      active: [],
+      review: [],
+    };
 
     if (Array.isArray(response)) {
-      integrations = response;
+      integrations = {
+        active: response.filter((i) => i.status === 'active'),
+        review: response.filter((i) => i.status === 'review'),
+      };
     }
 
     return appState.update((s) => {

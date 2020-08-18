@@ -9,6 +9,7 @@ import updateUser from '../../../api/lms/updateUser';
 import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import isURL from '../../../methods/util/isURL';
 
 export default ({ formStateHeight }) => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -17,14 +18,16 @@ export default ({ formStateHeight }) => {
 
   const submit = () => {
     setFormState({ submitted: true });
-    const { firstname, lastname } = formData;
+    const { firstname, lastname, github_repo } = formData;
     if (!firstname || !lastname) {
       setFormState({ error: 'All fields are required' });
-    } else if (auth.firstname === firstname && auth.lastname === lastname) {
+    } else if (!isURL(github_repo)) {
+      setFormState({ error: 'github repo must be a valid URL' });
+    } else if (auth.firstname === firstname && auth.lastname === lastname && auth.github_repo === github_repo) {
       setFormState({ error: 'Nothing seems to have changed' });
     } else {
       setFormState({ processing: true });
-      updateUser({ auth, firstname, lastname, user_id: auth.user_id });
+      updateUser({ auth, firstname, lastname, user_id: auth.user_id, github_repo });
     }
   };
 
@@ -95,6 +98,23 @@ export default ({ formStateHeight }) => {
                     placeholder="last name"
                     onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
                     value={formData.lastname || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  github repo
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    type="text"
+                    className="mb-0 text-center"
+                    name="github_repo"
+                    placeholder="github repo"
+                    onChange={(e) => setFormData({ ...formData, github_repo: e.target.value })}
+                    value={formData.github_repo || ''}
                     disabled={formState.submitted}
                   />
                 </Col>
