@@ -105,7 +105,7 @@ export default () => {
                 className="mb-2 text-center"
                 name="homepage"
                 autoComplete="false"
-                placeholder="public github repository"
+                placeholder="public github repo url"
                 value={formData.homepage || ''}
                 onChange={(e) => setFormData({ ...formData, homepage: e.target.value })}
               />
@@ -134,7 +134,7 @@ export default () => {
                     className="mb-2 text-center"
                     name="author_github_repo"
                     autoComplete="false"
-                    placeholder="your GitHub profile URL"
+                    placeholder="your github profile url"
                     value={formData.author_github_repo || ''}
                     onChange={(e) => setFormData({ ...formData, author_github_repo: e.target.value })}
                   />
