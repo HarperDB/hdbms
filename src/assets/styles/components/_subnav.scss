@@ -123,4 +123,26 @@
     }
 
   }
+
+  .filter-holder {
+    max-width: 280px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    input {
+      border: 1px solid $faintest-white-overlay !important;
+      background: $faint-white-overlay !important;
+      color: $color-lightgrey !important;
+    }
+
+    .clear-filter {
+      background: none !important;
+      border: 0 !important;
+      position: absolute;
+      right: 8px;
+      top: 0;
+      box-shadow: none !important;
+    }
+  }
 }

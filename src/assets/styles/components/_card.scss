@@ -22,7 +22,7 @@ i.floating-card-header {
   border: 1px solid $color-lightgrey;
   border-radius: $border-radius;
   color: $color-black;
-  box-shadow: 0 0 5px $lighter-grey-overlay;
+  box-shadow: 0 0 5px $light-grey-overlay !important;
 
   &.error,
   &.success {

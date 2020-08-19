@@ -18,7 +18,7 @@ export default [
   },
   {
     component: Tutorials,
-    path: '/support/tutorials',
+    path: '/support/tutorials/:video_id?',
     link: '/support/tutorials',
     label: 'tutorials',
     icon: 'video-camera',

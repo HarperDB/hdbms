@@ -13,7 +13,8 @@ const TopNav = () => {
   const { pathname } = useLocation();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
+  const nextTheme = theme === 'dark' ? 'light' : theme === 'purple' ? 'dark' : 'purple';
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,9 +27,9 @@ const TopNav = () => {
     [auth.orgs, customer.customer_id]
   );
 
-  const toggleDarkTheme = () =>
+  const toggleDarkTheme = (newValue) =>
     appState.update((s) => {
-      s.darkTheme = !darkTheme;
+      s.theme = newValue;
     });
 
   const logOut = () =>
@@ -98,11 +99,11 @@ const TopNav = () => {
           <NavItem className="ml-3">
             <DumbLink
               tabIndex="0"
-              title={darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              onKeyDown={(e) => e.keyCode !== 13 || toggleDarkTheme()}
-              onClick={toggleDarkTheme}
+              title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to light theme'}
+              onKeyDown={(e) => e.keyCode !== 13 || toggleDarkTheme(nextTheme)}
+              onClick={() => toggleDarkTheme(nextTheme)}
             >
-              <i className={`fas ${darkTheme ? 'fa-sun' : 'fa-moon'}`} />
+              <i className="fas fa-palette" />
             </DumbLink>
           </NavItem>
           <NavItem className="ml-3">

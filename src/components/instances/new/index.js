@@ -25,7 +25,7 @@ const OrderStatus = lazy(() => import(/* webpackChunkName: "newinstance-status" 
 export default () => {
   const history = useHistory();
   const { purchaseStep = 'type', customer_id } = useParams();
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
 
   const closeAndResetModal = () => {
@@ -41,7 +41,7 @@ export default () => {
   };
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={darkTheme ? 'dark' : ''}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>

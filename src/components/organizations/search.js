@@ -11,10 +11,10 @@ const Search = () => {
 
   return (
     <>
-      <Input type="text" className="orgs-filter text-center" onChange={updateFilter} placeholder="filter your organizations" value={orgSearch || ''} />
+      <Input type="text" className="text-center" onChange={updateFilter} placeholder="filter your organizations" value={orgSearch || ''} />
       {orgSearch && (
         <Button className="clear-filter" onClick={clearFilter}>
-          <i className="fa fa-times text-white" />
+          <i className="fa fa-times" />
         </Button>
       )}
     </>

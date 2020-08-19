@@ -21,7 +21,7 @@ export default ({ newEntityAttributes, hashAttribute }) => {
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [rowValue, setRowValue] = useState({});
 
   useAsyncEffect(async () => {
@@ -95,9 +95,9 @@ export default ({ newEntityAttributes, hashAttribute }) => {
                 theme="light_mitsuketa_tribute"
                 colors={{
                   background: 'transparent',
-                  default: darkTheme ? '#aaa' : '#000',
-                  colon: darkTheme ? '#aaa' : '#000',
-                  keys: darkTheme ? '#aaa' : '#000',
+                  default: theme === 'dark' ? '#aaa' : '#000',
+                  colon: theme === 'dark' ? '#aaa' : '#000',
+                  keys: theme === 'dark' ? '#aaa' : '#000',
                   string: '#13c664',
                   number: '#ea4c89',
                   primitive: '#ffa500',

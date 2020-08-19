@@ -10,7 +10,7 @@ const SubNav = () => (
   <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
     <Navbar className="app-subnav">
       <Nav navbar>
-        <div className="org-filter-holder">
+        <div className="filter-holder">
           <Search />
         </div>
       </Nav>

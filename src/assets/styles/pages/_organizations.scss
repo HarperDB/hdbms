@@ -2,9 +2,7 @@
   .active-org {
     align-items: center;
     background: $faint-white-overlay;
-    border-radius: 4px;
     border-right: 1px solid $faint-white-overlay;
-    box-shadow: 1px 1px 5px $light-grey-overlay !important;
     display: inline-flex;
     flex: 0;
     height: 34px;
@@ -13,8 +11,10 @@
     transition: flex 500ms;
 
     &.open {
-      border-right: 0;
+      box-shadow: 1px 1px 5px $light-grey-overlay !important;
+      border-right: 0 !important;
       flex: 1;
+      border-radius: 4px;
     }
 
     .org-name,
@@ -105,33 +105,6 @@
 
     .action-buttons {
       margin-top: 20px;
-    }
-  }
-
-  .org-filter-holder {
-    max-width: 400px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-
-    .orgs-filter {
-      box-shadow: inset 0 0 5px $grey-overlay !important;
-      background: $faint-white-overlay !important;
-      border-color: transparent !important;
-      color: $color-white !important;
-      width: 100%;
-
-      &::placeholder {
-        color: $white-overlay !important;
-      }
-    }
-
-    .clear-filter {
-      background: none !important;
-      border: 0 !important;
-      position: absolute;
-      right: 8px;
-      top: 0;
     }
   }
 }

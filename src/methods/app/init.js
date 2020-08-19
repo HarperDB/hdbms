@@ -31,16 +31,16 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller, 
   getPostManCollection();
 
   const unsubscribeAuth = appState.subscribe(
-    (s) => ({ newAuth: s.auth, newDarkTheme: s.darkTheme }),
-    ({ newAuth: { email, pass }, newDarkTheme }) => {
-      setPersistedUser({ email, pass, darkTheme: newDarkTheme });
+    (s) => ({ newAuth: s.auth, newTheme: s.theme }),
+    ({ newAuth: { email, pass }, newTheme }) => {
+      setPersistedUser({ email, pass, theme: newTheme });
       if (!email && controller) controller.abort();
     }
   );
 
   appState.update((s) => {
     s.auth = { email: auth?.email, pass: auth?.pass };
-    s.darkTheme = auth?.darkTheme;
+    s.theme = auth?.theme;
   });
 
   return unsubscribeAuth;

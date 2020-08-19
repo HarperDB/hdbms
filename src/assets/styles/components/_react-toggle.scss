@@ -31,6 +31,8 @@
     height: 100%;
     transition: all 0.2s ease;
     width: 100%;
+    border: 1px solid transparent !important;
+    background: $color-lightgrey !important;
   }
 
   &-track-check,
@@ -51,14 +53,10 @@
 
   &-track-check {
     opacity: 0;
-    padding-left: 10px;
-    padding-right: 30px;
   }
 
   &-track-x {
     opacity: 1;
-    padding-left: 30px;
-    padding-right: 10px;
   }
 
   &-thumb {
@@ -66,18 +64,18 @@
     border-radius: 50%;
     box-shadow: none;
     box-sizing: border-box;
-    height: 22px;
-    left: 1px;
+    height: 20px;
+    left: 2px;
     outline: none;
     position: absolute;
-    top: 1px;
+    top: 2px;
     transition: all 0.25s ease;
-    width: 22px;
+    width: 20px;
   }
 
   &--checked {
     .react-toggle-track {
-      background-color: $color-success;
+      background-color: $color-success !important;
     }
 
     .react-toggle-track-check {
@@ -89,7 +87,7 @@
     }
 
     .react-toggle-thumb {
-      left: calc(100% - 23px);
+      left: calc(100% - 22px);
     }
   }
 }

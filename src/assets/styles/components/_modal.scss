@@ -18,12 +18,12 @@
   .modal-content {
     border-radius: $border-radius;
     overflow: hidden;
+    border: 1px solid $faintest-white-overlay;
 
     .modal-header {
       background: $gradient-purple-magenta;
       color: $color-white;
-      box-shadow: 0 0 6px 1px $dark-grey-overlay;
-      border-bottom: 0;
+      border-bottom: 1px solid $faintest-white-overlay;
       border-radius: $border-radius $border-radius 0 0;
 
       &::after {

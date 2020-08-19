@@ -20,7 +20,7 @@ const Search = () => {
   const filterSearch = useStoreState(appState, (s) => s.filterSearch);
 
   return (
-    <div className="instance-filter-holder">
+    <div className="filter-holder">
       <Input
         title="filter instances by name, host, url, or region"
         type="text"

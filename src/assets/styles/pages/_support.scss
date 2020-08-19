@@ -32,23 +32,16 @@
   }
 
   .youtube-thumbnail {
-    border: 3px solid $color-white;
-    border-radius: 6px;
     cursor: pointer;
-    height: 150px;
+    height: 100px;
     margin-bottom: 15px;
     overflow: hidden;
     position: relative;
     width: 100%;
 
-    &.active {
-      border: 3px solid $color-lightpurple;
-    }
-
     .title {
       align-items: center;
       background: $dark-grey-overlay;
-      border-radius: 6px;
       bottom: 0;
       color: $color-white;
       display: flex;
@@ -60,7 +53,19 @@
       right: 0;
       top: 0;
       width: 100%;
+      padding: 15px;
+      text-align: center;
     }
+
+    &.active {
+      border: 1px solid $color-white;
+
+      .title {
+        border: 1px solid $faint-white-overlay;
+      }
+    }
+
+
   }
 
   .custom-example-prompt {

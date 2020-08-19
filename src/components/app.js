@@ -84,7 +84,7 @@ export default () => {
   useInterval(() => getCurrentVersion(), config.check_version_interval);
 
   return (
-    <div className={persistedUser?.darkTheme ? 'dark' : ''}>
+    <div className={persistedUser?.theme}>
       <div id="app-container">
         {config.maintenance ? (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>

@@ -49,21 +49,21 @@
   textarea,
   .fake-input,
   .form-control {
-    background: transparent !important;
-    border-color: $faint-white-overlay !important;
+    background: $faint-white-overlay !important;
+    border-color: $faintest-white-overlay !important;
     color: $color-lightgrey !important;
   }
 
   .entity-manager {
     .card {
-      background-color: $faint-white-overlay !important;
+      background-color: $dark-grey-overlay !important;
       border: 1px solid $color-black;
 
       .item-row {
-        background-color: $dark-grey-overlay !important;
+        background-color: transparent !important;
 
         &.active {
-          background-color: $black-overlay !important;
+          background-color: transparent !important;
         }
       }
     }
@@ -124,8 +124,8 @@
     .react-select__control--menu-is-open,
     .react-select__control--is-focused,
     .react-select__indicator-separator {
-      background: transparent;
-      border-color: $faint-white-overlay !important;
+      background: $faint-white-overlay !important;
+      border-color: $faintest-white-overlay !important;
 
       .react-select__single-value {
         color: $color-lightgrey;
@@ -154,6 +154,18 @@
     }
   }
 
+  .react-toggle {
+    .react-toggle-track {
+      background: transparent !important;
+      border: 1px solid $faint-white-overlay !important;
+    }
+    &--checked {
+      .react-toggle-track {
+        background: $color-success !important;
+      }
+    }
+  }
+
   .drop-zone {
     background: radial-gradient($faint-white-overlay 1px, transparent 0) !important;
     background-size: 3px 3px !important;
@@ -163,5 +175,9 @@
   .modal-content {
     background: $color-pureblack !important;
     color: $color-lightgrey !important;
+
+    .modal-header {
+      background: $dark-grey-overlay !important;
+    }
   }
 }
