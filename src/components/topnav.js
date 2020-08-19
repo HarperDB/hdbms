@@ -14,7 +14,7 @@ const TopNav = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const theme = useStoreState(appState, (s) => s.theme);
-  const nextTheme = theme === 'dark' ? 'light' : theme === 'purple' ? 'dark' : 'purple';
+  const nextTheme = !theme || theme === 'purple' ? 'dark' : theme === 'dark' ? 'light' : 'purple';
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
