@@ -8,7 +8,7 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
       <Col className="text-right">
         <i
           title={`Remove ${itemType}s`}
-          className="fa fa-minus text-white mr-2"
+          className="fa fa-minus mr-2"
           onClick={() => {
             toggleDropItem(!isDropping);
             toggleCreate(false);
@@ -16,7 +16,7 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
         />
         <i
           title={`Add ${itemType}`}
-          className="fa fa-plus text-white"
+          className="fa fa-plus"
           onClick={() => {
             toggleCreate(!isCreating);
             toggleDropItem(false);

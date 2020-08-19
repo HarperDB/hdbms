@@ -3,10 +3,10 @@
     background: $color-white !important;
 
     #logo {
-      background-image: url('/images/logo_circle_light.png');
+      background-image: url('/images/logo/logo_circle_light.png');
 
       @media screen and (max-width: 650px) {
-        background-image: url('/images/logo_circle_only_light.png');
+        background-image: url('/images/logo/logo_circle_only_light.png');
       }
     }
 
@@ -295,13 +295,28 @@
     }
   }
 
+  .structure-reloader {
+    button {
+      color: $color-darkgrey !important;
+    }
+  }
+
   #login-form {
     #login-logo {
-      background-image: url('/images/logo_vertical_white_light.png');
+      background-image: url('/images/logo/logo_vertical_white_light.png');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100px;
+      margin: 0 auto;
+      width: 80px;
     }
     .card {
       border: 1px solid $lighter-grey-overlay !important;
       background: $gradient-white-lightgrey !important;
+    }
+    .version {
+      color: $grey-overlay;
     }
     input {
       background: $light-white-overlay !important;

@@ -12,7 +12,7 @@
   }
 
   #logo {
-    background-image: url('/images/logo_circle.png');
+    background-image: url('/images/logo/logo_circle.png');
     background-position: center left;
     background-repeat: no-repeat;
     background-size: contain;
@@ -20,7 +20,7 @@
     width: 140px;
 
     @media screen and (max-width: 650px) {
-      background-image: url('/images/logo_circle_only.png');
+      background-image: url('/images/logo/logo_circle_only.png');
       width: 40px;
     }
   }

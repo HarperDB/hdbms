@@ -7,10 +7,12 @@ import { useParams } from 'react-router-dom';
 import instanceState from '../../../state/instanceState';
 
 import dropRole from '../../../api/instance/dropRole';
+import { useAlert } from 'react-alert';
 
 export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
+  const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -19,7 +21,12 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    await dropRole({ auth, url, id: item.id, is_local, compute_stack_id, customer_id });
+    const result = await dropRole({ auth, url, id: item.id, is_local, compute_stack_id, customer_id });
+
+    if (result.error) {
+      return alert.error(result.message);
+    }
+
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });

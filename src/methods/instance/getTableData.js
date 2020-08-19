@@ -102,6 +102,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
       }
+
+      fetchError = false;
     } catch (e) {
       fetchError = e.message;
     }
@@ -112,9 +114,9 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
   if (orderedColumns) {
     orderedColumns.map((k) => (newEntityAttributes[k] = null));
-    orderedColumns.unshift(hashAttribute);
-    orderedColumns.push('__createdtime__');
-    orderedColumns.push('__updatedtime__');
+    if (allAttributes.includes(hashAttribute)) orderedColumns.unshift(hashAttribute);
+    if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
+    if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
     dataTableColumns = orderedColumns.map((k) => ({
       id: k.toString(),

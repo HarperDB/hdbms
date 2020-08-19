@@ -20,6 +20,7 @@ export default () => {
   const alert = useAlert();
   const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const version = useStoreState(instanceState, (s) => s.registration?.version);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -34,6 +35,7 @@ export default () => {
       const defaultActivePermissions = await buildPermissionStructure({
         auth,
         url,
+        version,
         currentRolePermissions: roles.find((r) => r.id === role_id).permission,
         is_local,
         compute_stack_id,
@@ -53,7 +55,9 @@ export default () => {
     }
 
     setLoading(true);
-    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
+    const permission = { super_user: false, ...newPermissions };
+    console.log(permission);
+    const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 
     if (response.error) {
