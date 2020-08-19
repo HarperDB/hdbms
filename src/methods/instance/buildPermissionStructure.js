@@ -52,10 +52,7 @@ export default async ({ auth, url, currentRolePermissions, version, is_local, co
     return Object.keys(dbResponse[schema]).map((table) => {
       const thisTable = dbResponse[schema][table];
       const extantTablePermissions = currentRolePermissions && currentRolePermissions[schema] && currentRolePermissions[schema].tables[table];
-      const attributes = thisTable.attributes
-        //.filter((a) => ![thisTable.hash_attribute, '__createdtime__', '__updatedtime__'].includes(a.attribute))
-        .map((a) => a.attribute)
-        .sort();
+      const attributes = thisTable.attributes.map((a) => a.attribute).sort();
       permissionStructure[schema].tables[table] = legacy ? buildLegacy({ extantTablePermissions, attributes }) : buildCurrent({ extantTablePermissions, attributes });
       return true;
     });
