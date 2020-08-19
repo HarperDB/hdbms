@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { Row, Col, Card, CardBody } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
 import AddUserForm from './add';

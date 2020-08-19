@@ -56,7 +56,6 @@ export default () => {
 
     setLoading(true);
     const permission = { super_user: false, ...newPermissions };
-    console.log(permission);
     const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 

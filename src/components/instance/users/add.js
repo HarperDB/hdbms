@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Card, CardBody, Col } from 'reactstrap';
+import { Input, Button, Card, CardBody } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
