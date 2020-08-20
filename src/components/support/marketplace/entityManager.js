@@ -20,7 +20,7 @@ export default () => {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="entity-manager">
         <div className="floating-card-header">Status</div>
-        <Card className="mt-3 mb-4">
+        <Card className="my-3">
           <CardBody>{types && types.length ? types.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={type === item} />) : null}</CardBody>
         </Card>
       </div>

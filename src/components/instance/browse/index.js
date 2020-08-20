@@ -80,6 +80,9 @@ export default () => {
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>
+      <Col xs="12" className="d-block d-md-none">
+        <hr />
+      </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <ErrorBoundary
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}

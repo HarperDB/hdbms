@@ -25,7 +25,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
         toggleCreate={toggleCreate}
         showForm={showForm}
       />
-      <Card className="mt-3 mb-4">
+      <Card className="my-3">
         <CardBody>
           {items && items.length
             ? items.map((item) => (

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navbar, Nav, NavItem, NavLink as DumbLink } from 'reactstrap';
+import { Navbar, Nav, NavItem } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -62,7 +62,7 @@ const TopNav = () => {
           <div className={`active-org ${customer && pathname.indexOf(customer?.customer_id) !== -1 ? 'open' : ''}`}>
             <div className="text-white org-name">{customer.customer_name}</div>
             <div className="org-actions">
-              <NavItem>
+              <NavItem className="ml-0">
                 <NavLink title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
                   <i className="fa fa-th d-inline-block" />
                   <span className="d-none d-lg-inline-block">&nbsp; instances</span>
@@ -93,19 +93,19 @@ const TopNav = () => {
             </NavLink>
           </NavItem>
           <NavItem>
-            <DumbLink
-              tabIndex="0"
+            <a
+              href="#"
               title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to light theme'}
               onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
               onClick={() => toggleTheme(nextTheme)}
             >
               <i className="fas fa-palette" />
-            </DumbLink>
+            </a>
           </NavItem>
           <NavItem>
-            <DumbLink tabIndex="0" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
+            <a href="#" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
               <i className="fa fa-sign-out" />
-            </DumbLink>
+            </a>
           </NavItem>
         </Nav>
       </Navbar>

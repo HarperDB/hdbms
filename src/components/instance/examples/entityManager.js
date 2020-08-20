@@ -55,7 +55,7 @@ export default ({ type }) => {
     >
       <div className="entity-manager">
         <div className="floating-card-header">{type === 'folder' ? 'category' : 'operations'}</div>
-        <Card className="mt-3 mb-4">
+        <Card className="my-3">
           <CardBody>
             {!items.length ? (
               <div className="p-3 text-center">

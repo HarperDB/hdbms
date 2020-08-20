@@ -37,6 +37,10 @@
           border-top: 0;
         }
 
+        &.form {
+          border-top: 1px solid $lighter-grey-overlay;
+        }
+
         .input-holder {
           flex-grow: 1;
           flex-shrink: 0;

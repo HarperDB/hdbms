@@ -11,7 +11,7 @@ import Code from '../../shared/code';
 import appState from '../../../state/appState';
 import getIntegrations from '../../../api/lms/getIntegrations';
 
-export default ({ id, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command } }) => {
+export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command } }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const [sendingRating, setSendingRating] = useState(false);
@@ -48,51 +48,51 @@ export default ({ id, avg_rating, user_rating, author_user_id, meta: { name, des
             ) : (
               <i title={language.toLowerCase()} className={`card-icon text-darkgrey fab fa-lg fa-${language.toLowerCase()}`} />
             )}
-            {sendingRating ? (
-              <div className="my-3 star-rating-container">
+            <div className={`my-3 star-rating-container ${canRate ? 'enabled' : 'disabled'}`}>
+              {sendingRating ? (
                 <i className="fa-spinner fa fa-spin text-small text-purple" />
-              </div>
-            ) : (
-              <Row className={`my-3 star-rating-container ${canRate ? 'enabled' : 'disabled'}`}>
-                <Col sm="6" className="text-nowrap avg-rating">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <i
-                      title={star}
-                      key={star}
-                      onClick={() => alert.error('You cannot rate your own integration')}
-                      className={`star-icon text-purple ${
-                        !avg_rating || avg_rating < star - 0.5 ? 'far fa-star' : avg_rating === star - 0.5 ? 'fas fa-star-half-alt' : 'fas fa-star'
-                      }`}
-                    />
-                  ))}
-                </Col>
-                <Col sm="6" className="text-nowrap your-rating">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                    <i
-                      title={user_rating === star ? `Current rating: ${star} star${star !== 1 ? 's' : ''}` : `Rate ${star} star${star !== 1 ? 's' : ''}`}
-                      key={star}
-                      onMouseOver={() => setUserRating(star)}
-                      onMouseOut={() => {
-                        if (!sendingRating) setUserRating(user_rating);
-                      }}
-                      onClick={() => {
-                        addRating(star);
-                      }}
-                      className={`star-icon ${
-                        user_rating === star
-                          ? 'fas fa-star text-warning'
-                          : !userRating || userRating < star - 0.5
-                          ? 'far fa-star text-purple'
-                          : userRating === star - 0.5
-                          ? 'fas fa-star-half-alt text-purple'
-                          : 'fas fa-star text-purple'
-                      }`}
-                    />
-                  ))}
-                </Col>
-              </Row>
-            )}
+              ) : status !== 'review' ? (
+                <Row>
+                  <Col sm="6" className="text-nowrap avg-rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i
+                        title={star}
+                        key={star}
+                        onClick={() => alert.error('You cannot rate your own integration')}
+                        className={`star-icon text-purple ${
+                          !avg_rating || avg_rating < star - 0.5 ? 'far fa-star' : avg_rating === star - 0.5 ? 'fas fa-star-half-alt' : 'fas fa-star'
+                        }`}
+                      />
+                    ))}
+                  </Col>
+                  <Col sm="6" className="text-nowrap your-rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+                      <i
+                        title={user_rating === star ? `Current rating: ${star} star${star !== 1 ? 's' : ''}` : `Rate ${star} star${star !== 1 ? 's' : ''}`}
+                        key={star}
+                        onMouseOver={() => setUserRating(star)}
+                        onMouseOut={() => {
+                          if (!sendingRating) setUserRating(user_rating);
+                        }}
+                        onClick={() => {
+                          addRating(star);
+                        }}
+                        className={`star-icon ${
+                          user_rating === star
+                            ? 'fas fa-star text-warning'
+                            : !userRating || userRating < star - 0.5
+                            ? 'far fa-star text-purple'
+                            : userRating === star - 0.5
+                            ? 'fas fa-star-half-alt text-purple'
+                            : 'fas fa-star text-purple'
+                        }`}
+                      />
+                    ))}
+                  </Col>
+                </Row>
+              ) : null}
+            </div>
             {install_command ? (
               <Code onClick={() => addEngagement('copy_install_command')}>{install_command}</Code>
             ) : (

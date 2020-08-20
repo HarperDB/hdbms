@@ -3,10 +3,10 @@
   border-bottom: 1px solid transparent;
   height: 60px;
   min-width: $min-width;
+  overflow-x: auto;
   padding: 0 2rem;
   position: fixed;
   z-index: 99 !important;
-  overflow-x: auto;
 
   @media screen and (max-width: 991px) {
     padding: 0 1rem;
@@ -37,8 +37,8 @@
       align-items: center;
       display: inline-flex;
       margin-bottom: 0 !important;
-      white-space: nowrap;
       margin-left: 1rem;
+      white-space: nowrap;
 
       @media screen and (max-width: 511px) {
         margin-left: 0.5rem;
@@ -84,9 +84,9 @@
       flex: 0;
       height: 34px;
       justify-content: flex-end;
+      margin-left: 1rem;
       overflow: hidden;
       transition: flex 500ms;
-      margin-left: 1rem;
 
       @media screen and (max-width: 511px) {
         margin-left: 0.5rem;

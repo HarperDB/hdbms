@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Button, CardBody, Card } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useLocation, useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import alterUser from '../../../api/instance/alterUser';
@@ -15,17 +14,14 @@ import addError from '../../../api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id, username } = useParams();
-  const { pathname } = useLocation();
-  const history = useHistory();
-  const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
-
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const roles = useStoreState(instanceState, (s) => s.roles);
+  const roles = useStoreState(instanceState, (s) => s.roles.map((r) => ({ label: r.role, value: r.id })));
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
 
   const updateRole = async () => {
     const { newRole } = formData;
@@ -35,6 +31,7 @@ export default () => {
     } else if (thisUser.role.id === newRole) {
       setFormState({ error: 'user already has this role' });
     } else {
+      setFormState({ submitted: true });
       const response = await alterUser({ auth, url, username, role: newRole, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('updated') !== -1) {
@@ -42,40 +39,47 @@ export default () => {
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        setTimeout(() => history.push(pathname.replace(`/${username}`, '')), 0);
+        setFormState({});
       } else {
-        setFormState({ error: response.message });
+        alert.error(response.message);
+        setFormState({});
       }
     }
   };
 
-  useAsyncEffect(() => setFormData({ ...formData, role: thisUser?.role?.id }), []);
+  useAsyncEffect(() => setFormData({ ...formData, newRole: thisUser?.role?.id }), []);
 
   return (
     <ErrorBoundary
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
       FallbackComponent={ErrorFallback}
     >
-      <SelectDropdown
-        className="react-select-container mb-2"
-        classNamePrefix="react-select"
-        onChange={({ value }) => setFormData({ ...formData, newRole: value })}
-        options={roles && thisUser?.role?.id && roles.filter((r) => r.id !== thisUser.role.id).map((r) => ({ label: r.role, value: r.id }))}
-        value={roles && thisUser?.role?.id && roles.find((r) => r.value === thisUser.role.id)}
-        isSearchable={false}
-        isClearable={false}
-        isLoading={!roles}
-        placeholder="select a role"
-        styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-      />
-      <Button block color="purple" onClick={updateRole}>
-        Update Role
-      </Button>
-      {formState.error && (
-        <Card className="mt-3 error">
-          <CardBody>{formState.error}</CardBody>
-        </Card>
-      )}
+      <Row>
+        <Col xs="4" className="py-1">
+          Change user role
+          <br />
+          <span className="text-small">Change what this user can do</span>
+        </Col>
+        <Col xs="4">
+          <SelectDropdown
+            className="react-select-container"
+            classNamePrefix="react-select"
+            onChange={({ value }) => setFormData({ ...formData, newRole: value })}
+            options={roles.filter((r) => r.value !== thisUser.role.id)}
+            value={roles.find((r) => r.value === formData.newRole)}
+            isSearchable={false}
+            isClearable={false}
+            isLoading={!roles}
+            placeholder="select a role"
+            styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+          />
+        </Col>
+        <Col xs="4">
+          <Button block color="purple" onClick={updateRole} disabled={formData.newRole === thisUser.role.id || formState === 'submitted'}>
+            Update Role
+          </Button>
+        </Col>
+      </Row>
     </ErrorBoundary>
   );
 };

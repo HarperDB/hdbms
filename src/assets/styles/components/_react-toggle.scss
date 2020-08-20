@@ -27,14 +27,14 @@
 
   &-track {
     background: $color-lightgrey !important;
-    box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
-    border: 1px solid transparent !important;
+    border: 1px solid $lighter-grey-overlay !important;
     border-radius: 30px;
+    box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
     display: inline-block;
     height: 100%;
+    overflow: hidden;
     transition: all 0.2s ease;
     width: 100%;
-    overflow: hidden;
   }
 
   &-track-check,
@@ -49,9 +49,9 @@
     line-height: 1;
     position: absolute;
     right: 0;
+    text-shadow: 0 0 2px $lighter-grey-overlay !important;
     transition: opacity 0.25s ease;
     white-space: nowrap;
-    text-shadow: 0 0 2px $lighter-grey-overlay !important;
   }
 
   &-track-check {

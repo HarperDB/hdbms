@@ -23,7 +23,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const hasPaidInstance = instances.find((i) => i.compute?.price || i.storage?.price);
+      const hasPaidInstance = instances.find((i) => i.totalPrice);
       if (hasPaidInstance) {
         setFormState({ error: 'You have active, non-free instances.' });
         setTimeout(() => setFormState({}), 2000);
@@ -37,8 +37,8 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
         } else {
           setFormState({ success: true });
           await getCustomer({ auth, customer_id });
-          setEditingCard(false);
-          setTimeout(() => setFormState({}), 2000);
+          setFormState({});
+          setTimeout(() => setEditingCard(false), 0);
         }
       }
     }
@@ -53,62 +53,61 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       ) : formState.error ? (
         <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." />
       ) : (
-        <>
-          <Card className="credit-card-form">
-            <CardBody>
-              <Row>
-                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                  card number
-                </Col>
-                <Col md="6" xs="12">
-                  <div className="input-static">
-                    **** **** ****
-                    {customerCard?.card?.last4}
-                  </div>
-                </Col>
-                <Col xs="12">
-                  <hr className="my-2" />
-                </Col>
-                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                  expiration
-                </Col>
-                <Col md="6" xs="12">
-                  <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
-                </Col>
-                <Col xs="12">
-                  <hr className="my-2" />
-                </Col>
-                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                  cvcc
-                </Col>
-                <Col md="6" xs="12">
-                  <div className="input-static">***</div>
-                </Col>
-                <Col xs="12">
-                  <hr className="my-2" />
-                </Col>
-                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                  billing postal code
-                </Col>
-                <Col md="6" xs="12">
-                  <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-          <Row>
-            <Col sm="6">
-              <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
-                Remove Card
-              </Button>
-            </Col>
-            <Col sm="6">
-              <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
-                Update Card
-              </Button>
-            </Col>
-          </Row>
-        </>
+        <Card>
+          <CardBody>
+            <Row>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                card number
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">
+                  **** **** ****
+                  {customerCard?.card?.last4}
+                </div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                expiration
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                cvcc
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">***</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                billing postal code
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
+              </Col>
+            </Row>
+            <hr className="my-2" />
+            <Row>
+              <Col sm="6">
+                <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
+                  Remove Card
+                </Button>
+              </Col>
+              <Col sm="6">
+                <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+                  Update Card
+                </Button>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
       )}
     </ErrorBoundary>
   );

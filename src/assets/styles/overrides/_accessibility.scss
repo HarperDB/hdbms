@@ -1,13 +1,9 @@
-.btn,
-button {
-  &:focus {
-    box-shadow: 0 0 0 2px $color-lightpurple !important;
-  }
-}
-
-
+a,
+button,
 input,
 textarea,
+.item-row,
+select,
 .card {
   &:focus {
     box-shadow: inset 0 0 0 2px $color-lightpurple !important;
@@ -15,10 +11,32 @@ textarea,
   }
 }
 
-a,
-.past-query {
-  &:focus {
-    box-shadow: none !important;
-    outline: 2px solid $color-lightpurple !important;
+.dark{
+  a,
+  input,
+  textarea,
+  .item-row,
+  select,
+  button,
+  .card {
+    &:focus {
+      box-shadow: inset 0 0 0 2px $white-overlay !important;
+      outline: none !important;
+    }
+  }
+}
+
+.light{
+  a,
+  input,
+  textarea,
+.item-row,
+  select,
+  button,
+  .card {
+    &:focus {
+      box-shadow: inset 0 0 0 2px $light-grey-overlay !important;
+      outline: none !important;
+    }
   }
 }

@@ -78,7 +78,7 @@ export default () => {
           </Button>
         </Col>
         <Col xs="12" className="text-center text-danger text-small">
-          {formState.error}
+          {formState.error}&nbsp;
         </Col>
       </Row>
     </ErrorBoundary>

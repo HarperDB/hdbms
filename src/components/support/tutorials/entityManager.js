@@ -11,7 +11,7 @@ export default ({ items, baseUrl, videoId }) => (
   <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
     <div className="entity-manager">
       <div className="floating-card-header">Tutorials</div>
-      <Card className="mt-3 mb-4">
+      <Card className="my-3">
         <CardBody>
           {!items.length ? (
             <div className="p-3 text-center">

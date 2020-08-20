@@ -10,10 +10,11 @@ import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
-export default ({ formStateHeight }) => {
+export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
+  const formStateHeight = '259px';
 
   const submit = () => {
     setFormState({ submitted: true });
@@ -53,16 +54,15 @@ export default ({ formStateHeight }) => {
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-      {' '}
-      {formState.processing ? (
-        <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
-      ) : formState.success ? (
-        <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
-      ) : formState.error ? (
-        <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
-      ) : (
-        <>
-          <Card className="mb-3">
+      <div className="my-3">
+        {formState.processing ? (
+          <FormStatus height={formStateHeight} status="processing" header="Updating Password" subhead="The Security Shepherd is mad-hashing." />
+        ) : formState.success ? (
+          <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
+        ) : formState.error ? (
+          <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
+        ) : (
+          <Card>
             <CardBody>
               <Row>
                 <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
@@ -114,13 +114,14 @@ export default ({ formStateHeight }) => {
                   />
                 </Col>
               </Row>
+              <hr className="mt-2 mb-4" />
+              <Button color="purple" block onClick={submit} disabled={formState.submitted}>
+                Update Password
+              </Button>
             </CardBody>
           </Card>
-          <Button color="purple" block onClick={submit} disabled={formState.submitted}>
-            Update Password
-          </Button>
-        </>
-      )}{' '}
+        )}
+      </div>
     </ErrorBoundary>
   );
 };

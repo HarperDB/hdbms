@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, CardBody, Card, Input } from 'reactstrap';
+import { Button, CardBody, Card, Input, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useLocation, useParams } from 'react-router-dom';
@@ -26,6 +26,7 @@ export default () => {
     if (formData.delete_username !== username) {
       alert.error('Please type the username to delete this user');
     } else {
+      setFormState({ submitted: true });
       const response = await dropUser({ auth, username, url, is_local, compute_stack_id, customer_id });
 
       if (response.message.indexOf('successfully') !== -1) {
@@ -33,9 +34,11 @@ export default () => {
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
+        setFormState({});
         setTimeout(() => history.push(pathname.replace(`/users/${username}`, '/users')), 0);
       } else {
-        setFormState({ error: response.message });
+        alert.error(response.message);
+        setFormState({});
       }
     }
   };
@@ -45,22 +48,29 @@ export default () => {
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
       FallbackComponent={ErrorFallback}
     >
-      <Input
-        onChange={(e) => setFormData({ delete_username: e.target.value })}
-        type="text"
-        className="text-center mb-2"
-        title="confirm username to delete"
-        placeholder={`Enter "${username}" here to enable deletion.`}
-        value={formData.delete_username || ''}
-      />
-      <Button block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username}>
-        Delete {username}
-      </Button>
-      {formState.error && (
-        <Card className="mt-3 error">
-          <CardBody>{formState.error}</CardBody>
-        </Card>
-      )}
+      <Row>
+        <Col xs="8" className="py-1">
+          Delete User
+          <br />
+          <span className="text-small">user will be removed from this instance</span>
+        </Col>
+        <Col xs="4">
+          {username !== formData.delete_username ? (
+            <Input
+              onChange={(e) => setFormData({ delete_username: e.target.value })}
+              type="text"
+              className="text-center"
+              title="confirm username to delete"
+              placeholder={`Enter "${username}" here to enable deletion.`}
+              value={formData.delete_username || ''}
+            />
+          ) : (
+            <Button block color="danger" onClick={deleteUser} disabled={formState.submitted}>
+              {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
+            </Button>
+          )}
+        </Col>
+      </Row>
     </ErrorBoundary>
   );
 };

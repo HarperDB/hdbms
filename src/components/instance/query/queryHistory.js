@@ -32,7 +32,7 @@ export default ({ setQuery, query }) => {
             <i title="clear query history" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
           </Col>
         </Row>
-        <Card className="mt-3 mb-4">
+        <Card className="my-3">
           {queries && queries[compute_stack_id]?.length ? (
             <CardBody className="query-scroller">
               {queries[compute_stack_id].map((q) => (
