@@ -42,7 +42,7 @@ export default () => {
         const response = await upsertIntegration({ auth, name, description, language, homepage, install_command, author_github_repo, bounty_url });
         if (response.message.indexOf('successfully') !== -1) {
           getIntegrations({ auth });
-          getUser({ auth });
+          getUser(auth);
           setFormState({ success: response.message });
           setTimeout(() => setFormData({}), 2000);
         } else {
