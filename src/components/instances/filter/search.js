@@ -31,7 +31,7 @@ const Search = () => {
       />
       {filterSearch && (
         <Button title="Clear instance filter" className="clear-filter" onClick={clearFilter}>
-          <i className="fa fa-times text-white" />
+          <i className="fa fa-times" />
         </Button>
       )}
     </div>
