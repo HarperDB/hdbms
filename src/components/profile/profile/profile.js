@@ -72,6 +72,15 @@ export default () => {
               <CardBody>
                 <Row>
                   <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                    email address
+                  </Col>
+                  <Col md="6" xs="12">
+                    <div className="input-static text-center">{auth.email}</div>
+                  </Col>
+                  <Col xs="12">
+                    <hr className="my-2" />
+                  </Col>
+                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
                     first name
                   </Col>
                   <Col md="6" xs="12">
@@ -118,15 +127,6 @@ export default () => {
                       value={formData.github_repo || ''}
                       disabled={formState.submitted}
                     />
-                  </Col>
-                  <Col xs="12">
-                    <hr className="my-2" />
-                  </Col>
-                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    email address (not editable)
-                  </Col>
-                  <Col md="6" xs="12">
-                    <div className="fake-input text-center">{auth.email}</div>
                   </Col>
                 </Row>
                 <hr className="mt-2 mb-4" />

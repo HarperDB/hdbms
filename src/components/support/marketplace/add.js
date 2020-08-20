@@ -13,31 +13,36 @@ import addError from '../../../api/lms/addError';
 import isURL from '../../../methods/util/isURL';
 import getIntegrations from '../../../api/lms/getIntegrations';
 import integrationLanguageOptions from '../../../methods/support/integrationLanguageOptions';
+import getUser from '../../../api/lms/getUser';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
-  const formHeight = '451px';
+  const formHeight = auth.github_repo ? '405px' : '451px';
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
     if (submitted) {
-      const { name, description, language, homepage, install_command, author_github_repo } = formData;
-      if (!name || !description || !language || !homepage || !install_command) {
+      const { name, description, language, homepage, install_command, author_github_repo, bounty_url } = formData;
+      if (!name || !description || !language || !homepage || !install_command || (!auth.github_repo && !author_github_repo)) {
         setFormState({ error: 'All fields must be filled out' });
         setTimeout(() => setFormState({}), 2000);
       } else if (!isURL(homepage)) {
         setFormState({ error: 'Project GitHub repo must be a valid URL' });
+        setTimeout(() => setFormState({}), 2000);
+      } else if (!isURL(bounty_url)) {
+        setFormState({ error: 'Bounty URL must be a valid URL' });
         setTimeout(() => setFormState({}), 2000);
       } else if (author_github_repo && !isURL(author_github_repo)) {
         setFormState({ error: 'Your GitHub profile must be a valid URL' });
         setTimeout(() => setFormState({}), 2000);
       } else {
         setFormState({ processing: true });
-        const response = await upsertIntegration({ auth, name, description, language, homepage, install_command, author_github_repo });
+        const response = await upsertIntegration({ auth, name, description, language, homepage, install_command, author_github_repo, bounty_url });
         if (response.message.indexOf('successfully') !== -1) {
           getIntegrations({ auth });
+          getUser({ auth });
           setFormState({ success: response.message });
           setTimeout(() => setFormData({}), 2000);
         } else {
