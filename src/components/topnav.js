@@ -95,7 +95,7 @@ const TopNav = () => {
           <NavItem>
             <a
               href="#"
-              title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to light theme'}
+              title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
               onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
               onClick={() => toggleTheme(nextTheme)}
             >
