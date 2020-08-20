@@ -5,15 +5,15 @@
     #logo {
       background-image: url('/images/logo/logo_circle_light.png');
 
-      @media screen and (max-width: 650px) {
+      @media screen and (max-width: 511px) {
         background-image: url('/images/logo/logo_circle_only_light.png');
       }
     }
 
     .navbar-nav {
       .active-org {
-        border-right-color: $color-grey !important;
         background: $gradient-white-lightgrey;
+        border-right-color: $color-grey !important;
 
         .org-name {
           color: $color-black !important;
@@ -24,6 +24,7 @@
         .nav-link,
         a {
           color: $grey-overlay !important;
+
           &.active {
             color: $black-overlay !important;
           }
@@ -45,14 +46,15 @@
 
   .app-subnav {
     background: $gradient-white-lightgrey !important;
-    border-top: 1px solid $lightest-grey-overlay;
     border-bottom: 1px solid $lighter-grey-overlay;
+    border-top: 1px solid $lightest-grey-overlay;
     box-shadow: 0 0 5px $lighter-grey-overlay !important;
 
     .navbar-nav {
       .nav-item {
         .nav-link {
           color: $grey-overlay !important;
+
           &.active {
             color: $black-overlay !important;
           }
@@ -78,6 +80,7 @@
           background: $light-grey-overlay !important;
         }
       }
+
       .react-select__option,
       .react-select__option:hover,
       .react-select__option:focus,
@@ -96,6 +99,7 @@
         border: 1px solid $light-grey-overlay !important;
         color: $color-darkgrey !important;
       }
+
       .clear-filter {
         color: $color-darkgrey;
       }
@@ -103,18 +107,18 @@
   }
 
   a {
-    color: $color-lightpurple !important;
+    color: $color-lightpurple;
 
     &:hover {
-      color: $color-purple !important;
+      color: $color-purple;
     }
   }
 
   .card {
     background: $lightest-grey-overlay !important;
     border: 1px solid $lighter-grey-overlay;
-    color: $color-darkgrey !important;
     box-shadow: 0 0 5px $lighter-grey-overlay !important;
+    color: $color-darkgrey !important;
 
     &.instance {
       background: $gradient-white-lightgrey !important;
@@ -134,14 +138,14 @@
   }
 
   .lolight {
-    border: 1px solid $lighter-grey-overlay !important;
     background-color: $dark-grey-overlay !important;
+    border: 1px solid $lighter-grey-overlay !important;
   }
 
   .loader {
     .card {
-      border: 1px solid $lighter-grey-overlay !important;
       background: $gradient-white-lightgrey !important;
+      border: 1px solid $lighter-grey-overlay !important;
       box-shadow: 0 0 5px $lightest-grey-overlay !important;
       height: 183px !important;
       width: 270px !important;
@@ -311,13 +315,16 @@
       margin: 0 auto;
       width: 80px;
     }
+
     .card {
-      border: 1px solid $lighter-grey-overlay !important;
       background: $gradient-white-lightgrey !important;
+      border: 1px solid $lighter-grey-overlay !important;
     }
+
     .version {
       color: $grey-overlay;
     }
+
     input {
       background: $light-white-overlay !important;
       border: 1px solid $lighter-grey-overlay !important;
@@ -328,22 +335,25 @@
         color: $light-grey-overlay !important;
       }
     }
+
     .disclaimer {
-      color:$dark-grey-overlay !important;
       border-bottom: 1px solid $lighter-grey-overlay;
       border-top: 1px solid $lighter-grey-overlay;
+      color: $dark-grey-overlay !important;
 
       a {
         color: $dark-grey-overlay !important;
       }
     }
+
     .login-nav-link {
-      color: $dark-grey-overlay !important;
+      color: $grey-overlay !important;
 
       &:hover {
-        color: $dark-grey-overlay !important;
+        color: $grey-overlay !important;
       }
     }
+
     .subdomain-label {
       color: $dark-grey-overlay;
     }

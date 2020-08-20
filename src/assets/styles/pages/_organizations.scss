@@ -1,54 +1,12 @@
-#app-nav {
-  .active-org {
-    align-items: center;
-    background: $faint-white-overlay;
-    border-right: 1px solid $faint-white-overlay;
-    display: inline-flex;
-    flex: 0;
-    height: 34px;
-    justify-content: flex-end;
-    overflow: hidden;
-    transition: flex 500ms;
-
-    &.open {
-      box-shadow: 1px 1px 5px $light-grey-overlay !important;
-      border-right: 0 !important;
-      flex: 1;
-      border-radius: 4px;
-    }
-
-    .org-name,
-    .org-actions {
-      align-items: center;
-      display: inline-flex;
-      height: 100%;
-      justify-content: center;
-      padding: 0 15px;
-    }
-
-    .org-name {
-      border-right: 1px solid $faint-white-overlay;
-      white-space: nowrap;
-
-      @media screen and (max-width: 550px) {
-        font-size: 10px;
-        font-weight: $font-weight-bold;
-        max-width: 75px;
-        white-space: normal;
-      }
-    }
-  }
-}
-
 #organizations {
   .navbar-nav {
     max-width: 400px;
   }
 
   .card {
+    box-shadow: 0 0 5px $dark-grey-overlay;
     height: 170px;
     min-width: 278px;
-    box-shadow: 0 0 5px $dark-grey-overlay;
 
     &.clickable {
       cursor: pointer;

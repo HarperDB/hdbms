@@ -26,13 +26,13 @@
   }
 
   &-track {
+    background: $color-lightgrey !important;
+    border: 1px solid transparent !important;
     border-radius: 30px;
     display: inline-block;
     height: 100%;
     transition: all 0.2s ease;
     width: 100%;
-    border: 1px solid transparent !important;
-    background: $color-lightgrey !important;
   }
 
   &-track-check,

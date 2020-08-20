@@ -19,11 +19,14 @@ const ResetPassword = () => {
 
       if (!isEmail(email)) {
         setFormState({ error: 'valid email is required' });
+        setTimeout(() => setFormState({}), 2000);
       } else {
         setFormState({ processing: true });
         const response = await resetPassword({ email });
-        if (response.error) {
+
+        if (response.error && response.message !== 'User does not exist') {
           setFormState({ error: response.message });
+          setTimeout(() => setFormState({}), 2000);
         } else {
           setFormState({ success: true });
         }
@@ -42,7 +45,7 @@ const ResetPassword = () => {
       {formState.processing ? (
         <Loader header="resetting password" spinner relative />
       ) : formState.success ? (
-        <Loader header="success!" body="check your email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} relative />
+        <Loader header="success!" body="check the provided email for a password reset link." links={[{ to: '/', text: 'Go to Sign In' }]} relative />
       ) : (
         <>
           <Card className="mb-3">

@@ -54,7 +54,6 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       }
     }
   }, [formState]);
-
   return (
     <ErrorBoundary
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
@@ -63,49 +62,76 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       <Card className="instance">
         {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
           <CardBody>
-            <Input
-              onChange={(e) => setFormData({ ...formData, user: e.target.value })}
-              className="text-center mb-1"
-              type="text"
-              title="username"
-              placeholder="user"
-              disabled={formState.submitted}
-            />
-            <Input
-              onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
-              className="text-center mb-2"
-              type="password"
-              title="password"
-              placeholder="password"
-              disabled={formState.submitted}
-            />
-            <Row noGutters>
-              <Col xs="6" className="pr-1">
+            {formState.error && formState.error.indexOf('This instance was recently') !== -1 ? (
+              <>
+                {formState.error.split('.').map((text) =>
+                  text.length ? (
+                    <div key={text} className="text-small text-bold text-danger mb-2">
+                      {text.replace(' in HarperDB Studio', ' as a Super User')}.
+                    </div>
+                  ) : null
+                )}
                 <Button
                   onClick={() => {
                     setFormData({});
                     setFormState({});
-                    setFlipState(false);
                   }}
-                  title="Cancel"
+                  title="I understand"
                   block
-                  color="grey"
+                  color="danger"
+                  className="mt-3"
                   disabled={formState.submitted}
                 >
-                  Cancel
+                  OK, Got It
                 </Button>
-              </Col>
-              <Col xs="6" className="pl-1">
-                <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
-                  Log In
-                </Button>
-              </Col>
-            </Row>
-            {formState.error && (
-              <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
-                {formState.error}
-                {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
-              </a>
+              </>
+            ) : (
+              <>
+                <Input
+                  onChange={(e) => setFormData({ ...formData, user: e.target.value })}
+                  className="text-center mb-1"
+                  type="text"
+                  title="username"
+                  placeholder="user"
+                  disabled={formState.submitted}
+                />
+                <Input
+                  onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
+                  className="text-center mb-2"
+                  type="password"
+                  title="password"
+                  placeholder="password"
+                  disabled={formState.submitted}
+                />
+                <Row noGutters>
+                  <Col xs="6" className="pr-1">
+                    <Button
+                      onClick={() => {
+                        setFormData({});
+                        setFormState({});
+                        setFlipState(false);
+                      }}
+                      title="Cancel"
+                      block
+                      color="grey"
+                      disabled={formState.submitted}
+                    >
+                      Cancel
+                    </Button>
+                  </Col>
+                  <Col xs="6" className="pl-1">
+                    <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
+                      Log In
+                    </Button>
+                  </Col>
+                </Row>
+                {formState.error && (
+                  <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
+                    {formState.error}
+                    {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
+                  </a>
+                )}
+              </>
             )}
           </CardBody>
         )}

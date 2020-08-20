@@ -10,21 +10,21 @@
 }
 
 .modal-dialog {
-  box-shadow: 0 0 5px $dark-grey-overlay;
   border-radius: $border-radius;
-  overflow: hidden;
+  box-shadow: 0 0 5px $dark-grey-overlay;
   min-width: 304px;
+  overflow: hidden;
 
   .modal-content {
+    border: 1px solid $faintest-white-overlay;
     border-radius: $border-radius;
     overflow: hidden;
-    border: 1px solid $faintest-white-overlay;
 
     .modal-header {
       background: $gradient-purple-magenta;
-      color: $color-white;
       border-bottom: 1px solid $faintest-white-overlay;
       border-radius: $border-radius $border-radius 0 0;
+      color: $color-white;
 
       &::after {
         background: radial-gradient($color-purple 1px, transparent 0);

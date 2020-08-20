@@ -50,13 +50,13 @@ export default () => {
   const [fetchingUser, setFetchingUser] = useState(true);
   const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-
+  const currentTheme = persistedUser?.theme;
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
 
   useEffect(() => {
-    changeFavIcon(persistedUser?.theme);
-  }, [persistedUser?.theme]);
+    changeFavIcon(currentTheme);
+  }, [currentTheme]);
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));

@@ -4,10 +4,10 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
+import { useAlert } from 'react-alert';
 import instanceState from '../../../state/instanceState';
 
 import dropRole from '../../../api/instance/dropRole';
-import { useAlert } from 'react-alert';
 
 export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const { compute_stack_id, customer_id } = useParams();

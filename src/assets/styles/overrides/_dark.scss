@@ -40,8 +40,8 @@
   }
 
   .lolight {
-    border: 1px solid $faint-white-overlay !important;
     background-color: $faint-white-overlay !important;
+    border: 1px solid $faint-white-overlay !important;
   }
 
   input,
@@ -159,6 +159,7 @@
       background: transparent !important;
       border: 1px solid $faint-white-overlay !important;
     }
+
     &--checked {
       .react-toggle-track {
         background: $color-success !important;

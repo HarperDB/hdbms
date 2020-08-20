@@ -21,7 +21,6 @@ export default () => {
     try {
       const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLlgTMTKsypS5GIn4Yi3NxC4inX_tA5O9I&key=${config.youtube_api_key}`);
       const result = await response.json();
-      console.log(result.items);
 
       if (result.items && Array.isArray(result.items)) {
         setItems(result.items);
@@ -35,8 +34,6 @@ export default () => {
       console.log('error fetching youtube playlist');
     }
   }, []);
-
-  console.log(activeVideo);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

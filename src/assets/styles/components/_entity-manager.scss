@@ -8,8 +8,8 @@
   }
 
   .card {
-    overflow: hidden;
     box-shadow: 0 0 5px $dark-grey-overlay;
+    overflow: hidden;
 
     .card-body {
       max-height: calc(50vh - 155px);

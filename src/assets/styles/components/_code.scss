@@ -5,16 +5,16 @@
     background: $faint-white-overlay;
     border-radius: 0 $border-radius 0 $border-radius;
     color: $color-white;
-    position: absolute;
+    cursor: copy;
     padding: 4px;
+    position: absolute;
     right: 0;
     top: 0;
-    cursor: copy;
   }
 
   .lolight {
-    border: 1px solid $faint-white-overlay !important;
     background: $black-overlay;
+    border: 1px solid $faint-white-overlay !important;
     border-radius: $border-radius;
     font-size: 12px !important;
     line-height: 1.3;
