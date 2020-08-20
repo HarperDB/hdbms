@@ -21,6 +21,7 @@ import getPostManCollection from '../methods/examples/getPostManCollection';
 import checkVersion from '../methods/app/checkVersion';
 import init from '../methods/app/init';
 import refreshUser from '../methods/app/refreshUser';
+import changeFavIcon from '../methods/app/changeFavIcon';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './topnav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/signUp'));
@@ -52,6 +53,10 @@ export default () => {
 
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
+
+  useEffect(() => {
+    changeFavIcon(persistedUser?.theme);
+  }, [persistedUser?.theme]);
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));

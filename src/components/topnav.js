@@ -8,6 +8,7 @@ import appState from '../state/appState';
 import addError from '../api/lms/addError';
 
 import ErrorFallback from './shared/errorFallback';
+import changeFavIcon from '../methods/app/changeFavIcon';
 
 const TopNav = () => {
   const { pathname } = useLocation();
@@ -27,7 +28,7 @@ const TopNav = () => {
     [auth.orgs, customer.customer_id]
   );
 
-  const toggleDarkTheme = (newValue) =>
+  const toggleTheme = (newValue) =>
     appState.update((s) => {
       s.theme = newValue;
     });
@@ -100,8 +101,8 @@ const TopNav = () => {
             <DumbLink
               tabIndex="0"
               title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to light theme'}
-              onKeyDown={(e) => e.keyCode !== 13 || toggleDarkTheme(nextTheme)}
-              onClick={() => toggleDarkTheme(nextTheme)}
+              onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
+              onClick={() => toggleTheme(nextTheme)}
             >
               <i className="fas fa-palette" />
             </DumbLink>
