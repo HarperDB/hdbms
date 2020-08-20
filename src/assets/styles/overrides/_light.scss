@@ -1,6 +1,7 @@
 .light {
   #app-nav {
     background: $color-white !important;
+
     #logo {
       background-image: url('/images/logo/logo_circle_light.png');
       @media screen and (max-width: 511px) {
@@ -12,6 +13,7 @@
       .active-org {
         background: $gradient-white-lightgrey;
         border-right-color: $color-grey !important;
+
         .org-name {
           color: $color-black !important;
         }
