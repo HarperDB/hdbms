@@ -62,9 +62,6 @@ export default () => {
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
       setNewPermissions(activePermissions);
-    } else if (response.skipped_hashes.length) {
-      alert.error('Invalid role id. Permissions reset.');
-      setNewPermissions(activePermissions);
     } else {
       alert.success('Permissions updated successfully');
     }

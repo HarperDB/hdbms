@@ -45,6 +45,8 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
           }
         } else if (result.error && result.message === 'Login failed') {
           setFormState({ error: 'Login failed.' });
+        } else if (result.error) {
+          setFormState({ error: result.message });
         } else {
           setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
           setFlipState(false);
