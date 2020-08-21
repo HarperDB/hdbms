@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
-import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
@@ -27,7 +26,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const auth = useStoreState(appState, (s) => s.auth);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
   const history = useHistory();
-  const alert = useAlert();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
