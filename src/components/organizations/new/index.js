@@ -97,7 +97,9 @@ export default () => {
                     <Row>
                       <Col sm="4" className="pt-2 text-nowrap text-grey">
                         Ex: &quot;myorg&quot;&nbsp;
-                        <i className="fa fa-question-circle text-purple" onClick={() => setShowToolTip(!showToolTip)} />
+                        <Button color="link" title="Learn more" onClick={() => setShowToolTip(!showToolTip)}>
+                          <i className="fa fa-question-circle text-purple" />
+                        </Button>
                       </Col>
                       <Col sm="8">
                         <Input

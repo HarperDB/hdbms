@@ -139,7 +139,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
               <Col xs="10" className="instance-name">
                 {instance_name}
               </Col>
-              <Col xs="2" className="instance-icon">
+              <Col xs="2" className="instance-icons">
                 <CardFrontIcons
                   isOrgOwner={isOrgOwner}
                   isReady={isReady}

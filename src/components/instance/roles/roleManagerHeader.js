@@ -1,27 +1,33 @@
 import React from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 
 export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
   <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items && items.length ? (
       <Col className="text-right">
-        <i
+        <Button
+          color="link"
           title={`Remove ${itemType}s`}
-          className="fa fa-minus mr-2"
+          className="add-remove mr-3"
           onClick={() => {
             toggleDropItem(!isDropping);
             toggleCreate(false);
           }}
-        />
-        <i
+        >
+          <i className="fa fa-minus" />
+        </Button>
+        <Button
+          color="link"
           title={`Add ${itemType}`}
-          className="fa fa-plus"
+          className="add-remove mr-1"
           onClick={() => {
             toggleCreate(!isCreating);
             toggleDropItem(false);
           }}
-        />
+        >
+          <i className="fa fa-plus" />
+        </Button>
       </Col>
     ) : null}
   </Row>

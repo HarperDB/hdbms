@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table-6';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Col, Row, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';
@@ -30,11 +30,14 @@ export default () => {
         <Col className="text-right">
           <StructureReloader label="refresh cluster config" />
           <span className="mx-3 text">|</span>
-          <i
+          <Button
+            color="link"
             title="Filter Instances"
-            className="fa fa-search mr-3"
+            className=" mr-2"
             onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
-          />
+          >
+            <i className="fa fa-search" />
+          </Button>
         </Col>
       </Row>
       <Card className="my-3">

@@ -87,7 +87,8 @@ textarea {
   padding-top: 12px;
   white-space: nowrap;
 
-  a {
-    color: $color-white !important;
+  .btn-link {
+    color: $color-white;
   }
 }
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 
 import commaNumbers from '../../../methods/util/commaNumbers';
 
@@ -10,11 +10,17 @@ export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter
       {totalRecords !== 1 ? 's' : ''}
     </Col>
     <Col className="text-md-right">
-      <i title="Refresh Results" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
-      <span className="mr-2">auto</span>
-      <i title="Turn on Auto-Refresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
+      <Button color="link" title="Refresh Results" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
+        <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+      </Button>
+      <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
+        <span className="mr-2">auto</span>
+        <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
+      </Button>
       <span className="mx-3 text">|</span>
-      <i title="Filter Results" className="fa fa-search mr-3" onClick={() => toggleFilter({ filtered: showFilter ? [] : filtered, page: 0, showFilter: !showFilter })} />
+      <Button color="link" title="Filter Results" className="mr-2" onClick={() => toggleFilter({ filtered: showFilter ? [] : filtered, page: 0, showFilter: !showFilter })}>
+        <i className="fa fa-search" />
+      </Button>
     </Col>
   </Row>
 );

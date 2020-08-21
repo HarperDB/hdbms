@@ -43,6 +43,9 @@ export default () => {
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const [instanceAuths] = useInstanceAuth({});
   const showForm = instanceAuths[compute_stack_id]?.super;
+  const emptyPromptMessage = showForm
+    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
+    : "This user has not been granted access to any tables. A super-user must update this user's role.";
 
   useEffect(() => {
     if (structure) {
@@ -95,9 +98,7 @@ export default () => {
           ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
           ) : (
-            <EmptyPrompt
-              message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
-            />
+            <EmptyPrompt message={emptyPromptMessage} />
           )}
         </ErrorBoundary>
       </Col>

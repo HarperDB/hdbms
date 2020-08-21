@@ -13,6 +13,9 @@
   .drop-zone {
     background: radial-gradient($color-lightgrey 1px, transparent 0);
     background-size: 3px 3px !important;
+    border: 1px solid $lighter-grey-overlay;
+    border-radius: $border-radius;
+    box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
     color: $color-black;
     font-size: $font-size-root;
     outline: none !important;

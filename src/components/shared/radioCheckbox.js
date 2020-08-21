@@ -33,7 +33,8 @@ export default ({ required, onChange, options, type, defaultValue, ...rest }) =>
     <div {...rest}>
       {optionsArray &&
         optionsArray.map((option) => (
-          <div key={`${type}${option.value}${option.label}`} onClick={() => handleClick(option.value)}>
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <div role="button" tabIndex="0" key={`${type}${option.value}${option.label}`} onClick={() => handleClick(option.value)}>
             <div className={`radio-checkbox ${value.indexOf(option.value) !== -1 ? 'show' : 'hidden'}`}>
               {type === 'checkbox' ? <span className="checkmark">&#10004;</span> : <div className="dot" />}
             </div>

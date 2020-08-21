@@ -2,10 +2,16 @@
   color: $color-white;
   margin-bottom: 0.5rem !important;
   white-space: nowrap;
-}
 
-i.floating-card-header {
-  cursor: pointer;
+  i {
+    color: $color-white !important;
+    cursor: pointer;
+  }
+
+  .btn-link {
+    color: $color-white !important;
+    cursor: pointer;
+  }
 }
 
 .card-front-status-row {

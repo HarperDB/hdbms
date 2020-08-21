@@ -1,12 +1,9 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
-import { ErrorBoundary } from 'react-error-boundary';
 
 import CSVUploadURL from './csvuploadURL';
 import CSVUploadFile from './csvuploadFile';
-import addError from '../../../api/lms/addError';
-import ErrorFallback from '../../shared/errorFallback';
 
 export default () => {
   const history = useHistory();
@@ -19,28 +16,22 @@ export default () => {
       </span>
       <Card className="my-3">
         <CardBody>
+          <CSVUploadURL />
+          <hr className="my-3" />
+          <CSVUploadFile />
+          <hr className="my-3" />
           <Row>
-            <Col sm="6" className="mb-2">
-              <ErrorBoundary
-                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-                FallbackComponent={ErrorFallback}
-              >
-                <CSVUploadURL />
-              </ErrorBoundary>
+            <Col xs="8" className="py-1">
+              Return to Table
+              <br />
+              <span className="text-small">do not upload csv data</span>
             </Col>
-            <Col sm="6">
-              <ErrorBoundary
-                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-                FallbackComponent={ErrorFallback}
-              >
-                <CSVUploadFile />
-              </ErrorBoundary>
+            <Col xs="4">
+              <Button block color="grey" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
+                Return to Table
+              </Button>
             </Col>
           </Row>
-          <hr className="mt-2 mb-4" />
-          <Button block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
-            Cancel
-          </Button>
         </CardBody>
       </Card>
     </div>

@@ -4,39 +4,55 @@ input,
 textarea,
 .item-row,
 select,
-.card {
+i,
+.card,
+.btn,
+[role='button'] {
   &:focus {
-    box-shadow: inset 0 0 0 2px $color-lightpurple !important;
-    outline: none !important;
+    outline: 1px solid $light-white-overlay !important;
+    outline-offset: 3px !important;
+  }
+}
+
+input,
+textarea,
+.item-row,
+[role='button'] {
+  &:focus {
+    outline-offset: -1px !important;
   }
 }
 
 .dark {
   a,
+  button,
   input,
   textarea,
   .item-row,
   select,
-  button,
-  .card {
+  i,
+  .card,
+  .btn,
+  [role='button'] {
     &:focus {
-      box-shadow: inset 0 0 0 2px $white-overlay !important;
-      outline: none !important;
+      outline-color: $light-white-overlay !important;
     }
   }
 }
 
 .light {
   a,
+  button,
   input,
   textarea,
   .item-row,
   select,
-  button,
-  .card {
+  i,
+  .card,
+  .btn,
+  [role='button'] {
     &:focus {
-      box-shadow: inset 0 0 0 2px $light-grey-overlay !important;
-      outline: none !important;
+      outline-color: $color-lightpurple !important;
     }
   }
 }

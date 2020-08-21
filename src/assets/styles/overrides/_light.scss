@@ -20,6 +20,7 @@
       }
 
       .nav-item {
+        .btn-link,
         .nav-link,
         a {
           color: $grey-overlay !important;
@@ -122,11 +123,6 @@
     &.instance {
       background: $gradient-white-lightgrey !important;
       box-shadow: 0 0 5px $lighter-grey-overlay !important;
-
-      &:focus {
-        box-shadow: inset 0 0 0 2px $color-lightpurple !important;
-        outline: none !important;
-      }
     }
   }
 
@@ -164,7 +160,11 @@
     color: $color-black !important;
 
     i {
-      color: $color-grey;
+      color: $color-grey !important;
+    }
+
+    .btn-link {
+      color: $color-black !important;
     }
   }
 
@@ -184,7 +184,6 @@
 
   .entity-manager {
     .card {
-      background: $color-white !important;
       border: 1px solid $lighter-grey-overlay;
       box-shadow: 0 0 5px $lighter-grey-overlay !important;
 
@@ -270,11 +269,11 @@
     .react-select__option:focus,
     .react-select__option--is-focused {
       background: $color-white !important;
-      border-bottom: 1px solid $lighter-grey-overlay;
+      border-bottom: 1px solid $lighter-grey-overlay !important;
       color: $color-grey !important;
 
       &:last-child {
-        border-bottom: 0;
+        border-bottom: 0 !important;
       }
     }
 
@@ -282,6 +281,8 @@
       background: $color-white !important;
     }
   }
+
+
 
   .drop-zone {
     background: radial-gradient($lighter-grey-overlay 1px, transparent 0) !important;
@@ -307,6 +308,11 @@
     button {
       color: $color-darkgrey !important;
     }
+  }
+
+  .json-editor-holder {
+    background: $lightest-grey-overlay;
+    box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
   }
 
   #login-form {
@@ -360,6 +366,10 @@
 
     .subdomain-label {
       color: $dark-grey-overlay;
+
+      .btn-link {
+        color: $light-grey-overlay;
+      }
     }
   }
 }

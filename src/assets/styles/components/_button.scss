@@ -38,7 +38,17 @@
   }
 
   &.btn-link {
+    background: none;
+    border: 0 !important;
+    box-shadow: none !important;
+    height: auto;
     padding: 0;
+    vertical-align: baseline !important;
+
+    &:hover,
+    &:focus {
+      text-decoration: none !important;
+    }
   }
 
   &.btn-success {

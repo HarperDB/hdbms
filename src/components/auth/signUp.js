@@ -87,7 +87,10 @@ const SignUp = () => {
                   />
                 </Col>
                 <Col className="subdomain-label">
-                  .harperdbcloud.com <i className="fa fa-question-circle" onClick={() => setShowToolTip(!showToolTip)} />
+                  .harperdbcloud.com{' '}
+                  <Button color="link" onClick={() => setShowToolTip(!showToolTip)}>
+                    <i className="fa fa-question-circle" />
+                  </Button>
                 </Col>
               </Row>
               {showToolTip && (

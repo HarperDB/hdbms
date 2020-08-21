@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { Button } from 'reactstrap';
 
 import useInstanceAuth from '../../../state/instanceAuths';
 
@@ -20,13 +21,19 @@ const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, i
   return (
     <>
       {!isReady ? (
-        <i className="fa fa-spinner fa-spin text-purple" />
+        <i className="instance-icon fa fa-spinner fa-spin text-purple" />
       ) : showLogout && !onlyDelete ? (
-        <i onClick={logOut} title={`Log out of instance ${instance_name}`} className="fa fa-lock text-purple" />
+        <Button color="link" title={`Log out of instance ${instance_name}`} className="instance-icon" onClick={logOut}>
+          <i className="fa fa-lock text-purple" />
+        </Button>
       ) : !onlyDelete ? (
-        <i className="fa fa-unlock-alt text-danger" />
+        <i className="instance-icon fa fa-unlock-alt text-danger" />
       ) : null}
-      {isReady && isOrgOwner && <i title={`Remove instance ${instance_name}`} className="fa fa-trash delete text-purple" onClick={flipToDelete} />}
+      {isReady && isOrgOwner && (
+        <Button color="link" title={`Remove instance ${instance_name}`} className="instance-icon" onClick={flipToDelete}>
+          <i className="fa fa-trash text-purple" />
+        </Button>
+      )}
     </>
   );
 };

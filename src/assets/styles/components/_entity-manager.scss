@@ -1,12 +1,6 @@
 .entity-manager {
   padding-bottom: 10px;
 
-  .add-remove {
-    &:focus {
-      outline: 1px solid $faint-white-overlay !important;
-    }
-  }
-
   .card {
     box-shadow: 0 0 5px $dark-grey-overlay;
     overflow: hidden;
@@ -23,14 +17,9 @@
         height: 49px;
         overflow: hidden;
 
-        &:focus {
-          outline: 1px solid $color-lightpurple;
-        }
-
         &.active {
           background-color: $color-lightergrey;
           font-weight: bold;
-          outline: 0 !important;
         }
 
         &:first-child {

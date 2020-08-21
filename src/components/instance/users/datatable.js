@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import ReactTable from 'react-table-6';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
@@ -41,11 +41,14 @@ export default () => {
         <Col className="text-right">
           <StructureReloader label="refresh users" />
           <span className="mx-3 text">|</span>
-          <i
+          <Button
+            color="link"
             title="Filter Users"
-            className="fa fa-search mr-3"
+            className="mr-2"
             onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
-          />
+          >
+            <i className="fa fa-search" />
+          </Button>
         </Col>
       </Row>
       <Card className="my-3">

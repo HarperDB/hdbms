@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -55,20 +55,19 @@ export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { n
                 <Row>
                   <Col sm="6" className="text-nowrap avg-rating">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <i
-                        title={star}
-                        key={star}
-                        onClick={() => alert.error('You cannot rate your own integration')}
-                        className={`star-icon text-purple ${
-                          !avg_rating || avg_rating < star - 0.5 ? 'far fa-star' : avg_rating === star - 0.5 ? 'fas fa-star-half-alt' : 'fas fa-star'
-                        }`}
-                      />
+                      <Button color="link" title={star} key={star} onClick={() => alert.error('You cannot rate your own integration')}>
+                        <i
+                          className={`star-icon text-purple ${
+                            !avg_rating || avg_rating < star - 0.5 ? 'far fa-star' : avg_rating === star - 0.5 ? 'fas fa-star-half-alt' : 'fas fa-star'
+                          }`}
+                        />
+                      </Button>
                     ))}
                   </Col>
                   <Col sm="6" className="text-nowrap your-rating">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                      <i
+                      <Button
+                        color="link"
                         title={user_rating === star ? `Current rating: ${star} star${star !== 1 ? 's' : ''}` : `Rate ${star} star${star !== 1 ? 's' : ''}`}
                         key={star}
                         onMouseOver={() => setUserRating(star)}
@@ -78,16 +77,19 @@ export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { n
                         onClick={() => {
                           addRating(star);
                         }}
-                        className={`star-icon ${
-                          user_rating === star
-                            ? 'fas fa-star text-warning'
-                            : !userRating || userRating < star - 0.5
-                            ? 'far fa-star text-purple'
-                            : userRating === star - 0.5
-                            ? 'fas fa-star-half-alt text-purple'
-                            : 'fas fa-star text-purple'
-                        }`}
-                      />
+                      >
+                        <i
+                          className={`star-icon ${
+                            user_rating === star
+                              ? 'fas fa-star text-warning'
+                              : !userRating || userRating < star - 0.5
+                              ? 'far fa-star text-purple'
+                              : userRating === star - 0.5
+                              ? 'fas fa-star-half-alt text-purple'
+                              : 'fas fa-star text-purple'
+                          }`}
+                        />
+                      </Button>
                     ))}
                   </Col>
                 </Row>

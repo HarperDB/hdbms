@@ -87,8 +87,8 @@ export default ({ newEntityAttributes, hashAttribute }) => {
               </li>
             )}
           </ul>
-          <Card className="mb-1">
-            <CardBody className="json-editor-holder">
+          <Card className="mb-2 json-editor-holder">
+            <CardBody>
               <JSONInput
                 placeholder={rowValue}
                 height="350px"

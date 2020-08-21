@@ -36,15 +36,16 @@
       white-space: nowrap;
     }
 
-    .status-icon {
+    .status-icons {
       cursor: pointer;
       position: relative;
       width: 15px;
 
-      i {
+      .status-icon {
+        font-size: 12px !important;
         position: absolute;
         right: 15px;
-        top: -2px;
+        top: 0;
 
         &.disabled {
           color: $color-grey !important;

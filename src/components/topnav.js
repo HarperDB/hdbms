@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navbar, Nav, NavItem } from 'reactstrap';
+import { Navbar, Nav, NavItem, Button } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -93,19 +93,20 @@ const TopNav = () => {
             </NavLink>
           </NavItem>
           <NavItem>
-            <a
-              href="#"
+            <Button
+              color="link"
+              tabIndex="0"
               title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
               onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
               onClick={() => toggleTheme(nextTheme)}
             >
               <i className="fas fa-palette" />
-            </a>
+            </Button>
           </NavItem>
           <NavItem>
-            <a href="#" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
+            <Button tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
               <i className="fa fa-sign-out" />
-            </a>
+            </Button>
           </NavItem>
         </Nav>
       </Navbar>

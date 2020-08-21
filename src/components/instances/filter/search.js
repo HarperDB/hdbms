@@ -24,7 +24,7 @@ const Search = () => {
       <Input
         title="filter instances by name, host, url, or region"
         type="text"
-        className="instances-filter text-center"
+        className="text-center"
         onChange={updateFilter}
         placeholder="filter instances"
         value={filterSearch}

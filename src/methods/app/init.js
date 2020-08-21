@@ -8,7 +8,9 @@ import refreshUser from './refreshUser';
 export default ({ auth, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate }) => {
   const canonical = document.querySelector('link[rel="canonical"]');
 
-  history.listen(() => (canonical.href = window.location.href));
+  history.listen(() => {
+    canonical.href = window.location.href;
+  });
 
   if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(history.location.pathname)) {
     setFetchingUser(false);
