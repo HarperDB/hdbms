@@ -8,6 +8,7 @@ import handleCloudInstanceUsernameChange from '../../../methods/instances/handle
 import userInfo from '../../../api/instance/userInfo';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import CardInstanceUpdateRole from './cardInstanceUpdateRole';
 
 const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
   const [formState, setFormState] = useState({});
@@ -54,6 +55,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       }
     }
   }, [formState]);
+
   return (
     <ErrorBoundary
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
@@ -63,28 +65,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
         {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
           <CardBody>
             {formState.error && formState.error.indexOf('This instance was recently') !== -1 ? (
-              <>
-                {formState.error.split('.').map((text) =>
-                  text.length ? (
-                    <div key={text} className="text-small text-bold text-danger mb-2">
-                      {text.replace(' in HarperDB Studio', ' as a Super User')}.
-                    </div>
-                  ) : null
-                )}
-                <Button
-                  onClick={() => {
-                    setFormData({});
-                    setFormState({});
-                  }}
-                  title="I understand"
-                  block
-                  color="danger"
-                  className="mt-3"
-                  disabled={formState.submitted}
-                >
-                  OK, Got It
-                </Button>
-              </>
+              <CardInstanceUpdateRole formState={formState} setFormData={setFormData} setFormState={setFormState} />
             ) : (
               <>
                 <Input

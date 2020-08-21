@@ -1,6 +1,7 @@
 import queryInstance from '../../api/queryInstance';
 import describeTable from '../../api/instance/describeTable';
 import handleCellValues from '../datatable/handleCellValues';
+import registrationInfo from '../../api/instance/registrationInfo';
 
 export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
   let fetchError = false;
@@ -11,6 +12,15 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   let hashAttribute = false;
   let newSorted = sorted;
   const newEntityAttributes = {};
+  let legacy = true;
+
+  try {
+    const { version } = await registrationInfo({ auth, url, compute_stack_id, customer_id });
+    const [major, minor, patch] = version.split('.');
+    legacy = version !== '2.0.000' && major <= 2 && minor <= 1 && patch <= 2;
+  } catch (e) {
+    legacy = true;
+  }
 
   try {
     const result = await describeTable({ auth, url, schema, table, signal, is_local, compute_stack_id, customer_id });
@@ -77,14 +87,16 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
-  if (newData.access_errors && newData.access_errors.find((e) => e.type === 'attribute')) {
-    allAttributes = allAttributes.filter((a) => !newData.access_errors.find((e) => e.type === 'attribute' && e.entity.toString() === a.toString()));
-    const selectString = allAttributes.map((a) => `\`${a}\``).join(', ');
+  const disallowedAttributes = newData.access_errors && newData.access_errors.filter((e) => e.type === 'attribute').map((e) => e.entity);
+
+  if (disallowedAttributes?.length) {
+    allAttributes = allAttributes.filter((a) => !disallowedAttributes.includes(a.toString()));
+    const selectString = legacy ? allAttributes.map((a) => `\`${a}\``).join(', ') : '*';
 
     try {
       let dataSQL = `SELECT ${selectString} FROM \`${schema}\`.\`${table}\` `;
       if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-      if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
+      if (newSorted.length && !disallowedAttributes.includes(newSorted[0].id)) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
       newData = await queryInstance(
@@ -109,14 +121,16 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
-  const orderedColumns = allAttributes && allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
+  const orderedColumns = Object.keys(newData[0])
+    .filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a))
+    .sort();
   let dataTableColumns = null;
 
   if (orderedColumns) {
     orderedColumns.map((k) => (newEntityAttributes[k] = null));
-    if (allAttributes.includes(hashAttribute)) orderedColumns.unshift(hashAttribute);
-    if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
-    if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
+    if (Object.keys(newData[0]).includes(hashAttribute)) orderedColumns.unshift(hashAttribute);
+    if (Object.keys(newData[0]).includes('__createdtime__')) orderedColumns.push('__createdtime__');
+    if (Object.keys(newData[0]).includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
     dataTableColumns = orderedColumns.map((k) => ({
       id: k.toString(),
