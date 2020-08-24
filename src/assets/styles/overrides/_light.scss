@@ -39,7 +39,7 @@
   }
 
   #app-bg-dots {
-    background: transparent;
+    background: radial-gradient($lightest-grey-overlay 1px, transparent 0);
     background-size: 3px 3px;
     z-index: -1;
   }
@@ -115,7 +115,7 @@
   }
 
   .card {
-    background: $lightest-grey-overlay !important;
+    background: $color-lightestgrey !important;
     border: 1px solid $lighter-grey-overlay;
     box-shadow: 0 0 5px $lighter-grey-overlay !important;
     color: $color-darkgrey !important;

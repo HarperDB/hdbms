@@ -34,7 +34,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^3.4.3",
     "react-select": "^3.1.0",
     "react-table-6": "^6.11.0",
     "react-toggle": "^4.1.1",
