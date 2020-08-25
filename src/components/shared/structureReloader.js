@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
+import { Button } from 'reactstrap';
 
 import instanceState from '../../state/instanceState';
 
@@ -14,10 +15,10 @@ export default ({ label = 'instance', centerText = false }) => {
 
   return (
     <span className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`}>
-      <button type="button" onClick={refresh}>
+      <Button color="link" onClick={refresh}>
         <i title="Refresh Structure" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
         {label}
-      </button>
+      </Button>
     </span>
   );
 };

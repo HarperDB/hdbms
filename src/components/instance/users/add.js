@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'reactstrap';
+import { Input, Button, Card, CardBody } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
@@ -23,6 +23,7 @@ export default () => {
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
+  const cardHeight = '224px';
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -64,50 +65,50 @@ export default () => {
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
       FallbackComponent={ErrorFallback}
     >
-      {' '}
+      <span className="floating-card-header">add user</span>
       {formState.processing ? (
-        <FormStatus height="174px" status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
+        <FormStatus className="my-3" height={cardHeight} status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
       ) : formState.success ? (
-        <FormStatus height="174px" status="success" header="Success!" subhead={formState.success} />
+        <FormStatus className="my-3" height={cardHeight} status="success" header="Success!" subhead={formState.success} />
       ) : formState.error ? (
-        <FormStatus height="174px" status="error" header={formState.error} subhead="Please try again" />
+        <FormStatus className="my-3" height={cardHeight} status="error" header={formState.error} subhead="Please try again" />
       ) : (
-        <>
-          <Input
-            type="text"
-            className="mb-2 text-center"
-            name="username"
-            placeholder="username"
-            autoComplete="false"
-            value={formData.username || ''}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-          />
-          <Input
-            type="text"
-            className="mb-2 text-center"
-            name="password"
-            autoComplete="false"
-            placeholder="password"
-            value={formData.password || ''}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          />
-          <SelectDropdown
-            className="react-select-container"
-            classNamePrefix="react-select"
-            onChange={({ value }) => setFormData({ ...formData, role: value })}
-            options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
-            value={roles && formData.role && roles.find((r) => r.value === formData.role)}
-            isSearchable={false}
-            isClearable={false}
-            isLoading={!roles}
-            placeholder="select a role"
-            styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
-          />
-          <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
-            Add User
-          </Button>
-        </>
-      )}{' '}
+        <Card className="my-3">
+          <CardBody>
+            <Input
+              type="text"
+              className="mb-2 text-center"
+              name="username"
+              placeholder="username"
+              value={formData.username || ''}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            />
+            <Input
+              type="text"
+              className="mb-2 text-center"
+              name="password"
+              placeholder="password"
+              value={formData.password || ''}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
+            <SelectDropdown
+              className="react-select-container"
+              classNamePrefix="react-select"
+              onChange={({ value }) => setFormData({ ...formData, role: value })}
+              options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
+              value={roles && formData.role && roles.find((r) => r.value === formData.role)}
+              isSearchable={false}
+              isClearable={false}
+              isLoading={!roles}
+              placeholder="select a role"
+              styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
+            />
+            <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+              Add User
+            </Button>
+          </CardBody>
+        </Card>
+      )}
     </ErrorBoundary>
   );
 };

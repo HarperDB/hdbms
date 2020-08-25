@@ -60,12 +60,12 @@ export default () => {
   }, [formState]);
 
   return formState.processing ? (
-    <FormStatus height="410px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+    <FormStatus height="400px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
   ) : formState.error ? (
-    <FormStatus height="410px" status="error" header={formState.error} subhead="Please try again" />
+    <FormStatus height="400px" status="error" header={formState.error} subhead="Please try again" />
   ) : formState.success || hasCard ? (
     <>
-      <FormStatus height="358px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
+      <FormStatus height="346px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
       <Row>
         <Col sm="6">
           <Button

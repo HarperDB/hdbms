@@ -36,7 +36,7 @@ export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
           toggleCreate={toggleCreate}
           showForm={showForm}
         />
-        <Card className="mt-3 mb-4">
+        <Card className="my-3">
           <CardBody>
             {sortedRoles && sortedRoles.length
               ? sortedRoles.map((item) => (

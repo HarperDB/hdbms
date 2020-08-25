@@ -1,15 +1,18 @@
 import React, { useState, useCallback } from 'react';
-import { Button } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../state/instanceState';
 import config from '../../../config';
 import getJob from '../../../api/instance/getJob';
 import csvDataLoad from '../../../api/instance/csvDataLoad';
 import commaNumbers from '../../../methods/util/commaNumbers';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 const CSVUploadFile = () => {
   const history = useHistory();
@@ -89,61 +92,72 @@ const CSVUploadFile = () => {
   );
 
   return (
-    <>
-      <b className="text-small">Upload A CSV FIle (10MB Limit)</b>
-      <hr className="mt-1 mb-3" />
-      {formState.error ? (
-        <div className="text-danger csv-status">{formState.error}</div>
-      ) : formState.uploading ? (
-        <div className="csv-status">
-          <i className="fa fa-spin fa-spinner mr-3" />
-          inserting {commaNumbers(formData.records)} records into {schema}.{table}
-        </div>
-      ) : formState.processed ? (
-        <div
-          className="csv-status"
-          onClick={() => {
-            setFormState({});
-            setFormData({});
-          }}
-        >
-          <i className="fa fa-thumbs-up text-success mr-3" />
-          {commaNumbers(formData.records)} records. Click here to replace file.
-        </div>
-      ) : formState.processing ? (
-        <div className="csv-status">
-          <i className="fa fa-spin fa-spinner" /> processing {commaNumbers(formData.records)} records
-        </div>
-      ) : (
-        <Dropzone onDrop={onDrop}>
-          {({ getRootProps, getInputProps }) => (
-            <div {...getRootProps()} className="drop-zone">
-              <input {...getInputProps()} />
-              Click or Drag to select a .csv file
+    <ErrorBoundary
+      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
+      FallbackComponent={ErrorFallback}
+    >
+      <Row>
+        <Col xs="4" className="py-1">
+          Upload A CSV File
+          <br />
+          <span className="text-small">from your computer (10MB limit)</span>
+        </Col>
+        <Col xs="4">
+          {formState.error ? (
+            <div className="text-danger csv-status">{formState.error}</div>
+          ) : formState.uploading ? (
+            <div className="csv-status">
+              <i className="fa fa-spin fa-spinner mr-3" />
+              inserting {commaNumbers(formData.records)} records into {schema}.{table}
             </div>
+          ) : formState.processed ? (
+            <Button
+              block
+              color="default"
+              onClick={() => {
+                setFormState({});
+                setFormData({});
+              }}
+            >
+              <i className="fa fa-thumbs-up text-success mr-3" />
+              {commaNumbers(formData.records)} records. Click here to replace file.
+            </Button>
+          ) : formState.processing ? (
+            <div className="csv-status">
+              <i className="fa fa-spin fa-spinner" /> processing {commaNumbers(formData.records)} records
+            </div>
+          ) : (
+            <Dropzone onDrop={onDrop}>
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps()} className="drop-zone">
+                  <input {...getInputProps()} />
+                  Click or Drag to select a .csv file
+                </div>
+              )}
+            </Dropzone>
           )}
-        </Dropzone>
-      )}
-      <div className="pt-2">
-        {formState.error ? (
-          <Button
-            color="danger"
-            block
-            className="px-5 clear-files"
-            onClick={() => {
-              setFormState({});
-              setFormData({});
-            }}
-          >
-            Clear File
-          </Button>
-        ) : (
-          <Button block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
-            Insert {commaNumbers(formData.records)} Records
-          </Button>
-        )}
-      </div>
-    </>
+        </Col>
+        <Col xs="4">
+          {formState.error ? (
+            <Button
+              color="danger"
+              block
+              className="px-5 clear-files"
+              onClick={() => {
+                setFormState({});
+                setFormData({});
+              }}
+            >
+              Clear File
+            </Button>
+          ) : (
+            <Button block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
+              Insert {commaNumbers(formData.records)} Records
+            </Button>
+          )}
+        </Col>
+      </Row>
+    </ErrorBoundary>
   );
 };
 export default CSVUploadFile;

@@ -54,18 +54,17 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
             <Col xs="10" className="org-name">
               {customer_name}
             </Col>
-            <Col xs="2" className="status-icon text-right">
+            <Col xs="2" className="status-icons text-right">
               {loading ? (
-                <i className="fa fa-spinner fa-spin text-purple" />
+                <i className="status-icon fa fa-spinner fa-spin text-purple" />
               ) : status === 'accepted' ? (
-                <i title={`Leave ${customer_name} organization`} className="fa fa-times-circle text-purple" data-action="leave" onClick={handleCardFlipIconClick} />
+                <Button data-action="leave" className="status-icon" color="link" title={`Leave ${customer_name} organization`} onClick={handleCardFlipIconClick}>
+                  <i className="fa fa-times-circle text-purple" />
+                </Button>
               ) : status === 'owner' ? (
-                <i
-                  title={`Delete ${customer_name} organization`}
-                  className={`fa fa-trash delete text-purple ${total_instance_count ? 'disabled' : ''}`}
-                  data-action="delete"
-                  onClick={handleCardFlipIconClick}
-                />
+                <Button data-action="delete" className="status-icon" color="link" title={`Delete ${customer_name} organization`} onClick={handleCardFlipIconClick}>
+                  <i className={`fa fa-trash delete text-purple ${total_instance_count ? 'disabled' : ''}`} />
+                </Button>
               ) : null}
             </Col>
           </Row>

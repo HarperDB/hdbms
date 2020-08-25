@@ -10,6 +10,7 @@ import browseTableColumns from '../datatable/browseTableColumns';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from '../datatable/clusterConfigColumns';
+import registrationInfo from '../../api/instance/registrationInfo';
 
 export default async ({ instances, auth, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
@@ -47,6 +48,8 @@ export default async ({ instances, auth, compute_stack_id }) => {
     };
   }
 
+  const registration = await registrationInfo({ auth, url: thisInstance.url, compute_stack_id, customer_id: thisInstance.customer_id });
+
   const users = await listUsers({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
   const roles = await listRoles({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
@@ -69,6 +72,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
     Object.entries({
       ...thisInstance,
       auth,
+      registration,
       schema,
       structure,
       network,

@@ -16,7 +16,7 @@ const appState = new Store({
   filterLocal: true,
   filterCloud: true,
   version: false,
-  darkTheme: false,
+  theme: 'purple',
   postmanCollection: false,
 });
 

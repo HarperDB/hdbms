@@ -1,8 +1,9 @@
 .btn {
   align-items: center;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 31%, rgba(0, 0, 0, 0.05) 100%);
+  border: 1px solid $faintest-white-overlay !important;
   border-radius: $border-radius;
   box-shadow: 0 0 3px $grey-overlay !important;
-  border: 1px solid $faintest-white-overlay !important;
   display: inline-flex;
   font-family: $font-family-sans;
   font-size: $font-size-root;
@@ -12,9 +13,8 @@
   line-height: 1 !important;
   padding-left: 5px;
   padding-right: 5px;
-  transition: none !important;
   position: relative;
-  background: linear-gradient(to bottom,  rgba(255, 255, 255, 0.05) 31%, rgba(0, 0, 0, 0.05) 100%);
+  transition: none !important;
 
   &:active {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05)  31%, rgba(255, 255, 255, 0.05) 100%);
@@ -38,7 +38,17 @@
   }
 
   &.btn-link {
+    background: none;
+    border: 0 !important;
+    box-shadow: none !important;
+    height: auto;
     padding: 0;
+    vertical-align: baseline !important;
+
+    &:hover,
+    &:focus {
+      text-decoration: none !important;
+    }
   }
 
   &.btn-success {

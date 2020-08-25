@@ -55,8 +55,16 @@ export default ({ type }) => {
     >
       <div className="entity-manager">
         <div className="floating-card-header">{type === 'folder' ? 'category' : 'operations'}</div>
-        <Card className="mt-3 mb-4">
-          <CardBody>{items && items.length ? items.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />) : null}</CardBody>
+        <Card className="my-3">
+          <CardBody>
+            {!items.length ? (
+              <div className="p-3 text-center">
+                <i className="fa-spinner fa fa-spin text-purple" />
+              </div>
+            ) : (
+              items.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />)
+            )}
+          </CardBody>
         </Card>
       </div>
     </ErrorBoundary>

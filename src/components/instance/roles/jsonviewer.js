@@ -20,11 +20,12 @@ export default () => {
   const alert = useAlert();
   const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const version = useStoreState(instanceState, (s) => s.registration?.version);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ export default () => {
       const defaultActivePermissions = await buildPermissionStructure({
         auth,
         url,
+        version,
         currentRolePermissions: roles.find((r) => r.id === role_id).permission,
         is_local,
         compute_stack_id,
@@ -53,14 +55,12 @@ export default () => {
     }
 
     setLoading(true);
-    const response = await alterRole({ permission: newPermissions, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
+    const permission = { super_user: false, ...newPermissions };
+    const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
-      setNewPermissions(activePermissions);
-    } else if (response.skipped_hashes.length) {
-      alert.error('Invalid role id. Permissions reset.');
       setNewPermissions(activePermissions);
     } else {
       alert.success('Permissions updated successfully');
@@ -81,9 +81,9 @@ export default () => {
         theme="light_mitsuketa_tribute"
         colors={{
           background: 'transparent',
-          default: darkTheme ? '#aaa' : '#000',
-          colon: darkTheme ? '#aaa' : '#000',
-          keys: darkTheme ? '#aaa' : '#000',
+          default: theme === 'dark' ? '#aaa' : '#000',
+          colon: theme === 'dark' ? '#aaa' : '#000',
+          keys: theme === 'dark' ? '#aaa' : '#000',
           string: '#13c664',
           number: '#ea4c89',
           primitive: '#ffa500',

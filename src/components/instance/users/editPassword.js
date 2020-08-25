@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Input, CardBody, Card } from 'reactstrap';
+import { Button, Input, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import alterUser from '../../../api/instance/alterUser';
@@ -13,9 +12,6 @@ import addError from '../../../api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id, username } = useParams();
-  const { pathname } = useLocation();
-  const history = useHistory();
-
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
@@ -29,16 +25,18 @@ export default () => {
     if (!password) {
       setFormState({ error: 'password is required' });
     } else {
+      setFormState({ submitted: true });
       const response = await alterUser({ auth, url, username, password, is_local, compute_stack_id, customer_id });
-
+      setFormData({});
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        setTimeout(() => history.push(pathname.replace(`/${username}`, '')), 0);
+        setFormState({});
       } else {
-        setFormState({ error: response.message });
+        alert.error(response.message);
+        setFormState({});
       }
     }
   };
@@ -48,22 +46,28 @@ export default () => {
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
       FallbackComponent={ErrorFallback}
     >
-      <Input
-        type="text"
-        className="mb-2 text-center"
-        name="password"
-        placeholder="enter new password"
-        value={formData.password || ''}
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-      />
-      <Button block color="purple" onClick={updatePassword}>
-        Update Password
-      </Button>
-      {formState.error && (
-        <Card className="mt-3 error">
-          <CardBody>{formState.error}</CardBody>
-        </Card>
-      )}
+      <Row>
+        <Col xs="4" className="py-1">
+          Change user password
+          <br />
+          <span className="text-small">Modify user&apos;s access credentials</span>
+        </Col>
+        <Col xs="4">
+          <Input
+            type="text"
+            className="text-center"
+            name="password"
+            placeholder="enter new password"
+            value={formData.password || ''}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+        </Col>
+        <Col xs="4">
+          <Button block color="purple" onClick={updatePassword} disabled={formState.submitted || !formData.password}>
+            Update Password
+          </Button>
+        </Col>
+      </Row>
     </ErrorBoundary>
   );
 };

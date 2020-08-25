@@ -25,7 +25,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
         toggleCreate={toggleCreate}
         showForm={showForm}
       />
-      <Card className="mt-3 mb-4">
+      <Card className="my-3">
         <CardBody>
           {items && items.length
             ? items.map((item) => (
@@ -41,7 +41,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
                 />
               ))
             : null}
-          {((items && !items.length) || isCreating) && (
+          {((items && !items.length) || isCreating) && showForm ? (
             <EntityManagerForm
               items={items}
               itemType={itemType}
@@ -52,7 +52,9 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
               isCreating={isCreating}
               toggleCreate={toggleCreate}
             />
-          )}
+          ) : items && !items.length && !showForm ? (
+            <div className="py-3 text-center no-content">no visible schemas or tables</div>
+          ) : null}
         </CardBody>
       </Card>
     </div>

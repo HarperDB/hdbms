@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -75,9 +75,13 @@ export default () => {
         <Col>instance jobs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
-          <i title="Update Jobs" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={() => setLastUpdate(Date.now())} />
-          <span className="mr-2">auto</span>
-          <i title="Turn on autofresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={() => setAutoRefresh(!autoRefresh)} />
+          <Button color="link" title="Update Jobs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
+            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+          </Button>
+          <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
+            <span className="mr-2">auto</span>
+            <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
+          </Button>
         </Col>
       </Row>
       <Card className="my-3">

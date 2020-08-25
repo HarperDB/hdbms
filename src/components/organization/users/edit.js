@@ -2,16 +2,12 @@ import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { CardBody, Card, Button, Col, Row } from 'reactstrap';
 import { useHistory } from 'react-router';
-import { ErrorBoundary } from 'react-error-boundary';
 
 import Role from './editRole';
 import Delete from './editDelete';
-import ContentContainer from '../../shared/contentContainer';
-import addError from '../../../api/lms/addError';
-import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ userEmail }) => {
-  const { user_id, customer_id } = useParams();
+  const { user_id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
 
@@ -22,33 +18,22 @@ export default ({ userEmail }) => {
       </div>
       <Card className="my-3">
         <CardBody>
+          <Role />
+          <hr className="my-3" />
+          <Delete />
+          <hr className="my-3" />
           <Row>
-            <Col lg="6">
-              <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-                <Card className="mb-3">
-                  <CardBody>
-                    <ContentContainer header="Update User Role">
-                      <Role />
-                    </ContentContainer>
-                  </CardBody>
-                </Card>
-              </ErrorBoundary>
+            <Col xs="8" className="py-1">
+              Return to User List
+              <br />
+              <span className="text-small">make no further changes to this user</span>
             </Col>
-            <Col lg="6">
-              <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-                <Card className="mb-3">
-                  <CardBody>
-                    <ContentContainer header="Delete User">
-                      <Delete />
-                    </ContentContainer>
-                  </CardBody>
-                </Card>
-              </ErrorBoundary>
+            <Col xs="4">
+              <Button block color="grey" onClick={() => history.push(pathname.replace(`/${user_id}`, ''))}>
+                Return to User List
+              </Button>
             </Col>
           </Row>
-          <Button block color="grey" onClick={() => history.push(pathname.replace(`/${user_id}`, ''))}>
-            cancel
-          </Button>
         </CardBody>
       </Card>
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Col, Row, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -56,7 +56,10 @@ export default () => {
             <Col className="text-right">
               {(!!compute_subscription_id || !!unusedCompute.length) && (
                 <span className="floating-card-header">
-                  prepaid: <i onClick={() => setShowPrepaidCompute(!showPrepaidCompute)} className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
+                  prepaid:{' '}
+                  <Button color="link" onClick={() => setShowPrepaidCompute(!showPrepaidCompute)}>
+                    <i className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
+                  </Button>
                 </span>
               )}
             </Col>
@@ -82,7 +85,10 @@ export default () => {
             <Col className="text-right">
               {(!!storage_subscription_id || !!unusedStorage.length) && (
                 <span className="floating-card-header">
-                  prepaid: <i onClick={() => setShowPrepaidStorage(!showPrepaidStorage)} className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
+                  prepaid:{' '}
+                  <Button color="link" onClick={() => setShowPrepaidStorage(!showPrepaidStorage)}>
+                    <i className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
+                  </Button>
                 </span>
               )}
             </Col>

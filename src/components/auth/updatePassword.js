@@ -22,8 +22,10 @@ const UpdatePassword = () => {
 
       if (!password || !password2) {
         setFormState({ error: 'all fields are required' });
+        setTimeout(() => setFormState({}), 2000);
       } else if (password !== password2) {
         setFormState({ error: 'passwords must match' });
+        setTimeout(() => setFormState({}), 2000);
       } else {
         setFormState({ processing: true });
         updatePassword({ auth, ...auth, password });

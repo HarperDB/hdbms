@@ -9,11 +9,15 @@ import EditCard from './cardEdit';
 export default () => {
   const [editingCard, setEditingCard] = useState(false);
   const hasCard = useStoreState(appState, (s) => s.hasCard, [editingCard]);
-  const formStateHeight = '295px';
+  const formStateHeight = '314px';
 
-  return editingCard || !hasCard ? (
-    <EditCard formStateHeight={formStateHeight} setEditingCard={setEditingCard} customerCard={hasCard} />
-  ) : (
-    <StaticCard formStateHeight={formStateHeight} setEditingCard={setEditingCard} customerCard={hasCard} />
+  return (
+    <div className="mt-3 mb-4">
+      {editingCard || !hasCard ? (
+        <EditCard formStateHeight={formStateHeight} setEditingCard={setEditingCard} customerCard={hasCard} />
+      ) : (
+        <StaticCard formStateHeight={formStateHeight} setEditingCard={setEditingCard} customerCard={hasCard} />
+      )}
+    </div>
   );
 };

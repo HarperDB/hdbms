@@ -1,61 +1,85 @@
 import React, { useState } from 'react';
-import { Button, Input, CardBody, Card } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useLocation, useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
+import { ErrorBoundary } from 'react-error-boundary';
+import ToggleButton from 'react-toggle';
+import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
 import updateOrgUser from '../../../api/lms/updateOrgUser';
 import getUsers from '../../../api/lms/getUsers';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 export default () => {
   const { user_id } = useParams();
-  const { pathname } = useLocation();
   const { customer_id } = useParams();
-  const history = useHistory();
+  const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
-  const users = useStoreState(appState, (s) => s.users);
-  const currentUser = users && users.find((u) => u.user_id === user_id);
-  const currentStatus = currentUser && currentUser.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status;
-
+  const currentUser = useStoreState(appState, (s) => s.users && s.users.find((u) => u.user_id === user_id), [user_id]);
+  const [currentStatus, setCurrentStatus] = useState(false);
   const [formState, setFormState] = useState({});
+
+  useAsyncEffect(() => {
+    setCurrentStatus(currentUser && currentUser.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status);
+  }, [currentUser, customer_id]);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
     if (submitted && !processing) {
-      const newRole = currentStatus === 'declined' ? 'invited' : currentStatus === 'accepted' ? 'owner' : 'accepted';
+      const newRole = currentStatus === 'declined' ? 'invited' : currentStatus === 'accepted' ? 'owner' : currentStatus === 'owner' ? 'accepted' : 'invited';
+      setCurrentStatus(newRole);
       const response = await updateOrgUser({ auth, user_id, user_id_owner: auth.user_id, customer_id, status: newRole });
       if (response.error) {
-        setFormState({ error: response.message });
+        alert.error(response.message);
+        setFormState({});
       } else {
+        alert.success(`User role updated to ${newRole === 'accepted' ? 'user' : newRole}`);
+        setFormState({});
         getUsers({ auth, customer_id });
-        setTimeout(() => history.push(pathname.replace(`/${user_id}`, '')), 0);
       }
     }
   }, [formState]);
 
   return (
-    <>
-      <Input disabled className="text-center mb-2" type="text" placeholder={`Current Status: ${currentStatus === 'accepted' ? 'user' : currentStatus || '...'}`} />
-      <Button disabled={!currentStatus || formState.submitted || currentStatus === 'invited'} block color="purple" onClick={() => setFormState({ submitted: true })}>
-        {formState.submitted || !currentStatus ? (
-          <i className="fa fa-spinner fa-spin text-white" />
-        ) : currentStatus === 'invited' ? (
-          <span>User Must First Accept Invite</span>
-        ) : currentStatus === 'declined' ? (
-          <span>Reinvite User</span>
-        ) : currentStatus === 'accepted' ? (
-          <span>Update Role to Owner</span>
-        ) : (
-          <span>Update Role to User</span>
-        )}
-      </Button>
-      {formState.error && (
-        <Card className="mt-3 error">
-          <CardBody>{formState.error}</CardBody>
-        </Card>
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+      {!['invited', 'declined'].includes(currentStatus) ? (
+        <Row>
+          <Col xs="8" className="py-1">
+            Is Owner
+            <br />
+            <span className="text-small">can invite other users, add instances</span>
+          </Col>
+          <Col xs="4">
+            <div className="role-toggle-holder">
+              <ToggleButton checked={currentStatus === 'owner'} onChange={() => setFormState({ submitted: true })} />
+            </div>
+          </Col>
+        </Row>
+      ) : currentStatus === 'declined' ? (
+        <Row>
+          <Col xs="8" className="py-1">
+            User declined invitation to join
+            <br />
+            <span className="text-small">reinvite them by clicking this button</span>
+          </Col>
+          <Col xs="4">
+            <Button block color="purple" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+              {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Reinvite User</span>}
+            </Button>
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <Col className="py-1">
+            User has not yet accepted invitation
+            <br />
+            <span className="text-small">You must wait for them to accept before modifying them</span>
+          </Col>
+        </Row>
       )}
-    </>
+    </ErrorBoundary>
   );
 };

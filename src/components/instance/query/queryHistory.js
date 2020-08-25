@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { CardBody, Card, Row, Col } from 'reactstrap';
+import { CardBody, Card, Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -29,10 +29,12 @@ export default ({ setQuery, query }) => {
         <Row className="floating-card-header">
           <Col xs="9">query history (click to load)</Col>
           <Col xs="3" className="text-right">
-            <i title="clear query history" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })} className="fa fa-trash clickable" />
+            <Button color="link" title="Refresh Results" className="mr-2" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })}>
+              <i className="fa fa-trash" />
+            </Button>
           </Col>
         </Row>
-        <Card className="mt-3 mb-4">
+        <Card className="my-3">
           {queries && queries[compute_stack_id]?.length ? (
             <CardBody className="query-scroller">
               {queries[compute_stack_id].map((q) => (

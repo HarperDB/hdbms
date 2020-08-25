@@ -98,6 +98,12 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
         <CardBody className="react-table-holder">
           {tableState.error ? (
             <div className="text-center py-5">{tableState.error}</div>
+          ) : !loading && !tableState.tableData.length ? (
+            <div className="text-center py-5">This table has no data</div>
+          ) : !tableState.tableData.length ? (
+            <div className="text-center py-5">
+              <i className="fa fa-spinner fa-spin" />
+            </div>
           ) : (
             <ReactTable
               manual

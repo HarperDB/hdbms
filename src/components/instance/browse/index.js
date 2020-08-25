@@ -43,6 +43,9 @@ export default () => {
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const [instanceAuths] = useInstanceAuth({});
   const showForm = instanceAuths[compute_stack_id]?.super;
+  const emptyPromptMessage = showForm
+    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
+    : "This user has not been granted access to any tables. A super-user must update this user's role.";
 
   useEffect(() => {
     if (structure) {
@@ -80,6 +83,9 @@ export default () => {
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>
+      <Col xs="12" className="d-block d-md-none">
+        <hr />
+      </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <ErrorBoundary
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
@@ -92,9 +98,7 @@ export default () => {
           ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
           ) : (
-            <EmptyPrompt
-              message={`Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`}
-            />
+            <EmptyPrompt message={emptyPromptMessage} />
           )}
         </ErrorBoundary>
       </Col>

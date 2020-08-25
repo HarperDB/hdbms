@@ -1,9 +1,9 @@
-export default ({ darkTheme }) => ({
+export default ({ theme }) => ({
   iconStyle: 'solid',
   style: {
     base: {
       iconColor: '#403b8a',
-      color: darkTheme ? '#ffffff' : '#212121',
+      color: theme === 'dark' ? '#ffffff' : '#212121',
       fontWeight: 100,
       fontFamily: 'Raleway, Open Sans, Segoe UI, sans-serif',
       fontSize: '14px',

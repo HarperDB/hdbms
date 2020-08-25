@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import lolight from 'lolight';
 import { useAlert } from 'react-alert';
+import { Button } from 'reactstrap';
 
 export default ({ children, className, ...rest }) => {
   const alert = useAlert();
@@ -38,9 +39,9 @@ export default ({ children, className, ...rest }) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div className="code-holder">
-      <div className="copy-icon">
-        <i className="fa fa-copy" onClick={() => copyToClipboard(children)} />
-      </div>
+      <Button className="copy-icon" color="link" title="Copy this code snippet" onClick={() => copyToClipboard(children)}>
+        <i className="fa fa-copy text-white" />
+      </Button>
       <pre {...rest} className={`lolight ${className}`}>
         {children}
       </pre>

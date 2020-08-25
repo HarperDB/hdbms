@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 
 import commaNumbers from '../../../methods/util/commaNumbers';
@@ -25,21 +25,35 @@ export default ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh
       </Col>
       <Col xs="12" className="d-inline-flex d-md-none mb-2" />
       <Col className="text-md-right">
-        <i title={`Refresh table ${table}`} className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} onClick={refresh} />
-        <span className="mr-2">auto</span>
-        <i title="Turn on Auto-Refresh" className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} onClick={toggleAutoRefresh} />
+        <Button color="link" tabIndex="0" title={`Refresh table ${table}`} className="mr-2" onClick={refresh}>
+          <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+        </Button>
+        <Button color="link" tabIndex="0" title="Turn on Auto-Refresh" onClick={toggleAutoRefresh}>
+          <span className="mr-2">auto</span>
+          <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
+        </Button>
         <span className="mx-3 text">|</span>
-        <i title={`Filter table ${table}`} className="fa fa-search mr-3" onClick={toggleFilter} />
-        <i
+        <Button color="link" tabIndex="0" title={`Filter table ${table}`} className="mr-3" onClick={toggleFilter}>
+          <i className="fa fa-search" />
+        </Button>
+        <Button
+          color="link"
+          tabIndex="0"
           title={`Add new record to table ${table}`}
-          className="fa fa-plus mr-3"
+          className="mr-3"
           onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
-        />
-        <i
+        >
+          <i className="fa fa-plus" />
+        </Button>
+        <Button
+          color="link"
+          tabIndex="0"
+          className="mr-2"
           title={`Bulk Upload CSV to ${table}`}
-          className="fa fa-file-text-o"
           onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
-        />
+        >
+          <i className="fa fa-file-text-o" />
+        </Button>
       </Col>
     </Row>
   );

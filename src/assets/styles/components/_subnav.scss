@@ -123,4 +123,25 @@
     }
 
   }
+
+  .filter-holder {
+    max-width: 280px;
+    position: relative;
+    width: 100%;
+
+    input {
+      background: $faint-white-overlay !important;
+      border: 1px solid $faintest-white-overlay !important;
+      color: $color-lightgrey !important;
+    }
+
+    .clear-filter {
+      background: none !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      position: absolute;
+      right: 8px;
+      top: 0;
+    }
+  }
 }

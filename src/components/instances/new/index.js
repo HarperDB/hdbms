@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -13,19 +13,19 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 import Loader from '../../shared/loader';
 
-const InstanceTypeForm = lazy(() => import(/* webpackChunkName: "newinstance-type" */ './type'));
-const CloudMetadataForm = lazy(() => import(/* webpackChunkName: "newinstance-metaCloud" */ './metaCloud'));
-const LocalMetadataForm = lazy(() => import(/* webpackChunkName: "newinstance-metaLocal" */ './metaLocal'));
-const LocalInstanceForm = lazy(() => import(/* webpackChunkName: "newinstance-detailsLocal" */ './detailsLocal'));
-const CloudInstanceForm = lazy(() => import(/* webpackChunkName: "newinstance-detailsCloud" */ './detailsCloud'));
-const CustomerPaymentForm = lazy(() => import(/* webpackChunkName: "newinstance-payment" */ './payment'));
-const ConfirmOrderForm = lazy(() => import(/* webpackChunkName: "newinstance-confirm" */ './confirm'));
-const OrderStatus = lazy(() => import(/* webpackChunkName: "newinstance-status" */ './status'));
+import InstanceTypeForm from './type';
+import CloudMetadataForm from './metaCloud';
+import LocalMetadataForm from './metaLocal';
+import LocalInstanceForm from './detailsLocal';
+import CloudInstanceForm from './detailsCloud';
+import CustomerPaymentForm from './payment';
+import ConfirmOrderForm from './confirm';
+import OrderStatus from './status';
 
 export default () => {
   const history = useHistory();
   const { purchaseStep = 'type', customer_id } = useParams();
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
 
   const closeAndResetModal = () => {
@@ -41,7 +41,7 @@ export default () => {
   };
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={darkTheme ? 'dark' : ''}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>

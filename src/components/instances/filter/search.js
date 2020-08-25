@@ -20,18 +20,18 @@ const Search = () => {
   const filterSearch = useStoreState(appState, (s) => s.filterSearch);
 
   return (
-    <div className="instance-filter-holder">
+    <div className="filter-holder">
       <Input
         title="filter instances by name, host, url, or region"
         type="text"
-        className="instances-filter text-center"
+        className="text-center"
         onChange={updateFilter}
         placeholder="filter instances"
         value={filterSearch}
       />
       {filterSearch && (
         <Button title="Clear instance filter" className="clear-filter" onClick={clearFilter}>
-          <i className="fa fa-times text-white" />
+          <i className="fa fa-times" />
         </Button>
       )}
     </div>

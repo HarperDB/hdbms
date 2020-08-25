@@ -15,7 +15,7 @@ import addError from '../../../api/lms/addError';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
+  const theme = useStoreState(appState, (s) => s.theme);
   const history = useHistory();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
@@ -41,7 +41,7 @@ export default () => {
   }, [formData]);
 
   return (
-    <Modal id="new-org-modal" isOpen className={darkTheme ? 'dark' : ''}>
+    <Modal id="new-org-modal" isOpen className={theme}>
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
         {formState.submitted ? (
           <ModalBody>
@@ -97,7 +97,9 @@ export default () => {
                     <Row>
                       <Col sm="4" className="pt-2 text-nowrap text-grey">
                         Ex: &quot;myorg&quot;&nbsp;
-                        <i className="fa fa-question-circle text-purple" onClick={() => setShowToolTip(!showToolTip)} />
+                        <Button color="link" title="Learn more" onClick={() => setShowToolTip(!showToolTip)}>
+                          <i className="fa fa-question-circle text-purple" />
+                        </Button>
                       </Col>
                       <Col sm="8">
                         <Input

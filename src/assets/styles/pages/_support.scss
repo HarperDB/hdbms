@@ -32,23 +32,16 @@
   }
 
   .youtube-thumbnail {
-    border: 3px solid $color-white;
-    border-radius: 6px;
     cursor: pointer;
-    height: 150px;
+    height: 100px;
     margin-bottom: 15px;
     overflow: hidden;
     position: relative;
     width: 100%;
 
-    &.active {
-      border: 3px solid $color-lightpurple;
-    }
-
     .title {
       align-items: center;
       background: $dark-grey-overlay;
-      border-radius: 6px;
       bottom: 0;
       color: $color-white;
       display: flex;
@@ -56,11 +49,23 @@
       height: 100%;
       justify-content: center;
       left: 0;
+      padding: 15px;
       position: absolute;
       right: 0;
+      text-align: center;
       top: 0;
       width: 100%;
     }
+
+    &.active {
+      border: 1px solid $color-white;
+
+      .title {
+        border: 1px solid $faint-white-overlay;
+      }
+    }
+
+
   }
 
   .custom-example-prompt {
@@ -73,26 +78,39 @@
 
   .integration-driver-card {
     height: 100%;
-    position:relative;
+    position: relative;
 
     .card-icon {
-      position: absolute;
-      top: 15px;
-      right: 1.25rem;
       font-size: 1.5rem;
+      max-height: 22px;
+      max-width: 50px;
+      position: absolute;
+      right: 1.25rem;
+      top: 15px;
     }
 
     .star-rating-container {
-      .your-rating {
-        display:none;
+      .star-icon {
+        width: 16px;
       }
 
-      &:hover {
-        .avg-rating {
-          display: none;
-        }
-        .your-rating {
-          display:block;
+      .your-rating {
+        display: none;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+      }
+
+      &.enabled {
+        &:hover {
+          .avg-rating {
+            display: none;
+          }
+
+          .your-rating {
+            display: block;
+          }
         }
       }
     }

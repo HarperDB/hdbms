@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import Password from './editPassword';
 import Role from './editRole';
 import Delete from './editDelete';
-import ContentContainer from '../../shared/contentContainer';
 
 export default () => {
   const { username } = useParams();
@@ -20,38 +19,24 @@ export default () => {
       </div>
       <Card className="my-3">
         <CardBody>
+          <Password />
+          <hr className="my-3" />
+          <Role />
+          <hr className="my-3" />
+          <Delete />
+          <hr className="my-3" />
           <Row>
-            <Col xl="4">
-              <Card className="mb-3">
-                <CardBody>
-                  <ContentContainer header="Password" subheader="must restart instance">
-                    <Password />
-                  </ContentContainer>
-                </CardBody>
-              </Card>
+            <Col xs="8" className="py-1">
+              Return to User List
+              <br />
+              <span className="text-small">make no further changes to this user</span>
             </Col>
-            <Col xl="4">
-              <Card className="mb-3">
-                <CardBody>
-                  <ContentContainer header="Role">
-                    <Role />
-                  </ContentContainer>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xl="4">
-              <Card className="mb-3">
-                <CardBody>
-                  <ContentContainer header="Delete User">
-                    <Delete />
-                  </ContentContainer>
-                </CardBody>
-              </Card>
+            <Col xs="4">
+              <Button block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
+                Return to User List
+              </Button>
             </Col>
           </Row>
-          <Button block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
-            cancel
-          </Button>
         </CardBody>
       </Card>
     </>

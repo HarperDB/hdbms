@@ -73,34 +73,33 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
       ) : formState.error ? (
         <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
       ) : (
-        <>
-          <Card>
-            <CardBody>
-              <CreditCardForm setFormData={setFormData} formData={formData} />
-            </CardBody>
-          </Card>
-          <Row>
-            {customerCard && (
-              <Col sm="6">
-                <Button onClick={() => setEditingCard(false)} block color="danger" className="mt-3">
-                  Cancel
+        <Card>
+          <CardBody>
+            <CreditCardForm setFormData={setFormData} formData={formData} />
+            <hr className="my-2" />
+            <Row>
+              {customerCard && (
+                <Col sm="6">
+                  <Button onClick={() => setEditingCard(false)} block color="danger" className="mt-3">
+                    Cancel
+                  </Button>
+                </Col>
+              )}
+              <Col>
+                <Button
+                  title={customerCard ? 'Save New Card' : 'Add Card To Account'}
+                  disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
+                  onClick={() => setFormState({ submitted: true })}
+                  block
+                  className="mt-3"
+                  color="purple"
+                >
+                  {customerCard ? 'Save New Card' : 'Add Card To Account'}
                 </Button>
               </Col>
-            )}
-            <Col>
-              <Button
-                title={customerCard ? 'Save New Card' : 'Add Card To Account'}
-                disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
-                onClick={() => setFormState({ submitted: true })}
-                block
-                className="mt-3"
-                color="purple"
-              >
-                {customerCard ? 'Save New Card' : 'Add Card To Account'}
-              </Button>
-            </Col>
-          </Row>
-        </>
+            </Row>
+          </CardBody>
+        </Card>
       )}
     </ErrorBoundary>
   );

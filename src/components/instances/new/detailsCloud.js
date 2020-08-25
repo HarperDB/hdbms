@@ -64,11 +64,10 @@ export default () => {
   const computeSubheader =
     unusedCompute.length || newInstance.showPrepaidCompute ? (
       <span>
-        show prepaid options:{' '}
-        <i
-          onClick={() => setNewInstance({ ...newInstance, showPrepaidCompute: !newInstance.showPrepaidCompute })}
-          className={`fa fa-lg fa-toggle-${newInstance.showPrepaidCompute ? 'on' : 'off'}`}
-        />
+        <div className="d-inline align-top mr-2">show prepaid options:</div>
+        <Button color="link" onClick={() => setNewInstance({ ...newInstance, showPrepaidCompute: !newInstance.showPrepaidCompute })}>
+          <i className={`fa fa-lg text-lightpurple fa-toggle-${newInstance.showPrepaidCompute ? 'on' : 'off'}`} />
+        </Button>
       </span>
     ) : (
       'scroll for more'
@@ -76,11 +75,10 @@ export default () => {
   const storageSubheader =
     unusedStorage.length || newInstance.showPrepaidStorage ? (
       <span>
-        show prepaid options:{' '}
-        <i
-          onClick={() => setNewInstance({ ...newInstance, showPrepaidStorage: !newInstance.showPrepaidStorage })}
-          className={`fa fa-lg fa-toggle-${newInstance.showPrepaidStorage ? 'on' : 'off'}`}
-        />
+        <div className="d-inline align-top mr-2">show prepaid options:</div>
+        <Button color="link" onClick={() => setNewInstance({ ...newInstance, showPrepaidStorage: !newInstance.showPrepaidStorage })}>
+          <i className={`fa fa-lg text-lightpurple fa-toggle-${newInstance.showPrepaidStorage ? 'on' : 'off'}`} />
+        </Button>
       </span>
     ) : (
       'scroll for more'

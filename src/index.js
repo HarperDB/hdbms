@@ -21,11 +21,9 @@ render(
     <Provider template={AlertTemplate} timeout={2000} position={positions.TOP_CENTER}>
       <BrowserRouter>
         <Analytics trackPathnameOnly id={config.google_analytics_code}>
-          {/* <React.StrictMode> */}
           <Suspense fallback={null}>
             <App />
           </Suspense>
-          {/* </React.StrictMode> */}
         </Analytics>
       </BrowserRouter>
     </Provider>

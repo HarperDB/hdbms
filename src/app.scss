@@ -11,6 +11,7 @@
 // page styles
 @import 'assets/styles/pages/instances';
 @import 'assets/styles/pages/organizations';
+@import 'assets/styles/pages/organization';
 @import 'assets/styles/pages/auth';
 @import 'assets/styles/pages/config';
 @import 'assets/styles/pages/clustering';
@@ -43,4 +44,5 @@
 
 // override styles
 @import 'assets/styles/overrides/dark';
+@import 'assets/styles/overrides/light';
 @import 'assets/styles/overrides/accessibility';

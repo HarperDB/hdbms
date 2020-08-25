@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'reactstrap';
+import { Input, Button, CardBody, Card } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../state/appState';
 
 import addUser from '../../../api/lms/addUser';
 import isEmail from '../../../methods/util/isEmail';
 import FormStatus from '../../shared/formStatus';
+import addError from '../../../api/lms/addError';
+import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ refreshUsers, userEmails }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
+  const formStateHeight = '132px';
 
   useAsyncEffect(async () => {
     const { email } = formData;
@@ -41,26 +45,34 @@ export default ({ refreshUsers, userEmails }) => {
 
   useAsyncEffect(() => setFormState({}), [formData]);
 
-  return formState.processing ? (
-    <FormStatus height="173px" status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
-  ) : formState.success ? (
-    <FormStatus height="173px" status="success" header="Success!" subhead={formState.success} />
-  ) : formState.error ? (
-    <FormStatus height="171px" status="error" header={formState.error} subhead="Please try again" />
-  ) : (
-    <>
-      <Input
-        type="text"
-        className="mb-3 text-center"
-        name="email"
-        placeholder="email address"
-        onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
-        disabled={formState.submitted}
-      />
+  return (
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
+      <div className="mt-3 mb-4">
+        {formState.processing ? (
+          <FormStatus height={formStateHeight} status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
+        ) : formState.success ? (
+          <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />
+        ) : formState.error ? (
+          <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
+        ) : (
+          <Card>
+            <CardBody>
+              <Input
+                type="text"
+                className="mb-3 text-center"
+                name="email"
+                placeholder="email address"
+                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
+                disabled={formState.submitted}
+              />
 
-      <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
-        Add User
-      </Button>
-    </>
+              <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+                Add User
+              </Button>
+            </CardBody>
+          </Card>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };

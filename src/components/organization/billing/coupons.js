@@ -16,11 +16,11 @@ export default () => {
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-      <Card>
+      <Card className="my-3">
         <CardBody>
           <CouponForm />
           {stripe_coupons?.length ? (
-            <div className="mt-4">
+            <div className="mt-2">
               {stripe_coupons.map((coupon) => (
                 <Fragment key={coupon.id}>
                   <hr className="my-2" />

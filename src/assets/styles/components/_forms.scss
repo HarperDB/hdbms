@@ -4,7 +4,7 @@ textarea,
 .fake-input,
 .form-control {
   background: $light-white-overlay !important;
-  border: 1px solid $color-lightgrey !important;
+  border: 1px solid $lighter-grey-overlay !important;
   border-radius: $border-radius;
   box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
   color: $color-black;
@@ -13,12 +13,6 @@ textarea,
   font-weight: $font-weight-light;
   height: 38px;
   transition: none;
-
-  &::placeholder {
-    color: $color-grey !important;
-    font-family: $font-family-sans;
-    font-weight: $font-weight-light;
-  }
 
   &.is-invalid,
   &.error {
@@ -29,6 +23,12 @@ textarea,
 textarea {
   height: auto !important;
   resize: none;
+}
+
+::placeholder {
+  color: $color-grey !important;
+  font-family: $font-family-sans;
+  font-weight: $font-weight-light;
 }
 
 .form-status {
@@ -48,21 +48,6 @@ textarea {
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.nio-check-mark::before {
-  content: '\f00c';
-}
-
-.nio::before {
-  font-family: 'FontAwesome', monospace !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400 !important;
-  text-transform: none;
-  vertical-align: top;
 }
 
 .radio-button > div {
@@ -102,7 +87,8 @@ textarea {
   padding-top: 12px;
   white-space: nowrap;
 
-  a {
-    color: $color-white !important;
+  .btn-link {
+    color: $color-white;
   }
 }
+

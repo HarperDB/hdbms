@@ -21,6 +21,7 @@ import getPostManCollection from '../methods/examples/getPostManCollection';
 import checkVersion from '../methods/app/checkVersion';
 import init from '../methods/app/init';
 import refreshUser from '../methods/app/refreshUser';
+import changeFavIcon from '../methods/app/changeFavIcon';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './topnav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/signUp'));
@@ -49,9 +50,13 @@ export default () => {
   const [fetchingUser, setFetchingUser] = useState(true);
   const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-
+  const currentTheme = persistedUser?.theme;
   const showPasswordUpdate = auth?.user_id && auth?.update_password;
   const loggedIn = auth?.user_id;
+
+  useEffect(() => {
+    changeFavIcon(currentTheme);
+  }, [currentTheme]);
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));
@@ -84,7 +89,7 @@ export default () => {
   useInterval(() => getCurrentVersion(), config.check_version_interval);
 
   return (
-    <div className={persistedUser?.darkTheme ? 'dark' : ''}>
+    <div className={persistedUser?.theme}>
       <div id="app-container">
         {config.maintenance ? (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>

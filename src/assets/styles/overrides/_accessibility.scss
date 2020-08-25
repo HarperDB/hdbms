@@ -1,24 +1,58 @@
+a,
+button,
+input,
+textarea,
+.item-row,
+select,
+i,
+.card,
 .btn,
-button {
+[role='button'] {
   &:focus {
-    box-shadow: 0 0 0 2px $color-lightpurple !important;
+    outline: 1px solid $light-white-overlay !important;
+    outline-offset: 3px !important;
   }
 }
-
 
 input,
 textarea,
-.card {
+.item-row,
+[role='button'] {
   &:focus {
-    box-shadow: inset 0 0 0 2px $color-lightpurple !important;
-    outline: none !important;
+    outline-offset: -1px !important;
   }
 }
 
-a,
-.past-query {
-  &:focus {
-    box-shadow: none !important;
-    outline: 2px solid $color-lightpurple !important;
+.dark {
+  a,
+  button,
+  input,
+  textarea,
+  .item-row,
+  select,
+  i,
+  .card,
+  .btn,
+  [role='button'] {
+    &:focus {
+      outline-color: $light-white-overlay !important;
+    }
+  }
+}
+
+.light {
+  a,
+  button,
+  input,
+  textarea,
+  .item-row,
+  select,
+  i,
+  .card,
+  .btn,
+  [role='button'] {
+    &:focus {
+      outline-color: $color-lightpurple !important;
+    }
   }
 }

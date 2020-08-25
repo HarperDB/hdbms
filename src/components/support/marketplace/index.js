@@ -1,20 +1,29 @@
 import React from 'react';
-import { Card, CardBody, Row } from 'reactstrap';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
 import IntegrationCard from './integrationCard';
 import appState from '../../../state/appState';
 import getIntegrations from '../../../api/lms/getIntegrations';
+import EntityManager from './entityManager';
+import AddIntegration from './add';
 
 let controller;
 
 export default () => {
+  const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const integrations = useStoreState(appState, (s) => s.integrations);
+  const { type } = useParams();
 
   useAsyncEffect(
     () => {
+      if (!type) {
+        history.push('/support/marketplace/active');
+      }
       controller = new AbortController();
       getIntegrations({ auth, signal: controller.signal });
     },
@@ -22,26 +31,38 @@ export default () => {
     []
   );
 
+  useAsyncEffect(() => {
+    if (integrations && (!integrations[type] || !integrations[type].length)) {
+      history.push('/support/marketplace/active');
+    }
+  }, [integrations, type]);
+
   return (
-    <main id="support">
-      <span className="floating-card-header">Marketplace</span>
-      <Card className="my-3">
-        <CardBody>
-          {!integrations ? (
-            <div className="py-5 text-center">
-              <i className="fa fa-spinner fa-spin text-purple" />
-            </div>
-          ) : !integrations.length ? (
-            <div className="py-5 text-center">We were unable to find any marketplace apps at this time. Please try again later.</div>
-          ) : (
-            <Row>
-              {integrations.map((integration) => (
-                <IntegrationCard key={integration.id} {...integration} />
-              ))}
-            </Row>
-          )}
-        </CardBody>
-      </Card>
-    </main>
+    <Row id="support">
+      <Col xl="3" lg="4" md="5" xs="12">
+        <EntityManager />
+        <AddIntegration />
+      </Col>
+      <Col xl="9" lg="8" md="7" xs="12">
+        <span className="floating-card-header">Marketplace</span>
+        <Card className="my-3">
+          <CardBody>
+            {!integrations ? (
+              <div className="py-5 text-center">
+                <i className="fa fa-spinner fa-spin text-purple" />
+              </div>
+            ) : integrations[type] && !integrations[type].length ? (
+              <div className="py-5 text-center">We were unable to find any marketplace apps at this time. Please try again later.</div>
+            ) : integrations[type] ? (
+              <Row>
+                {integrations[type].map((integration) => (
+                  <IntegrationCard key={integration.id} {...integration} />
+                ))}
+              </Row>
+            ) : null}
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import ReactTable from 'react-table-6';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
@@ -48,11 +48,15 @@ export default () => {
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">
-          <i
+          <Button
+            color="link"
+            tabIndex="0"
             title="Filter Users"
-            className="fa fa-search "
+            className="mr-3"
             onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
-          />
+          >
+            <i className="fa fa-search" />
+          </Button>
         </Col>
       </Row>
       <Card className="my-3">

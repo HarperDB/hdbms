@@ -13,8 +13,8 @@ import addError from '../../api/lms/addError';
 export default ({ setFormData, formData }) => {
   const { customer_id } = useParams();
   const [formState, setFormState] = useState({});
-  const darkTheme = useStoreState(appState, (s) => s.darkTheme);
-  const themedCardOptions = cardOptions({ darkTheme });
+  const theme = useStoreState(appState, (s) => s.theme);
+  const themedCardOptions = cardOptions({ theme });
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>

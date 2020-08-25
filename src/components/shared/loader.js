@@ -7,7 +7,7 @@ export default ({ header, body, spinner, links = false, relative = false }) => (
     <Card className="mb-3">
       <CardBody className="text-white text-center">
         <div className="mb-3">{header}</div>
-        {spinner && <i className="fa fa-spinner fa-spin text-white" />}
+        {spinner && <i className="fa fa-spinner fa-spin" />}
         {body}
       </CardBody>
     </Card>

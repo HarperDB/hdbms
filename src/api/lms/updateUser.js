@@ -3,14 +3,14 @@ import appState from '../../state/appState';
 import addError from './addError';
 import config from '../../config';
 
-export default async ({ auth, firstname, lastname, customer_id, user_id }) => {
+export default async ({ auth, firstname, lastname, customer_id, user_id, github_repo }) => {
   let response = null;
 
   try {
     response = await queryLMS({
       endpoint: 'updateUser',
       method: 'POST',
-      payload: { firstname, lastname, customer_id, user_id },
+      payload: { firstname, lastname, customer_id, user_id, github_repo },
       auth,
     });
 
@@ -29,7 +29,7 @@ export default async ({ auth, firstname, lastname, customer_id, user_id }) => {
       status: 'error',
       url: config.lms_api_url,
       operation: 'updateUser',
-      request: { firstname, lastname, customer_id, user_id },
+      request: { firstname, lastname, customer_id, user_id, github_repo },
       error: { catch: e.toString() },
       customer_id,
     });

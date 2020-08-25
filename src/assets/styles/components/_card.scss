@@ -2,10 +2,16 @@
   color: $color-white;
   margin-bottom: 0.5rem !important;
   white-space: nowrap;
-}
 
-i.floating-card-header {
-  cursor: pointer;
+  i {
+    color: $color-white !important;
+    cursor: pointer;
+  }
+
+  .btn-link {
+    color: $color-white !important;
+    cursor: pointer;
+  }
 }
 
 .card-front-status-row {
@@ -21,8 +27,8 @@ i.floating-card-header {
   background: $color-white;
   border: 1px solid $color-lightgrey;
   border-radius: $border-radius;
+  box-shadow: 0 0 5px $light-grey-overlay !important;
   color: $color-black;
-  box-shadow: 0 0 5px $lighter-grey-overlay;
 
   &.error,
   &.success {
