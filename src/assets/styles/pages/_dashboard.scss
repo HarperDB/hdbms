@@ -2,12 +2,14 @@
   .instructions {
     color: $color-white;
   }
+
   .data-loader {
-    height: 250px;
-    display: flex;
     align-items: center;
+    display: flex;
+    height: 250px;
     justify-content: center;
   }
+
   .chart-remove {
     position: absolute;
     right: 30px;

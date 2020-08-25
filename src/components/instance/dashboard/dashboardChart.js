@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Col, Row, Card, CardBody, Button } from 'reactstrap';
+import React, { useState } from 'react';
+import { Col, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import Chart from 'react-apexcharts';
