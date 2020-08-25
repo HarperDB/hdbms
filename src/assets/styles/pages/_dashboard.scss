@@ -1,0 +1,17 @@
+#dashboard {
+  .instructions {
+    color: $color-white;
+  }
+  .data-loader {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chart-remove {
+    position: absolute;
+    right: 30px;
+    top: 27px;
+    z-index: 99999;
+  }
+}

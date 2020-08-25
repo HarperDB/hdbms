@@ -44,7 +44,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
         setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
         setFormState({ error: result.message });
       } else {
-        history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
+        history.push(`/o/${customer_id}/i/${compute_stack_id}/dashboard`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

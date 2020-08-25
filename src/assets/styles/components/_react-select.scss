@@ -32,6 +32,10 @@
     color: $color-grey !important;
   }
 
+  .react-select__menu {
+    z-index: 12;
+  }
+
   .react-select__option,
   .react-select__option:hover,
   .react-select__option:focus,

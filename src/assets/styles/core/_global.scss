@@ -45,10 +45,6 @@ ul {
 }
 
 hr {
-  border-top: 1px solid $color-lightgrey !important;
+  border-top: 1px solid $light-grey-overlay !important;
   width: 100%;
-
-  &.white {
-    border-top: 1px solid $light-white-overlay !important;
-  }
 }
