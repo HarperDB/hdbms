@@ -25,7 +25,17 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
         if (controller) controller.abort();
         controller = new AbortController();
         const newChartData = await sql({ sql: query, auth, url, is_local, compute_stack_id, customer_id, signal: controller.signal });
-        setChartData(newChartData);
+        if (!newChartData.error && newChartData.length) {
+          const columns = Object.keys(newChartData[0]);
+          const necessaryColumns = [labelAttribute, ...seriesAttributes];
+          if (!necessaryColumns.every((v) => columns.includes(v))) {
+            setChartData({ error: true, message: 'You do not have permission to access some of the data required to render this chart.' });
+          } else {
+            setChartData(newChartData);
+          }
+        } else {
+          setChartData(newChartData);
+        }
       }
     },
     () => controller && controller.abort(),
@@ -45,7 +55,12 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
           <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => removeChart(id)}>
             <i className="fa fa-times text-darkgrey" />
           </Button>
-          {chartData ? (
+          {chartData.error ? (
+            <div className="data-loader">
+              <div className="text-danger my-3">{chartData.message}</div>
+              Please contact an admin to resolve this issue.
+            </div>
+          ) : chartData ? (
             <Chart
               options={{
                 chart: {
