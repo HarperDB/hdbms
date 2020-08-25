@@ -31,13 +31,28 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   const { structure, defaultBrowseURL } = browseTableColumns(schema);
 
+  const dashboardStats = {
+    schemas: Object.keys(schema).length,
+    tables: Object.keys(schema).reduce((a, b) => a + Object.keys(schema[b]).length, 0),
+    records: Object.keys(schema).reduce((a, b) => a + Object.keys(schema[b]).reduce((c, d) => c + schema[b][d].record_count, 0), 0),
+  };
+
+  let registration;
+  try {
+    registration = await registrationInfo({ auth, url: thisInstance.url, compute_stack_id, customer_id: thisInstance.customer_id });
+  } catch (e) {
+    registration = {};
+  }
+
   if (!auth.super) {
     const activeInstanceObject = Object.entries({
       ...thisInstance,
       auth,
       schema,
+      registration,
       structure,
       defaultBrowseURL,
+      dashboardStats,
       loading: false,
     }).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {});
 
@@ -47,8 +62,6 @@ export default async ({ instances, auth, compute_stack_id }) => {
       error: false,
     };
   }
-
-  const registration = await registrationInfo({ auth, url: thisInstance.url, compute_stack_id, customer_id: thisInstance.customer_id });
 
   const users = await listUsers({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
@@ -82,6 +95,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
       clustering,
       clusterDataTable,
       clusterDataTableColumns,
+      dashboardStats,
       loading: false,
     }).map(([key, value]) => (s[key] = value));
   });

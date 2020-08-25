@@ -89,7 +89,7 @@ export default ({ routes = [] }) => {
                 isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
                 to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
               >
-                <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
+                <i className={`d-none d-sm-inline-block fa mr-1 fa-${route.icon}`} />
                 {route.label || route.link}
               </NavLink>
             </NavItem>
