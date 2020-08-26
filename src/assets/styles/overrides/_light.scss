@@ -176,6 +176,11 @@
     background: transparent !important;
     border: 1px solid $lighter-grey-overlay !important;
     color: $color-darkgrey !important;
+
+    &.is-invalid,
+    &.error {
+      border: 1px solid $color-danger !important;
+    }
   }
 
   ::placeholder {

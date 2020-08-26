@@ -13,13 +13,16 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const existing_roles = useStoreState(instanceState, (s) => s.roles && s.roles.map((r) => r.role));
 
   const [entity, setEntity] = useState({});
+
+  console.log(entity);
 
   const createItem = async (e) => {
     e.preventDefault();
 
-    if (!entity.name || items.includes(entity.name)) {
+    if (!entity.name || existing_roles.includes(entity.name)) {
       setEntity({ ...entity, error: true });
       return false;
     }
