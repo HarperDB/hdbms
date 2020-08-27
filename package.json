@@ -7,7 +7,7 @@
   "author": "harperdb",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "HTTPS=true react-scripts start",
+    "start": "HTTPS=true PORT=3001 react-scripts start",
     "build:stage": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://dbjxbnqel2bw9.cloudfront.net react-scripts build",
     "build:prod": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://ds5zz9rfvzuta.cloudfront.net react-scripts build",
     "test": "react-scripts test",
