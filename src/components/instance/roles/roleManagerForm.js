@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import addRole from '../../../api/instance/addRole';
 import instanceState from '../../../state/instanceState';
 
-export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
+export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -16,8 +16,6 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const existing_roles = useStoreState(instanceState, (s) => s.roles && s.roles.map((r) => r.role));
 
   const [entity, setEntity] = useState({});
-
-  console.log(entity);
 
   const createItem = async (e) => {
     e.preventDefault();

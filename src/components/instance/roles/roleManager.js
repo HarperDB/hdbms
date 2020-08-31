@@ -45,7 +45,6 @@ export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
               : null}
             {((items && !items.length) || isCreating) && (
               <EntityManagerForm
-                items={items}
                 itemType={itemType}
                 baseUrl={baseUrl}
                 isDropping={isDropping}
