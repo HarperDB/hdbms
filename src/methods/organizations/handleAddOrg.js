@@ -1,6 +1,6 @@
 import addOrg from '../../api/lms/addOrg';
 import checkSubdomain from '../../api/lms/checkSubdomain';
-import isAlphaNumericHyphen from '../util/isAlphaNumericHyphen';
+import isAlphaNumeric from '../util/isAlphaNumeric';
 
 export default async ({ formData, auth }) => {
   const { org, subdomain } = formData;
@@ -10,9 +10,9 @@ export default async ({ formData, auth }) => {
       error: 'All fields must be filled out',
     };
   }
-  if (!isAlphaNumericHyphen(subdomain)) {
+  if (!isAlphaNumeric(subdomain)) {
     return {
-      error: 'subdomain: alphanumeric and hyphens only',
+      error: 'subdomain: alphanumeric characters only',
     };
   }
   if (subdomain.length > 16) {
