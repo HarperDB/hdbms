@@ -96,7 +96,7 @@ export default ({ showAttributes }) => {
         onChange={(value) => setNewPermissions(value.jsObject)}
       />
       <hr />
-      <Button block color="success" disabled={loading} onClick={submitRecord}>
+      <Button id="updateRolePermissions" block color="success" disabled={loading} onClick={submitRecord}>
         {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Update Role Permissions</span>}
       </Button>
     </ErrorBoundary>
