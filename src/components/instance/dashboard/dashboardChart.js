@@ -19,7 +19,7 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const [chartData, setChartData] = useState(false);
-  const options = chartOptions({ type, labels: chartData.map((d) => d[labelAttribute]) });
+  const options = chartData && !chartData.error && chartOptions({ type, labels: chartData.map((d) => d[labelAttribute]) });
   let controller;
 
   useAsyncEffect(
