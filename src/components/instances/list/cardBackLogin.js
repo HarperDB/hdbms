@@ -69,6 +69,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
             ) : (
               <>
                 <Input
+                  id="username"
                   onChange={(e) => setFormData({ ...formData, user: e.target.value })}
                   className="text-center mb-1"
                   type="text"
@@ -77,6 +78,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
                   disabled={formState.submitted}
                 />
                 <Input
+                  id="password"
                   onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
                   className="text-center mb-2"
                   type="password"

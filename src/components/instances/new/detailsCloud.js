@@ -117,7 +117,7 @@ export default () => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button id="backToBasicInfo" onClick={() => history.push(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>

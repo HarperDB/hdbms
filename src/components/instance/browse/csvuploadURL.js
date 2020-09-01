@@ -99,7 +99,8 @@ const CSVUploadURL = () => {
               onChange={(e) => setFormData({ csv_url: e.target.value })}
               type="text"
               invalid={formData.csv_url && !isURL(formData.csv_url)}
-              title="instance_name"
+              id="csv_url"
+              title="csv url"
               placeholder="CSV file URL"
               value={formData.csv_url || ''}
               disabled={formState.submitted}

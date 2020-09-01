@@ -63,7 +63,7 @@ export default () => {
                 <li>Instance Credentials Stay Local</li>
               </ul>
               <hr />
-              <Button className="mt-3" color="purple" block onClick={() => setFormData({ is_local: true })}>
+              <Button id="createLocalInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: true })}>
                 Register User-Installed Instance
               </Button>
             </CardBody>

@@ -58,6 +58,7 @@ export default () => {
       <hr />
       <div className="text-nowrap mb-3">Create Cluster User</div>
       <Input
+        id="username"
         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
         className={`mb-1 ${formState.error && !formData.username ? 'error' : ''}`}
         type="text"
@@ -65,6 +66,7 @@ export default () => {
         placeholder="username"
       />
       <Input
+        id="password"
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         className={`mb-3 ${formState.error && !formData.password ? 'error' : ''}`}
         type="password"

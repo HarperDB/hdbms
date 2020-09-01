@@ -63,6 +63,7 @@ export default () => {
       <Row>
         <Col md="6">
           <Input
+            id="coupon_code"
             className="mb-2"
             type="text"
             value={formData.coupon_code}
@@ -73,7 +74,7 @@ export default () => {
           />
         </Col>
         <Col md="6">
-          <Button color="purple" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+          <Button id="addCoupon" color="purple" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Add Coupon</span>}
           </Button>
         </Col>

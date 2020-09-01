@@ -96,12 +96,12 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             <hr className="my-2" />
             <Row>
               <Col sm="6">
-                <Button title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
+                <Button id="removeCard" title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
                   Remove Card
                 </Button>
               </Col>
               <Col sm="6">
-                <Button block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+                <Button id="updateCard" block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
                   Update Card
                 </Button>
               </Col>

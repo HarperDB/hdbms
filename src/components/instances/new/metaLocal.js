@@ -105,6 +105,7 @@ export default () => {
               </Col>
               <Col sm="8">
                 <Input
+                  id="instance_name"
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -129,7 +130,7 @@ export default () => {
                 Username
               </Col>
               <Col sm="8">
-                <Input onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
+                <Input id="username" onChange={(e) => setFormData({ ...formData, user: e.target.value.substring(0, 249) })} type="text" title="username" value={formData.user} />
               </Col>
             </Row>
             <hr className="my-2 d-none d-sm-block" />
@@ -138,7 +139,13 @@ export default () => {
                 Password
               </Col>
               <Col sm="8">
-                <Input onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })} type="password" title="password" value={formData.pass} />
+                <Input
+                  id="password"
+                  onChange={(e) => setFormData({ ...formData, pass: e.target.value.substring(0, 249) })}
+                  type="password"
+                  title="password"
+                  value={formData.pass}
+                />
               </Col>
             </Row>
           </ContentContainer>
@@ -148,7 +155,7 @@ export default () => {
                 Host
               </Col>
               <Col sm="8">
-                <Input onChange={(e) => setFormData({ ...formData, host: e.target.value })} type="text" title="host" value={formData.host || ''} />
+                <Input id="host" onChange={(e) => setFormData({ ...formData, host: e.target.value })} type="text" title="host" value={formData.host || ''} />
               </Col>
             </Row>
             <hr className="my-2 d-none d-sm-block" />
@@ -157,7 +164,7 @@ export default () => {
                 Port
               </Col>
               <Col sm="8">
-                <Input onChange={(e) => setFormData({ ...formData, port: e.target.value })} type="number" title="port" value={formData.port || ''} />
+                <Input id="port" onChange={(e) => setFormData({ ...formData, port: e.target.value })} type="number" title="port" value={formData.port || ''} />
               </Col>
             </Row>
             <hr className="my-2 d-none d-sm-block" />
@@ -167,6 +174,7 @@ export default () => {
               </Col>
               <Col xs="8" className="pt-1">
                 <RadioCheckbox
+                  id="is_ssl"
                   tabIndex="0"
                   type="checkbox"
                   onChange={(value) => setFormData({ ...formData, is_ssl: value || false })}
@@ -181,13 +189,13 @@ export default () => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button id="instanceType" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Instance Type
           </Button>
         </Col>
         <Col sm="6">
-          <Button onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
+          <Button id="instanceDetails" onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
             Instance Details
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

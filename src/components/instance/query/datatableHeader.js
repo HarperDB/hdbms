@@ -10,7 +10,7 @@ export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter
       {totalRecords !== 1 ? 's' : ''}
     </Col>
     <Col className="text-md-right">
-      <Button color="link" title="Create Chart" onClick={() => setShowChartModal(true)}>
+      <Button id="createChart" color="link" title="Create Chart" onClick={() => setShowChartModal(true)}>
         <i className="fa fa-lg fa-chart-line" />
         <span className="ml-2">create chart</span>
       </Button>

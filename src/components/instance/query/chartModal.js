@@ -40,7 +40,7 @@ export default ({ setShowChartModal, tableData, query }) => {
       <ModalBody>
         <Row>
           <Col xs="4">
-            <Input type="text" placeholder="chart name" onChange={(e) => setChart({ ...chart, name: e.target.value })} />
+            <Input id="chart_name" type="text" placeholder="chart name" onChange={(e) => setChart({ ...chart, name: e.target.value })} />
           </Col>
           <Col xs="4" className="text-nowrap d-flex justify-content-center align-items-center">
             <Button className="mr-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>

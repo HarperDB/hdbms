@@ -56,6 +56,7 @@ export default () => {
         </Col>
         <Col xs="4">
           <Input
+            id="delete_username"
             onChange={(e) => setFormData({ delete_username: e.target.value })}
             type="text"
             className="text-center"
@@ -65,7 +66,7 @@ export default () => {
           />
         </Col>
         <Col xs="4">
-          <Button block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username || formState.submitted}>
+          <Button id="deleteUser" block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username || formState.submitted}>
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
           </Button>
         </Col>

@@ -54,6 +54,7 @@ export default () => {
         </Col>
         <Col xs="4">
           <Input
+            id="password"
             type="text"
             className="text-center"
             name="password"

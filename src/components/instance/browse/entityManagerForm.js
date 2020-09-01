@@ -79,6 +79,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     <Row className="item-row form">
       <Col className="input-holder">
         <Input
+          id="name"
           invalid={nameError}
           onChange={(e) => {
             toggleNameError(false);
@@ -93,6 +94,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       {itemType === 'table' && (
         <Col className="input-holder">
           <Input
+            id="hash_attribute"
             invalid={hashError}
             disabled={addingItem}
             onChange={(e) => {
@@ -112,7 +114,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           </Button>
         ) : (
           <>
-            <Button color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
+            <Button id="createItem" color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button color="black" className="round" onClick={() => toggleCreate(false)}>

@@ -32,7 +32,7 @@ export default () => {
               <span className="text-small">make no further changes to this user</span>
             </Col>
             <Col xs="4">
-              <Button block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
+              <Button id="returnToUserList" block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
                 Return to User List
               </Button>
             </Col>

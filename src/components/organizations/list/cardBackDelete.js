@@ -66,6 +66,7 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
                 </ul>
 
                 <Input
+                  id="customer_name"
                   onChange={(e) => setFormData({ delete_customer_name: e.target.value })}
                   type="text"
                   title="customer name"
@@ -81,6 +82,7 @@ const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState })
                   </Col>
                   <Col>
                     <Button
+                      id="deleteOrganization"
                       onClick={() => setFormState({ submitted: true })}
                       title="Confirm Organization Details"
                       block

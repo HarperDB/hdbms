@@ -51,6 +51,7 @@ export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
       <Row className="item-row form">
         <Col className="input-holder">
           <Input
+            id="name"
             invalid={entity.error}
             onChange={(e) =>
               setEntity({
@@ -63,7 +64,7 @@ export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
           />
         </Col>
         <Col className="item-action">
-          <Button color="success" className="round mr-1">
+          <Button id="createRole" color="success" className="round mr-1">
             <i className="fa fa-check text-white" />
           </Button>
           <Button color="black" className="round" onClick={() => toggleCreate(false)}>

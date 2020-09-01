@@ -89,7 +89,14 @@ export default () => {
                         Ex: &quot;My Org&quot;
                       </Col>
                       <Col sm="8">
-                        <Input className="text-center" onChange={(e) => setFormData({ ...formData, org: e.target.value })} type="text" title="name" value={formData.org || ''} />
+                        <Input
+                          id="org_name"
+                          className="text-center"
+                          onChange={(e) => setFormData({ ...formData, org: e.target.value })}
+                          type="text"
+                          title="name"
+                          value={formData.org || ''}
+                        />
                       </Col>
                     </Row>
                   </ContentContainer>
@@ -103,6 +110,7 @@ export default () => {
                       </Col>
                       <Col sm="8">
                         <Input
+                          id="subdomain"
                           className="text-center"
                           type="text"
                           title="subdomain"
@@ -130,7 +138,7 @@ export default () => {
                   </ContentContainer>
                 </CardBody>
               </Card>
-              <Button onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="purple">
+              <Button id="createOrganization" onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="purple">
                 Create Organization
               </Button>
               {formState.error && (

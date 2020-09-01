@@ -69,6 +69,7 @@ export default () => {
       <Row>
         <Col sm="6">
           <Button
+            id="instanceDetailsButton"
             onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
@@ -119,6 +120,7 @@ export default () => {
       <Row>
         <Col sm="6">
           <Button
+            id="instanceDetailsButton"
             onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block

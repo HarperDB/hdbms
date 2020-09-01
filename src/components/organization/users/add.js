@@ -58,6 +58,7 @@ export default ({ refreshUsers, userEmails }) => {
           <Card>
             <CardBody>
               <Input
+                id="email"
                 type="text"
                 className="mb-3 text-center"
                 name="email"
@@ -66,7 +67,7 @@ export default ({ refreshUsers, userEmails }) => {
                 disabled={formState.submitted}
               />
 
-              <Button color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+              <Button id="addOrganizationUser" color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
                 Add User
               </Button>
             </CardBody>

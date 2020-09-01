@@ -66,7 +66,7 @@ export default () => {
             <span className="text-small">reinvite them by clicking this button</span>
           </Col>
           <Col xs="4">
-            <Button block color="purple" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+            <Button id="reinviteOrganizationUser" block color="purple" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
               {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Reinvite User</span>}
             </Button>
           </Col>

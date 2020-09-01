@@ -26,6 +26,7 @@ export default ({ setFormData, formData }) => {
           <div className={`fake-input ${formState.cardError ? 'error' : ''}`}>
             <CardNumberElement
               options={themedCardOptions}
+              id="ccCardNumber"
               onChange={(e) => {
                 setFormState({ ...formState, cardError: e.error?.message });
                 setFormData({
@@ -46,6 +47,7 @@ export default ({ setFormData, formData }) => {
           <div className={`fake-input ${formState.expError ? 'error' : ''}`}>
             <CardExpiryElement
               options={themedCardOptions}
+              id="ccExpire"
               onChange={(e) => {
                 setFormState({ ...formState, expError: e.error?.message });
                 setFormData({
@@ -65,6 +67,7 @@ export default ({ setFormData, formData }) => {
         <Col md="6" xs="12" className="text-md-right text-center">
           <div className={`fake-input ${formState.cvcError ? 'error' : ''}`}>
             <CardCvcElement
+              id="ccCVC"
               options={themedCardOptions}
               onChange={(e) => {
                 setFormState({ ...formState, cvcError: e.error?.message });
@@ -84,6 +87,7 @@ export default ({ setFormData, formData }) => {
         </Col>
         <Col md="6" xs="12" className="text-md-right text-center">
           <Input
+            id="ccPostalCode"
             onChange={(e) =>
               setFormData({
                 ...formData,

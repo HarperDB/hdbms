@@ -76,6 +76,7 @@ export default () => {
         <Card className="my-3">
           <CardBody>
             <Input
+              id="username"
               type="text"
               className="mb-2 text-center"
               name="username"
@@ -84,6 +85,7 @@ export default () => {
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             />
             <Input
+              id="password"
               type="text"
               className="mb-2 text-center"
               name="password"
@@ -103,7 +105,7 @@ export default () => {
               placeholder="select a role"
               styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
-            <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+            <Button id="addInstanceUser" color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
               Add User
             </Button>
           </CardBody>

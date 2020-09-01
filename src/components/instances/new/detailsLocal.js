@@ -63,13 +63,20 @@ export default () => {
       </Card>
       <Row>
         <Col sm="6">
-          <Button onClick={() => history.push(`/o/${customer_id}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button id="backToBasicInfo" onClick={() => history.push(`/o/${customer_id}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left mr-2" />
             Basic Info
           </Button>
         </Col>
         <Col sm="6">
-          <Button onClick={() => setFormState({ submitted: true })} title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'} block className="mt-3" color="purple">
+          <Button
+            id={needsCard ? 'addPaymentMethod' : 'confirmInstanceDetails'}
+            onClick={() => setFormState({ submitted: true })}
+            title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
+            block
+            className="mt-3"
+            color="purple"
+          >
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ml-2" />
           </Button>

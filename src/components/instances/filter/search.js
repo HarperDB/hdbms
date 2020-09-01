@@ -22,6 +22,7 @@ const Search = () => {
   return (
     <div className="filter-holder">
       <Input
+        id="filter_instances"
         title="filter instances by name, host, url, or region"
         type="text"
         className="text-center"

@@ -69,6 +69,7 @@ export default () => {
           <Card className="my-3">
             <CardBody>
               <Input
+                id="name"
                 type="text"
                 className="mb-2 text-center"
                 name="name"
@@ -89,6 +90,7 @@ export default () => {
                 styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
               />
               <Input
+                id="install_command"
                 type="text"
                 className="mb-2 text-center"
                 name="install_command"
@@ -97,6 +99,7 @@ export default () => {
                 onChange={(e) => setFormData({ ...formData, install_command: e.target.value })}
               />
               <Input
+                id="description"
                 type="text"
                 className="mb-2 text-center"
                 name="description"
@@ -105,6 +108,7 @@ export default () => {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
               <Input
+                id="homepage"
                 type="text"
                 className="mb-2 text-center"
                 name="homepage"
@@ -114,6 +118,7 @@ export default () => {
               />
               {auth && !auth.github_repo && (
                 <Input
+                  id="author_github_repo"
                   type="text"
                   className="mb-2 text-center"
                   name="author_github_repo"
@@ -130,6 +135,7 @@ export default () => {
                 ? Provide the bounty URL:
               </span>
               <Input
+                id="bounty_url"
                 type="text"
                 className="mb-2 text-center"
                 name="bounty_url"
