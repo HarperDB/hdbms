@@ -3,24 +3,40 @@ import { Modal, ModalBody, ModalHeader, Button, Row, Col, Input } from 'reactstr
 import SelectDropdown from 'react-select';
 import Chart from 'react-apexcharts';
 import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
 
-import useDashboard from '../../../state/instanceDashboard';
-import uuid from '../../../methods/util/uuid';
+import appState from '../../../state/appState';
+import addChart from '../../../api/lms/addChart';
+
+const chartTypes = [
+  { type: 'line', singleSeriesAttribute: false },
+  { type: 'bar', singleSeriesAttribute: false },
+  { type: 'area', singleSeriesAttribute: false },
+  { type: 'radar', singleSeriesAttribute: false },
+  { type: 'pie', singleSeriesAttribute: true },
+  { type: 'donut', singleSeriesAttribute: true },
+];
 
 export default ({ setShowChartModal, tableData, query }) => {
-  const [instanceDashboard, setInstanceDashboard] = useDashboard({});
-  const { compute_stack_id } = useParams();
-  const [chart, setChart] = useState({ type: 'line', labelAttribute: false, seriesAttributes: [], query, name: false, id: uuid() });
-  const chartTypes = ['line', 'bar', 'pie', 'donut'];
+  const { compute_stack_id, customer_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const [chart, setChart] = useState({ customer_id, compute_stack_id, name: false, type: 'line', query, labelAttribute: false, seriesAttributes: [], shared: false });
   const attributes = Object.keys(tableData[0]);
   const showChart = chart.type && chart.seriesAttributes?.length && chart.labelAttribute;
   const excludeFromDataDropdown = [...chart.seriesAttributes, chart.labelAttribute, '__createdtime__', '__updatedtime__'];
+  const singleSeriesAttribute = chartTypes
+    .filter((t) => t.singleSeriesAttribute)
+    .map((t) => t.type)
+    .includes(chart.type);
 
-  const setChartType = (type) => setChart({ ...chart, labelAttribute: false, seriesAttributes: [], type });
+  const setChartType = (type) => {
+    const shapeChange = chartTypes.find((t) => t.type === type).singleSeriesAttribute !== chartTypes.find((t) => t.type === chart.type).singleSeriesAttribute;
+    setChart(shapeChange ? { ...chart, labelAttribute: false, seriesAttributes: [], type } : { ...chart, type });
+  };
 
   const addLabelAttribute = (labelAttribute) => setChart({ ...chart, labelAttribute });
 
-  const addSeriesAttribute = (attribute) => setChart({ ...chart, seriesAttributes: chart.type === 'pie' ? [attribute] : [...chart.seriesAttributes, attribute] });
+  const addSeriesAttribute = (attribute) => setChart({ ...chart, seriesAttributes: singleSeriesAttribute ? [attribute] : [...chart.seriesAttributes, attribute] });
 
   const removeSeriesAttribute = (attribute) => {
     const attributeIndex = chart.seriesAttributes.indexOf(attribute);
@@ -28,21 +44,27 @@ export default ({ setShowChartModal, tableData, query }) => {
     setChart({ ...chart, seriesAttributes: chart.seriesAttributes });
   };
 
-  const addChartToDashboard = () => {
-    setInstanceDashboard({ ...instanceDashboard, [compute_stack_id]: instanceDashboard[compute_stack_id] ? [...instanceDashboard[compute_stack_id], chart] : [chart] });
-    setTimeout(() => setShowChartModal(false), 0);
-  };
-
   return (
     <Modal id="chart-modal" size="lg" isOpen toggle={() => setShowChartModal(false)}>
       <ModalHeader toggle={() => setShowChartModal(false)}>Create Chart From This Query Data</ModalHeader>
       <ModalBody>
         <Row>
-          <Col xs="8">
+          <Col xs="4">
             <Input type="text" placeholder="chart name" onChange={(e) => setChart({ ...chart, name: e.target.value })} />
           </Col>
+          <Col xs="4" className="text-nowrap d-flex justify-content-center align-items-center">
+            <Button className="mr-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>
+              <i className={`fa fa-lg text-purple fa-toggle-${chart.shared ? 'on' : 'off'}`} />
+            </Button>
+            visible to all instance users
+          </Col>
           <Col xs="4">
-            <Button onClick={addChartToDashboard} block disabled={!chart.type || !chart.labelAttribute || !chart.seriesAttributes.length || !chart.name} color="purple">
+            <Button
+              onClick={() => addChart({ auth, ...chart })}
+              block
+              disabled={!chart.type || !chart.labelAttribute || !chart.seriesAttributes.length || !chart.name}
+              color="purple"
+            >
               Add To Dashboard
             </Button>
           </Col>
@@ -54,7 +76,7 @@ export default ({ setShowChartModal, tableData, query }) => {
               className="react-select-container"
               classNamePrefix="react-select"
               onChange={({ value }) => setChartType(value)}
-              options={chartTypes.map((c) => ({ label: `${c} chart`, value: c }))}
+              options={chartTypes.map((c) => ({ label: `${c.type} chart`, value: c.type }))}
               value={{ label: `chart type: ${chart.type} chart`, value: chart.type }}
               isSearchable={false}
               isClearable={false}
@@ -71,11 +93,11 @@ export default ({ setShowChartModal, tableData, query }) => {
                 .filter((a) => !['__createdtime__', '__updatedtime__'].includes(a))
                 .sort()
                 .map((a) => ({ label: a, value: a }))}
-              value={chart.labelAttribute ? { label: `${['donut', 'pie'].includes(chart.type) ? 'label' : 'x-axis'}: ${chart.labelAttribute}`, value: chart.labelAttribute } : null}
+              value={chart.labelAttribute ? { label: `${singleSeriesAttribute ? 'label' : 'x-axis'}: ${chart.labelAttribute}`, value: chart.labelAttribute } : null}
               isSearchable={false}
               isClearable={false}
               isDisabled={!chart.type}
-              placeholder={`${chart.type === 'pie' ? 'label' : 'x-axis'} column`}
+              placeholder={`${singleSeriesAttribute ? 'label' : 'x-axis'} column`}
               styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
           </Col>
@@ -88,16 +110,16 @@ export default ({ setShowChartModal, tableData, query }) => {
                 .filter((a) => !excludeFromDataDropdown.includes(a))
                 .sort()
                 .map((a) => ({ label: a, value: a }))}
-              value={chart.type === 'pie' && chart.seriesAttributes.length ? { label: `data column: ${chart.seriesAttributes[0]}`, value: chart.seriesAttributes[0] } : null}
+              value={singleSeriesAttribute && chart.seriesAttributes.length ? { label: `data column: ${chart.seriesAttributes[0]}`, value: chart.seriesAttributes[0] } : null}
               isSearchable={false}
               isClearable={false}
               isDisabled={!chart.type}
-              placeholder={`${['donut', 'pie'].includes(chart.type) ? 'select' : 'add'} data column`}
+              placeholder={`${singleSeriesAttribute ? 'select' : 'add'} data column`}
               styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
           </Col>
         </Row>
-        {!['donut', 'pie'].includes(chart.type) && chart.seriesAttributes.length ? (
+        {!singleSeriesAttribute && chart.seriesAttributes.length ? (
           <>
             <hr className="my-2" />
             <div className="">
@@ -119,22 +141,19 @@ export default ({ setShowChartModal, tableData, query }) => {
                   fontFamily: 'proxima-soft',
                   toolbar: { offsetX: -25, tools: { selection: false, pan: false, zoom: false, zoomin: false, zoomout: false, reset: false } },
                 },
-                title: { text: chart.name },
                 labels: tableData.map((d) => d[chart.labelAttribute]),
                 theme: { palette: 'palette10' },
                 plotOptions: { pie: { offsetY: 10 } },
                 legend: { offsetY: 15 },
               }}
               series={
-                ['donut', 'pie'].includes(chart.type)
-                  ? tableData.map((d) => d[chart.seriesAttributes[0]])
-                  : chart.seriesAttributes.map((s) => ({ name: s, data: tableData.map((d) => d[s]) }))
+                singleSeriesAttribute ? tableData.map((d) => d[chart.seriesAttributes[0]]) : chart.seriesAttributes.map((s) => ({ name: s, data: tableData.map((d) => d[s]) }))
               }
               type={chart.type}
               height={250}
             />
           ) : (
-            <div className="text-center py-5 text-grey">please choose chart type, label, and data</div>
+            <div className="text-center py-5 text-grey">please choose chart {!chart.type && 'type, '}label and data</div>
           )}
         </div>
       </ModalBody>

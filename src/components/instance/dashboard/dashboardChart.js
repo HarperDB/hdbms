@@ -6,18 +6,19 @@ import Chart from 'react-apexcharts';
 import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../state/instanceState';
-import sql from '../../../api/instance/sql';
-import useDashboard from '../../../state/instanceDashboard';
+import appState from '../../../state/appState';
 
-let controller;
+import sql from '../../../api/instance/sql';
+import removeChart from '../../../api/lms/removeChart';
 
 export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes } }) => {
   const { compute_stack_id, customer_id } = useParams();
+  const lmsAuth = useStoreState(appState, (s) => s.auth);
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const [chartData, setChartData] = useState(false);
-  const [instanceDashboard, setInstanceDashboard] = useDashboard({});
+  let controller;
 
   useAsyncEffect(
     async () => {
@@ -42,17 +43,11 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
     []
   );
 
-  const removeChart = (chartId) => {
-    const dashboardCharts = instanceDashboard[compute_stack_id];
-    const newCharts = dashboardCharts.filter((c) => c.id !== chartId);
-    setInstanceDashboard({ ...instanceDashboard, [compute_stack_id]: newCharts });
-  };
-
   return (
     <Col lg="6" xs="12" className="mb-3" key={name}>
       <Card>
         <CardBody className="text-nowrap position-relative">
-          <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => removeChart(id)}>
+          <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => removeChart({ auth: lmsAuth, customer_id, compute_stack_id, id })}>
             <i className="fa fa-times text-darkgrey" />
           </Button>
           {chartData.error ? (

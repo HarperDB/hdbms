@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Row, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import useAsyncEffect from 'use-async-effect';
 
+import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
 
 import commaNumbers from '../../../methods/util/commaNumbers';
-import useDashboard from '../../../state/instanceDashboard';
 import DashboardChart from './dashboardChart';
+import getCharts from '../../../api/lms/getCharts';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const charts = useStoreState(instanceState, (s) => s.charts);
   const registration = useStoreState(instanceState, (s) => s.registration);
   const dashboardStats = useStoreState(instanceState, (s) => s.dashboardStats);
-  const [instanceDashboard] = useDashboard({});
-  const [instanceCharts, setInstanceCharts] = useState(false);
 
-  useEffect(() => setInstanceCharts(instanceDashboard && compute_stack_id && instanceDashboard[compute_stack_id]), [instanceDashboard, compute_stack_id]);
+  useAsyncEffect(async () => {
+    if (auth && customer_id && compute_stack_id && !charts) {
+      getCharts({ auth, customer_id, compute_stack_id });
+    }
+  }, [auth, customer_id, compute_stack_id, charts]);
 
   return (
     <Row id="dashboard">
@@ -84,7 +90,7 @@ export default () => {
         </div>
         <hr className="my-3" />
       </Col>
-      {instanceCharts && instanceCharts.map((chart) => <DashboardChart key={chart.id} chart={chart} />)}
+      {charts && charts.map((chart) => <DashboardChart key={chart.id} chart={chart} />)}
     </Row>
   );
 };
