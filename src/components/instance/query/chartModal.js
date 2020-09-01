@@ -7,15 +7,8 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
 import addChart from '../../../api/lms/addChart';
-
-const chartTypes = [
-  { type: 'line', singleSeriesAttribute: false },
-  { type: 'bar', singleSeriesAttribute: false },
-  { type: 'area', singleSeriesAttribute: false },
-  { type: 'radar', singleSeriesAttribute: false },
-  { type: 'pie', singleSeriesAttribute: true },
-  { type: 'donut', singleSeriesAttribute: true },
-];
+import chartOptions from '../../../methods/instance/chartOptions';
+import chartTypes from '../../../methods/instance/chartTypes';
 
 export default ({ setShowChartModal, tableData, query }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -28,16 +21,13 @@ export default ({ setShowChartModal, tableData, query }) => {
     .filter((t) => t.singleSeriesAttribute)
     .map((t) => t.type)
     .includes(chart.type);
-
+  const options = chartOptions({ type: chart.type, labels: tableData.map((d) => d[chart.labelAttribute]) });
   const setChartType = (type) => {
     const shapeChange = chartTypes.find((t) => t.type === type).singleSeriesAttribute !== chartTypes.find((t) => t.type === chart.type).singleSeriesAttribute;
     setChart(shapeChange ? { ...chart, labelAttribute: false, seriesAttributes: [], type } : { ...chart, type });
   };
-
   const addLabelAttribute = (labelAttribute) => setChart({ ...chart, labelAttribute });
-
   const addSeriesAttribute = (attribute) => setChart({ ...chart, seriesAttributes: singleSeriesAttribute ? [attribute] : [...chart.seriesAttributes, attribute] });
-
   const removeSeriesAttribute = (attribute) => {
     const attributeIndex = chart.seriesAttributes.indexOf(attribute);
     chart.seriesAttributes.splice(attributeIndex, 1);
@@ -135,17 +125,7 @@ export default ({ setShowChartModal, tableData, query }) => {
         <div className="chart-holder">
           {showChart ? (
             <Chart
-              options={{
-                chart: {
-                  type: chart.type,
-                  fontFamily: 'proxima-soft',
-                  toolbar: { offsetX: -25, tools: { selection: false, pan: false, zoom: false, zoomin: false, zoomout: false, reset: false } },
-                },
-                labels: tableData.map((d) => d[chart.labelAttribute]),
-                theme: { palette: 'palette10' },
-                plotOptions: { pie: { offsetY: 10 } },
-                legend: { offsetY: 15 },
-              }}
+              options={options}
               series={
                 singleSeriesAttribute ? tableData.map((d) => d[chart.seriesAttributes[0]]) : chart.seriesAttributes.map((s) => ({ name: s, data: tableData.map((d) => d[s]) }))
               }

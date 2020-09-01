@@ -6,10 +6,10 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../state/appState';
-
 import useNewInstance from '../../../state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import RadioCheckbox from '../../shared/radioCheckbox';
+import DetailsSubheader from './detailsSubheader';
 import config from '../../../config';
 
 export default () => {
@@ -17,17 +17,14 @@ export default () => {
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const [newInstance, setNewInstance] = useNewInstance({});
-
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
     appState,
     (s) => s.subscriptions?.cloud_storage?.filter((p) => p.value.active && p.value.storage_quantity_available >= p.value.data_volume_size) || []
   );
-
   const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? unusedCompute : s.products.cloud_compute.filter((p) => p.value.active)), [
     newInstance.showPrepaidCompute,
   ]);
-
   const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)), [
     newInstance.showPrepaidStorage,
   ]);
@@ -35,59 +32,15 @@ export default () => {
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
-
-  const selectedCompute =
-    products &&
-    formData.stripe_plan_id &&
-    products.find(
-      (p) => p.value.stripe_plan_id === formData.stripe_plan_id && (!formData.compute_subscription_id || p.value.storage_subscription_id === formData.compute_subscription_id)
-    );
-  const computePrice = selectedCompute?.value.compute_price;
-
-  const selectedStorage =
-    storage &&
-    formData.data_volume_size &&
-    storage.find(
-      (p) =>
-        p.value.data_volume_size === formData.data_volume_size &&
-        p.value.stripe_storage_plan_id === formData.stripe_storage_plan_id &&
-        (!newInstance.storage_subscription_id || p.value.storage_subscription_id === formData.storage_subscription_id)
-    );
-  const storagePrice = selectedStorage?.value.storage_price;
-
-  const isFree = !computePrice && !storagePrice && !formData.compute_subscription_id && !formData.storage_subscription_id;
+  const isFree = (!formData.compute_price || !!formData.compute_subscription_id) && (!formData.storage_price || !!formData.storage_subscription_id);
   const needsCard = products && storage && !hasCard && !isFree;
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
 
-  const computeSubheader =
-    unusedCompute.length || newInstance.showPrepaidCompute ? (
-      <span>
-        <div className="d-inline align-top mr-2">show prepaid options:</div>
-        <Button color="link" onClick={() => setNewInstance({ ...newInstance, showPrepaidCompute: !newInstance.showPrepaidCompute })}>
-          <i className={`fa fa-lg text-lightpurple fa-toggle-${newInstance.showPrepaidCompute ? 'on' : 'off'}`} />
-        </Button>
-      </span>
-    ) : (
-      'scroll for more'
-    );
-  const storageSubheader =
-    unusedStorage.length || newInstance.showPrepaidStorage ? (
-      <span>
-        <div className="d-inline align-top mr-2">show prepaid options:</div>
-        <Button color="link" onClick={() => setNewInstance({ ...newInstance, showPrepaidStorage: !newInstance.showPrepaidStorage })}>
-          <i className={`fa fa-lg text-lightpurple fa-toggle-${newInstance.showPrepaidStorage ? 'on' : 'off'}`} />
-        </Button>
-      </span>
-    ) : (
-      'scroll for more'
-    );
-
   useAsyncEffect(() => {
     const { submitted } = formState;
     const { stripe_plan_id, stripe_storage_plan_id, instance_region, instance_type, data_volume_size } = formData;
-
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
@@ -106,7 +59,11 @@ export default () => {
     <>
       <Card id="cloudInstanceSpecs">
         <CardBody>
-          <ContentContainer header="Instance RAM" subheader={computeSubheader} maxHeight="120px" minHeight="120px">
+          <ContentContainer
+            header="Instance RAM"
+            subheader={<DetailsSubheader hasPrepaid={unusedCompute.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidCompute" />}
+            maxHeight="120px"
+          >
             {products.length ? (
               <RadioCheckbox
                 id="stripe_plan_id"
@@ -115,8 +72,7 @@ export default () => {
                 required
                 onChange={(value) => setFormData({ ...formData, ...value })}
                 options={products}
-                value={formData.stripe_plan_id}
-                defaultValue={selectedCompute || products[0]}
+                defaultValue={products[0]}
               />
             ) : (
               <div className="text-center">
@@ -124,7 +80,11 @@ export default () => {
               </div>
             )}
           </ContentContainer>
-          <ContentContainer header="Storage Size" subheader={storageSubheader} maxHeight="120px" minHeight="120px">
+          <ContentContainer
+            header="Storage Size"
+            subheader={<DetailsSubheader hasPrepaid={unusedStorage.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidStorage" />}
+            maxHeight="120px"
+          >
             {storage.length ? (
               <RadioCheckbox
                 id="data_volume_size"
@@ -133,12 +93,7 @@ export default () => {
                 required
                 onChange={(value) => setFormData({ ...formData, ...value })}
                 options={storage}
-                value={{
-                  data_volume_size: formData.data_volume_size,
-                  stripe_storage_plan_id: formData.stripe_storage_plan_id,
-                  storage_subscription_id: formData.storage_subscription_id,
-                }}
-                defaultValue={selectedStorage || storage[0]}
+                defaultValue={storage[0]}
               />
             ) : (
               <div className="text-center">

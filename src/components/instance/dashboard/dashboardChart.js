@@ -10,6 +10,7 @@ import appState from '../../../state/appState';
 
 import sql from '../../../api/instance/sql';
 import removeChart from '../../../api/lms/removeChart';
+import chartOptions from '../../../methods/instance/chartOptions';
 
 export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes } }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -18,6 +19,7 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const [chartData, setChartData] = useState(false);
+  const options = chartOptions({ type, labels: chartData.map((d) => d[labelAttribute]) });
   let controller;
 
   useAsyncEffect(
@@ -57,19 +59,7 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
             </div>
           ) : chartData ? (
             <Chart
-              options={{
-                chart: {
-                  type,
-                  fontFamily: 'proxima-soft',
-                  parentHeightOffset: 0,
-                  toolbar: { offsetX: -25, tools: { selection: false, pan: false, zoom: false, zoomin: false, zoomout: false, reset: false } },
-                },
-                title: { text: name },
-                labels: chartData.map((d) => d[labelAttribute]),
-                theme: { palette: 'palette10' },
-                plotOptions: { pie: { offsetY: 10, expandOnClick: false } },
-                legend: { offsetY: 15 },
-              }}
+              options={options}
               series={['donut', 'pie'].includes(type) ? chartData.map((d) => d[seriesAttributes[0]]) : seriesAttributes.map((s) => ({ name: s, data: chartData.map((d) => d[s]) }))}
               type={type}
               height={250}
