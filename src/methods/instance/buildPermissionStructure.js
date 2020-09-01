@@ -32,9 +32,9 @@ const buildCurrent = ({ extantTablePermissions, attributes, showAttributes }) =>
 
       return {
         attribute_name: a,
-        read: extantAttributePermissions?.read || !extantTablePermissions?.attribute_permissions.length,
-        insert: extantAttributePermissions?.insert || !extantTablePermissions?.attribute_permissions.length,
-        update: extantAttributePermissions?.update || !extantTablePermissions?.attribute_permissions.length,
+        read: extantAttributePermissions ? extantAttributePermissions.read : extantTablePermissions.attribute_permissions.length ? false : extantTablePermissions?.read,
+        insert: extantAttributePermissions ? extantAttributePermissions.insert : extantTablePermissions.attribute_permissions.length ? false : extantTablePermissions?.insert,
+        update: extantAttributePermissions ? extantAttributePermissions.update : extantTablePermissions.attribute_permissions.length ? false : extantTablePermissions?.update,
       };
     }),
 });
