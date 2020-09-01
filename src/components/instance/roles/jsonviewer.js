@@ -16,7 +16,7 @@ import buildPermissionStructure from '../../../methods/instance/buildPermissionS
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 
-export default () => {
+export default ({ showAttributes }) => {
   const alert = useAlert();
   const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
@@ -40,11 +40,12 @@ export default () => {
         is_local,
         compute_stack_id,
         customer_id,
+        showAttributes,
       });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
     }
-  }, [role_id, roles, lastUpdate]);
+  }, [role_id, roles, lastUpdate, showAttributes]);
 
   const submitRecord = async (e) => {
     e.preventDefault();

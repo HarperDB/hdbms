@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Row, Col, CardBody, Card } from 'reactstrap';
+import { Row, Col, CardBody, Card, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../state/instanceState';
@@ -17,6 +17,7 @@ const defaultState = {
   superUsers: [],
   clusterUsers: [],
   standardUsers: [],
+  showAttributes: false,
 };
 
 export default () => {
@@ -36,6 +37,7 @@ export default () => {
         clusterUsers: roles.filter((r) => r.permission.cluster_user),
         superUsers: roles.filter((r) => r.permission.super_user),
         standardUsers: roles.filter((r) => !r.permission.super_user && !r.permission.cluster_user),
+        showAttributes: false,
       });
     } else {
       setFormState(defaultState);
@@ -54,6 +56,11 @@ export default () => {
         <Row className="floating-card-header">
           {formState.canEdit && <Col>edit role &gt; {formState.roleName}</Col>}
           <Col className="text-md-right">
+            <Button color="link" tabIndex="0" title="Show Attributes" onClick={() => setFormState({ ...formState, showAttributes: !formState.showAttributes })}>
+              <span className="mr-2">show all attributes</span>
+              <i className={`fa fa-lg fa-toggle-${formState.showAttributes ? 'on' : 'off'}`} />
+            </Button>
+            <span className="mx-3 text">|</span>
             <StructureReloader label="refresh schemas, tables, and roles" />
           </Col>
         </Row>
@@ -61,7 +68,7 @@ export default () => {
           <Card className="my-3">
             <CardBody className="full-height">
               <Suspense fallback={<Loader header=" " spinner />}>
-                <JSONViewer />
+                <JSONViewer showAttributes={formState.showAttributes} />
               </Suspense>
             </CardBody>
           </Card>

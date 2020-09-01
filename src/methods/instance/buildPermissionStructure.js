@@ -1,41 +1,45 @@
 import describeAll from '../../api/instance/describeAll';
 
-const buildLegacy = ({ extantTablePermissions, attributes }) => ({
+const buildLegacy = ({ extantTablePermissions, attributes, showAttributes }) => ({
   read: extantTablePermissions ? extantTablePermissions.read : true,
   insert: extantTablePermissions ? extantTablePermissions.insert : true,
   update: extantTablePermissions ? extantTablePermissions.update : true,
   delete: extantTablePermissions ? extantTablePermissions.delete : true,
-  attribute_restrictions: attributes.map((a) => {
-    const extantAttributePermissions = extantTablePermissions?.attribute_restrictions?.find((att) => att.attribute_name === a);
+  attribute_restrictions: attributes
+    .filter((a) => showAttributes || extantTablePermissions?.attribute_restrictions?.find((att) => att.attribute_name === a))
+    .map((a) => {
+      const extantAttributePermissions = extantTablePermissions?.attribute_restrictions?.find((att) => att.attribute_name === a);
 
-    return {
-      attribute_name: a,
-      read: extantAttributePermissions ? extantAttributePermissions.read : extantTablePermissions ? extantTablePermissions.read : true,
-      insert: extantAttributePermissions ? extantAttributePermissions.insert : extantTablePermissions ? extantTablePermissions.insert : true,
-      update: extantAttributePermissions ? extantAttributePermissions.update : extantTablePermissions ? extantTablePermissions.update : true,
-      delete: extantAttributePermissions ? extantAttributePermissions.delete : extantTablePermissions ? extantTablePermissions.delete : true,
-    };
-  }),
+      return {
+        attribute_name: a,
+        read: extantAttributePermissions ? extantAttributePermissions.read : extantTablePermissions ? extantTablePermissions.read : true,
+        insert: extantAttributePermissions ? extantAttributePermissions.insert : extantTablePermissions ? extantTablePermissions.insert : true,
+        update: extantAttributePermissions ? extantAttributePermissions.update : extantTablePermissions ? extantTablePermissions.update : true,
+        delete: extantAttributePermissions ? extantAttributePermissions.delete : extantTablePermissions ? extantTablePermissions.delete : true,
+      };
+    }),
 });
 
-const buildCurrent = ({ extantTablePermissions, attributes }) => ({
+const buildCurrent = ({ extantTablePermissions, attributes, showAttributes }) => ({
   read: extantTablePermissions ? extantTablePermissions.read : true,
   insert: extantTablePermissions ? extantTablePermissions.insert : true,
   update: extantTablePermissions ? extantTablePermissions.update : true,
   delete: extantTablePermissions ? extantTablePermissions.delete : true,
-  attribute_permissions: attributes.map((a) => {
-    const extantAttributePermissions = extantTablePermissions?.attribute_permissions?.find((att) => att.attribute_name === a);
+  attribute_permissions: attributes
+    .filter((a) => showAttributes || extantTablePermissions?.attribute_permissions?.find((att) => att.attribute_name === a))
+    .map((a) => {
+      const extantAttributePermissions = extantTablePermissions?.attribute_permissions?.find((att) => att.attribute_name === a);
 
-    return {
-      attribute_name: a,
-      read: extantAttributePermissions ? extantAttributePermissions.read : extantTablePermissions ? extantTablePermissions.read : true,
-      insert: extantAttributePermissions ? extantAttributePermissions.insert : extantTablePermissions ? extantTablePermissions.insert : true,
-      update: extantAttributePermissions ? extantAttributePermissions.update : extantTablePermissions ? extantTablePermissions.update : true,
-    };
-  }),
+      return {
+        attribute_name: a,
+        read: extantAttributePermissions?.read || !extantTablePermissions?.attribute_permissions.length,
+        insert: extantAttributePermissions?.insert || !extantTablePermissions?.attribute_permissions.length,
+        update: extantAttributePermissions?.update || !extantTablePermissions?.attribute_permissions.length,
+      };
+    }),
 });
 
-export default async ({ auth, url, currentRolePermissions, version, is_local, compute_stack_id, customer_id }) => {
+export default async ({ auth, url, currentRolePermissions, version, is_local, compute_stack_id, customer_id, showAttributes }) => {
   const dbResponse = await describeAll({ auth, url, is_local, compute_stack_id, customer_id });
   const permissionStructure = {};
   const [major, minor, patch] = version.split('.');
@@ -53,7 +57,9 @@ export default async ({ auth, url, currentRolePermissions, version, is_local, co
       const thisTable = dbResponse[schema][table];
       const extantTablePermissions = currentRolePermissions && currentRolePermissions[schema] && currentRolePermissions[schema].tables[table];
       const attributes = thisTable.attributes.map((a) => a.attribute).sort();
-      permissionStructure[schema].tables[table] = legacy ? buildLegacy({ extantTablePermissions, attributes }) : buildCurrent({ extantTablePermissions, attributes });
+      permissionStructure[schema].tables[table] = legacy
+        ? buildLegacy({ extantTablePermissions, attributes, showAttributes })
+        : buildCurrent({ extantTablePermissions, attributes, showAttributes });
       return true;
     });
   });

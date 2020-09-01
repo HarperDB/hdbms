@@ -49,26 +49,25 @@ export default () => {
       FallbackComponent={ErrorFallback}
     >
       <Row>
-        <Col xs="8" className="py-1">
+        <Col xs="4" className="py-1">
           Delete User
           <br />
           <span className="text-small">user will be removed from this instance</span>
         </Col>
         <Col xs="4">
-          {username !== formData.delete_username ? (
-            <Input
-              onChange={(e) => setFormData({ delete_username: e.target.value })}
-              type="text"
-              className="text-center"
-              title="confirm username to delete"
-              placeholder={`Enter "${username}" here to enable deletion.`}
-              value={formData.delete_username || ''}
-            />
-          ) : (
-            <Button block color="danger" onClick={deleteUser} disabled={formState.submitted}>
-              {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
-            </Button>
-          )}
+          <Input
+            onChange={(e) => setFormData({ delete_username: e.target.value })}
+            type="text"
+            className="text-center"
+            title="confirm username to delete"
+            placeholder={`Enter "${username}" here to enable deletion.`}
+            value={formData.delete_username || ''}
+          />
+        </Col>
+        <Col xs="4">
+          <Button block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username || formState.submitted}>
+            {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
+          </Button>
         </Col>
       </Row>
     </ErrorBoundary>
