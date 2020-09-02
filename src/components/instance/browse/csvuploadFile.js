@@ -119,8 +119,10 @@ const CSVUploadFile = () => {
                 setFormData({});
               }}
             >
-              <i className="fa fa-thumbs-up text-success mr-3" />
-              {commaNumbers(formData.records)} records. Click here to replace file.
+              <span className="text-nowrap text-small">
+                <i className="fa fa-thumbs-up text-success mr-3" />
+                {commaNumbers(formData.records)} records. Click here to replace file.
+              </span>
             </Button>
           ) : formState.processing ? (
             <div className="csv-status">

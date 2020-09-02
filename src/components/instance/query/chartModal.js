@@ -4,6 +4,7 @@ import SelectDropdown from 'react-select';
 import Chart from 'react-apexcharts';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import { useAlert } from 'react-alert';
 
 import appState from '../../../state/appState';
 import addChart from '../../../api/lms/addChart';
@@ -13,7 +14,9 @@ import isNumeric from '../../../methods/util/isNumeric';
 
 export default ({ setShowChartModal, tableData, query }) => {
   const { compute_stack_id, customer_id } = useParams();
+  const alert = useAlert();
   const [chart, setChart] = useState({ customer_id, compute_stack_id, name: false, type: 'line', query, labelAttribute: false, seriesAttributes: [], shared: false });
+  const [submitted, setSubmitted] = useState(false);
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const attributes = Object.keys(tableData[0]);
@@ -35,6 +38,18 @@ export default ({ setShowChartModal, tableData, query }) => {
     setChart({ ...chart, seriesAttributes: chart.seriesAttributes });
   };
 
+  const handleAddChart = async () => {
+    setSubmitted(true);
+    const response = await addChart({ auth, ...chart });
+    if (response.error) {
+      alert.error(response.message);
+      setSubmitted(false);
+    } else {
+      alert.success(response.message);
+      setShowChartModal(false);
+    }
+  };
+
   return (
     <Modal id="chart-modal" size="lg" isOpen toggle={() => setShowChartModal(false)} className={theme}>
       <ModalHeader toggle={() => setShowChartModal(false)}>Create Chart From This Query Data</ModalHeader>
@@ -46,29 +61,7 @@ export default ({ setShowChartModal, tableData, query }) => {
           <Col xs="12">
             <hr className="my-2" />
           </Col>
-          <Col lg="4">
-            <Input id="chart_name" type="text" placeholder="chart name" onChange={(e) => setChart({ ...chart, name: e.target.value })} />
-          </Col>
-          <Col xs="12" className="d-block d-lg-none">
-            <hr className="my-2" />
-          </Col>
-          <Col lg="4" className="py-2 text-nowrap d-flex justify-content-center align-items-center">
-            <Button className="mr-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>
-              <i className={`fa fa-lg text-purple fa-toggle-${chart.shared ? 'on' : 'off'}`} />
-            </Button>
-            visible to all instance users
-          </Col>
-          <Col xs="12" className="d-block d-lg-none">
-            <hr className="my-2" />
-          </Col>
-          <Col lg="4">
-            <Button onClick={() => addChart({ auth, ...chart })} block disabled={!canSubmit} color="purple">
-              Add To Dashboard
-            </Button>
-          </Col>
-          <Col xs="12">
-            <hr className="my-2" />
-          </Col>
+
           <Col lg="4">
             <SelectDropdown
               className="react-select-container limited-height"
@@ -124,6 +117,29 @@ export default ({ setShowChartModal, tableData, query }) => {
               </>
             )}
           </Col>
+          <Col xs="12">
+            <hr className="my-2" />
+          </Col>
+          <Col lg="4">
+            <Input id="chart_name" type="text" placeholder="chart name" onChange={(e) => setChart({ ...chart, name: e.target.value })} />
+          </Col>
+          <Col xs="12" className="d-block d-lg-none">
+            <hr className="my-2" />
+          </Col>
+          <Col lg="4" className="py-2 text-nowrap d-flex justify-content-center align-items-center">
+            <Button className="mr-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>
+              <i className={`fa fa-lg text-purple fa-toggle-${chart.shared ? 'on' : 'off'}`} />
+            </Button>
+            visible to all org users
+          </Col>
+          <Col xs="12" className="d-block d-lg-none">
+            <hr className="my-2" />
+          </Col>
+          <Col lg="4">
+            <Button onClick={handleAddChart} block disabled={!canSubmit || submitted} color="purple">
+              {submitted ? <i className="fa fa-spin fa-spinner" /> : <span>Add To Dashboard</span>}
+            </Button>
+          </Col>
         </Row>
         {!singleSeriesAttribute && chart.seriesAttributes.length ? (
           <>
@@ -147,7 +163,7 @@ export default ({ setShowChartModal, tableData, query }) => {
               </CardBody>
             </Card>
           ) : showChart ? (
-            <Chart options={options} series={series} type={chart.type} height={250} />
+            <Chart options={options} series={series} type={chart.type} height={220} />
           ) : (
             <div className="text-center py-5 text-grey">please choose chart {!chart.type && 'type, '}label and data</div>
           )}

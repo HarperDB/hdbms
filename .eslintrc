@@ -11,7 +11,7 @@
     "prettier"
   ],
   "rules": {
-    "max-lines": ["warn", {"max": 160, "skipComments": false}],
+    "max-lines": ["warn", {"max": 185, "skipComments": false}],
     "camelcase": 0,
     "no-nested-ternary": 0,
     "no-param-reassign": 0,

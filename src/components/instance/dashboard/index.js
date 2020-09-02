@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import useAsyncEffect from 'use-async-effect';
+import { useAlert } from 'react-alert';
+import useInterval from 'use-interval';
 
 import appState from '../../../state/appState';
 import instanceState from '../../../state/instanceState';
@@ -11,20 +12,37 @@ import instanceState from '../../../state/instanceState';
 import commaNumbers from '../../../methods/util/commaNumbers';
 import DashboardChart from './dashboardChart';
 import getCharts from '../../../api/lms/getCharts';
+import removeChart from '../../../api/lms/removeChart';
+import config from '../../../config';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
+  const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const charts = useStoreState(instanceState, (s) => s.charts);
   const registration = useStoreState(instanceState, (s) => s.registration);
   const dashboardStats = useStoreState(instanceState, (s) => s.dashboardStats);
 
-  useAsyncEffect(async () => {
-    if (auth && customer_id && compute_stack_id && !charts) {
+  const refreshCharts = () => {
+    if (auth && customer_id && compute_stack_id) {
       getCharts({ auth, customer_id, compute_stack_id });
     }
-  }, [auth, customer_id, compute_stack_id, charts]);
+  };
+
+  useEffect(refreshCharts, [auth, customer_id, compute_stack_id]);
+
+  useInterval(refreshCharts, config.refresh_content_interval);
+
+  const handleRemoveChart = async (id) => {
+    const response = await removeChart({ auth, customer_id, compute_stack_id, id });
+    if (response.error) {
+      alert.error(response.message);
+    } else {
+      alert.success(response.message);
+      getCharts({ auth, customer_id, compute_stack_id });
+    }
+  };
 
   return (
     <Row id="dashboard">
@@ -90,7 +108,7 @@ export default () => {
         </div>
         <hr className="my-3" />
       </Col>
-      {charts && charts.map((chart) => <DashboardChart key={chart.id} chart={chart} />)}
+      {charts && charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} />)}
     </Row>
   );
 };
