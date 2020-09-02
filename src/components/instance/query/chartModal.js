@@ -20,11 +20,8 @@ export default ({ setShowChartModal, tableData, query }) => {
   const excludeFromDataDropdown = [...chart.seriesAttributes, chart.labelAttribute, '__createdtime__', '__updatedtime__'];
   const showChart = chart.type === 'single value' ? chart.seriesAttributes?.length : chart.type && chart.seriesAttributes?.length && chart.labelAttribute;
   const canSubmit = chart.type === 'single value' ? chart.seriesAttributes.length && chart.name : chart.type && chart.labelAttribute && chart.seriesAttributes.length && chart.name;
-  const singleSeriesAttribute = chartTypes
-    .filter((t) => t.singleSeriesAttribute)
-    .map((t) => t.type)
-    .includes(chart.type);
-  const options = chartOptions({ title: chart.name, type: chart.type, labels: tableData.map((d) => d[chart.labelAttribute]), theme });
+  const singleSeriesAttribute = chartTypes.map((t) => t.singleSeriesAttribute && t.type).includes(chart.type);
+  const options = chartOptions({ title: chart.name || 'chart name', type: chart.type, labels: tableData.map((d) => d[chart.labelAttribute]), theme });
   const series = singleSeriesAttribute ? tableData.map((d) => d[chart.seriesAttributes[0]]) : chart.seriesAttributes.map((s) => ({ name: s, data: tableData.map((d) => d[s]) }));
   const setChartType = (type) => {
     const shapeChange = chartTypes.find((t) => t.type === type).singleSeriesAttribute !== chartTypes.find((t) => t.type === chart.type).singleSeriesAttribute;
@@ -145,7 +142,7 @@ export default ({ setShowChartModal, tableData, query }) => {
           {showChart && chart.type === 'single value' ? (
             <Card>
               <CardBody className="single-value-chart">
-                <div className="title">{chart.name}</div>
+                <div className="title">{chart.name || 'chart name'}</div>
                 <h1>{isNumeric(series[0]) ? series[0].toFixed(2) : series[0]}</h1>
               </CardBody>
             </Card>
