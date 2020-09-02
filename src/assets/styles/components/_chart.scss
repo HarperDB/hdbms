@@ -1,0 +1,36 @@
+#chart-modal {
+  .modal-body {
+    .query-text {
+      color: $color-grey;
+    }
+
+    .chart-holder {
+      height: 250px;
+    }
+  }
+}
+
+.single-value-chart {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+  justify-content: center;
+  position: relative;
+
+  .title {
+    font-weight: $font-weight-bold;
+    left: 25px;
+    position: absolute;
+    top: 20px;
+  }
+
+  &.dashboard {
+    height: 265px;
+
+    .title {
+      left: 10px;
+      top: 5px;
+    }
+  }
+}

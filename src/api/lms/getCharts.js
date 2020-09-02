@@ -35,6 +35,18 @@ export default async ({ auth, customer_id, compute_stack_id }) => {
             type: 'line',
             user_id: '3eceb5ff-9bac-4e3b-8429-95f097eeb1bd',
           },
+          {
+            id: 'temp-chart-identification-value2',
+            compute_stack_id: 'compute-stack-b7ff16bc-1597419076419',
+            customer_id: 'b7ff16bc',
+            labelAttribute: false,
+            name: 'average dog weight',
+            query: 'select AVG(weight_lbs) as average_weight from dev.dog',
+            seriesAttributes: ['average_weight'],
+            shared: false,
+            type: 'single value',
+            user_id: '3eceb5ff-9bac-4e3b-8429-95f097eeb1bd',
+          },
         ];
       });
     }

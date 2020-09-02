@@ -5,11 +5,12 @@ import commaNumbers from '../../../methods/util/commaNumbers';
 
 export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) => (
   <Row className="floating-card-header">
-    <Col>
+    <Col xs="12" md="3">
       {commaNumbers(totalRecords)} record
       {totalRecords !== 1 ? 's' : ''}
     </Col>
-    <Col className="text-md-right">
+    <Col xs="12" md="9" className="text-md-right">
+      <br className="d-block d-md-none" />
       <Button id="createChart" color="link" title="Create Chart" onClick={() => setShowChartModal(true)}>
         <i className="fa fa-lg fa-chart-line" />
         <span className="ml-2">create chart</span>

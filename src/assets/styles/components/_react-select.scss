@@ -57,4 +57,10 @@
   .react-select__menu {
     margin-top: 1px !important;
   }
+
+  &.limited-height {
+    .react-select__menu-list {
+      max-height: 275px;
+    }
+  }
 }

@@ -1,4 +1,10 @@
-export default ({ type, labels }) => ({
+export default ({ title, type, labels, theme }) => ({
+  title: {
+    text: title,
+    style: {
+      color: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '##212121',
+    },
+  },
   chart: {
     type,
     fontFamily: 'proxima-soft',

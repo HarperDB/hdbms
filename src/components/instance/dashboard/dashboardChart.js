@@ -11,6 +11,7 @@ import appState from '../../../state/appState';
 import sql from '../../../api/instance/sql';
 import removeChart from '../../../api/lms/removeChart';
 import chartOptions from '../../../methods/instance/chartOptions';
+import isNumeric from '../../../methods/util/isNumeric';
 
 export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes } }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -18,8 +19,16 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [chartData, setChartData] = useState(false);
-  const options = chartData && !chartData.error && chartOptions({ type, labels: chartData.map((d) => d[labelAttribute]) });
+  const options = chartData && !chartData.error && chartOptions({ title: name, type, labels: chartData.map((d) => d[labelAttribute]), theme });
+  const series = !chartData
+    ? []
+    : type === 'single value'
+    ? chartData[0][seriesAttributes[0]]
+    : ['donut', 'pie'].includes(type)
+    ? chartData.map((d) => d[seriesAttributes[0]])
+    : seriesAttributes.map((s) => ({ name: s, data: chartData.map((d) => d[s]) }));
   let controller;
 
   useAsyncEffect(
@@ -30,7 +39,7 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
         const newChartData = await sql({ sql: query, auth, url, is_local, compute_stack_id, customer_id, signal: controller.signal });
         if (!newChartData.error && newChartData.length) {
           const columns = Object.keys(newChartData[0]);
-          const necessaryColumns = [labelAttribute, ...seriesAttributes];
+          const necessaryColumns = type === 'single value' ? seriesAttributes : [labelAttribute, ...seriesAttributes];
           if (!necessaryColumns.every((v) => columns.includes(v))) {
             setChartData({ error: true, message: 'You do not have permission to access some of the data required to render this chart.' });
           } else {
@@ -57,13 +66,13 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
               <div className="text-danger my-3">{chartData.message}</div>
               Please contact an admin to resolve this issue.
             </div>
+          ) : chartData && type === 'single value' ? (
+            <div className="dashboard single-value-chart">
+              <div className="title">{name}</div>
+              <h1>{isNumeric(series) ? series.toFixed(2) : series}</h1>
+            </div>
           ) : chartData ? (
-            <Chart
-              options={options}
-              series={['donut', 'pie'].includes(type) ? chartData.map((d) => d[seriesAttributes[0]]) : seriesAttributes.map((s) => ({ name: s, data: chartData.map((d) => d[s]) }))}
-              type={type}
-              height={250}
-            />
+            <Chart options={options} series={series} type={type} height={250} />
           ) : (
             <div className="data-loader">
               <i className="fa fa-spinner fa-spin" />
