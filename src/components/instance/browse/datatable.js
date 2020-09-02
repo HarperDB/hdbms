@@ -12,7 +12,6 @@ import config from '../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../methods/instance/getTableData';
 
-let controller;
 let debounceTimer;
 
 const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
@@ -40,10 +39,8 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(
       async () => {
-        if (controller) controller.abort();
         if (canFetch) {
           setLoading(true);
-          controller = new AbortController();
           const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
             schema,
             table,
@@ -53,12 +50,10 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
             page: tableState.page,
             auth,
             url,
-            signal: controller.signal,
             is_local,
             compute_stack_id,
             customer_id,
           });
-
           setTableState({
             ...tableState,
             tableData: newData,
@@ -80,10 +75,7 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
 
   useAsyncEffect(
     () => setMounted(true),
-    () => {
-      if (controller) controller.abort();
-      setMounted(false);
-    },
+    () => setMounted(false),
     []
   );
 

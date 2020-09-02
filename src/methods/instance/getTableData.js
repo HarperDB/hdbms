@@ -3,7 +3,7 @@ import describeTable from '../../api/instance/describeTable';
 import handleCellValues from '../datatable/handleCellValues';
 import registrationInfo from '../../api/instance/registrationInfo';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, is_local, compute_stack_id, customer_id }) => {
   let fetchError = false;
   let newTotalPages = 1;
   let newTotalRecords = 0;
@@ -23,7 +23,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   }
 
   try {
-    const result = await describeTable({ auth, url, schema, table, signal, is_local, compute_stack_id, customer_id });
+    const result = await describeTable({ auth, url, schema, table, is_local, compute_stack_id, customer_id });
 
     if (result.error) {
       allAttributes = [];
@@ -48,8 +48,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
         auth,
         url,
         compute_stack_id,
-        customer_id,
-        signal
+        customer_id
       );
     } else {
       newTotalRecords = record_count;
@@ -74,8 +73,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
         auth,
         url,
         compute_stack_id,
-        customer_id,
-        signal
+        customer_id
       );
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
@@ -103,8 +101,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
         auth,
         url,
         compute_stack_id,
-        customer_id,
-        signal
+        customer_id
       );
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
