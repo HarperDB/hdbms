@@ -1,7 +1,6 @@
 .loader {
   align-items: center;
   background-color: transparent;
-  color: $color-white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,6 +22,7 @@
     box-shadow: 0 0 4px $lighter-grey-overlay !important;
     height: 183px !important;
     width: 270px !important;
+    color: $color-white !important;
 
     .card-body {
       align-content: center;

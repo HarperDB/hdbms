@@ -20,13 +20,19 @@
     margin-bottom: 1px;
     margin-top: 1px;
     overflow-x: auto;
-    padding: 1rem;
+    padding: 1rem 0;
     text-align: left;
     white-space: nowrap;
     width: 100%;
+    outline: 0 !important;
+    background: $gradient-white-lightgrey;
 
     &:first-child {
       border-top: 0 !important;
+    }
+
+    span {
+      padding: 0 1rem;
     }
   }
 }

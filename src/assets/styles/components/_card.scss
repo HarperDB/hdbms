@@ -24,11 +24,15 @@
 }
 
 .card {
-  background: $color-white;
-  border: 1px solid $color-lightgrey;
-  border-radius: $border-radius;
-  box-shadow: 0 0 5px $light-grey-overlay !important;
-  color: $color-black;
+  background: $color-white !important;
+  border: 1px solid $lighter-grey-overlay;
+  box-shadow: 0 0 5px $lighter-grey-overlay !important;
+  color: $color-darkgrey !important;
+
+  .card-body {
+    background: $gradient-white-lightgrey !important;
+    height: 100%;
+  }
 
   &.error,
   &.success {

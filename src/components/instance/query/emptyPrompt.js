@@ -8,8 +8,8 @@ export default ({ message, error = false, accessErrors }) => {
   return (
     <>
       <div className="floating-card-header">&nbsp;</div>
-      <Card className="my-3 py-5">
-        <CardBody>
+      <Card className="my-3">
+        <CardBody className="py-5">
           <div className={`text-center ${error ? 'text-danger' : ''}`}>{message}</div>
           {error && (
             <div className="px-5">

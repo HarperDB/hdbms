@@ -73,8 +73,8 @@ export default () => {
             </CardBody>
           </Card>
         ) : (
-          <Card className="my-3 py-5">
-            <CardBody>
+          <Card className="my-3">
+            <CardBody className="py-5">
               {role_id ? (
                 <div className="text-center">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
               ) : (

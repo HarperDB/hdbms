@@ -98,15 +98,15 @@ export default () => {
         </Card>
       </Col>
       <Col xs="12">
-        <hr className="mt-0 mb-3" />
+        <hr className="mt-0 mb-3 white" />
         <div className="text-center text-bold instructions">
-          To add charts to the dashboard, execute a{' '}
-          <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="purple" className="py-1 px-2 mr-2">
+          To add charts to the dashboard, execute a
+          <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="purple" className="px-2 mx-2">
             <i className="fa fa-search text-small mr-2 " /> query
           </Button>
           Then click &quot;create chart&quot;
         </div>
-        <hr className="my-3" />
+        <hr className="my-3 white" />
       </Col>
       {charts && charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} />)}
     </Row>

@@ -23,9 +23,14 @@
   }
 
   .card {
-    background: $dark-grey-overlay;
-    border: 1px solid $faint-white-overlay;
+    background: $color-pureblack !important;
+    border: 1px solid $black-overlay !important;
+    box-shadow: 0 0 5px $color-pureblack !important;
     color: $color-lightgrey !important;
+
+    .card-body {
+      background: $gradient-white-lightgrey !important;
+    }
   }
 
   hr,
@@ -40,12 +45,12 @@
   }
 
   .past-query {
-    background-color: $faint-white-overlay !important;
+    background-color: $faintest-white-overlay !important;
     color: $color-white;
   }
 
   .lolight {
-    background-color: $faint-white-overlay !important;
+    background-color: $color-pureblack !important;
     border: 1px solid $faint-white-overlay !important;
   }
 
@@ -54,14 +59,14 @@
   textarea,
   .fake-input,
   .form-control {
-    background: $faint-white-overlay !important;
-    border-color: $faintest-white-overlay !important;
+    background: $faintest-white-overlay !important;
+    border-color: $faint-white-overlay !important;
     color: $color-lightgrey !important;
   }
 
   .entity-manager {
     .card {
-      background-color: $dark-grey-overlay !important;
+      background-color: $color-pureblack !important;
       border: 1px solid $color-black;
 
       .item-row {
@@ -130,8 +135,8 @@
     .react-select__control--menu-is-open,
     .react-select__control--is-focused,
     .react-select__indicator-separator {
-      background: $faint-white-overlay !important;
-      border-color: $faintest-white-overlay !important;
+      background: $faintest-white-overlay !important;
+      border-color: $faint-white-overlay !important;
 
       .react-select__single-value {
         color: $color-lightgrey;
@@ -146,7 +151,7 @@
     .react-select__option:hover,
     .react-select__option:focus,
     .react-select__option--is-focused {
-      background: $color-pureblack !important;
+      background: $faintest-white-overlay !important;
       border-bottom: 1px solid $faint-white-overlay;
       color: $color-lightgrey !important;
 
@@ -186,5 +191,22 @@
     .modal-header {
       background: $dark-grey-overlay !important;
     }
+  }
+
+  #login-form {
+    .card {
+      background: $color-pureblack !important;
+      border: 1px solid $color-black !important;
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $color-pureblack;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: $faint-white-overlay;
+    border: 2px solid $color-pureblack;
+    border-radius: 5px;
   }
 }

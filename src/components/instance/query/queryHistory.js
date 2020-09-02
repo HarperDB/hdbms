@@ -40,7 +40,7 @@ export default ({ setQuery, query }) => {
               {queries[compute_stack_id].map((q) => (
                 <Fragment key={q.query}>
                   <button type="button" tabIndex="0" title={`Load query: ${q.query}`} className="past-query" onClick={() => setQuery(q.query)}>
-                    {q.query}
+                    <span>{q.query}</span>
                   </button>
                   <hr className="my-0" />
                 </Fragment>
