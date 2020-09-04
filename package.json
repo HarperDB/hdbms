@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "HTTPS=true react-scripts start",
+    "build:dev": "PUBLIC_URL=https://d2uv4fa0aeja0t.cloudfront.net react-scripts build",
     "build:stage": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://dbjxbnqel2bw9.cloudfront.net react-scripts build",
     "build:prod": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://ds5zz9rfvzuta.cloudfront.net react-scripts build",
     "test": "react-scripts test",
