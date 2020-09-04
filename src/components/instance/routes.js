@@ -13,6 +13,7 @@ const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ '
 
 export default ({ super_user }) => {
   const standardRoutes = [
+    /*
     {
       component: Dashboard,
       path: `/o/:customer_id/i/:compute_stack_id/dashboard`,
@@ -21,6 +22,7 @@ export default ({ super_user }) => {
       icon: 'chart-line',
       iconCode: 'f201',
     },
+    */
     {
       component: Browse,
       path: `/o/:customer_id/i/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,

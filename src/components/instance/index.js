@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
@@ -127,6 +127,7 @@ export default () => {
             {hydratedRoutes.map((route) => (
               <Route key={route.path} path={route.path} component={route.component} />
             ))}
+            <Redirect to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} />
           </Switch>
         </Suspense>
       ) : (

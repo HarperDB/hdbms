@@ -10,12 +10,14 @@ export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter
       {totalRecords !== 1 ? 's' : ''}
     </Col>
     <Col xs="12" md="9" className="text-md-right">
+      {/*
       <br className="d-block d-md-none" />
       <Button id="createChart" color="link" title="Create Chart" onClick={() => setShowChartModal(true)}>
         <i className="fa fa-lg fa-chart-line" />
         <span className="ml-2">create chart</span>
       </Button>
       <span className="mx-3 text">|</span>
+      */}
       <Button color="link" title="Refresh Results" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
         <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
       </Button>
