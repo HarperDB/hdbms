@@ -57,7 +57,7 @@ const TopNav = () => {
           <NavItem className="ml-0">
             <NavLink title="View or Switch Organizations" to="/">
               <i className="fa fa-building-o d-inline-block" />
-              <span className="d-none d-lg-inline-block">&nbsp; all organizations</span>
+              <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
               {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
             </NavLink>
           </NavItem>
@@ -67,7 +67,7 @@ const TopNav = () => {
               <NavItem className="ml-0">
                 <NavLink title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
                   <i className="fa fa-th d-inline-block" />
-                  <span className="d-none d-lg-inline-block">&nbsp; instances</span>
+                  <span className="d-none d-lg-inline-block">&nbsp;instances</span>
                 </NavLink>
               </NavItem>
               {showManageIcon && (
@@ -78,7 +78,7 @@ const TopNav = () => {
                     to={`/o/${customer.customer_id}/users`}
                   >
                     <i className="fa fa-gears d-inline-block" />
-                    <span className="d-none d-lg-inline-block">&nbsp; manage</span>
+                    <span className="d-none d-lg-inline-block">&nbsp;manage</span>
                   </NavLink>
                 </NavItem>
               )}
@@ -87,11 +87,13 @@ const TopNav = () => {
           <NavItem>
             <NavLink title="Manage My Profile" to="/profile">
               <i className="fa fa-user" />
+              <span className="d-none d-lg-inline-block">&nbsp;profile</span>
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink title="View Support Documentation" to="/support">
               <i className="far fa-life-ring" />
+              <span className="d-none d-lg-inline-block">&nbsp;support</span>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -103,11 +105,13 @@ const TopNav = () => {
               onClick={() => toggleTheme(nextTheme)}
             >
               <i className="fas fa-palette" />
+              <span className="d-none d-lg-inline-block">&nbsp;theme</span>
             </Button>
           </NavItem>
           <NavItem>
             <Button tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
               <i className="fa fa-sign-out" />
+              <span className="d-none d-lg-inline-block">&nbsp;log out</span>
             </Button>
           </NavItem>
         </Nav>
