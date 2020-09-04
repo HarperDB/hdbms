@@ -20,6 +20,10 @@
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05)  31%, rgba(255, 255, 255, 0.05) 100%);
   }
 
+  &.btn-sm {
+    height: auto !important;
+  }
+
   &.no-shadow {
     box-shadow: none !important;
   }

@@ -11,7 +11,7 @@ const Search = () => {
 
   return (
     <>
-      <Input type="text" className="text-center" onChange={updateFilter} placeholder="filter your organizations" value={orgSearch || ''} />
+      <Input id="filter_orgs" type="text" className="text-center" onChange={updateFilter} placeholder="filter your organizations" value={orgSearch || ''} />
       {orgSearch && (
         <Button className="clear-filter" onClick={clearFilter}>
           <i className="fa fa-times" />

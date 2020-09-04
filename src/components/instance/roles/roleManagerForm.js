@@ -7,19 +7,20 @@ import { useParams } from 'react-router-dom';
 import addRole from '../../../api/instance/addRole';
 import instanceState from '../../../state/instanceState';
 
-export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
+export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const existing_roles = useStoreState(instanceState, (s) => s.roles && s.roles.map((r) => r.role));
 
   const [entity, setEntity] = useState({});
 
   const createItem = async (e) => {
     e.preventDefault();
 
-    if (!entity.name || items.includes(entity.name)) {
+    if (!entity.name || existing_roles.includes(entity.name)) {
       setEntity({ ...entity, error: true });
       return false;
     }
@@ -50,6 +51,7 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
       <Row className="item-row form">
         <Col className="input-holder">
           <Input
+            id="name"
             invalid={entity.error}
             onChange={(e) =>
               setEntity({
@@ -62,7 +64,7 @@ export default ({ items, itemType, toggleDropItem, toggleCreate, baseUrl }) => {
           />
         </Col>
         <Col className="item-action">
-          <Button color="success" className="round mr-1">
+          <Button id="createRole" color="success" className="round mr-1">
             <i className="fa fa-check text-white" />
           </Button>
           <Button color="black" className="round" onClick={() => toggleCreate(false)}>

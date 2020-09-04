@@ -11,6 +11,7 @@ import config from '../../../config';
 import instanceState from '../../../state/instanceState';
 
 import DataTableHeader from './datatableHeader';
+import ChartModal from './chartModal';
 import getQueryData from '../../../methods/instance/getQueryData';
 import EmptyPrompt from './emptyPrompt';
 import ErrorFallback from '../../shared/errorFallback';
@@ -41,12 +42,13 @@ export default ({ query }) => {
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [tableState, setTableState] = useState(defaultTableState);
+  const [showChartModal, setShowChartModal] = useState(false);
 
   useAsyncEffect(() => {
     if (query.query) {
       setTableState({ ...defaultTableState, reload: true });
     } else {
-      setTableState({ ...tableState, error: false, message: false, reload: false });
+      setTableState({ ...tableState, tableData: [], error: false, message: false, reload: false });
     }
   }, [query.query]);
 
@@ -110,6 +112,7 @@ export default ({ query }) => {
         filtered={tableState.filtered}
         toggleFilter={(newValues) => setTableState({ ...tableState, ...newValues })}
         setLastUpdate={setLastUpdate}
+        setShowChartModal={setShowChartModal}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
@@ -131,6 +134,7 @@ export default ({ query }) => {
           />
         </CardBody>
       </Card>
+      {showChartModal && <ChartModal setShowChartModal={setShowChartModal} tableData={tableState.tableData} query={query.query.replace(/\n/g, ' ').trim()} />}
     </ErrorBoundary>
   ) : (
     <EmptyPrompt message="Please execute a SQL query to proceed" />

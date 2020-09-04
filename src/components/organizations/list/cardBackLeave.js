@@ -54,6 +54,7 @@ export default ({ customer_id, customer_name, setFlipState, flipState }) => {
             </ul>
 
             <Input
+              id="customer_name"
               onChange={(e) => setFormData({ delete_customer_name: e.target.value })}
               type="text"
               title="customer name"

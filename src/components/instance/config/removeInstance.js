@@ -53,6 +53,7 @@ export default ({ setInstanceAction }) => {
   ) : (
     <>
       <Input
+        id="instance_name"
         onChange={(e) => setFormData({ delete_instance_name: e.target.value })}
         type="text"
         title="instance_name"
@@ -100,7 +101,7 @@ export default ({ setInstanceAction }) => {
               </Button>
             </Col>
             <Col>
-              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
+              <Button id="removeInstance" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={formState.submitted} color="danger">
                 Remove
               </Button>
             </Col>

@@ -51,6 +51,7 @@ export default () => {
         <Col xs="4">
           {formData.delete_confirm !== 'DELETE' ? (
             <Input
+              id="username"
               onChange={(e) => setFormData({ delete_confirm: e.target.value })}
               type="text"
               className="text-center"
@@ -59,7 +60,7 @@ export default () => {
               value={formData.delete_confirm || ''}
             />
           ) : (
-            <Button block color="danger" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+            <Button id="deleteOrganizationUser" block color="danger" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
               {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
             </Button>
           )}

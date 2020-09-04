@@ -80,6 +80,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
               </ul>
             )}
             <Input
+              id="instance_name"
               onChange={(e) => setFormData({ delete_instance_name: e.target.value })}
               type="text"
               title="instance_name"

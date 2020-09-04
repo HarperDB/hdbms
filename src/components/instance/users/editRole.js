@@ -75,7 +75,7 @@ export default () => {
           />
         </Col>
         <Col xs="4">
-          <Button block color="purple" onClick={updateRole} disabled={formData.newRole === thisUser.role.id || formState === 'submitted'}>
+          <Button id="updateRole" block color="purple" onClick={updateRole} disabled={formData.newRole === thisUser.role.id || formState === 'submitted'}>
             Update Role
           </Button>
         </Col>

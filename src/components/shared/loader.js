@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 export default ({ header, body, spinner, links = false, relative = false }) => (
   <div className={`loader ${relative ? 'relative' : ''}`}>
     <Card className="mb-3">
-      <CardBody className="text-white text-center">
+      <CardBody className="text-center">
         <div className="mb-3">{header}</div>
         {spinner && <i className="fa fa-spinner fa-spin" />}
         {body}

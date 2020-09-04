@@ -80,13 +80,14 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             <Row>
               {customerCard && (
                 <Col sm="6">
-                  <Button onClick={() => setEditingCard(false)} block color="danger" className="mt-3">
+                  <Button id="editCard" onClick={() => setEditingCard(false)} block color="danger" className="mt-3">
                     Cancel
                   </Button>
                 </Col>
               )}
               <Col>
                 <Button
+                  id={customerCard ? 'saveNewCard' : 'addCardToAccount'}
                   title={customerCard ? 'Save New Card' : 'Add Card To Account'}
                   disabled={formState.submitted || !formData.card || !formData.expire || !formData.cvc || !formData.postal_code || !stripe || !elements}
                   onClick={() => setFormState({ submitted: true })}

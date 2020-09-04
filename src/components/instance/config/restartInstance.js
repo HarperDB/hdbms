@@ -63,6 +63,7 @@ export default ({ instanceAction, setInstanceAction }) => {
   ) : (
     <>
       <Input
+        id="instance_name"
         onChange={(e) => setFormData({ restart_instance_name: e.target.value })}
         type="text"
         title="instance_name"

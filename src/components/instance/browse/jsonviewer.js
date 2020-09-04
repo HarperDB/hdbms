@@ -52,7 +52,13 @@ export default ({ newEntityAttributes, hashAttribute }) => {
     if (!rowValue) alert.error('Please insert valid JSON to proceed');
     if (!action || !rowValue) return false;
     if (action === 'edit') rowValue[hashAttribute] = hash;
-    await queryInstance({ operation: action === 'edit' ? 'update' : 'insert', schema, table, records: [rowValue] }, auth, url, compute_stack_id, customer_id);
+    await queryInstance(
+      { operation: action === 'edit' ? 'update' : 'insert', schema, table, records: action !== 'edit' && Array.isArray(rowValue) ? rowValue : [rowValue] },
+      auth,
+      url,
+      compute_stack_id,
+      customer_id
+    );
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
@@ -82,9 +88,14 @@ export default ({ newEntityAttributes, hashAttribute }) => {
               The auto-maintained fields &quot;<b>__createdtime__</b>&quot; &amp; &quot;<b>__updatedtime__</b>&quot; have been hidden from this view.
             </li>
             {action === 'add' && (
-              <li>
-                The hash_attribute for this table is &quot;<b>{hashAttribute}</b>&quot;, and will auto-generate. You may manually add it if you want to specify its value.
-              </li>
+              <>
+                <li>
+                  The hash_attribute for this table is &quot;<b>{hashAttribute}</b>&quot;, and will auto-generate. You may manually add it if you want to specify its value.
+                </li>
+                <li>
+                  <b>You may paste in an array</b> if you want to add more than one record at a time.
+                </li>
+              </>
             )}
           </ul>
           <Card className="mb-2 json-editor-holder">

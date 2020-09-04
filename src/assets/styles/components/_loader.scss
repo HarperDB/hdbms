@@ -1,7 +1,6 @@
 .loader {
   align-items: center;
   background-color: transparent;
-  color: $color-white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,6 +20,7 @@
     background: $faint-white-overlay !important;
     border: 1px solid $faint-white-overlay !important;
     box-shadow: 0 0 4px $lighter-grey-overlay !important;
+    color: $color-white !important;
     height: 183px !important;
     width: 270px !important;
 

@@ -11,14 +11,13 @@
   width: 20px;
 
   .dot {
-    background: $color-purple;
+    background: $color-white;
     border: 5px solid $color-white;
     border-radius: 50%;
     height: 18px;
     left: 0;
     position: absolute;
     top: 0;
-    visibility: hidden;
     width: 18px;
   }
 
@@ -33,15 +32,15 @@
   }
 
   &.show {
-    background-color: $color-purple;
-    border-color: $color-purple;
+    background-color: $color-purple !important;
+    border-color: $color-purple !important;
 
     .checkmark {
       visibility: visible;
     }
 
     .dot {
-      visibility: visible;
+      background: $color-purple;
     }
   }
 }

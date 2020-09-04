@@ -1,0 +1,27 @@
+#dashboard {
+  .instructions {
+    color: $color-white;
+  }
+
+  .data-loader {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    justify-content: center;
+    padding: 0 50px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .chart-remove {
+    position: absolute;
+    right: 30px;
+    top: 27px;
+    z-index: 99999;
+  }
+
+  .dashboard-chart {
+    height: 277px;
+  }
+}

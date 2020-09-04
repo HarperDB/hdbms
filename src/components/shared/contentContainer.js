@@ -6,7 +6,7 @@ export default ({ children, header, subheader, maxHeight = 'auto', minHeight = '
       <span className="header">{header}</span>
       <span className="subheader">{subheader}</span>
     </div>
-    <div className="scrollable" style={{ maxHeight, minHeight }}>
+    <div className={maxHeight !== 'auto' ? 'scrollable' : ''} style={{ maxHeight, minHeight }}>
       {children}
     </div>
   </div>

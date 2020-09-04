@@ -49,9 +49,9 @@ export default ({ routes = [] }) => {
   );
   const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
   const activeRoute = {
-    label: currentRoute.label,
-    value: currentRoute.link,
-    iconCode: currentRoute.iconCode,
+    label: currentRoute?.label,
+    value: currentRoute?.link,
+    iconCode: currentRoute?.iconCode,
   };
 
   return (
@@ -65,7 +65,7 @@ export default ({ routes = [] }) => {
             className="react-select-container"
             classNamePrefix="react-select"
             onChange={({ value, has_auth, is_unavailable }) =>
-              is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${currentRoute.link}`) : history.push(`/o/${customer_id}/instances/login`)
+              is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : history.push(`/o/${customer_id}/instances/login`)
             }
             options={options || []}
             value={activeOption}
@@ -89,7 +89,7 @@ export default ({ routes = [] }) => {
                 isActive={(match, browserLoc) => match || (route.link === 'browse' && browserLoc.pathname.indexOf('/browse/') !== -1)}
                 to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
               >
-                <i className={`d-none d-sm-inline-block fa mr-2 fa-${route.icon}`} />
+                <i className={`d-none d-sm-inline-block fa mr-1 fa-${route.icon}`} />
                 {route.label || route.link}
               </NavLink>
             </NavItem>
@@ -101,7 +101,10 @@ export default ({ routes = [] }) => {
             classNamePrefix="react-select"
             width="200px"
             onChange={({ value }) => history.push(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
-            options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode }))}
+            options={
+              activeRoute.value ? routes.filter((r) => r.link !== activeRoute.value).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode })) : null
+            }
+            isLoading={!activeRoute.value}
             value={activeRoute}
             defaultValue={activeRoute.value}
             isSearchable={false}

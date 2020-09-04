@@ -9,7 +9,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import config from '../../../config';
 import appState from '../../../state/appState';
 import useInstanceAuth from '../../../state/instanceAuths';
-
 import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
 import userInfo from '../../../api/instance/userInfo';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
@@ -39,12 +38,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
       setFlipState('login');
     } else if (instanceData.status === 'OK') {
       const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
-
       if (result.error) {
         setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
         setFormState({ error: result.message });
       } else {
-        history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
+        history.push(`/o/${customer_id}/i/${compute_stack_id}`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

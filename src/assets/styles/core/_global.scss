@@ -45,10 +45,26 @@ ul {
 }
 
 hr {
-  border-top: 1px solid $color-lightgrey !important;
+  border-top: 1px solid $lighter-grey-overlay !important;
   width: 100%;
 
   &.white {
-    border-top: 1px solid $light-white-overlay !important;
+    border-top: 1px solid $faint-white-overlay !important;
   }
+}
+
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: $color-white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $light-grey-overlay;
+  border: 2px solid $color-white;
+  border-radius: 5px;
 }

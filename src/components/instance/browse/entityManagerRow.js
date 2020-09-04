@@ -71,7 +71,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
           </Button>
         ) : isConfirmingDropItem ? (
           <>
-            <Button color="danger" className="round mr-1" title={`confirm drop ${itemType} ${item}`} onClick={confirmItemForDrop}>
+            <Button id="confirmDropItem" color="danger" className="round mr-1" title={`confirm drop ${itemType} ${item}`} onClick={confirmItemForDrop}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button color="black" className="round" title={`Cancel drop ${itemType} ${item}`} onClick={cancelConfirmDrop}>
@@ -79,7 +79,7 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
             </Button>
           </>
         ) : isDropping ? (
-          <Button color="danger" className="round" title={`Drop ${itemType} ${item}`} onClick={selectItemForDrop}>
+          <Button id={`drop${itemType}${item}`} color="danger" className="round" title={`Drop ${itemType} ${item}`} onClick={selectItemForDrop}>
             <i className="fa fa-minus text-white" />
           </Button>
         ) : isActive ? (

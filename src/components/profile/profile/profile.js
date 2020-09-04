@@ -85,6 +85,7 @@ export default () => {
                   </Col>
                   <Col md="6" xs="12">
                     <Input
+                      id="firstname"
                       type="text"
                       className="mb-0 text-center"
                       name="fname"
@@ -102,6 +103,7 @@ export default () => {
                   </Col>
                   <Col md="6" xs="12">
                     <Input
+                      id="lastname"
                       type="text"
                       className="mb-0 text-center"
                       name="lname"
@@ -119,6 +121,7 @@ export default () => {
                   </Col>
                   <Col md="6" xs="12">
                     <Input
+                      id="github_repo"
                       type="text"
                       className="mb-0 text-center"
                       name="github_repo"

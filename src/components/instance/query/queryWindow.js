@@ -46,6 +46,7 @@ export default ({ setQuery, query }) => {
         <Card className="mt-3 mb-4">
           <CardBody>
             <Input
+              id="sql_query"
               type="textarea"
               className="sql-query-textarea"
               value={formData}

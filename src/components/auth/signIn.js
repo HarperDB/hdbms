@@ -52,6 +52,7 @@ const SignIn = () => {
           <Card className="mb-3">
             <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
               <Input
+                id="email"
                 onChange={(e) => {
                   e.currentTarget.focus();
                   setFormData({ ...formData, email: e.target.value.toLowerCase() });
@@ -65,6 +66,7 @@ const SignIn = () => {
                 placeholder="email address"
               />
               <Input
+                id="password"
                 onChange={(e) => {
                   e.currentTarget.focus();
                   setFormData({ ...formData, pass: e.target.value });
@@ -77,7 +79,7 @@ const SignIn = () => {
                 autoComplete="current-password"
                 placeholder="password"
               />
-              <Button onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
+              <Button id="signIn" onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
                 Sign In
               </Button>
             </CardBody>

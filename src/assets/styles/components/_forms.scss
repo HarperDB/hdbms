@@ -54,11 +54,6 @@ textarea {
   border-bottom: 1px solid $color-lightergrey;
   padding: 8px 0;
   white-space: nowrap;
-
-  &:last-child {
-    border-bottom: 0;
-    padding-bottom: 4px;
-  }
 }
 
 .radio-checkbox-label {

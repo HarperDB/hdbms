@@ -48,6 +48,7 @@ const SignUp = () => {
           <Card className="mb-3">
             <CardBody className="px-3" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
+                id="firstname"
                 className="text-center mb-2"
                 type="text"
                 title="first name"
@@ -57,6 +58,7 @@ const SignUp = () => {
                 onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
               />
               <Input
+                id="lastname"
                 className="text-center mb-2"
                 type="text"
                 title="last name"
@@ -66,6 +68,7 @@ const SignUp = () => {
                 onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
               />
               <Input
+                id="email"
                 className="text-center mb-2"
                 type="text"
                 title="email"
@@ -77,6 +80,7 @@ const SignUp = () => {
               <Row>
                 <Col className="subdomain-form">
                   <Input
+                    id="subdomain"
                     className="text-center mb-2"
                     type="text"
                     title="subdomain"
@@ -99,6 +103,7 @@ const SignUp = () => {
                 </div>
               )}
               <Input
+                id="coupon_code"
                 type="text"
                 className="text-center mb-2"
                 name="coupon_code"

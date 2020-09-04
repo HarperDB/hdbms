@@ -14,19 +14,25 @@
   }
 
   .past-query {
+    background: $gradient-white-lightgrey;
     border: 0;
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
     font-size: $font-size-small;
     margin-bottom: 1px;
     margin-top: 1px;
+    outline: 0 !important;
     overflow-x: auto;
-    padding: 1rem;
+    padding: 1rem 0;
     text-align: left;
     white-space: nowrap;
     width: 100%;
 
     &:first-child {
       border-top: 0 !important;
+    }
+
+    span {
+      padding: 0 1rem;
     }
   }
 }

@@ -70,6 +70,7 @@ export default () => {
                 </Col>
                 <Col md="6" xs="12">
                   <Input
+                    id="oldpassword"
                     type="password"
                     className="mb-0 text-center"
                     name="current password"
@@ -87,6 +88,7 @@ export default () => {
                 </Col>
                 <Col md="6" xs="12">
                   <Input
+                    id="newpassword1"
                     type="password"
                     className="mb-0 text-center"
                     name="new password"
@@ -104,6 +106,7 @@ export default () => {
                 </Col>
                 <Col md="6" xs="12">
                   <Input
+                    id="newpassword2"
                     type="password"
                     className="mb-0 text-center"
                     name="verify password"
@@ -115,7 +118,7 @@ export default () => {
                 </Col>
               </Row>
               <hr className="mt-2 mb-4" />
-              <Button color="purple" block onClick={submit} disabled={formState.submitted}>
+              <Button id="updatePassword" color="purple" block onClick={submit} disabled={formState.submitted}>
                 Update Password
               </Button>
             </CardBody>

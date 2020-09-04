@@ -21,13 +21,12 @@ export default async ({ query, auth, url, signal, is_local, compute_stack_id, cu
 
     const totalRecords = response.length;
     const attributes = totalRecords ? Object.keys(response[0]) : [];
+
     const orderedColumns = attributes.filter((a) => !['__createdtime__', '__updatedtime__'].includes(a)).sort();
-    if (attributes.includes('__createdtime__')) {
-      orderedColumns.push('__createdtime__');
-    }
-    if (attributes.includes('__updatedtime__')) {
-      orderedColumns.push('__updatedtime__');
-    }
+
+    if (attributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
+    if (attributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
+
     const dataTableColumns = orderedColumns.map((k) => ({
       id: k.toString(),
       Header: k.toString(),

@@ -8,8 +8,8 @@ export default ({ message }) => (
     <div className="floating-card-header text-right">
       <StructureReloader label="refresh cluster config" />
     </div>
-    <Card className="my-3 py-5">
-      <CardBody>
+    <Card className="my-3">
+      <CardBody className="py-5">
         <div className="text-center">{message}</div>
       </CardBody>
     </Card>

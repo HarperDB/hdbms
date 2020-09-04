@@ -32,6 +32,10 @@
     color: $color-grey !important;
   }
 
+  .react-select__menu {
+    z-index: 12;
+  }
+
   .react-select__option,
   .react-select__option:hover,
   .react-select__option:focus,
@@ -52,5 +56,11 @@
 
   .react-select__menu {
     margin-top: 1px !important;
+  }
+
+  &.limited-height {
+    .react-select__menu-list {
+      max-height: 235px;
+    }
   }
 }

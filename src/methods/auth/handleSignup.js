@@ -1,7 +1,7 @@
 import isEmail from '../util/isEmail';
 import addCustomer from '../../api/lms/addCustomer';
 import checkSubdomain from '../../api/lms/checkSubdomain';
-import isAlphaNumericHyphen from '../util/isAlphaNumericHyphen';
+import isAlphaNumeric from '../util/isAlphaNumeric';
 
 export default async ({ formData }) => {
   const { firstname, lastname, email, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
@@ -16,9 +16,10 @@ export default async ({ formData }) => {
       error: 'Please provide a valid email',
     };
   }
-  if (!isAlphaNumericHyphen(subdomain)) {
+
+  if (!isAlphaNumeric(subdomain)) {
     return {
-      error: 'subdomain: alphanumeric and hyphens only',
+      error: 'subdomain: alphanumeric characters only',
     };
   }
   if (subdomain.length > 16) {

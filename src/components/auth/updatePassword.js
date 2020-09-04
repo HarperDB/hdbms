@@ -54,6 +54,7 @@ const UpdatePassword = () => {
           <Card className="mb-3">
             <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
+                id="password1"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-2 text-center"
@@ -62,6 +63,7 @@ const UpdatePassword = () => {
                 placeholder="new password"
               />
               <Input
+                id="password2"
                 onChange={(e) => setFormData({ ...formData, password2: e.target.value })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -69,7 +71,7 @@ const UpdatePassword = () => {
                 title="verify password"
                 placeholder="verify password"
               />
-              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Update My Password" block color="purple">
+              <Button id="updateMyPassword" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Update My Password" block color="purple">
                 Update My Password
               </Button>
             </CardBody>

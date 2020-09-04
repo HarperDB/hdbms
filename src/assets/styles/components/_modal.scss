@@ -1,5 +1,9 @@
 #new-instance-modal,
 #new-org-modal {
+  .card {
+    box-shadow: none !important;
+  }
+
   .instance-form-card-holder {
     &:first-child {
       @media screen and (max-width: 991px) {
@@ -8,6 +12,8 @@
     }
   }
 }
+
+
 
 .modal-dialog {
   border-radius: $border-radius;
@@ -21,10 +27,10 @@
     overflow: hidden;
 
     .modal-header {
-      background: $gradient-purple-magenta;
-      border-bottom: 1px solid $faintest-white-overlay;
-      border-radius: $border-radius $border-radius 0 0;
-      color: $color-white;
+      background: $gradient-purple-magenta !important;
+      border-bottom: 1px solid $faintest-white-overlay !important;
+      border-radius: $border-radius $border-radius 0 0 !important;
+      color: $color-white !important;
 
       &::after {
         background: radial-gradient($color-purple 1px, transparent 0);

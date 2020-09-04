@@ -51,6 +51,7 @@ const ResetPassword = () => {
           <Card className="mb-3">
             <CardBody className="text-center text-white" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <Input
+                id="email"
                 onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
                 disabled={formState.submitted}
                 className="mb-4 text-center"
@@ -59,7 +60,14 @@ const ResetPassword = () => {
                 name="email"
                 placeholder="email address"
               />
-              <Button onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Send Password Reset Email" block color="purple">
+              <Button
+                id="sendPasswordResetEmail"
+                onClick={() => setFormState({ submitted: true })}
+                disabled={formState.submitted}
+                title="Send Password Reset Email"
+                block
+                color="purple"
+              >
                 Send Password Reset Email
               </Button>
             </CardBody>
