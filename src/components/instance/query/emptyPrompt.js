@@ -13,9 +13,9 @@ export default ({ message, error = false, accessErrors }) => {
           <div className={`text-center ${error ? 'text-danger' : ''}`}>{message}</div>
           {error && (
             <div className="px-5">
-              <hr className="my-4" />
               {tableErrors && tableErrors.length ? (
                 <>
+                  <hr className="my-4" />
                   <ul>
                     {tableErrors.map((e) => (
                       <li key={`${e.schema}${e.table}${e.entity}${e.permission}`} className="mb-2">
@@ -27,13 +27,16 @@ export default ({ message, error = false, accessErrors }) => {
                 </>
               ) : null}
               {attributeErrors && (
-                <ul>
-                  {attributeErrors.map((e) => (
-                    <li key={`${e.schema}${e.table}${e.entity}${e.permission}`} className="mb-2">
-                      {e.schema} &gt; {e.type === 'attribute' && <span>{e.table} &gt;</span>} <b>{e.entity}</b>: {e.type} requires <b>{e.permission}</b> permissions
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <hr className="my-4" />
+                  <ul>
+                    {attributeErrors.map((e) => (
+                      <li key={`${e.schema}${e.table}${e.entity}${e.permission}`} className="mb-2">
+                        {e.schema} &gt; {e.type === 'attribute' && <span>{e.table} &gt;</span>} <b>{e.entity}</b>: {e.type} requires <b>{e.permission}</b> permissions
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
             </div>
           )}

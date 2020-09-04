@@ -48,7 +48,7 @@ export default ({ query }) => {
     if (query.query) {
       setTableState({ ...defaultTableState, reload: true });
     } else {
-      setTableState({ ...tableState, error: false, message: false, reload: false });
+      setTableState({ ...tableState, tableData: [], error: false, message: false, reload: false });
     }
   }, [query.query]);
 
