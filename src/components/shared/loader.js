@@ -16,8 +16,8 @@ export default ({ header, body, spinner, links = false, relative = false }) => (
     ) : (
       <Row>
         {links.map((link) => (
-          <Col key={link.to} className="login-nav-link-holder">
-            <NavLink to={link.to} className={`login-nav-link ${links.length === 1 ? 'text-center' : ''}`}>
+          <Col key={link.to} className={`login-nav-link-holder ${link.className || ''}`}>
+            <NavLink to={link.to} className="login-nav-link">
               {link.text}
             </NavLink>
           </Col>
