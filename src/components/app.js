@@ -93,11 +93,15 @@ export default () => {
       <div id="app-container">
         {config.maintenance ? (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-            <Maintenance />
+            <Suspense fallback={<Loader header=" " spinner />}>
+              <Maintenance />
+            </Suspense>
           </ErrorBoundary>
         ) : showPasswordUpdate ? (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-            <UpdatePassword />
+            <Suspense fallback={<Loader header=" " spinner />}>
+              <UpdatePassword />
+            </Suspense>
           </ErrorBoundary>
         ) : loggedIn ? (
           <>

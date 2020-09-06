@@ -38,8 +38,8 @@ const SignUp = () => {
           header="success!"
           body="check your email for your username and password. be sure to check your spam folder, just in case."
           links={[
-            { to: '/', text: 'Sign In' },
-            { to: '/resend-registration-email', text: 'Resend Email' },
+            { to: '/', text: 'Sign In', className: 'text-left' },
+            { to: '/resend-registration-email', text: 'Resend Email', className: 'text-right' },
           ]}
           relative
         />
