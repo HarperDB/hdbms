@@ -83,10 +83,12 @@ export default () => {
     if (!products) getProducts();
     if (!regions) getRegions();
     if (!postmanCollection) getPostManCollection();
-    refreshUser({ auth, showPasswordUpdate, controller, setFetchingUser });
   }, config.refresh_content_interval);
 
-  useInterval(() => getCurrentVersion(), config.check_version_interval);
+  useInterval(() => {
+    getCurrentVersion();
+    refreshUser({ auth, showPasswordUpdate, controller, setFetchingUser });
+  }, config.check_version_interval);
 
   return (
     <div className={persistedUser?.theme}>
