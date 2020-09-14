@@ -14,6 +14,19 @@ export default ({ title, type, labels, theme }) => ({
   theme: { palette: 'palette10' },
   plotOptions: { pie: { offsetY: 10 } },
   legend: { offsetY: 5 },
+  markers: {
+    size: [5],
+  },
+  tooltip: {
+    custom({ series, seriesIndex, dataPointIndex, w }) {
+      const tooltipLabel = ['donut', 'pie'].includes(type)
+        ? `${w.globals.labels[seriesIndex]}: ${series[seriesIndex]}`
+        : w.globals.categoryLabels.length
+        ? `${w.globals.categoryLabels[dataPointIndex]}: ${series[seriesIndex][dataPointIndex]}`
+        : `${w.globals.labels[dataPointIndex]}: ${series[seriesIndex][dataPointIndex]}`;
+      return `<div class="chart-tooltip"><span>${tooltipLabel}</span></div>`;
+    },
+  },
   xaxis: {
     labels: {
       rotate: -60,
