@@ -69,7 +69,7 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
       },
       !tableState.filtered.length ? 0 : 500
     );
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, mounted]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, activeTable, mounted]);
 
   useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 

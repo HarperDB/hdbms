@@ -34,3 +34,11 @@
     }
   }
 }
+
+.chart-tooltip {
+  position: relative;
+  background: $dark-grey-overlay;
+  color: $color-white;
+  padding: 3px 8px;
+  border: 0 !important;
+}
