@@ -90,3 +90,7 @@
     color: $color-white !important;
   }
 }
+
+.btn-group-sm>.btn {
+  height: auto !important;
+}
