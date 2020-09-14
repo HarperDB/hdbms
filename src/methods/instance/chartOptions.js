@@ -31,5 +31,8 @@ export default ({ title, type, labels, theme }) => ({
         fontSize: '10px',
       },
     },
+    tooltip: {
+      enabled: false,
+    },
   },
 });
