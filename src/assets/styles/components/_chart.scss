@@ -34,11 +34,12 @@
     }
   }
 }
+.apexcharts-tooltip {
+  background: $color-white !important;
+  color: $color-black !important;
 
-.chart-tooltip {
-  position: relative;
-  background: $dark-grey-overlay;
-  color: $color-white;
-  padding: 3px 8px;
-  border: 0 !important;
+  .apexcharts-tooltip-title {
+    background: $color-white !important;
+  }
 }
+

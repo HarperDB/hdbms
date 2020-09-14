@@ -2,7 +2,7 @@ export default ({ title, type, labels, theme }) => ({
   title: {
     text: title,
     style: {
-      color: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '##212121',
+      color: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '#212121',
     },
   },
   chart: {
@@ -15,16 +15,12 @@ export default ({ title, type, labels, theme }) => ({
   plotOptions: { pie: { offsetY: 10 } },
   legend: { offsetY: 5 },
   markers: {
-    size: [5],
-  },
-  tooltip: {
-    custom({ series, seriesIndex, dataPointIndex, w }) {
-      const tooltipLabel = ['donut', 'pie'].includes(type)
-        ? `${w.globals.labels[seriesIndex]}: ${series[seriesIndex]}`
-        : w.globals.categoryLabels.length
-        ? `${w.globals.categoryLabels[dataPointIndex]}: ${series[seriesIndex][dataPointIndex]}`
-        : `${w.globals.labels[dataPointIndex]}: ${series[seriesIndex][dataPointIndex]}`;
-      return `<div class="chart-tooltip"><span>${tooltipLabel}</span></div>`;
+    size: [4],
+    strokeColors: theme === 'dark' ? '#212121' : '#fff',
+    strokeWidth: 1,
+    strokeOpacity: theme === 'dark' ? 0.5 : 1,
+    hover: {
+      sizeOffset: 0,
     },
   },
   xaxis: {
