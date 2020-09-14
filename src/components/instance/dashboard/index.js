@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -23,6 +23,7 @@ export default () => {
   const charts = useStoreState(instanceState, (s) => s.charts);
   const registration = useStoreState(instanceState, (s) => s.registration);
   const dashboardStats = useStoreState(instanceState, (s) => s.dashboardStats);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const refreshCharts = () => {
     if (auth && customer_id && compute_stack_id) {
@@ -108,7 +109,8 @@ export default () => {
         </div>
         <hr className="my-3 white" />
       </Col>
-      {charts && charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} />)}
+      {charts &&
+        charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} confirmDelete={confirmDelete} setConfirmDelete={setConfirmDelete} />)}
     </Row>
   );
 };
