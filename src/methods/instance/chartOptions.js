@@ -13,7 +13,12 @@ export default ({ title, type, labels, theme }) => ({
   labels,
   theme: { palette: 'palette10' },
   plotOptions: { pie: { offsetY: 10 } },
-  legend: { offsetY: 5 },
+  legend: {
+    offsetY: 5,
+    labels: {
+      colors: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '#212121',
+    },
+  },
   markers: {
     size: [4],
     strokeColors: theme === 'dark' ? '#212121' : '#fff',
@@ -29,10 +34,19 @@ export default ({ title, type, labels, theme }) => ({
       maxHeight: 80,
       style: {
         fontSize: '10px',
+        colors: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '#212121',
       },
     },
     tooltip: {
       enabled: false,
+    },
+  },
+  yaxis: {
+    labels: {
+      style: {
+        fontSize: '10px',
+        colors: theme === 'light' ? '#696969' : theme === 'dark' ? '#fff' : '#212121',
+      },
     },
   },
 });
