@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Card, CardBody, Button } from 'reactstrap';
+import { Col, Card, CardBody, Button, ButtonGroup } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import Chart from 'react-apexcharts';
@@ -14,22 +14,25 @@ import chartOptions from '../../../methods/instance/chartOptions';
 import isNumeric from '../../../methods/util/isNumeric';
 import config from '../../../config';
 
-export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes }, removeChart }) => {
+export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes, user_id }, removeChart, confirmDelete, setConfirmDelete }) => {
   const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const theme = useStoreState(appState, (s) => s.theme);
+  const canDelete = useStoreState(appState, (s) => s.auth?.user_id === user_id);
   const [chartData, setChartData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const options = chartData && !chartData.error && chartOptions({ title: name, type, labels: chartData.map((d) => d[labelAttribute]), theme });
-  const series = !chartData
-    ? []
-    : type === 'single value'
-    ? chartData[0][seriesAttributes[0]]
-    : ['donut', 'pie'].includes(type)
-    ? chartData.map((d) => d[seriesAttributes[0]])
-    : seriesAttributes.map((s) => ({ name: s, data: chartData.map((d) => d[s]) }));
+  const series =
+    !chartData || chartData.error
+      ? []
+      : type === 'single value'
+      ? chartData[0][seriesAttributes[0]]
+      : ['donut', 'pie'].includes(type)
+      ? chartData.map((d) => d[seriesAttributes[0]])
+      : seriesAttributes.map((s) => ({ name: s, data: chartData.map((d) => d[s]) }));
   let controller;
 
   const getChartData = async () => {
@@ -38,6 +41,7 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
       if (controller) controller.abort();
       controller = new AbortController();
       const newChartData = await sql({ sql: query, auth, url, is_local, compute_stack_id, customer_id, signal: controller.signal });
+
       if (!newChartData.error && newChartData.length) {
         const columns = Object.keys(newChartData[0]);
         const necessaryColumns = type === 'single value' ? seriesAttributes : [labelAttribute, ...seriesAttributes];
@@ -62,36 +66,46 @@ export default ({ chart: { query, name, id, type, labelAttribute, seriesAttribut
   useInterval(getChartData, config.refresh_content_interval);
 
   const handleRemoveChart = (chartId) => {
-    setLoading(true);
+    setDeleting(true);
     removeChart(chartId);
   };
 
   return (
-    <Col lg="6" xs="12" className="mb-3" key={name}>
-      <Card className="dashboard-chart">
-        <CardBody className="text-nowrap position-relative">
-          <Button disabled={loading} title="Remove this chart" className="chart-remove" color="link" onClick={() => handleRemoveChart(id)}>
-            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-times'} text-darkgrey`} />
-          </Button>
-          {chartData.error ? (
-            <div className="data-loader">
-              <div className="text-danger my-3">{chartData.message}</div>
-              Please contact an admin to resolve this issue.
-            </div>
-          ) : chartData && type === 'single value' ? (
-            <div className="dashboard single-value-chart">
-              <div className="title">{name}</div>
-              <h1>{isNumeric(series) ? series.toFixed(2) : series}</h1>
-            </div>
-          ) : chartData ? (
-            <Chart options={options} series={series} type={type} height={220} />
-          ) : (
-            <div className="data-loader">
-              <i className="fa fa-spinner fa-spin" />
-            </div>
-          )}
-        </CardBody>
-      </Card>
-    </Col>
+    chartData &&
+    !chartData.error && (
+      <Col lg="6" xs="12" className="mb-3" key={name}>
+        <Card className="dashboard-chart">
+          <CardBody className="text-nowrap position-relative">
+            {loading && (
+              <Button disabled title="loading" className="chart-loading" color="link">
+                <i className="fa fa-spinner fa-spin text-darkgrey" />
+              </Button>
+            )}
+            {confirmDelete === id ? (
+              <ButtonGroup size="sm" className="chart-remove-confirm">
+                <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
+                  {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
+                </Button>
+                <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
+                  cancel <i className="ml-2 fa fa-times" />
+                </Button>
+              </ButtonGroup>
+            ) : canDelete ? (
+              <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => setConfirmDelete(id)}>
+                <i className="fa fa-times text-darkgrey" />
+              </Button>
+            ) : null}
+            {chartData && type === 'single value' ? (
+              <div className="dashboard single-value-chart">
+                <div className="title">{name}</div>
+                <h1>{isNumeric(series) ? series.toFixed(2) : series}</h1>
+              </div>
+            ) : chartData ? (
+              <Chart options={options} series={series} type={type} height={220} />
+            ) : null}
+          </CardBody>
+        </Card>
+      </Col>
+    )
   );
 };

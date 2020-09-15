@@ -200,6 +200,15 @@
     }
   }
 
+  .apexcharts-tooltip {
+    background: $color-pureblack !important;
+    color: $color-white !important;
+
+    .apexcharts-tooltip-title {
+      background: $color-pureblack !important;
+    }
+  }
+
   ::-webkit-scrollbar-track {
     background: $color-pureblack;
   }

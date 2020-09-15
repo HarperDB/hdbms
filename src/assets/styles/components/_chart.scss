@@ -34,3 +34,20 @@
     }
   }
 }
+
+
+.apexcharts-tooltip {
+  background: $color-white !important;
+  color: $color-black !important;
+
+  .apexcharts-tooltip-title {
+    background: $color-white !important;
+  }
+}
+
+div[type='pie'] {
+  .apexcharts-tooltip {
+    color: $color-white !important;
+  }
+}
+

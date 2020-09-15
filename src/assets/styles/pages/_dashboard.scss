@@ -18,7 +18,21 @@
     position: absolute;
     right: 30px;
     top: 27px;
-    z-index: 99999;
+    z-index: 97;
+  }
+
+  .chart-loading {
+    position: absolute;
+    right: 85px;
+    top: 26px;
+    z-index: 97;
+  }
+
+  .chart-remove-confirm {
+    position: absolute;
+    right: 21px;
+    top: 22px;
+    z-index: 97;
   }
 
   .dashboard-chart {
