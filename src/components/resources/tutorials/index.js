@@ -14,7 +14,7 @@ export default () => {
   const history = useHistory();
   const { video_id } = useParams();
   const [items, setItems] = useState([]);
-  const baseUrl = '/support/tutorials';
+  const baseUrl = '/resources/tutorials';
   const activeVideo = video_id && items.find((i) => i.id === video_id);
 
   useAsyncEffect(async () => {

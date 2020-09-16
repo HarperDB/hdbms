@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-const Resources = lazy(() => import(/* webpackChunkName: "support-resources" */ './resources'));
+const Links = lazy(() => import(/* webpackChunkName: "support-links" */ './links'));
 const Installation = lazy(() => import(/* webpackChunkName: "support-installation" */ './installation'));
 const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './drivers'));
 const Marketplace = lazy(() => import(/* webpackChunkName: "support-marketplace" */ './marketplace'));
@@ -10,48 +10,48 @@ const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ '.
 export default [
   {
     component: Installation,
-    path: '/support/installation',
-    link: '/support/installation',
+    path: '/resources/installation',
+    link: '/resources/installation',
     label: 'installation',
     icon: 'wrench',
     iconCode: 'f0ad',
   },
   {
     component: Tutorials,
-    path: '/support/tutorials/:video_id?',
-    link: '/support/tutorials',
+    path: '/resources/tutorials/:video_id?',
+    link: '/resources/tutorials',
     label: 'tutorials',
     icon: 'video-camera',
     iconCode: 'f03d',
   },
   {
     component: Marketplace,
-    path: '/support/marketplace/:type?',
-    link: '/support/marketplace/active',
+    path: '/resources/marketplace/:type?',
+    link: '/resources/marketplace/active',
     label: 'marketplace',
     icon: 'shopping-cart',
     iconCode: 'f07a',
   },
   {
     component: Drivers,
-    path: '/support/drivers',
-    link: '/support/drivers',
+    path: '/resources/drivers',
+    link: '/resources/drivers',
     label: 'drivers',
     icon: 'cubes',
     iconCode: 'f1b3',
   },
   {
-    component: Resources,
-    path: '/support/resources',
-    link: '/support/resources',
-    label: 'resources',
+    component: Links,
+    path: '/resources/links',
+    link: '/resources/links',
+    label: 'links',
     icon: 'external-link-square',
     iconCode: 'f14c',
   },
   {
     component: Examples,
-    path: '/support/examples/:folder?/:method?',
-    link: '/support/examples',
+    path: '/resources/examples/:folder?/:method?',
+    link: '/resources/examples',
     label: 'example code',
     icon: 'code',
     iconCode: 'f121',
