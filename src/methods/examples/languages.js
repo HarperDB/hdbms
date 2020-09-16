@@ -9,6 +9,7 @@ import javascriptjQuery from './snippetTemplates/javascript.jquery';
 import javascriptXHR from './snippetTemplates/javascript.xhr';
 import cLibcurl from './snippetTemplates/c.libcurl';
 import nodejsAxios from './snippetTemplates/nodejs.axios';
+import nodejsRequest from './snippetTemplates/nodejs.request';
 import nodejsUnirest from './snippetTemplates/nodejs.unirest';
 import objectiveCNSURLSession from './snippetTemplates/objectivec.nsurlsession';
 import ocamlCohttp from './snippetTemplates/ocaml.cohttp';
@@ -34,6 +35,7 @@ export default [
   { lang: 'JavaScript', variant: 'XHR', syntax_mode: 'javascript', snippet: javascriptXHR },
   { lang: 'C', variant: 'libcurl', syntax_mode: 'cpp', snippet: cLibcurl },
   { lang: 'nodejs', variant: 'Axios', syntax_mode: 'javascript', snippet: nodejsAxios },
+  { lang: 'nodejs', variant: 'Request', syntax_mode: 'javascript', snippet: nodejsRequest },
   { lang: 'nodejs', variant: 'Unirest', syntax_mode: 'javascript', snippet: nodejsUnirest },
   { lang: 'Objective-C', variant: 'NSURLSession', syntax_mode: 'objectivec', snippet: objectiveCNSURLSession },
   { lang: 'ocaml', variant: 'Cohttp', syntax_mode: 'ocaml', snippet: ocamlCohttp },
