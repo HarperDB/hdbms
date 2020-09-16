@@ -4,7 +4,7 @@ import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 export default () => (
   <main id="support">
     <Row>
-      <Col lg="4" className="mb-3">
+      <Col lg="3" className="mb-3">
         <span className="floating-card-header">Instance API Docs</span>
         <Card className="my-3">
           <CardBody>
@@ -14,7 +14,23 @@ export default () => (
           </CardBody>
         </Card>
       </Col>
-      <Col lg="4" className="mb-3">
+      <Col lg="3" className="mb-3">
+        <span className="floating-card-header">HarperDB Community Slack</span>
+        <Card className="my-3">
+          <CardBody>
+            <Button
+              color="purple"
+              block
+              href="https://join.slack.com/t/harperdbcommunity/shared_invite/zt-e8w6u1pu-2UFAXl_f4ZHo7F7DVkHIDA"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Join Our Slack Community
+            </Button>
+          </CardBody>
+        </Card>
+      </Col>
+      <Col lg="3" className="mb-3">
         <span className="floating-card-header">SQL Features Matrix</span>
         <Card className="my-3">
           <CardBody>
@@ -24,7 +40,7 @@ export default () => (
           </CardBody>
         </Card>
       </Col>
-      <Col lg="4" className="mb-3">
+      <Col lg="3" className="mb-3">
         <span className="floating-card-header">Create A Support Ticket</span>
         <Card className="my-3">
           <CardBody>

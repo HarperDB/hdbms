@@ -12,7 +12,7 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
 import isURL from '../../../methods/util/isURL';
 import getIntegrations from '../../../api/lms/getIntegrations';
-import integrationLanguageOptions from '../../../methods/support/integrationLanguageOptions';
+import integrationLanguageOptions from '../../../methods/resources/integrationLanguageOptions';
 import getUser from '../../../api/lms/getUser';
 
 export default () => {

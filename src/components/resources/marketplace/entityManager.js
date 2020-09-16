@@ -14,7 +14,7 @@ import addError from '../../../api/lms/addError';
 export default () => {
   const { type } = useParams();
   const types = useStoreState(appState, (s) => (s.integrations ? Object.keys(s.integrations).filter((k) => s.integrations[k].length) : ['active']));
-  const baseUrl = '/support/marketplace';
+  const baseUrl = '/resources/marketplace';
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

@@ -22,7 +22,7 @@ export default () => {
   useAsyncEffect(
     () => {
       if (!type) {
-        history.push('/support/marketplace/active');
+        history.push('/resources/marketplace/active');
       }
       controller = new AbortController();
       getIntegrations({ auth, signal: controller.signal });
@@ -33,7 +33,7 @@ export default () => {
 
   useAsyncEffect(() => {
     if (integrations && (!integrations[type] || !integrations[type].length)) {
-      history.push('/support/marketplace/active');
+      history.push('/resources/marketplace/active');
     }
   }, [integrations, type]);
 
