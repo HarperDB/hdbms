@@ -13,7 +13,7 @@ export default () => (
         {routes.map((route) => (
           <Route key={route.path} path={route.path} component={route.component} />
         ))}
-        <Redirect to="/support/installation" />
+        <Redirect to="/resources/installation" />
       </Switch>
     </Suspense>
   </>

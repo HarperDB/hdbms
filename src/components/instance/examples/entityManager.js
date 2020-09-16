@@ -25,8 +25,8 @@ export default ({ type }) => {
       ? `/o/${customer_id}/i/${compute_stack_id}/examples`
       : `/o/${customer_id}/i/${compute_stack_id}/examples/${folder}`
     : type === 'folder'
-    ? `/support/examples`
-    : `/support/examples/${folder}`;
+    ? `/resources/examples`
+    : `/resources/examples/${folder}`;
 
   useEffect(() => {
     if (postmanCollection) {

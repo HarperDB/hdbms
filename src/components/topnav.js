@@ -91,9 +91,9 @@ const TopNav = () => {
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/support">
+            <NavLink title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
               <i className="far fa-life-ring" />
-              <span className="d-none d-lg-inline-block">&nbsp;support</span>
+              <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
           </NavItem>
           <NavItem>

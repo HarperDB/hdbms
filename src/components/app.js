@@ -31,7 +31,7 @@ const UpdatePassword = lazy(() => import(/* webpackChunkName: "updatePassword" *
 const ResendRegistrationEmail = lazy(() => import(/* webpackChunkName: "resendRegistrationEmail" */ './auth/resendRegistrationEmail'));
 const Organization = lazy(() => import(/* webpackChunkName: "organization" */ './organization'));
 const Organizations = lazy(() => import(/* webpackChunkName: "organizations" */ './organizations'));
-const Support = lazy(() => import(/* webpackChunkName: "support" */ './support'));
+const Resources = lazy(() => import(/* webpackChunkName: "resources" */ './resources'));
 const Instances = lazy(() => import(/* webpackChunkName: "instances" */ './instances'));
 const Instance = lazy(() => import(/* webpackChunkName: "instance" */ './instance'));
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
@@ -114,7 +114,7 @@ export default () => {
               <Suspense fallback={<Loader header=" " spinner />}>
                 <Switch>
                   <Route component={Profile} path="/profile" />
-                  <Route component={Support} path="/support/:view?" />
+                  <Route component={Resources} path="/resources/:view?" />
                   <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
                   <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
                   <Route component={Organization} path="/o/:customer_id/:view?" />
