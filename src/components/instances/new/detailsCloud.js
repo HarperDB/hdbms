@@ -32,7 +32,7 @@ export default () => {
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
-  const isFree = (!formData.compute_price || !!formData.compute_subscription_id) && (!formData.storage_price || !!formData.storage_subscription_id);
+  const isFree = !formData.compute_price && !formData.compute_subscription_id && !formData.storage_price && !formData.storage_subscription_id;
   const needsCard = products && storage && !hasCard && !isFree;
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
