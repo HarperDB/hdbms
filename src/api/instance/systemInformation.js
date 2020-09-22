@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal, refresh, compute_stack_id, customer_id }) => {
+export default async ({ auth, url, signal, refresh, compute_stack_id, customer_id, is_local }) => {
   const result = await queryInstance({ operation: 'system_information' }, auth, url, compute_stack_id, customer_id, signal);
 
   if (result.error && refresh) {
@@ -42,11 +42,18 @@ export default async ({ auth, url, signal, refresh, compute_stack_id, customer_i
   const freeMemory = result.memory.available / B2GB1024;
   const memoryStatus = freeMemory / totalMemory < 0.1 ? 'danger' : freeMemory / totalMemory < 0.25 ? 'warning' : 'success';
 
-  const totalDisk = result.system.platform === 'darwin' ? result.disk.size[0].size / B2GB1000 : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024;
+  const totalDisk =
+    result.system.platform === 'darwin'
+      ? result.disk.size[0].size / B2GB1000
+      : !is_local
+      ? result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024
+      : result.disk.size[0].size / B2GB1024;
   const usedDisk =
     result.system.platform === 'darwin'
       ? result.disk.size.reduce((a, b) => a + b.used, 0) / B2GB1000
-      : result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB1024;
+      : !is_local
+      ? result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB1024
+      : result.disk.size.reduce((a, b) => a + b.used, 0) / B2GB1024;
   const freeDisk = totalDisk - usedDisk;
   const diskStatus = freeDisk / totalDisk < 0.1 ? 'danger' : freeDisk / totalDisk < 0.25 ? 'warning' : 'success';
 
