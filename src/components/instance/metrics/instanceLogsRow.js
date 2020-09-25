@@ -1,6 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
+import isObject from '../../../methods/util/isObject';
+
 export default ({ level, timestamp, message }) => (
   <div className="log-row">
     <Row>
@@ -10,7 +12,7 @@ export default ({ level, timestamp, message }) => (
       <Col xs="3">{new Date(timestamp).toLocaleDateString()}</Col>
       <Col xs="6">{new Date(timestamp).toLocaleTimeString()}</Col>
       <Col xs="12" className="mt-1">
-        {message}
+        {isObject(message) ? JSON.stringify(message) : message}
       </Col>
     </Row>
   </div>
