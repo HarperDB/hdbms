@@ -120,8 +120,16 @@
 
   }
 
+  .instance-toggle-holder {
+    display: inline-block;
+    margin-right: 10px;
+    padding-top: 7px;
+    position: relative;
+    width: 160px;
+  }
+
   .filter-holder {
-    max-width: 280px;
+    max-width: 270px;
     position: relative;
     width: 100%;
 
@@ -139,5 +147,10 @@
       right: 8px;
       top: 0;
     }
+  }
+
+  .refresh-instances {
+    color: $color-white;
+    margin-left: 15px;
   }
 }
