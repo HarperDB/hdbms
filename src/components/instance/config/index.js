@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Col, Row, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -15,9 +15,12 @@ import InstanceDetails from './instanceDetails';
 import Loader from '../../shared/loader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../api/lms/addError';
+import getPrepaidSubscriptions from '../../../api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const compute_subscription_id = useStoreState(instanceState, (s) => s.compute_subscription_id);
   const storage_subscription_id = useStoreState(instanceState, (s) => s.storage_subscription_id);
@@ -34,6 +37,15 @@ export default () => {
   );
   const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
   const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
+
+
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getPrepaidSubscriptions({ auth, customer_id, stripe_id });
+    }
+  };
+
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   return instanceAction && instanceAction !== 'Restarting' ? (
     <Loader header={`${instanceAction} Instance`} spinner />

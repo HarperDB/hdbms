@@ -69,8 +69,6 @@ export default () => {
 
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
-  useInterval(refreshSubscriptions, config.check_version_interval);
-
   const refreshInstances = () => {
     if (auth && products && regions && subscriptions && customer_id) {
       getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
