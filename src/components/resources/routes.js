@@ -6,6 +6,7 @@ const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './d
 const Marketplace = lazy(() => import(/* webpackChunkName: "support-marketplace" */ './marketplace'));
 const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ './tutorials'));
 const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ './examples'));
+const DBMigrator = lazy(() => import(/* webpackChunkName: "support-dbmigrator" */ './dbmigrator'));
 
 export default [
   {
@@ -17,14 +18,6 @@ export default [
     iconCode: 'f0ad',
   },
   {
-    component: Tutorials,
-    path: '/resources/tutorials/:video_id?',
-    link: '/resources/tutorials',
-    label: 'tutorials',
-    icon: 'video-camera',
-    iconCode: 'f03d',
-  },
-  {
     component: Marketplace,
     path: '/resources/marketplace/:type?',
     link: '/resources/marketplace/active',
@@ -33,12 +26,28 @@ export default [
     iconCode: 'f07a',
   },
   {
+    component: DBMigrator,
+    path: '/resources/dbmigrator',
+    link: '/resources/dbmigrator',
+    label: 'dbmigrator',
+    icon: 'coins',
+    iconCode: 'f51e',
+  },
+  {
     component: Drivers,
     path: '/resources/drivers',
     link: '/resources/drivers',
     label: 'drivers',
     icon: 'cubes',
     iconCode: 'f1b3',
+  },
+  {
+    component: Tutorials,
+    path: '/resources/tutorials/:video_id?',
+    link: '/resources/tutorials',
+    label: 'tutorials',
+    icon: 'video-camera',
+    iconCode: 'f03d',
   },
   {
     component: Links,

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import useInterval from 'use-interval';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -60,8 +59,6 @@ const InstancesIndex = () => {
 
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
-  useInterval(refreshSubscriptions, config.refresh_content_interval);
-
   const refreshInstances = () => {
     if (auth && products && regions && subscriptions && customer_id) {
       getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
@@ -69,8 +66,6 @@ const InstancesIndex = () => {
   };
 
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
-
-  useInterval(refreshInstances, config.refresh_content_interval);
 
   useEffect(() => {
     if (mounted && instances && isOrgOwner) {
@@ -92,7 +87,7 @@ const InstancesIndex = () => {
 
   return (
     <div id="instances">
-      <SubNav />
+      <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
           <Row>

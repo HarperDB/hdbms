@@ -100,7 +100,7 @@ export default () => {
                       </Col>
                     </Row>
                   </ContentContainer>
-                  <ContentContainer header="Subdomain" subheader="alphanumeric and hyphens only. 16 char max.">
+                  <ContentContainer header="Subdomain" subheader="alphanumeric only. 16 char max.">
                     <Row>
                       <Col sm="4" className="pt-2 text-nowrap text-grey">
                         Ex: &quot;myorg&quot;&nbsp;

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -21,9 +21,12 @@ import CloudInstanceForm from './detailsCloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
+import getPrepaidSubscriptions from '../../../api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const history = useHistory();
+  const auth = useStoreState(appState, (s) => s.auth);
+  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const { purchaseStep = 'type', customer_id } = useParams();
   const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
@@ -39,6 +42,14 @@ export default () => {
     setNewInstance({});
     setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
   };
+
+  const refreshSubscriptions = () => {
+    if (auth && customer_id && stripe_id) {
+      getPrepaidSubscriptions({ auth, customer_id, stripe_id });
+    }
+  };
+
+  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme}>
