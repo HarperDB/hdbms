@@ -56,7 +56,7 @@ export default async (operation, auth, url, compute_stack_id = false, customer_i
 
     return response;
   } catch (e) {
-    if (e.message !== 'Aborted' && !['registration_info', 'user_info'].includes(operation.operation)) {
+    if (!['Aborted', 'Network request failed'].includes(e.message) && !['registration_info', 'user_info'].includes(operation.operation)) {
       addError({ ...errorObject, error: { catch: e.message } });
     }
 

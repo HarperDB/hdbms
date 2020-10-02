@@ -54,7 +54,7 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
 
     return response;
   } catch (e) {
-    if (e.message !== 'Aborted') {
+    if (!['Aborted', 'Network request failed'].includes(e.message) && e !== 'TypeError: Network request failed') {
       addError({ ...errorObject, error: { catch: e.message } });
     }
 
