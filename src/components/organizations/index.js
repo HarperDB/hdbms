@@ -29,7 +29,7 @@ const OrganizationsIndex = () => {
   );
 
   useEffect(() => {
-    if (auth?.orgs?.length === 1 && !list) {
+    if (auth?.orgs?.length === 1 && (!list || list === 'sign-up')) {
       history.push(`/o/${auth.orgs[0].customer_id}/instances`)
     }
   }, [auth]);
