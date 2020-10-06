@@ -118,7 +118,7 @@ export default () => {
                   <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
                   <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
                   <Route component={Organization} path="/o/:customer_id/:view?" />
-                  <Route component={Organizations} path="/:action?" />
+                  <Route component={Organizations} path="/:list?/:action?" />
                   <Redirect to="/" />
                 </Switch>
               </Suspense>

@@ -15,7 +15,7 @@ import addError from '../../functions/api/lms/addError';
 import ErrorFallbackCard from '../shared/errorFallbackCard';
 
 const OrganizationsIndex = () => {
-  const { action } = useParams();
+  const { list, action } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
 
@@ -29,7 +29,7 @@ const OrganizationsIndex = () => {
   );
 
   useEffect(() => {
-    if (auth?.orgs?.length === 1) {
+    if (auth?.orgs?.length === 1 && !list) {
       history.push(`/o/${auth.orgs[0].customer_id}/instances`)
     }
   }, [auth]);

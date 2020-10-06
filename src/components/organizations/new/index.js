@@ -21,7 +21,7 @@ export default () => {
   const [formState, setFormState] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  const closeModal = () => history.push(`/`);
+  const closeModal = () => history.push(`/organizations`);
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
