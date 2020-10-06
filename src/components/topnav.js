@@ -49,13 +49,13 @@ const TopNav = () => {
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
         <div className="navbar-brand">
-          <NavLink to="/">
+          <NavLink to="/organizations">
             <div id="logo" title="Go to Organizations Home" />
           </NavLink>
         </div>
         <Nav className="ml-auto" navbar>
           <NavItem className="ml-0">
-            <NavLink title="View or Switch Organizations" to="/">
+            <NavLink title="View or Switch Organizations" to="/organizations">
               <i className="fa fa-building-o d-inline-block" />
               <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
               {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
