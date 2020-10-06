@@ -5,14 +5,14 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
-import useCodeExampleLanguage from '../../../state/codeExampleLanguage';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import useCodeExampleLanguage from '../../../functions/state/codeExampleLanguage';
 
-import languages from '../../../methods/examples/languages';
-import getMethodObject from '../../../methods/examples/getMethodObject';
+import languages from '../../../functions/examples/languages';
+import getMethodObject from '../../../functions/examples/getMethodObject';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import Code from '../../shared/code';
 
 export default ({ showCustomMessage }) => {

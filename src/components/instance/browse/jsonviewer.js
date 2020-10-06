@@ -8,11 +8,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 
-import queryInstance from '../../../api/queryInstance';
-import addError from '../../../api/lms/addError';
+import queryInstance from '../../../functions/api/queryInstance';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ newEntityAttributes, hashAttribute }) => {

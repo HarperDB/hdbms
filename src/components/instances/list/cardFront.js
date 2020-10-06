@@ -7,14 +7,14 @@ import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import config from '../../../config';
-import appState from '../../../state/appState';
-import useInstanceAuth from '../../../state/instanceAuths';
-import handleInstanceRegistration from '../../../methods/instances/handleInstanceRegistration';
-import userInfo from '../../../api/instance/userInfo';
+import appState from '../../../functions/state/appState';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
+import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
+import userInfo from '../../../functions/api/instance/userInfo';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
 import CardFrontIcons from './cardFrontIcons';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './cardInstanceUpdateRole';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];

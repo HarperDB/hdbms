@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { Card, CardBody, Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 const NewOrgCard = () => {

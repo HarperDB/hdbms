@@ -4,10 +4,10 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import createClusterUser from '../../../methods/instance/createClusterUser';
-import instanceState from '../../../state/instanceState';
+import createClusterUser from '../../../functions/instance/createClusterUser';
+import instanceState from '../../../functions/state/instanceState';
 
-import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();

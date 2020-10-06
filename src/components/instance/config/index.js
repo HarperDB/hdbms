@@ -4,8 +4,8 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 
 import UpdateDiskVolume from './updateDiskVolume';
 import UpdateRAM from './updateRAM';
@@ -14,8 +14,8 @@ import RestartInstance from './restartInstance';
 import InstanceDetails from './instanceDetails';
 import Loader from '../../shared/loader';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import getPrepaidSubscriptions from '../../../api/lms/getPrepaidSubscriptions';
+import addError from '../../../functions/api/lms/addError';
+import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();

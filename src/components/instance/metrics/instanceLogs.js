@@ -6,14 +6,14 @@ import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
-import readLog from '../../../api/instance/readLog';
+import readLog from '../../../functions/api/instance/readLog';
 import LogRow from './instanceLogsRow';
-import logMessagesToIgnore from '../../../methods/instance/logMessagesToIgnore';
+import logMessagesToIgnore from '../../../functions/instance/logMessagesToIgnore';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 let controller;
 

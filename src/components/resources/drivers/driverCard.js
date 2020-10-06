@@ -3,7 +3,7 @@ import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ icon, name, docs, urls }) => (
   <Col xl="4" lg="6" xs="12" className="mb-3">

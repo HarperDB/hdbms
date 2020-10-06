@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Button } from 'reactstrap';
 
-import useInstanceAuth from '../../../state/instanceAuths';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
 
 const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, instance_name, isOrgOwner, onlyDelete }) => {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});

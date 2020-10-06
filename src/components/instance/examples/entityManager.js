@@ -5,14 +5,14 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
 import EntityManagerRow from './entityManagerRow';
 import ErrorFallback from '../../shared/errorFallback';
 
-import generateFolderLinks from '../../../methods/examples/generateFolderLinks';
-import generateMethodLinks from '../../../methods/examples/generateMethodLinks';
-import addError from '../../../api/lms/addError';
+import generateFolderLinks from '../../../functions/examples/generateFolderLinks';
+import generateMethodLinks from '../../../functions/examples/generateMethodLinks';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ type }) => {
   const history = useHistory();

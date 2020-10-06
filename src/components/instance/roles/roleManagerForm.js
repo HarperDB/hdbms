@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import addRole from '../../../api/instance/addRole';
-import instanceState from '../../../state/instanceState';
+import addRole from '../../../functions/api/instance/addRole';
+import instanceState from '../../../functions/state/instanceState';
 
 export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();

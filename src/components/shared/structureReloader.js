@@ -2,7 +2,7 @@ import React from 'react';
 import { useStoreState } from 'pullstate';
 import { Button } from 'reactstrap';
 
-import instanceState from '../../state/instanceState';
+import instanceState from '../../functions/state/instanceState';
 
 export default ({ label = 'instance', centerText = false }) => {
   const loading = useStoreState(instanceState, (s) => s.loading);

@@ -3,8 +3,8 @@ import { Card, CardBody, Input, Button, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
-import isEmail from '../../methods/util/isEmail';
-import resetPassword from '../../api/lms/resetPassword';
+import isEmail from '../../functions/util/isEmail';
+import resetPassword from '../../functions/api/lms/resetPassword';
 import Loader from '../shared/loader';
 import config from '../../config';
 

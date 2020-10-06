@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import getJob from '../../../api/instance/getJob';
-import isURL from '../../../methods/util/isURL';
-import csvURLLoad from '../../../api/instance/csvURLLoad';
-import addError from '../../../api/lms/addError';
+import instanceState from '../../../functions/state/instanceState';
+import getJob from '../../../functions/api/instance/getJob';
+import isURL from '../../../functions/util/isURL';
+import csvURLLoad from '../../../functions/api/instance/csvURLLoad';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 const CSVUploadURL = () => {

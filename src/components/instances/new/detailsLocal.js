@@ -5,8 +5,8 @@ import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
-import useNewInstance from '../../../state/newInstance';
+import appState from '../../../functions/state/appState';
+import useNewInstance from '../../../functions/state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import RadioCheckbox from '../../shared/radioCheckbox';
 import DetailsSubheader from './detailsSubheader';

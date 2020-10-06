@@ -7,17 +7,17 @@ import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import config from '../../config';
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
 import InstanceList from './list/instanceList';
 import NewInstanceCard from './list/newInstanceCard';
 import NoInstancesCard from './list/noInstancesCard';
 import SubNav from './subnav';
 import NewInstanceModal from './new';
-import getInstances from '../../api/lms/getInstances';
+import getInstances from '../../functions/api/lms/getInstances';
 import Loader from '../shared/loader';
-import getCustomer from '../../api/lms/getCustomer';
-import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
+import getCustomer from '../../functions/api/lms/getCustomer';
+import getPrepaidSubscriptions from '../../functions/api/lms/getPrepaidSubscriptions';
 
 const InstancesIndex = () => {
   const history = useHistory();

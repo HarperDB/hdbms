@@ -6,13 +6,13 @@ import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
-import addUser from '../../../api/instance/addUser';
+import addUser from '../../../functions/api/instance/addUser';
 import FormStatus from '../../shared/formStatus';
-import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
+import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();

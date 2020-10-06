@@ -6,19 +6,19 @@ import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
-import appState from '../../state/appState';
-import instanceState from '../../state/instanceState';
-import useInstanceAuth from '../../state/instanceAuths';
+import appState from '../../functions/state/appState';
+import instanceState from '../../functions/state/instanceState';
+import useInstanceAuth from '../../functions/state/instanceAuths';
 
 import SubNav from './subnav';
 import routes from './routes';
-import buildActiveInstanceObject from '../../methods/instance/buildActiveInstanceObject';
+import buildActiveInstanceObject from '../../functions/instance/buildActiveInstanceObject';
 import Loader from '../shared/loader';
-import getInstances from '../../api/lms/getInstances';
-import getCustomer from '../../api/lms/getCustomer';
+import getInstances from '../../functions/api/lms/getInstances';
+import getCustomer from '../../functions/api/lms/getCustomer';
 import config from '../../config';
-import userInfo from '../../api/instance/userInfo';
-import getPrepaidSubscriptions from '../../api/lms/getPrepaidSubscriptions';
+import userInfo from '../../functions/api/instance/userInfo';
+import getPrepaidSubscriptions from '../../functions/api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();

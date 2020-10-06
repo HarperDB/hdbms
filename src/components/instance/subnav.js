@@ -6,14 +6,14 @@ import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../state/appState';
-import instanceState from '../../state/instanceState';
+import appState from '../../functions/state/appState';
+import instanceState from '../../functions/state/instanceState';
 
-import icon from '../../methods/select/icon';
-import routeIcon from '../../methods/select/routeIcon';
+import icon from '../../functions/select/icon';
+import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from '../shared/errorFallback';
-import addError from '../../api/lms/addError';
-import useInstanceAuth from '../../state/instanceAuths';
+import addError from '../../functions/api/lms/addError';
+import useInstanceAuth from '../../functions/state/instanceAuths';
 
 export default ({ routes = [] }) => {
   const { compute_stack_id, customer_id } = useParams();

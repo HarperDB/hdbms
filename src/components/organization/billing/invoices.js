@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import getInvoices from '../../../api/lms/getInvoices';
+import getInvoices from '../../../functions/api/lms/getInvoices';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 let controller;
 

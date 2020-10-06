@@ -6,12 +6,12 @@ import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import removeInstance from '../../../api/lms/removeInstance';
-import appState from '../../../state/appState';
-import useInstanceAuth from '../../../state/instanceAuths';
-import getInstances from '../../../api/lms/getInstances';
+import removeInstance from '../../../functions/api/lms/removeInstance';
+import appState from '../../../functions/state/appState';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
+import getInstances from '../../../functions/api/lms/getInstances';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();

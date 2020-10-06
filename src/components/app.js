@@ -5,8 +5,8 @@ import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../state/appState';
-import usePersistedUser from '../state/persistedUser';
+import appState from '../functions/state/appState';
+import usePersistedUser from '../functions/state/persistedUser';
 import config from '../config';
 
 import Loader from './shared/loader';
@@ -14,14 +14,14 @@ import Maintenance from './shared/maintenance';
 import ErrorFallback from './shared/errorFallback';
 import ErrorFallbackAuth from './shared/errorFallbackAuth';
 
-import getProducts from '../api/lms/getProducts';
-import getRegions from '../api/lms/getRegions';
-import getCurrentVersion from '../api/lms/getCurrentVersion';
-import getPostManCollection from '../methods/examples/getPostManCollection';
-import checkVersion from '../methods/app/checkVersion';
-import init from '../methods/app/init';
-import refreshUser from '../methods/app/refreshUser';
-import changeFavIcon from '../methods/app/changeFavIcon';
+import getProducts from '../functions/api/lms/getProducts';
+import getRegions from '../functions/api/lms/getRegions';
+import getCurrentVersion from '../functions/api/lms/getCurrentVersion';
+import getPostManCollection from '../functions/examples/getPostManCollection';
+import checkVersion from '../functions/app/checkVersion';
+import init from '../functions/app/init';
+import refreshUser from '../functions/app/refreshUser';
+import changeFavIcon from '../functions/app/changeFavIcon';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './topnav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/signUp'));

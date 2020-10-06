@@ -8,14 +8,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
 import config from '../../../config';
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import DataTableHeader from './datatableHeader';
 import ChartModal from './chartModal';
-import getQueryData from '../../../methods/instance/getQueryData';
+import getQueryData from '../../../functions/instance/getQueryData';
 import EmptyPrompt from './emptyPrompt';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 const defaultTableState = {
   tableData: [],

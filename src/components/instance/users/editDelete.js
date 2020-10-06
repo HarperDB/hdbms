@@ -6,10 +6,10 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import dropUser from '../../../api/instance/dropUser';
+import instanceState from '../../../functions/state/instanceState';
+import dropUser from '../../../functions/api/instance/dropUser';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id, username } = useParams();

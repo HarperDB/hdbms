@@ -4,8 +4,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../state/appState';
-import addError from '../api/lms/addError';
+import appState from '../functions/state/appState';
+import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/errorFallback';
 
 const TopNav = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row, Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 
-import commaNumbers from '../../../methods/util/commaNumbers';
+import commaNumbers from '../../../functions/util/commaNumbers';
 
 export default ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) => {
   const history = useHistory();

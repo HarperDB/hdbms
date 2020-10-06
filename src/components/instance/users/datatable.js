@@ -5,12 +5,12 @@ import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
-import instanceUserColumns from '../../../methods/datatable/instanceUserColumns';
+import instanceUserColumns from '../../../functions/datatable/instanceUserColumns';
 import StructureReloader from '../../shared/structureReloader';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const history = useHistory();

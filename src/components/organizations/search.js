@@ -2,9 +2,9 @@ import React from 'react';
 import { Input, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../state/appState';
-import updateFilter from '../../methods/organizations/updateFilter';
-import clearFilter from '../../methods/organizations/clearFilter';
+import appState from '../../functions/state/appState';
+import updateFilter from '../../functions/organizations/updateFilter';
+import clearFilter from '../../functions/organizations/clearFilter';
 
 const Search = () => {
   const orgSearch = useStoreState(appState, (s) => s.orgSearch);

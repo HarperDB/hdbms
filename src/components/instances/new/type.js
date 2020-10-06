@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 
-import useNewInstance from '../../../state/newInstance';
+import useNewInstance from '../../../functions/state/newInstance';
 
 export default () => {
   const history = useHistory();

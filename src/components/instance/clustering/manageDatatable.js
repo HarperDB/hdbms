@@ -3,7 +3,7 @@ import ReactTable from 'react-table-6';
 import { Card, CardBody, Col, Row, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import StructureReloader from '../../shared/structureReloader';
 
 export default () => {

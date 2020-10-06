@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import removeOrg from '../../../api/lms/removeOrg';
-import appState from '../../../state/appState';
-import getUser from '../../../api/lms/getUser';
+import removeOrg from '../../../functions/api/lms/removeOrg';
+import appState from '../../../functions/state/appState';
+import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 const CardBackDelete = ({ customer_id, customer_name, setFlipState, flipState }) => {
   const alert = useAlert();

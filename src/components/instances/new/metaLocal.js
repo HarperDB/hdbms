@@ -5,15 +5,15 @@ import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import useNewInstance from '../../../state/newInstance';
+import useNewInstance from '../../../functions/state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
 import RadioCheckbox from '../../shared/radioCheckbox';
-import registrationInfo from '../../../api/instance/registrationInfo';
-import isAlphaUnderscoreHyphen from '../../../methods/util/isAlphaUnderscoreHyphen';
-import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
-import userInfo from '../../../api/instance/userInfo';
+import registrationInfo from '../../../functions/api/instance/registrationInfo';
+import isAlphaUnderscoreHyphen from '../../../functions/util/isAlphaUnderscoreHyphen';
+import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
+import userInfo from '../../../functions/api/instance/userInfo';
 
 export default () => {
   const history = useHistory();

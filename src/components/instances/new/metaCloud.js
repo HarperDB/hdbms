@@ -5,12 +5,12 @@ import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import useNewInstance from '../../../state/newInstance';
+import useNewInstance from '../../../functions/state/newInstance';
 import ContentContainer from '../../shared/contentContainer';
-import isAlphaUnderscore from '../../../methods/util/isAlphaUnderscore';
-import isAlphaNumericHyphen from '../../../methods/util/isAlphaNumericHyphen';
+import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
+import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 
 export default () => {
   const history = useHistory();

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 import InstanceCard from './instanceCard';
-import filterInstances from '../../../methods/instances/filterInstances';
+import filterInstances from '../../../functions/instances/filterInstances';
 
 const InstanceList = () => {
   const [flippedCard, setFlippedCard] = useState(false);
