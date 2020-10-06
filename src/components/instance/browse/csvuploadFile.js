@@ -6,12 +6,12 @@ import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
-import getJob from '../../../api/instance/getJob';
-import csvDataLoad from '../../../api/instance/csvDataLoad';
-import commaNumbers from '../../../methods/util/commaNumbers';
-import addError from '../../../api/lms/addError';
+import getJob from '../../../functions/api/instance/getJob';
+import csvDataLoad from '../../../functions/api/instance/csvDataLoad';
+import commaNumbers from '../../../functions/util/commaNumbers';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 const CSVUploadFile = () => {

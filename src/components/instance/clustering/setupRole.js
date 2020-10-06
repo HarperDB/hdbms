@@ -3,8 +3,8 @@ import { Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import createClusterUserRole from '../../../methods/instance/createClusterUserRole';
-import instanceState from '../../../state/instanceState';
+import createClusterUserRole from '../../../functions/instance/createClusterUserRole';
+import instanceState from '../../../functions/state/instanceState';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();

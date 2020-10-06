@@ -3,7 +3,7 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/contentContainer';
 
 export default () => {

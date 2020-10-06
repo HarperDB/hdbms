@@ -6,13 +6,13 @@ import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 
-import commaNumbers from '../../../methods/util/commaNumbers';
+import commaNumbers from '../../../functions/util/commaNumbers';
 import DashboardChart from './dashboardChart';
-import getCharts from '../../../api/lms/getCharts';
-import removeChart from '../../../api/lms/removeChart';
+import getCharts from '../../../functions/api/lms/getCharts';
+import removeChart from '../../../functions/api/lms/removeChart';
 import config from '../../../config';
 
 export default () => {

@@ -8,15 +8,15 @@ import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import addPaymentMethod from '../../../api/lms/addPaymentMethod';
-import getCustomer from '../../../api/lms/getCustomer';
+import addPaymentMethod from '../../../functions/api/lms/addPaymentMethod';
+import getCustomer from '../../../functions/api/lms/getCustomer';
 
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();

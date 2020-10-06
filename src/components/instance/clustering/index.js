@@ -2,7 +2,7 @@ import React from 'react';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import Setup from './setup';
 import Manage from './manage';

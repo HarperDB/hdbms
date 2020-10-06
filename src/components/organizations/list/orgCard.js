@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import CardFront from './cardFront';
 import CardBack from './cardBack';
 import ErrorFallbackCard from '../../shared/errorFallbackCard';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 const OrgCard = ({ flippedCard, setFlippedCard, customer_id, ...rest }) => {
   const [flipState, setFlipState] = useState(false);

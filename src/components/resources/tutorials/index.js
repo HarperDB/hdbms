@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 
 import config from '../../../config';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import EntityManager from './entityManager';
 
 export default () => {

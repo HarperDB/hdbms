@@ -4,9 +4,9 @@ import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
-import updatePassword from '../../api/lms/updatePassword';
+import updatePassword from '../../functions/api/lms/updatePassword';
 import config from '../../config';
 import Loader from '../shared/loader';
 
@@ -48,7 +48,7 @@ const UpdatePassword = () => {
       <div id="login-logo" title="HarperDB Logo" />
       <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
-        <Loader header="updating password" spinner relative />
+        <Loader header="adding account password" spinner relative />
       ) : (
         <>
           <Card className="mb-3">
@@ -60,7 +60,7 @@ const UpdatePassword = () => {
                 className="mb-2 text-center"
                 type="password"
                 title="password"
-                placeholder="new password"
+                placeholder="add password"
               />
               <Input
                 id="password2"
@@ -71,8 +71,8 @@ const UpdatePassword = () => {
                 title="verify password"
                 placeholder="verify password"
               />
-              <Button id="updateMyPassword" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Update My Password" block color="purple">
-                Update My Password
+              <Button id="updateMyPassword" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Add Account Password" block color="purple">
+                Add Account Password
               </Button>
             </CardBody>
           </Card>

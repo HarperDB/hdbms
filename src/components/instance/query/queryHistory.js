@@ -3,9 +3,9 @@ import { CardBody, Card, Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import useQueryHistory from '../../../state/instanceQueries';
+import useQueryHistory from '../../../functions/state/instanceQueries';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ setQuery, query }) => {
   const { customer_id, compute_stack_id } = useParams();

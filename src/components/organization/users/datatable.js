@@ -6,10 +6,10 @@ import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import customerUserColumns from '../../../methods/datatable/customerUserColumns';
+import appState from '../../../functions/state/appState';
+import customerUserColumns from '../../../functions/datatable/customerUserColumns';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { customer_id } = useParams();

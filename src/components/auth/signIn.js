@@ -3,10 +3,10 @@ import { Card, CardBody, Input, Button, Row, Col } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
-import getUser from '../../api/lms/getUser';
-import isEmail from '../../methods/util/isEmail';
+import getUser from '../../functions/api/lms/getUser';
+import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/loader';
 import config from '../../config';
 

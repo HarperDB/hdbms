@@ -5,13 +5,13 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
 import ContentContainer from '../../shared/contentContainer';
-import handleAddOrg from '../../../methods/organizations/handleAddOrg';
-import getUser from '../../../api/lms/getUser';
+import handleAddOrg from '../../../functions/organizations/handleAddOrg';
+import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);

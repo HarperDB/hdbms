@@ -7,7 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import config from '../../../config';
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import Role from './setupRole';
 import User from './setupUser';
@@ -17,11 +17,11 @@ import NodeName from './setupNodeName';
 import Instructions from './setupInstructions';
 import Loader from '../../shared/loader';
 
-import configureCluster from '../../../api/instance/configureCluster';
-import restartInstance from '../../../api/instance/restartInstance';
-import userInfo from '../../../api/instance/userInfo';
+import configureCluster from '../../../functions/api/instance/configureCluster';
+import restartInstance from '../../../functions/api/instance/restartInstance';
+import userInfo from '../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();

@@ -3,13 +3,13 @@ import { Row, Col, Input, Button, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import updateUser from '../../../api/lms/updateUser';
+import updateUser from '../../../functions/api/lms/updateUser';
 import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import isURL from '../../../methods/util/isURL';
+import addError from '../../../functions/api/lms/addError';
+import isURL from '../../../functions/util/isURL';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);

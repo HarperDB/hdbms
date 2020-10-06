@@ -6,11 +6,11 @@ import { Button, Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import config from '../../../config';
 import DataTableHeader from './datatableHeader';
-import getTableData from '../../../methods/instance/getTableData';
+import getTableData from '../../../functions/instance/getTableData';
 
 let debounceTimer;
 

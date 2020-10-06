@@ -5,12 +5,12 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import addUser from '../../../api/lms/addUser';
-import isEmail from '../../../methods/util/isEmail';
+import addUser from '../../../functions/api/lms/addUser';
+import isEmail from '../../../functions/util/isEmail';
 import FormStatus from '../../shared/formStatus';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ refreshUsers, userEmails }) => {

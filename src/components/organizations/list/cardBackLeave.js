@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import updateUserOrgs from '../../../api/lms/updateUserOrgs';
-import getUser from '../../../api/lms/getUser';
+import appState from '../../../functions/state/appState';
+import updateUserOrgs from '../../../functions/api/lms/updateUserOrgs';
+import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ customer_id, customer_name, setFlipState, flipState }) => {
   const alert = useAlert();

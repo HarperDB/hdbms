@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 
-import handleSignup from '../../methods/auth/handleSignup';
+import handleSignup from '../../functions/auth/handleSignup';
 import Loader from '../shared/loader';
 import config from '../../config';
 

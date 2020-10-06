@@ -7,7 +7,7 @@ import Cloud from './filter/cloud';
 import Search from './filter/search';
 import Refresh from './filter/refresh';
 import ErrorFallback from '../shared/errorFallback';
-import addError from '../../api/lms/addError';
+import addError from '../../functions/api/lms/addError';
 
 const SubNav = ({ refreshInstances }) => (
   <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

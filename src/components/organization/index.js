@@ -5,11 +5,11 @@ import useInterval from 'use-interval';
 
 import routes from './routes';
 import SubNav from '../shared/subnav';
-import appState from '../../state/appState';
-import getCustomer from '../../api/lms/getCustomer';
+import appState from '../../functions/state/appState';
+import getCustomer from '../../functions/api/lms/getCustomer';
 import config from '../../config';
 import Loader from '../shared/loader';
-import getInstances from '../../api/lms/getInstances';
+import getInstances from '../../functions/api/lms/getInstances';
 
 export default () => {
   const { customer_id } = useParams();

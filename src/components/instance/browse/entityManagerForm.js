@@ -5,10 +5,10 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 
-import queryInstance from '../../../api/queryInstance';
-import instanceState from '../../../state/instanceState';
+import queryInstance from '../../../functions/api/queryInstance';
+import instanceState from '../../../functions/state/instanceState';
 
-import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
+import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();

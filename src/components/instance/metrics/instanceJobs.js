@@ -6,13 +6,13 @@ import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
-import searchJobsByStartDate from '../../../api/instance/searchJobsByStartDate';
+import searchJobsByStartDate from '../../../functions/api/instance/searchJobsByStartDate';
 import JobRow from './instanceJobsRow';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 let controller;
 

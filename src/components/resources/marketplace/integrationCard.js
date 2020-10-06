@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import addIntegrationEngagement from '../../../api/lms/addIntegrationEngagement';
+import addError from '../../../functions/api/lms/addError';
+import addIntegrationEngagement from '../../../functions/api/lms/addIntegrationEngagement';
 import Code from '../../shared/code';
-import appState from '../../../state/appState';
-import getIntegrations from '../../../api/lms/getIntegrations';
+import appState from '../../../functions/state/appState';
+import getIntegrations from '../../../functions/api/lms/getIntegrations';
 
 export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command } }) => {
   const auth = useStoreState(appState, (s) => s.auth);

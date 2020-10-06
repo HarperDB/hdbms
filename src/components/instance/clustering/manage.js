@@ -5,16 +5,16 @@ import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 
 import InstanceManager from './manageInstances';
 import DataTable from './manageDatatable';
 import ManageEmptyPrompt from './manageEmptyPrompt';
-import getInstances from '../../../api/lms/getInstances';
+import getInstances from '../../../functions/api/lms/getInstances';
 import config from '../../../config';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { compute_stack_id, customer_id } = useParams();

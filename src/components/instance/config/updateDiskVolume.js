@@ -6,13 +6,13 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
 import ChangeSummary from './changeSummary';
-import updateInstance from '../../../api/lms/updateInstance';
-import commaNumbers from '../../../methods/util/commaNumbers';
+import updateInstance from '../../../functions/api/lms/updateInstance';
+import commaNumbers from '../../../functions/util/commaNumbers';
 
 export default ({ setInstanceAction, showPrepaidStorage }) => {
   const { customer_id, compute_stack_id } = useParams();

@@ -5,10 +5,10 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import cardOptions from '../../methods/stripe/cardOptions';
-import appState from '../../state/appState';
+import cardOptions from '../../functions/stripe/cardOptions';
+import appState from '../../functions/state/appState';
 import ErrorFallback from './errorFallback';
-import addError from '../../api/lms/addError';
+import addError from '../../functions/api/lms/addError';
 
 export default ({ setFormData, formData }) => {
   const { customer_id } = useParams();

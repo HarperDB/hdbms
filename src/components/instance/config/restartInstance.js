@@ -6,10 +6,10 @@ import useInterval from 'use-interval';
 import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 
-import instanceState from '../../../state/instanceState';
-import userInfo from '../../../api/instance/userInfo';
+import instanceState from '../../../functions/state/instanceState';
+import userInfo from '../../../functions/api/instance/userInfo';
 import config from '../../../config';
-import restartInstance from '../../../api/instance/restartInstance';
+import restartInstance from '../../../functions/api/instance/restartInstance';
 
 export default ({ instanceAction, setInstanceAction }) => {
   const { compute_stack_id, customer_id } = useParams();
