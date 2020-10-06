@@ -32,7 +32,8 @@ const OrganizationsIndex = () => {
     if (auth?.orgs?.length === 1 && (!list || list === 'sign-up')) {
       history.push(`/o/${auth.orgs[0].customer_id}/instances`)
     }
-  }, [auth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, list]);
 
   return (
     <div id="organizations">
