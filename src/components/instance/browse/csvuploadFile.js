@@ -112,6 +112,7 @@ const CSVUploadFile = () => {
             </div>
           ) : formState.processed ? (
             <Button
+              id="replaceFile"
               block
               color="default"
               onClick={() => {
@@ -142,6 +143,7 @@ const CSVUploadFile = () => {
         <Col xs="4">
           {formState.error ? (
             <Button
+              id="clearFile"
               color="danger"
               block
               className="px-5 clear-files"
@@ -153,7 +155,7 @@ const CSVUploadFile = () => {
               Clear File
             </Button>
           ) : (
-            <Button block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
+            <Button id="insertRecords" block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
               Insert {commaNumbers(formData.records)} Records
             </Button>
           )}

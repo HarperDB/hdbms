@@ -117,7 +117,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
             <Button id="createItem" color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
-            <Button color="black" className="round" onClick={() => toggleCreate(false)}>
+            <Button id="toggleCreate" color="black" className="round" onClick={() => toggleCreate(false)}>
               <i className="fa fa-times text-white" />
             </Button>
           </>

@@ -76,7 +76,7 @@ export default ({ setQuery, query }) => {
                 </Button>
               </Col>
               <Col>
-                <Button innerRef={submitRef} title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
+                <Button id="executeQuery" innerRef={submitRef} title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
                   Execute
                 </Button>
               </Col>

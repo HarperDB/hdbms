@@ -3,10 +3,10 @@ select,
 textarea,
 .fake-input,
 .form-control {
-  background: $light-white-overlay !important;
-  border: 1px solid $lighter-grey-overlay !important;
+  background: $lightest-grey-overlay !important;
+  border: 0 !important;
   border-radius: $border-radius;
-  box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
+  box-shadow: none !important;
   color: $color-black;
   font-family: $font-family-sans;
   font-size: $font-size-root;
@@ -77,12 +77,14 @@ textarea {
 .subdomain-label {
   color: $color-white;
   font-size: 0.7rem !important;
-  line-height: 1 !important;
   padding-left: 0;
-  padding-top: 12px;
+  padding-top: 14px;
   white-space: nowrap;
 
   .btn-link {
+    font-size: 0.5rem !important;
+    display: inline-block;
+    margin-top: -5px;
     color: $color-white;
   }
 }

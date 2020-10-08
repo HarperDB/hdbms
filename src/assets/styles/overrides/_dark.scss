@@ -1,6 +1,11 @@
 .dark {
   #app-nav {
     background: $color-pureblack !important;
+    border-bottom: 1px solid $color-darkestgrey;
+  }
+
+  .app-subnav {
+    border-bottom: 1px solid $color-darkestgrey;
   }
 
   #app-bg-color {
@@ -24,7 +29,7 @@
 
   .card {
     background: $color-pureblack !important;
-    border: 1px solid $black-overlay !important;
+    border: 1px solid $color-darkestgrey !important;
     box-shadow: 0 0 5px $color-pureblack !important;
     color: $color-lightgrey !important;
 
@@ -60,7 +65,6 @@
   .fake-input,
   .form-control {
     background: $faintest-white-overlay !important;
-    border-color: $faint-white-overlay !important;
     color: $color-lightgrey !important;
   }
 
@@ -196,7 +200,9 @@
   #login-form {
     .card {
       background: $color-pureblack !important;
-      border: 1px solid $color-black !important;
+    }
+    input {
+      background: $fainter-white-overlay !important;
     }
   }
 

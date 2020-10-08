@@ -96,7 +96,7 @@ export default ({ setInstanceAction }) => {
           </Card>
           <Row>
             <Col>
-              <Button onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button id="cancelDeleteInstance" onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

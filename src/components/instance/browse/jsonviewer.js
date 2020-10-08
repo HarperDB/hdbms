@@ -123,19 +123,19 @@ export default ({ newEntityAttributes, hashAttribute }) => {
           </Card>
           <Row>
             <Col className="mt-2">
-              <Button block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
+              <Button id="backToTable" block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Cancel
               </Button>
             </Col>
             {action !== 'add' && (
               <Col className="mt-2">
-                <Button block color="danger" onClick={deleteRecord}>
+                <Button id="deleteRecord" block color="danger" onClick={deleteRecord}>
                   Delete
                 </Button>
               </Col>
             )}
             <Col>
-              <Button className="mt-2" onClick={submitRecord} block color="success">
+              <Button id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                 {action === 'edit' ? 'Update' : 'Add New'}
               </Button>
             </Col>
