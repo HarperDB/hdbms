@@ -1,6 +1,8 @@
 // color palette
 $color-pureblack: #111;
 $color-black: #212121;
+$color-darkestgrey: #232323;
+$color-darkergrey: #555;
 $color-darkgrey: #696969;
 $color-grey: #9a9a9a;
 $color-lightgrey: #ddd;
@@ -20,12 +22,13 @@ $color-lightpurple: #7a3a87;
 $gradient-purple-magenta: linear-gradient(45deg, $color-darkpurple, $color-purple, $color-lightpurple);
 $gradient-white-lightgrey: linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 31%, rgba(0, 0, 0, 0.05) 100%);
 $faintest-white-overlay: rgba(255, 255, 255, 0.01);
+$fainter-white-overlay: rgba(255, 255, 255, 0.05);
 $faint-white-overlay: rgba(255, 255, 255, 0.1);
 $white-overlay: rgba(255, 255, 255, 0.3);
 $light-white-overlay: rgba(255, 255, 255, 0.9);
 
 $lightest-grey-overlay: rgba(0, 0, 0, 0.03);
-$lighter-grey-overlay: rgba(0, 0, 0, 0.15);
+$lighter-grey-overlay: rgba(0, 0, 0, 0.1);
 $light-grey-overlay: rgba(0, 0, 0, 0.3);
 $grey-overlay: rgba(0, 0, 0, 0.5);
 $dark-grey-overlay: rgba(0, 0, 0, 0.7);

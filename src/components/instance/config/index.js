@@ -69,7 +69,7 @@ export default () => {
               {(!!compute_subscription_id || !!unusedCompute.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}
-                  <Button color="link" onClick={() => setShowPrepaidCompute(!showPrepaidCompute)}>
+                  <Button id="showPrepaidCompute" color="link" onClick={() => setShowPrepaidCompute(!showPrepaidCompute)}>
                     <i className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
                   </Button>
                 </span>
@@ -98,7 +98,7 @@ export default () => {
               {(!!storage_subscription_id || !!unusedStorage.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}
-                  <Button color="link" onClick={() => setShowPrepaidStorage(!showPrepaidStorage)}>
+                  <Button id="showPrepaidStorage" color="link" onClick={() => setShowPrepaidStorage(!showPrepaidStorage)}>
                     <i className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
                   </Button>
                 </span>

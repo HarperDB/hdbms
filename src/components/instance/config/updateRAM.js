@@ -103,6 +103,7 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
           disabled={!hasChanged || formState.submitted}
           color="danger"
           className="mt-2"
+          id="addCardToAccount"
         >
           Add Credit Card To Account
         </Button>
@@ -116,12 +117,12 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
           />
           <Row>
             <Col>
-              <Button onClick={resetFormData} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button id="cancelChange" onClick={resetFormData} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>
             <Col>
-              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
+              <Button id="confirmChange" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
                 Update
               </Button>
             </Col>

@@ -3,6 +3,10 @@
     color: $color-white;
   }
 
+  .dashboard-divider {
+    background: $faint-white-overlay;
+  }
+
   .data-loader {
     align-items: center;
     display: flex;

@@ -5,7 +5,7 @@ import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 
-export default ({ auth, history, setFetchingUser, setPersistedUser, controller, showPasswordUpdate }) => {
+export default ({ auth, history, setFetchingUser, setPersistedUser, controller }) => {
   const canonical = document.querySelector('link[rel="canonical"]');
 
   history.listen(() => {
@@ -24,7 +24,7 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller, 
   if (!auth?.email) {
     setFetchingUser(false);
   } else {
-    refreshUser({ auth, loggingIn: true, showPasswordUpdate, controller, setFetchingUser });
+    refreshUser({ auth, loggingIn: true, controller, setFetchingUser });
   }
 
   getCurrentVersion();

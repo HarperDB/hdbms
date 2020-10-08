@@ -10,7 +10,7 @@ export default async ({ auth, user_id, password }) => {
     response = await queryLMS({
       endpoint: 'updatePassword',
       method: 'POST',
-      payload: { user_id, password },
+      payload: { user_id, password, loggingIn: true },
       auth,
     });
 

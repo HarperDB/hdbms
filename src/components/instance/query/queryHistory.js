@@ -37,9 +37,9 @@ export default ({ setQuery, query }) => {
         <Card className="my-3">
           {queries && queries[compute_stack_id]?.length ? (
             <CardBody className="query-scroller">
-              {queries[compute_stack_id].map((q) => (
+              {queries[compute_stack_id].map((q, i) => (
                 <Fragment key={q.query}>
-                  <button type="button" tabIndex="0" title={`Load query: ${q.query}`} className="past-query" onClick={() => setQuery(q.query)}>
+                  <button id={`loadQuery${i}`} type="button" tabIndex="0" title={`Load query: ${q.query}`} className="past-query" onClick={() => setQuery(q.query)}>
                     <span>{q.query}</span>
                   </button>
                   <hr className="my-0" />

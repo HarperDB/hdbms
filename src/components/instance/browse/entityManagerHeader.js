@@ -7,6 +7,7 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
     {showForm && items?.length ? (
       <Col className="text-right">
         <Button
+          id="toggleRemove"
           color="link"
           title={`Remove ${itemType}s`}
           className="add-remove mr-3"
@@ -18,6 +19,7 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
           <i className="fa fa-minus" />
         </Button>
         <Button
+          id="toggleCreate"
           color="link"
           title={`Add ${itemType}`}
           className="add-remove mr-1"

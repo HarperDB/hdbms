@@ -8,7 +8,7 @@ a {
 }
 
 ul {
-  padding-inline-start: 14px;
+  padding-inline-start: 16px;
 
   li {
     margin-bottom: 6px;
@@ -45,14 +45,26 @@ ul {
 }
 
 hr {
-  border-top: 1px solid $lighter-grey-overlay !important;
-  width: 100%;
+  border: 0 none;
+  height: 1px !important;
+  overflow: hidden;
+  /* Set the hr color */
+  color: $lighter-grey-overlay; /* old IE */
+  background-color: $lighter-grey-overlay; /* Modern Browsers */
 
   &.white {
-    border-top: 1px solid $faint-white-overlay !important;
+    color: $light-white-overlay; /* old IE */
+    background-color: $light-white-overlay; /* Modern Browsers */
   }
 }
 
+.version {
+  color: $color-lightgrey;
+  position: fixed;
+  font-size: $font-size-small;
+  bottom: 10px;
+  right: 15px;
+}
 
 ::-webkit-scrollbar {
   height: 10px;

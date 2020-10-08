@@ -1,12 +1,16 @@
 #app-nav {
   background: $gradient-purple-magenta !important;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid $faint-white-overlay;
   height: 60px;
   min-width: $min-width;
   overflow-x: auto;
   padding: 0 2rem;
   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 99 !important;
+  width: 100%;
 
   @media screen and (max-width: 991px) {
     padding: 0 1rem;
@@ -14,21 +18,24 @@
 
   .navbar-brand {
     margin-right: 0;
-  }
+    position: relative;
 
-  #logo {
-    background-image: url('/images/logo/logo_circle.png');
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: 35px;
-    width: 140px;
+    #logo {
+      background-image: url('/images/logo/logo_circle.png');
+      background-position: center left;
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 35px;
+      width: 140px;
 
-    @media screen and (max-width: 511px) {
-      background-image: url('/images/logo/logo_circle_only.png');
-      width: 40px;
+      @media screen and (max-width: 511px) {
+        background-image: url('/images/logo/logo_circle_only.png');
+        width: 40px;
+      }
     }
   }
+
+
 
   .navbar-nav {
     justify-content: flex-end;
@@ -75,6 +82,10 @@
           width: 13px;
         }
       }
+    }
+
+    .login-text-label {
+      min-width: 52px;
     }
 
     .active-org {

@@ -110,6 +110,7 @@ const CSVUploadURL = () => {
         <Col xs="4">
           {formState.error ? (
             <Button
+              id="clearURL"
               block
               color="danger"
               onClick={() => {
@@ -120,7 +121,7 @@ const CSVUploadURL = () => {
               Clear URL
             </Button>
           ) : (
-            <Button disabled={!!Object.keys(formState).length || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
+            <Button id="importFromURL" disabled={!!Object.keys(formState).length || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
               Import From URL
             </Button>
           )}

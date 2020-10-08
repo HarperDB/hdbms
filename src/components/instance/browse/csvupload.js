@@ -27,7 +27,7 @@ export default () => {
               <span className="text-small">do not upload csv data</span>
             </Col>
             <Col xs="4">
-              <Button block color="grey" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
+              <Button id="returnToTable" block color="grey" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Return to Table
               </Button>
             </Col>
