@@ -45,24 +45,24 @@ ul {
 }
 
 hr {
+  background-color: $lighter-grey-overlay; /* Modern Browsers */
   border: 0 none;
-  height: 1px !important;
-  overflow: hidden;
   /* Set the hr color */
   color: $lighter-grey-overlay; /* old IE */
-  background-color: $lighter-grey-overlay; /* Modern Browsers */
+  height: 1px !important;
+  overflow: hidden;
 
   &.white {
-    color: $light-white-overlay; /* old IE */
     background-color: $light-white-overlay; /* Modern Browsers */
+    color: $light-white-overlay; /* old IE */
   }
 }
 
 .version {
-  color: $color-lightgrey;
-  position: fixed;
-  font-size: $font-size-small;
   bottom: 10px;
+  color: $color-lightgrey;
+  font-size: $font-size-small;
+  position: fixed;
   right: 15px;
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
+import JSONInput from 'react-json-editor-ajrm/dist';
+import locale from 'react-json-editor-ajrm/dist/locale/en';
 import { Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';

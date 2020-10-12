@@ -2,15 +2,15 @@
   background: $gradient-purple-magenta !important;
   border-bottom: 1px solid $faint-white-overlay;
   height: 60px;
+  left: 0;
   min-width: $min-width;
   overflow-x: auto;
   padding: 0 2rem;
   position: fixed;
-  top: 0;
-  left: 0;
   right: 0;
-  z-index: 99 !important;
+  top: 0;
   width: 100%;
+  z-index: 99 !important;
 
   @media screen and (max-width: 991px) {
     padding: 0 1rem;
