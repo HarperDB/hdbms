@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
 import { Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -15,6 +13,8 @@ import alterRole from '../../../functions/api/instance/alterRole';
 import buildPermissionStructure from '../../../functions/instance/buildPermissionStructure';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import JSONInput from '../../shared/react-json-editor-ajrm';
+import locale from '../../shared/react-json-editor-ajrm/locale/en';
 
 export default ({ showAttributes }) => {
   const alert = useAlert();

@@ -1,19 +1,19 @@
 .app-subnav {
+  align-items: center;
   background: $black-overlay !important;
+  border-bottom: 1px solid $white-overlay;
   display: flex;
   flex-flow: row nowrap;
   height: 50px;
   justify-content: flex-start;
-  align-items: center;
   left: 0;
   min-width: $min-width;
+  padding: 0 2rem;
   position: fixed;
   right: 0;
   top: 60px !important;
   width: 100%;
   z-index: 98 !important;
-  border-bottom: 1px solid $white-overlay;
-  padding: 0 2rem;
 
   @media screen and (max-width: 991px) {
     padding: 5px 1rem;

@@ -10,16 +10,16 @@
   .card {
     background: $faint-white-overlay !important;
     border: 1px solid $faint-white-overlay !important;
-    z-index: 2;
     box-shadow: none !important;
+    z-index: 2;
 
     .card-body {
       min-height: 205px;
 
       .instructions {
-        text-align: center;
         color: $color-white;
         padding-bottom: 16.5px;
+        text-align: center;
       }
     }
   }
@@ -32,9 +32,9 @@
     }
 
     @media screen and (max-width: 767px), screen and (max-height: 530px) {
+      margin-bottom: 50px;
       top: -50px;
       transform: translateX(-50%);
-      margin-bottom: 50px;
     }
 
     hr {
@@ -42,13 +42,13 @@
     }
 
     .sign-up-header {
-      text-align: center;
-      line-height: 1 !important;
+      border-bottom: 1px solid $faint-white-overlay;
+      color: $light-white-overlay !important;
       font-size: 1.5rem !important;
+      line-height: 1 !important;
       margin-bottom: 25px !important;
       padding-bottom: 25px;
-      color: $light-white-overlay !important;
-      border-bottom: 1px solid $faint-white-overlay;
+      text-align: center;
       width: 100%;
 
       @media screen and (max-width: 767px) {
@@ -61,16 +61,16 @@
       width: 100%;
 
       h3 {
-        padding-top: 15px;
         font-size: 1.1rem !important;
+        padding-top: 15px;
       }
     }
 
     .sign-up-form {
       .subdomain-explanation {
-        font-size: 0.7rem;
-        display: block;
         color: $color-white;
+        display: block;
+        font-size: 0.7rem;
         padding-bottom: 8px;
       }
     }
@@ -112,11 +112,11 @@
 
   .login-nav-link {
     color: $white-overlay !important;
+    display: inline-block;
     font-size: 85%;
+    height: 16px;
     text-transform: lowercase;
     white-space: nowrap;
-    height: 16px;
-    display: inline-block;
 
     &:hover {
       color: $color-white !important;

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -14,6 +12,8 @@ import appState from '../../../functions/state/appState';
 import queryInstance from '../../../functions/api/queryInstance';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
+import JSONInput from '../../shared/react-json-editor-ajrm';
+import locale from '../../shared/react-json-editor-ajrm/locale/en';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();

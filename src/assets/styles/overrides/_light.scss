@@ -342,8 +342,8 @@
     }
 
     input {
-      color: $color-black !important;
       background: $lightest-grey-overlay !important;
+      color: $color-black !important;
 
       &::placeholder {
         color: $color-grey !important;
@@ -383,6 +383,7 @@
     .instructions {
       color: $color-darkgrey;
     }
+
     .dashboard-divider {
       background: $lighter-grey-overlay;
     }
