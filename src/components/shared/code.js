@@ -39,7 +39,7 @@ export default ({ children, className, ...rest }) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div className="code-holder">
-      <Button className="copy-icon" color="link" title="Copy this code snippet" onClick={() => copyToClipboard(children)}>
+      <Button id="copyCodeSnippet" className="copy-icon" color="link" title="Copy this code snippet" onClick={() => copyToClipboard(children)}>
         <i className="fa fa-copy text-white" />
       </Button>
       <pre {...rest} className={`lolight ${className}`}>
