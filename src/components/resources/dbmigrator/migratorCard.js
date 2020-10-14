@@ -15,7 +15,7 @@ export default ({ icon, name, urls }) => (
           <Row className="mt-3">
             {urls.map((u) => (
               <Col key={u.link}>
-                <Button href={u.link} block color="purple">
+                <Button id={name} href={u.link} block color="purple">
                   {u.label || 'Download'}
                 </Button>
               </Col>
