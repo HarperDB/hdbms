@@ -60,7 +60,7 @@ const TopNav = () => {
           {loggedIn && (
             <>
               <NavItem className="ml-0">
-                <NavLink title="View or Switch Organizations" to="/organizations">
+                <NavLink id="viewOrganizations" title="View or Switch Organizations" to="/organizations">
                   <i className="fa fa-building-o d-inline-block" />
                   <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
                   {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
@@ -70,7 +70,7 @@ const TopNav = () => {
                 <div className="text-white org-name">{customer.customer_name}</div>
                 <div className="org-actions">
                   <NavItem className="ml-0">
-                    <NavLink title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
+                    <NavLink id="viewOrganizationInstances" title="View Organization Instances" isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1} to={`/o/${customer.customer_id}/instances`}>
                       <i className="fa fa-th d-inline-block" />
                       <span className="d-none d-lg-inline-block">&nbsp;instances</span>
                     </NavLink>
@@ -78,6 +78,7 @@ const TopNav = () => {
                   {showManageIcon && (
                     <NavItem>
                       <NavLink
+                        id="manageOrganization"
                         isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
                         title="Manage Organization"
                         to={`/o/${customer.customer_id}/users`}
@@ -90,7 +91,7 @@ const TopNav = () => {
                 </div>
               </div>
               <NavItem>
-                <NavLink title="Manage My Profile" to="/profile">
+                <NavLink id="manageProfile" title="Manage My Profile" to="/profile">
                   <i className="fa fa-user" />
                   <span className="d-none d-lg-inline-block">&nbsp;profile</span>
                 </NavLink>
@@ -98,7 +99,7 @@ const TopNav = () => {
             </>
           )}
           <NavItem>
-            <NavLink title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
+            <NavLink id="viewResources" title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
               <i className="fas fa-tools" />
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
@@ -106,6 +107,7 @@ const TopNav = () => {
           <NavItem>
             <Button
               color="link"
+              id="changeTheme"
               tabIndex="0"
               title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
               onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
@@ -117,12 +119,12 @@ const TopNav = () => {
           </NavItem>
           <NavItem>
             {loggedIn ? (
-              <Button tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
+              <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
                 <i className="fa fa-sign-out" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign out</span>
               </Button>
             ) : (
-              <NavLink title="Log In" exact to="/">
+              <NavLink id="goToLogin" title="Log In" exact to="/">
                 <i className="fa fa-sign-in" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign in</span>
               </NavLink>
