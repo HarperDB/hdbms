@@ -143,7 +143,7 @@ export default () => {
                 value={formData.bounty_url || ''}
                 onChange={(e) => setFormData({ ...formData, bounty_url: e.target.value })}
               />
-              <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+              <Button id="submitBountyForReview" color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
                 Submit for Review
               </Button>
             </CardBody>

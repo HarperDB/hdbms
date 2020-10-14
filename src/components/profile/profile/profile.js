@@ -133,7 +133,7 @@ export default () => {
                   </Col>
                 </Row>
                 <hr className="mt-2 mb-4" />
-                <Button color="purple" block onClick={submit} disabled={formState.submitted}>
+                <Button id="saveProfile" color="purple" block onClick={submit} disabled={formState.submitted}>
                   Save Profile
                 </Button>
               </CardBody>
