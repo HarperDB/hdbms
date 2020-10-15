@@ -2,7 +2,7 @@ import React from 'react';
 import ToggleButton from 'react-toggle';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
 const updateFilter = (e) => {
   appState.update((s) => {

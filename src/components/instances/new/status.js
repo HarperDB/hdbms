@@ -4,14 +4,14 @@ import useAsyncEffect from 'use-async-effect';
 import { useAlert } from 'react-alert';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import useInstanceAuth from '../../../state/instanceAuths';
-import useNewInstance from '../../../state/newInstance';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
+import useNewInstance from '../../../functions/state/newInstance';
 
-import addInstance from '../../../api/lms/addInstance';
-import addTCAcceptance from '../../../api/lms/addTCAcceptance';
-import getInstances from '../../../api/lms/getInstances';
+import addInstance from '../../../functions/api/lms/addInstance';
+import addTCAcceptance from '../../../functions/api/lms/addTCAcceptance';
+import getInstances from '../../../functions/api/lms/getInstances';
 
 export default ({ closeAndResetModal }) => {
   const auth = useStoreState(appState, (s) => s.auth);

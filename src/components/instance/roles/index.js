@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Row, Col, CardBody, Card, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import EntityManager from './roleManager';
 import StructureReloader from '../../shared/structureReloader';

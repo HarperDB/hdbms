@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
+import JSONInput from 'react-json-editor-ajrm/dist';
+import locale from 'react-json-editor-ajrm/dist/locale/en';
 import { Button } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
@@ -8,13 +8,13 @@ import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 
-import alterRole from '../../../api/instance/alterRole';
-import buildPermissionStructure from '../../../methods/instance/buildPermissionStructure';
+import alterRole from '../../../functions/api/instance/alterRole';
+import buildPermissionStructure from '../../../functions/instance/buildPermissionStructure';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ showAttributes }) => {
   const alert = useAlert();

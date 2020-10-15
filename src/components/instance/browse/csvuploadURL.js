@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import getJob from '../../../api/instance/getJob';
-import isURL from '../../../methods/util/isURL';
-import csvURLLoad from '../../../api/instance/csvURLLoad';
-import addError from '../../../api/lms/addError';
+import instanceState from '../../../functions/state/instanceState';
+import getJob from '../../../functions/api/instance/getJob';
+import isURL from '../../../functions/util/isURL';
+import csvURLLoad from '../../../functions/api/instance/csvURLLoad';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 const CSVUploadURL = () => {
@@ -110,6 +110,7 @@ const CSVUploadURL = () => {
         <Col xs="4">
           {formState.error ? (
             <Button
+              id="clearURL"
               block
               color="danger"
               onClick={() => {
@@ -120,7 +121,7 @@ const CSVUploadURL = () => {
               Clear URL
             </Button>
           ) : (
-            <Button disabled={!!Object.keys(formState).length || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
+            <Button id="importFromURL" disabled={!!Object.keys(formState).length || !isURL(formData.csv_url)} block color="success" onClick={() => setFormState({ submitted: true })}>
               Import From URL
             </Button>
           )}

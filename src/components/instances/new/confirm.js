@@ -5,13 +5,13 @@ import useAsyncEffect from 'use-async-effect';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
 import config from '../../../config';
-import useNewInstance from '../../../state/newInstance';
+import useNewInstance from '../../../functions/state/newInstance';
 import CouponForm from '../../shared/couponForm';
 import RadioCheckbox from '../../shared/radioCheckbox';
-import commaNumbers from '../../../methods/util/commaNumbers';
+import commaNumbers from '../../../functions/util/commaNumbers';
 
 export default () => {
   const history = useHistory();

@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import queryInstance from '../../../api/queryInstance';
-import instanceState from '../../../state/instanceState';
+import queryInstance from '../../../functions/api/queryInstance';
+import instanceState from '../../../functions/state/instanceState';
 
 export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
@@ -74,12 +74,12 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
             <Button id="confirmDropItem" color="danger" className="round mr-1" title={`confirm drop ${itemType} ${item}`} onClick={confirmItemForDrop}>
               <i className="fa fa-check text-white" />
             </Button>
-            <Button color="black" className="round" title={`Cancel drop ${itemType} ${item}`} onClick={cancelConfirmDrop}>
+            <Button id="cancelDropItem" color="black" className="round" title={`Cancel drop ${itemType} ${item}`} onClick={cancelConfirmDrop}>
               <i className="fa fa-times text-white" />
             </Button>
           </>
         ) : isDropping ? (
-          <Button id={`drop${itemType}${item}`} color="danger" className="round" title={`Drop ${itemType} ${item}`} onClick={selectItemForDrop}>
+          <Button id="dropItem" color="danger" className="round" title={`Drop ${itemType} ${item}`} onClick={selectItemForDrop}>
             <i className="fa fa-minus text-white" />
           </Button>
         ) : isActive ? (

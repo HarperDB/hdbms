@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-import isObject from '../../../methods/util/isObject';
+import isObject from '../../../functions/util/isObject';
 
 export default ({ end_datetime, start_datetime, status, message }) => (
   <div className="log-row">

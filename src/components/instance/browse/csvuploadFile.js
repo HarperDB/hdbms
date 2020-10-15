@@ -6,12 +6,12 @@ import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
-import getJob from '../../../api/instance/getJob';
-import csvDataLoad from '../../../api/instance/csvDataLoad';
-import commaNumbers from '../../../methods/util/commaNumbers';
-import addError from '../../../api/lms/addError';
+import getJob from '../../../functions/api/instance/getJob';
+import csvDataLoad from '../../../functions/api/instance/csvDataLoad';
+import commaNumbers from '../../../functions/util/commaNumbers';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 const CSVUploadFile = () => {
@@ -112,6 +112,7 @@ const CSVUploadFile = () => {
             </div>
           ) : formState.processed ? (
             <Button
+              id="replaceFile"
               block
               color="default"
               onClick={() => {
@@ -142,6 +143,7 @@ const CSVUploadFile = () => {
         <Col xs="4">
           {formState.error ? (
             <Button
+              id="clearFile"
               color="danger"
               block
               className="px-5 clear-files"
@@ -153,7 +155,7 @@ const CSVUploadFile = () => {
               Clear File
             </Button>
           ) : (
-            <Button block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
+            <Button id="insertRecords" block disabled={formState.uploading || !formData.csv_file} color="success" onClick={() => setFormState({ submitted: true })}>
               Insert {commaNumbers(formData.records)} Records
             </Button>
           )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
+import JSONInput from 'react-json-editor-ajrm/dist';
+import locale from 'react-json-editor-ajrm/dist/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
@@ -8,11 +8,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 
-import queryInstance from '../../../api/queryInstance';
-import addError from '../../../api/lms/addError';
+import queryInstance from '../../../functions/api/queryInstance';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 export default ({ newEntityAttributes, hashAttribute }) => {
@@ -123,19 +123,19 @@ export default ({ newEntityAttributes, hashAttribute }) => {
           </Card>
           <Row>
             <Col className="mt-2">
-              <Button block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
+              <Button id="backToTable" block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Cancel
               </Button>
             </Col>
             {action !== 'add' && (
               <Col className="mt-2">
-                <Button block color="danger" onClick={deleteRecord}>
+                <Button id="deleteRecord" block color="danger" onClick={deleteRecord}>
                   Delete
                 </Button>
               </Col>
             )}
             <Col>
-              <Button className="mt-2" onClick={submitRecord} block color="success">
+              <Button id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                 {action === 'edit' ? 'Update' : 'Add New'}
               </Button>
             </Col>

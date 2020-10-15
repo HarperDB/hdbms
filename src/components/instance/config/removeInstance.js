@@ -5,9 +5,9 @@ import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
-import removeInstance from '../../../api/lms/removeInstance';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
+import removeInstance from '../../../functions/api/lms/removeInstance';
 
 export default ({ setInstanceAction }) => {
   const { customer_id, compute_stack_id } = useParams();
@@ -96,7 +96,7 @@ export default ({ setInstanceAction }) => {
           </Card>
           <Row>
             <Col>
-              <Button onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button id="cancelDeleteInstance" onClick={() => setFormData({ delete_instance_name: '' })} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>

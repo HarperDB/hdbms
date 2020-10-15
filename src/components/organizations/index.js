@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
 import { Row } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import { ErrorBoundary } from 'react-error-boundary';
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
 import SubNav from './subnav';
 import OrgList from './list/orgList';
 import NewOrgCard from './list/newOrgCard';
 import NewOrgModal from './new';
 import Loader from '../shared/loader';
-import addError from '../../api/lms/addError';
+import addError from '../../functions/api/lms/addError';
 import ErrorFallbackCard from '../shared/errorFallbackCard';
 
 const OrganizationsIndex = () => {
-  const { action } = useParams();
+  const { list, action } = useParams();
+  const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
 
   useEffect(() =>
@@ -26,6 +27,13 @@ const OrganizationsIndex = () => {
       s.lastUpdate = false;
     })
   );
+
+  useEffect(() => {
+    if (auth?.orgs?.length === 1 && (!list || list === 'sign-up')) {
+      history.push(`/o/${auth.orgs[0].customer_id}/instances`)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, list]);
 
   return (
     <div id="organizations">

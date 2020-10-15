@@ -6,11 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import appState from '../../../state/appState';
-import addChart from '../../../api/lms/addChart';
-import chartOptions from '../../../methods/instance/chartOptions';
-import chartTypes from '../../../methods/instance/chartTypes';
-import isNumeric from '../../../methods/util/isNumeric';
+import appState from '../../../functions/state/appState';
+import addChart from '../../../functions/api/lms/addChart';
+import chartOptions from '../../../functions/instance/chartOptions';
+import chartTypes from '../../../functions/instance/chartTypes';
+import isNumeric from '../../../functions/util/isNumeric';
 
 export default ({ setShowChartModal, tableData, query }) => {
   const { compute_stack_id, customer_id } = useParams();

@@ -8,7 +8,7 @@ a {
 }
 
 ul {
-  padding-inline-start: 14px;
+  padding-inline-start: 16px;
 
   li {
     margin-bottom: 6px;
@@ -45,14 +45,26 @@ ul {
 }
 
 hr {
-  border-top: 1px solid $lighter-grey-overlay !important;
-  width: 100%;
+  background-color: $lighter-grey-overlay; /* Modern Browsers */
+  border: 0 none;
+  /* Set the hr color */
+  color: $lighter-grey-overlay; /* old IE */
+  height: 1px !important;
+  overflow: hidden;
 
   &.white {
-    border-top: 1px solid $faint-white-overlay !important;
+    background-color: $light-white-overlay; /* Modern Browsers */
+    color: $light-white-overlay; /* old IE */
   }
 }
 
+.version {
+  bottom: 10px;
+  color: $color-lightgrey;
+  font-size: $font-size-small;
+  position: fixed;
+  right: 15px;
+}
 
 ::-webkit-scrollbar {
   height: 10px;

@@ -4,11 +4,11 @@ import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 import DataTable from './datatable';
 import EditUser from './edit';
 import AddUserForm from './add';
-import getUsers from '../../../api/lms/getUsers';
+import getUsers from '../../../functions/api/lms/getUsers';
 import config from '../../../config';
 
 export default () => {

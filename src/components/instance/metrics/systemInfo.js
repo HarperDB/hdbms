@@ -6,12 +6,12 @@ import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
-import systemInformation from '../../../api/instance/systemInformation';
+import systemInformation from '../../../functions/api/instance/systemInformation';
 import ContentContainer from '../../shared/contentContainer';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();

@@ -6,11 +6,11 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import appState from '../../../state/appState';
-import useNewInstance from '../../../state/newInstance';
+import appState from '../../../functions/state/appState';
+import useNewInstance from '../../../functions/state/newInstance';
 
-import addPaymentMethod from '../../../api/lms/addPaymentMethod';
-import getCustomer from '../../../api/lms/getCustomer';
+import addPaymentMethod from '../../../functions/api/lms/addPaymentMethod';
+import getCustomer from '../../../functions/api/lms/getCustomer';
 import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';

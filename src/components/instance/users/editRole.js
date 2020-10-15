@@ -7,10 +7,10 @@ import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import alterUser from '../../../api/instance/alterUser';
-import instanceState from '../../../state/instanceState';
+import alterUser from '../../../functions/api/instance/alterUser';
+import instanceState from '../../../functions/state/instanceState';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { customer_id, compute_stack_id, username } = useParams();

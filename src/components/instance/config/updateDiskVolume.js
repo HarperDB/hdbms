@@ -6,13 +6,13 @@ import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
 import ChangeSummary from './changeSummary';
-import updateInstance from '../../../api/lms/updateInstance';
-import commaNumbers from '../../../methods/util/commaNumbers';
+import updateInstance from '../../../functions/api/lms/updateInstance';
+import commaNumbers from '../../../functions/util/commaNumbers';
 
 export default ({ setInstanceAction, showPrepaidStorage }) => {
   const { customer_id, compute_stack_id } = useParams();
@@ -114,6 +114,7 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
           disabled={!hasChanged || formState.submitted}
           color="danger"
           className="mt-2"
+          id="addCardToAccount"
         >
           Add Credit Card To Account
         </Button>
@@ -127,12 +128,12 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
           />
           <Row>
             <Col>
-              <Button onClick={resetFormData} title="Cancel" block disabled={formState.submitted} color="grey">
+              <Button id="cancelChange" onClick={resetFormData} title="Cancel" block disabled={formState.submitted} color="grey">
                 Cancel
               </Button>
             </Col>
             <Col>
-              <Button onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
+              <Button id="confirmChange" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
                 Update
               </Button>
             </Col>

@@ -5,15 +5,15 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import upsertIntegration from '../../../api/lms/upsertIntegration';
+import appState from '../../../functions/state/appState';
+import upsertIntegration from '../../../functions/api/lms/upsertIntegration';
 import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import isURL from '../../../methods/util/isURL';
-import getIntegrations from '../../../api/lms/getIntegrations';
-import integrationLanguageOptions from '../../../methods/resources/integrationLanguageOptions';
-import getUser from '../../../api/lms/getUser';
+import addError from '../../../functions/api/lms/addError';
+import isURL from '../../../functions/util/isURL';
+import getIntegrations from '../../../functions/api/lms/getIntegrations';
+import integrationLanguageOptions from '../../../functions/resources/integrationLanguageOptions';
+import getUser from '../../../functions/api/lms/getUser';
 
 export default () => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -143,7 +143,7 @@ export default () => {
                 value={formData.bounty_url || ''}
                 onChange={(e) => setFormData({ ...formData, bounty_url: e.target.value })}
               />
-              <Button color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+              <Button id="submitBountyForReview" color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
                 Submit for Review
               </Button>
             </CardBody>

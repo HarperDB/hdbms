@@ -3,14 +3,16 @@ import { Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
+import { useStoreState } from 'pullstate';
 
-import handleSignup from '../../methods/auth/handleSignup';
+import handleSignup from '../../functions/auth/handleSignup';
 import Loader from '../shared/loader';
-import config from '../../config';
+import appState from '../../functions/state/appState';
 
 const SignUp = () => {
   const { search } = useLocation();
   const { code, htuk, pageName, pageUri } = queryString.parse(search);
+  const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ coupon_code: code, htuk, pageName, pageUri });
   const [showToolTip, setShowToolTip] = useState(false);
@@ -18,7 +20,7 @@ const SignUp = () => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       const newFormState = await handleSignup({ formData });
-      if (newFormState) setFormState(newFormState);
+      if (!auth && newFormState) setFormState(newFormState);
     }
   }, [formState]);
 
@@ -27,26 +29,53 @@ const SignUp = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
-  return (
+  return formState.submitted ? (
     <div id="login-form">
-      <div id="login-logo" title="HarperDB Logo" />
-      <div className="version">Studio v{config.studio_version}</div>
-      {formState.submitted ? (
         <Loader header="creating your account" spinner relative />
-      ) : formState.success ? (
-        <Loader
-          header="success!"
-          body="check your email for your username and password. be sure to check your spam folder, just in case."
-          links={[
-            { to: '/', text: 'Sign In', className: 'text-left' },
-            { to: '/resend-registration-email', text: 'Resend Email', className: 'text-right' },
-          ]}
-          relative
-        />
-      ) : (
-        <>
-          <Card className="mb-3">
-            <CardBody className="px-3" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+    </div>
+  ) : (
+    <div id="login-form" className="sign-up">
+      <Card className="mb-3">
+        <CardBody className="px-3" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+          <div className="sign-up-header">Sign Up And Launch Your Free HarperDB Cloud Instance Today</div>
+          <Row>
+            <Col xs="12" md="8">
+              <div className="sign-up-content">
+                <ul>
+                  <li>Provision HarperDB Cloud and user-installed instances</li>
+                  <li>Configure instance schemas, tables, users, roles, and clustering</li>
+                  <li>Create and monitor real-time charts based on custom queries</li>
+                  <li>Bulk data import via CSV upload or URL</li>
+                </ul>
+
+                <h3>Check Out Our Developer Resources Above</h3>
+
+                <ul className="mt-3">
+                  <li>SDKs, Drivers, and language-specific Code Snippets</li>
+                  <li>Video Tutorials</li>
+                  <li>HarperDB Migrator</li>
+                </ul>
+
+                <hr className="mt-4 mb-3" />
+
+                <div className="d-none d-md-block">
+                  <div className="disclaimer">
+                    By creating an account, you agree to the&nbsp;
+                    <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+                      Privacy Policy
+                    </a>
+                    &nbsp;and&nbsp;
+                    <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+                      Terms of Service
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <hr className="mt-4 mb-3 d-block d-md-none" />
+            </Col>
+            <Col xs="12" md="4">
+              <div className="sign-up-form">
               <Input
                 id="firstname"
                 className="text-center mb-2"
@@ -98,9 +127,7 @@ const SignUp = () => {
                 </Col>
               </Row>
               {showToolTip && (
-                <div className="text-center pb-2 text-white text-small">
-                  <i>The URL of your HarperDB Cloud Instances</i>
-                </div>
+                <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>
               )}
               <Input
                 id="coupon_code"
@@ -113,35 +140,43 @@ const SignUp = () => {
                 onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
                 disabled={formState.submitted}
               />
-              <div className="disclaimer">
-                By creating an account, you agree to the&nbsp;
-                <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
-                  Privacy Policy
-                </a>
-                &nbsp;and&nbsp;
-                <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
-                  Terms of Service
-                </a>
-              </div>
-              <Button color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
+
+                <div className="d-block d-md-none">
+                  <hr />
+                  <div className="disclaimer text-center">
+                    By creating an account, you agree to the&nbsp;
+                    <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
+                      Privacy Policy
+                    </a>
+                    &nbsp;and&nbsp;
+                    <a href="https://harperdb.io/legal/harperdb-cloud-terms-of-service/" target="_blank" rel="noopener noreferrer">
+                      Terms of Service
+                    </a>
+                  </div>
+                  <hr />
+                </div>
+
+              <Button id="sign-up" color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
                 {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
               </Button>
-            </CardBody>
-          </Card>
-          {formState.error ? (
-            <div className="login-nav-link error">
-              {formState.error}
-              &nbsp;
-            </div>
-          ) : (
-            <div className="text-center">
-              <NavLink to="/" className="login-nav-link">
-                Already Have An Account? Sign In Instead.
-              </NavLink>
-            </div>
-          )}
-        </>
+              </div>
+            </Col>
+          </Row>
+
+        </CardBody>
+      </Card>
+      <div className="text-center">
+      {formState.error ? (
+        <div className="login-nav-link error">
+          {formState.error}
+          &nbsp;
+        </div>
+      ) : (
+        <NavLink to="/" className="login-nav-link">
+          Already Have An Account? Sign In Instead.
+        </NavLink>
       )}
+      </div>
     </div>
   );
 };

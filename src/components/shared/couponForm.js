@@ -5,12 +5,12 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
-import addCoupon from '../../api/lms/addCoupon';
-import getCustomer from '../../api/lms/getCustomer';
+import addCoupon from '../../functions/api/lms/addCoupon';
+import getCustomer from '../../functions/api/lms/getCustomer';
 import ErrorFallback from './errorFallback';
-import addError from '../../api/lms/addError';
+import addError from '../../functions/api/lms/addError';
 
 let controller;
 

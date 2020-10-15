@@ -3,10 +3,9 @@ import { Card, CardBody, Input, Button, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
-import isEmail from '../../methods/util/isEmail';
-import resetPassword from '../../api/lms/resetPassword';
+import isEmail from '../../functions/util/isEmail';
+import resetPassword from '../../functions/api/lms/resetPassword';
 import Loader from '../shared/loader';
-import config from '../../config';
 
 const ResetPassword = () => {
   const [formState, setFormState] = useState({});
@@ -40,8 +39,6 @@ const ResetPassword = () => {
 
   return (
     <div id="login-form">
-      <div id="login-logo" title="HarperDB Logo" />
-      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
         <Loader header="resetting password" spinner relative />
       ) : formState.success ? (
@@ -49,12 +46,13 @@ const ResetPassword = () => {
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody className="text-center text-white" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+            <CardBody className="text-center" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+              <div className="instructions">Please enter your account email. If a matching account exists, we&apos;ll send you a password reset link.</div>
               <Input
                 id="email"
                 onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
                 disabled={formState.submitted}
-                className="mb-4 text-center"
+                className="mt-3 mb-2 text-center"
                 type="text"
                 title="email"
                 name="email"

@@ -7,10 +7,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ToggleButton from 'react-toggle';
 import { useAlert } from 'react-alert';
 
-import appState from '../../../state/appState';
-import updateOrgUser from '../../../api/lms/updateOrgUser';
-import getUsers from '../../../api/lms/getUsers';
-import addError from '../../../api/lms/addError';
+import appState from '../../../functions/state/appState';
+import updateOrgUser from '../../../functions/api/lms/updateOrgUser';
+import getUsers from '../../../functions/api/lms/getUsers';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
 export default () => {

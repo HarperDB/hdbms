@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
-import useNewInstance from '../../../state/newInstance';
-import steps from '../../../methods/instances/addInstanceSteps';
+import appState from '../../../functions/state/appState';
+import useNewInstance from '../../../functions/state/newInstance';
+import steps from '../../../functions/instances/addInstanceSteps';
 
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import Loader from '../../shared/loader';
 
 import InstanceTypeForm from './type';
@@ -21,7 +21,7 @@ import CloudInstanceForm from './detailsCloud';
 import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
-import getPrepaidSubscriptions from '../../../api/lms/getPrepaidSubscriptions';
+import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const history = useHistory();

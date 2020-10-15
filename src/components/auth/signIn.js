@@ -3,12 +3,11 @@ import { Card, CardBody, Input, Button, Row, Col } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-import appState from '../../state/appState';
+import appState from '../../functions/state/appState';
 
-import getUser from '../../api/lms/getUser';
-import isEmail from '../../methods/util/isEmail';
+import getUser from '../../functions/api/lms/getUser';
+import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/loader';
-import config from '../../config';
 
 const SignIn = () => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -43,14 +42,13 @@ const SignIn = () => {
 
   return (
     <div id="login-form">
-      <div id="login-logo" title="HarperDB Logo" />
-      <div className="version">Studio v{config.studio_version}</div>
       {formState.processing ? (
         <Loader header="signing in" spinner relative />
       ) : (
         <>
           <Card className="mb-3">
             <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
+              <div className="instructions">Please sign into HarperDB Studio</div>
               <Input
                 id="email"
                 onChange={(e) => {
@@ -73,7 +71,7 @@ const SignIn = () => {
                 }}
                 value={formData.pass || ''}
                 disabled={formState.submitted}
-                className="mb-4 text-center"
+                className="mb-2 text-center"
                 type="password"
                 title="password"
                 autoComplete="current-password"

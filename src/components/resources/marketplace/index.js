@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
 import IntegrationCard from './integrationCard';
-import appState from '../../../state/appState';
-import getIntegrations from '../../../api/lms/getIntegrations';
+import appState from '../../../functions/state/appState';
+import getIntegrations from '../../../functions/api/lms/getIntegrations';
 import EntityManager from './entityManager';
 import AddIntegration from './add';
 

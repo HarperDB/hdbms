@@ -4,12 +4,12 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
 import EntityManagerRow from './entityManagerRow';
 import ErrorFallback from '../../shared/errorFallback';
 
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default () => {
   const { type } = useParams();

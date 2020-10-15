@@ -4,8 +4,8 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 
 import UpdateDiskVolume from './updateDiskVolume';
 import UpdateRAM from './updateRAM';
@@ -14,8 +14,8 @@ import RestartInstance from './restartInstance';
 import InstanceDetails from './instanceDetails';
 import Loader from '../../shared/loader';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import getPrepaidSubscriptions from '../../../api/lms/getPrepaidSubscriptions';
+import addError from '../../../functions/api/lms/addError';
+import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
 export default () => {
   const { customer_id, compute_stack_id } = useParams();
@@ -69,7 +69,7 @@ export default () => {
               {(!!compute_subscription_id || !!unusedCompute.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}
-                  <Button color="link" onClick={() => setShowPrepaidCompute(!showPrepaidCompute)}>
+                  <Button id="showPrepaidCompute" color="link" onClick={() => setShowPrepaidCompute(!showPrepaidCompute)}>
                     <i className={`fa fa-lg fa-toggle-${showPrepaidCompute ? 'on' : 'off'}`} />
                   </Button>
                 </span>
@@ -98,7 +98,7 @@ export default () => {
               {(!!storage_subscription_id || !!unusedStorage.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}
-                  <Button color="link" onClick={() => setShowPrepaidStorage(!showPrepaidStorage)}>
+                  <Button id="showPrepaidStorage" color="link" onClick={() => setShowPrepaidStorage(!showPrepaidStorage)}>
                     <i className={`fa fa-lg fa-toggle-${showPrepaidStorage ? 'on' : 'off'}`} />
                   </Button>
                 </span>

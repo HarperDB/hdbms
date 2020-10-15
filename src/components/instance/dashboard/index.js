@@ -6,13 +6,13 @@ import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
 
-import appState from '../../../state/appState';
-import instanceState from '../../../state/instanceState';
+import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 
-import commaNumbers from '../../../methods/util/commaNumbers';
+import commaNumbers from '../../../functions/util/commaNumbers';
 import DashboardChart from './dashboardChart';
-import getCharts from '../../../api/lms/getCharts';
-import removeChart from '../../../api/lms/removeChart';
+import getCharts from '../../../functions/api/lms/getCharts';
+import removeChart from '../../../functions/api/lms/removeChart';
 import config from '../../../config';
 
 export default () => {
@@ -99,15 +99,15 @@ export default () => {
         </Card>
       </Col>
       <Col xs="12">
-        <hr className="mt-0 mb-3 white" />
+        <hr className="mt-0 mb-3 dashboard-divider" />
         <div className="text-center text-bold instructions">
           To add charts to the dashboard, execute a
-          <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="purple" className="px-2 mx-2">
+          <Button id="goToQueryPage" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="purple" className="px-2 mx-2">
             <i className="fa fa-search text-small mr-2 " /> query
           </Button>
           Then click &quot;create chart&quot;
         </div>
-        <hr className="my-3 white" />
+        <hr className="my-3 dashboard-divider" />
       </Col>
       {charts &&
         charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} confirmDelete={confirmDelete} setConfirmDelete={setConfirmDelete} />)}

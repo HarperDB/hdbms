@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
-import useInstanceAuth from '../../../state/instanceAuths';
+import addError from '../../../functions/api/lms/addError';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './datatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './entityManager'));

@@ -6,12 +6,12 @@ import Chart from 'react-apexcharts';
 import useAsyncEffect from 'use-async-effect';
 
 import useInterval from 'use-interval';
-import instanceState from '../../../state/instanceState';
-import appState from '../../../state/appState';
+import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 
-import sql from '../../../api/instance/sql';
-import chartOptions from '../../../methods/instance/chartOptions';
-import isNumeric from '../../../methods/util/isNumeric';
+import sql from '../../../functions/api/instance/sql';
+import chartOptions from '../../../functions/instance/chartOptions';
+import isNumeric from '../../../functions/util/isNumeric';
 import config from '../../../config';
 
 export default ({ chart: { query, name, id, type, labelAttribute, seriesAttributes, user_id }, removeChart, confirmDelete, setConfirmDelete }) => {

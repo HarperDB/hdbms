@@ -5,13 +5,13 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 
-import removePaymentMethod from '../../../api/lms/removePaymentMethod';
+import removePaymentMethod from '../../../functions/api/lms/removePaymentMethod';
 import FormStatus from '../../shared/formStatus';
-import getCustomer from '../../../api/lms/getCustomer';
+import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();

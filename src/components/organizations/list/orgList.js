@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import appState from '../../../state/appState';
+import appState from '../../../functions/state/appState';
 import OrgCard from './orgCard';
-import filterOrgs from '../../../methods/organizations/filterOrgs';
-import addError from '../../../api/lms/addError';
+import filterOrgs from '../../../functions/organizations/filterOrgs';
+import addError from '../../../functions/api/lms/addError';
 import ErrorFallbackCard from '../../shared/errorFallbackCard';
 
 const OrgList = () => {

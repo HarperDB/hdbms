@@ -5,9 +5,9 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import routeIcon from '../../methods/select/routeIcon';
+import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from './errorFallback';
-import addError from '../../api/lms/addError';
+import addError from '../../functions/api/lms/addError';
 
 export default ({ routes = [] }) => {
   const history = useHistory();

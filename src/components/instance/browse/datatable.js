@@ -6,11 +6,11 @@ import { Button, Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import instanceState from '../../../state/instanceState';
+import instanceState from '../../../functions/state/instanceState';
 
 import config from '../../../config';
 import DataTableHeader from './datatableHeader';
-import getTableData from '../../../methods/instance/getTableData';
+import getTableData from '../../../functions/instance/getTableData';
 
 let debounceTimer;
 
@@ -98,7 +98,7 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
           ) : !loading && !tableState.tableData.length ? (
             <div className="text-center py-5">
               <div className="mb-3">Your filters have returned no data.</div>
-              <Button onClick={() => setTableState({ ...tableState, filtered: [] })} size="sm" color="purple" className="py-1 px-2 mr-2">
+              <Button id="resetFilter" onClick={() => setTableState({ ...tableState, filtered: [] })} size="sm" color="purple" className="py-1 px-2 mr-2">
                 reset filter
               </Button>
             </div>

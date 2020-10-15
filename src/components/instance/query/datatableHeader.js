@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Row } from 'reactstrap';
 
-import commaNumbers from '../../../methods/util/commaNumbers';
+import commaNumbers from '../../../functions/util/commaNumbers';
 
 export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) => (
   <Row className="floating-card-header">

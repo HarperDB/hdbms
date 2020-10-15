@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 
 export default ({ setQuery, query }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -76,7 +76,7 @@ export default ({ setQuery, query }) => {
                 </Button>
               </Col>
               <Col>
-                <Button innerRef={submitRef} title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
+                <Button id="executeQuery" innerRef={submitRef} title="execute query" color="purple" block className="mt-2" onClick={() => setFormState({ submitted: true })}>
                   Execute
                 </Button>
               </Col>

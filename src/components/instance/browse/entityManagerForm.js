@@ -5,10 +5,10 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 
-import queryInstance from '../../../api/queryInstance';
-import instanceState from '../../../state/instanceState';
+import queryInstance from '../../../functions/api/queryInstance';
+import instanceState from '../../../functions/state/instanceState';
 
-import isAlphaNumericUnderscore from '../../../methods/util/isAlphaNumericUnderscore';
+import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
 
 export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -117,7 +117,7 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
             <Button id="createItem" color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
-            <Button color="black" className="round" onClick={() => toggleCreate(false)}>
+            <Button id="toggleCreate" color="black" className="round" onClick={() => toggleCreate(false)}>
               <i className="fa fa-times text-white" />
             </Button>
           </>

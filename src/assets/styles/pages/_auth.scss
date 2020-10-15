@@ -7,40 +7,77 @@
   transform: translate(-50%, -50%);
   width: 100%;
 
-  #login-logo {
-    background-image: url('/images/logo/logo_vertical_white.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100px;
-    margin: 0 auto;
-    width: 80px;
-  }
-
-  .version {
-    color: $white-overlay;
-    font-size: $font-size-small;
-    margin: 0 auto 20px;
-    text-align: center;
-  }
-
   .card {
     background: $faint-white-overlay !important;
     border: 1px solid $faint-white-overlay !important;
-    min-height: 188px !important;
+    box-shadow: none !important;
     z-index: 2;
 
     .card-body {
-      align-content: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      min-height: 205px;
+
+      .instructions {
+        color: $color-white;
+        padding-bottom: 16.5px;
+        text-align: center;
+      }
+    }
+  }
+
+  &.sign-up {
+    max-width: 770px;
+
+    .card-body {
+      padding: 2rem !important;
+    }
+
+    @media screen and (max-width: 767px), screen and (max-height: 530px) {
+      margin-bottom: 50px;
+      top: -50px;
+      transform: translateX(-50%);
+    }
+
+    hr {
+      background: $faint-white-overlay;
+    }
+
+    .sign-up-header {
+      border-bottom: 1px solid $faint-white-overlay;
+      color: $light-white-overlay !important;
+      font-size: 1.5rem !important;
+      line-height: 1 !important;
+      margin-bottom: 25px !important;
+      padding-bottom: 25px;
+      text-align: center;
+      width: 100%;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.1rem !important;
+      }
+    }
+
+    .sign-up-content {
+      color: $light-white-overlay !important;
+      width: 100%;
+
+      h3 {
+        font-size: 1.1rem !important;
+        padding-top: 15px;
+      }
+    }
+
+    .sign-up-form {
+      .subdomain-explanation {
+        color: $color-white;
+        display: block;
+        font-size: 0.7rem;
+        padding-bottom: 8px;
+      }
     }
   }
 
   input {
-    background: $lighter-grey-overlay !important;
-    border: 1px solid $faint-white-overlay !important;
+    background: $faint-white-overlay !important;
     color: $color-white !important;
     text-align: center !important;
 
@@ -53,18 +90,8 @@
   }
 
   .disclaimer {
-    border-bottom: 1px solid $faint-white-overlay;
-    border-top: 1px solid $faint-white-overlay;
     color: $white-overlay !important;
     font-size: $font-size-small;
-    margin-bottom: 15px;
-    margin-top: 6px;
-    padding: 10px 0;
-    text-align: center;
-
-    @media screen and (max-width: 575px) {
-      font-size: $font-size-small;
-    }
 
     a,
     a:hover {
@@ -85,8 +112,9 @@
 
   .login-nav-link {
     color: $white-overlay !important;
-    display: block;
+    display: inline-block;
     font-size: 85%;
+    height: 16px;
     text-transform: lowercase;
     white-space: nowrap;
 

@@ -3,11 +3,11 @@ import { Button, Card, CardBody, Input, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import useInstanceAuth from '../../../state/instanceAuths';
-import handleCloudInstanceUsernameChange from '../../../methods/instances/handleCloudInstanceUsernameChange';
-import userInfo from '../../../api/instance/userInfo';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
+import handleCloudInstanceUsernameChange from '../../../functions/instances/handleCloudInstanceUsernameChange';
+import userInfo from '../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../api/lms/addError';
+import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './cardInstanceUpdateRole';
 
 const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
