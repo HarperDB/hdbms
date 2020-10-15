@@ -41,7 +41,7 @@ export default () => {
     <Row id="support">
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager />
-        {auth?.user && (
+        {auth?.email && (
           <AddIntegration />
         )}
       </Col>
