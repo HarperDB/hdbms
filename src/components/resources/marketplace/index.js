@@ -41,7 +41,9 @@ export default () => {
     <Row id="support">
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager />
-        <AddIntegration />
+        {auth?.email && (
+          <AddIntegration />
+        )}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <span className="floating-card-header">Marketplace</span>
