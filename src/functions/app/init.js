@@ -24,7 +24,7 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller }
   if (!auth?.email) {
     setFetchingUser(false);
   } else {
-    refreshUser({ auth, loggingIn: true, controller, setFetchingUser });
+    refreshUser({ auth, controller, setFetchingUser, loggingIn: true });
   }
 
   getCurrentVersion();
