@@ -89,7 +89,7 @@ export default () => {
 
   useInterval(() => {
     getCurrentVersion();
-    refreshUser({ auth, controller, setFetchingUser });
+    refreshUser({ auth, controller });
   }, config.check_version_interval);
 
   return (

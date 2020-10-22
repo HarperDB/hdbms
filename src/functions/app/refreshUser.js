@@ -1,10 +1,10 @@
 import getUser from '../api/lms/getUser';
 
-export default async ({ auth, loggingIn = false, controller, setFetchingUser }) => {
+export default async ({ auth, loggingIn = false, controller, setFetchingUser = false }) => {
   if (auth?.email && auth?.pass) {
     controller = new AbortController();
-    setFetchingUser(true);
+    if (setFetchingUser) setFetchingUser(true);
     await getUser({ ...auth, loggingIn, signal: controller.signal });
-    setFetchingUser(false);
+    if (setFetchingUser) setFetchingUser(false);
   }
 };
