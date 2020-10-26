@@ -30,6 +30,9 @@ const CSVUploadURL = () => {
           if (['Error: CSV Load failed from URL', 'Error downloading CSV file'].some((i) => message.indexOf(i) !== -1)) {
             return setFormState({ error: 'The URL did not return a valid csv file' });
           }
+          if (['unsupported content type'].some((i) => message.indexOf(i) !== -1)) {
+            return setFormState({ error: `File error: ${message.split(',')[1]}` });
+          }
           return setFormState({ error: message.split(':')[1] });
         }
         if (status !== 'COMPLETE' && mounted) {

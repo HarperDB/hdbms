@@ -11,7 +11,7 @@ import Code from '../../shared/code';
 import appState from '../../../functions/state/appState';
 import getIntegrations from '../../../functions/api/lms/getIntegrations';
 
-export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command } }) => {
+export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command }, icon = false }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const [sendingRating, setSendingRating] = useState(false);
@@ -43,8 +43,8 @@ export default ({ id, status, avg_rating, user_rating, author_user_id, meta: { n
                 {homepage}
               </a>
             </div>
-            {['c++', 'c', 'csharp', 'golang', 'kotlin', 'ruby'].includes(language.toLowerCase()) ? (
-              <img alt={language.toLowerCase()} title={language.toLowerCase()} className="card-icon" src={`/images/svg/${language.toLowerCase()}.svg`} />
+            {icon ? (
+              <img alt={language.toLowerCase()} title={language.toLowerCase()} className="card-icon" src={icon} />
             ) : (
               <i title={language.toLowerCase()} className={`card-icon text-darkgrey fab fa-lg fa-${language.toLowerCase()}`} />
             )}
