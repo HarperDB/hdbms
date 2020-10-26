@@ -1,6 +1,6 @@
 export default [
   { label: 'C', value: 'c' },
-  { label: 'C++', value: 'c++' },
+  { label: 'C++', value: 'cplusplus' },
   { label: 'C#', value: 'csharp' },
   { label: 'Go', value: 'golang' },
   { label: 'JavaScript', value: 'js' },

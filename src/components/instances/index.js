@@ -49,6 +49,7 @@ const InstancesIndex = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshCustomer, []);
 
   const refreshSubscriptions = () => {
@@ -65,6 +66,7 @@ const InstancesIndex = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
 
   useEffect(() => {

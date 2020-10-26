@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
@@ -12,6 +12,15 @@ import EntityManager from './entityManager';
 import AddIntegration from './add';
 
 let controller;
+
+const logoMapper = {
+  cplusplus : lazy(() => import('../../../assets/images/svg/c++.svg')),
+  c : lazy(() => import('../../../assets/images/svg/c.svg')),
+  csharp: lazy(() => import('../../../assets/images/svg/csharp.svg')),
+  golang: lazy(() => import('../../../assets/images/svg/golang.svg')),
+  kotlin: lazy(() => import('../../../assets/images/svg/kotlin.svg')),
+  ruby: lazy(() => import('../../../assets/images/svg/ruby.svg')),
+}
 
 export default () => {
   const history = useHistory();
@@ -58,7 +67,7 @@ export default () => {
             ) : integrations[type] ? (
               <Row>
                 {integrations[type].map((integration) => (
-                  <IntegrationCard key={integration.id} {...integration} />
+                  <IntegrationCard key={integration.id} {...integration} icon={logoMapper[integration.meta.language]} />
                 ))}
               </Row>
             ) : null}
