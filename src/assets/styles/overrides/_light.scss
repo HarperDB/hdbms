@@ -4,9 +4,9 @@
     border-bottom: 1px solid $color-lightgrey;
 
     #logo {
-      background-image: url('/images/logo/logo_circle_light.png');
+      background-image: url('../../images/logo/logo_circle_light.png');
       @media screen and (max-width: 511px) {
-        background-image: url('/images/logo/logo_circle_only_light.png');
+        background-image: url('../../images/logo/logo_circle_only_light.png');
       }
     }
 

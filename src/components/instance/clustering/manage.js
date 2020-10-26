@@ -34,6 +34,7 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, products, regions, customer_id, subscriptions]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, []);
 
   useInterval(refreshInstances, config.refresh_content_interval);

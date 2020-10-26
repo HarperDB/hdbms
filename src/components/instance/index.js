@@ -45,6 +45,7 @@ export default () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshCustomer, []);
 
   const refreshUser = async () => {
@@ -75,6 +76,7 @@ export default () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, customer_id, subscriptions]);
 
   const refreshInstance = async () => {

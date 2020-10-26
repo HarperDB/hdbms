@@ -3,7 +3,7 @@
   "name": "HarperDB Studio",
   "icons": [
     {
-      "src": "images/logo/logo_vertical_white_light.png",
+      "src": "images/logo_manifest.png",
       "type": "image/png",
       "sizes": "536x672"
     }

@@ -27,6 +27,7 @@ export default () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshCustomer, []);
 
   const refreshInstances = () => {
@@ -35,6 +36,7 @@ export default () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, customer_id]);
 
   useInterval(refreshCustomer, config.refresh_content_interval);
