@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Input, Button, Row, Col } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import queryString from 'query-string';
 
 import appState from '../../functions/state/appState';
 
@@ -10,6 +11,8 @@ import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/loader';
 
 const SignIn = () => {
+  const { search } = useLocation();
+  const { user, token } = queryString.parse(search, { decode: false });
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -40,6 +43,12 @@ const SignIn = () => {
     [formData]
   );
 
+  useEffect(() => {
+    if (user && token) {
+      getUser({ email: user, pass: token, loggingIn: true });
+    }
+  }, [user, token]);
+
   return (
     <div id="login-form">
       {formState.processing ? (
@@ -53,7 +62,7 @@ const SignIn = () => {
                 id="email"
                 onChange={(e) => {
                   e.currentTarget.focus();
-                  setFormData({ ...formData, email: e.target.value.toLowerCase() });
+                  setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
                 }}
                 value={formData.email || ''}
                 disabled={formState.submitted}
