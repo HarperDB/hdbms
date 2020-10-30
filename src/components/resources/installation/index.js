@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
@@ -7,6 +7,10 @@ import Code from '../../shared/code';
 
 export default () => {
   const version = useStoreState(appState, (s) => s.version);
+
+  useEffect(() => {
+    if (window.ORIBI) window.ORIBI.api('track', 'visited resources - installation');
+  }, []);
 
   return (
     <main id="support">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
@@ -7,6 +7,10 @@ import CodeViewer from './codeViewer';
 
 export default ({ showCustomMessage }) => {
   const { folder } = useParams();
+
+  useEffect(() => {
+    if (window.ORIBI) window.ORIBI.api('track', `visited ${showCustomMessage ? 'resources' : 'instance'} - example code`);
+  }, [showCustomMessage]);
 
   return (
     <Row id="support">

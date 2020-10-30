@@ -13,7 +13,7 @@ export default {
   total_local_instance_limit: false,
   free_local_instance_limit: false,
   max_file_upload_size: 10380902,
-  studio_version: '1.4.17',
+  studio_version: '1.4.18',
   user_guide_id: 16032,
   maintenance: 0,
 };

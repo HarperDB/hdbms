@@ -60,6 +60,14 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
           alert.error('There was an error updating your instance. Please try again later.');
           setInstanceAction(false);
         } else {
+          if (window.ORIBI) {
+            window.ORIBI.api('track', 'upgrade instance - RAM');
+            window.ORIBI.api('trackPurchase', {
+              totalPrice: formData?.compute_price,
+              currency: 'USD',
+              products: [{ name: 'compute', id: selectedProduct.compute_ram_string, price: formData?.compute_price || 0 }],
+            });
+          }
           alert.success('Instance update initialized successfully');
           appState.update((s) => {
             s.lastUpdate = Date.now();
