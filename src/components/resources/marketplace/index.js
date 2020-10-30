@@ -14,13 +14,13 @@ import AddIntegration from './add';
 let controller;
 
 const logoMapper = {
-  cplusplus : lazy(() => import('../../../assets/images/svg/c++.svg')),
-  c : lazy(() => import('../../../assets/images/svg/c.svg')),
+  cplusplus: lazy(() => import('../../../assets/images/svg/c++.svg')),
+  c: lazy(() => import('../../../assets/images/svg/c.svg')),
   csharp: lazy(() => import('../../../assets/images/svg/csharp.svg')),
   golang: lazy(() => import('../../../assets/images/svg/golang.svg')),
   kotlin: lazy(() => import('../../../assets/images/svg/kotlin.svg')),
   ruby: lazy(() => import('../../../assets/images/svg/ruby.svg')),
-}
+};
 
 export default () => {
   const history = useHistory();
@@ -50,9 +50,7 @@ export default () => {
     <Row id="support">
       <Col xl="3" lg="4" md="5" xs="12">
         <EntityManager />
-        {auth?.email && (
-          <AddIntegration />
-        )}
+        {auth?.email && <AddIntegration />}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <span className="floating-card-header">Marketplace</span>

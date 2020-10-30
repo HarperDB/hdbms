@@ -31,7 +31,7 @@ const SignUp = () => {
 
   return formState.submitted ? (
     <div id="login-form">
-        <Loader header="creating your account" spinner relative />
+      <Loader header="creating your account" spinner relative />
     </div>
   ) : (
     <div id="login-form" className="sign-up">
@@ -76,70 +76,68 @@ const SignUp = () => {
             </Col>
             <Col xs="12" md="4">
               <div className="sign-up-form">
-              <Input
-                id="firstname"
-                className="text-center mb-2"
-                type="text"
-                title="first name"
-                placeholder="first name"
-                value={formData.firstname || ''}
-                disabled={formState.submitted}
-                onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
-              />
-              <Input
-                id="lastname"
-                className="text-center mb-2"
-                type="text"
-                title="last name"
-                placeholder="last name"
-                value={formData.lastname || ''}
-                disabled={formState.submitted}
-                onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-              />
-              <Input
-                id="email"
-                className="text-center mb-2"
-                type="text"
-                title="email"
-                placeholder="email"
-                value={formData.email || ''}
-                disabled={formState.submitted}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
-              />
-              <Row>
-                <Col className="subdomain-form">
-                  <Input
-                    id="subdomain"
-                    className="text-center mb-2"
-                    type="text"
-                    title="subdomain"
-                    placeholder="subdomain"
-                    value={formData.subdomain || ''}
-                    disabled={formState.submitted}
-                    onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
-                  />
-                </Col>
-                <Col className="subdomain-label">
-                  .harperdbcloud.com{' '}
-                  <Button color="link" onClick={() => setShowToolTip(!showToolTip)}>
-                    <i className="fa fa-question-circle" />
-                  </Button>
-                </Col>
-              </Row>
-              {showToolTip && (
-                <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>
-              )}
-              <Input
-                id="coupon_code"
-                type="text"
-                className="text-center mb-2"
-                name="coupon_code"
-                title="coupon code"
-                placeholder="coupon code (optional)"
-                value={formData.coupon_code || ''}
-                onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
-                disabled={formState.submitted}
-              />
+                <Input
+                  id="firstname"
+                  className="text-center mb-2"
+                  type="text"
+                  title="first name"
+                  placeholder="first name"
+                  value={formData.firstname || ''}
+                  disabled={formState.submitted}
+                  onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+                />
+                <Input
+                  id="lastname"
+                  className="text-center mb-2"
+                  type="text"
+                  title="last name"
+                  placeholder="last name"
+                  value={formData.lastname || ''}
+                  disabled={formState.submitted}
+                  onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+                />
+                <Input
+                  id="email"
+                  className="text-center mb-2"
+                  type="text"
+                  title="email"
+                  placeholder="email"
+                  value={formData.email || ''}
+                  disabled={formState.submitted}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
+                />
+                <Row>
+                  <Col className="subdomain-form">
+                    <Input
+                      id="subdomain"
+                      className="text-center mb-2"
+                      type="text"
+                      title="subdomain"
+                      placeholder="subdomain"
+                      value={formData.subdomain || ''}
+                      disabled={formState.submitted}
+                      onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
+                    />
+                  </Col>
+                  <Col className="subdomain-label">
+                    .harperdbcloud.com{' '}
+                    <Button color="link" onClick={() => setShowToolTip(!showToolTip)}>
+                      <i className="fa fa-question-circle" />
+                    </Button>
+                  </Col>
+                </Row>
+                {showToolTip && <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>}
+                <Input
+                  id="coupon_code"
+                  type="text"
+                  className="text-center mb-2"
+                  name="coupon_code"
+                  title="coupon code"
+                  placeholder="coupon code (optional)"
+                  value={formData.coupon_code || ''}
+                  onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
+                  disabled={formState.submitted}
+                />
 
                 <div className="d-block d-md-none">
                   <hr />
@@ -156,26 +154,25 @@ const SignUp = () => {
                   <hr />
                 </div>
 
-              <Button id="sign-up" color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
-                {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
-              </Button>
+                <Button id="sign-up" color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
+                  {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
+                </Button>
               </div>
             </Col>
           </Row>
-
         </CardBody>
       </Card>
       <div className="text-center">
-      {formState.error ? (
-        <div className="login-nav-link error">
-          {formState.error}
-          &nbsp;
-        </div>
-      ) : (
-        <NavLink to="/" className="login-nav-link">
-          Already Have An Account? Sign In Instead.
-        </NavLink>
-      )}
+        {formState.error ? (
+          <div className="login-nav-link error">
+            {formState.error}
+            &nbsp;
+          </div>
+        ) : (
+          <NavLink to="/" className="login-nav-link">
+            Already Have An Account? Sign In Instead.
+          </NavLink>
+        )}
       </div>
     </div>
   );

@@ -12,8 +12,12 @@ export default () => (
     <span className="floating-card-header">HarperDB Migrator</span>
     <Card className="my-3">
       <CardBody>
-        The HarperDB Migrator allows you to quickly and easily replicate data from your existing database into HarperDB.<br /><br />
-        <b><i>We currently support migration from MongoDB, but we&apos;re working on other platforms.</i></b>
+        The HarperDB Migrator allows you to quickly and easily replicate data from your existing database into HarperDB.
+        <br />
+        <br />
+        <b>
+          <i>We currently support migration from MongoDB, but we&apos;re working on other platforms.</i>
+        </b>
         <hr />
         <Row>
           <MigratorCard icon="apple" name="MacOS DMG" urls={[{ link: 'https://harperdb.io/download/migrator/mac' }]} />

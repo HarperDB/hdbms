@@ -38,7 +38,6 @@ export default () => {
   const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
   const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
 
-
   const refreshSubscriptions = () => {
     if (auth && customer_id && stripe_id) {
       getPrepaidSubscriptions({ auth, customer_id, stripe_id });

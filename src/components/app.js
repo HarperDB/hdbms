@@ -55,8 +55,6 @@ export default () => {
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1;
   const isMaintenance = config.maintenance && isNotEmployee;
 
-  console.log(isMaintenance);
-
   useEffect(() => {
     changeFavIcon(currentTheme);
   }, [currentTheme]);
@@ -102,25 +100,19 @@ export default () => {
         <Suspense fallback={<Loader header=" " spinner />}>
           <TopNav isMaintenance={isMaintenance} />
         </Suspense>
-        {isMaintenance ? (
-          <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-            <Suspense fallback={<Loader header=" " spinner />}>
-              <Maintenance />
-            </Suspense>
-          </ErrorBoundary>
-        ) : fetchingUser ? (
+        {fetchingUser ? (
           <Loader header="signing in" spinner />
         ) : loggedIn ? (
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Switch>
-                <Route component={UpdatePassword} path="/update-password" />
-                <Route component={Profile} path="/profile" />
-                <Route component={Resources} path="/resources/:view?" />
-                <Route component={Instance} path="/o/:customer_id/i/:compute_stack_id" />
-                <Route component={Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route component={Organization} path="/o/:customer_id/:view?" />
-                <Route component={Organizations} path="/:list?/:action?" />
+                <Route component={isMaintenance ? Maintenance : UpdatePassword} path="/update-password" />
+                <Route component={isMaintenance ? Maintenance : Profile} path="/profile" />
+                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
+                <Route component={isMaintenance ? Maintenance : Instance} path="/o/:customer_id/i/:compute_stack_id" />
+                <Route component={isMaintenance ? Maintenance : Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                <Route component={isMaintenance ? Maintenance : Organization} path="/o/:customer_id/:view?" />
+                <Route component={isMaintenance ? Maintenance : Organizations} path="/:list?/:action?" />
                 <Redirect to="/" />
               </Switch>
             </Suspense>
@@ -130,13 +122,9 @@ export default () => {
             <Suspense fallback={<Loader header=" " spinner />}>
               <Switch>
                 <Route component={SignIn} exact path="/" />
-                {!config.maintenance && (
-                  <>
-                    <Route component={SignUp} exact path="/sign-up" />
-                    <Route component={ResetPassword} exact path="/reset-password" />
-                    <Route component={Resources} path="/resources/:view?" />
-                  </>
-                )}
+                <Route component={config.maintenance ? Maintenance : SignUp} exact path="/sign-up" />
+                <Route component={isMaintenance ? Maintenance : ResetPassword} exact path="/reset-password" />
+                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
                 <Redirect to="/" />
               </Switch>
             </Suspense>
