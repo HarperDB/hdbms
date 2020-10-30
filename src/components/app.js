@@ -52,6 +52,10 @@ export default () => {
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const currentTheme = persistedUser?.theme;
   const loggedIn = auth?.user_id;
+  const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1;
+  const isMaintenance = config.maintenance && isNotEmployee;
+
+  console.log(isMaintenance);
 
   useEffect(() => {
     changeFavIcon(currentTheme);
@@ -93,12 +97,12 @@ export default () => {
   }, config.check_version_interval);
 
   return (
-    <div className={theme}>
+    <div className={`${theme} ${config.maintenance ? 'maintenance' : ''}`}>
       <div id="app-container">
         <Suspense fallback={<Loader header=" " spinner />}>
-          <TopNav />
+          <TopNav isMaintenance={isMaintenance} />
         </Suspense>
-        {config.maintenance ? (
+        {isMaintenance ? (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Maintenance />
@@ -126,9 +130,13 @@ export default () => {
             <Suspense fallback={<Loader header=" " spinner />}>
               <Switch>
                 <Route component={SignIn} exact path="/" />
-                <Route component={SignUp} exact path="/sign-up" />
-                <Route component={ResetPassword} exact path="/reset-password" />
-                <Route component={Resources} path="/resources/:view?" />
+                {!config.maintenance && (
+                  <>
+                    <Route component={SignUp} exact path="/sign-up" />
+                    <Route component={ResetPassword} exact path="/reset-password" />
+                    <Route component={Resources} path="/resources/:view?" />
+                  </>
+                )}
                 <Redirect to="/" />
               </Switch>
             </Suspense>
