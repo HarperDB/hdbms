@@ -17,7 +17,7 @@
   transition: none !important;
 
   &:active {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05)  31%, rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 31%, rgba(255, 255, 255, 0.05) 100%);
   }
 
   &.btn-sm {
@@ -91,6 +91,6 @@
   }
 }
 
-.btn-group-sm>.btn {
+.btn-group-sm > .btn {
   height: auto !important;
 }
