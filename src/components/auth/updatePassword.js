@@ -18,7 +18,7 @@ const UpdatePassword = () => {
   const setPasswordError = () => {
     setFormData({});
     setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
-  }
+  };
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -54,16 +54,14 @@ const UpdatePassword = () => {
           <Card className="mb-3">
             <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <div className="instructions">
-                Add an account password<br /><br />
-                  {formState.error ? (
-                    <i className="text-small text-danger text-bold">
-                      {formState.error}
-                    </i>
-                  ) : (
-                    <i className="text-small text-bold">
-                      8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.
-                    </i>
-                  )}
+                Add an account password
+                <br />
+                <br />
+                {formState.error ? (
+                  <i className="text-small text-danger text-bold">{formState.error}</i>
+                ) : (
+                  <i className="text-small text-bold">8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.</i>
+                )}
               </div>
               <Input
                 id="password1"
@@ -79,9 +77,7 @@ const UpdatePassword = () => {
               </Button>
             </CardBody>
           </Card>
-          <div className="login-nav-link">
-            &nbsp;
-          </div>
+          <div className="login-nav-link">&nbsp;</div>
         </>
       )}
     </div>

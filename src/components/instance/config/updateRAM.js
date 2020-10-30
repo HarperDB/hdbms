@@ -122,7 +122,14 @@ export default ({ setInstanceAction, showPrepaidCompute }) => {
               </Button>
             </Col>
             <Col>
-              <Button id="confirmChange" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block disabled={!hasChanged || formState.submitted} color="success">
+              <Button
+                id="confirmChange"
+                onClick={() => setFormState({ submitted: true })}
+                title="Confirm Instance Details"
+                block
+                disabled={!hasChanged || formState.submitted}
+                color="success"
+              >
                 Update
               </Button>
             </Col>

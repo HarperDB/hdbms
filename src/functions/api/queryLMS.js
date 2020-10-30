@@ -20,12 +20,15 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
       signal,
       method: 'POST',
       body: JSON.stringify(payload),
-      headers: auth?.email && auth?.pass ? {
-        'Content-Type': 'application/json',
-        authorization: `Basic ${btoa(`${auth.email}:${auth.pass}`)}`,
-      } : {
-        'Content-Type': 'application/json',
-      },
+      headers:
+        auth?.email && auth?.pass
+          ? {
+              'Content-Type': 'application/json',
+              authorization: `Basic ${btoa(`${auth.email}:${auth.pass}`)}`,
+            }
+          : {
+              'Content-Type': 'application/json',
+            },
     });
 
     const json = await request.json();

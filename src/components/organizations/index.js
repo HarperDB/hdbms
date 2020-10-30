@@ -31,7 +31,7 @@ const OrganizationsIndex = () => {
   useEffect(() => {
     const activeOrgs = auth?.orgs.filter((o) => ['accepted', 'owner'].includes(o.status));
     if (activeOrgs.length === 1 && (!list || list === 'sign-up')) {
-      history.push(`/o/${auth.orgs[0].customer_id}/instances`)
+      history.push(`/o/${auth.orgs[0].customer_id}/instances`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, list]);
