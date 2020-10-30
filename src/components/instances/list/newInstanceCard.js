@@ -6,16 +6,18 @@ const NewInstanceCard = () => {
   const history = useHistory();
   const { customer_id } = useParams();
 
+  const handleClick = () => {
+    if (window.ORIBI) {
+      window.ORIBI.api('track', 'clicked new instance card');
+    } else {
+      console.log('no oribi');
+    }
+    history.push(`/o/${customer_id}/instances/new`);
+  };
+
   return (
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
-      <Card
-        tabIndex="0"
-        id="newInstanceCard"
-        title="Add New Instance"
-        className="instance new"
-        onKeyDown={(e) => e.keyCode !== 13 || history.push(`/o/${customer_id}/instances/new`)}
-        onClick={() => history.push(`/o/${customer_id}/instances/new`)}
-      >
+      <Card tabIndex="0" id="newInstanceCard" title="Add New Instance" className="instance new" onKeyDown={(e) => e.keyCode !== 13 || handleClick()} onClick={handleClick}>
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
           <span>Create New HarperDB Cloud Instance</span>
           <div className="my-4">

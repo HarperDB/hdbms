@@ -45,6 +45,7 @@ export default () => {
         is_local,
         customer_id,
       });
+      if (window.ORIBI) window.ORIBI.api('track', 'enabled clustering');
       await restartInstance({ auth, url, is_local, compute_stack_id, customer_id });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }

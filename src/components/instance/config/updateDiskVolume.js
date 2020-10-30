@@ -68,6 +68,14 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
         alert.error('There was an error updating your instance. Please try again later.');
         setInstanceAction(false);
       } else {
+        if (window.ORIBI) {
+          window.ORIBI.api('track', 'upgrade instance - disk size');
+          window.ORIBI.api('trackPurchase', {
+            totalPrice: formData?.compute_price,
+            currency: 'USD',
+            products: [{ name: 'storage', id: selectedProduct.data_volume_size_string, price: formData?.storage_price || 0 }],
+          });
+        }
         alert.success('Instance update initialized successfully');
         appState.update((s) => {
           s.lastUpdate = Date.now();

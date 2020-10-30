@@ -50,6 +50,7 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
             setFormState({ error: response.message });
             setTimeout(() => setFormState({}), 2000);
           } else {
+            if (window.ORIBI) window.ORIBI.api('track', 'added credit card - billing page');
             setFormState({ success: response.message });
             await getCustomer({ auth, customer_id });
 
