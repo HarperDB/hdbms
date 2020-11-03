@@ -31,19 +31,13 @@ export default ({ newEntityAttributes, hashAttribute }) => {
   }, []);
 
   useAsyncEffect(async () => {
-    if (action === 'edit' && newEntityAttributes) {
-      const [rowData] = await queryInstance(
-        { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: Object.keys(newEntityAttributes) },
-        auth,
-        url,
-        compute_stack_id,
-        customer_id
-      );
+    if (action === 'edit') {
+      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url, compute_stack_id, customer_id);
       delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
       delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
       setRowValue(rowData);
     } else {
-      setRowValue(newEntityAttributes);
+      setRowValue(newEntityAttributes || {});
     }
   }, [hash]);
 
