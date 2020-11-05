@@ -1,35 +1,38 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
-import ReactTable from 'react-table-6';
 import { useStoreState } from 'pullstate';
 import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
-import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';
 import customerUserColumns from '../../../functions/datatable/customerUserColumns';
-import ErrorFallback from '../../shared/errorFallback';
-import addError from '../../../functions/api/lms/addError';
+import DataTable from '../../shared/dataTable';
+
+const defaultTableState = {
+  tableData: false,
+  totalRecords: 0,
+  dataTableColumns: [],
+  filtered: [],
+  sorted: [{ id: 'email', desc: false }],
+  page: 0,
+  loading: false,
+  totalPages: 1,
+  pageSize: 20,
+  autoRefresh: false,
+  showFilter: false,
+  lastUpdate: false,
+};
 
 export default () => {
   const { customer_id } = useParams();
   const alert = useAlert();
   const history = useHistory();
+  const [tableState, setTableState] = useState(defaultTableState);
+  const sortParam = tableState.sorted[0]?.id;
+  const sortDesc = tableState.sorted[0]?.desc;
   const auth = useStoreState(appState, (s) => s.auth);
-  const users = useStoreState(appState, (s) => s.users && s.users.filter((u) => u.user_id !== s.auth?.user_id));
-  const [tableState, setTableState] = useState({
-    filtered: [],
-    page: 0,
-    loading: true,
-    tableData: [],
-    pages: -1,
-    totalRecords: 0,
-    pageSize: 20,
-    autoRefresh: false,
-    showFilter: false,
-    lastUpdate: false,
-    sorted: [{ id: 'lastname', desc: false }],
-  });
+  const users = useStoreState(appState, (s) => s.users);
+  const tableColumns = customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer_id });
 
   const rowClick = useCallback(
     (user_id) => {
@@ -42,6 +45,27 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [auth.user_id, customer_id]
   );
+
+  useEffect(() => {
+    if (tableState.tableData.length && sortParam) {
+      const userData = [...tableState.tableData];
+      const sortedTableData = userData.sort((a, b) => (a[sortParam] > b[sortParam] && sortDesc ? -1 : a[sortParam] > b[sortParam] ? 1 : sortDesc ? 1 : -1));
+      setTableState({ ...tableState, tableData: sortedTableData });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortParam, sortDesc]);
+
+  useEffect(() => {
+    if (users && tableColumns) {
+      setTableState({
+        ...tableState,
+        tableData: users,
+        dataTableColumns: tableColumns,
+        totalPages: Math.ceil((users.length || tableState.pageSize) / tableState.pageSize),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users, setTableState, tableState.pageSize]);
 
   return (
     <>
@@ -61,27 +85,21 @@ export default () => {
       </Row>
       <Card className="my-3">
         <CardBody>
-          <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-            <ReactTable
-              data={users ? [auth, ...users] : [auth]}
-              columns={customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer_id })}
-              pages={tableState.pages}
-              onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-              filtered={tableState.filtered}
-              onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
-              sorted={tableState.sorted}
-              onPageChange={(value) => setTableState({ ...tableState, page: value })}
-              page={tableState.page}
-              filterable={tableState.showFilter}
-              defaultPageSize={tableState.pageSize}
-              pageSize={tableState.pageSize}
-              onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-              resizable={false}
-              getTrProps={(state, rowInfo) => ({
-                onClick: () => rowClick(rowInfo.original.user_id),
-              })}
-            />
-          </ErrorBoundary>
+          <DataTable
+            columns={tableState.dataTableColumns}
+            data={tableState.tableData}
+            page={tableState.page}
+            pageSize={tableState.pageSize}
+            totalPages={tableState.totalPages}
+            showFilter={tableState.showFilter}
+            sorted={tableState.sorted}
+            loading={tableState.loading && !tableState.autoRefresh}
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
+            onRowClick={(rowData) => rowClick(rowData.user_id)}
+          />
         </CardBody>
       </Card>
     </>

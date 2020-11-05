@@ -6,7 +6,7 @@ import listUsers from '../api/instance/listUsers';
 import listRoles from '../api/instance/listRoles';
 import clusterStatus from '../api/instance/clusterStatus';
 
-import browseTableColumns from '../datatable/browseTableColumns';
+import buildInstanceDataStructure from './buildInstanceDataStructure';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from '../datatable/clusterConfigColumns';
@@ -29,7 +29,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
     };
   }
 
-  const { structure, defaultBrowseURL } = browseTableColumns(schema);
+  const { structure, defaultBrowseURL } = buildInstanceDataStructure(schema);
 
   const dashboardStats = {
     schemas: Object.keys(schema).length,
@@ -64,6 +64,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
   }
 
   const users = await listUsers({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
+  users.sort((a, b) => (a.username > b.username ? -1 : 1));
 
   const roles = await listRoles({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
@@ -79,7 +80,7 @@ export default async ({ instances, auth, compute_stack_id }) => {
 
   const clusterDataTable = buildClusteringTable({ instances: clustering.connected.filter((i) => i.connection.state !== 'closed'), structure });
 
-  const clusterDataTableColumns = clusterConfigColumns({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id });
+  const clusterDataTableColumns = clusterConfigColumns({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
   instanceState.update((s) => {
     Object.entries({

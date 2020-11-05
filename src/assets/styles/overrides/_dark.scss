@@ -89,44 +89,47 @@
     }
   }
 
-  .ReactTable {
-    .rt-thead {
-      &.-header {
-        border-bottom: 1px solid $faint-white-overlay !important;
-        border-top: 1px solid $faint-white-overlay !important;
-      }
+  .react-table-scroller {
+    .react-table {
+      .header {
+        .col {
+          border-top: 1px solid $faint-white-overlay;
 
-      &.-filters {
-        input,
-        select {
-          background: transparent !important;
-          border: 1px solid $faint-white-overlay !important;
-          color: $color-lightgrey !important;
+          &.sorted {
+            &.desc {
+              box-shadow: inset 0 -2px 0 0 $faint-white-overlay;
+            }
+
+            &.asc {
+              box-shadow: inset 0 2px 0 0 $faint-white-overlay;
+            }
+
+          }
         }
       }
-    }
 
-    .rt-thead,
-    .rt-tbody {
-      &.-header,
-      .rt-tr-group {
-        border-color: $faint-white-overlay !important;
+      .rows {
+        border-bottom: 1px solid $faint-white-overlay;
       }
 
-      .rt-td,
-      .rt-th {
-        &.-sort-desc {
-          box-shadow: inset 0 -2px 0 0 $color-lightgrey !important;
-        }
-
-        &.-sort-asc {
-          box-shadow: inset 0 2px 0 0 $color-lightgrey !important;
+      .row {
+        .col {
+          border-bottom: 1px solid $faint-white-overlay;
         }
       }
-    }
 
-    .-pagination {
-      border-top-color: $faint-white-overlay !important;
+      input,
+      select {
+        color: $color-white;
+      }
+
+      .image-renderer {
+        .preview-image {
+          &.no-image {
+            background: $color-white;
+          }
+        }
+      }
     }
   }
 
@@ -186,6 +189,10 @@
     background: radial-gradient($faint-white-overlay 1px, transparent 0) !important;
     background-size: 3px 3px !important;
     color: $color-lightgrey !important;
+  }
+
+  #replaceFile {
+    color: $color-white;
   }
 
   .modal-content {

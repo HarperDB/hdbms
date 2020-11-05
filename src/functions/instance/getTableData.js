@@ -1,6 +1,5 @@
 import queryInstance from '../api/queryInstance';
 import describeTable from '../api/instance/describeTable';
-import handleCellValues from '../datatable/handleCellValues';
 import registrationInfo from '../api/instance/registrationInfo';
 
 export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, is_local, compute_stack_id, customer_id }) => {
@@ -121,11 +120,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     orderedColumns.push('__createdtime__');
     orderedColumns.push('__updatedtime__');
     dataTableColumns = orderedColumns.map((k) => ({
-      id: k.toString(),
       Header: k.toString(),
       accessor: (row) => row[k.toString()],
-      style: { height: 29, paddingTop: 10 },
-      Cell: (props) => handleCellValues(props.value),
     }));
   }
 

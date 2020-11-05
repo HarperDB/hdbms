@@ -9,7 +9,7 @@ export default () => {
   const [query, setQuery] = useState(false);
 
   return (
-    <Row>
+    <Row id="query">
       <Col xl="3" lg="4" md="5" xs="12">
         <QueryWindow setQuery={setQuery} query={query} />
         <QueryHistory setQuery={setQuery} query={query} />

@@ -10,11 +10,9 @@ import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../functions/instance/getTableData';
-import Table from '../../shared/dataTable';
+import DataTable from '../../shared/dataTable';
 
-let debounceTimer;
-
-const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
+const BrowseDataTable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -36,39 +34,33 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
   }, [schema, table]);
 
   useAsyncEffect(async () => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(
-      async () => {
-        if (canFetch) {
-          setLoading(true);
-          const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
-            schema,
-            table,
-            filtered: tableState.filtered,
-            pageSize: tableState.pageSize,
-            sorted: tableState.sorted,
-            page: tableState.page,
-            auth,
-            url,
-            is_local,
-            compute_stack_id,
-            customer_id,
-          });
-          setTableState({
-            ...tableState,
-            tableData: newData,
-            totalPages: newTotalPages,
-            totalRecords: newTotalRecords,
-            sorted: newSorted,
-            newEntityAttributes,
-            hashAttribute,
-            dataTableColumns,
-            error,
-          });
-        }
-      },
-      !tableState.filtered.length ? 0 : 500
-    );
+    if (canFetch) {
+      setLoading(true);
+      const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+        schema,
+        table,
+        filtered: tableState.filtered,
+        pageSize: tableState.pageSize,
+        sorted: tableState.sorted,
+        page: tableState.page,
+        auth,
+        url,
+        is_local,
+        compute_stack_id,
+        customer_id,
+      });
+      setTableState({
+        ...tableState,
+        tableData: newData,
+        totalPages: newTotalPages,
+        totalRecords: newTotalRecords,
+        sorted: newSorted,
+        newEntityAttributes,
+        hashAttribute,
+        dataTableColumns,
+        error,
+      });
+    }
   }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, activeTable, mounted]);
 
   useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
@@ -91,10 +83,15 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
       />
       <Card className="my-3">
         <CardBody>
-          <Table
-            {...tableState}
-            schema={schema}
-            table={table}
+          <DataTable
+            manual
+            columns={tableState.dataTableColumns}
+            data={tableState.tableData}
+            page={tableState.page}
+            pageSize={tableState.pageSize}
+            totalPages={tableState.totalPages}
+            showFilter={tableState.showFilter}
+            sorted={tableState.sorted}
             loading={loading && !tableState.autoRefresh}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
@@ -102,48 +99,10 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
             onRowClick={(rowData) => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}
           />
-          {/*
-          {tableState.error ? (
-            <div className="text-center py-5">{tableState.error}</div>
-          ) : !loading && !tableState.tableData.length && !tableState.filtered.length ? (
-            <div className="text-center py-5">This table has no data</div>
-          ) : loading ? (
-            <div className="text-center py-5">
-              <i className="fa fa-spinner fa-spin" />
-            </div>
-          ) : (
-            <ReactTable
-              manual
-              loading={loading && !tableState.autoRefresh}
-              loadingText="loading"
-              data={tableState.tableData}
-              pages={tableState.totalPages}
-              columns={tableState.dataTableColumns}
-              hashAttribute={tableState.hashAttribute}
-              onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-              filtered={tableState.filtered}
-              onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
-              sorted={tableState.sorted}
-              onPageChange={(value) => setTableState({ ...tableState, page: value })}
-              page={tableState.page}
-              filterable={tableState.showFilter}
-              defaultPageSize={tableState.pageSize}
-              showPageJump={!loading}
-              pageSize={tableState.pageSize}
-              onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-              getTrProps={(state, rowInfo) => ({
-                onClick: () => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowInfo.original[tableState.hashAttribute]}`),
-              })}
-              collapseOnSortingChange={false}
-              collapseOnPageChange={false}
-              collapseOnDataChange={false}
-            />
-          )}
-          */}
         </CardBody>
       </Card>
     </>
   );
 };
 
-export default DataTable;
+export default BrowseDataTable;

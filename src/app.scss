@@ -1,12 +1,25 @@
 // external resources
-@import '~react-table-6/react-table';
+@import '~bootstrap-scss/bootstrap-reboot';
+@import '~bootstrap-scss/bootstrap-grid';
+
+@import 'assets/styles/core/vars';
+
+@import '~bootstrap-scss/button-group';
+@import '~bootstrap-scss/buttons';
+@import '~bootstrap-scss/card';
+@import '~bootstrap-scss/forms';
+@import '~bootstrap-scss/modal';
+@import '~bootstrap-scss/nav';
+@import '~bootstrap-scss/navbar';
+@import '~bootstrap-scss/close';
+@import '~bootstrap-scss/utilities/text';
 
 // core styles
-@import 'assets/styles/core/vars';
 @import 'assets/styles/core/base';
 @import 'assets/styles/core/global';
 @import 'assets/styles/core/typography';
 @import 'assets/styles/core/background';
+@import 'assets/styles/core/fonts';
 
 // page styles
 @import 'assets/styles/pages/instances';
@@ -18,6 +31,7 @@
 @import 'assets/styles/pages/resources';
 @import 'assets/styles/pages/outdated';
 @import 'assets/styles/pages/dashboard';
+@import 'assets/styles/pages/query';
 
 // component styles
 @import 'assets/styles/components/entity-manager';
@@ -35,8 +49,6 @@
 @import 'assets/styles/components/subnav';
 @import 'assets/styles/components/tooltip';
 @import 'assets/styles/components/json-editor';
-@import 'assets/styles/components/query-window';
-@import 'assets/styles/components/query-history';
 @import 'assets/styles/components/structure-reloader';
 @import 'assets/styles/components/error-boundary';
 @import 'assets/styles/components/code';

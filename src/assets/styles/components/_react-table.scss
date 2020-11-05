@@ -1,7 +1,7 @@
 .react-table-scroller {
-  width: 100%;
-  overflow-y: hidden;
   overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
 
   .react-table {
     font-size: 12px;
@@ -10,14 +10,15 @@
       font-weight: bold;
 
       .col {
+        border-top: 1px solid $lighter-grey-overlay;
         min-width: 100px;
         white-space: nowrap;
-        border-top: 1px solid $lighter-grey-overlay;
 
-        &.sorted{
+        &.sorted {
           &.desc {
             box-shadow: inset 0 -2px 0 0 $lighter-grey-overlay;
           }
+
           &.asc {
             box-shadow: inset 0 2px 0 0 $lighter-grey-overlay;
           }
@@ -33,22 +34,49 @@
     }
 
     .rows {
-      min-height: 555px;
+      border-bottom: 1px solid $lighter-grey-overlay;
+      min-height: 601px;
+
+      .row:last-child {
+        .col {
+          border-bottom: 0;
+        }
+      }
+
+      .no-results,
+      .loader {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.875rem;
+        height: 555px;
+        justify-content: center;
+      }
     }
 
     .row {
+      cursor: pointer;
+      flex-wrap: nowrap;
       margin: 0;
       overflow: visible;
       white-space: nowrap;
       width: 100%;
-      flex-wrap: nowrap;
-      cursor: pointer;
 
       .col {
-        min-width: 100px;
-        white-space: nowrap;
-        padding: 0.4rem 0.5rem;
+        align-items: center;
         border-bottom: 1px solid $lighter-grey-overlay;
+        display: flex;
+        height: 30px;
+        margin-bottom: 0 !important;
+        min-width: 100px;
+        padding: 0 0.25rem;
+        white-space: nowrap;
+
+        &.action {
+          justify-content: center;
+          max-width: 70px;
+          min-width: 70px;
+        }
       }
     }
 
@@ -67,177 +95,70 @@
     }
 
     .image-renderer {
-      position: relative;
       padding-left: 10px;
+      position: relative;
 
       .preview-image {
         border-radius: 4px;
         box-shadow: 0 0 4px $grey-overlay;
         left: 40px;
-        top: -5px;
         max-height: 150px;
         max-width: 150px;
         position: absolute;
+        top: -5px;
         width: auto;
         z-index: 99;
 
         &.no-image {
-          width: 150px;
-          height: 60px;
+          align-items: center;
+          background: $color-white;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          height: 60px;
           justify-content: center;
-          background: $color-white;
+          width: 150px;
         }
       }
     }
   }
 }
 
-.paginator {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+.pagination {
+  margin-top: 1.5rem;
 
-  input {
-    text-align: center;
-    max-width: 50px;
-    padding-left: 3px;
-    padding-right: 3px;
-    margin: 0 5px;
-  }
-}
-
-.page-size {
-  select {
+  .btn {
     max-width: 100px;
-  }
-}
 
-
-.ReactTable {
-  border: 0 !important;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1 !important;
-
-  .rt-thead {
-    &.-header {
-      border-top: 1px solid $lighter-grey-overlay;
-      font-weight: $font-weight-bold;
-    }
-
-    &.-filters {
-      input,
-      select {
-        background: $lighter-grey-overlay;
-        box-shadow: none;
-        color: $color-black;
-        height: 33px !important;
-      }
+    @media screen and (max-width: 575px) {
+      max-width: 100%;
     }
   }
 
-  .rt-thead,
-  .rt-tbody {
-    &.-header,
-    .rt-tr-group {
-      border-bottom: 1px solid $lighter-grey-overlay;
-      box-shadow: none !important;
-    }
-
-    .rt-td,
-    .rt-th {
-      border-right: 0 !important;
-      text-align: left !important;
-
-      &.-sort-desc {
-        box-shadow: inset 0 -2px 0 0 $color-black;
-      }
-
-      &.-sort-asc {
-        box-shadow: inset 0 2px 0 0 $color-black;
-      }
+  .next {
+    .btn {
+      float: right;
     }
   }
 
-  .rt-tbody {
-    .rt-td {
-      font-family: Helvetica, Arial, sans-serif !important;
-      overflow: visible;
+
+  .paginator {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+
+    input {
+      margin: 0 5px;
+      padding-left: 3px;
+      padding-right: 3px;
+      padding-top: 13px;
+      text-align: center;
+      width: 100%;
     }
   }
 
-  .-pagination {
-    border-top: 1px solid $lighter-grey-overlay;
-    box-shadow: none;
-    padding-top: 1rem;
-
-    .-btn {
-      background: $color-purple !important;
-      color: $color-white !important;
-      font-family: $font-family-sans;
-      font-weight: $font-weight-light;
-      height: 33px;
-      margin-top: 3px;
-      min-width: 100px;
-
-      &:hover {
-        background: $color-purple !important;
-        color: $color-white !important;
-      }
-    }
-
-    .-previous,
-    .-next {
-      flex: 0 1;
-    }
-
-    .-center {
-      flex: none;
-    }
-
-    .-previous,
-    .-center,
-    .-next {
-      @media screen and (max-width: 905px) {
-        display: block;
-        flex: none;
-        margin-bottom: 5px;
-        width: 100%;
-
-        .-pageInfo {
-          margin-left: 0;
-        }
-
-        .-pageSizeOptions {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  .rt-noData {
-    display: none;
-  }
-
-  .text-renderer {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .image-renderer {
-    position: relative;
-
-    .preview-image {
-      border-radius: 4px;
-      box-shadow: 0 0 3px $black-overlay;
-      left: 25px;
-      max-height: 150px;
-      max-width: 150px;
-      position: absolute;
-      width: auto;
+  .page-size {
+    select {
+      width: 100%;
     }
   }
 }

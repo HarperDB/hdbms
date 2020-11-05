@@ -1,5 +1,4 @@
 import sql from '../api/instance/sql';
-import handleCellValues from '../datatable/handleCellValues';
 
 export default async ({ query, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
   try {
@@ -28,14 +27,8 @@ export default async ({ query, auth, url, signal, is_local, compute_stack_id, cu
     if (attributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
     const dataTableColumns = orderedColumns.map((k) => ({
-      id: k.toString(),
       Header: k.toString(),
       accessor: (row) => row[k.toString()],
-      style: {
-        height: 29,
-        paddingTop: 10,
-      },
-      Cell: (props) => handleCellValues(props.value),
     }));
 
     return {

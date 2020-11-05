@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactTable from 'react-table-6';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { Card, CardBody } from 'reactstrap';
@@ -16,21 +15,21 @@ import getQueryData from '../../../functions/instance/getQueryData';
 import EmptyPrompt from './emptyPrompt';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import DataTable from '../../shared/dataTable';
 
 const defaultTableState = {
-  tableData: [],
-  totalPages: -1,
+  tableData: false,
   totalRecords: 0,
-  loading: false,
+  dataTableColumns: [],
   filtered: [],
   sorted: [],
+  page: 0,
+  loading: false,
+  totalPages: 1,
+  pageSize: 20,
   autoRefresh: false,
   showFilter: false,
-  dataTableColumns: [],
-  error: false,
-  message: false,
-  reload: false,
-  accessErrors: false,
+  lastUpdate: false,
 };
 
 let controller;
@@ -48,7 +47,7 @@ export default ({ query }) => {
     if (query.query) {
       setTableState({ ...defaultTableState, reload: true });
     } else {
-      setTableState({ ...tableState, tableData: [], error: false, message: false, reload: false });
+      setTableState({ ...tableState, tableData: false, error: false, message: false, reload: false });
     }
   }, [query.query]);
 
@@ -62,24 +61,20 @@ export default ({ query }) => {
         const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal, is_local, compute_stack_id, customer_id });
 
         if (response.error) {
-          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true, reload: false });
+          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true });
         } else if (response.message) {
-          setTableState({ ...tableState, message: response.message, loading: false, error: false, reload: false });
-        } else if (!response.tableData.length) {
-          setTableState({ ...tableState, message: 'Your query produced no results', loading: false, error: false, reload: false });
+          setTableState({ ...tableState, message: response.message, loading: false, error: false });
         } else {
-          const sortable = query.query.toLowerCase().indexOf('order by') === -1;
           setTableState({
             ...tableState,
             tableData: response.tableData,
             totalRecords: response.totalRecords,
             dataTableColumns: response.dataTableColumns,
+            totalPages: Math.ceil((response.tableData?.length || 20) / 20),
             loading: false,
             error: false,
             message: false,
-            reload: false,
-            sorted: sortable ? [{ id: response.dataTableColumns[0].accessor, desc: (tableState.sorted && tableState.sorted[0]?.desc) || false }] : [],
-            sortable,
+            sorted: [],
           });
         }
       }
@@ -98,6 +93,8 @@ export default ({ query }) => {
     <EmptyPrompt message="Executing Query" />
   ) : tableState.message ? (
     <EmptyPrompt error={tableState.error} message={tableState.message} accessErrors={tableState.access_errors} />
+  ) : tableState.tableData && !tableState.tableData.length ? (
+    <EmptyPrompt message="No records" />
   ) : tableState.tableData?.length ? (
     <ErrorBoundary
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
@@ -106,31 +103,29 @@ export default ({ query }) => {
       <DataTableHeader
         totalRecords={tableState.totalRecords}
         loading={tableState.loading}
-        autoRefresh={tableState.autoRefresh}
-        setAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         showFilter={tableState.showFilter}
         filtered={tableState.filtered}
         toggleFilter={(newValues) => setTableState({ ...tableState, ...newValues })}
+        autoRefresh={tableState.autoRefresh}
+        setAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         setLastUpdate={setLastUpdate}
         setShowChartModal={setShowChartModal}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
-          <ReactTable
-            sortable={tableState.sortable}
-            loading={tableState.loading && !tableState.autoRefresh}
-            loadingText="loading"
-            data={tableState.tableData}
+          <DataTable
             columns={tableState.dataTableColumns}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-            filtered={tableState.filtered}
-            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
-            sorted={tableState.sorted}
-            onPageChange={(value) => setTableState({ ...tableState, page: value })}
-            filterable={tableState.showFilter}
-            defaultPageSize={tableState.pageSize}
+            data={tableState.tableData}
+            page={tableState.page}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            totalPages={tableState.totalPages}
+            showFilter={tableState.showFilter}
+            sorted={tableState.sorted}
+            loading={tableState.loading && !tableState.autoRefresh}
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
           />
         </CardBody>
       </Card>

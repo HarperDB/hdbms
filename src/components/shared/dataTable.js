@@ -1,27 +1,71 @@
-import React, { useEffect } from 'react';
-import { useFilters, useTable, usePagination, useSortBy } from 'react-table';
-import { Row, Col, Input, Button } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { useFilters, useTable, usePagination } from 'react-table';
+import { Input } from 'reactstrap';
+import { ErrorBoundary } from 'react-error-boundary';
 
-function DefaultColumnFilter({ column }) {
+import DataTableHeader from './dataTableHeader';
+import DataTablePagination from './dataTablePagination';
+import DataTableRow from './dataTableRow';
+import isImage from '../../functions/util/isImage';
+import addError from '../../functions/api/lms/addError';
+import ErrorFallback from './errorFallback';
+
+const TextViewer = ({ value }) => <div className="text-renderer">{value}</div>;
+
+const ImageViewer = ({ src }) => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewError, setPreviewError] = useState(false);
+
   return (
-    <Input
-      type="text"
-      value={column.filterValue || ''}
-      onChange={(e) => {
-        column.setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-      }}
-    />
+    <div className="image-renderer" onMouseEnter={() => setPreviewOpen(true)} onMouseLeave={() => setPreviewOpen(false)}>
+      <i className="fa fa-image" />
+      {previewOpen && previewError ? (
+        <div className="preview-image no-image">
+          <i className="fa fa-ban text-danger" />
+          <div className="mt-2">image failed to load</div>
+        </div>
+      ) : previewOpen ? (
+        <img onError={setPreviewError} alt={src} src={src} className="preview-image" />
+      ) : null}
+    </div>
   );
-}
+};
+
+const handlCellValues = (value) => {
+  const dataType = Object.prototype.toString.call(value);
+
+  switch (dataType) {
+    case '[object Array]':
+    case '[object Object]':
+      return <TextViewer value={JSON.stringify(value)} />;
+    case '[object Boolean]':
+      return <TextViewer value={value ? 'true' : 'false'} />;
+    case '[object String]':
+      return isImage(value) ? <ImageViewer src={value} /> : <TextViewer value={value} />;
+    default:
+      return <TextViewer value={value} />;
+  }
+};
+
+const defaultColumnFilter = ({ column }) => (
+  <Input
+    type="text"
+    value={column.filterValue || ''}
+    onChange={(e) => {
+      column.setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+    }}
+  />
+);
 
 const defaultColumn = {
-  Filter: DefaultColumnFilter,
+  Filter: defaultColumnFilter,
+  Cell: ({ value }) => handlCellValues(value),
 };
 
 // Our table component
 export default ({
-  dataTableColumns,
-  tableData,
+  columns,
+  data,
   page,
   pageSize,
   totalPages,
@@ -33,24 +77,22 @@ export default ({
   onRowClick,
   sorted,
   loading,
-  autoRefresh,
+  manual = false,
 }) => {
   const { headerGroups, rows, prepareRow, state } = useTable(
     {
-      columns: dataTableColumns,
-      data: tableData,
+      columns,
+      data,
       defaultColumn,
-      manualPagination: true,
-      manualFilters: true,
-      manualSortBy: true,
       onFilteredChange,
       onSortedChange,
       onPageChange,
       onPageSizeChange,
       onRowClick,
+      manualPagination: manual,
+      manualFilters: manual,
     },
     useFilters,
-    useSortBy,
     usePagination
   );
 
@@ -58,86 +100,31 @@ export default ({
     if (state.filters) {
       onFilteredChange(state.filters);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters]);
 
   return (
-    <>
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="react-table-scroller">
         <div className="react-table">
-          {headerGroups.map((headerGroup) => (
-            <div {...headerGroup.getHeaderGroupProps()}>
-              <Row className="header" noGutters>
-                {headerGroup.headers.map((column) => {
-                  // console.log(column, column.getHeaderProps(column.getSortByToggleProps()));
-                  return (
-                    <Col
-                      key={column.id}
-                      onClick={() => onSortedChange([{ id: column.id, desc: sorted[0]?.id === column.id ? !sorted[0]?.desc : false }])}
-                      className={`${sorted[0]?.id === column.id ? 'sorted' : ''} ${sorted[0]?.desc ? 'desc' : 'asc'} px-1`}
-                    >
-                      {column.render('Header')}
-                    </Col>
-                  );
-                })}
-              </Row>
-              {showFilter && (
-                <Row noGutters className="filter">
-                  {headerGroup.headers.map((column) => (
-                    <Col {...column.getHeaderProps()}>{column.render('Filter')}</Col>
-                  ))}
-                </Row>
-              )}
-            </div>
-          ))}
+          <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
           <div className="rows">
-            {loading && !autoRefresh && !state.filters?.length ? (
-              <div className="text-center py-5">
+            {rows?.length ? (
+              rows.map((row) => <DataTableRow key={row.id} row={row} prepareRow={prepareRow} onRowClick={onRowClick} />)
+            ) : loading ? (
+              <div className="loader">
                 <i className="fa fa-spinner fa-spin" />
               </div>
-            ) : rows?.length ? (
-              rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <Row onClick={() => onRowClick(row.original)} noGutters {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <Col className="px-1" {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </Col>
-                    ))}
-                  </Row>
-                );
-              })
             ) : (
-              <div className="text-center py-5">no results!</div>
+              <div className="no-results">
+                <i className="fa fa-ban text-danger" />
+                <div className="mt-2">no results</div>
+              </div>
             )}
           </div>
         </div>
       </div>
-      <Row className="mt-4">
-        <Col xs="12" md="3">
-          <Button color="purple" block onClick={() => onPageChange(page - 1)} disabled={page === 0}>
-            <i className="fa fa-chevron-left" />
-          </Button>
-        </Col>
-        <Col xs="12" md="3" className="paginator">
-          <i className="fa fa-book mr-2" />
-          <Input type="number" value={page + 1} min={1} max={totalPages} onChange={(e) => onPageChange(e.target.value - 1)} /> of {totalPages}
-        </Col>
-        <Col xs="12" md="3" className="page-size">
-          <Input type="select" value={pageSize} onChange={(e) => onPageSizeChange(e.target.value)}>
-            {[20, 50, 100, 250].map((pageSizeValue) => (
-              <option key={pageSizeValue} value={pageSizeValue}>
-                {pageSizeValue} rows
-              </option>
-            ))}
-          </Input>
-        </Col>
-        <Col xs="12" md="3">
-          <Button block color="purple" onClick={() => onPageChange(page + 1)} disabled={page + 1 === totalPages}>
-            <i className="fa fa-chevron-right" />
-          </Button>
-        </Col>
-      </Row>
-    </>
+      <DataTablePagination page={page} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
+    </ErrorBoundary>
   );
 };

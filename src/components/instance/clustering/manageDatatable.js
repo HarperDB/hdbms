@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
-import ReactTable from 'react-table-6';
-import { Card, CardBody, Col, Row, Button } from 'reactstrap';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../functions/state/instanceState';
 import StructureReloader from '../../shared/structureReloader';
+import DataTable from '../../shared/dataTable';
 
 export default () => {
+  const data = useStoreState(instanceState, (s) => s.clusterDataTable);
+  const columns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
   const [tableState, setTableState] = useState({
     filtered: [],
     sorted: [],
     page: 0,
-    loading: true,
-    tableData: [],
-    pages: -1,
+    loading: false,
+    totalPages: Math.ceil((data?.length || 20) / 20),
     totalRecords: 0,
     pageSize: 20,
     autoRefresh: false,
     showFilter: false,
     lastUpdate: false,
   });
-  const clusterDataTable = useStoreState(instanceState, (s) => s.clusterDataTable);
-  const clusterDataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
 
   return (
     <>
@@ -29,30 +28,23 @@ export default () => {
         <Col>manage clustering</Col>
         <Col className="text-right">
           <StructureReloader label="refresh cluster config" />
-          <span className="mx-3 text">|</span>
-          <Button
-            color="link"
-            title="Filter Instances"
-            className=" mr-2"
-            onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
-          >
-            <i className="fa fa-search" />
-          </Button>
         </Col>
       </Row>
       <Card className="my-3">
         <CardBody>
-          <ReactTable
-            data={clusterDataTable}
-            columns={clusterDataTableColumns}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-            filtered={tableState.filtered}
-            sortable={false}
-            filterable={tableState.showFilter}
-            defaultPageSize={tableState.pageSize}
+          <DataTable
+            columns={columns}
+            data={data}
+            page={tableState.page}
             pageSize={tableState.pageSize}
-            onPageSizeChange={(value) => setTableState({ ...tableState, pageSize: value })}
-            resizable={false}
+            totalPages={tableState.totalPages}
+            showFilter={tableState.showFilter}
+            sorted={tableState.sorted}
+            loading={tableState.loading && !tableState.autoRefresh}
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}
+            onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
           />
         </CardBody>
       </Card>
