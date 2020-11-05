@@ -6,11 +6,19 @@ const TextViewer = ({ value }) => <div className="text-renderer">{value}</div>;
 
 const ImageViewer = ({ src }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewError, setPreviewError] = useState(false);
 
   return (
     <div className="image-renderer" onMouseEnter={() => setPreviewOpen(true)} onMouseLeave={() => setPreviewOpen(false)}>
       <i className="fa fa-image" />
-      {previewOpen && <img alt={src} src={src} className="preview-image" />}
+      {previewOpen && previewError ? (
+        <div className="preview-image no-image">
+          <i className="fa fa-ban text-danger" />
+          <div className="mt-2">image failed to load</div>
+        </div>
+      ) : previewOpen ? (
+        <img onError={setPreviewError} alt={src} src={src} className="preview-image" />
+      ) : null}
     </div>
   );
 };

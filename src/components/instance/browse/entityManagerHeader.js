@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'reactstrap';
 
 export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
   <Row className="floating-card-header">
-    <Col>{items?.length ? `${itemType}s` : ''}&nbsp;</Col>
+    <Col>{itemType}s</Col>
     {showForm && items?.length ? (
       <Col className="text-right">
         <Button

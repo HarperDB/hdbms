@@ -26,22 +26,25 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
         showForm={showForm}
       />
       <Card className="my-3">
-        <CardBody>
-          {items && items.length
-            ? items.map((item) => (
-                <EntityManagerRow
-                  key={item}
-                  item={item}
-                  itemType={itemType}
-                  baseUrl={baseUrl}
-                  isActive={activeItem === item}
-                  isDropping={isDropping}
-                  toggleDropItem={toggleDropItem}
-                  activeSchema={activeSchema}
-                />
-              ))
-            : null}
-          {((items && !items.length) || isCreating) && showForm ? (
+        {items && items.length ? (
+          <CardBody className="scrollable">
+            {items.map((item) => (
+              <EntityManagerRow
+                key={item}
+                item={item}
+                itemType={itemType}
+                baseUrl={baseUrl}
+                isActive={activeItem === item}
+                isDropping={isDropping}
+                toggleDropItem={toggleDropItem}
+                activeSchema={activeSchema}
+              />
+            ))}
+          </CardBody>
+        ) : null}
+
+        {((items && !items.length) || isCreating) && showForm ? (
+          <CardBody>
             <EntityManagerForm
               items={items}
               itemType={itemType}
@@ -52,10 +55,12 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
               isCreating={isCreating}
               toggleCreate={toggleCreate}
             />
-          ) : items && !items.length && !showForm ? (
+          </CardBody>
+        ) : items && !items.length && !showForm ? (
+          <CardBody>
             <div className="py-3 text-center no-content">no visible schemas or tables</div>
-          ) : null}
-        </CardBody>
+          </CardBody>
+        ) : null}
       </Card>
     </div>
   );

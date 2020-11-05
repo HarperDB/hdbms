@@ -38,6 +38,12 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
       alert.error('You may only use alphanumeric characters or underscores.');
     }
 
+    if (entityName && entityName.match(/^[0-9]+$/)) {
+      toggleNameError(true);
+      error = true;
+      alert.error('You may not provide a number as a name.');
+    }
+
     if (itemType === 'table' && !hashAttribute) {
       error = true;
       toggleHashError(true);
@@ -83,8 +89,9 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
           invalid={nameError}
           onChange={(e) => {
             toggleNameError(false);
-            setEntityName(e.target.value.toString());
+            setEntityName(e.target.value);
           }}
+          value={entityName || ''}
           disabled={addingItem}
           type="text"
           name="name"
@@ -99,8 +106,9 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
             disabled={addingItem}
             onChange={(e) => {
               toggleHashError(false);
-              setHashAttribute(e.target.value.toString());
+              setHashAttribute(e.target.value);
             }}
+            value={hashAttribute || ''}
             type="test"
             name="hash_attribute"
             placeholder="hash attr."

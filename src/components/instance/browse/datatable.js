@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ReactTable from 'react-table-6';
 import { useHistory, useParams } from 'react-router';
 import useInterval from 'use-interval';
-import { Button, Card, CardBody } from 'reactstrap';
+import { Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
@@ -11,6 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 import DataTableHeader from './datatableHeader';
 import getTableData from '../../../functions/instance/getTableData';
+import Table from '../../shared/dataTable';
 
 let debounceTimer;
 
@@ -90,19 +90,24 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
-        <CardBody className="react-table-holder">
+        <CardBody>
+          <Table
+            {...tableState}
+            schema={schema}
+            table={table}
+            loading={loading && !tableState.autoRefresh}
+            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
+            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onPageChange={(value) => setTableState({ ...tableState, page: value })}
+            onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
+            onRowClick={(rowData) => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}
+          />
+          {/*
           {tableState.error ? (
             <div className="text-center py-5">{tableState.error}</div>
           ) : !loading && !tableState.tableData.length && !tableState.filtered.length ? (
             <div className="text-center py-5">This table has no data</div>
-          ) : !loading && !tableState.tableData.length ? (
-            <div className="text-center py-5">
-              <div className="mb-3">Your filters have returned no data.</div>
-              <Button id="resetFilter" onClick={() => setTableState({ ...tableState, filtered: [] })} size="sm" color="purple" className="py-1 px-2 mr-2">
-                reset filter
-              </Button>
-            </div>
-          ) : !tableState.tableData.length ? (
+          ) : loading ? (
             <div className="text-center py-5">
               <i className="fa fa-spinner fa-spin" />
             </div>
@@ -134,6 +139,7 @@ const DataTable = ({ tableState, setTableState, activeTable, defaultTableState }
               collapseOnDataChange={false}
             />
           )}
+          */}
         </CardBody>
       </Card>
     </>

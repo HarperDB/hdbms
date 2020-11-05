@@ -113,24 +113,22 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   }
 
   let dataTableColumns = [];
-  if (Array.isArray(newData) && newData.length) {
-    const orderedColumns = Object.keys(newData[0])
-      .filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a))
-      .sort();
-    if (orderedColumns) {
-      orderedColumns.map((k) => (newEntityAttributes[k] = null));
-      if (Object.keys(newData[0]).includes(hashAttribute)) orderedColumns.unshift(hashAttribute);
-      if (Object.keys(newData[0]).includes('__createdtime__')) orderedColumns.push('__createdtime__');
-      if (Object.keys(newData[0]).includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
-      dataTableColumns = orderedColumns.map((k) => ({
-        id: k.toString(),
-        Header: k.toString(),
-        accessor: (row) => row[k.toString()],
-        style: { height: 29, paddingTop: 10 },
-        Cell: (props) => handleCellValues(props.value),
-      }));
-    }
+
+  const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
+  if (orderedColumns) {
+    orderedColumns.map((k) => (newEntityAttributes[k] = null));
+    orderedColumns.unshift(hashAttribute);
+    orderedColumns.push('__createdtime__');
+    orderedColumns.push('__updatedtime__');
+    dataTableColumns = orderedColumns.map((k) => ({
+      id: k.toString(),
+      Header: k.toString(),
+      accessor: (row) => row[k.toString()],
+      style: { height: 29, paddingTop: 10 },
+      Cell: (props) => handleCellValues(props.value),
+    }));
   }
+
   return {
     newData: newData || [],
     newTotalPages,
