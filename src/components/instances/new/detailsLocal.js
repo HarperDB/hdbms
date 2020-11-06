@@ -11,7 +11,7 @@ import ContentContainer from '../../shared/contentContainer';
 import RadioCheckbox from '../../shared/radioCheckbox';
 import DetailsSubheader from './detailsSubheader';
 
-export default () => {
+const DetailsLocal = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -90,3 +90,5 @@ export default () => {
     </>
   );
 };
+
+export default DetailsLocal;

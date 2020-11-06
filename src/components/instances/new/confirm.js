@@ -14,7 +14,7 @@ import CouponForm from '../../shared/couponForm';
 import RadioCheckbox from '../../shared/radioCheckbox';
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-export default () => {
+const Confirm = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -230,3 +230,5 @@ export default () => {
     </>
   );
 };
+
+export default Confirm;

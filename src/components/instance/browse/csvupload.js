@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import CSVUploadURL from './csvuploadURL';
 import CSVUploadFile from './csvuploadFile';
 
-export default () => {
+const CSVUpload = () => {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
 
@@ -37,3 +37,4 @@ export default () => {
     </div>
   );
 };
+export default CSVUpload;

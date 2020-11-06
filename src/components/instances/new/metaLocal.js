@@ -16,7 +16,7 @@ import isAlphaUnderscoreHyphen from '../../../functions/util/isAlphaUnderscoreHy
 import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 import userInfo from '../../../functions/api/instance/userInfo';
 
-export default () => {
+const MetaLocal = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
@@ -218,3 +218,5 @@ export default () => {
     </>
   );
 };
+
+export default MetaLocal;

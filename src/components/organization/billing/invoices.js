@@ -13,7 +13,7 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-export default () => {
+const Invoices = () => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const invoices = useStoreState(appState, (s) => s.invoices);
@@ -75,3 +75,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default Invoices;

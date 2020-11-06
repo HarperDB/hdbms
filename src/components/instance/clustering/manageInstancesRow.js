@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import removeNode from '../../../functions/api/instance/removeNode';
 import addNode from '../../../functions/api/instance/addNode';
 
-export default ({ setShowModal, item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort }, itemType }) => {
+const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort }, itemType }) => {
   const { customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -141,3 +141,5 @@ export default ({ setShowModal, item: { compute_stack_id, instance_name, instanc
     </Row>
   );
 };
+
+export default ManageInstancesRow;

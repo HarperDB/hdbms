@@ -3,7 +3,7 @@ import { Button, Col, Row } from 'reactstrap';
 
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) => (
+const DatatableHeader = ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) => (
   <Row className="floating-card-header">
     <Col xs="12" md="3">
       {commaNumbers(totalRecords)} record
@@ -30,3 +30,5 @@ export default ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter
     </Col>
   </Row>
 );
+
+export default DatatableHeader;

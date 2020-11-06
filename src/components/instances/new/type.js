@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import useNewInstance from '../../../functions/state/newInstance';
 
-export default () => {
+const Type = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
@@ -73,3 +73,5 @@ export default () => {
     </>
   );
 };
+
+export default Type;

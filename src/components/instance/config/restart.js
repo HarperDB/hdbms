@@ -11,7 +11,7 @@ import userInfo from '../../../functions/api/instance/userInfo';
 import config from '../../../config';
 import restartInstance from '../../../functions/api/instance/restartInstance';
 
-export default ({ instanceAction, setInstanceAction }) => {
+const Restart = ({ instanceAction, setInstanceAction }) => {
   const { compute_stack_id, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -102,3 +102,5 @@ export default ({ instanceAction, setInstanceAction }) => {
     </>
   );
 };
+
+export default Restart;

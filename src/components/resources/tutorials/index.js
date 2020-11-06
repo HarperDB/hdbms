@@ -10,7 +10,7 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import EntityManager from './entityManager';
 
-export default () => {
+const TutorialsIndex = () => {
   const history = useHistory();
   const { video_id } = useParams();
   const [items, setItems] = useState([]);
@@ -66,3 +66,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default TutorialsIndex;

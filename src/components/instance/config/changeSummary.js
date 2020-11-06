@@ -1,7 +1,7 @@
 import { Col, Row, Card, CardBody } from 'reactstrap';
 import React from 'react';
 
-export default ({ which, compute, storage, total }) => (
+const ChangeSummary = ({ which, compute, storage, total }) => (
   <Card className="my-2">
     <CardBody className="p-2 text-small">
       <Row>
@@ -39,3 +39,5 @@ export default ({ which, compute, storage, total }) => (
     </CardBody>
   </Card>
 );
+
+export default ChangeSummary;

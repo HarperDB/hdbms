@@ -7,7 +7,7 @@ import useQueryHistory from '../../../functions/state/instanceQueries';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ setQuery, query }) => {
+const QueryHistory = ({ setQuery, query }) => {
   const { customer_id, compute_stack_id } = useParams();
   const [queries, setQueries] = useQueryHistory({});
 
@@ -54,3 +54,5 @@ export default ({ setQuery, query }) => {
     </ErrorBoundary>
   );
 };
+
+export default QueryHistory;

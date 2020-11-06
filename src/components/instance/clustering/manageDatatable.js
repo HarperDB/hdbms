@@ -6,7 +6,7 @@ import instanceState from '../../../functions/state/instanceState';
 import StructureReloader from '../../shared/structureReloader';
 import DataTable from '../../shared/dataTable';
 
-export default () => {
+const ManageDatatable = () => {
   const data = useStoreState(instanceState, (s) => s.clusterDataTable);
   const columns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
   const [tableState, setTableState] = useState({
@@ -51,3 +51,5 @@ export default () => {
     </>
   );
 };
+
+export default ManageDatatable;

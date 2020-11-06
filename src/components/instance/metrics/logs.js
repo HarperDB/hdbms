@@ -9,46 +9,34 @@ import { useParams } from 'react-router';
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
-import searchJobsByStartDate from '../../../functions/api/instance/searchJobsByStartDate';
-import JobRow from './instanceJobsRow';
+import readLog from '../../../functions/api/instance/readLog';
+import LogRow from './logsRow';
+import logMessagesToIgnore from '../../../functions/instance/logMessagesToIgnore';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-export default () => {
+const Logs = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const jobs = useStoreState(instanceState, (s) => s.jobs);
-  const jobsError = useStoreState(instanceState, (s) => s.jobsError);
+  const logs = useStoreState(instanceState, (s) => s.logs);
+  const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
 
   useAsyncEffect(
     async () => {
       if (mounted) {
         setLoading(true);
         controller = new AbortController();
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const toDate = tomorrow.toISOString().split('T')[0];
-        tomorrow.setFullYear(tomorrow.getFullYear() - 1);
-        const fromDate = tomorrow.toISOString().split('T')[0];
-        await searchJobsByStartDate({
-          auth,
-          signal: controller.signal,
-          url,
-          currentJobCount: jobs?.length || 0,
-          from_date: fromDate,
-          to_date: toDate,
-          is_local,
-          compute_stack_id,
-          customer_id,
-        });
+        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0, is_local, compute_stack_id, customer_id });
         setLoading(false);
       }
     },
@@ -72,15 +60,20 @@ export default () => {
       FallbackComponent={ErrorFallback}
     >
       <Row className="floating-card-header">
-        <Col>instance jobs</Col>
+        <Col>instance logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
-          <Button color="link" title="Update Jobs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
+          <Button color="link" title="Update Logs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
             <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="mr-2">auto</span>
             <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
+          </Button>
+          <span className="mx-3 text">|</span>
+          <Button color="link" title="view detailed logs" onClick={() => setShowDetail(!showDetail)}>
+            <span className="mr-2">detailed</span>
+            <i className={`fa fa-lg fa-toggle-${showDetail ? 'on' : 'off'}`} />
           </Button>
         </Col>
       </Row>
@@ -93,31 +86,31 @@ export default () => {
             <Col xs="3">
               <b>date</b>
             </Col>
-            {jobsError ? (
+            {logsError ? (
               <Col xs="6" className="text-right text-danger">
-                <b>job fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
+                <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
               </Col>
             ) : (
-              <>
-                <Col xs="3">
-                  <b>start</b>
-                </Col>
-                <Col xs="3">
-                  <b>end</b>
-                </Col>
-              </>
+              <Col xs="6">
+                <b>time</b>
+              </Col>
             )}
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="log-scroller">
-            {(loading || !jobs) && !autoRefresh ? (
+            {(loading || !filteredLogs) && !autoRefresh ? (
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : jobs.length ? (
-              jobs.map((j) => <JobRow key={j.id} {...j} />)
+            ) : filteredLogs.length ? (
+              filteredLogs.map((l, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <LogRow key={i} {...l} />
+              ))
+            ) : logs && !logs.length ? (
+              <div className="pt-5 text-center">no logs found</div>
             ) : (
-              <div className="pt-5 text-center">no jobs found</div>
+              <div className="pt-5 text-center">no logs found in this view</div>
             )}
           </div>
         </CardBody>
@@ -125,3 +118,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default Logs;

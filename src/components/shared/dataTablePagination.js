@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Row, Col, Input, Button } from 'reactstrap';
 
 // Our table component
-export default memo(({ page, pageSize, totalPages, onPageChange, onPageSizeChange }) => (
+const DataTablePagination = memo(({ page, pageSize, totalPages, onPageChange, onPageSizeChange }) => (
   <Row className="pagination">
     <Col xs="12" sm="2" className="previous">
       <Button className="mb-2" color="purple" block onClick={() => onPageChange(page - 1)} disabled={page === 0}>
@@ -30,3 +30,5 @@ export default memo(({ page, pageSize, totalPages, onPageChange, onPageSizeChang
     </Col>
   </Row>
 ));
+
+export default DataTablePagination;

@@ -23,7 +23,7 @@ import userInfo from '../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const Setup = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -94,3 +94,5 @@ export default () => {
     </Row>
   );
 };
+
+export default Setup;

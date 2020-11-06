@@ -63,7 +63,7 @@ const defaultColumn = {
 };
 
 // Our table component
-export default ({
+const DataTable = ({
   columns,
   data,
   page,
@@ -128,3 +128,5 @@ export default ({
     </ErrorBoundary>
   );
 };
+
+export default DataTable;

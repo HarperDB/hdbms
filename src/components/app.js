@@ -38,7 +38,7 @@ const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile')
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
-export default () => {
+const App = () => {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -137,3 +137,5 @@ export default () => {
     </div>
   );
 };
+
+export default App;

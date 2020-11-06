@@ -5,7 +5,7 @@ import DataTable from './datatable';
 import QueryWindow from './queryWindow';
 import QueryHistory from './queryHistory';
 
-export default () => {
+const QueryIndex = () => {
   const [query, setQuery] = useState(false);
 
   return (
@@ -20,3 +20,5 @@ export default () => {
     </Row>
   );
 };
+
+export default QueryIndex;

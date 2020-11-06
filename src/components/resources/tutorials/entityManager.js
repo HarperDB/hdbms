@@ -7,7 +7,7 @@ import ErrorFallback from '../../shared/errorFallback';
 
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ items, baseUrl, videoId }) => (
+const EntityManager = ({ items, baseUrl, videoId }) => (
   <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
     <div className="entity-manager">
       <div className="floating-card-header">Tutorials</div>
@@ -25,3 +25,5 @@ export default ({ items, baseUrl, videoId }) => (
     </div>
   </ErrorBoundary>
 );
+
+export default EntityManager;

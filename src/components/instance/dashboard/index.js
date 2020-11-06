@@ -15,7 +15,7 @@ import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
 import config from '../../../config';
 
-export default () => {
+const DashboardIndex = () => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -114,3 +114,5 @@ export default () => {
     </Row>
   );
 };
+
+export default DashboardIndex;

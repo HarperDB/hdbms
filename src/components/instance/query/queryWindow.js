@@ -6,7 +6,7 @@ import { useParams } from 'react-router';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ setQuery, query }) => {
+const QueryWindow = ({ setQuery, query }) => {
   const { compute_stack_id, customer_id } = useParams();
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
@@ -87,3 +87,5 @@ export default ({ setQuery, query }) => {
     </ErrorBoundary>
   );
 };
+
+export default QueryWindow;

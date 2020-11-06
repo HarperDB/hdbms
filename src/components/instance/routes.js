@@ -11,7 +11,7 @@ const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './user
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
-export default ({ super_user }) => {
+const Routes = ({ super_user }) => {
   const standardRoutes = [
     {
       component: Dashboard,
@@ -95,3 +95,5 @@ export default ({ super_user }) => {
 
   return super_user ? [...standardRoutes, ...superUserRoutes, ...trailingRoutes] : [...standardRoutes, ...trailingRoutes];
 };
+
+export default Routes;

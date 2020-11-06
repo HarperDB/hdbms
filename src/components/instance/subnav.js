@@ -15,7 +15,7 @@ import ErrorFallback from '../shared/errorFallback';
 import addError from '../../functions/api/lms/addError';
 import useInstanceAuth from '../../functions/state/instanceAuths';
 
-export default ({ routes = [] }) => {
+const Subnav = ({ routes = [] }) => {
   const { compute_stack_id, customer_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
   const history = useHistory();
@@ -119,3 +119,5 @@ export default ({ routes = [] }) => {
     </ErrorBoundary>
   );
 };
+
+export default Subnav;

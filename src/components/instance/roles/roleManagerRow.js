@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import dropRole from '../../../functions/api/instance/dropRole';
 
-export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
+const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -76,3 +76,5 @@ export default ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
     </Row>
   );
 };
+
+export default RoleManagerRow;

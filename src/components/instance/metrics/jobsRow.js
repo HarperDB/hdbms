@@ -3,7 +3,7 @@ import { Row, Col } from 'reactstrap';
 
 import isObject from '../../../functions/util/isObject';
 
-export default ({ end_datetime, start_datetime, status, message }) => (
+const JobsRow = ({ end_datetime, start_datetime, status, message }) => (
   <div className="log-row">
     <Row>
       <Col xs="3" className={status.toLowerCase()}>
@@ -18,3 +18,5 @@ export default ({ end_datetime, start_datetime, status, message }) => (
     </Row>
   </div>
 );
+
+export default JobsRow;

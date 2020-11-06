@@ -3,7 +3,7 @@ import { Card, CardBody, Row } from 'reactstrap';
 
 import DriverCard from './driverCard';
 
-export default () => (
+const DriversIndex = () => (
   <main id="support">
     <span className="floating-card-header">Download Drivers</span>
     <Card className="my-3">
@@ -40,3 +40,5 @@ export default () => (
     </Card>
   </main>
 );
+
+export default DriversIndex;

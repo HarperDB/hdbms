@@ -23,7 +23,7 @@ import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
-export default () => {
+const NewInstanceIndex = () => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -80,3 +80,5 @@ export default () => {
     </Modal>
   );
 };
+
+export default NewInstanceIndex;

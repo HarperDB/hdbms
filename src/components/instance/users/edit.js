@@ -7,7 +7,7 @@ import Password from './editPassword';
 import Role from './editRole';
 import Delete from './editDelete';
 
-export default () => {
+const Edit = () => {
   const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -42,3 +42,5 @@ export default () => {
     </>
   );
 };
+
+export default Edit;

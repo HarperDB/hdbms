@@ -5,7 +5,7 @@ import CreditCard from './card';
 import Invoices from './invoices';
 import Coupons from './coupons';
 
-export default () => (
+const BillingIndex = () => (
   <Row>
     <Col md="6">
       <span className="floating-card-header">coupons</span>
@@ -20,3 +20,5 @@ export default () => (
     </Col>
   </Row>
 );
+
+export default BillingIndex;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardBody, Card } from 'reactstrap';
 
-export default ({ message, error = false, accessErrors }) => {
+const EmptyPrompt = ({ message, error = false, accessErrors }) => {
   const tableErrors = accessErrors && accessErrors.filter((t) => t.type === 'table');
   const attributeErrors = accessErrors && accessErrors.filter((t) => t.type === 'attribute');
 
@@ -45,3 +45,5 @@ export default ({ message, error = false, accessErrors }) => {
     </>
   );
 };
+
+export default EmptyPrompt;

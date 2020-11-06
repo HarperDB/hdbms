@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Row } from 'reactstrap';
 
 import InstanceManagerRow from './manageInstancesRow';
 
-export default ({ items, itemType, setShowModal }) => (
+const ManageInstances = ({ items, itemType, setShowModal }) => (
   <div className="entity-manager">
     <div className="floating-card-header">{itemType} instances</div>
     <Card className="my-3">
@@ -19,3 +19,5 @@ export default ({ items, itemType, setShowModal }) => (
     </Card>
   </div>
 );
+
+export default ManageInstances;

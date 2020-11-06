@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 
-export default () => {
+const SetupUser = () => {
   const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -84,3 +84,5 @@ export default () => {
     </>
   );
 };
+
+export default SetupUser;

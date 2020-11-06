@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
 
-export default [
+const Routes = [
   {
     component: Profile,
     path: '/profile',
@@ -12,3 +12,5 @@ export default [
     iconCode: 'f007',
   },
 ];
+
+export default Routes;

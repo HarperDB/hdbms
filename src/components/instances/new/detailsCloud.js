@@ -12,7 +12,7 @@ import RadioCheckbox from '../../shared/radioCheckbox';
 import DetailsSubheader from './detailsSubheader';
 import config from '../../../config';
 
-export default () => {
+const DetailsCloud = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
@@ -144,3 +144,5 @@ export default () => {
     </>
   );
 };
+
+export default DetailsCloud;

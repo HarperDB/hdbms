@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import isURL from '../../../functions/util/isURL';
 
-export default () => {
+const Profile = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState(auth);
@@ -144,3 +144,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default Profile;

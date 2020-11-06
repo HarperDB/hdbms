@@ -18,7 +18,7 @@ import FormStatus from '../../shared/formStatus';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ setEditingCard, customerCard, formStateHeight }) => {
+const CardEdit = ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -106,3 +106,5 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
     </ErrorBoundary>
   );
 };
+
+export default CardEdit;

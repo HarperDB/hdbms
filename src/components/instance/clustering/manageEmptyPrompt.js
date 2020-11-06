@@ -3,7 +3,7 @@ import { CardBody, Card } from 'reactstrap';
 
 import StructureReloader from '../../shared/structureReloader';
 
-export default ({ message }) => (
+const ManageEmptyPrompt = ({ message }) => (
   <>
     <div className="floating-card-header text-right">
       <StructureReloader label="refresh cluster config" />
@@ -15,3 +15,5 @@ export default ({ message }) => (
     </Card>
   </>
 );
+
+export default ManageEmptyPrompt;

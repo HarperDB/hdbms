@@ -11,7 +11,7 @@ import AddUserForm from './add';
 import getUsers from '../../../functions/api/lms/getUsers';
 import config from '../../../config';
 
-export default () => {
+const UsersIndex = () => {
   const { user_id, customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const users = useStoreState(appState, (s) => s.users);
@@ -43,3 +43,5 @@ export default () => {
     </Row>
   );
 };
+
+export default UsersIndex;

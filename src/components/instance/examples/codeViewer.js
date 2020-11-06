@@ -15,7 +15,7 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import Code from '../../shared/code';
 
-export default ({ showCustomMessage }) => {
+const CodeViewer = ({ showCustomMessage }) => {
   const { customer_id, compute_stack_id, folder, method } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -115,3 +115,5 @@ export default ({ showCustomMessage }) => {
     </ErrorBoundary>
   );
 };
+
+export default CodeViewer;

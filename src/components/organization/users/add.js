@@ -13,7 +13,7 @@ import FormStatus from '../../shared/formStatus';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/errorFallback';
 
-export default ({ refreshUsers, userEmails }) => {
+const Add = ({ refreshUsers, userEmails }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -78,3 +78,5 @@ export default ({ refreshUsers, userEmails }) => {
     </ErrorBoundary>
   );
 };
+
+export default Add;

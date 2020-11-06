@@ -15,7 +15,7 @@ import getIntegrations from '../../../functions/api/lms/getIntegrations';
 import integrationLanguageOptions from '../../../functions/resources/integrationLanguageOptions';
 import getUser from '../../../functions/api/lms/getUser';
 
-export default () => {
+const Add = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -153,3 +153,5 @@ export default () => {
     </>
   );
 };
+
+export default Add;

@@ -10,7 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
 
-export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
+const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -134,3 +134,5 @@ export default ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, b
     </Row>
   );
 };
+
+export default EntityManagerForm;

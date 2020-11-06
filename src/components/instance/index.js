@@ -20,7 +20,7 @@ import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
 import getPrepaidSubscriptions from '../../functions/api/lms/getPrepaidSubscriptions';
 
-export default () => {
+const InstanceIndex = () => {
   const { compute_stack_id, customer_id } = useParams();
   const [loadingInstance, setLoadingInstance] = useState(false);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -136,3 +136,5 @@ export default () => {
     </>
   );
 };
+
+export default InstanceIndex;

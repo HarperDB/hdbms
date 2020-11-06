@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 
 import instanceState from '../../functions/state/instanceState';
 
-export default ({ label = 'instance', centerText = false }) => {
+const StructureReloader = ({ label = 'instance', centerText = false }) => {
   const loading = useStoreState(instanceState, (s) => s.loading);
 
   const refresh = () =>
@@ -22,3 +22,5 @@ export default ({ label = 'instance', centerText = false }) => {
     </span>
   );
 };
+
+export default StructureReloader;

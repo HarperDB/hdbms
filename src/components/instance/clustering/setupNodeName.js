@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-export default ({ nodeNameMatch, setNodeNameMatch }) =>
+const SetupNodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
   nodeNameMatch ? (
     <Row>
       <Col xs="12">
@@ -22,3 +22,5 @@ export default ({ nodeNameMatch, setNodeNameMatch }) =>
       </Button>
     </>
   );
+
+export default SetupNodeName;

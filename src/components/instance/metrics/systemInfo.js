@@ -13,7 +13,7 @@ import ContentContainer from '../../shared/contentContainer';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const SystemInfo = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -147,3 +147,4 @@ export default () => {
     </ErrorBoundary>
   );
 };
+export default SystemInfo;

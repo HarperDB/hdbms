@@ -8,7 +8,7 @@ import Loader from '../../shared/loader';
 const DataTable = lazy(() => import(/* webpackChunkName: "instance-users-datatable" */ './datatable'));
 const EditUser = lazy(() => import(/* webpackChunkName: "instance-users-edit" */ './edit'));
 
-export default () => {
+const UsersIndex = () => {
   const { username } = useParams();
 
   return (
@@ -22,3 +22,5 @@ export default () => {
     </Row>
   );
 };
+
+export default UsersIndex;

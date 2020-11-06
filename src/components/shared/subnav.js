@@ -9,7 +9,7 @@ import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from './errorFallback';
 import addError from '../../functions/api/lms/addError';
 
-export default ({ routes = [] }) => {
+const Subnav = ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
 
@@ -54,3 +54,5 @@ export default ({ routes = [] }) => {
     </ErrorBoundary>
   );
 };
+
+export default Subnav;

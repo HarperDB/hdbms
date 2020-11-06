@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
 
-export default ({ header, subhead = ' ', height, status, className }) => (
+const FormStatus = ({ header, subhead = ' ', height, status, className }) => (
   <Card className={`form-status ${className}`}>
     <CardBody className="text-center" style={{ height }}>
       <div className="text-bold">{header}</div>
@@ -16,3 +16,5 @@ export default ({ header, subhead = ' ', height, status, className }) => (
     </CardBody>
   </Card>
 );
+
+export default FormStatus;

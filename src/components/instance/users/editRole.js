@@ -12,7 +12,7 @@ import instanceState from '../../../functions/state/instanceState';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const EditRole = () => {
   const { customer_id, compute_stack_id, username } = useParams();
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -83,3 +83,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default EditRole;

@@ -3,7 +3,7 @@ import lolight from 'lolight';
 import { useAlert } from 'react-alert';
 import { Button } from 'reactstrap';
 
-export default ({ children, className, ...rest }) => {
+const Code = ({ children, className, ...rest }) => {
   const alert = useAlert();
 
   useEffect(() => {
@@ -48,3 +48,5 @@ export default ({ children, className, ...rest }) => {
     </div>
   );
 };
+
+export default Code;

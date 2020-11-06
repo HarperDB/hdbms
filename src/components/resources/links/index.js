@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 
-export default () => (
+const LinksIndex = () => (
   <main id="support">
     <Row>
       <Col lg="3" className="mb-3">
@@ -53,3 +53,5 @@ export default () => (
     </Row>
   </main>
 );
+
+export default LinksIndex;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ children, header, subheader, maxHeight = 'auto', minHeight = 'auto', className }) => (
+const ContentContainer = ({ children, header, subheader, maxHeight = 'auto', minHeight = 'auto', className }) => (
   <div className={`content-container ${className}`}>
     <div className="header-container">
       <span className="header">{header}</span>
@@ -11,3 +11,5 @@ export default ({ children, header, subheader, maxHeight = 'auto', minHeight = '
     </div>
   </div>
 );
+
+export default ContentContainer;

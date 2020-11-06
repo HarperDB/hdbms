@@ -27,7 +27,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-export default () => {
+const Datatable = () => {
   const history = useHistory();
   const { compute_stack_id, customer_id } = useParams();
   const [tableColumns] = useState(instanceUserColumns());
@@ -107,3 +107,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default Datatable;

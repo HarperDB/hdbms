@@ -3,7 +3,7 @@ import { Row, Col } from 'reactstrap';
 
 import isObject from '../../../functions/util/isObject';
 
-export default ({ level, timestamp, message }) => (
+const LogsRow = ({ level, timestamp, message }) => (
   <div className="log-row">
     <Row>
       <Col xs="3" className={level.toLowerCase()}>
@@ -17,3 +17,5 @@ export default ({ level, timestamp, message }) => (
     </Row>
   </div>
 );
+
+export default LogsRow;

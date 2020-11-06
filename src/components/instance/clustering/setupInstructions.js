@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 
-export default ({ showNodeNameInstructions }) => (
+const SetupInstructions = ({ showNodeNameInstructions }) => (
   <Card className="my-3">
     <CardBody>
       This instance does not yet have clustering enabled. To enable clustering, complete the steps at left.
@@ -34,3 +34,5 @@ export default ({ showNodeNameInstructions }) => (
     </CardBody>
   </Card>
 );
+
+export default SetupInstructions;

@@ -12,7 +12,7 @@ import DataTableHeader from './datatableHeader';
 import getTableData from '../../../functions/instance/getTableData';
 import DataTable from '../../shared/dataTable';
 
-const BrowseDataTable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
+const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -105,4 +105,4 @@ const BrowseDataTable = ({ tableState, setTableState, activeTable, defaultTableS
   );
 };
 
-export default BrowseDataTable;
+export default Datatable;

@@ -12,7 +12,7 @@ import chartOptions from '../../../functions/instance/chartOptions';
 import chartTypes from '../../../functions/instance/chartTypes';
 import isNumeric from '../../../functions/util/isNumeric';
 
-export default ({ setShowChartModal, tableData, query }) => {
+const ChartModal = ({ setShowChartModal, tableData, query }) => {
   const { compute_stack_id, customer_id } = useParams();
   const alert = useAlert();
   const [chart, setChart] = useState({ customer_id, compute_stack_id, name: false, type: 'line', query, labelAttribute: false, seriesAttributes: [], shared: false });
@@ -172,3 +172,5 @@ export default ({ setShowChartModal, tableData, query }) => {
     </Modal>
   );
 };
+
+export default ChartModal;

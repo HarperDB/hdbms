@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-export default ({ port }) => (
+const SetupPort = ({ port }) => (
   <Row>
     <Col xs="12">
       <hr />
@@ -14,3 +14,5 @@ export default ({ port }) => (
     </Col>
   </Row>
 );
+
+export default SetupPort;

@@ -3,7 +3,7 @@ import { CardBody, Card } from 'reactstrap';
 
 import StructureReloader from '../../shared/structureReloader';
 
-export default ({ message }) => (
+const EmptyPrompt = ({ message }) => (
   <>
     <div className="floating-card-header text-right">
       <StructureReloader label="refresh schemas and tables" />
@@ -15,3 +15,5 @@ export default ({ message }) => (
     </Card>
   </>
 );
+
+export default EmptyPrompt;

@@ -20,7 +20,7 @@ const defaultState = {
   showAttributes: false,
 };
 
-export default () => {
+const RolesIndex = () => {
   const { compute_stack_id, role_id, customer_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const [formState, setFormState] = useState(defaultState);
@@ -87,3 +87,5 @@ export default () => {
     </Row>
   );
 };
+
+export default RolesIndex;

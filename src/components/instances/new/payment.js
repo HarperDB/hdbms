@@ -15,7 +15,7 @@ import CreditCardForm from '../../shared/creditCardForm';
 import FormStatus from '../../shared/formStatus';
 import ContentContainer from '../../shared/contentContainer';
 
-export default () => {
+const Payment = () => {
   const history = useHistory();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -150,3 +150,5 @@ export default () => {
     </>
   );
 };
+
+export default Payment;

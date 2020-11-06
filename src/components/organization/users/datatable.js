@@ -23,7 +23,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-export default () => {
+const Datatable = () => {
   const { customer_id } = useParams();
   const alert = useAlert();
   const history = useHistory();
@@ -105,3 +105,5 @@ export default () => {
     </>
   );
 };
+
+export default Datatable;

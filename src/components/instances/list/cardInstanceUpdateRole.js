@@ -1,7 +1,7 @@
 import { Button } from 'reactstrap';
 import React from 'react';
 
-export default ({ formState, setFormState, setFormData = false }) => (
+const CardInstanceUpdateRole = ({ formState, setFormState, setFormData = false }) => (
   <>
     {formState.error.split('.').map((text) =>
       text.length ? (
@@ -25,3 +25,5 @@ export default ({ formState, setFormState, setFormData = false }) => (
     </Button>
   </>
 );
+
+export default CardInstanceUpdateRole;

@@ -11,7 +11,7 @@ import dropUser from '../../../functions/api/instance/dropUser';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const EditDelete = () => {
   const { customer_id, compute_stack_id, username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -74,3 +74,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default EditDelete;

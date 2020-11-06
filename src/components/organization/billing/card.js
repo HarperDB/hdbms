@@ -6,7 +6,7 @@ import appState from '../../../functions/state/appState';
 import StaticCard from './cardStatic';
 import EditCard from './cardEdit';
 
-export default () => {
+const Card = () => {
   const [editingCard, setEditingCard] = useState(false);
   const hasCard = useStoreState(appState, (s) => s.hasCard, [editingCard]);
   const formStateHeight = '314px';
@@ -21,3 +21,5 @@ export default () => {
     </div>
   );
 };
+
+export default Card;

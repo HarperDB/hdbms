@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import appState from '../../../functions/state/appState';
 import removeInstance from '../../../functions/api/lms/removeInstance';
 
-export default ({ setInstanceAction }) => {
+const Remove = ({ setInstanceAction }) => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -111,3 +111,5 @@ export default ({ setInstanceAction }) => {
     </>
   );
 };
+
+export default Remove;

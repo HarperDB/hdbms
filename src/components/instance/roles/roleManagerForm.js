@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import addRole from '../../../functions/api/instance/addRole';
 import instanceState from '../../../functions/state/instanceState';
 
-export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
+const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -75,3 +75,5 @@ export default ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
     </Form>
   );
 };
+
+export default RoleManagerForm;

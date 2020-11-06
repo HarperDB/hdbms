@@ -14,7 +14,7 @@ import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const Add = () => {
   const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -114,3 +114,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default Add;

@@ -13,7 +13,7 @@ import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ setEditingCard, customerCard, formStateHeight }) => {
+const CardStatic = ({ setEditingCard, customerCard, formStateHeight }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const instances = useStoreState(appState, (s) => s.instances);
@@ -112,3 +112,5 @@ export default ({ setEditingCard, customerCard, formStateHeight }) => {
     </ErrorBoundary>
   );
 };
+
+export default CardStatic;

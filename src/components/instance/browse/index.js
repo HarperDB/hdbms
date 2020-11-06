@@ -34,7 +34,7 @@ const defaultTableState = {
   dataTableColumns: [],
 };
 
-export default () => {
+const BrowseIndex = () => {
   const history = useHistory();
   const { compute_stack_id, schema, table, action, customer_id } = useParams();
   const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
@@ -105,3 +105,5 @@ export default () => {
     </Row>
   );
 };
+
+export default BrowseIndex;

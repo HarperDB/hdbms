@@ -1,13 +1,13 @@
 import React from 'react';
 import { Card, CardBody, Row, Col, CardImg } from 'reactstrap';
 
-import MigratorCard from './migratorCard';
+import MigratorCard from './dbMigratorCard';
 
 import Screenshot1 from '../../../assets/images/migrator/screenshot1.png';
 import Screenshot2 from '../../../assets/images/migrator/screenshot2.png';
 import Screenshot3 from '../../../assets/images/migrator/screenshot3.png';
 
-export default () => (
+const DBMigratorIndex = () => (
   <main id="support">
     <span className="floating-card-header">HarperDB Migrator</span>
     <Card className="my-3">
@@ -43,3 +43,5 @@ export default () => (
     </Card>
   </main>
 );
+
+export default DBMigratorIndex;

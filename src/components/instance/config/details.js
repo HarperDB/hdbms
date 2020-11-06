@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/contentContainer';
 
-export default () => {
+const Details = () => {
   const { compute_stack_id } = useParams();
   const url = useStoreState(instanceState, (s) => s.url);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -87,3 +87,5 @@ export default () => {
     </>
   );
 };
+
+export default Details;

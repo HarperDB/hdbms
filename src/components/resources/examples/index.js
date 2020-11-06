@@ -2,4 +2,6 @@ import React from 'react';
 
 import Examples from '../../instance/examples';
 
-export default () => <Examples showCustomMessage />;
+const ResourcesExamples = () => <Examples showCustomMessage />;
+
+export default ResourcesExamples;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router';
 
-export default ({ videoId, title, baseUrl, isActive }) => {
+const EntityManagerRow = ({ videoId, title, baseUrl, isActive }) => {
   const history = useHistory();
   const handleSetActive = () => (isActive ? false : history.push(`${baseUrl}/${videoId}`));
 
@@ -19,3 +19,5 @@ export default ({ videoId, title, baseUrl, isActive }) => {
     </Row>
   );
 };
+
+export default EntityManagerRow;

@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/errorFallback';
 
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const EntityManager = () => {
   const { type } = useParams();
   const types = useStoreState(appState, (s) => (s.integrations ? Object.keys(s.integrations).filter((k) => s.integrations[k].length) : ['active']));
   const baseUrl = '/resources/marketplace';
@@ -27,3 +27,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default EntityManager;

@@ -13,7 +13,7 @@ import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const NewOrgIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const history = useHistory();
@@ -153,3 +153,5 @@ export default () => {
     </Modal>
   );
 };
+
+export default NewOrgIndex;

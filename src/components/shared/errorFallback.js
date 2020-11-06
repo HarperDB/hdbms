@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardBody } from 'reactstrap';
 
-export default ({ error, componentStack, extraClass = undefined }) => (
+const ErrorFallback = ({ error, componentStack, extraClass = undefined }) => (
   <Card className={`error-boundary mb-3 ${extraClass}`}>
     <CardBody>
       <b>Component Error {new Date().toLocaleTimeString()}</b>
@@ -17,3 +17,5 @@ export default ({ error, componentStack, extraClass = undefined }) => (
     </CardBody>
   </Card>
 );
+
+export default ErrorFallback;

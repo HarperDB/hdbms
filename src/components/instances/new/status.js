@@ -13,7 +13,7 @@ import addInstance from '../../../functions/api/lms/addInstance';
 import addTCAcceptance from '../../../functions/api/lms/addTCAcceptance';
 import getInstances from '../../../functions/api/lms/getInstances';
 
-export default ({ closeAndResetModal }) => {
+const Status = ({ closeAndResetModal }) => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
@@ -76,3 +76,5 @@ export default ({ closeAndResetModal }) => {
     </Card>
   );
 };
+
+export default Status;

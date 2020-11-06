@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import createClusterUserRole from '../../../functions/instance/createClusterUserRole';
 import instanceState from '../../../functions/state/instanceState';
 
-export default () => {
+const SetupRole = () => {
   const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -30,3 +30,5 @@ export default () => {
     </>
   );
 };
+
+export default SetupRole;

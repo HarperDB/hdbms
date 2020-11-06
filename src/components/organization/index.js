@@ -11,7 +11,7 @@ import config from '../../config';
 import Loader from '../shared/loader';
 import getInstances from '../../functions/api/lms/getInstances';
 
-export default () => {
+const OrganizationsIndex = () => {
   const { customer_id } = useParams();
   const hydratedRoutes = routes({ customer_id });
   const auth = useStoreState(appState, (s) => s.auth);
@@ -57,3 +57,5 @@ export default () => {
     <Redirect to={`/o/${customer_id}/instances`} />
   ) : null;
 };
+
+export default OrganizationsIndex;

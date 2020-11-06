@@ -9,7 +9,7 @@ import EntityManagerHeader from './roleManagerHeader';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
+const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
   const { compute_stack_id, customer_id } = useParams();
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
@@ -59,3 +59,5 @@ export default ({ items, activeItem, showForm, baseUrl, itemType }) => {
     </ErrorBoundary>
   );
 };
+
+export default RoleManager;

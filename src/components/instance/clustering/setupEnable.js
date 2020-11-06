@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-export default ({ setFormState, disabled }) => (
+const SetupEnable = ({ setFormState, disabled }) => (
   <>
     <hr />
     <Button color="success" block onClick={() => setFormState({ submitted: true })} disabled={disabled}>
@@ -9,3 +9,5 @@ export default ({ setFormState, disabled }) => (
     </Button>
   </>
 );
+
+export default SetupEnable;

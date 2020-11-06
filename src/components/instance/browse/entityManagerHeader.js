@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
+const EntityManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
   <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items?.length ? (
@@ -34,3 +34,5 @@ export default ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isC
     ) : null}
   </Row>
 );
+
+export default EntityManagerHeader;

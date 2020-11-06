@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 
-export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
+const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -91,3 +91,5 @@ export default ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping,
     </Row>
   );
 };
+
+export default EntityManagerRow;

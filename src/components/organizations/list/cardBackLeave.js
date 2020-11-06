@@ -11,7 +11,7 @@ import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ customer_id, customer_name, setFlipState, flipState }) => {
+const CardBackLeave = ({ customer_id, customer_name, setFlipState, flipState }) => {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -86,3 +86,5 @@ export default ({ customer_id, customer_name, setFlipState, flipState }) => {
     </ErrorBoundary>
   );
 };
+
+export default CardBackLeave;

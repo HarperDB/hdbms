@@ -2,21 +2,23 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 
 import SystemInfo from './systemInfo';
-import InstanceLogs from './instanceLogs';
-import InstanceJobs from './instanceJobs';
+import Logs from './logs';
+import Jobs from './jobs';
 
-export default () => (
+const MetricsIndex = () => (
   <>
     <Row id="config">
       <Col xs="12">
         <SystemInfo />
       </Col>
       <Col lg="6" xs="12">
-        <InstanceLogs />
+        <Logs />
       </Col>
       <Col lg="6" xs="12">
-        <InstanceJobs />
+        <Jobs />
       </Col>
     </Row>
   </>
 );
+
+export default MetricsIndex;

@@ -14,7 +14,7 @@ import ChangeSummary from './changeSummary';
 import updateInstance from '../../../functions/api/lms/updateInstance';
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-export default ({ setInstanceAction, showPrepaidStorage }) => {
+const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -158,3 +158,5 @@ export default ({ setInstanceAction, showPrepaidStorage }) => {
     </>
   );
 };
+
+export default UpdateDiskVolume;

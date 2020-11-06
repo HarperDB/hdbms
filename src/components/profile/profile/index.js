@@ -4,7 +4,7 @@ import { Row, Col } from 'reactstrap';
 import ProfileForm from './profile';
 import PasswordForm from './password';
 
-export default () => (
+const ProfileIndex = () => (
   <Row>
     <Col md="6" className="mb-4">
       <span className="floating-card-header">profile</span>
@@ -16,3 +16,5 @@ export default () => (
     </Col>
   </Row>
 );
+
+export default ProfileIndex;

@@ -16,7 +16,7 @@ import config from '../../../config';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const Manage = () => {
   const { compute_stack_id, customer_id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const auth = useStoreState(appState, (s) => s.auth);
@@ -107,3 +107,5 @@ export default () => {
     </>
   );
 };
+
+export default Manage;

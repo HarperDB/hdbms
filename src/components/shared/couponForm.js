@@ -14,7 +14,7 @@ import addError from '../../functions/api/lms/addError';
 
 let controller;
 
-export default () => {
+const CouponForm = () => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formData, setFormData] = useState({ coupon_code: '' });
@@ -86,3 +86,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default CouponForm;

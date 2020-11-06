@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ message, options, close }) => (
+const Alert = ({ message, options, close }) => (
   <button type="button" tabIndex="0" className={`alert ${options.type}`} onClick={close}>
     <div className="text-white icon">
       {options.type === 'info' && <i className="fa fa-lg fa-info-circle" />}
@@ -10,3 +10,5 @@ export default ({ message, options, close }) => (
     <div className="text-white message">{message}</div>
   </button>
 );
+
+export default Alert;

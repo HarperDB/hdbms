@@ -5,7 +5,7 @@ import routes from './routes';
 import SubNav from '../shared/subnav';
 import Loader from '../shared/loader';
 
-export default () => (
+const ResourcesIndex = () => (
   <>
     <SubNav routes={routes} />
     <Suspense fallback={<Loader header=" " spinner />}>
@@ -18,3 +18,5 @@ export default () => (
     </Suspense>
   </>
 );
+
+export default ResourcesIndex;

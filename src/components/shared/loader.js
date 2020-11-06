@@ -2,13 +2,13 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export default ({ header, body, spinner, links = false, relative = false }) => (
+const Loader = ({ header, body, spinner, links = false, relative = false }) => (
   <div className={`loader ${relative ? 'relative' : ''}`}>
     <Card className="mb-3">
       <CardBody className="text-center">
-        <div className="mb-3">{header}</div>
-        {spinner && <i className="fa fa-spinner fa-spin" />}
-        {body}
+        <div className="mb-3">&nbsp;{header}&nbsp;</div>
+        <div className="mt-2">&nbsp;{spinner && <i className="fa fa-spinner fa-spin" />}&nbsp;</div>
+        <div className="mt-2">&nbsp;{body}&nbsp;</div>
       </CardBody>
     </Card>
     {!links ? (
@@ -26,3 +26,5 @@ export default ({ header, body, spinner, links = false, relative = false }) => (
     )}
   </div>
 );
+
+export default Loader;

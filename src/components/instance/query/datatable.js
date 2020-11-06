@@ -34,7 +34,7 @@ const defaultTableState = {
 
 let controller;
 
-export default ({ query }) => {
+const Datatable = ({ query }) => {
   const { customer_id, compute_stack_id } = useParams();
   const [lastUpdate, setLastUpdate] = useState();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -135,3 +135,5 @@ export default ({ query }) => {
     <EmptyPrompt message="Please execute a SQL query to proceed" />
   );
 };
+
+export default Datatable;

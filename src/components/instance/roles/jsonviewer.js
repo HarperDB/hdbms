@@ -16,7 +16,7 @@ import buildPermissionStructure from '../../../functions/instance/buildPermissio
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default ({ showAttributes }) => {
+const JsonViewer = ({ showAttributes }) => {
   const alert = useAlert();
   const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
@@ -102,3 +102,5 @@ export default ({ showAttributes }) => {
     </ErrorBoundary>
   );
 };
+
+export default JsonViewer;

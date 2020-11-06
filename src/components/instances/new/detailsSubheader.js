@@ -1,7 +1,7 @@
 import { Button } from 'reactstrap';
 import React from 'react';
 
-export default ({ hasPrepaid, newInstance, setNewInstance, toggleValue }) =>
+const DetailsSubheader = ({ hasPrepaid, newInstance, setNewInstance, toggleValue }) =>
   hasPrepaid || newInstance[toggleValue] ? (
     <span>
       <div className="d-inline align-top mr-2">show prepaid options:</div>
@@ -12,3 +12,5 @@ export default ({ hasPrepaid, newInstance, setNewInstance, toggleValue }) =>
   ) : (
     <span>scroll for more</span>
   );
+
+export default DetailsSubheader;
