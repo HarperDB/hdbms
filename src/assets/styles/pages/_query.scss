@@ -1,13 +1,6 @@
 $split-height: calc(50vh - 182px) !important;
 
 #query {
-  .empty-prompt {
-    align-items: center;
-    display: flex;
-    height: calc(100vh - 220px) !important;
-    justify-content: center;
-  }
-
   #query-history {
     .query-scroller {
       height: $split-height;

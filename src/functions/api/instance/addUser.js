@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, role, username, password, url, compute_stack_id, customer_id }) =>
+export default async ({ auth, role, username, password, url }) =>
   queryInstance(
     {
       operation: 'add_user',
@@ -10,7 +10,5 @@ export default async ({ auth, role, username, password, url, compute_stack_id, c
       active: true,
     },
     auth,
-    url,
-    compute_stack_id,
-    customer_id
+    url
   );

@@ -32,7 +32,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url, compute_stack_id, customer_id);
+      const [rowData] = await queryInstance({ operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url);
       delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
       delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
       setRowValue(rowData);
@@ -49,9 +49,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
     await queryInstance(
       { operation: action === 'edit' ? 'update' : 'insert', schema, table, records: action !== 'edit' && Array.isArray(rowValue) ? rowValue : [rowValue] },
       auth,
-      url,
-      compute_stack_id,
-      customer_id
+      url
     );
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
@@ -62,7 +60,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
-    await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url, compute_stack_id, customer_id);
+    await queryInstance({ operation: 'delete', schema, table, hash_values: [hash] }, auth, url);
     return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 

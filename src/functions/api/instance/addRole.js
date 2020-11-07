@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, url, role, permission, compute_stack_id, customer_id }) =>
+export default async ({ auth, url, role, permission }) =>
   queryInstance(
     {
       operation: 'add_role',
@@ -8,7 +8,5 @@ export default async ({ auth, url, role, permission, compute_stack_id, customer_
       permission,
     },
     auth,
-    url,
-    compute_stack_id,
-    customer_id
+    url
   );

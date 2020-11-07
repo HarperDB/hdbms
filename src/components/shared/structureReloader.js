@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useStoreState } from 'pullstate';
 import { Button } from 'reactstrap';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../functions/state/instanceState';
+import appState from '../../functions/state/appState';
+import buildActiveInstanceObject from '../../functions/instance/buildActiveInstanceObject';
 
 const StructureReloader = ({ label = 'instance', centerText = false }) => {
+  const { compute_stack_id } = useParams();
   const loading = useStoreState(instanceState, (s) => s.loading);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const auth = useStoreState(instanceState, (s) => s.auth);
 
-  const refresh = () =>
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-      s.loading = true;
-    });
+  const refresh = useCallback(() => buildActiveInstanceObject({ auth, compute_stack_id, instances }), [auth, compute_stack_id, instances]);
 
   return (
     <span className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`}>

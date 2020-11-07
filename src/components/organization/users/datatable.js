@@ -84,11 +84,11 @@ const Datatable = () => {
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <DataTable
             columns={tableState.dataTableColumns}
             data={tableState.tableData}
-            page={tableState.page}
+            currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}

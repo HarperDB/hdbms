@@ -82,12 +82,12 @@ const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <DataTable
             manual
             columns={tableState.dataTableColumns}
             data={tableState.tableData}
-            page={tableState.page}
+            currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}

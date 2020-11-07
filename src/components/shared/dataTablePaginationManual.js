@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Row, Col, Input, Button } from 'reactstrap';
 
 // Our table component
-const DataTablePagination = memo(({ page, pageSize, totalPages, onPageChange, onPageSizeChange }) => (
+const DataTablePaginationManual = ({ page, pageSize, totalPages, onPageChange, onPageSizeChange }) => (
   <Row className="pagination">
     <Col xs="12" sm="2" className="previous">
       <Button className="mb-2" color="purple" block onClick={() => onPageChange(page - 1)} disabled={page === 0}>
@@ -12,7 +12,7 @@ const DataTablePagination = memo(({ page, pageSize, totalPages, onPageChange, on
     <Col xs="12" sm="4" className="paginator">
       <i className="fa fa-book mr-2" />
       <Input className="mb-2" type="number" value={page + 1} min={1} max={totalPages} onChange={(e) => onPageChange(e.target.value - 1)} />
-      &nbsp;/&nbsp;{totalPages}
+      <div className="page-count">&nbsp;/&nbsp;{totalPages}</div>
     </Col>
     <Col xs="12" sm="4" className="page-size">
       <Input className="mb-2" type="select" value={pageSize} onChange={(e) => onPageSizeChange(e.target.value)}>
@@ -29,6 +29,6 @@ const DataTablePagination = memo(({ page, pageSize, totalPages, onPageChange, on
       </Button>
     </Col>
   </Row>
-));
+);
 
-export default DataTablePagination;
+export default DataTablePaginationManual;

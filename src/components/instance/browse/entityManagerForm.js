@@ -65,7 +65,7 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth, url, compute_stack_id, customer_id);
+    await queryInstance(operation, auth, url);
 
     return instanceState.update((s) => {
       s.lastUpdate = Date.now();

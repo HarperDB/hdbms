@@ -31,17 +31,15 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       operation.schema = item;
     }
 
-    const result = await queryInstance(operation, auth, url, compute_stack_id, customer_id);
+    const result = await queryInstance(operation, auth, url);
 
     if (result.error) {
       return alert.error(result.error);
     }
 
-    instanceState.update((s) => {
+    return instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-
-    return setTimeout(() => history.push(baseUrl), 100);
   };
 
   const selectItemForDrop = () => {

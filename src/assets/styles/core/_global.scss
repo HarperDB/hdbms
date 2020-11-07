@@ -59,11 +59,11 @@ hr {
 }
 
 .version {
-  bottom: 10px;
+  bottom: 15px;
   color: $color-lightgrey;
   font-size: $font-size-small;
   position: fixed;
-  right: 15px;
+  left: 30px;
 }
 
 ::-webkit-scrollbar {

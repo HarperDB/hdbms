@@ -10,6 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 import dropUser from '../../../functions/api/instance/dropUser';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import listUsers from '../../../functions/api/instance/listUsers';
 
 const EditDelete = () => {
   const { customer_id, compute_stack_id, username } = useParams();
@@ -31,9 +32,7 @@ const EditDelete = () => {
 
       if (response.message.indexOf('successfully') !== -1) {
         alert.success(response.message);
-        instanceState.update((s) => {
-          s.lastUpdate = Date.now();
-        });
+        listUsers({ auth, url, is_local, compute_stack_id, customer_id });
         setFormState({});
         setTimeout(() => history.push(pathname.replace(`/users/${username}`, '/users')), 0);
       } else {

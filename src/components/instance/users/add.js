@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Input, Button, Card, CardBody } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
@@ -13,6 +13,8 @@ import FormStatus from '../../shared/formStatus';
 import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import listRoles from '../../../functions/api/instance/listRoles';
+import listUsers from '../../../functions/api/instance/listUsers';
 
 const Add = () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -24,6 +26,8 @@ const Add = () => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const cardHeight = '224px';
+
+  const fetchRoles = useCallback(() => listRoles({ auth, url, is_local, compute_stack_id, customer_id }), [auth, url, is_local, compute_stack_id, customer_id]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -42,9 +46,7 @@ const Add = () => {
         const response = await addUser({ auth, role, username, password, url, is_local, compute_stack_id, customer_id });
 
         if (response.message.indexOf('successfully') !== -1) {
-          instanceState.update((s) => {
-            s.lastUpdate = Date.now();
-          });
+          listUsers({ auth, url, is_local, compute_stack_id, customer_id });
           setFormState({ success: response.message });
         } else {
           setFormState({ error: response.message });
@@ -59,6 +61,8 @@ const Add = () => {
   useAsyncEffect(() => {
     if (roles) setFormData({ ...formData, role: false });
   }, [roles]);
+
+  useEffect(fetchRoles, [fetchRoles]);
 
   return (
     <ErrorBoundary

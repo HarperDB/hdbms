@@ -6,8 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
 
-import instanceUserColumns from '../../../functions/datatable/instanceUserColumns';
-import StructureReloader from '../../shared/structureReloader';
+import listUsers from '../../../functions/api/instance/listUsers';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import DataTable from '../../shared/dataTable';
@@ -28,13 +27,22 @@ const defaultTableState = {
 };
 
 const Datatable = () => {
-  const history = useHistory();
   const { compute_stack_id, customer_id } = useParams();
-  const [tableColumns] = useState(instanceUserColumns());
+  const history = useHistory();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const users = useStoreState(instanceState, (s) => s.users, [compute_stack_id]);
   const [tableState, setTableState] = useState(defaultTableState);
   const sortParam = tableState.sorted[0]?.id;
   const sortDesc = tableState.sorted[0]?.desc;
-  const users = useStoreState(instanceState, (s) => s.users, [compute_stack_id]);
+
+  const fetchUsers = useCallback(async () => {
+    setTableState({ ...tableState, loading: true });
+    await listUsers({ auth, url, is_local, compute_stack_id, customer_id });
+    setTableState({ ...tableState, loading: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, url, is_local, compute_stack_id, customer_id]);
 
   const rowClick = useCallback(
     (user_id) => {
@@ -54,16 +62,22 @@ const Datatable = () => {
   }, [sortParam, sortDesc]);
 
   useEffect(() => {
-    if (users && tableColumns) {
+    if (users) {
       setTableState({
         ...tableState,
         tableData: users,
-        dataTableColumns: tableColumns,
+        dataTableColumns: [
+          { Header: 'username', accessor: 'username' },
+          { Header: 'role', accessor: 'role' },
+        ],
         totalPages: Math.ceil((users.length || tableState.pageSize) / tableState.pageSize),
+        loading: false,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users, tableColumns, setTableState, tableState.pageSize]);
+  }, [users, setTableState, tableState.pageSize]);
+
+  useEffect(fetchUsers, [fetchUsers]);
 
   return (
     <ErrorBoundary
@@ -73,7 +87,9 @@ const Datatable = () => {
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">
-          <StructureReloader label="refresh users" />
+          <Button color="link" onClick={fetchUsers} className="mr-2">
+            <i title="Refresh Structure" className={`fa ${tableState.loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+          </Button>
           <span className="mx-3 text">|</span>
           <Button
             color="link"
@@ -85,12 +101,12 @@ const Datatable = () => {
           </Button>
         </Col>
       </Row>
-      <Card className="my-3">
-        <CardBody>
+      <Card className="mt-3">
+        <CardBody className="react-table-holder">
           <DataTable
             columns={tableState.dataTableColumns}
             data={tableState.tableData}
-            page={tableState.page}
+            currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}

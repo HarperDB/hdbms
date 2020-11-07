@@ -43,7 +43,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
           </CardBody>
         ) : null}
 
-        {((items && !items.length) || isCreating) && showForm ? (
+        {showForm && ((items && !items.length) || isCreating) ? (
           <CardBody>
             <EntityManagerForm
               items={items}

@@ -13,6 +13,7 @@ import commaNumbers from '../../../functions/util/commaNumbers';
 import DashboardChart from './dashboardChart';
 import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
+import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import config from '../../../config';
 
 const DashboardIndex = () => {
@@ -20,10 +21,13 @@ const DashboardIndex = () => {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
+  const instanceAuth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const charts = useStoreState(instanceState, (s) => s.charts);
   const registration = useStoreState(instanceState, (s) => s.registration);
-  const dashboardStats = useStoreState(instanceState, (s) => s.dashboardStats);
+  const structure = useStoreState(instanceState, (s) => s.structure);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [dashboardStats, setDashboardStats] = useState({ schemas: '...', tables: '...', records: '...' });
 
   const refreshCharts = () => {
     if (auth && customer_id && compute_stack_id) {
@@ -31,7 +35,30 @@ const DashboardIndex = () => {
     }
   };
 
-  useEffect(refreshCharts, [auth, customer_id, compute_stack_id]);
+  const refreshRegistration = () => {
+    if (auth && url) {
+      registrationInfo({ auth: instanceAuth, url });
+    }
+  };
+
+  useEffect(() => {
+    refreshCharts();
+  }, [auth, customer_id, compute_stack_id]);
+
+  useEffect(() => {
+    refreshRegistration();
+  }, [auth, url]);
+
+  useEffect(() => {
+    if (structure) {
+      const schemas = Object.keys(structure);
+      setDashboardStats({
+        schemas: commaNumbers(schemas.length.toString()),
+        tables: commaNumbers(schemas.reduce((a, b) => a + Object.keys(structure[b]).length, 0).toString()),
+        records: commaNumbers(schemas.reduce((a, b) => a + Object.keys(structure[b]).reduce((c, d) => c + structure[b][d].record_count, 0), 0).toString()),
+      });
+    }
+  }, [structure]);
 
   useInterval(refreshCharts, config.refresh_content_interval);
 
@@ -50,7 +77,7 @@ const DashboardIndex = () => {
       <Col lg="2" sm="4" xs="6" className="mb-3">
         <Card>
           <CardBody className="text-nowrap text-truncate">
-            <h5>{commaNumbers(dashboardStats?.schemas.toString() || '...')}</h5>
+            <h5>{dashboardStats.schemas}</h5>
             schemas
           </CardBody>
         </Card>
@@ -58,7 +85,7 @@ const DashboardIndex = () => {
       <Col lg="2" sm="4" xs="6" className="mb-3">
         <Card>
           <CardBody className="text-nowrap text-truncate">
-            <h5>{commaNumbers(dashboardStats?.tables.toString() || '...')}</h5>
+            <h5>{dashboardStats.tables}</h5>
             tables
           </CardBody>
         </Card>
@@ -66,7 +93,7 @@ const DashboardIndex = () => {
       <Col lg="2" sm="4" xs="6" className="mb-3">
         <Card>
           <CardBody className="text-nowrap text-truncate">
-            <h5>{commaNumbers(dashboardStats?.records.toString() || '...')}</h5>
+            <h5>{dashboardStats.records}</h5>
             total records
           </CardBody>
         </Card>

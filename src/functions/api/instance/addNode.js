@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ compute_stack_id, instance_host, clusterPort, auth, url, customer_id }) =>
+export default async ({ compute_stack_id, instance_host, clusterPort, auth, url }) =>
   queryInstance(
     {
       operation: 'add_node',
@@ -10,7 +10,5 @@ export default async ({ compute_stack_id, instance_host, clusterPort, auth, url,
       subscriptions: [],
     },
     auth,
-    url,
-    compute_stack_id,
-    customer_id
+    url
   );

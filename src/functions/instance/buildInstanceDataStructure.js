@@ -11,21 +11,15 @@ export default (dbResponse) => {
         .sort()
         .map((table, t) => {
           if (t === 0 && s === 0) defaultBrowseURL.push(table);
-          const thisTable = dbResponse[schema][table];
-          const attributes = thisTable.attributes
-            .filter((a) => ![thisTable.hash_attribute, '__createdtime__', '__updatedtime__'].includes(a.attribute))
-            .map((a) => a.attribute)
-            .sort();
-
-          structure[schema][table] = {
-            hashAttribute: thisTable.hash_attribute,
-            newEntityColumns: {},
-          };
-
-          // generate new entity columns
-          return attributes.filter((c) => !['__createdtime__', '__updatedtime__'].includes(c)).map((c) => (structure[schema][table].newEntityColumns[c] = null));
+          return (structure[schema][table] = {
+            record_count: dbResponse[schema][table].record_count,
+            hashAttribute: dbResponse[schema][table].hash_attribute,
+          });
         });
     });
 
-  return { structure, defaultBrowseURL: defaultBrowseURL.join('/') };
+  return {
+    structure,
+    defaultBrowseURL: defaultBrowseURL.join('/'),
+  };
 };

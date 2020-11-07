@@ -31,7 +31,7 @@ const ManageDatatable = () => {
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <DataTable
             columns={columns}
             data={data}

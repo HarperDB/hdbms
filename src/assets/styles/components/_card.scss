@@ -32,6 +32,13 @@
   .card-body {
     background: $gradient-white-lightgrey !important;
     height: 100%;
+
+    &.empty-prompt {
+      align-items: center;
+      display: flex;
+      height: calc(100vh - 221px) !important;
+      justify-content: center;
+    }
   }
 
   &.error,
@@ -47,10 +54,10 @@
       align-items: center;
       color: $color-danger;
       display: flex;
-      height: 36px;
       justify-content: center;
       line-height: 1;
-      padding: 0;
+      min-height: 36px;
+      padding: 10px !important;
     }
   }
 

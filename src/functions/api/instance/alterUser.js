@@ -1,6 +1,6 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, url, username, password = undefined, role = undefined, compute_stack_id, customer_id }) =>
+export default async ({ auth, url, username, password = undefined, role = undefined }) =>
   queryInstance(
     {
       operation: 'alter_user',
@@ -10,7 +10,5 @@ export default async ({ auth, url, username, password = undefined, role = undefi
       active: true,
     },
     auth,
-    url,
-    compute_stack_id,
-    customer_id
+    url
   );

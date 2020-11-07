@@ -1,6 +1,10 @@
 #config {
   .instance-details {
-    min-height: 174px;
+    min-height: 158px;
+
+    .card-body {
+      padding-bottom: 0;
+    }
 
     .nowrap-scroll {
       overflow: hidden;
@@ -10,7 +14,7 @@
   }
 
   .log-scroller {
-    height: calc(100vh - 495px);
+    height: calc(100vh - 499px);
     overflow-x: hidden;
     overflow-y: auto;
 
