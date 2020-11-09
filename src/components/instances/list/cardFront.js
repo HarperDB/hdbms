@@ -9,22 +9,25 @@ import { ErrorBoundary } from 'react-error-boundary';
 import config from '../../../config';
 import appState from '../../../functions/state/appState';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
+
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
 import userInfo from '../../../functions/api/instance/userInfo';
-import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
-import CardFrontIcons from './cardFrontIcons';
-import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+
+import CardFrontURL from './cardFrontURL';
+import CardFrontIcons from './cardFrontIcons';
 import CardInstanceUpdateRole from './cardInstanceUpdateRole';
+import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
+import ErrorFallback from '../../shared/errorFallback';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const { customer_id } = useParams();
+  const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
-  const history = useHistory();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
@@ -156,7 +159,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                   />
                 </Col>
               </Row>
-              <div className="instance-url">{url}</div>
+              <CardFrontURL url={url} />
               <CardFrontStatusRow
                 label="STATUS"
                 isReady

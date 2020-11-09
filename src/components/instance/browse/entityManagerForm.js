@@ -3,7 +3,6 @@ import { Row, Col, Button, Input } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useParams } from 'react-router-dom';
 
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
@@ -11,7 +10,6 @@ import instanceState from '../../../functions/state/instanceState';
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
 
 const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);

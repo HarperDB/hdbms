@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Col, Row, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -29,25 +29,25 @@ const DashboardIndex = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [dashboardStats, setDashboardStats] = useState({ schemas: '...', tables: '...', records: '...' });
 
-  const refreshCharts = () => {
+  const refreshCharts = useCallback(() => {
     if (auth && customer_id && compute_stack_id) {
       getCharts({ auth, customer_id, compute_stack_id });
     }
-  };
+  }, [auth, customer_id, compute_stack_id]);
 
-  const refreshRegistration = () => {
-    if (auth && url) {
+  const refreshRegistration = useCallback(() => {
+    if (instanceAuth && url) {
       registrationInfo({ auth: instanceAuth, url });
     }
-  };
+  }, [instanceAuth, url]);
 
   useEffect(() => {
     refreshCharts();
-  }, [auth, customer_id, compute_stack_id]);
+  }, [auth, customer_id, compute_stack_id, refreshCharts]);
 
   useEffect(() => {
     refreshRegistration();
-  }, [auth, url]);
+  }, [auth, refreshRegistration, url]);
 
   useEffect(() => {
     if (structure) {

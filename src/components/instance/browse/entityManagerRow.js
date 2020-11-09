@@ -14,8 +14,6 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
-  const customer_id = useStoreState(instanceState, (s) => s.customer_id);
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;

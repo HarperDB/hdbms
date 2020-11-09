@@ -9,7 +9,7 @@ const CardFrontStatusRow = ({ label, value, textClass = '', isReady, bottomDivid
     </Col>
     {bottomDivider && (
       <Col xs="12">
-        <hr className="my-1" />
+        <hr />
       </Col>
     )}
   </Row>
