@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useFilters, useTable, usePagination } from 'react-table';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import DataTableHeader from './dataTableHeader';
@@ -110,23 +110,19 @@ const DataTable = ({
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="react-table-scroller">
-        <div className="react-table">
-          <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
-          <div className="rows">
-            {iterable?.length ? (
-              iterable.map((row) => <DataTableRow key={row.id} row={row} prepareRow={prepareRow} onRowClick={onRowClick} />)
-            ) : loading ? (
-              <div className="loader">
-                <i className="fa fa-spinner fa-spin" />
-              </div>
-            ) : (
-              <div className="no-results">
-                <i className="fa fa-ban text-danger" />
-                <div className="mt-2">no records</div>
-              </div>
-            )}
+        <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
+        {iterable?.length ? (
+          iterable.map((row) => <DataTableRow key={row.id} row={row} prepareRow={prepareRow} onRowClick={onRowClick} />)
+        ) : loading ? (
+          <div className="centered text-center">
+            <i className="fa fa-spinner fa-spin" />
           </div>
-        </div>
+        ) : (
+          <div className="centered text-center">
+            <i className="fa fa-exclamation-triangle text-danger" />
+            <div className="mt-2 text-darkgrey">no records</div>
+          </div>
+        )}
       </div>
       {manual ? (
         <DataTablePaginationManual page={currentPage} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />

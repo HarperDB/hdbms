@@ -6,7 +6,6 @@ import { useStoreState } from 'pullstate';
 import instanceState from '../../../functions/state/instanceState';
 
 import EntityManager from './roleManager';
-import StructureReloader from '../../shared/structureReloader';
 import Loader from '../../shared/loader';
 import listRoles from '../../../functions/api/instance/listRoles';
 

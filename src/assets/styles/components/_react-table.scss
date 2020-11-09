@@ -1,135 +1,113 @@
 .react-table-holder {
-  min-height: calc(100vh - 242px);
-
-  @media screen and (max-width: 767px) {
-    min-height: auto;
-  }
-
   .react-table-scroller {
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    min-height: calc(100vh - 327px);
     border-bottom: 1px solid $lighter-grey-overlay;
+    min-height: calc(100vh - 328px);
+    font-size: 12px;
 
     @media screen and (max-width: 767px) {
       min-height: auto;
     }
 
-    .react-table {
-      font-size: 12px;
+    .header {
+      font-weight: bold;
 
-      .header {
-        font-weight: bold;
+      .col {
+        border-top: 1px solid $lighter-grey-overlay;
+        min-width: 100px;
+        white-space: nowrap;
 
-        .col {
-          border-top: 1px solid $lighter-grey-overlay;
-          min-width: 100px;
-          white-space: nowrap;
-
-          &.sorted {
-            &.desc {
-              box-shadow: inset 0 -2px 0 0 $lighter-grey-overlay;
-            }
-
-            &.asc {
-              box-shadow: inset 0 2px 0 0 $lighter-grey-overlay;
-            }
-
+        &.sorted {
+          &.desc {
+            box-shadow: inset 0 -2px 0 0 $lighter-grey-overlay;
           }
+
+          &.asc {
+            box-shadow: inset 0 2px 0 0 $lighter-grey-overlay;
+          }
+
         }
       }
+    }
 
-      .filter {
-        .col {
-          padding: 0.4rem 0.3rem 0.4rem 0 !important;
+    .filter {
+      .col {
+        padding: 0.4rem 0.3rem 0.4rem 0 !important;
+
+        input,
+        select {
+          background: $light-grey-overlay;
+          box-shadow: none;
+          color: $color-black;
+          height: 24px !important;
+          width: 100%;
         }
       }
+    }
 
-      .rows {
+    .centered {
+      position: absolute;
+      top: 40%;
+      left: 0;
+      right: 0;
+    }
+
+    .row {
+      cursor: pointer;
+      flex-wrap: nowrap;
+      margin: 0;
+      overflow: visible;
+      white-space: nowrap;
+      width: 100%;
+
+      .col {
+        align-items: center;
         border-bottom: 1px solid $lighter-grey-overlay;
+        display: flex;
+        height: 30px;
+        margin-bottom: 0 !important;
+        min-width: 100px;
+        padding: 0 0.25rem;
+        white-space: nowrap;
 
-        .row:last-child {
-          .col {
-            border-bottom: 0;
-          }
+        &.action {
+          justify-content: center;
+          max-width: 70px;
+          min-width: 70px;
         }
+      }
+    }
 
-        .no-results,
-        .loader {
+    .text-renderer {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .image-renderer {
+      padding-left: 10px;
+      position: relative;
+
+      .preview-image {
+        border-radius: 4px;
+        box-shadow: 0 0 4px $grey-overlay;
+        left: 40px;
+        max-height: 150px;
+        max-width: 150px;
+        position: absolute;
+        top: -5px;
+        width: auto;
+        z-index: 99;
+
+        &.no-image {
           align-items: center;
+          background: $color-white;
           display: flex;
           flex-direction: column;
-          font-size: 0.875rem;
-          height: 555px;
+          height: 60px;
           justify-content: center;
-        }
-      }
-
-      .row {
-        cursor: pointer;
-        flex-wrap: nowrap;
-        margin: 0;
-        overflow: visible;
-        white-space: nowrap;
-        width: 100%;
-
-        .col {
-          align-items: center;
-          border-bottom: 1px solid $lighter-grey-overlay;
-          display: flex;
-          height: 30px;
-          margin-bottom: 0 !important;
-          min-width: 100px;
-          padding: 0 0.25rem;
-          white-space: nowrap;
-
-          &.action {
-            justify-content: center;
-            max-width: 70px;
-            min-width: 70px;
-          }
-        }
-      }
-
-      input,
-      select {
-        background: $light-grey-overlay;
-        box-shadow: none;
-        color: $color-black;
-        height: 24px !important;
-        width: 100%;
-      }
-
-      .text-renderer {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .image-renderer {
-        padding-left: 10px;
-        position: relative;
-
-        .preview-image {
-          border-radius: 4px;
-          box-shadow: 0 0 4px $grey-overlay;
-          left: 40px;
-          max-height: 150px;
-          max-width: 150px;
-          position: absolute;
-          top: -5px;
-          width: auto;
-          z-index: 99;
-
-          &.no-image {
-            align-items: center;
-            background: $color-white;
-            display: flex;
-            flex-direction: column;
-            height: 60px;
-            justify-content: center;
-            width: 150px;
-          }
+          width: 150px;
         }
       }
     }
