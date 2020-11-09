@@ -90,44 +90,42 @@
   }
 
   .react-table-scroller {
-    .react-table {
-      .header {
-        .col {
-          border-top: 1px solid $faint-white-overlay;
+    .header {
+      .col {
+        border-top: 1px solid $faint-white-overlay;
 
-          &.sorted {
-            &.desc {
-              box-shadow: inset 0 -2px 0 0 $faint-white-overlay;
-            }
-
-            &.asc {
-              box-shadow: inset 0 2px 0 0 $faint-white-overlay;
-            }
-
+        &.sorted {
+          &.desc {
+            box-shadow: inset 0 -2px 0 0 $faint-white-overlay;
           }
+
+          &.asc {
+            box-shadow: inset 0 2px 0 0 $faint-white-overlay;
+          }
+
         }
       }
+    }
 
-      .rows {
+    .rows {
+      border-bottom: 1px solid $faint-white-overlay;
+    }
+
+    .row {
+      .col {
         border-bottom: 1px solid $faint-white-overlay;
       }
+    }
 
-      .row {
-        .col {
-          border-bottom: 1px solid $faint-white-overlay;
-        }
-      }
+    input,
+    select {
+      color: $color-white;
+    }
 
-      input,
-      select {
-        color: $color-white;
-      }
-
-      .image-renderer {
-        .preview-image {
-          &.no-image {
-            background: $color-white;
-          }
+    .image-renderer {
+      .preview-image {
+        &.no-image {
+          background: $color-white;
         }
       }
     }
