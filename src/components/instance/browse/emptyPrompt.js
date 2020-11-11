@@ -9,8 +9,8 @@ const EmptyPrompt = ({ message }) => (
       <StructureReloader label="refresh schemas and tables" />
     </div>
     <Card className="my-3">
-      <CardBody className="py-5">
-        <div className="text-center">{message}</div>
+      <CardBody>
+        <div className="empty-prompt">{message}</div>
       </CardBody>
     </Card>
   </>

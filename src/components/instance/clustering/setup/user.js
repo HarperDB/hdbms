@@ -4,13 +4,16 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import createClusterUser from '../../../functions/instance/createClusterUser';
-import instanceState from '../../../functions/state/instanceState';
+import createClusterUser from '../../../../functions/instance/createClusterUser';
+import instanceState from '../../../../functions/state/instanceState';
+import appState from '../../../../functions/state/appState';
 
-import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
+import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
+import buildNetwork from '../../../../functions/instance/buildNetwork';
 
-const SetupUser = () => {
+const User = () => {
   const { compute_stack_id, customer_id } = useParams();
+  const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -30,7 +33,9 @@ const SetupUser = () => {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
         const response = await createClusterUser({ username, password, role: cluster_role, auth, url, is_local, compute_stack_id, customer_id });
-        if (response) {
+        if (!response.error) {
+          buildNetwork({ auth, url, instances, compute_stack_id });
+        } else {
           setFormState({ error: response.message });
         }
       }
@@ -46,7 +51,7 @@ const SetupUser = () => {
   return cluster_user ? (
     <Row>
       <Col xs="12">
-        <hr />
+        <hr className="my-3" />
       </Col>
       <Col xs="10">Cluster User</Col>
       <Col xs="2" className="text-right">
@@ -55,7 +60,7 @@ const SetupUser = () => {
     </Row>
   ) : (
     <>
-      <hr />
+      <hr className="my-3" />
       <div className="text-nowrap mb-3">Create Cluster User</div>
       <Input
         id="username"
@@ -85,4 +90,4 @@ const SetupUser = () => {
   );
 };
 
-export default SetupUser;
+export default User;

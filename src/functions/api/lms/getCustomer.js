@@ -2,6 +2,7 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import addError from './addError';
 import config from '../../../config';
+import getPrepaidSubscriptions from './getPrepaidSubscriptions';
 
 export default async ({ auth, customer_id }) => {
   let response = null;
@@ -13,6 +14,8 @@ export default async ({ auth, customer_id }) => {
       payload: { customer_id },
       auth,
     });
+
+    getPrepaidSubscriptions({ auth, customer_id, stripe_id: response?.stripe_id });
 
     if (!response.error) {
       appState.update((s) => {

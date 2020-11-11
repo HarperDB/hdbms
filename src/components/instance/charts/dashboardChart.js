@@ -10,7 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 import appState from '../../../functions/state/appState';
 
 import sql from '../../../functions/api/instance/sql';
-import chartOptions from '../../../functions/instance/chartOptions';
+import chartOptions from '../../../functions/charts/chartOptions';
 import isNumeric from '../../../functions/util/isNumeric';
 import config from '../../../config';
 

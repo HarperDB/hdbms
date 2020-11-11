@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-const SetupNodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
+const NodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
   nodeNameMatch ? (
     <Row>
       <Col xs="12">
-        <hr />
+        <hr className="my-3" />
       </Col>
       <Col xs="10" className="text">
         Cluster Node Name
@@ -16,11 +16,11 @@ const SetupNodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
     </Row>
   ) : (
     <>
-      <hr />
+      <hr className="my-3" />
       <Button color="success" block onClick={() => setNodeNameMatch(true)}>
         Set Cluster Node Name
       </Button>
     </>
   );
 
-export default SetupNodeName;
+export default NodeName;

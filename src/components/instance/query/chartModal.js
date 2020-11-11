@@ -8,8 +8,8 @@ import { useAlert } from 'react-alert';
 
 import appState from '../../../functions/state/appState';
 import addChart from '../../../functions/api/lms/addChart';
-import chartOptions from '../../../functions/instance/chartOptions';
-import chartTypes from '../../../functions/instance/chartTypes';
+import chartOptions from '../../../functions/charts/chartOptions';
+import chartTypes from '../../../functions/charts/chartTypes';
 import isNumeric from '../../../functions/util/isNumeric';
 
 const ChartModal = ({ setShowChartModal, tableData, query }) => {

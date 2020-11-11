@@ -73,7 +73,7 @@ const SystemInfo = () => {
       </Row>
       <Card className="my-3 instance-details">
         <CardBody>
-          {(loading || !systemInfo) && !autoRefresh ? (
+          {!systemInfo && !autoRefresh ? (
             <div className="pt-5 text-center">
               <i className="fa fa-spinner fa-spin text-purple" />
             </div>

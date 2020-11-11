@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import useAsyncEffect from 'use-async-effect';
 
+import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 import buildNetwork from '../../../functions/instance/buildNetwork';
 
@@ -13,18 +15,27 @@ const ClusteringIndex = () => {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const instances = useStoreState(instanceState, (s) => s.instances);
-  const structure = useStoreState(instanceState, (s) => s.structure);
   const network = useStoreState(instanceState, (s) => s.network, [compute_stack_id]);
-  const showManage = network && !!network.is_enabled && !!network.cluster_user && !!network.cluster_role && network.name === compute_stack_id;
+  const instances = useStoreState(appState, (s) => s.instances, [compute_stack_id]);
+  const [showManage, setShowManage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (auth && compute_stack_id && instances && structure && url) {
-      buildNetwork({ auth, url, instances, compute_stack_id, structure });
+  useAsyncEffect(async () => {
+    if (auth && compute_stack_id && instances && url) {
+      setLoading(true);
+      await buildNetwork({ auth, url, instances, compute_stack_id });
+      setTimeout(() => setLoading(false), 100);
     }
-  }, [auth, compute_stack_id, instances, structure, url]);
+  }, [url]);
 
-  return !network ? <Loader header="loading network" spinner /> : showManage ? <Manage /> : <Setup />;
+  useAsyncEffect(() => {
+    if (network) {
+      setShowManage(!!network.is_enabled && !!network.cluster_user && !!network.cluster_role);
+      setLoading(false);
+    }
+  }, [network]);
+
+  return loading ? <Loader header="loading network" spinner /> : showManage ? <Manage /> : <Setup />;
 };
 
 export default ClusteringIndex;

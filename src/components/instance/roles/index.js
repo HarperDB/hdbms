@@ -8,6 +8,7 @@ import instanceState from '../../../functions/state/instanceState';
 import EntityManager from './roleManager';
 import Loader from '../../shared/loader';
 import listRoles from '../../../functions/api/instance/listRoles';
+import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './jsonviewer'));
 
@@ -33,6 +34,7 @@ const RolesIndex = () => {
   const fetchRoles = useCallback(async () => {
     setLoading(true);
     await listRoles({ auth, url, is_local, compute_stack_id, customer_id });
+    await registrationInfo({ auth, url });
     setLoading(false);
   }, [auth, url, is_local, compute_stack_id, customer_id]);
 
@@ -97,11 +99,11 @@ const RolesIndex = () => {
           </Card>
         ) : (
           <Card className="my-3">
-            <CardBody className="empty-prompt">
+            <CardBody>
               {role_id ? (
-                <div className="text-center">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
+                <div className="empty-prompt">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
               ) : (
-                <div className="text-center">Please choose or add a role to manage it.</div>
+                <div className="empty-prompt">Please choose or add a role to manage it.</div>
               )}
             </CardBody>
           </Card>

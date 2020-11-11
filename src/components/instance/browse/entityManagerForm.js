@@ -8,6 +8,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
+import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
 const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
@@ -65,9 +66,7 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
 
     await queryInstance(operation, auth, url);
 
-    return instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
+    return buildInstanceStructure({ auth, url });
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);

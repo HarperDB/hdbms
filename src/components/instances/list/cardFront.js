@@ -13,6 +13,7 @@ import useInstanceAuth from '../../../functions/state/instanceAuths';
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
 import userInfo from '../../../functions/api/instance/userInfo';
 import addError from '../../../functions/api/lms/addError';
+import iopsMapper from '../../../functions/products/iopsMapper';
 
 import CardFrontURL from './cardFrontURL';
 import CardFrontIcons from './cardFrontIcons';
@@ -35,6 +36,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [processing, setProcessing] = useState(false);
   const [formState, setFormState] = useState({});
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
+  const statusString = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
+  const regionString = is_local ? 'USER INSTALLED' : instance_region;
+  const licenseString = `${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`;
+  const iopsString = is_local ? 'HARDWARE LIMIT' : `${iopsMapper[storage?.data_volume_size]} BASE / 3000 BURST`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -160,22 +165,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                 </Col>
               </Row>
               <CardFrontURL url={url} />
-              <CardFrontStatusRow
-                label="STATUS"
-                isReady
-                textClass={`text-bold text-${instanceData.error ? 'danger' : 'success'}`}
-                value={instanceData.status?.toUpperCase()}
-                bottomDivider
-              />
-              <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-              <CardFrontStatusRow
-                label="LICENSE"
-                isReady={isReady}
-                value={`${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`}
-                bottomDivider
-              />
+              <CardFrontStatusRow label="STATUS" isReady textClass={statusString} value={instanceData.status} bottomDivider />
+              <CardFrontStatusRow label="REGION" isReady={isReady} value={regionString} bottomDivider />
+              <CardFrontStatusRow label="LICENSE" isReady={isReady} value={licenseString} bottomDivider />
               <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-              <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
+              <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} />
             </CardBody>
           )}
         </Card>

@@ -23,13 +23,6 @@
   .card-body {
     background: $gradient-white-lightgrey !important;
     height: 100%;
-
-    &.empty-prompt {
-      align-items: center;
-      display: flex;
-      height: calc(100vh - 221px) !important;
-      justify-content: center;
-    }
   }
 
   &.error,

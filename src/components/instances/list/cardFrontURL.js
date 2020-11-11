@@ -17,14 +17,18 @@ const CardFrontURL = ({ url }) => {
 
   return (
     <Row noGutters className="instance-url-holder">
-      {canCopyToClipboard && (
-        <Col className="copy-icon">
-          <Button title="Copy instance url" onClick={copyURL} color="link" disabled={!url}>
-            <i className="fa fa-copy text-small" />
-          </Button>
-        </Col>
+      {url && (
+        <>
+          {canCopyToClipboard && (
+            <Col className="copy-icon">
+              <Button title="Copy instance url" onClick={copyURL} color="link">
+                <i className="fa fa-copy text-small" />
+              </Button>
+            </Col>
+          )}
+          <Col className="instance-url">{url}</Col>
+        </>
       )}
-      <Col className="instance-url">{url}</Col>
     </Row>
   );
 };

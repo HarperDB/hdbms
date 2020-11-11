@@ -40,8 +40,8 @@ const BrowseIndex = () => {
   const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
-  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const [instanceAuths] = useInstanceAuth({});
+  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super;
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`

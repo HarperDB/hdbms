@@ -3,7 +3,7 @@ import ToggleButton from 'react-toggle';
 
 import updateNode from '../api/instance/updateNode';
 
-export default ({ auth, url, is_local, customer_id }) => [
+export default ({ auth, url, is_local, customer_id, buildNetwork }) => [
   {
     Header: 'instance',
     Cell: ({
@@ -33,8 +33,8 @@ export default ({ auth, url, is_local, customer_id }) => [
     }) => (
       <ToggleButton
         checked={publish || false}
-        onChange={() =>
-          updateNode({
+        onChange={async () => {
+          await updateNode({
             compute_stack_id,
             instance_host,
             clusterPort,
@@ -46,8 +46,9 @@ export default ({ auth, url, is_local, customer_id }) => [
             url,
             is_local,
             customer_id,
-          })
-        }
+          });
+          buildNetwork();
+        }}
       />
     ),
   },
@@ -60,8 +61,8 @@ export default ({ auth, url, is_local, customer_id }) => [
     }) => (
       <ToggleButton
         checked={subscribe || false}
-        onChange={() =>
-          updateNode({
+        onChange={async () => {
+          await updateNode({
             compute_stack_id,
             instance_host,
             clusterPort,
@@ -73,8 +74,9 @@ export default ({ auth, url, is_local, customer_id }) => [
             url,
             is_local,
             customer_id,
-          })
-        }
+          });
+          buildNetwork();
+        }}
       />
     ),
   },

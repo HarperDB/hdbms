@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-const SetupEnable = ({ setFormState, disabled }) => (
+const Enable = ({ setFormState, disabled }) => (
   <>
-    <hr />
+    <hr className="my-3" />
     <Button color="success" block onClick={() => setFormState({ submitted: true })} disabled={disabled}>
       Enable Instance Clustering
     </Button>
   </>
 );
 
-export default SetupEnable;
+export default Enable;

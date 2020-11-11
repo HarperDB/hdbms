@@ -9,6 +9,7 @@ export default ({ title, type, labels, theme }) => {
     },
     chart: {
       type,
+      animations: { enabled: false },
       fontFamily: 'proxima-soft',
       toolbar: { offsetX: -25, tools: { selection: false, pan: false, zoom: false, zoomin: false, zoomout: false, reset: false } },
     },

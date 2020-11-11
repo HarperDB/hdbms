@@ -5,6 +5,8 @@ import instanceState from '../state/instanceState';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from './buildClusterConfigColumns';
+import describeAll from '../api/instance/describeAll';
+import buildInstanceDataStructure from './buildInstanceDataStructure';
 
 const processConnections = (connections) =>
   connections
@@ -19,15 +21,19 @@ const processConnections = (connections) =>
         }))
     : [];
 
-export default async ({ auth, url, instances, compute_stack_id, structure }) => {
+const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-  const users = await listUsers({ auth, url });
-  const roles = await listRoles({ auth, url });
-  const { is_enabled, node_name, status, message } = await clusterStatus({ auth, url });
-  const cluster_role = roles && Array.isArray(roles) && roles.find((r) => r.role === 'cluster_user');
-  const cluster_user = cluster_role && users.find((u) => u.role.id === cluster_role.id);
+  const schema = await describeAll({ auth, url });
+  const { structure } = buildInstanceDataStructure(schema);
 
-  const networkObject = {
+  const roles = await listRoles({ auth, url });
+  const users = await listUsers({ auth, url });
+  const { is_enabled, node_name, status, message } = await clusterStatus({ auth, url });
+
+  const cluster_role = roles.find((r) => r.permission.cluster_user);
+  const cluster_user = cluster_role && users.find((u) => u.role === cluster_role.role);
+
+  const network = {
     is_enabled,
     cluster_role: cluster_role?.id,
     cluster_user: cluster_user?.username,
@@ -38,17 +44,29 @@ export default async ({ auth, url, instances, compute_stack_id, structure }) => 
 
   const clustering = buildInstanceClusterPartners({
     instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
-    network: networkObject,
+    network,
     instance_region: thisInstance.instance_region,
   });
 
   const clusterDataTable = buildClusteringTable({ instances: clustering.connected.filter((i) => i.connection.state !== 'closed'), structure });
-  const clusterDataTableColumns = clusterConfigColumns({ auth, url: thisInstance.url, is_local: thisInstance.is_local, compute_stack_id, customer_id: thisInstance.customer_id });
 
-  return instanceState.update((s) => {
-    s.network = networkObject;
+  const clusterDataTableColumns = clusterConfigColumns({
+    auth,
+    url: thisInstance.url,
+    is_local: thisInstance.is_local,
+    compute_stack_id,
+    customer_id: thisInstance.customer_id,
+    buildNetwork: () => buildNetwork({ auth, url, instances, compute_stack_id }),
+  });
+
+  instanceState.update((s) => {
+    s.network = network;
     s.clustering = clustering;
     s.clusterDataTable = clusterDataTable;
     s.clusterDataTableColumns = clusterDataTableColumns;
   });
+
+  return true;
 };
+
+export default buildNetwork;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-const SetupPort = ({ port }) => (
+const Port = ({ port }) => (
   <Row>
     <Col xs="12">
-      <hr />
+      <hr className="my-3" />
     </Col>
     <Col xs="10" className="text">
       Cluster Port {port}
@@ -15,4 +15,4 @@ const SetupPort = ({ port }) => (
   </Row>
 );
 
-export default SetupPort;
+export default Port;

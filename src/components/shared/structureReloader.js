@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import instanceState from '../../functions/state/instanceState';
 import appState from '../../functions/state/appState';
-import buildActiveInstanceObject from '../../functions/instance/buildActiveInstanceObject';
+import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
 
 const StructureReloader = ({ label = 'instance', centerText = false }) => {
   const { compute_stack_id } = useParams();
@@ -13,7 +13,10 @@ const StructureReloader = ({ label = 'instance', centerText = false }) => {
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
 
-  const refresh = useCallback(() => buildActiveInstanceObject({ auth, compute_stack_id, instances }), [auth, compute_stack_id, instances]);
+  const refresh = useCallback(() => {
+    const instance = instances.find((i) => i.compute_stack_id === compute_stack_id);
+    buildInstanceStructure({ auth, url: instance.url });
+  }, [auth, compute_stack_id, instances]);
 
   return (
     <span className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`}>

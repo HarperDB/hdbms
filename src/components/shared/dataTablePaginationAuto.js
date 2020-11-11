@@ -11,7 +11,7 @@ const DataTablePagination = ({ previousPage, canPreviousPage, pageIndex, gotoPag
     </Col>
     <Col xs="12" sm="4" className="paginator">
       <i className="fa fa-book mr-2" />
-      <Input className="mb-2" type="number" value={pageIndex + 1} min={1} max={pageCount} onChange={(e) => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)} />
+      <Input className="mb-2" type="number" value={pageIndex + 1 || 1} min={1} max={pageCount} onChange={(e) => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)} />
       <div className="page-count">&nbsp;/&nbsp;{pageCount}</div>
     </Col>
     <Col xs="12" sm="4" className="page-size">

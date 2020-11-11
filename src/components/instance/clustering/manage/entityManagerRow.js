@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
+import useInterval from 'use-interval';
 
-import instanceState from '../../../functions/state/instanceState';
-import removeNode from '../../../functions/api/instance/removeNode';
-import addNode from '../../../functions/api/instance/addNode';
+import instanceState from '../../../../functions/state/instanceState';
+import removeNode from '../../../../functions/api/instance/removeNode';
+import addNode from '../../../../functions/api/instance/addNode';
 
-const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_name, instance_host, instance_status, connection, clusterPort }, itemType }) => {
+const EntityManagerRow = ({ setShowModal, item, itemType, refreshNetwork, loading }) => {
   const { customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -22,12 +23,8 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
     setChanging(true);
     const result = await addNode(payload);
     if (result.error) {
-      alert.error(instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
+      alert.error(item.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
       setChanging(false);
-    } else {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
     }
   };
 
@@ -37,16 +34,16 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
     if (result.error) {
       alert.error(result.message);
       setChanging(false);
-    } else {
-      instanceState.update((s) => {
-        s.lastUpdate = Date.now();
-      });
     }
   };
 
+  useEffect(() => {
+    if (changing || loading) refreshNetwork();
+  }, [changing, loading, refreshNetwork]);
+
   return (
     <Row className="item-row">
-      <Col className={`item-label ${connection?.state === 'closed' ? 'text-danger' : ''}`}>{instance_name}</Col>
+      <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <>
@@ -60,7 +57,7 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
               disabled={changing}
               onClick={() =>
                 handleRemoveNode({
-                  compute_stack_id,
+                  compute_stack_id: item.compute_stack_id,
                   auth,
                   url,
                   is_local,
@@ -68,14 +65,14 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
                 })
               }
             >
-              <i className={`fa ${changing ? 'fa-spin fa-spinner' : 'fa-times'} text-white`} />
+              <i className={`fa ${changing || loading ? 'fa-spin fa-spinner' : 'fa-times'} text-white`} />
             </Button>
           </>
-        ) : instance_status === 'CREATE_IN_PROGRESS' ? (
+        ) : item.instance_status === 'CREATE_IN_PROGRESS' ? (
           <Button color="grey" className="round" title="Creating Instance" disabled>
             <i className="fa fa-spin fa-spinner" />
           </Button>
-        ) : !connection ? (
+        ) : !item.connection ? (
           <Button
             color="purple"
             className="round"
@@ -83,9 +80,9 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
             disabled={changing}
             onClick={() =>
               handleAddNode({
-                compute_stack_id,
-                instance_host,
-                clusterPort,
+                compute_stack_id: item.compute_stack_id,
+                instance_host: item.instance_host,
+                clusterPort: item.clusterPort,
                 auth,
                 url,
                 is_local,
@@ -93,11 +90,11 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
               })
             }
           >
-            <i className={`fa ${changing ? 'fa-spin fa-spinner' : 'fa-plus'} text-white`} />
+            <i className={`fa ${changing || loading ? 'fa-spin fa-spinner' : 'fa-plus'} text-white`} />
           </Button>
-        ) : connection?.state === 'closed' ? (
+        ) : item.connection?.state === 'closed' ? (
           <>
-            <Button color="danger" className="round mr-1" title="Why isn't this instance clustering?" disabled={changing} onClick={() => setShowModal(instance_name)}>
+            <Button color="danger" className="round mr-1" title="Why isn't this instance clustering?" disabled={changing} onClick={() => setShowModal(item.instance_name)}>
               <i className="fa fa-exclamation" />
             </Button>
             <Button
@@ -107,7 +104,7 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
               disabled={changing}
               onClick={() =>
                 handleRemoveNode({
-                  compute_stack_id,
+                  compute_stack_id: item.compute_stack_id,
                   auth,
                   url,
                   is_local,
@@ -115,7 +112,7 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
                 })
               }
             >
-              <i className={`fa ${changing ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
+              <i className={`fa ${changing || loading ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
             </Button>
           </>
         ) : (
@@ -126,7 +123,7 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
             disabled={changing}
             onClick={() =>
               handleRemoveNode({
-                compute_stack_id,
+                compute_stack_id: item.compute_stack_id,
                 auth,
                 url,
                 is_local,
@@ -134,7 +131,7 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
               })
             }
           >
-            <i className={`fa ${changing || connection?.state === 'connecting' ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
+            <i className={`fa ${changing || loading ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
           </Button>
         )}
       </Col>
@@ -142,4 +139,4 @@ const ManageInstancesRow = ({ setShowModal, item: { compute_stack_id, instance_n
   );
 };
 
-export default ManageInstancesRow;
+export default EntityManagerRow;

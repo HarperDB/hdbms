@@ -6,6 +6,7 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
+import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
 const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
@@ -35,9 +36,7 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       return alert.error(result.error);
     }
 
-    return instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
+    return buildInstanceStructure({ auth, url });
   };
 
   const selectItemForDrop = () => {

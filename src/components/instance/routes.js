@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 
-import Dashboard from './dashboard';
+import Browse from './browse';
 
-const Browse = lazy(() => import(/* webpackChunkName: "instance-browse" */ './browse'));
+const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
 const Clustering = lazy(() => import(/* webpackChunkName: "instance-clustering" */ './clustering'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
@@ -13,14 +13,6 @@ const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ '
 
 const Routes = ({ super_user }) => {
   const standardRoutes = [
-    {
-      component: Dashboard,
-      path: `/o/:customer_id/i/:compute_stack_id/dashboard`,
-      link: 'dashboard',
-      label: 'dashboard',
-      icon: 'chart-line',
-      iconCode: 'f201',
-    },
     {
       component: Browse,
       path: `/o/:customer_id/i/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,
@@ -63,6 +55,14 @@ const Routes = ({ super_user }) => {
       label: 'roles',
       icon: 'check-square',
       iconCode: 'f14a',
+    },
+    {
+      component: Charts,
+      path: `/o/:customer_id/i/:compute_stack_id/charts`,
+      link: 'charts',
+      label: 'charts',
+      icon: 'chart-line',
+      iconCode: 'f201',
     },
     {
       component: Metrics,

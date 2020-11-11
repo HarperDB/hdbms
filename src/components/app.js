@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
