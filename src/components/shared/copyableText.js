@@ -2,35 +2,39 @@ import React, { useCallback } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { useAlert } from 'react-alert';
 
-const CardFrontURL = ({ url }) => {
+const CopyableText = ({ text, beforeText, afterText }) => {
   const alert = useAlert();
   const canCopyToClipboard = navigator.clipboard;
 
   const copyURL = useCallback(
     async (e) => {
       e.stopPropagation();
-      await navigator.clipboard.writeText(url);
-      alert.success('Instance URL copied to clipboard');
+      await navigator.clipboard.writeText(text);
+      alert.success('Text copied to clipboard');
     },
-    [alert, url]
+    [alert, text]
   );
 
   return (
-    <Row noGutters className="instance-url-holder">
-      {url && (
+    <Row noGutters className="copyable-text-holder">
+      {text && (
         <>
           {canCopyToClipboard && (
             <Col className="copy-icon">
-              <Button title="Copy instance url" onClick={copyURL} color="link">
+              <Button title="Copy this value" onClick={copyURL} color="link">
                 <i className="fa fa-copy text-small" />
               </Button>
             </Col>
           )}
-          <Col className="instance-url">{url}</Col>
+          <Col className="text-container">
+            {beforeText}
+            {text}
+            {afterText}
+          </Col>
         </>
       )}
     </Row>
   );
 };
 
-export default CardFrontURL;
+export default CopyableText;

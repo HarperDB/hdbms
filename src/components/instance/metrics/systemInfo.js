@@ -12,6 +12,7 @@ import systemInformation from '../../../functions/api/instance/systemInformation
 import ContentContainer from '../../shared/contentContainer';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import IopsInfoModal from '../../shared/iopsInfoModal';
 
 const SystemInfo = () => {
   const { customer_id, compute_stack_id } = useParams();
@@ -19,6 +20,7 @@ const SystemInfo = () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const storage = useStoreState(instanceState, (s) => s.storage);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
@@ -110,11 +112,6 @@ const SystemInfo = () => {
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="CPU Info" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.cpuInfo || '...'}</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
                 <ContentContainer header="CPU Cores" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.cpuCores || '...'}</div>
                 </ContentContainer>
@@ -137,6 +134,12 @@ const SystemInfo = () => {
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Network Latency" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>{systemInfo?.networkLatency || '...'}ms</div>
+                </ContentContainer>
+              </Col>
+
+              <Col md="2" sm="4" xs="6">
+                <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal iops={storage?.iops} />} className="mb-3">
+                  <div className="nowrap-scroll">{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
                 </ContentContainer>
               </Col>
             </Row>

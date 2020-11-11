@@ -6,7 +6,6 @@ import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import config from '../../../../config';
 import instanceState from '../../../../functions/state/instanceState';
 import appState from '../../../../functions/state/appState';
 

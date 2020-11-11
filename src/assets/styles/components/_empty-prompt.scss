@@ -1,9 +1,9 @@
 .empty-prompt {
   align-items: center;
   display: flex;
+  flex-direction: column;
   height: calc(100vh - 262px) !important;
   justify-content: center;
-  flex-direction: column;
   line-height: 1.5 !important;
 
   &.narrow {

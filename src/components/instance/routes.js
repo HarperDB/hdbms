@@ -4,7 +4,7 @@ import Browse from './browse';
 
 const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
-const Clustering = lazy(() => import(/* webpackChunkName: "instance-clustering" */ './clustering'));
+const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './cluster'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
 const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './metrics'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
@@ -33,10 +33,10 @@ const Routes = ({ super_user }) => {
 
   const superUserRoutes = [
     {
-      component: Clustering,
-      path: `/o/:customer_id/i/:compute_stack_id/clustering`,
-      link: 'clustering',
-      label: 'clustering',
+      component: Cluster,
+      path: `/o/:customer_id/i/:compute_stack_id/cluster`,
+      link: 'cluster',
+      label: 'cluster',
       icon: 'cubes',
       iconCode: 'f1e0',
     },

@@ -10,7 +10,7 @@ const ManageErrorModal = ({ showModal, setShowModal }) => {
   const instance_name = useStoreState(instanceState, (s) => s.instance_name, [compute_stack_id]);
 
   return (
-    <Modal id="cluster-state-modal" isOpen={!!showModal} toggle={() => setShowModal(false)}>
+    <Modal id="cluster-state-modal" isOpen={!!showModal} toggle={() => setShowModal(false)} centered fade={false}>
       <ModalHeader toggle={() => setShowModal(false)}>Instance Cluster Error</ModalHeader>
       <ModalBody>
         <Card>

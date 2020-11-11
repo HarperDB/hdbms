@@ -59,37 +59,7 @@
         }
       }
 
-      .instance-url-holder {
-        margin: 7px 0 8px;
-        height: 20px;
 
-        .copy-icon {
-          min-width: 15px;
-          flex-shrink: 1;
-          flex-grow: 0;
-           i {
-             color: $color-grey !important;
-             cursor: copy;
-           }
-        }
-
-        .instance-url {
-          font-size: $font-size-small;
-          flex-shrink: 0;
-          flex-grow: 1;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          padding-top: 1px;
-
-          input {
-            background: transparent !important;
-            height: auto;
-            font-size: 12px !important;
-            padding: 0;
-          }
-        }
-      }
 
 
       .card-front-status-row {
@@ -101,8 +71,8 @@
           white-space: nowrap;
 
           hr {
-            margin-top: 0.2rem !important;
             margin-bottom: 0.2rem !important;
+            margin-top: 0.2rem !important;
           }
         }
       }

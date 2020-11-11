@@ -4,7 +4,6 @@ import { useStoreState } from 'pullstate';
 import { useHistory } from 'react-router';
 import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
-import useInterval from 'use-interval';
 
 import instanceState from '../../../../functions/state/instanceState';
 import removeNode from '../../../../functions/api/instance/removeNode';
@@ -19,23 +18,31 @@ const EntityManagerRow = ({ setShowModal, item, itemType, refreshNetwork, loadin
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
 
-  const handleAddNode = async (payload) => {
-    setChanging(true);
-    const result = await addNode(payload);
-    if (result.error) {
-      alert.error(item.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
-      setChanging(false);
-    }
-  };
+  const handleAddNode = useCallback(
+    async (payload) => {
+      setChanging(true);
+      const result = await addNode(payload);
+      console.log(result);
+      if (result.error) {
+        alert.error(item.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
+        setChanging(false);
+      }
+    },
+    [setChanging, alert, item.instance_host]
+  );
 
-  const handleRemoveNode = async (payload) => {
-    setChanging(true);
-    const result = await removeNode(payload);
-    if (result.error) {
-      alert.error(result.message);
-      setChanging(false);
-    }
-  };
+  const handleRemoveNode = useCallback(
+    async (payload) => {
+      setChanging(true);
+      const result = await removeNode(payload);
+      console.log(result);
+      if (result.error) {
+        alert.error(result.message);
+        setChanging(false);
+      }
+    },
+    [setChanging, alert]
+  );
 
   useEffect(() => {
     if (changing || loading) refreshNetwork();

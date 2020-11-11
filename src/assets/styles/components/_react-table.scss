@@ -1,11 +1,11 @@
 .react-table-holder {
   .react-table-scroller {
+    border-bottom: 1px solid $lighter-grey-overlay;
+    font-size: 12px;
+    min-height: calc(100vh - 328px);
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    border-bottom: 1px solid $lighter-grey-overlay;
-    min-height: calc(100vh - 328px);
-    font-size: 12px;
 
     @media screen and (max-width: 767px) {
       min-height: auto;
@@ -48,10 +48,10 @@
     }
 
     .centered {
-      position: absolute;
-      top: 40%;
       left: 0;
+      position: absolute;
       right: 0;
+      top: 40%;
     }
 
     .row {
@@ -141,13 +141,13 @@
         padding-left: 3px;
         padding-right: 3px;
         text-align: center;
+        vertical-align: middle;
         width: 100%;
-        vertical-align:middle;
       }
 
       .page-count {
-        height: 100%;
         display: inline-block;
+        height: 100%;
         padding-top: 11px;
       }
     }

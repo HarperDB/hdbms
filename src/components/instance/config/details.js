@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/contentContainer';
+import CopyableText from '../../shared/copyableText';
+import IopsInfoModal from '../../shared/iopsInfoModal';
 
 const Details = () => {
   const { compute_stack_id } = useParams();
@@ -14,37 +16,38 @@ const Details = () => {
   const compute = useStoreState(instanceState, (s) => s.compute);
   const prepaid_compute = useStoreState(instanceState, (s) => !!s.compute_subscription_id);
   const prepaid_storage = useStoreState(instanceState, (s) => !!s.storage_subscription_id);
-  const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const creation_date = useStoreState(instanceState, (s) => s.creation_date);
   const instance_region = useStoreState(instanceState, (s) => s.instance_region);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const authHeader = auth?.user ? `Basic ${btoa(`${auth.user}:${auth.pass}`)}` : '...';
+  const authHeader = auth?.user ? `${btoa(`${auth.user}:${auth.pass}`)}` : '...';
+  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} BASE / 3000 BURST`;
 
   return (
     <>
       <span className="floating-card-header">instance overview</span>
-      <Card className="my-3 instance-details">
+      <Card className="mt-3 mb-4 instance-details">
         <CardBody>
           <Row>
             <Col md="4" xs="12">
               <ContentContainer header="Instance URL" className="mb-3">
-                <div className="nowrap-scroll">{url}</div>
+                <div className="nowrap-scroll">
+                  <CopyableText text={url} />
+                </div>
               </ContentContainer>
             </Col>
             <Col md="4" xs="12">
               <ContentContainer header="Instance Node Name (for clustering)" className="mb-3">
-                <div className="nowrap-scroll">{compute_stack_id}</div>
+                <div className="nowrap-scroll">
+                  <CopyableText text={compute_stack_id} />
+                </div>
               </ContentContainer>
             </Col>
             <Col md="4" xs="12">
               <ContentContainer header="Instance API Auth Header (this user)" className="mb-3">
-                <div className="nowrap-scroll">&quot;{authHeader}&quot;</div>
-              </ContentContainer>
-            </Col>
-            <Col md="2" sm="4" xs="6">
-              <ContentContainer header="Name" className="mb-3">
-                <div className="nowrap-scroll">{instance_name}</div>
+                <div className="nowrap-scroll">
+                  <CopyableText text={authHeader} beforeText="Basic " />
+                </div>
               </ContentContainer>
             </Col>
             <Col md="2" sm="4" xs="6">
@@ -72,18 +75,24 @@ const Details = () => {
               </ContentContainer>
             </Col>
             {!is_local && (
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Storage" className="mb-3 text-nowrap">
-                  <div className="nowrap-scroll">
-                    {storage?.data_volume_size_string} {prepaid_storage && '(PREPAID)'}
-                  </div>
-                </ContentContainer>
-              </Col>
+              <>
+                <Col md="2" sm="4" xs="6">
+                  <ContentContainer header="Storage" className="mb-3 text-nowrap">
+                    <div className="nowrap-scroll">
+                      {storage?.data_volume_size_string} {prepaid_storage && '(PREPAID)'}
+                    </div>
+                  </ContentContainer>
+                </Col>
+                <Col md="2" sm="4" xs="6">
+                  <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal iops={storage?.iops} />} className="mb-3 text-nowrap">
+                    <div className="nowrap-scroll">{iopsString}</div>
+                  </ContentContainer>
+                </Col>
+              </>
             )}
           </Row>
         </CardBody>
       </Card>
-      <br />
     </>
   );
 };

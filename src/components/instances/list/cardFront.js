@@ -15,7 +15,7 @@ import userInfo from '../../../functions/api/instance/userInfo';
 import addError from '../../../functions/api/lms/addError';
 import iopsMapper from '../../../functions/products/iopsMapper';
 
-import CardFrontURL from './cardFrontURL';
+import CopyableText from '../../shared/copyableText';
 import CardFrontIcons from './cardFrontIcons';
 import CardInstanceUpdateRole from './cardInstanceUpdateRole';
 import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
@@ -39,7 +39,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const statusString = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const regionString = is_local ? 'USER INSTALLED' : instance_region;
   const licenseString = `${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`;
-  const iopsString = is_local ? 'HARDWARE LIMIT' : `${iopsMapper[storage?.data_volume_size]} BASE / 3000 BURST`;
+  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} BASE / 3000 BURST`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -164,7 +164,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                   />
                 </Col>
               </Row>
-              <CardFrontURL url={url} />
+              <CopyableText text={url} />
               <CardFrontStatusRow label="STATUS" isReady textClass={statusString} value={instanceData.status} bottomDivider />
               <CardFrontStatusRow label="REGION" isReady={isReady} value={regionString} bottomDivider />
               <CardFrontStatusRow label="LICENSE" isReady={isReady} value={licenseString} bottomDivider />

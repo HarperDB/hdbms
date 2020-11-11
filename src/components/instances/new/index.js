@@ -52,7 +52,7 @@ const NewInstanceIndex = () => {
   useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
