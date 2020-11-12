@@ -57,7 +57,7 @@ const SetupIndex = () => {
     if (!response.error) {
       buildNetwork({ auth, url, instances, compute_stack_id });
     }
-  }, [auth, url, is_local, compute_stack_id, customer_id]);
+  }, [auth, url, is_local, compute_stack_id, customer_id, instances]);
 
   useInterval(() => {
     if (formState.restarting) {

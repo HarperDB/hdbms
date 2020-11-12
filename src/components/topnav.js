@@ -65,7 +65,7 @@ const TopNav = ({ isMaintenance }) => {
                 <NavLink id="viewOrganizations" title="View or Switch Organizations" to="/organizations">
                   <i className="fa fa-building-o d-inline-block" />
                   <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
-                  {showInviteBadge ? <span className="invite-badge">{showInviteBadge}</span> : null}
+                  {showInviteBadge ? <span className="badge">{showInviteBadge}</span> : null}
                 </NavLink>
               </NavItem>
               <div className={`active-org ${customer && pathname.indexOf(customer?.customer_id) !== -1 ? 'open' : ''}`}>

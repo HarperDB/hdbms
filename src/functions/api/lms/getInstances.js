@@ -21,10 +21,9 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
     if (Array.isArray(response)) {
       const instances = response
         .map((instance) => {
-          const thisInstance = instance;
           const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
           /* TODO: Move the licensing, loading, etc. management here. */
-          return { ...thisInstance, ...instanceProductDetails };
+          return { ...instance, ...instanceProductDetails };
         })
         .sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
 

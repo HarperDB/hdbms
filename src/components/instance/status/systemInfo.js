@@ -23,6 +23,7 @@ const SystemInfo = () => {
   const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const storage = useStoreState(instanceState, (s) => s.storage);
+  const iopsAlarms = useStoreState(instanceState, (s) => s.alarms && s.alarms['Disk I/O']);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
@@ -62,7 +63,7 @@ const SystemInfo = () => {
       FallbackComponent={ErrorFallback}
     >
       <Row className="floating-card-header">
-        <Col>host system metrics</Col>
+        <Col>host system</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
           <Button color="link" title="Update Metrics" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
@@ -139,8 +140,8 @@ const SystemInfo = () => {
               </Col>
 
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal iops={storage?.iops} />} className="mb-3">
-                  <div className="nowrap-scroll">{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
+                <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal error={iopsAlarms} iops={storage?.iops} />} className="mb-3">
+                  <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
                 </ContentContainer>
               </Col>
             </Row>

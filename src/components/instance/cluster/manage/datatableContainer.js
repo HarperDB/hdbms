@@ -40,7 +40,7 @@ const ManageDatatable = ({ refreshNetwork, loading }) => {
       <Row className="floating-card-header">
         <Col>manage clustering</Col>
         <Col className="text-right">
-          <Button color="link" onClick={() => refreshNetwork('table header')} className="mr-2">
+          <Button color="link" onClick={() => refreshNetwork()} className="mr-2">
             <span className="mr-2">refresh network</span>
             <i title="Refresh Roles" className="fa fa-refresh" />
           </Button>

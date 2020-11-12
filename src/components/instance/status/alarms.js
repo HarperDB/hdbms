@@ -19,7 +19,8 @@ let controller;
 const Alarms = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
-  const alarms = useStoreState(appState, (s) => s.alarms?.filter((a) => a.compute_stack_id === compute_stack_id), [compute_stack_id]);
+  const instances = useStoreState(appState, (s) => s.instances);
+  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms.filter((a) => a.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const alarmsError = useStoreState(appState, (s) => s.alarmsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,14 +29,14 @@ const Alarms = () => {
 
   useAsyncEffect(
     async () => {
-      if (auth && mounted) {
+      if (auth && mounted && instances) {
         setLoading(true);
-        await getAlarms({ auth, customer_id, currentAlarmsLength: alarms?.length });
+        await getAlarms({ auth, customer_id, instances, currentAlarmsLength: alarms?.length });
         setLoading(false);
       }
     },
     () => controller?.abort(),
-    [lastUpdate, mounted]
+    [lastUpdate, mounted, instances]
   );
 
   useAsyncEffect(
@@ -47,8 +48,6 @@ const Alarms = () => {
   useInterval(() => {
     if (autoRefresh && mounted) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
-
-  console.log(alarms);
 
   return (
     <ErrorBoundary
@@ -91,7 +90,7 @@ const Alarms = () => {
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : alarms.length ? (
+            ) : alarms?.length ? (
               alarms.map((a) => <AlarmsRow key={a.id} {...a} />)
             ) : (
               <div className="pt-5 text-center">no alarms found</div>

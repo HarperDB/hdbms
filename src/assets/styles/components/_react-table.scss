@@ -12,7 +12,7 @@
     }
 
     .header {
-      font-weight: bold;
+      font-weight: $font-weight-bold;
 
       .col {
         border-top: 1px solid $lighter-grey-overlay;

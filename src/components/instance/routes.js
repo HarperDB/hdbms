@@ -6,7 +6,7 @@ const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './ch
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
 const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './cluster'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
-const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './metrics'));
+const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './status'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
@@ -66,9 +66,9 @@ const Routes = ({ super_user }) => {
     },
     {
       component: Metrics,
-      path: `/o/:customer_id/i/:compute_stack_id/metrics`,
-      link: 'metrics',
-      label: 'metrics',
+      path: `/o/:customer_id/i/:compute_stack_id/status`,
+      link: 'status',
+      label: 'status',
       icon: 'tachometer',
       iconCode: 'f0e4',
     },

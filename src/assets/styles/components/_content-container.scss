@@ -3,22 +3,22 @@
 
   .header-container {
     border-bottom: 1px solid $color-lightgrey;
+    display: flex;
+    flex-wrap: nowrap;
     font-size: $font-size-small;
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
-    display: flex;
-    flex-wrap: nowrap;
     white-space: nowrap;
 
     .header {
-      font-weight: 700;
+      font-weight: $font-weight-bold;
     }
 
     .subheader {
       color: $color-lightpurple;
       font-style: italic;
-      text-transform: lowercase;
       text-align: right;
+      text-transform: lowercase;
       width: 100%;
     }
   }

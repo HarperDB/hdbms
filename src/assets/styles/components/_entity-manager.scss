@@ -27,7 +27,7 @@
 
         &.active {
           background-color: $color-lightergrey;
-          font-weight: bold;
+          font-weight: $font-weight-bold;
         }
 
         &:first-child {

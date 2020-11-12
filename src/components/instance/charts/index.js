@@ -15,6 +15,7 @@ import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
 import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import config from '../../../config';
+import Loader from '../../shared/loader';
 
 const DashboardIndex = () => {
   const { customer_id, compute_stack_id } = useParams();
@@ -25,12 +26,14 @@ const DashboardIndex = () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const charts = useStoreState(instanceState, (s) => s.charts);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const refreshCharts = useCallback(() => {
+  const refreshCharts = useCallback(async () => {
     if (auth && customer_id && compute_stack_id) {
-      getCharts({ auth, customer_id, compute_stack_id });
+      await getCharts({ auth, customer_id, compute_stack_id });
+      setLoading(false);
     }
-  }, [auth, customer_id, compute_stack_id]);
+  }, [auth, customer_id, compute_stack_id, setLoading]);
 
   const refreshRegistration = useCallback(() => {
     if (instanceAuth && url) {
@@ -70,7 +73,9 @@ const DashboardIndex = () => {
         </CardBody>
       </Card>
       <Row>
-        {charts && charts.length ? (
+        {loading ? (
+          <Loader header="loading charts" spinner />
+        ) : charts?.length ? (
           charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} confirmDelete={confirmDelete} setConfirmDelete={setConfirmDelete} />)
         ) : (
           <Col lg="6" xs="12" className="mb-3">

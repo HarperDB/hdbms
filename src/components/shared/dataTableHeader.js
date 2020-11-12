@@ -11,7 +11,7 @@ const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter }) =
             onClick={() => onSortedChange([{ id: column.id, desc: sorted[0]?.id === column.id ? !sorted[0]?.desc : false }])}
             className={`${sorted[0]?.id === column.id ? 'sorted' : ''} ${sorted[0]?.desc ? 'desc' : 'asc'} ${['publish', 'subscribe'].includes(column.id) ? 'action' : ''} px-1`}
           >
-            {column.render('Header')}
+            <div className="text-renderer">{column.render('Header')}</div>
           </Col>
         ))}
       </Row>

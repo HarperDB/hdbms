@@ -13,7 +13,6 @@ import useInstanceAuth from '../../../functions/state/instanceAuths';
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
 import userInfo from '../../../functions/api/instance/userInfo';
 import addError from '../../../functions/api/lms/addError';
-import iopsMapper from '../../../functions/products/iopsMapper';
 
 import CopyableText from '../../shared/copyableText';
 import CardFrontIcons from './cardFrontIcons';
@@ -24,7 +23,7 @@ import ErrorFallback from '../../shared/errorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
+const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage, alarms }) => {
   const { customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -36,10 +35,14 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [processing, setProcessing] = useState(false);
   const [formState, setFormState] = useState({});
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
-  const statusString = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
-  const regionString = is_local ? 'USER INSTALLED' : instance_region;
-  const licenseString = `${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`;
-  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} BASE / 3000 BURST`;
+  const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
+  const ramString = `${compute?.compute_ram_string || '...'}`;
+  const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
+  const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
+  const iopsClass = alarms && alarms['Disk I/O'] ? 'text-danger' : '';
+  const iopsString = is_local
+    ? 'HARDWARE LIMIT'
+    : `${storage?.iops} / ${alarms && alarms['Disk I/O'] ? `${alarms['Disk I/O']} ALARM${alarms['Disk I/O'] > 1 ? 'S' : ''}` : '3000 BURST'}`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -165,11 +168,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                 </Col>
               </Row>
               <CopyableText text={url} />
-              <CardFrontStatusRow label="STATUS" isReady textClass={statusString} value={instanceData.status} bottomDivider />
-              <CardFrontStatusRow label="REGION" isReady={isReady} value={regionString} bottomDivider />
-              <CardFrontStatusRow label="LICENSE" isReady={isReady} value={licenseString} bottomDivider />
+              <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
+              <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
+              <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
               <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-              <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} />
+              <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} textClass={iopsClass} />
             </CardBody>
           )}
         </Card>

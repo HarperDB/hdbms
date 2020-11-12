@@ -17,7 +17,7 @@ const ManageDatatable = ({
   onPageSizeChange,
   refreshNetwork,
 }) => {
-  // useEffect(() => refreshNetwork('datatable'), [refreshNetwork]);
+  useEffect(() => refreshNetwork(), [refreshNetwork]);
 
   return (
     <DataTable

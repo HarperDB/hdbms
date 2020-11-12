@@ -1,5 +1,5 @@
-import React, { useState, Suspense } from 'react';
-import { Redirect, Route, Switch, useLocation, useParams } from 'react-router-dom';
+import React, { useState, Suspense, useEffect } from 'react';
+import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
@@ -22,7 +22,7 @@ import userInfo from '../../functions/api/instance/userInfo';
 
 const InstanceIndex = () => {
   const { compute_stack_id, customer_id } = useParams();
-  const [loadingInstance, setLoadingInstance] = useState(false);
+  const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
   const auth = useStoreState(appState, (s) => s.auth);
@@ -31,6 +31,7 @@ const InstanceIndex = () => {
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
@@ -44,25 +45,28 @@ const InstanceIndex = () => {
     }
   }, [auth, customer_id]);
 
+  useEffect(() => {
+    if (auth && customer_id && instances?.length) {
+      getAlarms({ auth, customer_id, instances });
+    }
+  }, [auth, customer_id, instances]);
+
   useAsyncEffect(() => {
-    if (auth && products && regions && subscriptions && customer_id && !instances.length) {
+    if (auth && products && regions && subscriptions && customer_id && !instances?.length) {
       getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
     }
   }, [auth, products, regions, customer_id, subscriptions, instances]);
 
   useAsyncEffect(async () => {
-    if (instances && instanceAuth) {
-      setLoadingInstance(true);
-
-      const instance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-      instanceState.update(() => Object.entries(instance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
-      const { error } = await buildInstanceStructure({ auth: instanceAuth, url: instance.url });
+    if (thisInstance && instanceAuth) {
+      instanceState.update(() => Object.entries(thisInstance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
+      const { error } = await buildInstanceStructure({ auth: instanceAuth, url: thisInstance.url });
       setLoadingInstance(false);
       if (error) {
         setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
       }
     }
-  }, [compute_stack_id, instances]);
+  }, [compute_stack_id, thisInstance]);
 
   useAsyncEffect(() => {
     if (mounted && url && instanceAuth?.super) {

@@ -2,8 +2,9 @@ import queryLMS from '../queryLMS';
 import appState from '../../state/appState';
 import addError from './addError';
 import config from '../../../config';
+import generateInstanceAlarmDetails from '../../instances/generateInstanceAlarmDetails';
 
-export default async ({ auth, customer_id, signal, currentAlarmsLength }) => {
+export default async ({ auth, customer_id, instances, signal, currentAlarmsLength }) => {
   let response = null;
 
   try {
@@ -16,24 +17,28 @@ export default async ({ auth, customer_id, signal, currentAlarmsLength }) => {
     });
 
     if (response.error && currentAlarmsLength) {
-      console.log(1);
       return appState.update((s) => {
         s.alarmsError = true;
       });
     }
 
     if (!Array.isArray(response) || response.error) {
-      console.log(2);
       return appState.update((s) => {
         s.alarms = [];
         s.alarmsError = true;
       });
     }
 
-    console.log(3, response);
+    const instancesWithAlarms = instances.map((instance) => {
+      const instanceAlarms = response?.filter((a) => a.compute_stack_id === instance.compute_stack_id && a.date + config.alarm_badge_threshold * 1000 > Date.now());
+      const instanceAlarmDetails = instanceAlarms ? generateInstanceAlarmDetails({ alarms: instanceAlarms }) : { total: 0 };
+      return { ...instance, alarms: instanceAlarmDetails };
+    });
+
     return appState.update((s) => {
       s.alarms = response.sort((a, b) => b.date - a.date);
       s.alarmsError = false;
+      s.instances = instancesWithAlarms;
     });
   } catch (e) {
     return addError({

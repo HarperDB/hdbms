@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import { Card, CardBody, Modal, ModalBody, ModalHeader } from 'reactstrap';
 
-const IopsInfoModal = ({ iops }) => {
+const IopsInfoModal = ({ iops, error }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <i tabIndex={0} role="button" onMouseDown={setIsOpen} className="fa fa-info-circle text-purple" />
+      <i tabIndex={0} role="button" onMouseDown={setIsOpen} className={`fa fa-info-circle ${error ? 'text-danger' : 'text-purple'}`} />
       <Modal isOpen={!!isOpen} toggle={() => setIsOpen(false)} centered fade={false} scrollable>
         <ModalHeader toggle={() => setIsOpen(false)}>Disk IOPS Primer</ModalHeader>
         <ModalBody>

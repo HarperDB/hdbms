@@ -16,25 +16,18 @@ const ClusteringIndex = () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const network = useStoreState(instanceState, (s) => s.network);
-  const alarms = useStoreState(instanceState, (s) => s.alarms);
   const connectedNodes = useStoreState(instanceState, (s) => s.clustering?.connected);
   const aNodeIsConnecting = connectedNodes?.some((c) => c.connection.state === 'connecting');
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  console.log(alarms);
-
-  const refreshNetwork = useCallback(
-    async (source = 'cluster-index') => {
-      if (auth && url && instances && compute_stack_id) {
-        console.log(source);
-        setLoading(true);
-        await buildNetwork({ auth, url, instances, compute_stack_id });
-        setLoading(false);
-      }
-    },
-    [auth, url, instances, compute_stack_id]
-  );
+  const refreshNetwork = useCallback(async () => {
+    if (auth && url && instances && compute_stack_id) {
+      setLoading(true);
+      await buildNetwork({ auth, url, instances, compute_stack_id });
+      setLoading(false);
+    }
+  }, [auth, url, instances, compute_stack_id]);
 
   useEffect(refreshNetwork, [refreshNetwork]);
 
@@ -47,7 +40,7 @@ const ClusteringIndex = () => {
 
   useInterval(() => {
     if (aNodeIsConnecting) {
-      refreshNetwork('aNodeIsConnecting');
+      refreshNetwork();
     }
   }, 1000);
 

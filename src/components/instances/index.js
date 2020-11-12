@@ -19,8 +19,6 @@ import Loader from '../shared/loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 
-let controller;
-
 const InstancesIndex = () => {
   const history = useHistory();
   const { action, customer_id } = useParams();
@@ -28,7 +26,6 @@ const InstancesIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
-  const alarms = useStoreState(appState, (s) => s.alarms);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
@@ -47,10 +44,14 @@ const InstancesIndex = () => {
   useEffect(() => {
     if (auth && customer_id) {
       getCustomer({ auth, customer_id });
-      getAlarms({ auth, customer_id, currentAlarmsLength: alarms?.length });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customer_id]);
+  }, [customer_id, auth]);
+
+  useEffect(() => {
+    if (auth && customer_id && instances?.length) {
+      getAlarms({ auth, customer_id, instances });
+    }
+  }, [customer_id, instances, auth]);
 
   const refreshInstances = useCallback(() => {
     if (auth && products && regions && subscriptions && customer_id) {

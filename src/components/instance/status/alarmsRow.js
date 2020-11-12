@@ -9,7 +9,7 @@ const AlarmsRow = ({ date, type, message }) => (
       <Col xs="3" className="text-danger">
         {type}
       </Col>
-      <Col xs="9">{new Date(date).toLocaleDateString()}</Col>
+      <Col xs="9">{new Date(date).toLocaleString()}</Col>
       <Col xs="12" className="mt-1">
         {isObject(message) ? JSON.stringify(message) : message}
       </Col>

@@ -27,7 +27,7 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
         alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
         setLoading(false);
       } else {
-        refreshNetwork('add node');
+        refreshNetwork();
       }
     },
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert]
@@ -41,7 +41,7 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
         alert.error(result.message);
         setLoading(false);
       } else {
-        refreshNetwork('remove node');
+        refreshNetwork();
       }
     },
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert]
