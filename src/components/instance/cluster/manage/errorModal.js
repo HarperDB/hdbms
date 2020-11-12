@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, ModalHeader, ModalBody, Modal, Button } from 'reactstrap';
+import { Card, CardBody, ModalHeader, ModalBody, Modal } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const ManageErrorModal = ({ showModal, setShowModal }) => {
         <Card>
           <CardBody>
             <b>{instance_name}</b> is unable to open a connection to <b>{showModal}</b>.
-            <hr />
+            <hr className="my-3" />
             <ul>
               <li>Clustered instances must be able to reach each other. This may require allowing access through a firewall.</li>
               <li>Both instances must be running. In the event of a restart, instances will automatically attempt to reconnect.</li>
@@ -25,12 +25,8 @@ const ManageErrorModal = ({ showModal, setShowModal }) => {
                 section.
               </li>
             </ul>
-            <hr />
+            <hr className="my-3" />
             If none of these help fix the issue, you can disconnect <b>{showModal}</b> from <b>{instance_name}</b> by clicking the purple disconnect button with the minus sign.
-            <hr />
-            <Button block onClick={() => setShowModal(false)} color="danger">
-              OK
-            </Button>
           </CardBody>
         </Card>
       </ModalBody>

@@ -14,6 +14,8 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import IopsInfoModal from '../../shared/iopsInfoModal';
 
+let controller;
+
 const SystemInfo = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -25,7 +27,6 @@ const SystemInfo = () => {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
   const [mounted, setMounted] = useState(false);
-  let controller;
 
   useAsyncEffect(
     () => {

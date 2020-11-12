@@ -12,6 +12,7 @@ import useInstanceAuth from '../../../functions/state/instanceAuths';
 import getInstances from '../../../functions/api/lms/getInstances';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import getUser from '../../../functions/api/lms/getUser';
 
 const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
   const alert = useAlert();
@@ -46,6 +47,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
           setTimeout(() => {
             alert.success('Instance deletion complete');
             getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+            getUser(auth);
           }, 100);
         }
       }

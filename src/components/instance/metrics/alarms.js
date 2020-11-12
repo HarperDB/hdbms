@@ -6,23 +6,21 @@ import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
-import instanceState from '../../../functions/state/instanceState';
+import appState from '../../../functions/state/appState';
 import config from '../../../config';
 
-import searchJobsByStartDate from '../../../functions/api/instance/searchJobsByStartDate';
-import JobRow from './jobsRow';
+import AlarmsRow from './alarmsRow';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import getAlarms from '../../../functions/api/lms/getAlarms';
 
 let controller;
 
-const Jobs = () => {
+const Alarms = () => {
   const { customer_id, compute_stack_id } = useParams();
-  const auth = useStoreState(instanceState, (s) => s.auth);
-  const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const jobs = useStoreState(instanceState, (s) => s.jobs);
-  const jobsError = useStoreState(instanceState, (s) => s.jobsError);
+  const auth = useStoreState(appState, (s) => s.auth);
+  const alarms = useStoreState(appState, (s) => s.alarms?.filter((a) => a.compute_stack_id === compute_stack_id), [compute_stack_id]);
+  const alarmsError = useStoreState(appState, (s) => s.alarmsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);
@@ -30,25 +28,9 @@ const Jobs = () => {
 
   useAsyncEffect(
     async () => {
-      if (mounted) {
+      if (auth && mounted) {
         setLoading(true);
-        controller = new AbortController();
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const toDate = tomorrow.toISOString().split('T')[0];
-        tomorrow.setFullYear(tomorrow.getFullYear() - 1);
-        const fromDate = tomorrow.toISOString().split('T')[0];
-        await searchJobsByStartDate({
-          auth,
-          signal: controller.signal,
-          url,
-          currentJobCount: jobs?.length || 0,
-          from_date: fromDate,
-          to_date: toDate,
-          is_local,
-          compute_stack_id,
-          customer_id,
-        });
+        await getAlarms({ auth, customer_id, currentAlarmsLength: alarms?.length });
         setLoading(false);
       }
     },
@@ -66,13 +48,15 @@ const Jobs = () => {
     if (autoRefresh && mounted) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
+  console.log(alarms);
+
   return (
     <ErrorBoundary
       onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
       FallbackComponent={ErrorFallback}
     >
       <Row className="floating-card-header">
-        <Col>jobs</Col>
+        <Col>alarms</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
           <Button color="link" title="Update Jobs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
@@ -93,31 +77,24 @@ const Jobs = () => {
             <Col xs="3">
               <b>date</b>
             </Col>
-            {jobsError ? (
+            {alarmsError ? (
               <Col xs="6" className="text-right text-danger">
-                <b>job fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
+                <b>alarms fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
               </Col>
             ) : (
-              <>
-                <Col xs="3">
-                  <b>start</b>
-                </Col>
-                <Col xs="3">
-                  <b>end</b>
-                </Col>
-              </>
+              <Col xs="6" />
             )}
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="log-scroller">
-            {loading && !jobs && !autoRefresh ? (
+            {loading && !alarms && !autoRefresh ? (
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : jobs.length ? (
-              jobs.map((j) => <JobRow key={j.id} {...j} />)
+            ) : alarms.length ? (
+              alarms.map((a) => <AlarmsRow key={a.id} {...a} />)
             ) : (
-              <div className="pt-5 text-center">no jobs found</div>
+              <div className="pt-5 text-center">no alarms found</div>
             )}
           </div>
         </CardBody>
@@ -126,4 +103,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default Alarms;

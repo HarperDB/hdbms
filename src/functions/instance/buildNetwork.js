@@ -66,7 +66,12 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
     s.clusterDataTableColumns = clusterDataTableColumns;
   });
 
-  return true;
+  return {
+    network,
+    clustering,
+    clusterDataTable,
+    clusterDataTableColumns,
+  };
 };
 
 export default buildNetwork;

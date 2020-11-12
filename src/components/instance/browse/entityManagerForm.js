@@ -64,7 +64,13 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth, url);
+    const result = await queryInstance(operation, auth, url);
+
+    if (result.error) {
+      setAddingItem(false);
+      toggleCreate(false);
+      return alert.error(result.message);
+    }
 
     return buildInstanceStructure({ auth, url });
   };

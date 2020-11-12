@@ -16,6 +16,7 @@ import buildInstanceStructure from '../../functions/instance/buildInstanceStruct
 import Loader from '../shared/loader';
 import getInstances from '../../functions/api/lms/getInstances';
 import getCustomer from '../../functions/api/lms/getCustomer';
+import getAlarms from '../../functions/api/lms/getAlarms';
 import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
 
@@ -34,7 +35,6 @@ const InstanceIndex = () => {
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
   const history = useHistory();
-  const { pathname } = useLocation();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
   const [mounted, setMounted] = useState(false);
 
@@ -53,12 +53,12 @@ const InstanceIndex = () => {
   useAsyncEffect(async () => {
     if (instances && instanceAuth) {
       setLoadingInstance(true);
+
       const instance = instances.find((i) => i.compute_stack_id === compute_stack_id);
       instanceState.update(() => Object.entries(instance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
       const { error } = await buildInstanceStructure({ auth: instanceAuth, url: instance.url });
       setLoadingInstance(false);
       if (error) {
-        console.log('instance structure');
         setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
       }
     }
@@ -82,7 +82,6 @@ const InstanceIndex = () => {
     if (url) {
       const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       if (result.error) {
-        console.log('userinfo interval', pathname);
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
       } else {

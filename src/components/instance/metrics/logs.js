@@ -60,7 +60,7 @@ const Logs = () => {
       FallbackComponent={ErrorFallback}
     >
       <Row className="floating-card-header">
-        <Col>instance logs</Col>
+        <Col>logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-right">
           <Button color="link" title="Update Logs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
@@ -98,7 +98,7 @@ const Logs = () => {
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="log-scroller">
-            {(loading || !filteredLogs) && !autoRefresh ? (
+            {loading && !filteredLogs && !autoRefresh ? (
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
@@ -52,18 +52,18 @@ const SetupIndex = () => {
     }
   }, [formState.submitted]);
 
-  const checkInstance = async () => {
+  const checkInstance = useCallback(async () => {
     const response = await userInfo({ auth, url, is_local, compute_stack_id, customer_id });
     if (!response.error) {
       buildNetwork({ auth, url, instances, compute_stack_id });
     }
-  };
+  }, [auth, url, is_local, compute_stack_id, customer_id]);
 
   useInterval(() => {
     if (formState.restarting) {
       checkInstance();
     }
-  }, 1000);
+  }, 5000);
 
   return (
     <Row id="clustering">

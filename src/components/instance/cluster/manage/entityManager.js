@@ -1,14 +1,51 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
-import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
-import InstanceManagerRow from './entityManagerRow';
 import instanceState from '../../../../functions/state/instanceState';
 
-const EntityManager = ({ itemType, setShowModal, refreshNetwork, loading }) => {
-  const { compute_stack_id } = useParams();
-  const items = useStoreState(instanceState, (s) => (s.clustering ? s.clustering[itemType] : []), [compute_stack_id]);
+import EntityManagerRow from './entityManagerRow';
+
+import addNode from '../../../../functions/api/instance/addNode';
+import removeNode from '../../../../functions/api/instance/removeNode';
+
+const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) => {
+  const { customer_id } = useParams();
+  const alert = useAlert();
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
+  const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
+  const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
+
+  const handleAddNode = useCallback(
+    async (payload) => {
+      setLoading(true);
+      const result = await addNode({ ...payload, auth, url, is_local, customer_id });
+      if (result.error) {
+        alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
+        setLoading(false);
+      } else {
+        refreshNetwork('add node');
+      }
+    },
+    [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert]
+  );
+
+  const handleRemoveNode = useCallback(
+    async (payload) => {
+      setLoading(true);
+      const result = await removeNode({ ...payload, auth, url, is_local, customer_id });
+      if (result.error) {
+        alert.error(result.message);
+        setLoading(false);
+      } else {
+        refreshNetwork('remove node');
+      }
+    },
+    [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert]
+  );
 
   return (
     <div className="entity-manager">
@@ -17,7 +54,16 @@ const EntityManager = ({ itemType, setShowModal, refreshNetwork, loading }) => {
         <CardBody>
           {items && items.length ? (
             items.map((item) => (
-              <InstanceManagerRow key={item.instance_name} item={item} itemType={itemType} setShowModal={setShowModal} refreshNetwork={refreshNetwork} loading={loading} />
+              <EntityManagerRow
+                key={item.instance_name}
+                item={item}
+                itemType={itemType}
+                setShowModal={setShowModal}
+                handleAddNode={handleAddNode}
+                handleRemoveNode={handleRemoveNode}
+                loading={loading}
+                refreshNetwork={refreshNetwork}
+              />
             ))
           ) : (
             <Row className="item-row">

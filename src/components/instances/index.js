@@ -17,6 +17,9 @@ import NewInstanceModal from './new';
 import getInstances from '../../functions/api/lms/getInstances';
 import Loader from '../shared/loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
+import getAlarms from '../../functions/api/lms/getAlarms';
+
+let controller;
 
 const InstancesIndex = () => {
   const history = useHistory();
@@ -25,6 +28,7 @@ const InstancesIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const alarms = useStoreState(appState, (s) => s.alarms);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
@@ -43,8 +47,10 @@ const InstancesIndex = () => {
   useEffect(() => {
     if (auth && customer_id) {
       getCustomer({ auth, customer_id });
+      getAlarms({ auth, customer_id, currentAlarmsLength: alarms?.length });
     }
-  }, [auth, customer_id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customer_id]);
 
   const refreshInstances = useCallback(() => {
     if (auth && products && regions && subscriptions && customer_id) {

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useCallback } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -22,6 +22,7 @@ import CustomerPaymentForm from './payment';
 import ConfirmOrderForm from './confirm';
 import OrderStatus from './status';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
+import getUser from '../../../functions/api/lms/getUser';
 
 const NewInstanceIndex = () => {
   const history = useHistory();
@@ -31,25 +32,29 @@ const NewInstanceIndex = () => {
   const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
 
-  const closeAndResetModal = () => {
+  const closeAndResetModal = useCallback(() => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
       setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
     }
-  };
+  }, [customer_id, history, purchaseStep, setNewInstance]);
 
-  const finishOrder = () => {
+  const finishOrder = useCallback(() => {
     setNewInstance({});
     setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
-  };
+  }, [customer_id, history, setNewInstance]);
 
-  const refreshSubscriptions = () => {
+  const refreshSubscriptions = useCallback(() => {
     if (auth && customer_id && stripe_id) {
       getPrepaidSubscriptions({ auth, customer_id, stripe_id });
     }
-  };
+  }, [auth, customer_id, stripe_id]);
 
-  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
+  useEffect(() => {
+    refreshSubscriptions();
+    getUser(auth);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
