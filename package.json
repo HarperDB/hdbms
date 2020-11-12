@@ -11,16 +11,11 @@
     "build:dev": "PUBLIC_URL=https://d2uv4fa0aeja0t.cloudfront.net react-scripts build",
     "build:stage": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://dbjxbnqel2bw9.cloudfront.net react-scripts build",
     "build:prod": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://ds5zz9rfvzuta.cloudfront.net react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "lint": "eslint --fix src && npx stylelint --fix \"src/**/*.scss\""
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4",
-    "@testing-library/user-event": "^12.1.4",
     "apexcharts": "^3.20.0",
     "bootstrap-scss": "^4.5.3",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
@@ -46,7 +41,6 @@
     "use-async-effect": "^2.2.2",
     "use-interval": "^1.2.1",
     "use-persisted-state": "^0.3.0",
-    "web-vitals": "^0.2.4",
     "whatwg-fetch": "^3.2.0"
   },
   "eslintConfig": {

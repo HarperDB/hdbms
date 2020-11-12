@@ -46,8 +46,8 @@ const InstanceIndex = () => {
   }, [auth, customer_id]);
 
   useEffect(() => {
-    if (auth && customer_id && instances?.length) {
-      getAlarms({ auth, customer_id, instances });
+    if (auth && customer_id) {
+      getAlarms({ auth, customer_id });
     }
   }, [auth, customer_id, instances]);
 

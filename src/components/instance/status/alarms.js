@@ -14,39 +14,25 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getAlarms from '../../../functions/api/lms/getAlarms';
 
-let controller;
-
 const Alarms = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
-  const instances = useStoreState(appState, (s) => s.instances);
-  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms.filter((a) => a.compute_stack_id === compute_stack_id), [compute_stack_id]);
+  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarms, [compute_stack_id]);
   const alarmsError = useStoreState(appState, (s) => s.alarmsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
-  useAsyncEffect(
-    async () => {
-      if (auth && mounted && instances) {
-        setLoading(true);
-        await getAlarms({ auth, customer_id, instances, currentAlarmsLength: alarms?.length });
-        setLoading(false);
-      }
-    },
-    () => controller?.abort(),
-    [lastUpdate, mounted, instances]
-  );
-
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+  useAsyncEffect(async () => {
+    if (lastUpdate) {
+      setLoading(true);
+      await getAlarms({ auth, customer_id, currentAlarmsLength: alarms?.length });
+      setLoading(false);
+    }
+  }, [lastUpdate]);
 
   useInterval(() => {
-    if (autoRefresh && mounted) setLastUpdate(Date.now());
+    if (autoRefresh) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
   return (

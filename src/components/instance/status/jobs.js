@@ -114,7 +114,7 @@ const Jobs = () => {
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : jobs.length ? (
+            ) : jobs?.length ? (
               jobs.map((j) => <JobRow key={j.id} {...j} />)
             ) : (
               <div className="pt-5 text-center">no jobs found</div>

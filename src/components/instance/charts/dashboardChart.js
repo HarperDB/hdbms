@@ -22,7 +22,7 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
   const theme = useStoreState(appState, (s) => s.theme);
   const canDelete = useStoreState(appState, (s) => s.auth?.user_id === user_id);
   const [chartData, setChartData] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const options = chartData && !chartData.error && chartOptions({ title: name, type, labels: chartData.map((d) => d[labelAttribute]), theme });
   const series =
@@ -70,43 +70,66 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
     removeChart(chartId);
   };
 
-  return (
-    chartData &&
-    !chartData.error && (
-      <Col lg="6" xs="12" className="mb-3" key={name}>
-        <Card className="dashboard-chart">
-          <CardBody className="text-nowrap position-relative">
-            {loading && (
-              <Button disabled title="loading" className="chart-loading" color="link">
-                <i className="fa fa-spinner fa-spin text-darkgrey" />
+  return chartData.error ? (
+    <Col lg="6" xs="12" className="mb-3" key={name}>
+      <Card className="dashboard-chart">
+        <CardBody className="text-nowrap position-relative">
+          {confirmDelete === id ? (
+            <ButtonGroup size="sm" className="chart-remove-confirm">
+              <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
+                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
               </Button>
-            )}
-            {confirmDelete === id ? (
-              <ButtonGroup size="sm" className="chart-remove-confirm">
-                <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
-                  {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
-                </Button>
-                <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
-                  cancel <i className="ml-2 fa fa-times" />
-                </Button>
-              </ButtonGroup>
-            ) : canDelete ? (
-              <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => setConfirmDelete(id)}>
-                <i className="fa fa-times text-darkgrey" />
+              <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
+                cancel <i className="ml-2 fa fa-times" />
               </Button>
-            ) : null}
-            {chartData && type === 'single value' ? (
-              <div className="dashboard single-value-chart">
-                <div className="title">{name}</div>
-                <h1>{isNumeric(series) ? series.toFixed(2) : series}</h1>
-              </div>
-            ) : chartData ? (
-              <Chart options={options} series={series} type={type} height={220} />
-            ) : null}
-          </CardBody>
-        </Card>
-      </Col>
-    )
+            </ButtonGroup>
+          ) : (
+            <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => setConfirmDelete(id)}>
+              <i className="fa fa-times text-darkgrey" />
+            </Button>
+          )}
+          <div className="dashboard single-value-chart">
+            <div className="title">Error Loading Chart</div>
+            <div>{chartData.message}</div>
+            <div className="mt-3">You may remove this chart by clicking the &quot;x&quot;</div>
+          </div>
+        </CardBody>
+      </Card>
+    </Col>
+  ) : (
+    <Col lg="6" xs="12" className="mb-3" key={name}>
+      <Card className="dashboard-chart">
+        <CardBody className="text-nowrap position-relative">
+          {loading && (
+            <Button disabled title="loading" className="chart-loading" color="link">
+              <i className="fa fa-spinner fa-spin text-darkgrey" />
+            </Button>
+          )}
+          {confirmDelete === id ? (
+            <ButtonGroup size="sm" className="chart-remove-confirm">
+              <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
+                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
+              </Button>
+              <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
+                cancel <i className="ml-2 fa fa-times" />
+              </Button>
+            </ButtonGroup>
+          ) : canDelete ? (
+            <Button title="Remove this chart" className="chart-remove" color="link" onClick={() => setConfirmDelete(id)}>
+              <i className="fa fa-times text-darkgrey" />
+            </Button>
+          ) : null}
+          {chartData && type === 'single value' ? (
+            <div className="dashboard single-value-chart">
+              <div className="title">{name}</div>
+              <h1>{isNumeric(series) ? series.toFixed(2) : series}</h1>
+            </div>
+          ) : chartData ? (
+            <Chart options={options} series={series} type={type} height={220} />
+          ) : null}
+        </CardBody>
+      </Card>
+    </Col>
   );
 };
 

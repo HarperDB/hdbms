@@ -42,6 +42,7 @@ const DashboardIndex = () => {
   }, [instanceAuth, url]);
 
   useEffect(() => {
+    setLoading(true);
     refreshCharts();
   }, [auth, customer_id, compute_stack_id, refreshCharts]);
 

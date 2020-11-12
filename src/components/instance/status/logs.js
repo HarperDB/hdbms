@@ -102,7 +102,7 @@ const Logs = () => {
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : filteredLogs.length ? (
+            ) : filteredLogs?.length ? (
               filteredLogs.map((l, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <LogRow key={i} {...l} />

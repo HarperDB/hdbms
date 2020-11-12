@@ -13,6 +13,7 @@ import ContentContainer from '../../shared/contentContainer';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 import IopsInfoModal from '../../shared/iopsInfoModal';
+import appState from '../../../functions/state/appState';
 
 let controller;
 
@@ -23,7 +24,7 @@ const SystemInfo = () => {
   const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const storage = useStoreState(instanceState, (s) => s.storage);
-  const iopsAlarms = useStoreState(instanceState, (s) => s.alarms && s.alarms['Disk I/O']);
+  const iopsAlarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts['Disk I/O'], [compute_stack_id]);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(false);

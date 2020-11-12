@@ -4,7 +4,7 @@ import addError from './addError';
 import config from '../../../config';
 import generateInstanceAlarmDetails from '../../instances/generateInstanceAlarmDetails';
 
-export default async ({ auth, customer_id, instances, signal, currentAlarmsLength }) => {
+export default async ({ auth, customer_id, signal, currentAlarmsLength }) => {
   let response = null;
 
   try {
@@ -29,16 +29,24 @@ export default async ({ auth, customer_id, instances, signal, currentAlarmsLengt
       });
     }
 
-    const instancesWithAlarms = instances.map((instance) => {
-      const instanceAlarms = response?.filter((a) => a.compute_stack_id === instance.compute_stack_id && a.date + config.alarm_badge_threshold * 1000 > Date.now());
-      const instanceAlarmDetails = instanceAlarms ? generateInstanceAlarmDetails({ alarms: instanceAlarms }) : { total: 0 };
-      return { ...instance, alarms: instanceAlarmDetails };
-    });
+    const alarms = Object.assign(
+      {},
+      ...response
+        .sort((a, b) => b.date - a.date)
+        .map((i) => {
+          const instanceAlarms = response?.filter((a) => a.compute_stack_id === i.compute_stack_id);
+          return {
+            [i.compute_stack_id]: {
+              alarms: instanceAlarms,
+              alarmCounts: generateInstanceAlarmDetails({ alarms: instanceAlarms.filter((a) => a.date + config.alarm_badge_threshold * 1000 > Date.now()) }),
+            },
+          };
+        })
+    );
 
     return appState.update((s) => {
-      s.alarms = response.sort((a, b) => b.date - a.date);
+      s.alarms = alarms;
       s.alarmsError = false;
-      s.instances = instancesWithAlarms;
     });
   } catch (e) {
     return addError({

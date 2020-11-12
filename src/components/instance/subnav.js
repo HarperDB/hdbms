@@ -21,7 +21,7 @@ const Subnav = ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
-  const alarms = useStoreState(instanceState, (s) => s.alarms?.total);
+  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts.total, [compute_stack_id]);
   const { options, activeOption } = useStoreState(
     appState,
     (s) => {
