@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-import EntityManager from './EntityManager';
+import InstanceManager from './InstanceManager';
 import DataTable from './Datatable';
 import ManageErrorModal from './ErrorModal';
 import ErrorFallback from '../../../shared/ErrorFallback';
@@ -20,7 +20,7 @@ const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {
       <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
           <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-            <EntityManager
+            <InstanceManager
               items={clustering?.connected || []}
               itemType="connected"
               loading={loading}
@@ -28,8 +28,8 @@ const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {
               setLoading={setLoading}
               setShowModal={setShowModal}
             />
-            <EntityManager items={clustering?.unconnected || []} itemType="unconnected" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
-            <EntityManager items={clustering?.unregistered || []} itemType="unregistered" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
+            <InstanceManager items={clustering?.unconnected || []} itemType="unconnected" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
+            <InstanceManager items={clustering?.unregistered || []} itemType="unregistered" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
           </ErrorBoundary>
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">

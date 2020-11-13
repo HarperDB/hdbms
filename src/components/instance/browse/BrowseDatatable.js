@@ -8,11 +8,11 @@ import useAsyncEffect from 'use-async-effect';
 import instanceState from '../../../functions/state/instanceState';
 
 import config from '../../../config';
-import DataTableHeader from './DatatableHeader';
+import DataTableHeader from './BrowseDatatableHeader';
 import getTableData from '../../../functions/instance/getTableData';
 import DataTable from '../../shared/DataTable';
 
-const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
+const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -105,4 +105,4 @@ const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }
   );
 };
 
-export default Datatable;
+export default BrowseDatatable;

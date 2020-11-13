@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-const ManageErrorModal = ({ showModal, setShowModal }) => {
+const ErrorModal = ({ showModal, setShowModal }) => {
   const { compute_stack_id } = useParams();
   const instance_name = useStoreState(instanceState, (s) => s.instance_name, [compute_stack_id]);
 
@@ -34,4 +34,4 @@ const ManageErrorModal = ({ showModal, setShowModal }) => {
   );
 };
 
-export default ManageErrorModal;
+export default ErrorModal;

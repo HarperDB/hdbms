@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
-const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './Datatable'));
+const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
 const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JsonViewer'));
 const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));

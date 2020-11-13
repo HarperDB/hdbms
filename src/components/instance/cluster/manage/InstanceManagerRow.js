@@ -9,7 +9,7 @@ import ActionConnectionClosed from './ActionConnectionClosed';
 import ActionConnectionOpen from './ActionConnectionOpen';
 import ActionConnecting from './ActionConnecting';
 
-const EntityManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode, handleRemoveNode, refreshNetwork }) => {
+const InstanceManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode, handleRemoveNode, refreshNetwork }) => {
   const { customer_id } = useParams();
   const history = useHistory();
 
@@ -56,4 +56,4 @@ const EntityManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode
   );
 };
 
-export default EntityManagerRow;
+export default InstanceManagerRow;

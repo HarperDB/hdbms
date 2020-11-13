@@ -6,12 +6,12 @@ import { useAlert } from 'react-alert';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-import EntityManagerRow from './EntityManagerRow';
+import InstanceManagerRow from './InstanceManagerRow';
 
 import addNode from '../../../../functions/api/instance/addNode';
 import removeNode from '../../../../functions/api/instance/removeNode';
 
-const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) => {
+const InstanceManager = ({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) => {
   const { customer_id } = useParams();
   const alert = useAlert();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -54,7 +54,7 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
         <CardBody>
           {items && items.length ? (
             items.map((item) => (
-              <EntityManagerRow
+              <InstanceManagerRow
                 key={item.instance_name}
                 item={item}
                 itemType={itemType}
@@ -76,4 +76,4 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
   );
 };
 
-export default EntityManager;
+export default InstanceManager;

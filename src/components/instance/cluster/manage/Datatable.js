@@ -18,7 +18,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-const ManageDatatable = ({ refreshNetwork, loading }) => {
+const Datatable = ({ refreshNetwork, loading }) => {
   const tableData = useStoreState(instanceState, (s) => s.clusterDataTable);
   const dataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
   const [tableState, setTableState] = useState(defaultTableState);
@@ -68,4 +68,4 @@ const ManageDatatable = ({ refreshNetwork, loading }) => {
   );
 };
 
-export default ManageDatatable;
+export default Datatable;
