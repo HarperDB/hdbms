@@ -75,7 +75,7 @@ const DashboardIndex = () => {
         </CardBody>
       </Card>
       <Row>
-        {loading ? (
+        {loading && !charts?.length ? (
           <Loader header="loading charts" spinner />
         ) : charts?.length ? (
           charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} confirmDelete={confirmDelete} setConfirmDelete={setConfirmDelete} />)
