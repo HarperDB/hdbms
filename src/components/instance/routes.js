@@ -6,7 +6,7 @@ const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './ch
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
 const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './cluster'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
-const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './status'));
+const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));

@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
-import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';
 
+import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
+
 import systemInformation from '../../../functions/api/instance/systemInformation';
 import ContentContainer from '../../shared/ContentContainer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import IopsInfoModal from '../../shared/IopsInfoModal';
-import appState from '../../../functions/state/appState';
 
 let controller;
 
 const SystemInfo = () => {
-  const { customer_id, compute_stack_id } = useParams();
+  const { customer_id } = useParams();
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
@@ -27,36 +28,28 @@ const SystemInfo = () => {
   const iopsAlarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts['Disk I/O'], [compute_stack_id]);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(true);
 
-  useAsyncEffect(
-    () => {
-      if (mounted) {
-        setLoading(true);
-        controller = new AbortController();
-        systemInformation({ auth, signal: controller.signal, url, refresh: !!systemInfo, compute_stack_id, customer_id, is_local });
-      }
-    },
-    () => controller?.abort(),
-    [lastUpdate, mounted]
-  );
+  useEffect(() => {
+    let isMounted = true;
 
-  useAsyncEffect(() => {
-    if (systemInfo) {
-      setLoading(false);
-    }
-  }, [systemInfo]);
+    const fetchData = async () => {
+      setLoading(true);
+      controller = new AbortController();
+      await systemInformation({ auth, url, signal: controller.signal, refresh: !!systemInfo });
+      if (isMounted) setLoading(false);
+    };
 
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+    if (auth) fetchData();
 
-  useInterval(() => {
-    if (autoRefresh && mounted) setLastUpdate(Date.now());
-  }, config.refresh_content_interval);
+    return () => {
+      controller?.abort();
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, lastUpdate]);
+
+  useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
   return (
     <ErrorBoundary

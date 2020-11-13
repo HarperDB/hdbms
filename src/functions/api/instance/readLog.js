@@ -15,14 +15,14 @@ export default async ({ auth, url, signal, currentLogCount }) => {
 
   if (error && currentLogCount) {
     return instanceState.update((s) => {
-      s.logsError = true;
+      s.logsError = error;
     });
   }
 
   if (error) {
     return instanceState.update((s) => {
       s.logs = [];
-      s.logsError = true;
+      s.logsError = error;
     });
   }
 

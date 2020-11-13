@@ -6,8 +6,6 @@ import instanceState from '../../../../functions/state/instanceState';
 import DataTable from '../../../shared/DataTable';
 
 const defaultTableState = {
-  tableData: [],
-  dataTableColumns: [],
   filtered: [],
   sorted: [],
   page: 0,

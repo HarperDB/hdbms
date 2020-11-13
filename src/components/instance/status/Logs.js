@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
-import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router';
 
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
@@ -18,47 +16,39 @@ import addError from '../../../functions/api/lms/addError';
 let controller;
 
 const Logs = () => {
-  const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const logs = useStoreState(instanceState, (s) => s.logs);
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
+  const [lastUpdate, setLastUpdate] = useState(true);
 
-  useAsyncEffect(
-    async () => {
-      if (mounted) {
-        setLoading(true);
-        controller = new AbortController();
-        await readLog({ auth, signal: controller.signal, url, currentLogCount: logs?.length || 0, is_local, compute_stack_id, customer_id });
-        setLoading(false);
-      }
-    },
-    () => controller?.abort(),
-    [lastUpdate, mounted]
-  );
+  useEffect(() => {
+    let isMounted = true;
 
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+    const fetchData = async () => {
+      setLoading(true);
+      controller = new AbortController();
+      await readLog({ auth, url, signal: controller.signal, currentLogCount: logs?.length || 0 });
+      if (isMounted) setLoading(false);
+    };
 
-  useInterval(() => {
-    if (autoRefresh && mounted) setLastUpdate(Date.now());
-  }, config.refresh_content_interval);
+    if (auth) fetchData();
+
+    return () => {
+      controller?.abort();
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, lastUpdate]);
+
+  useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>logs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
@@ -78,7 +68,7 @@ const Logs = () => {
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody className="text-small">
+        <CardBody className="item-list">
           <Row>
             <Col xs="3">
               <b>status</b>
@@ -86,7 +76,7 @@ const Logs = () => {
             <Col xs="3">
               <b>date</b>
             </Col>
-            {logsError ? (
+            {!loading && logsError ? (
               <Col xs="6" className="text-right text-danger">
                 <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
               </Col>
@@ -97,7 +87,7 @@ const Logs = () => {
             )}
           </Row>
           <hr className="mt-1 mb-0" />
-          <div className="log-scroller">
+          <div className="item-scroller">
             {loading && !filteredLogs && !autoRefresh ? (
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
