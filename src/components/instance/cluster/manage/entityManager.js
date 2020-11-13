@@ -21,7 +21,7 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
 
   const handleAddNode = useCallback(
     async (payload) => {
-      setLoading(true);
+      setLoading(payload.compute_stack_id);
       const result = await addNode({ ...payload, auth, url, is_local, customer_id });
       if (result.error) {
         alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
@@ -35,7 +35,7 @@ const EntityManager = ({ items, itemType, setShowModal, loading, setLoading, ref
 
   const handleRemoveNode = useCallback(
     async (payload) => {
-      setLoading(true);
+      setLoading(payload.compute_stack_id);
       const result = await removeNode({ ...payload, auth, url, is_local, customer_id });
       if (result.error) {
         alert.error(result.message);

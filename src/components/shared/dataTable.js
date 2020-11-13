@@ -97,8 +97,9 @@ const DataTable = ({
     useFilters,
     usePagination
   );
+  const [localLoading, setLocalLoading] = useState(true);
 
-  const iterable = manual ? rows : page;
+  const iterable = manual || !page.length ? rows : page;
 
   useEffect(() => {
     if (state.filters) {
@@ -107,11 +108,15 @@ const DataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters]);
 
+  useEffect(() => {
+    setTimeout(() => setLocalLoading(false), 100);
+  }, [iterable?.length]);
+
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="react-table-scroller">
         <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
-        {loading ? (
+        {loading || localLoading ? (
           <div className="centered text-center">
             <i className="fa fa-spinner fa-spin" />
           </div>

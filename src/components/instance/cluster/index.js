@@ -42,7 +42,7 @@ const ClusteringIndex = () => {
     if (aNodeIsConnecting) {
       refreshNetwork();
     }
-  }, 1000);
+  }, 1500);
 
   return !network ? (
     <Loader header="loading network" spinner />

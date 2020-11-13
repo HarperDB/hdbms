@@ -13,7 +13,7 @@ const defaultTableState = {
   filtered: [],
   sorted: [{ id: 'email', desc: false }],
   page: 0,
-  loading: true,
+  loading: false,
   totalPages: 1,
   pageSize: 20,
   autoRefresh: false,

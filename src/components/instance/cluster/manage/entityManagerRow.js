@@ -21,6 +21,7 @@ const EntityManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <ActionUnregistered
+            loading={loading === item.compute_stack_id}
             handleRemoveNode={() => handleRemoveNode({ compute_stack_id: item.compute_stack_id })}
             handleRegisterNode={() => history.push(`/o/${customer_id}/instances/new`)}
           />
@@ -30,7 +31,7 @@ const EntityManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode
           </Button>
         ) : !item.connection ? (
           <ActionNoConnection
-            loading={loading}
+            loading={loading === item.compute_stack_id}
             handleAddNode={() =>
               handleAddNode({
                 compute_stack_id: item.compute_stack_id,
@@ -41,14 +42,14 @@ const EntityManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode
           />
         ) : item.connection?.state === 'closed' ? (
           <ActionConnectionClosed
-            loading={loading}
+            loading={loading === item.compute_stack_id}
             handleRemoveNode={() => handleRemoveNode({ compute_stack_id: item.compute_stack_id })}
             showModal={() => setShowModal(item.instance_name)}
           />
         ) : item.connection?.state === 'connecting' ? (
           <ActionConnecting refreshNetwork={refreshNetwork} />
         ) : (
-          <ActionConnectionOpen loading={loading} handleRemoveNode={() => handleRemoveNode({ compute_stack_id: item.compute_stack_id })} />
+          <ActionConnectionOpen loading={loading === item.compute_stack_id} handleRemoveNode={() => handleRemoveNode({ compute_stack_id: item.compute_stack_id })} />
         )}
       </Col>
     </Row>

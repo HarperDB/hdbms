@@ -6,7 +6,7 @@ import { useStoreState } from 'pullstate';
 import instanceState from '../../../../functions/state/instanceState';
 
 import EntityManager from './entityManager';
-import DataTableContainer from './datatableContainer';
+import DataTable from './datatable';
 import ManageErrorModal from './errorModal';
 import ErrorFallback from '../../../shared/errorFallback';
 import addError from '../../../../functions/api/lms/addError';
@@ -33,7 +33,7 @@ const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {
           </ErrorBoundary>
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
-          <DataTableContainer refreshNetwork={refreshNetwork} loading={loading} />
+          <DataTable refreshNetwork={refreshNetwork} loading={loading} />
         </Col>
       </Row>
       <ManageErrorModal showModal={showModal} setShowModal={setShowModal} />
