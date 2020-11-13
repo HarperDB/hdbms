@@ -8,9 +8,8 @@ import Analytics from 'react-router-ga';
 import './functions/util/textDecoderPolyfill';
 import stripePromise from './functions/stripe/stripePromise';
 import config from './config';
-import App from './components/app';
-import AlertTemplate from './components/shared/alert';
-import * as serviceWorker from './serviceWorker';
+import App from './components/App';
+import AlertTemplate from './components/shared/Alert';
 
 import './app.scss';
 
@@ -26,8 +25,3 @@ render(
   </Elements>,
   document.getElementById('app')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

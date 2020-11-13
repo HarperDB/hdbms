@@ -7,13 +7,13 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';
 
-import ContentContainer from '../../shared/contentContainer';
+import ContentContainer from '../../shared/ContentContainer';
 import handleAddOrg from '../../../functions/organizations/handleAddOrg';
 import getUser from '../../../functions/api/lms/getUser';
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-export default () => {
+const NewOrgIndex = () => {
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const history = useHistory();
@@ -41,7 +41,7 @@ export default () => {
   }, [formData]);
 
   return (
-    <Modal id="new-org-modal" isOpen className={theme}>
+    <Modal id="new-org-modal" isOpen className={theme} centered fade={false}>
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
         {formState.submitted ? (
           <ModalBody>
@@ -153,3 +153,5 @@ export default () => {
     </Modal>
   );
 };
+
+export default NewOrgIndex;

@@ -1,19 +1,6 @@
 import { fetch } from 'whatwg-fetch';
-import addError from './lms/addError';
 
-export default async (operation, auth, url, compute_stack_id = false, customer_id = false, signal = undefined) => {
-  // eslint-disable-next-line no-console
-  // console.log('Querying Instance API', operation.operation);
-  const errorObject = {
-    type: 'instance api',
-    status: 'warn',
-    url,
-    operation: operation.operation,
-    request: operation,
-    compute_stack_id,
-    customer_id,
-  };
-
+export default async (operation, auth, url, signal = undefined) => {
   try {
     const request = await fetch(url, {
       signal,
@@ -28,8 +15,6 @@ export default async (operation, auth, url, compute_stack_id = false, customer_i
     const response = await request.json();
 
     if (response.error) {
-      addError({ ...errorObject, error: response });
-
       return {
         error: true,
         message: response.error,
@@ -45,8 +30,6 @@ export default async (operation, auth, url, compute_stack_id = false, customer_i
     }
 
     if (request.status !== 200) {
-      addError({ ...errorObject, error: { status: `Error of type ${request.status}` } });
-
       return {
         error: true,
         message: `Error of type ${request.status}`,
@@ -56,10 +39,6 @@ export default async (operation, auth, url, compute_stack_id = false, customer_i
 
     return response;
   } catch (e) {
-    if (!['Aborted', 'Network request failed'].includes(e.message) && !['registration_info', 'user_info'].includes(operation.operation)) {
-      addError({ ...errorObject, error: { catch: e.message } });
-    }
-
     return {
       error: true,
       message: e.message,

@@ -7,17 +7,17 @@ import { ErrorBoundary } from 'react-error-boundary';
 import instanceState from '../../../functions/state/instanceState';
 import appState from '../../../functions/state/appState';
 
-import UpdateDiskVolume from './updateDiskVolume';
-import UpdateRAM from './updateRAM';
-import RemoveInstance from './removeInstance';
-import RestartInstance from './restartInstance';
-import InstanceDetails from './instanceDetails';
-import Loader from '../../shared/loader';
-import ErrorFallback from '../../shared/errorFallback';
+import UpdateDiskVolume from './UpdateDiskVolume';
+import UpdateRAM from './UpdateRAM';
+import Remove from './Remove';
+import Restart from './Restart';
+import Details from './Details';
+import Loader from '../../shared/Loader';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
-export default () => {
+const ConfigIndex = () => {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -55,7 +55,7 @@ export default () => {
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
           FallbackComponent={ErrorFallback}
         >
-          <InstanceDetails />
+          <Details />
         </ErrorBoundary>
       </Col>
       {isOrgOwner && (
@@ -125,7 +125,7 @@ export default () => {
                 onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
                 FallbackComponent={ErrorFallback}
               >
-                <RemoveInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+                <Remove setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
               </ErrorBoundary>
             </CardBody>
           </Card>
@@ -139,7 +139,7 @@ export default () => {
               onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
               FallbackComponent={ErrorFallback}
             >
-              <RestartInstance setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
+              <Restart setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
             </ErrorBoundary>
           </CardBody>
         </Card>
@@ -147,3 +147,5 @@ export default () => {
     </Row>
   );
 };
+
+export default ConfigIndex;

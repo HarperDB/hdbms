@@ -1,6 +1,10 @@
 #config {
   .instance-details {
-    min-height: 174px;
+    min-height: 158px;
+
+    .card-body {
+      padding-bottom: 0;
+    }
 
     .nowrap-scroll {
       overflow: hidden;
@@ -9,32 +13,42 @@
     }
   }
 
-  .log-scroller {
-    height: calc(100vh - 495px);
-    overflow-x: hidden;
-    overflow-y: auto;
+  .item-list {
+    font-size: 0.65rem;
 
-    @media only screen and (max-width: 991px) {
-      height: auto;
-    }
+    .item-scroller {
+      height: calc(100vh - 500px);
+      overflow-x: hidden;
+      overflow-y: auto;
 
-    .log-row {
-      border-bottom: 1px solid $lightest-grey-overlay;
-      padding: 8px 0;
-
-      .error,
-      .fatal {
-        color: $color-danger;
+      @media only screen and (max-width: 991px) {
+        height: auto;
       }
 
-      .warn {
-        color: $color-warning;
-      }
+      .item-row {
+        border-bottom: 1px solid $lightest-grey-overlay;
+        padding: 8px 0;
 
-      .complete,
-      .notify {
-        color: $color-success;
+        .text-nowrap {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .error,
+        .fatal {
+          color: $color-danger;
+        }
+
+        .warn {
+          color: $color-warning;
+        }
+
+        .complete,
+        .notify {
+          color: $color-success;
+        }
       }
     }
   }
+
 }

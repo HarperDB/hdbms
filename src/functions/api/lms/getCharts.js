@@ -3,7 +3,7 @@ import instanceState from '../../state/instanceState';
 import addError from './addError';
 import config from '../../../config';
 
-export default async ({ auth, customer_id, compute_stack_id }) => {
+export default async ({ auth, customer_id, compute_stack_id, signal }) => {
   let response = null;
 
   try {
@@ -12,6 +12,7 @@ export default async ({ auth, customer_id, compute_stack_id }) => {
       method: 'POST',
       payload: { customer_id, compute_stack_id, user_id: auth.user_id },
       auth,
+      signal,
     });
 
     if (!response.error) {

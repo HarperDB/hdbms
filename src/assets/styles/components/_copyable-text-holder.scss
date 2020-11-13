@@ -1,0 +1,34 @@
+.copyable-text-holder {
+  .copy-icon {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 15px;
+
+    i {
+      color: $color-grey !important;
+      cursor: copy;
+    }
+  }
+
+  .text-container {
+    flex-grow: 1;
+    flex-shrink: 0;
+    overflow: hidden;
+    padding-top: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.instance {
+  &.card {
+    .copyable-text-holder {
+      margin: 10px 0;
+
+      .text-container {
+        font-size: 12px !important;
+        padding-top: 1px;
+      }
+    }
+  }
+}

@@ -14,14 +14,11 @@
 }
 
 .modal-dialog {
-  border-radius: $border-radius;
-  box-shadow: 0 0 5px $dark-grey-overlay;
-  min-width: 304px;
-  overflow: hidden;
-
   .modal-content {
     border: 1px solid $faintest-white-overlay;
-    border-radius: $border-radius;
+    border-radius: 6px;
+    box-shadow: 0 0 5px $dark-grey-overlay;
+    min-width: 304px;
     overflow: hidden;
 
     .modal-header {

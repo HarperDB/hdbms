@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal, currentLogCount, compute_stack_id, customer_id }) => {
+export default async ({ auth, url, signal, currentLogCount }) => {
   const { error, file, dailyRotateFile } = await queryInstance(
     {
       operation: 'read_log',
@@ -10,21 +10,19 @@ export default async ({ auth, url, signal, currentLogCount, compute_stack_id, cu
     },
     auth,
     url,
-    compute_stack_id,
-    customer_id,
     signal
   );
 
   if (error && currentLogCount) {
     return instanceState.update((s) => {
-      s.logsError = true;
+      s.logsError = error;
     });
   }
 
   if (error) {
     return instanceState.update((s) => {
       s.logs = [];
-      s.logsError = true;
+      s.logsError = error;
     });
   }
 

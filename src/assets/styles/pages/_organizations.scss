@@ -56,7 +56,7 @@
     .org-status {
       font-size: $font-size-small;
       height: 20px;
-      margin: 5px 0 10px;
+      margin: 7px 0 8px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -64,6 +64,21 @@
 
     .action-buttons {
       margin-top: 20px;
+    }
+
+    .card-front-status-row {
+      font-size: 62%;
+      text-transform: uppercase;
+
+      div {
+        overflow: hidden;
+        white-space: nowrap;
+
+        hr {
+          margin-bottom: 0.2rem !important;
+          margin-top: 0.2rem !important;
+        }
+      }
     }
   }
 }

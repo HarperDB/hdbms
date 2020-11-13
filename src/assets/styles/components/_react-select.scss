@@ -33,6 +33,7 @@
   }
 
   .react-select__menu {
+    margin-top: 1px !important;
     z-index: 12;
   }
 
@@ -52,10 +53,6 @@
     &:last-child {
       border-bottom: 0;
     }
-  }
-
-  .react-select__menu {
-    margin-top: 1px !important;
   }
 
   &.limited-height {

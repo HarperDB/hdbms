@@ -63,22 +63,6 @@
         &:hover {
           color: $color-white !important;
         }
-
-        .invite-badge {
-          align-items: center;
-          background: $color-danger;
-          border-radius: 10px;
-          color: $color-white;
-          display: flex;
-          font-size: $font-size-small;
-          height: 13px;
-          justify-content: center;
-          line-height: 1;
-          position: absolute;
-          right: -10px;
-          top: -5px;
-          width: 13px;
-        }
       }
     }
 

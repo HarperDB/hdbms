@@ -6,11 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
 import config from '../../../config';
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import EntityManager from './entityManager';
+import TutorialManager from './TutorialManager';
 
-export default () => {
+const TutorialsIndex = () => {
   const history = useHistory();
   const { video_id } = useParams();
   const [items, setItems] = useState([]);
@@ -39,7 +39,7 @@ export default () => {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row id="support">
         <Col xl="3" lg="4" md="5" xs="12">
-          <EntityManager items={items} baseUrl={baseUrl} videoId={video_id} />
+          <TutorialManager items={items} baseUrl={baseUrl} videoId={video_id} />
         </Col>
         <Col xl="9" lg="8" md="7" xs="12">
           <span className="floating-card-header mb-3">{activeVideo?.snippet.title}</span>
@@ -66,3 +66,5 @@ export default () => {
     </ErrorBoundary>
   );
 };
+
+export default TutorialsIndex;

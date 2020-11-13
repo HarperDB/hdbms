@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'reactstrap';
 
-import DataTable from './datatable';
-import QueryWindow from './queryWindow';
-import QueryHistory from './queryHistory';
+import DataTable from './Datatable';
+import QueryWindow from './QueryWindow';
+import QueryHistory from './QueryHistory';
 
-export default () => {
+const QueryIndex = () => {
   const [query, setQuery] = useState(false);
 
   return (
-    <Row>
+    <Row id="query">
       <Col xl="3" lg="4" md="5" xs="12">
         <QueryWindow setQuery={setQuery} query={query} />
         <QueryHistory setQuery={setQuery} query={query} />
@@ -20,3 +20,5 @@ export default () => {
     </Row>
   );
 };
+
+export default QueryIndex;

@@ -6,10 +6,18 @@
     overflow: hidden;
 
     .card-body {
-      max-height: calc(50vh - 155px);
-      overflow-x: hidden;
-      overflow-y: auto;
       padding: 0 15px;
+
+      &.scrollable {
+        max-height: calc(50vh - 160px);
+        min-height: 49px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        &.creating {
+          max-height: calc(50vh - 209px);
+        }
+      }
 
       .item-row {
         border-top: 1px solid $lighter-grey-overlay;
@@ -19,15 +27,11 @@
 
         &.active {
           background-color: $color-lightergrey;
-          font-weight: bold;
+          font-weight: $font-weight-bold;
         }
 
         &:first-child {
           border-top: 0;
-        }
-
-        &.form {
-          border-top: 1px solid $lighter-grey-overlay;
         }
 
         .input-holder {

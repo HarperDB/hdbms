@@ -8,7 +8,7 @@ const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ 
 const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ './examples'));
 const DBMigrator = lazy(() => import(/* webpackChunkName: "support-dbmigrator" */ './dbmigrator'));
 
-export default [
+const Routes = [
   {
     component: Installation,
     path: '/resources/installation',
@@ -66,3 +66,5 @@ export default [
     iconCode: 'f121',
   },
 ];
+
+export default Routes;

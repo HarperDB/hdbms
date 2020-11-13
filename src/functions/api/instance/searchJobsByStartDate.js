@@ -1,8 +1,8 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal, from_date, to_date, currentJobCount, compute_stack_id, customer_id }) => {
-  const result = await queryInstance({ operation: 'search_jobs_by_start_date', from_date, to_date }, auth, url, compute_stack_id, customer_id, signal);
+export default async ({ auth, url, signal, from_date, to_date, currentJobCount }) => {
+  const result = await queryInstance({ operation: 'search_jobs_by_start_date', from_date, to_date }, auth, url, signal);
 
   if (result.error && currentJobCount) {
     return instanceState.update((s) => {
@@ -18,7 +18,7 @@ export default async ({ auth, url, signal, from_date, to_date, currentJobCount, 
   }
 
   return instanceState.update((s) => {
-    s.jobs = result.sort((a, b) => b.start_datetime - a.end_datetime);
+    s.jobs = [...result].sort((a, b) => b.start_datetime - a.end_datetime);
     s.jobsError = false;
   });
 };

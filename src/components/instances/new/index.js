@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useCallback } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -9,21 +9,22 @@ import appState from '../../../functions/state/appState';
 import useNewInstance from '../../../functions/state/newInstance';
 import steps from '../../../functions/instances/addInstanceSteps';
 
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import Loader from '../../shared/loader';
+import Loader from '../../shared/Loader';
 
-import InstanceTypeForm from './type';
-import CloudMetadataForm from './metaCloud';
-import LocalMetadataForm from './metaLocal';
-import LocalInstanceForm from './detailsLocal';
-import CloudInstanceForm from './detailsCloud';
-import CustomerPaymentForm from './payment';
-import ConfirmOrderForm from './confirm';
-import OrderStatus from './status';
+import InstanceTypeForm from './Type';
+import CloudMetadataForm from './MetaCloud';
+import LocalMetadataForm from './MetaLocal';
+import LocalInstanceForm from './DetailsLocal';
+import CloudInstanceForm from './DetailsCloud';
+import CustomerPaymentForm from './Payment';
+import ConfirmOrderForm from './Confirm';
+import OrderStatus from './Status';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
+import getUser from '../../../functions/api/lms/getUser';
 
-export default () => {
+const NewInstanceIndex = () => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -31,28 +32,32 @@ export default () => {
   const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
 
-  const closeAndResetModal = () => {
+  const closeAndResetModal = useCallback(() => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
       setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
     }
-  };
+  }, [customer_id, history, purchaseStep, setNewInstance]);
 
-  const finishOrder = () => {
+  const finishOrder = useCallback(() => {
     setNewInstance({});
     setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
-  };
+  }, [customer_id, history, setNewInstance]);
 
-  const refreshSubscriptions = () => {
+  const refreshSubscriptions = useCallback(() => {
     if (auth && customer_id && stripe_id) {
       getPrepaidSubscriptions({ auth, customer_id, stripe_id });
     }
-  };
+  }, [auth, customer_id, stripe_id]);
 
-  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
+  useEffect(() => {
+    refreshSubscriptions();
+    getUser(auth);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
@@ -80,3 +85,5 @@ export default () => {
     </Modal>
   );
 };
+
+export default NewInstanceIndex;

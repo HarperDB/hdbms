@@ -2,10 +2,10 @@ import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import routes from './routes';
-import SubNav from '../shared/subnav';
-import Loader from '../shared/loader';
+import SubNav from '../shared/SubNav';
+import Loader from '../shared/Loader';
 
-export default () => (
+const ProfileIndex = () => (
   <>
     <SubNav routes={routes} />
     <Suspense fallback={<Loader header=" " spinner />}>
@@ -18,3 +18,5 @@ export default () => (
     </Suspense>
   </>
 );
+
+export default ProfileIndex;

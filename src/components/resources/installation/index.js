@@ -3,9 +3,9 @@ import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
-import Code from '../../shared/code';
+import Code from '../../shared/Code';
 
-export default () => {
+const InstallationIndex = () => {
   const version = useStoreState(appState, (s) => s.version);
 
   useEffect(() => {
@@ -74,3 +74,5 @@ harperdb install`}
     </main>
   );
 };
+
+export default InstallationIndex;

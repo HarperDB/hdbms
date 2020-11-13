@@ -3,25 +3,23 @@
 
   .header-container {
     border-bottom: 1px solid $color-lightgrey;
+    display: flex;
+    flex-wrap: nowrap;
     font-size: $font-size-small;
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
+    white-space: nowrap;
 
     .header {
-      display: inline-block;
-      font-weight: 700;
+      font-weight: $font-weight-bold;
     }
 
     .subheader {
       color: $color-lightpurple;
-      display: block;
       font-style: italic;
+      text-align: right;
       text-transform: lowercase;
-
-      @media screen and (min-width: 576px) {
-        display: inline-block;
-        float: right;
-      }
+      width: 100%;
     }
   }
 

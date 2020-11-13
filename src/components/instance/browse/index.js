@@ -7,22 +7,22 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
 
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
-const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './datatable'));
-const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './entityManager'));
-const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './jsonviewer'));
-const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './csvupload'));
-const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './emptyPrompt'));
-const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/structureReloader'));
+const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
+const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JsonViewer'));
+const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
+const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './EmptyPrompt'));
+const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/StructureReloader'));
 
 const defaultTableState = {
   tableData: [],
+  dataTableColumns: [],
   totalPages: 0,
   totalRecords: 0,
-  loading: false,
   filtered: [],
   sorted: [],
   page: 0,
@@ -31,17 +31,16 @@ const defaultTableState = {
   showFilter: false,
   newEntityAttributes: false,
   hashAttribute: false,
-  dataTableColumns: [],
 };
 
-export default () => {
+const BrowseIndex = () => {
   const history = useHistory();
   const { compute_stack_id, schema, table, action, customer_id } = useParams();
   const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
-  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const [instanceAuths] = useInstanceAuth({});
+  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super;
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
@@ -105,3 +104,5 @@ export default () => {
     </Row>
   );
 };
+
+export default BrowseIndex;

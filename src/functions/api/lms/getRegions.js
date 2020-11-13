@@ -15,7 +15,7 @@ export default async () => {
     let regions = [];
 
     if (Array.isArray(response)) {
-      regions = response; // .sort((a, b) => (a.label < b.label ? 1 : -1));
+      regions = response;
     }
 
     return appState.update((s) => {

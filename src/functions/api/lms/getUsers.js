@@ -17,7 +17,7 @@ export default async ({ auth, customer_id }) => {
     let users = [];
 
     if (Array.isArray(response)) {
-      users = response.sort((a, b) => (a.email > b.email ? 1 : -1));
+      users = [...response].sort((a, b) => (a.email > b.email ? 1 : -1));
     }
 
     return appState.update((s) => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-import CreditCard from './card';
-import Invoices from './invoices';
-import Coupons from './coupons';
+import CreditCard from './Card';
+import Invoices from './Invoices';
+import Coupons from './Coupons';
 
-export default () => (
+const BillingIndex = () => (
   <Row>
     <Col md="6">
       <span className="floating-card-header">coupons</span>
@@ -20,3 +20,5 @@ export default () => (
     </Col>
   </Row>
 );
+
+export default BillingIndex;

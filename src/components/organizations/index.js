@@ -6,13 +6,13 @@ import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../../functions/state/appState';
 
-import SubNav from './subnav';
-import OrgList from './list/orgList';
-import NewOrgCard from './list/newOrgCard';
+import SubNav from './SubNav';
+import OrgList from './list/OrgList';
+import NewOrgCard from './list/NewOrgCard';
 import NewOrgModal from './new';
-import Loader from '../shared/loader';
+import Loader from '../shared/Loader';
 import addError from '../../functions/api/lms/addError';
-import ErrorFallbackCard from '../shared/errorFallbackCard';
+import ErrorFallbackCard from '../shared/ErrorFallbackCard';
 
 const OrganizationsIndex = () => {
   const { list, action } = useParams();

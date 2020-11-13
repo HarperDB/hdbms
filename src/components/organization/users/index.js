@@ -5,13 +5,13 @@ import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 
 import appState from '../../../functions/state/appState';
-import DataTable from './datatable';
-import EditUser from './edit';
-import AddUserForm from './add';
+import DataTable from './Datatable';
+import EditUser from './Edit';
+import AddUserForm from './Add';
 import getUsers from '../../../functions/api/lms/getUsers';
 import config from '../../../config';
 
-export default () => {
+const UsersIndex = () => {
   const { user_id, customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const users = useStoreState(appState, (s) => s.users);
@@ -43,3 +43,5 @@ export default () => {
     </Row>
   );
 };
+
+export default UsersIndex;

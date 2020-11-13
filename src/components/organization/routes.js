@@ -3,7 +3,7 @@ import { lazy } from 'react';
 const Users = lazy(() => import(/* webpackChunkName: "organization-users" */ './users'));
 const Billing = lazy(() => import(/* webpackChunkName: "organization-billing" */ './billing'));
 
-export default ({ customer_id }) => [
+const Routes = ({ customer_id }) => [
   {
     component: Users,
     path: `/o/:customer_id/users/:user_id?`,
@@ -21,3 +21,5 @@ export default ({ customer_id }) => [
     iconCode: 'f283',
   },
 ];
+
+export default Routes;

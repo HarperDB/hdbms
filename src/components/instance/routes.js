@@ -1,26 +1,18 @@
 import { lazy } from 'react';
 
-import Dashboard from './dashboard';
+import Browse from './browse';
 
-const Browse = lazy(() => import(/* webpackChunkName: "instance-browse" */ './browse'));
+const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
-const Clustering = lazy(() => import(/* webpackChunkName: "instance-clustering" */ './clustering'));
+const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './cluster'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
-const Metrics = lazy(() => import(/* webpackChunkName: "instance-metrics" */ './metrics'));
+const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
-export default ({ super_user }) => {
+const Routes = ({ super_user }) => {
   const standardRoutes = [
-    {
-      component: Dashboard,
-      path: `/o/:customer_id/i/:compute_stack_id/dashboard`,
-      link: 'dashboard',
-      label: 'dashboard',
-      icon: 'chart-line',
-      iconCode: 'f201',
-    },
     {
       component: Browse,
       path: `/o/:customer_id/i/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,
@@ -41,10 +33,10 @@ export default ({ super_user }) => {
 
   const superUserRoutes = [
     {
-      component: Clustering,
-      path: `/o/:customer_id/i/:compute_stack_id/clustering`,
-      link: 'clustering',
-      label: 'clustering',
+      component: Cluster,
+      path: `/o/:customer_id/i/:compute_stack_id/cluster`,
+      link: 'cluster',
+      label: 'cluster',
       icon: 'cubes',
       iconCode: 'f1e0',
     },
@@ -65,10 +57,18 @@ export default ({ super_user }) => {
       iconCode: 'f14a',
     },
     {
+      component: Charts,
+      path: `/o/:customer_id/i/:compute_stack_id/charts`,
+      link: 'charts',
+      label: 'charts',
+      icon: 'chart-line',
+      iconCode: 'f201',
+    },
+    {
       component: Metrics,
-      path: `/o/:customer_id/i/:compute_stack_id/metrics`,
-      link: 'metrics',
-      label: 'metrics',
+      path: `/o/:customer_id/i/:compute_stack_id/status`,
+      link: 'status',
+      label: 'status',
       icon: 'tachometer',
       iconCode: 'f0e4',
     },
@@ -95,3 +95,5 @@ export default ({ super_user }) => {
 
   return super_user ? [...standardRoutes, ...superUserRoutes, ...trailingRoutes] : [...standardRoutes, ...trailingRoutes];
 };
+
+export default Routes;
