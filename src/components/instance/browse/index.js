@@ -20,9 +20,9 @@ const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-relo
 
 const defaultTableState = {
   tableData: [],
+  dataTableColumns: [],
   totalPages: 0,
   totalRecords: 0,
-  loading: false,
   filtered: [],
   sorted: [],
   page: 0,
@@ -31,7 +31,6 @@ const defaultTableState = {
   showFilter: false,
   newEntityAttributes: false,
   hashAttribute: false,
-  dataTableColumns: [],
 };
 
 const BrowseIndex = () => {

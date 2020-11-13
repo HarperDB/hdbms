@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router';
 import useInterval from 'use-interval';
 import { Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import useAsyncEffect from 'use-async-effect';
 
 import instanceState from '../../../functions/state/instanceState';
 
@@ -12,64 +11,71 @@ import DataTableHeader from './BrowseDatatableHeader';
 import getTableData from '../../../functions/instance/getTableData';
 import DataTable from '../../shared/DataTable';
 
+let controller;
+
 const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const canFetch = mounted && !loading && !!activeTable && !!table;
-
-  const getData = async () => {
-    setLoading(true);
-    const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
-      schema,
-      table,
-      filtered: tableState.filtered,
-      pageSize: tableState.pageSize,
-      sorted: tableState.sorted,
-      page: tableState.page,
-      auth,
-      url,
-      is_local,
-      compute_stack_id,
-      customer_id,
-    });
-    setTableState({
-      ...tableState,
-      tableData: newData,
-      totalPages: newTotalPages,
-      totalRecords: newTotalRecords,
-      sorted: newSorted,
-      newEntityAttributes,
-      hashAttribute,
-      dataTableColumns,
-      error,
-    });
-  };
+  const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(true);
 
   useEffect(() => {
-    if (mounted) setLoading(false);
-  }, [tableState.tableData, mounted]);
+    let isMounted = true;
 
-  useEffect(() => {
-    if (schema && table && activeTable) {
-      setTableState(defaultTableState);
-    }
+    const fetchData = async () => {
+      setLoading(true);
+      controller = new AbortController();
+      const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+        schema,
+        table,
+        filtered: tableState.filtered,
+        pageSize: tableState.pageSize,
+        sorted: tableState.sorted,
+        page: tableState.page,
+        auth,
+        url,
+        is_local,
+        compute_stack_id,
+        customer_id,
+        signal: controller.signal,
+      });
+      if (isMounted) {
+        setLoading(false);
+        if (!newData.error) {
+          setTableState({
+            ...tableState,
+            tableData: newData,
+            totalPages: newTotalPages,
+            totalRecords: newTotalRecords,
+            sorted: newSorted,
+            newEntityAttributes,
+            hashAttribute,
+            dataTableColumns,
+            error,
+          });
+        }
+      }
+    };
+
+    if (auth) fetchData();
+
+    return () => {
+      controller?.abort();
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, table]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate]);
 
-  useAsyncEffect(() => canFetch && getData(), [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, mounted]);
+  useEffect(() => {
+    if (activeTable) {
+      setLastUpdate(Date.now());
+    }
+  }, [activeTable]);
 
-  useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
-
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+  useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
   return (
     <>
@@ -77,7 +83,7 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
         totalRecords={tableState.totalRecords}
         loading={loading}
         autoRefresh={tableState.autoRefresh}
-        refresh={() => setTableState({ ...tableState, lastUpdate: Date.now() })}
+        refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
       />
@@ -85,8 +91,8 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
         <CardBody className="react-table-holder">
           <DataTable
             manual
-            columns={tableState.dataTableColumns}
-            data={tableState.tableData}
+            columns={tableState.dataTableColumns || []}
+            data={tableState.tableData || []}
             currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}

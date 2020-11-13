@@ -1,7 +1,7 @@
 import queryInstance from '../api/queryInstance';
 import describeTable from '../api/instance/describeTable';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, is_local, compute_stack_id, customer_id }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, is_local, compute_stack_id, customer_id, signal }) => {
   let fetchError = false;
   let newTotalPages = 1;
   let newTotalRecords = 0;
@@ -57,7 +57,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
           sql: dataSQL,
         },
         auth,
-        url
+        url,
+        signal
       );
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
