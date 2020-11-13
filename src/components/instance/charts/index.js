@@ -13,54 +13,55 @@ import DashboardChart from './DashboardChart';
 import PlaceholderChart from './PlaceholderChart';
 import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
-import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import config from '../../../config';
 import Loader from '../../shared/Loader';
 
+let controller;
+
 const DashboardIndex = () => {
-  const { customer_id, compute_stack_id } = useParams();
+  const { customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
-  const instanceAuth = useStoreState(instanceState, (s) => s.auth);
-  const url = useStoreState(instanceState, (s) => s.url);
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const charts = useStoreState(instanceState, (s) => s.charts);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(true);
 
-  const refreshCharts = useCallback(async () => {
-    if (auth && customer_id && compute_stack_id) {
-      await getCharts({ auth, customer_id, compute_stack_id });
-      setLoading(false);
-    }
-  }, [auth, customer_id, compute_stack_id, setLoading]);
-
-  const refreshRegistration = useCallback(() => {
-    if (instanceAuth && url) {
-      registrationInfo({ auth: instanceAuth, url });
-    }
-  }, [instanceAuth, url]);
-
-  useEffect(() => {
-    setLoading(true);
-    refreshCharts();
-  }, [auth, customer_id, compute_stack_id, refreshCharts]);
+  const handleRemoveChart = useCallback(
+    async (id) => {
+      const response = await removeChart({ auth, customer_id, compute_stack_id, id });
+      if (response.error) {
+        alert.error(response.message);
+      } else {
+        alert.success(response.message);
+        setLastUpdate(Date.now());
+      }
+    },
+    [alert, auth, compute_stack_id, customer_id]
+  );
 
   useEffect(() => {
-    refreshRegistration();
-  }, [auth, refreshRegistration, url]);
+    let isMounted = true;
 
-  useInterval(refreshCharts, config.refresh_content_interval);
+    const fetchData = async () => {
+      setLoading(true);
+      controller = new AbortController();
+      await getCharts({ auth, customer_id, compute_stack_id, signal: controller.signal });
+      if (isMounted) setLoading(false);
+    };
 
-  const handleRemoveChart = async (id) => {
-    const response = await removeChart({ auth, customer_id, compute_stack_id, id });
-    if (response.error) {
-      alert.error(response.message);
-    } else {
-      alert.success(response.message);
-      getCharts({ auth, customer_id, compute_stack_id });
-    }
-  };
+    if (auth) fetchData();
+
+    return () => {
+      controller?.abort();
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, lastUpdate]);
+
+  useInterval(() => auth && setLastUpdate(Date.now()), config.refresh_content_interval);
 
   return (
     <div id="charts">

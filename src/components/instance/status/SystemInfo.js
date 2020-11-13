@@ -132,7 +132,6 @@ const SystemInfo = () => {
                   <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>{systemInfo?.networkLatency || '...'}ms</div>
                 </ContentContainer>
               </Col>
-
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal error={iopsAlarms} iops={storage?.iops} />} className="mb-3">
                   <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>

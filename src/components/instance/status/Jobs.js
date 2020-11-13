@@ -74,23 +74,23 @@ const Jobs = () => {
       <Card className="my-3">
         <CardBody className="item-list">
           <Row>
-            <Col xs="3">
-              <b>status</b>
+            <Col xs="3" className="text-bold">
+              status
             </Col>
-            <Col xs="3">
-              <b>date</b>
+            <Col xs="3" className="text-bold">
+              date
             </Col>
             {!loading && jobsError ? (
-              <Col xs="6" className="text-right text-danger">
+              <Col xs="6" className="text-right text-danger text-bold">
                 <b>job fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
               </Col>
             ) : (
               <>
-                <Col xs="3">
-                  <b>start</b>
+                <Col xs="3" className="text-bold">
+                  start
                 </Col>
-                <Col xs="3">
-                  <b>end</b>
+                <Col xs="3" className="text-bold">
+                  end
                 </Col>
               </>
             )}

@@ -70,21 +70,15 @@ const Logs = () => {
       <Card className="my-3">
         <CardBody className="item-list">
           <Row>
-            <Col xs="3">
-              <b>status</b>
+            <Col xs="3" className="text-bold">
+              status
             </Col>
-            <Col xs="3">
-              <b>date</b>
+            <Col xs="3" className="text-bold">
+              date
             </Col>
-            {!loading && logsError ? (
-              <Col xs="6" className="text-right text-danger">
-                <b>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
-              </Col>
-            ) : (
-              <Col xs="6">
-                <b>time</b>
-              </Col>
-            )}
+            <Col xs="6" className="text-right text-danger text-bold">
+              {!loading && logsError ? <span>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
+            </Col>
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
