@@ -7,14 +7,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';
 
-import EntityManagerRow from './EntityManagerRow';
+import ExampleManagerRow from './ExampleManagerRow';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 import generateFolderLinks from '../../../functions/examples/generateFolderLinks';
 import generateMethodLinks from '../../../functions/examples/generateMethodLinks';
 import addError from '../../../functions/api/lms/addError';
 
-const EntityManager = ({ type }) => {
+const ExampleManager = ({ type }) => {
   const history = useHistory();
   const { customer_id, compute_stack_id, folder, method } = useParams();
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
@@ -62,7 +62,7 @@ const EntityManager = ({ type }) => {
                 <i className="fa-spinner fa fa-spin text-purple" />
               </div>
             ) : (
-              items.map((item) => <EntityManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />)
+              items.map((item) => <ExampleManagerRow key={item} item={item} baseUrl={baseUrl} isActive={activeItem === item} />)
             )}
           </CardBody>
         </Card>
@@ -71,4 +71,4 @@ const EntityManager = ({ type }) => {
   );
 };
 
-export default EntityManager;
+export default ExampleManager;

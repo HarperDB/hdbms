@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router';
 
-const EntityManagerRow = ({ item, baseUrl, isActive }) => {
+const ExampleManagerRow = ({ item, baseUrl, isActive }) => {
   const history = useHistory();
 
   const handleSetActive = () => (isActive ? false : history.push(`${baseUrl}/${item}`));
@@ -21,4 +21,4 @@ const EntityManagerRow = ({ item, baseUrl, isActive }) => {
   );
 };
 
-export default EntityManagerRow;
+export default ExampleManagerRow;
