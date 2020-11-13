@@ -4,17 +4,17 @@ export default (dbResponse) => {
 
   Object.keys(dbResponse)
     .sort()
-    .map((schema, s) => {
+    .forEach((schema, s) => {
       structure[schema] = {};
       if (s === 0) defaultBrowseURL.push(schema);
-      return Object.keys(dbResponse[schema])
+      Object.keys(dbResponse[schema])
         .sort()
-        .map((table, t) => {
+        .forEach((table, t) => {
           if (t === 0 && s === 0) defaultBrowseURL.push(table);
-          return (structure[schema][table] = {
+          structure[schema][table] = {
             record_count: dbResponse[schema][table].record_count,
             hashAttribute: dbResponse[schema][table].hash_attribute,
-          });
+          };
         });
     });
 
