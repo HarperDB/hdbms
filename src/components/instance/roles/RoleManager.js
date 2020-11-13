@@ -19,7 +19,7 @@ const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
     toggleDropItem();
   }, [activeItem, items]);
 
-  const sortedRoles = items && items.sort((a, b) => (a.role < b.role ? -1 : 1));
+  const sortedRoles = items && [...items].sort((a, b) => (a.role < b.role ? -1 : 1));
 
   return (
     <ErrorBoundary
