@@ -29,19 +29,19 @@ export default async ({ auth, customer_id, signal, currentAlarmsLength }) => {
       });
     }
 
+    const alarmsArray = response.sort((a, b) => b.date - a.date);
+
     const alarms = Object.assign(
       {},
-      ...response
-        .sort((a, b) => b.date - a.date)
-        .map((i) => {
-          const instanceAlarms = response?.filter((a) => a.compute_stack_id === i.compute_stack_id);
-          return {
-            [i.compute_stack_id]: {
-              alarms: instanceAlarms,
-              alarmCounts: generateInstanceAlarmDetails({ alarms: instanceAlarms.filter((a) => a.date + config.alarm_badge_threshold * 1000 > Date.now()) }),
-            },
-          };
-        })
+      ...alarmsArray.map((i) => {
+        const instanceAlarms = response?.filter((a) => a.compute_stack_id === i.compute_stack_id);
+        return {
+          [i.compute_stack_id]: {
+            alarms: instanceAlarms,
+            alarmCounts: generateInstanceAlarmDetails({ alarms: instanceAlarms.filter((a) => a.date + config.alarm_badge_threshold * 1000 > Date.now()) }),
+          },
+        };
+      })
     );
 
     return appState.update((s) => {
