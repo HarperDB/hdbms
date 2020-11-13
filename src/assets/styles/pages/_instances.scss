@@ -59,13 +59,22 @@
         }
       }
 
-      .instance-url {
-        font-size: $font-size-small;
-        height: 20px;
-        margin: 5px 0 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+
+
+
+      .card-front-status-row {
+        font-size: 62%;
+        text-transform: uppercase;
+
+        div {
+          overflow: hidden;
+          white-space: nowrap;
+
+          hr {
+            margin-bottom: 0.2rem !important;
+            margin-top: 0.2rem !important;
+          }
+        }
       }
     }
   }

@@ -8,8 +8,8 @@ import { useAlert } from 'react-alert';
 
 import appState from '../../../functions/state/appState';
 import addChart from '../../../functions/api/lms/addChart';
-import chartOptions from '../../../functions/instance/chartOptions';
-import chartTypes from '../../../functions/instance/chartTypes';
+import chartOptions from '../../../functions/charts/chartOptions';
+import chartTypes from '../../../functions/charts/chartTypes';
 import isNumeric from '../../../functions/util/isNumeric';
 
 const ChartModal = ({ setShowChartModal, tableData, query }) => {
@@ -51,7 +51,7 @@ const ChartModal = ({ setShowChartModal, tableData, query }) => {
   };
 
   return (
-    <Modal id="chart-modal" size="lg" isOpen toggle={() => setShowChartModal(false)} className={theme}>
+    <Modal id="chart-modal" size="lg" isOpen toggle={() => setShowChartModal(false)} className={theme} centered fade={false}>
       <ModalHeader toggle={() => setShowChartModal(false)}>Create Chart From This Query Data</ModalHeader>
       <ModalBody>
         <Row>
@@ -137,7 +137,7 @@ const ChartModal = ({ setShowChartModal, tableData, query }) => {
           </Col>
           <Col lg="4">
             <Button onClick={handleAddChart} block disabled={!canSubmit || submitted} color="purple">
-              {submitted ? <i className="fa fa-spin fa-spinner" /> : <span>Add To Dashboard</span>}
+              {submitted ? <i className="fa fa-spin fa-spinner" /> : <span>Add Chart</span>}
             </Button>
           </Col>
         </Row>

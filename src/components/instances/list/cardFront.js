@@ -9,22 +9,25 @@ import { ErrorBoundary } from 'react-error-boundary';
 import config from '../../../config';
 import appState from '../../../functions/state/appState';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
+
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
 import userInfo from '../../../functions/api/instance/userInfo';
-import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
-import CardFrontIcons from './cardFrontIcons';
-import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+
+import CopyableText from '../../shared/copyableText';
+import CardFrontIcons from './cardFrontIcons';
 import CardInstanceUpdateRole from './cardInstanceUpdateRole';
+import CardFrontStatusRow from '../../shared/cardFrontStatusRow';
+import ErrorFallback from '../../shared/errorFallback';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
+const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
   const { customer_id } = useParams();
+  const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
-  const history = useHistory();
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
@@ -32,6 +35,15 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
   const [processing, setProcessing] = useState(false);
   const [formState, setFormState] = useState({});
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
+  const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
+  const ramString = `${compute?.compute_ram_string || '...'}`;
+  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
+  const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
+  const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
+  const iopsClass = alarms && alarms['Disk I/O'] ? 'text-danger' : '';
+  const iopsString = is_local
+    ? 'HARDWARE LIMIT'
+    : `${storage?.iops} / ${alarms && alarms['Disk I/O'] ? `${alarms['Disk I/O']} ALARM${alarms['Disk I/O'] > 1 ? 'S' : ''}` : '3000 BURST'}`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -156,23 +168,12 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_region
                   />
                 </Col>
               </Row>
-              <div className="instance-url">{url}</div>
-              <CardFrontStatusRow
-                label="STATUS"
-                isReady
-                textClass={`text-bold text-${instanceData.error ? 'danger' : 'success'}`}
-                value={instanceData.status?.toUpperCase()}
-                bottomDivider
-              />
-              <CardFrontStatusRow label="REGION" isReady={isReady} value={is_local ? 'USER INSTALLED' : instance_region.toUpperCase()} bottomDivider />
-              <CardFrontStatusRow
-                label="LICENSE"
-                isReady={isReady}
-                value={`${compute?.compute_ram_string || '...'} RAM / ${storage?.data_volume_size_string || 'DEVICE'} DISK`}
-                bottomDivider
-              />
+              <CopyableText text={url} />
+              <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
+              <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
+              <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
               <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-              <CardFrontStatusRow label="CLUSTERING" isReady={isReady} value={instanceData.clustering.toUpperCase()} />
+              <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} textClass={iopsClass} />
             </CardBody>
           )}
         </Card>

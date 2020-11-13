@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -12,17 +12,17 @@ import useInstanceAuth from '../../functions/state/instanceAuths';
 
 import SubNav from './subnav';
 import routes from './routes';
-import buildActiveInstanceObject from '../../functions/instance/buildActiveInstanceObject';
+import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
 import Loader from '../shared/loader';
 import getInstances from '../../functions/api/lms/getInstances';
 import getCustomer from '../../functions/api/lms/getCustomer';
+import getAlarms from '../../functions/api/lms/getAlarms';
 import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
-import getPrepaidSubscriptions from '../../functions/api/lms/getPrepaidSubscriptions';
 
 const InstanceIndex = () => {
   const { compute_stack_id, customer_id } = useParams();
-  const [loadingInstance, setLoadingInstance] = useState(false);
+  const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
   const auth = useStoreState(appState, (s) => s.auth);
@@ -31,7 +31,7 @@ const InstanceIndex = () => {
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
-  const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
@@ -39,16 +39,50 @@ const InstanceIndex = () => {
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
   const [mounted, setMounted] = useState(false);
 
-  const refreshCustomer = () => {
+  useAsyncEffect(() => {
     if (auth && customer_id) {
       getCustomer({ auth, customer_id });
     }
-  };
+  }, [auth, customer_id]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refreshCustomer, []);
+  useEffect(() => {
+    if (auth && customer_id) {
+      getAlarms({ auth, customer_id });
+    }
+  }, [auth, customer_id, instances]);
 
-  const refreshUser = async () => {
+  useAsyncEffect(() => {
+    if (auth && products && regions && subscriptions && customer_id && !instances?.length) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+    }
+  }, [auth, products, regions, customer_id, subscriptions, instances]);
+
+  useAsyncEffect(async () => {
+    if (thisInstance && instanceAuth) {
+      instanceState.update(() => Object.entries(thisInstance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
+      const { error } = await buildInstanceStructure({ auth: instanceAuth, url: thisInstance.url });
+      setLoadingInstance(false);
+      if (error) {
+        setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
+      }
+    }
+  }, [compute_stack_id, thisInstance]);
+
+  useAsyncEffect(() => {
+    if (mounted && url && instanceAuth?.super) {
+      alert.success('Your instance user role has been upgraded to super_user');
+    } else if (mounted && url) {
+      alert.success('Your instance user role has been downgraded to standard');
+    }
+  }, [alert, instanceAuth?.super]);
+
+  useAsyncEffect(
+    () => setMounted(true),
+    () => setMounted(false),
+    []
+  );
+
+  useInterval(async () => {
     if (url) {
       const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
       if (result.error) {
@@ -58,65 +92,7 @@ const InstanceIndex = () => {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuth, super: result.role?.permission?.super_user } });
       }
     }
-  };
-
-  useInterval(refreshUser, config.refresh_content_interval);
-
-  const refreshSubscriptions = () => {
-    if (auth && customer_id && stripe_id) {
-      getPrepaidSubscriptions({ auth, customer_id, stripe_id });
-    }
-  };
-
-  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
-
-  const refreshInstances = () => {
-    if (auth && products && regions && subscriptions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refreshInstances, [auth, products, regions, customer_id, subscriptions]);
-
-  const refreshInstance = async () => {
-    if (instances && instanceAuth) {
-      const { error } = await buildActiveInstanceObject({ auth: instanceAuth, compute_stack_id, instances });
-      setLoadingInstance(false);
-      if (error) {
-        setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
-      }
-    }
-  };
-
-  useEffect(() => {
-    let cancelSub = () => false;
-    if (compute_stack_id && instances && !loadingInstance) {
-      setLoadingInstance(true);
-      cancelSub = instanceState.subscribe(
-        (s) => s.lastUpdate,
-        () => refreshInstance()
-      );
-      setTimeout(refreshInstance, 250);
-    }
-    return () => cancelSub();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [compute_stack_id, instances]);
-
-  useEffect(() => {
-    if (mounted && url && instanceAuth?.super) {
-      alert.success('Your instance user role has been upgraded to super_user');
-    } else if (mounted && url) {
-      alert.success('Your instance user role has been downgraded to standard');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [instanceAuth?.super]);
-
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    []
-  );
+  }, config.refresh_content_interval);
 
   return (
     <>

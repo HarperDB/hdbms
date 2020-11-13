@@ -201,46 +201,6 @@
     }
   }
 
-  .ReactTable {
-    .rt-thead {
-      &.-header {
-        border-bottom: 1px solid $lighter-grey-overlay !important;
-        border-top: 1px solid $lighter-grey-overlay !important;
-      }
-
-      &.-filters {
-        input,
-        select {
-          background: transparent !important;
-          color: $color-darkgrey !important;
-        }
-      }
-    }
-
-    .rt-thead,
-    .rt-tbody {
-      &.-header,
-      .rt-tr-group {
-        border-color: $lighter-grey-overlay !important;
-      }
-
-      .rt-td,
-      .rt-th {
-        &.-sort-desc {
-          box-shadow: inset 0 -2px 0 0 $lighter-grey-overlay !important;
-        }
-
-        &.-sort-asc {
-          box-shadow: inset 0 2px 0 0 $lighter-grey-overlay !important;
-        }
-      }
-    }
-
-    .-pagination {
-      border-top-color: $lighter-grey-overlay !important;
-    }
-  }
-
   .react-select-container {
     width: 100%;
 
@@ -250,8 +210,8 @@
     .react-select__control--menu-is-open,
     .react-select__control--is-focused,
     .react-select__indicator-separator {
-      background: transparent;
-      border-color: $lightest-grey-overlay !important;
+      background: $lightest-grey-overlay !important;
+      border-color: transparent !important;
 
       .react-select__single-value {
         color: $color-grey;

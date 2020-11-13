@@ -21,6 +21,7 @@ const Subnav = ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
+  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts.total, [compute_stack_id]);
   const { options, activeOption } = useStoreState(
     appState,
     (s) => {
@@ -91,6 +92,7 @@ const Subnav = ({ routes = [] }) => {
               >
                 <i className={`d-none d-sm-inline-block fa mr-1 fa-${route.icon}`} />
                 {route.label || route.link}
+                {!!alarms && route.link === 'status' && <span className="badge">{alarms}</span>}
               </NavLink>
             </NavItem>
           ))}

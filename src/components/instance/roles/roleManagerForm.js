@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import addRole from '../../../functions/api/instance/addRole';
 import instanceState from '../../../functions/state/instanceState';
+import listRoles from '../../../functions/api/instance/listRoles';
 
 const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -38,9 +39,7 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
       },
     });
     setEntity({});
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
+    listRoles({ auth, url, is_local, compute_stack_id, customer_id });
     return setTimeout(() => history.push(`${baseUrl}/${response.id}`), 100);
   };
 

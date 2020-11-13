@@ -20,7 +20,7 @@
   }
 
   .react-toggle-track {
-    background: $faint-white-overlay !important;
+    background: $light-grey-overlay !important;
     border: 1px solid $faintest-white-overlay !important;
     border-radius: 30px;
     box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
@@ -37,7 +37,7 @@
     color: $color-white !important;
     display: flex;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: $font-weight-bold;
     height: 100%;
     justify-content: flex-end;
     line-height: 1;

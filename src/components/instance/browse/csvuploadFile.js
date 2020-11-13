@@ -38,17 +38,11 @@ const CSVUploadFile = () => {
           return setFormState({ error: message });
         }
         if (status !== 'COMPLETE' && mounted) {
-          return setTimeout(() => validateData(uploadJobId), 2000);
+          return setTimeout(() => validateData(uploadJobId), 1000);
         }
-        instanceState.update((s) => {
-          s.lastUpdate = Date.now();
-        });
         return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
       } catch (e) {
         return setTimeout(() => {
-          instanceState.update((s) => {
-            s.lastUpdate = Date.now();
-          });
           history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
         }, 2000);
       }

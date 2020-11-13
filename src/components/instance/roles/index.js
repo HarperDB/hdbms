@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Row, Col, CardBody, Card, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
@@ -6,8 +6,9 @@ import { useStoreState } from 'pullstate';
 import instanceState from '../../../functions/state/instanceState';
 
 import EntityManager from './roleManager';
-import StructureReloader from '../../shared/structureReloader';
 import Loader from '../../shared/loader';
+import listRoles from '../../../functions/api/instance/listRoles';
+import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './jsonviewer'));
 
@@ -22,9 +23,20 @@ const defaultState = {
 
 const RolesIndex = () => {
   const { compute_stack_id, role_id, customer_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const roles = useStoreState(instanceState, (s) => s.roles);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
+
+  const fetchRoles = useCallback(async () => {
+    setLoading(true);
+    await listRoles({ auth, url, is_local, compute_stack_id, customer_id });
+    await registrationInfo({ auth, url });
+    setLoading(false);
+  }, [auth, url, is_local, compute_stack_id, customer_id]);
 
   useEffect(() => {
     if (roles) {
@@ -45,6 +57,8 @@ const RolesIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role_id, roles]);
 
+  useEffect(fetchRoles, [fetchRoles]);
+
   return (
     <Row id="roles">
       <Col xl="3" lg="4" md="5" xs="12">
@@ -54,14 +68,25 @@ const RolesIndex = () => {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <Row className="floating-card-header">
-          {formState.canEdit && <Col>edit role &gt; {formState.roleName}</Col>}
+          {formState.canEdit && (
+            <>
+              <Col>edit role &gt; {formState.roleName}</Col>
+            </>
+          )}
           <Col className="text-md-right">
-            <Button color="link" tabIndex="0" title="Show Attributes" onClick={() => setFormState({ ...formState, showAttributes: !formState.showAttributes })}>
-              <span className="mr-2">show all attributes</span>
-              <i className={`fa fa-lg fa-toggle-${formState.showAttributes ? 'on' : 'off'}`} />
+            {formState.canEdit && (
+              <>
+                <Button color="link" tabIndex="0" title="Show Attributes" onClick={() => setFormState({ ...formState, showAttributes: !formState.showAttributes })}>
+                  <span className="mr-2">show all attributes</span>
+                  <i className={`fa fa-lg fa-toggle-${formState.showAttributes ? 'on' : 'off'}`} />
+                </Button>
+                <span className="mx-3 text">|</span>
+              </>
+            )}
+            <Button color="link" onClick={fetchRoles} className="mr-2">
+              <span className="mr-2">refresh roles</span>
+              <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
             </Button>
-            <span className="mx-3 text">|</span>
-            <StructureReloader label="refresh schemas, tables, and roles" />
           </Col>
         </Row>
         {formState.canEdit ? (
@@ -74,11 +99,11 @@ const RolesIndex = () => {
           </Card>
         ) : (
           <Card className="my-3">
-            <CardBody className="py-5">
+            <CardBody>
               {role_id ? (
-                <div className="text-center">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
+                <div className="empty-prompt">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
               ) : (
-                <div className="text-center">Please choose or add a role to manage it.</div>
+                <div className="empty-prompt">Please choose or add a role to manage it.</div>
               )}
             </CardBody>
           </Card>

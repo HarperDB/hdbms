@@ -105,14 +105,22 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
         styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
       />
       {hasChanged && !formData.storage_subscription_id && !newTotal && !is_local && !canAddFreeCloudInstance ? (
-        <Card className="error mt-2">
+        <Card className="error mt-3">
           <CardBody>
             You are limited to {config.free_cloud_instance_limit} free cloud instance{config.free_cloud_instance_limit !== 1 ? 's' : ''}
           </CardBody>
         </Card>
       ) : hasChanged && !canChange ? (
-        <Card className="error mt-2">
-          <CardBody>1 resize every 6 hours. Last: {new Date(last_volume_resize).toLocaleString()}</CardBody>
+        <Card className="error mt-3 text-left">
+          <CardBody>
+            You may update disk size every 6 hours
+            <br />
+            <br />
+            Last resize: {new Date(last_volume_resize).toLocaleTimeString()}
+            <br />
+            <br />
+            Try again at: {new Date(new Date(last_volume_resize).getTime() + 21600000).toLocaleTimeString()}
+          </CardBody>
         </Card>
       ) : hasChanged && (formData?.storage_price || compute?.compute_price) && !hasCard ? (
         <Button

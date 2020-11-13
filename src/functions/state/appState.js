@@ -9,6 +9,8 @@ const appState = new Store({
   integrations: false,
   subscriptions: false,
   instances: false,
+  alarms: false,
+  alarmsError: false,
   hasCard: false,
   lastUpdate: false,
   orgSearch: '',

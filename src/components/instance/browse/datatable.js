@@ -22,6 +22,34 @@ const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }
   const [mounted, setMounted] = useState(false);
   const canFetch = mounted && !loading && !!activeTable && !!table;
 
+  const getData = async () => {
+    setLoading(true);
+    const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+      schema,
+      table,
+      filtered: tableState.filtered,
+      pageSize: tableState.pageSize,
+      sorted: tableState.sorted,
+      page: tableState.page,
+      auth,
+      url,
+      is_local,
+      compute_stack_id,
+      customer_id,
+    });
+    setTableState({
+      ...tableState,
+      tableData: newData,
+      totalPages: newTotalPages,
+      totalRecords: newTotalRecords,
+      sorted: newSorted,
+      newEntityAttributes,
+      hashAttribute,
+      dataTableColumns,
+      error,
+    });
+  };
+
   useEffect(() => {
     if (mounted) setLoading(false);
   }, [tableState.tableData, mounted]);
@@ -33,35 +61,7 @@ const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schema, table]);
 
-  useAsyncEffect(async () => {
-    if (canFetch) {
-      setLoading(true);
-      const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
-        schema,
-        table,
-        filtered: tableState.filtered,
-        pageSize: tableState.pageSize,
-        sorted: tableState.sorted,
-        page: tableState.page,
-        auth,
-        url,
-        is_local,
-        compute_stack_id,
-        customer_id,
-      });
-      setTableState({
-        ...tableState,
-        tableData: newData,
-        totalPages: newTotalPages,
-        totalRecords: newTotalRecords,
-        sorted: newSorted,
-        newEntityAttributes,
-        hashAttribute,
-        dataTableColumns,
-        error,
-      });
-    }
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, activeTable, mounted]);
+  useAsyncEffect(() => canFetch && getData(), [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.lastUpdate, mounted]);
 
   useInterval(() => tableState.autoRefresh && setTableState({ ...tableState, lastUpdate: Date.now() }), config.refresh_content_interval);
 
@@ -82,12 +82,12 @@ const Datatable = ({ tableState, setTableState, activeTable, defaultTableState }
         toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <DataTable
             manual
             columns={tableState.dataTableColumns}
             data={tableState.tableData}
-            page={tableState.page}
+            currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}

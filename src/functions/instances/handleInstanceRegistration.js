@@ -4,9 +4,7 @@ import restartInstance from '../api/instance/restartInstance';
 import setLicense from '../api/instance/setLicense';
 
 import createLicense from '../api/lms/createLicense';
-
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
-import clusterStatus from '../api/instance/clusterStatus';
 
 export default async ({ auth, customer_id, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
@@ -65,15 +63,12 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       };
     }
 
-    const cluster_status = await clusterStatus({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
-    const clustering = cluster_status.is_enabled ? 'ENABLED' : 'NOT ENABLED';
     const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.compute_ram);
 
     if (registration_matches_stripe_plan) {
       return {
         status: 'OK',
         error: false,
-        clustering,
         version: registration.version,
         retry: false,
       };
@@ -101,7 +96,6 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       return {
         status: 'APPLYING LICENSE',
         error: false,
-        clustering,
         version: registration.version,
         retry: true,
       };
@@ -118,7 +112,6 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
     return {
       status: 'APPLYING LICENSE',
       error: false,
-      clustering,
       version: registration.version,
       retry: true,
     };

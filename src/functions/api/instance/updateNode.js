@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ channel, subscriptions, buttonState, compute_stack_id, instance_host, clusterPort, auth, url, customer_id }) => {
+export default async ({ channel, subscriptions, buttonState, compute_stack_id, instance_host, clusterPort, auth, url }) => {
   const newSubscriptions = JSON.parse(JSON.stringify(subscriptions));
   const existingChannelSubscriptionIndex = newSubscriptions.findIndex((s) => s.channel === channel);
 
@@ -41,9 +41,7 @@ export default async ({ channel, subscriptions, buttonState, compute_stack_id, i
       subscriptions: newSubscriptions,
     },
     auth,
-    url,
-    compute_stack_id,
-    customer_id
+    url
   );
   return instanceState.update((s) => {
     s.lastUpdate = Date.now();

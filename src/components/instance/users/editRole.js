@@ -11,6 +11,7 @@ import alterUser from '../../../functions/api/instance/alterUser';
 import instanceState from '../../../functions/state/instanceState';
 import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
+import listUsers from '../../../functions/api/instance/listUsers';
 
 const EditRole = () => {
   const { customer_id, compute_stack_id, username } = useParams();
@@ -36,9 +37,7 @@ const EditRole = () => {
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('user role updated');
-        instanceState.update((s) => {
-          s.lastUpdate = Date.now();
-        });
+        listUsers({ auth, url, is_local, compute_stack_id, customer_id });
         setFormState({});
       } else {
         alert.error(response.message);

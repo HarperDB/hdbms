@@ -1,13 +1,18 @@
-.react-table-scroller {
-  overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-
-  .react-table {
+.react-table-holder {
+  .react-table-scroller {
+    border-bottom: 1px solid $lighter-grey-overlay;
     font-size: 12px;
+    min-height: calc(100vh - 328px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+
+    @media screen and (max-width: 767px) {
+      min-height: auto;
+    }
 
     .header {
-      font-weight: bold;
+      font-weight: $font-weight-bold;
 
       .col {
         border-top: 1px solid $lighter-grey-overlay;
@@ -30,28 +35,23 @@
     .filter {
       .col {
         padding: 0.4rem 0.3rem 0.4rem 0 !important;
+
+        input,
+        select {
+          background: $light-grey-overlay;
+          box-shadow: none;
+          color: $color-black;
+          height: 24px !important;
+          width: 100%;
+        }
       }
     }
 
-    .rows {
-      border-bottom: 1px solid $lighter-grey-overlay;
-      min-height: 601px;
-
-      .row:last-child {
-        .col {
-          border-bottom: 0;
-        }
-      }
-
-      .no-results,
-      .loader {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        font-size: 0.875rem;
-        height: 555px;
-        justify-content: center;
-      }
+    .centered {
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 40%;
     }
 
     .row {
@@ -78,15 +78,6 @@
           min-width: 70px;
         }
       }
-    }
-
-    input,
-    select {
-      background: $light-grey-overlay;
-      box-shadow: none;
-      color: $color-black;
-      height: 24px !important;
-      width: 100%;
     }
 
     .text-renderer {
@@ -121,44 +112,51 @@
       }
     }
   }
-}
 
-.pagination {
-  margin-top: 1.5rem;
+  .pagination {
+    padding-top: 20px;
 
-  .btn {
-    max-width: 100px;
-
-    @media screen and (max-width: 575px) {
-      max-width: 100%;
-    }
-  }
-
-  .next {
     .btn {
-      float: right;
+      max-width: 100px;
+
+      @media screen and (max-width: 575px) {
+        max-width: 100%;
+      }
     }
-  }
 
-
-  .paginator {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-
-    input {
-      margin: 0 5px;
-      padding-left: 3px;
-      padding-right: 3px;
-      padding-top: 13px;
-      text-align: center;
-      width: 100%;
+    .next {
+      .btn {
+        float: right;
+      }
     }
-  }
 
-  .page-size {
-    select {
-      width: 100%;
+
+    .paginator {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+
+      input {
+        margin: 0 5px;
+        padding-left: 3px;
+        padding-right: 3px;
+        text-align: center;
+        vertical-align: middle;
+        width: 100%;
+      }
+
+      .page-count {
+        display: inline-block;
+        height: 100%;
+        padding-top: 11px;
+      }
+    }
+
+    .page-size {
+      select {
+        width: 100%;
+      }
     }
   }
 }
+

@@ -8,6 +8,7 @@ import { useAlert } from 'react-alert';
 import instanceState from '../../../functions/state/instanceState';
 
 import dropRole from '../../../functions/api/instance/dropRole';
+import listRoles from '../../../functions/api/instance/listRoles';
 
 const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const { compute_stack_id, customer_id } = useParams();
@@ -27,9 +28,7 @@ const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping })
       return alert.error(result.message);
     }
 
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
+    listRoles({ auth, url, is_local, compute_stack_id, customer_id });
 
     return isActive ? setTimeout(() => history.push(baseUrl), 100) : false;
   };

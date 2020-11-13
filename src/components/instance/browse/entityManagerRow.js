@@ -6,6 +6,7 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
+import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
 const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
   const history = useHistory();
@@ -14,8 +15,6 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
-  const customer_id = useStoreState(instanceState, (s) => s.customer_id);
 
   const handleDropItem = async () => {
     if (!itemType || !isConfirmingDropItem) return false;
@@ -31,17 +30,15 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       operation.schema = item;
     }
 
-    const result = await queryInstance(operation, auth, url, compute_stack_id, customer_id);
+    const result = await queryInstance(operation, auth, url);
 
     if (result.error) {
-      return alert.error(result.error);
+      toggleConfirmDropItem(false);
+      setConfirmedDropItem(false);
+      return alert.error(result.message);
     }
 
-    instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
-
-    return setTimeout(() => history.push(baseUrl), 100);
+    return buildInstanceStructure({ auth, url });
   };
 
   const selectItemForDrop = () => {

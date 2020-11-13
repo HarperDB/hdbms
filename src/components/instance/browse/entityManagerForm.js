@@ -3,15 +3,14 @@ import { Row, Col, Button, Input } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useParams } from 'react-router-dom';
 
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
+import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
 const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -65,11 +64,15 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       operation.schema = entityName;
     }
 
-    await queryInstance(operation, auth, url, compute_stack_id, customer_id);
+    const result = await queryInstance(operation, auth, url);
 
-    return instanceState.update((s) => {
-      s.lastUpdate = Date.now();
-    });
+    if (result.error) {
+      setAddingItem(false);
+      toggleCreate(false);
+      return alert.error(result.message);
+    }
+
+    return buildInstanceStructure({ auth, url });
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);

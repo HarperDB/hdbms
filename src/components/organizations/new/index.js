@@ -41,7 +41,7 @@ const NewOrgIndex = () => {
   }, [formData]);
 
   return (
-    <Modal id="new-org-modal" isOpen className={theme}>
+    <Modal id="new-org-modal" isOpen className={theme} centered fade={false}>
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
         {formState.submitted ? (
           <ModalBody>

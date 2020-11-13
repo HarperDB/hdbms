@@ -5,12 +5,10 @@ import { useHistory, useParams } from 'react-router';
 import { useAlert } from 'react-alert';
 
 import appState from '../../../functions/state/appState';
-import customerUserColumns from '../../../functions/datatable/customerUserColumns';
 import DataTable from '../../shared/dataTable';
 
 const defaultTableState = {
   tableData: false,
-  totalRecords: 0,
   dataTableColumns: [],
   filtered: [],
   sorted: [{ id: 'email', desc: false }],
@@ -32,7 +30,10 @@ const Datatable = () => {
   const sortDesc = tableState.sorted[0]?.desc;
   const auth = useStoreState(appState, (s) => s.auth);
   const users = useStoreState(appState, (s) => s.users);
-  const tableColumns = customerUserColumns({ current_user_id: auth.user_id, current_org_id: customer_id });
+  const tableColumns = [
+    { Header: 'email address', accessor: 'email' },
+    { Header: 'status', accessor: 'orgs[0].status' },
+  ];
 
   const rowClick = useCallback(
     (user_id) => {
@@ -84,11 +85,11 @@ const Datatable = () => {
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody>
+        <CardBody className="react-table-holder">
           <DataTable
             columns={tableState.dataTableColumns}
             data={tableState.tableData}
-            page={tableState.page}
+            currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}

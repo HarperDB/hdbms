@@ -6,7 +6,7 @@ import ErrorFallback from '../../shared/errorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 const DBMigratorCard = ({ icon, name, urls }) => (
-  <Col xl="4" lg="6" xs="12" className="mb-3">
+  <Col lg="4" xs="12" className="mb-3">
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Card className="integration-driver-card">
         <CardBody className="pt-3">

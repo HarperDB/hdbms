@@ -9,8 +9,8 @@ const EmptyPrompt = ({ message, error = false, accessErrors }) => {
     <>
       <div className="floating-card-header">&nbsp;</div>
       <Card className="my-3">
-        <CardBody className="empty-prompt">
-          <div className={`text-center ${error ? 'text-danger' : ''}`}>{message}</div>
+        <CardBody>
+          <div className={`empty-prompt ${error ? 'text-danger' : ''}`}>{message}</div>
           {error && (
             <div className="px-5">
               {tableErrors && tableErrors.length ? (

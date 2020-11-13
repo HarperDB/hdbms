@@ -27,7 +27,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
       />
       <Card className="my-3">
         {items && items.length ? (
-          <CardBody className="scrollable">
+          <CardBody className={`scrollable ${isCreating ? 'creating' : ''}`}>
             {items.map((item) => (
               <EntityManagerRow
                 key={item}
@@ -43,7 +43,7 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
           </CardBody>
         ) : null}
 
-        {((items && !items.length) || isCreating) && showForm ? (
+        {showForm && ((items && !items.length) || isCreating) ? (
           <CardBody>
             <EntityManagerForm
               items={items}

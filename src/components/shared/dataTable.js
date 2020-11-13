@@ -4,7 +4,8 @@ import { Input } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import DataTableHeader from './dataTableHeader';
-import DataTablePagination from './dataTablePagination';
+import DataTablePaginationManual from './dataTablePaginationManual';
+import DataTablePaginationAuto from './dataTablePaginationAuto';
 import DataTableRow from './dataTableRow';
 import isImage from '../../functions/util/isImage';
 import addError from '../../functions/api/lms/addError';
@@ -66,7 +67,7 @@ const defaultColumn = {
 const DataTable = ({
   columns,
   data,
-  page,
+  currentPage,
   pageSize,
   totalPages,
   onFilteredChange,
@@ -79,7 +80,7 @@ const DataTable = ({
   loading,
   manual = false,
 }) => {
-  const { headerGroups, rows, prepareRow, state } = useTable(
+  const { headerGroups, page, rows, prepareRow, state, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize } = useTable(
     {
       columns,
       data,
@@ -91,10 +92,14 @@ const DataTable = ({
       onRowClick,
       manualPagination: manual,
       manualFilters: manual,
+      initialState: { pageIndex: currentPage, pageSize },
     },
     useFilters,
     usePagination
   );
+  const [localLoading, setLocalLoading] = useState(true);
+
+  const iterable = manual || !page.length ? rows : page;
 
   useEffect(() => {
     if (state.filters) {
@@ -103,28 +108,43 @@ const DataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filters]);
 
+  useEffect(() => {
+    setTimeout(() => setLocalLoading(false), 100);
+  }, [iterable?.length]);
+
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="react-table-scroller">
-        <div className="react-table">
-          <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
-          <div className="rows">
-            {rows?.length ? (
-              rows.map((row) => <DataTableRow key={row.id} row={row} prepareRow={prepareRow} onRowClick={onRowClick} />)
-            ) : loading ? (
-              <div className="loader">
-                <i className="fa fa-spinner fa-spin" />
-              </div>
-            ) : (
-              <div className="no-results">
-                <i className="fa fa-ban text-danger" />
-                <div className="mt-2">no results</div>
-              </div>
-            )}
+        <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
+        {loading || localLoading ? (
+          <div className="centered text-center">
+            <i className="fa fa-spinner fa-spin" />
           </div>
-        </div>
+        ) : iterable.length ? (
+          iterable.map((row) => <DataTableRow key={row.id} row={row} prepareRow={prepareRow} onRowClick={onRowClick} />)
+        ) : (
+          <div className="centered text-center">
+            <i className="fa fa-exclamation-triangle text-danger" />
+            <div className="mt-2 text-darkgrey">no records</div>
+          </div>
+        )}
       </div>
-      <DataTablePagination page={page} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
+      {manual ? (
+        <DataTablePaginationManual page={currentPage} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
+      ) : (
+        <DataTablePaginationAuto
+          previousPage={previousPage}
+          pageSize={pageSize}
+          canPreviousPage={canPreviousPage}
+          pageIndex={state.pageIndex}
+          pageOptions={pageOptions}
+          gotoPage={gotoPage}
+          setPageSize={setPageSize}
+          pageCount={pageCount}
+          nextPage={nextPage}
+          canNextPage={canNextPage}
+        />
+      )}
     </ErrorBoundary>
   );
 };
