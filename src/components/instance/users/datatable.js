@@ -55,7 +55,7 @@ const Datatable = () => {
   useEffect(() => {
     if (tableState.tableData.length && sortParam) {
       const userData = [...tableState.tableData];
-      const sortedTableData = userData.sort((a, b) => (a[sortParam] > b[sortParam] && sortDesc ? 1 : a[sortParam] > b[sortParam] ? -1 : sortDesc ? -1 : 1));
+      const sortedTableData = [...userData].sort((a, b) => (a[sortParam] > b[sortParam] && sortDesc ? 1 : a[sortParam] > b[sortParam] ? -1 : sortDesc ? -1 : 1));
       setTableState({ ...tableState, tableData: sortedTableData });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
