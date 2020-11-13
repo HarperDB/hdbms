@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Examples from '../../instance/examples';
+import Examples from '../../shared/examples';
 
 const ResourcesExamples = () => <Examples showCustomMessage />;
 

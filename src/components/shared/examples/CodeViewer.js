@@ -11,9 +11,9 @@ import useCodeExampleLanguage from '../../../functions/state/codeExampleLanguage
 
 import languages from '../../../functions/examples/languages';
 import getMethodObject from '../../../functions/examples/getMethodObject';
-import ErrorFallback from '../../shared/ErrorFallback';
+import ErrorFallback from '../ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import Code from '../../shared/Code';
+import Code from '../Code';
 
 const CodeViewer = ({ showCustomMessage }) => {
   const { customer_id, compute_stack_id, folder, method } = useParams();
@@ -71,7 +71,7 @@ const CodeViewer = ({ showCustomMessage }) => {
                 <span className="custom-example-prompt">For examples pre-populated with the URL and Auth Header,</span>{' '}
                 <span className="custom-example-prompt">choose an Organization, select an Instance, and click &quot;Example Code&quot;</span>
               </b>
-              <hr />
+              <hr className="my-4" />
             </>
           )}
           <Row>

@@ -8,7 +8,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../../../functions/state/appState';
 
 import ExampleManagerRow from './ExampleManagerRow';
-import ErrorFallback from '../../shared/ErrorFallback';
+import ErrorFallback from '../ErrorFallback';
 
 import generateFolderLinks from '../../../functions/examples/generateFolderLinks';
 import generateMethodLinks from '../../../functions/examples/generateMethodLinks';
