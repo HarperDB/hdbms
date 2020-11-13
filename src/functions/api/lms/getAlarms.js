@@ -29,7 +29,7 @@ export default async ({ auth, customer_id, signal, currentAlarmsLength }) => {
       });
     }
 
-    const alarmsArray = response.sort((a, b) => b.date - a.date);
+    const alarmsArray = [...response].sort((a, b) => b.date - a.date);
 
     const alarms = Object.assign(
       {},

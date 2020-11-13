@@ -6,7 +6,7 @@ export default async ({ auth, url }) => {
   const data = Array.isArray(result) ? result : [];
 
   instanceState.update((s) => {
-    s.roles = data.sort((a, b) => (a.role.toLowerCase() > b.role.toLowerCase() ? 1 : -1));
+    s.roles = [...data].sort((a, b) => (a.role.toLowerCase() > b.role.toLowerCase() ? 1 : -1));
   });
 
   return data;
