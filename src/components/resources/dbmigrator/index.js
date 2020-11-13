@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Row, Col, CardImg } from 'reactstrap';
 
-import MigratorCard from './dbMigratorCard';
+import MigratorCard from './DbMigratorCard';
 
 import Screenshot1 from '../../../assets/images/migrator/screenshot1.png';
 import Screenshot2 from '../../../assets/images/migrator/screenshot2.png';

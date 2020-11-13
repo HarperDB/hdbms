@@ -7,16 +7,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
 
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
-const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './datatable'));
-const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './entityManager'));
-const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './jsonviewer'));
-const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './csvupload'));
-const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './emptyPrompt'));
-const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/structureReloader'));
+const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './Datatable'));
+const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JsonViewer'));
+const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
+const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './EmptyPrompt'));
+const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/StructureReloader'));
 
 const defaultTableState = {
   tableData: [],

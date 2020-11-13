@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-import ProfileForm from './profile';
-import PasswordForm from './password';
+import ProfileForm from './Profile';
+import PasswordForm from './Password';
 
 const ProfileIndex = () => (
   <Row>

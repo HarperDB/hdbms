@@ -5,10 +5,10 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-import EntityManager from './entityManager';
-import DataTable from './datatable';
-import ManageErrorModal from './errorModal';
-import ErrorFallback from '../../../shared/errorFallback';
+import EntityManager from './EntityManager';
+import DataTable from './Datatable';
+import ManageErrorModal from './ErrorModal';
+import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
 const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {

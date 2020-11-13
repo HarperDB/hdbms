@@ -8,8 +8,8 @@ import Analytics from 'react-router-ga';
 import './functions/util/textDecoderPolyfill';
 import stripePromise from './functions/stripe/stripePromise';
 import config from './config';
-import App from './components/app';
-import AlertTemplate from './components/shared/alert';
+import App from './components/App';
+import AlertTemplate from './components/shared/Alert';
 
 import './app.scss';
 

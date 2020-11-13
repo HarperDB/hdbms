@@ -7,10 +7,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';
 
-import ContentContainer from '../../shared/contentContainer';
+import ContentContainer from '../../shared/ContentContainer';
 import handleAddOrg from '../../../functions/organizations/handleAddOrg';
 import getUser from '../../../functions/api/lms/getUser';
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 const NewOrgIndex = () => {

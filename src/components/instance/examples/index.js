@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
-import EntityManager from './entityManager';
-import CodeViewer from './codeViewer';
+import EntityManager from './EntityManager';
+import CodeViewer from './CodeViewer';
 
 const ExamplesIndex = ({ showCustomMessage }) => {
   const { folder } = useParams();

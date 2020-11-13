@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'reactstrap';
 
-import DataTable from './datatable';
-import QueryWindow from './queryWindow';
-import QueryHistory from './queryHistory';
+import DataTable from './Datatable';
+import QueryWindow from './QueryWindow';
+import QueryHistory from './QueryHistory';
 
 const QueryIndex = () => {
   const [query, setQuery] = useState(false);

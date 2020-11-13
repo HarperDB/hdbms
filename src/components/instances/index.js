@@ -9,13 +9,13 @@ import useAsyncEffect from 'use-async-effect';
 import config from '../../config';
 import appState from '../../functions/state/appState';
 
-import InstanceList from './list/instanceList';
-import NewInstanceCard from './list/newInstanceCard';
-import NoInstancesCard from './list/noInstancesCard';
-import SubNav from './subnav';
+import InstanceList from './list/InstanceList';
+import NewInstanceCard from './list/NewInstanceCard';
+import NoInstancesCard from './list/NoInstancesCard';
+import SubNav from './SubNav';
 import NewInstanceModal from './new';
 import getInstances from '../../functions/api/lms/getInstances';
-import Loader from '../shared/loader';
+import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 

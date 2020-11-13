@@ -3,9 +3,9 @@ import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import routes from './routes';
-import SubNav from '../shared/subnav';
+import SubNav from '../shared/SubNav';
 import appState from '../../functions/state/appState';
-import Loader from '../shared/loader';
+import Loader from '../shared/Loader';
 
 const OrganizationsIndex = () => {
   const { customer_id } = useParams();

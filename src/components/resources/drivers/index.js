@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Row } from 'reactstrap';
 
-import DriverCard from './driverCard';
+import DriverCard from './DriverCard';
 
 const DriversIndex = () => (
   <main id="support">

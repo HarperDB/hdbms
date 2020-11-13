@@ -9,17 +9,17 @@ import { ErrorBoundary } from 'react-error-boundary';
 import instanceState from '../../../../functions/state/instanceState';
 import appState from '../../../../functions/state/appState';
 
-import Role from './role';
-import User from './user';
-import Port from './port';
-import Enable from './enable';
-import NodeName from './nodeName';
-import EmptyPrompt from './emptyPrompt';
+import Role from './Role';
+import User from './User';
+import Port from './Port';
+import Enable from './Enable';
+import NodeName from './NodeName';
+import EmptyPrompt from './EmptyPrompt';
 
 import configureCluster from '../../../../functions/api/instance/configureCluster';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 import userInfo from '../../../../functions/api/instance/userInfo';
-import ErrorFallback from '../../../shared/errorFallback';
+import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 

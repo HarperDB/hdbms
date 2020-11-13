@@ -5,12 +5,12 @@ import { useStoreState } from 'pullstate';
 
 import instanceState from '../../../functions/state/instanceState';
 
-import EntityManager from './roleManager';
-import Loader from '../../shared/loader';
+import EntityManager from './RoleManager';
+import Loader from '../../shared/Loader';
 import listRoles from '../../../functions/api/instance/listRoles';
 import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
-const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './jsonviewer'));
+const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));
 
 const defaultState = {
   roleName: false,

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-import CreditCard from './card';
-import Invoices from './invoices';
-import Coupons from './coupons';
+import CreditCard from './Card';
+import Invoices from './Invoices';
+import Coupons from './Coupons';
 
 const BillingIndex = () => (
   <Row>

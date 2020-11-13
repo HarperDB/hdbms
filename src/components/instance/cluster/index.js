@@ -8,7 +8,7 @@ import buildNetwork from '../../../functions/instance/buildNetwork';
 
 import Setup from './setup';
 import Manage from './manage';
-import Loader from '../../shared/loader';
+import Loader from '../../shared/Loader';
 
 const ClusteringIndex = () => {
   const instances = useStoreState(appState, (s) => s.instances);

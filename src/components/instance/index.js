@@ -10,10 +10,10 @@ import appState from '../../functions/state/appState';
 import instanceState from '../../functions/state/instanceState';
 import useInstanceAuth from '../../functions/state/instanceAuths';
 
-import SubNav from './subnav';
+import SubNav from './Subnav';
 import routes from './routes';
 import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
-import Loader from '../shared/loader';
+import Loader from '../shared/Loader';
 import getInstances from '../../functions/api/lms/getInstances';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';

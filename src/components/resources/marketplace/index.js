@@ -5,11 +5,11 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
-import IntegrationCard from './integrationCard';
+import IntegrationCard from './IntegrationCard';
 import appState from '../../../functions/state/appState';
 import getIntegrations from '../../../functions/api/lms/getIntegrations';
-import EntityManager from './entityManager';
-import AddIntegration from './add';
+import IntegrationManager from './IntegrationManager';
+import AddIntegration from './Add';
 
 let controller;
 
@@ -49,7 +49,7 @@ const MarketplaceIndex = () => {
   return (
     <Row id="support">
       <Col xl="3" lg="4" md="5" xs="12">
-        <EntityManager />
+        <IntegrationManager />
         {auth?.email && <AddIntegration />}
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">

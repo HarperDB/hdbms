@@ -9,18 +9,18 @@ import appState from '../../../functions/state/appState';
 import useNewInstance from '../../../functions/state/newInstance';
 import steps from '../../../functions/instances/addInstanceSteps';
 
-import ErrorFallback from '../../shared/errorFallback';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import Loader from '../../shared/loader';
+import Loader from '../../shared/Loader';
 
-import InstanceTypeForm from './type';
-import CloudMetadataForm from './metaCloud';
-import LocalMetadataForm from './metaLocal';
-import LocalInstanceForm from './detailsLocal';
-import CloudInstanceForm from './detailsCloud';
-import CustomerPaymentForm from './payment';
-import ConfirmOrderForm from './confirm';
-import OrderStatus from './status';
+import InstanceTypeForm from './Type';
+import CloudMetadataForm from './MetaCloud';
+import LocalMetadataForm from './MetaLocal';
+import LocalInstanceForm from './DetailsLocal';
+import CloudInstanceForm from './DetailsCloud';
+import CustomerPaymentForm from './Payment';
+import ConfirmOrderForm from './Confirm';
+import OrderStatus from './Status';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 import getUser from '../../../functions/api/lms/getUser';
 

@@ -7,13 +7,13 @@ import { ErrorBoundary } from 'react-error-boundary';
 import instanceState from '../../../functions/state/instanceState';
 import appState from '../../../functions/state/appState';
 
-import UpdateDiskVolume from './updateDiskVolume';
-import UpdateRAM from './updateRAM';
-import Remove from './remove';
-import Restart from './restart';
-import Details from './details';
-import Loader from '../../shared/loader';
-import ErrorFallback from '../../shared/errorFallback';
+import UpdateDiskVolume from './UpdateDiskVolume';
+import UpdateRAM from './UpdateRAM';
+import Remove from './Remove';
+import Restart from './Restart';
+import Details from './Details';
+import Loader from '../../shared/Loader';
+import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 

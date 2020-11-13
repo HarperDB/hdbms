@@ -1,10 +1,10 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
 
-import SystemInfo from './systemInfo';
-import Logs from './logs';
-import Jobs from './jobs';
-import Alarms from './alarms';
+import SystemInfo from './SystemInfo';
+import Logs from './Logs';
+import Jobs from './Jobs';
+import Alarms from './Alarms';
 
 const MetricsIndex = () => (
   <>

@@ -9,13 +9,13 @@ import useInterval from 'use-interval';
 import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 
-import DashboardChart from './dashboardChart';
-import PlaceholderChart from './placeholderChart';
+import DashboardChart from './DashboardChart';
+import PlaceholderChart from './PlaceholderChart';
 import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
 import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import config from '../../../config';
-import Loader from '../../shared/loader';
+import Loader from '../../shared/Loader';
 
 const DashboardIndex = () => {
   const { customer_id, compute_stack_id } = useParams();
