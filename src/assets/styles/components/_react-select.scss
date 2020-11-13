@@ -34,6 +34,7 @@
 
   .react-select__menu {
     z-index: 12;
+    margin-top: 1px !important;
   }
 
   .react-select__option,
@@ -52,10 +53,6 @@
     &:last-child {
       border-bottom: 0;
     }
-  }
-
-  .react-select__menu {
-    margin-top: 1px !important;
   }
 
   &.limited-height {

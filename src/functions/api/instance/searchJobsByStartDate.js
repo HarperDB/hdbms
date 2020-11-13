@@ -18,7 +18,7 @@ export default async ({ auth, url, signal, from_date, to_date, currentJobCount }
   }
 
   return instanceState.update((s) => {
-    s.jobs = result.sort((a, b) => b.start_datetime - a.end_datetime);
+    s.jobs = [...result].sort((a, b) => b.start_datetime - a.end_datetime);
     s.jobsError = false;
   });
 };

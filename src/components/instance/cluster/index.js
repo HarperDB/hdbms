@@ -29,7 +29,7 @@ const ClusteringIndex = () => {
     }
   }, [auth, url, instances, compute_stack_id]);
 
-  useEffect(() => refreshNetwork(), [refreshNetwork]);
+  useEffect(refreshNetwork, [refreshNetwork]);
 
   useEffect(() => {
     if (network) {
