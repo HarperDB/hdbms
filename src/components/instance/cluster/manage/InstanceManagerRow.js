@@ -15,9 +15,7 @@ const InstanceManagerRow = ({ setShowModal, item, itemType, loading, handleAddNo
 
   return (
     <Row className="item-row">
-      <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>
-        {item.instance_name} {item.connection?.state}
-      </Col>
+      <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
       <Col className="item-action">
         {itemType === 'unregistered' ? (
           <ActionUnregistered
