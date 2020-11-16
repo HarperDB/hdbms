@@ -2,16 +2,16 @@ import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
 export default async ({ auth, url, signal, currentLogCount }) => {
-  const { error, file, dailyRotateFile } = await queryInstance(
-    {
+  const { error, file, dailyRotateFile } = await queryInstance({
+    operation: {
       operation: 'read_log',
       limit: 1000,
       order: 'desc',
     },
     auth,
     url,
-    signal
-  );
+    signal,
+  });
 
   if (error && currentLogCount) {
     return instanceState.update((s) => {

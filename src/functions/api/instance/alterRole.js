@@ -1,12 +1,12 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ auth, url, id, permission }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'alter_role',
       id,
       permission,
     },
     auth,
-    url
-  );
+    url,
+  });

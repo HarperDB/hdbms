@@ -32,8 +32,8 @@ export default async ({ channel, subscriptions, buttonState, compute_stack_id, i
   }
 
   // send the query
-  await queryInstance(
-    {
+  await queryInstance({
+    operation: {
       operation: 'update_node',
       name: compute_stack_id,
       host: instance_host,
@@ -41,8 +41,8 @@ export default async ({ channel, subscriptions, buttonState, compute_stack_id, i
       subscriptions: newSubscriptions,
     },
     auth,
-    url
-  );
+    url,
+  });
   return instanceState.update((s) => {
     s.lastUpdate = Date.now();
   });

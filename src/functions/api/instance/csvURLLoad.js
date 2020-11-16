@@ -1,8 +1,8 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ schema, table, csv_url, auth, url }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'csv_url_load',
       action: 'insert',
       transact_to_cluster: true,
@@ -11,5 +11,5 @@ export default async ({ schema, table, csv_url, auth, url }) =>
       csv_url,
     },
     auth,
-    url
-  );
+    url,
+  });

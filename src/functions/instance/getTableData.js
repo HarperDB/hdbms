@@ -1,4 +1,3 @@
-import queryInstance from '../api/queryInstance';
 import describeTable from '../api/instance/describeTable';
 import sql from '../api/instance/sql';
 
@@ -40,15 +39,12 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
       if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
-      newData = await queryInstance(
-        {
-          operation: 'sql',
-          sql: dataSQL,
-        },
+      newData = await sql({
+        sql: dataSQL,
         auth,
         url,
-        signal
-      );
+        signal,
+      });
       if (newData.error || !Array.isArray(newData)) {
         throw new Error(newData.message);
       }

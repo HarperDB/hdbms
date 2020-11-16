@@ -1,8 +1,8 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, url, id }) =>
+export default async ({ auth, url }) =>
   queryInstance({
-    operation: { operation: 'get_job', id },
+    operation: { operation: 'get_config' },
     auth,
     url,
   });

@@ -64,7 +64,7 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       operation.schema = entityName;
     }
 
-    const result = await queryInstance(operation, auth, url);
+    const result = await queryInstance({ operation, auth, url });
 
     if (result.error) {
       setAddingItem(false);

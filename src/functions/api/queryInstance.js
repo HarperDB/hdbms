@@ -1,6 +1,6 @@
 import { fetch } from 'whatwg-fetch';
 
-export default async (operation, auth, url, signal = undefined) => {
+export default async ({ operation, auth, url, authType = undefined, signal = undefined }) => {
   try {
     const request = await fetch(url, {
       signal,
@@ -8,7 +8,7 @@ export default async (operation, auth, url, signal = undefined) => {
       body: JSON.stringify(operation),
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
+        authorization: authType === 'token' ? `Bearer ${auth.token}` : `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
       },
     });
 
