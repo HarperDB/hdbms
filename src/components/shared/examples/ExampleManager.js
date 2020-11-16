@@ -49,10 +49,7 @@ const ExampleManager = ({ type }) => {
   }, [postmanCollection, folder]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="entity-manager">
         <div className="floating-card-header">{type === 'folder' ? 'category' : 'operations'}</div>
         <Card className="my-3">

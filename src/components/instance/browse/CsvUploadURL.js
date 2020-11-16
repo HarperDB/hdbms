@@ -76,10 +76,7 @@ const CsvUploadURL = () => {
   );
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row>
         <Col xs="4" className="py-1">
           Import A CSV File From URL

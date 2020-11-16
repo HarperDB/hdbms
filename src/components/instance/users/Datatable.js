@@ -95,10 +95,7 @@ const Datatable = () => {
   }, [sortParam, sortDesc]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>existing users</Col>
         <Col className="text-right">

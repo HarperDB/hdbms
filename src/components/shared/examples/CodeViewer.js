@@ -16,7 +16,7 @@ import addError from '../../../functions/api/lms/addError';
 import Code from '../Code';
 
 const CodeViewer = ({ showCustomMessage }) => {
-  const { customer_id, compute_stack_id, folder, method } = useParams();
+  const { folder, method } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
@@ -56,10 +56,7 @@ const CodeViewer = ({ showCustomMessage }) => {
   }, [methodObject, language]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="floating-card-header">
         {instance_name} instance &gt; {folder?.toLowerCase()} {method && `> ${method.toLowerCase()}`}
       </div>

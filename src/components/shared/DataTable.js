@@ -48,18 +48,8 @@ const handlCellValues = (value) => {
   }
 };
 
-const defaultColumnFilter = ({ column }) => (
-  <Input
-    type="text"
-    value={column.filterValue || ''}
-    onChange={(e) => {
-      column.setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-    }}
-  />
-);
-
 const defaultColumn = {
-  Filter: defaultColumnFilter,
+  Filter: ({ column: { filterValue, setFilter } }) => <Input type="text" value={filterValue || ''} onChange={(e) => setFilter(e.target.value || undefined)} />,
   Cell: ({ value }) => handlCellValues(value),
 };
 
@@ -80,7 +70,22 @@ const DataTable = ({
   loading,
   manual = false,
 }) => {
-  const { headerGroups, page, rows, prepareRow, state, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize } = useTable(
+  const {
+    headerGroups,
+    page,
+    rows,
+    prepareRow,
+    state,
+    setAllFilters,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+  } = useTable(
     {
       columns,
       data,
@@ -102,11 +107,13 @@ const DataTable = ({
   const iterable = manual || !page.length ? rows : page;
 
   useEffect(() => {
-    if (state.filters) {
+    if (!showFilter && state.filters.length) {
+      setAllFilters([]);
+    } else if (state.filters) {
       onFilteredChange(state.filters);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.filters]);
+  }, [state.filters, showFilter]);
 
   useEffect(() => {
     setTimeout(() => setLocalLoading(false), 100);

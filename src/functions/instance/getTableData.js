@@ -1,17 +1,17 @@
 import queryInstance from '../api/queryInstance';
 import describeTable from '../api/instance/describeTable';
+import sql from '../api/instance/sql';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, is_local, compute_stack_id, customer_id, signal }) => {
+export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal }) => {
   let fetchError = false;
   let newTotalPages = 1;
   let newTotalRecords = 0;
   let newData = [];
   let allAttributes = false;
   let hashAttribute = false;
-  let newSorted = sorted;
 
   try {
-    const result = await describeTable({ auth, url, schema, table, is_local, compute_stack_id, customer_id });
+    const result = await describeTable({ auth, url, schema, table });
 
     if (result.error) {
       allAttributes = [];
@@ -22,20 +22,9 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     allAttributes = attributes.map((a) => a.attribute);
     hashAttribute = hash_attribute;
 
-    if (!newSorted.length || !allAttributes.includes(newSorted[0].id)) {
-      newSorted = [{ id: hash_attribute, desc: false }];
-    }
-
     if (filtered.length) {
       const countSQL = `SELECT count(*) as newTotalRecords FROM \`${schema}\`.\`${table}\` WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')}`;
-      [{ newTotalRecords }] = await queryInstance(
-        {
-          operation: 'sql',
-          sql: countSQL,
-        },
-        auth,
-        url
-      );
+      [{ newTotalRecords }] = await sql({ auth, url, sql: countSQL });
     } else {
       newTotalRecords = record_count;
     }
@@ -48,7 +37,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     try {
       let dataSQL = `SELECT * FROM \`${schema}\`.\`${table}\` `;
       if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-      if (newSorted.length) dataSQL += `ORDER BY \`${newSorted[0].id}\` ${newSorted[0].desc ? 'DESC' : 'ASC'}`;
+      if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
       dataSQL += ` OFFSET ${page * pageSize} FETCH ${pageSize}`;
 
       newData = await queryInstance(
@@ -82,7 +71,6 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     newEntityAttributes,
     hashAttribute,
     dataTableColumns,
-    newSorted,
     error: fetchError === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError,
   };
 };

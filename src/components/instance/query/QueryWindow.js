@@ -1,13 +1,11 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { Input, Button, Row, Col, CardBody, Card } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router';
 
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 const QueryWindow = ({ setQuery, query }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
   const submitRef = createRef();
@@ -37,10 +35,7 @@ const QueryWindow = ({ setQuery, query }) => {
   }, [formState]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div id="query-window">
         <span className="floating-card-header">sql query</span>
         <Card className="mt-3 mb-4">
