@@ -1,8 +1,8 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ auth, url, username, password = undefined, role = undefined }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'alter_user',
       role,
       username,
@@ -10,5 +10,5 @@ export default async ({ auth, url, username, password = undefined, role = undefi
       active: true,
     },
     auth,
-    url
-  );
+    url,
+  });

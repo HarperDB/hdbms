@@ -38,13 +38,11 @@ const ConfigIndex = () => {
   const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
   const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
 
-  const refreshSubscriptions = () => {
+  useEffect(() => {
     if (auth && customer_id && stripe_id) {
       getPrepaidSubscriptions({ auth, customer_id, stripe_id });
     }
-  };
-
-  useEffect(refreshSubscriptions, [auth, customer_id, stripe_id]);
+  }, [auth, customer_id, stripe_id]);
 
   return instanceAction && instanceAction !== 'Restarting' ? (
     <Loader header={`${instanceAction} Instance`} spinner />

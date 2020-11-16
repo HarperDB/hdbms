@@ -30,7 +30,7 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       operation.schema = item;
     }
 
-    const result = await queryInstance(operation, auth, url);
+    const result = await queryInstance({ operation, auth, url });
 
     if (result.error) {
       toggleConfirmDropItem(false);

@@ -1,8 +1,8 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ auth, role, username, password, url }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'add_user',
       role,
       username,
@@ -10,5 +10,5 @@ export default async ({ auth, role, username, password, url }) =>
       active: true,
     },
     auth,
-    url
-  );
+    url,
+  });

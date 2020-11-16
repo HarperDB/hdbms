@@ -34,7 +34,7 @@ const SystemInfo = () => {
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
-      await systemInformation({ auth, url, signal: controller.signal, refresh: !!systemInfo });
+      await systemInformation({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo });
       if (isMounted) setLoading(false);
     };
 

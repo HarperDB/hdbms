@@ -1,12 +1,12 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ auth, key, company, url }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'set_license',
       key,
       company,
     },
     auth,
-    url
-  );
+    url,
+  });

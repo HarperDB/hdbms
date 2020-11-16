@@ -5,6 +5,7 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
+import useInterval from 'use-interval';
 
 import config from '../../config';
 import appState from '../../functions/state/appState';
@@ -61,6 +62,8 @@ const InstancesIndex = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
+
+  useInterval(() => instances?.length && instances.some((i) => i.status === 'CREATE_IN_PROGRESS') && refreshInstances(), config.refresh_content_interval);
 
   useEffect(() => {
     if (mounted && instances && isOrgOwner) {

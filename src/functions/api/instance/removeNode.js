@@ -1,11 +1,11 @@
 import queryInstance from '../queryInstance';
 
 export default async ({ compute_stack_id, auth, url }) =>
-  queryInstance(
-    {
+  queryInstance({
+    operation: {
       operation: 'remove_node',
       name: compute_stack_id,
     },
     auth,
-    url
-  );
+    url,
+  });

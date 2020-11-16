@@ -64,8 +64,10 @@ const BrowseIndex = () => {
           history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
           break;
         default:
+          if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {
+            setTableState(defaultTableState);
+          }
           setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
-          setTableState(defaultTableState);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

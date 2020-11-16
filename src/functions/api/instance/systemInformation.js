@@ -2,7 +2,12 @@ import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
 export default async ({ auth, url, signal, refresh, is_local }) => {
-  const result = await queryInstance({ operation: 'system_information' }, auth, url, signal);
+  const result = await queryInstance({
+    operation: { operation: 'system_information' },
+    auth,
+    url,
+    signal,
+  });
 
   if (result.error && refresh) {
     return instanceState.update((s) => {
