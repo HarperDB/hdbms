@@ -8,27 +8,28 @@ import instanceState from '../../../functions/state/instanceState';
 
 import config from '../../../config';
 import DataTableHeader from './BrowseDatatableHeader';
-import getTableData from '../../../functions/instance/getTableData';
 import DataTable from '../../shared/DataTable';
+import getTableData from '../../../functions/instance/getTableData';
 
 let controller;
 
-const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableState }) => {
+const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchData = async () => {
-      setLoading(true);
+      if (!tableState.filtered.length) {
+        setLoading(true);
+      }
       controller = new AbortController();
-      const { newData, newTotalPages, newTotalRecords, newSorted, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -37,9 +38,6 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
         page: tableState.page,
         auth,
         url,
-        is_local,
-        compute_stack_id,
-        customer_id,
         signal: controller.signal,
       });
       if (isMounted) {
@@ -50,7 +48,6 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
             tableData: newData,
             totalPages: newTotalPages,
             totalRecords: newTotalRecords,
-            sorted: newSorted,
             newEntityAttributes,
             hashAttribute,
             dataTableColumns,
@@ -60,20 +57,14 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
       }
     };
 
-    if (auth) fetchData();
+    fetchData();
 
     return () => {
       controller?.abort();
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate]);
-
-  useEffect(() => {
-    if (activeTable) {
-      setLastUpdate(Date.now());
-    }
-  }, [activeTable]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate, activeTable]);
 
   useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
@@ -85,7 +76,7 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
         autoRefresh={tableState.autoRefresh}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
-        toggleFilter={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, page: 0, showFilter: !tableState.showFilter })}
+        toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
@@ -97,10 +88,10 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable, defaultTableS
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}
-            sorted={tableState.sorted}
+            sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
-            onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
-            onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
+            onFilteredChange={(value) => setTableState({ ...tableState, page: 0, filtered: value })}
+            onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
             onRowClick={(rowData) => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import useAsyncEffect from 'use-async-effect';
+import React, { useState, useEffect } from 'react';
 import useInterval from 'use-interval';
 import { Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router';
 
 import config from '../../../config';
 import instanceState from '../../../functions/state/instanceState';
@@ -24,7 +22,6 @@ const defaultTableState = {
   filtered: [],
   sorted: [],
   page: 0,
-  loading: false,
   totalPages: 1,
   pageSize: 20,
   autoRefresh: false,
@@ -35,74 +32,78 @@ const defaultTableState = {
 let controller;
 
 const Datatable = ({ query }) => {
-  const { customer_id, compute_stack_id } = useParams();
   const [lastUpdate, setLastUpdate] = useState();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [tableState, setTableState] = useState(defaultTableState);
   const [showChartModal, setShowChartModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useAsyncEffect(() => {
-    if (query.query) {
-      setTableState({ ...defaultTableState, reload: true });
-    } else {
-      setTableState({ ...tableState, tableData: false, error: false, message: false, reload: false });
-    }
-  }, [query.query]);
+  const cancel = () => {
+    if (controller) controller.abort();
+    setTableState({ ...defaultTableState, reload: true });
+    setLoading(false);
+  };
 
-  useAsyncEffect(
-    async () => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
       if (query.query && query.lastUpdate) {
         if (controller) controller.abort();
         controller = new AbortController();
-        setTableState({ ...tableState, loading: true });
+        setLoading(true);
+        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal });
+        setLoading(false);
 
-        const response = await getQueryData({ query: query.query.replace(/\n/g, ' ').trim(), auth, url, signal: controller.signal, is_local, compute_stack_id, customer_id });
-
-        if (response.error) {
-          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, loading: false, error: true });
+        if (response.error && response.message === 'Aborted') {
+          setTableState({ ...tableState, message: false, error: false });
+        } else if (response.error) {
+          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, error: true });
         } else if (response.message) {
-          setTableState({ ...tableState, message: response.message, loading: false, error: false });
-        } else {
+          setTableState({ ...tableState, message: response.message, error: false });
+        } else if (isMounted) {
           setTableState({
             ...tableState,
-            tableData: response.tableData,
-            totalRecords: response.totalRecords,
-            dataTableColumns: response.dataTableColumns,
+            ...response,
             totalPages: Math.ceil((response.tableData?.length || 20) / 20),
-            loading: false,
             error: false,
             message: false,
             sorted: [],
           });
         }
       }
-    },
-    () => {
-      if (controller) controller.abort();
-    },
-    [query, lastUpdate]
-  );
+    };
+
+    fetchData();
+
+    return () => {
+      controller?.abort();
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, lastUpdate]);
+
+  useEffect(() => {
+    if (query.query) {
+      setTableState({ ...defaultTableState, reload: true });
+    } else {
+      setTableState({ ...tableState, tableData: false, error: false, message: false, reload: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query.query]);
 
   useInterval(() => {
-    if (tableState.autoRefresh && !tableState.loading) setLastUpdate(Date.now());
+    if (tableState.autoRefresh && loading) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
-  return tableState.reload ? (
-    <EmptyPrompt message="Executing Query" />
-  ) : tableState.message ? (
-    <EmptyPrompt error={tableState.error} message={tableState.message} accessErrors={tableState.access_errors} />
-  ) : tableState.tableData && !tableState.tableData.length ? (
-    <EmptyPrompt message="No records" />
+  return loading || tableState.message || tableState.access_errors ? (
+    <EmptyPrompt error={tableState.error} accessErrors={tableState.access_errors} loading={loading} message={tableState.message || 'Executing Query'} cancel={cancel} />
   ) : tableState.tableData?.length ? (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <DataTableHeader
         totalRecords={tableState.totalRecords}
-        loading={tableState.loading}
+        loading={loading}
         showFilter={tableState.showFilter}
         filtered={tableState.filtered}
         toggleFilter={(newValues) => setTableState({ ...tableState, ...newValues })}
@@ -114,14 +115,14 @@ const Datatable = ({ query }) => {
       <Card className="my-3">
         <CardBody className="react-table-holder">
           <DataTable
-            columns={tableState.dataTableColumns}
-            data={tableState.tableData}
+            columns={tableState.dataTableColumns || []}
+            data={tableState.tableData || []}
             currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}
             sorted={tableState.sorted}
-            loading={tableState.loading && !tableState.autoRefresh}
+            loading={loading && !tableState.autoRefresh}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}

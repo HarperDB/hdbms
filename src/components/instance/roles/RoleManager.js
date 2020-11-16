@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router-dom';
 
 import EntityManagerForm from './RoleManagerForm';
 import EntityManagerRow from './RoleManagerRow';
@@ -10,7 +9,6 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -22,10 +20,7 @@ const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
   const sortedRoles = items && [...items].sort((a, b) => (a.role < b.role ? -1 : 1));
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="entity-manager">
         <EntityManagerHeader
           items={items}

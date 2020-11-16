@@ -3,7 +3,6 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router';
 
 import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
@@ -18,7 +17,6 @@ import IopsInfoModal from '../../shared/IopsInfoModal';
 let controller;
 
 const SystemInfo = () => {
-  const { customer_id } = useParams();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -52,10 +50,7 @@ const SystemInfo = () => {
   useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>host system</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />

@@ -65,10 +65,7 @@ const Add = () => {
   useEffect(fetchRoles, [fetchRoles]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <span className="floating-card-header">add user</span>
       {formState.processing ? (
         <FormStatus className="my-3" height={cardHeight} status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />

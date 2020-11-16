@@ -55,10 +55,7 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
   }, [formState]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Card className="instance">
         {flipState && ( // don't render the forms unless the card is flipped, as the autocomplete icon shows through
           <CardBody>

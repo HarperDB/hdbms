@@ -129,13 +129,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
 
   useInterval(() => {
     if (instanceData.retry) setLastUpdate(Date.now());
-  }, config.refresh_content_interval);
+  }, config.refresh_content_interval / 5);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       {formState.error && formState.error.indexOf('This instance was recently') !== -1 ? (
         <Card className="instance">
           <CardBody>

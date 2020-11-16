@@ -71,10 +71,7 @@ const SetupIndex = () => {
         <span className="floating-card-header">enable clustering</span>
         <Card className="my-3">
           <CardBody>
-            <ErrorBoundary
-              onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-              FallbackComponent={ErrorFallback}
-            >
+            <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
               <Role />
               {cluster_role && <User />}
               {cluster_user && <Port port={12345} />}

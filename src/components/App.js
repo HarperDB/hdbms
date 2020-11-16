@@ -52,8 +52,8 @@ const App = () => {
   const [persistedUser, setPersistedUser] = usePersistedUser({});
   const currentTheme = persistedUser?.theme;
   const loggedIn = auth?.user_id;
-  const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1;
-  const isMaintenance = config.maintenance && isNotEmployee;
+  const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
+  const isMaintenance = version?.maintenance && isNotEmployee;
 
   useEffect(() => {
     changeFavIcon(currentTheme);
@@ -133,7 +133,10 @@ const App = () => {
       </div>
       <div id="app-bg-color" />
       <div id="app-bg-dots" />
-      <div className="version">v{config.studio_version}</div>
+      <div className="version">
+        v{config.studio_version}
+        {version.maintenance && ' - MAINTENANCE MODE'}
+      </div>
     </div>
   );
 };

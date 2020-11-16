@@ -56,10 +56,7 @@ const Subnav = ({ routes = [] }) => {
   };
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Navbar className="app-subnav">
         <Nav navbar className="instance-select">
           <SelectDropdown

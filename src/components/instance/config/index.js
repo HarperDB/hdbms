@@ -18,7 +18,7 @@ import addError from '../../../functions/api/lms/addError';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
 const ConfigIndex = () => {
-  const { customer_id, compute_stack_id } = useParams();
+  const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -51,10 +51,7 @@ const ConfigIndex = () => {
   ) : (
     <Row id="config">
       <Col xs="12">
-        <ErrorBoundary
-          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-          FallbackComponent={ErrorFallback}
-        >
+        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
           <Details />
         </ErrorBoundary>
       </Col>
@@ -77,10 +74,7 @@ const ConfigIndex = () => {
           </Row>
           <Card className="my-3">
             <CardBody>
-              <ErrorBoundary
-                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-                FallbackComponent={ErrorFallback}
-              >
+              <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
                 <UpdateRAM setInstanceAction={setInstanceAction} showPrepaidCompute={showPrepaidCompute} />
               </ErrorBoundary>
             </CardBody>
@@ -106,10 +100,7 @@ const ConfigIndex = () => {
           </Row>
           <Card className="my-3">
             <CardBody>
-              <ErrorBoundary
-                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-                FallbackComponent={ErrorFallback}
-              >
+              <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
                 <UpdateDiskVolume setInstanceAction={setInstanceAction} showPrepaidStorage={showPrepaidStorage} />
               </ErrorBoundary>
             </CardBody>
@@ -121,10 +112,7 @@ const ConfigIndex = () => {
           <span className="floating-card-header">remove instance</span>
           <Card className="my-3">
             <CardBody>
-              <ErrorBoundary
-                onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-                FallbackComponent={ErrorFallback}
-              >
+              <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
                 <Remove setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
               </ErrorBoundary>
             </CardBody>
@@ -135,10 +123,7 @@ const ConfigIndex = () => {
         <span className="floating-card-header">restart instance</span>
         <Card className="my-3">
           <CardBody>
-            <ErrorBoundary
-              onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-              FallbackComponent={ErrorFallback}
-            >
+            <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
               <Restart setInstanceAction={setInstanceAction} instanceAction={instanceAction} />
             </ErrorBoundary>
           </CardBody>

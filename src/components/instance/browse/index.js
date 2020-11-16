@@ -35,8 +35,9 @@ const defaultTableState = {
 
 const BrowseIndex = () => {
   const history = useHistory();
-  const { compute_stack_id, schema, table, action, customer_id } = useParams();
-  const structure = useStoreState(instanceState, (s) => s.structure, [compute_stack_id]);
+  const { schema, table, action, customer_id } = useParams();
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
+  const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
   const [instanceAuths] = useInstanceAuth({});
@@ -50,7 +51,6 @@ const BrowseIndex = () => {
     if (structure) {
       const schemas = Object.keys(structure);
       const tables = Object.keys(structure?.[schema] || {});
-      const activeTable = structure?.[schema]?.[table];
 
       switch (true) {
         case !schemas.length && history.location.pathname !== '/browse':
@@ -64,7 +64,8 @@ const BrowseIndex = () => {
           history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
           break;
         default:
-          setEntities({ schemas, tables, activeTable });
+          setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
+          setTableState(defaultTableState);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,10 +74,7 @@ const BrowseIndex = () => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <ErrorBoundary
-          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-          FallbackComponent={ErrorFallback}
-        >
+        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
           <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
           {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showForm} />}
           <StructureReloader centerText label="refresh schemas and tables" />
@@ -86,16 +84,13 @@ const BrowseIndex = () => {
         <hr />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        <ErrorBoundary
-          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-          FallbackComponent={ErrorFallback}
-        >
+        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
           {schema && table && action === 'csv' && entities.activeTable ? (
             <CSVUpload />
           ) : schema && table && action && entities.activeTable ? (
             <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
           ) : schema && table && entities.activeTable ? (
-            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} defaultTableState={defaultTableState} />
+            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
           ) : (
             <EmptyPrompt message={emptyPromptMessage} />
           )}

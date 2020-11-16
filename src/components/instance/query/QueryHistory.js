@@ -8,7 +8,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
 const QueryHistory = ({ setQuery, query }) => {
-  const { customer_id, compute_stack_id } = useParams();
+  const { compute_stack_id } = useParams();
   const [queries, setQueries] = useQueryHistory({});
 
   useEffect(() => {
@@ -21,10 +21,7 @@ const QueryHistory = ({ setQuery, query }) => {
   }, [query]);
 
   return (
-    <ErrorBoundary
-      onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id, compute_stack_id })}
-      FallbackComponent={ErrorFallback}
-    >
+    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div id="query-history">
         <Row className="floating-card-header">
           <Col xs="9">query history (click to load)</Col>

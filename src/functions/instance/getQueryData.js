@@ -1,8 +1,8 @@
 import sql from '../api/instance/sql';
 
-export default async ({ query, auth, url, signal, is_local, compute_stack_id, customer_id }) => {
+export default async ({ query, auth, url, signal }) => {
   try {
-    const response = await sql({ sql: query, auth, url, signal, is_local, compute_stack_id, customer_id });
+    const response = await sql({ sql: query, auth, url, signal });
 
     if (response.error) {
       return {

@@ -10,10 +10,6 @@
       }
     }
 
-    .version {
-      color: $color-grey;
-    }
-
     .navbar-nav {
       .active-org {
         background: $gradient-white-lightgrey;
@@ -335,7 +331,7 @@
     }
   }
 
-  #dashboard {
+  #charts {
     .instructions {
       color: $color-darkgrey;
     }
@@ -343,5 +339,9 @@
     .dashboard-divider {
       background: $lighter-grey-overlay;
     }
+  }
+
+  .version {
+    color: $color-darkgrey !important;
   }
 }
