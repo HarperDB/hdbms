@@ -19,16 +19,3 @@
     white-space: nowrap;
   }
 }
-
-.instance {
-  &.card {
-    .copyable-text-holder {
-      margin: 10px 0;
-
-      .text-container {
-        font-size: 12px !important;
-        padding-top: 1px;
-      }
-    }
-  }
-}

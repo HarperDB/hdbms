@@ -87,7 +87,7 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
 
   return is_being_modified ? (
     <Card className="error">
-      <CardBody>this instance is being modified. please wait.</CardBody>
+      <CardBody>instance updating. please wait.</CardBody>
     </Card>
   ) : (
     <>

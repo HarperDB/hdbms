@@ -59,7 +59,14 @@
         }
       }
 
+      .copyable-text-holder {
+        margin: 8px 0 12px;
 
+        .text-container {
+          font-size: 12px !important;
+          padding-top: 1px;
+        }
+      }
 
 
       .card-front-status-row {
