@@ -42,7 +42,7 @@ const ResetPassword = () => {
       {formState.processing ? (
         <Loader header="resetting password" spinner relative />
       ) : formState.success ? (
-        <Loader header="success!" body="check the provided email for a password reset link." links={[{ to: '/', text: 'Go to Sign In', className: 'text-center' }]} relative />
+        <Loader header="success!" body="check the provided email for a temporary password." links={[{ to: '/', text: 'Go to Sign In', className: 'text-center' }]} relative />
       ) : (
         <>
           <Card className="mb-3">
