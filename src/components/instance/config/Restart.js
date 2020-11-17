@@ -16,9 +16,9 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const status = useStoreState(instanceState, (s) => s.status);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
+  const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -53,12 +53,12 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
     <Card className="error">
       <CardBody>
         <i className="fa fa-spin fa-spinner mr-2" />
-        this instance is being restarted. please wait.
+        instance restarting. please wait.
       </CardBody>
     </Card>
-  ) : status && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(status) ? (
+  ) : is_being_modified ? (
     <Card className="error">
-      <CardBody>this instance is being modified. please wait.</CardBody>
+      <CardBody>instance updating. please wait.</CardBody>
     </Card>
   ) : (
     <>

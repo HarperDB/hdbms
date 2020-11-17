@@ -24,6 +24,8 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       } else {
         const result = await userInfo({ auth: { user, pass }, url, is_local, compute_stack_id, customer_id });
 
+        console.log(result);
+
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
@@ -33,9 +35,6 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
             instance_id,
             instanceAuth: { user, pass },
             url,
-            is_local,
-            compute_stack_id,
-            customer_id,
           });
 
           if (handleCloudInstanceUsernameChangeResult) {

@@ -76,8 +76,8 @@ const Logs = () => {
             <Col xs="3" className="text-bold">
               date
             </Col>
-            <Col xs="6" className="text-right text-danger text-bold">
-              {!loading && logsError ? <span>log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
+            <Col xs="6" className="text-right text-bold">
+              {!loading && logsError ? <span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
             </Col>
           </Row>
           <hr className="mt-1 mb-0" />
