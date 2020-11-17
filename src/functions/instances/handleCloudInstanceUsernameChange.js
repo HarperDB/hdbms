@@ -11,8 +11,6 @@ export default async ({ instance_id, instanceAuth, url }) => {
     url,
   });
 
-  console.log(roles);
-
   if (roles.error || !roles.length) {
     return false;
   }
