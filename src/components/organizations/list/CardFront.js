@@ -68,7 +68,8 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
               ) : null}
             </Col>
           </Row>
-          <div className="org-status">Org ID: {customer_id}</div>
+          <div className="org-status">&nbsp;</div>
+          <CardFrontStatusRow label="ORG ID" isReady value={customer_id} bottomDivider />
           <CardFrontStatusRow textClass="text-bold" label="ROLE" isReady value={status === 'accepted' ? 'USER' : status.toUpperCase()} bottomDivider />
           <CardFrontStatusRow label="INSTANCES" isReady value={total_instance_count || '...'} />
           <div className="action-buttons">
