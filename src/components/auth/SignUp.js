@@ -20,7 +20,7 @@ const SignUp = () => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       const newFormState = await handleSignup({ formData });
-      if (!auth && newFormState) setFormState(newFormState);
+      if (!auth.email && newFormState) setFormState(newFormState);
     }
   }, [formState]);
 
