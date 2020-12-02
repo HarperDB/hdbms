@@ -1,6 +1,5 @@
 import isEmail from '../util/isEmail';
 import addCustomer from '../api/lms/addCustomer';
-import checkSubdomain from '../api/lms/checkSubdomain';
 import isAlphaNumeric from '../util/isAlphaNumeric';
 import getUser from '../api/lms/getUser';
 
@@ -26,14 +25,6 @@ export default async ({ formData }) => {
   if (subdomain.length > 16) {
     return {
       error: 'subdomain: max 16 characters',
-    };
-  }
-
-  const subdomainResponse = await checkSubdomain({ subdomain });
-
-  if (subdomainResponse.result) {
-    return {
-      error: 'Subdomain is not available',
     };
   }
 

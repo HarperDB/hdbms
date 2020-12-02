@@ -1,5 +1,4 @@
 import addOrg from '../api/lms/addOrg';
-import checkSubdomain from '../api/lms/checkSubdomain';
 import isAlphaNumeric from '../util/isAlphaNumeric';
 
 export default async ({ formData, auth }) => {
@@ -18,14 +17,6 @@ export default async ({ formData, auth }) => {
   if (subdomain.length > 16) {
     return {
       error: 'subdomain: max 16 characters',
-    };
-  }
-
-  const subdomainResponse = await checkSubdomain({ subdomain });
-
-  if (subdomainResponse.result) {
-    return {
-      error: 'Subdomain is not available',
     };
   }
 
