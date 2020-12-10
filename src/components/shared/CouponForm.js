@@ -71,7 +71,7 @@ const CouponForm = () => {
             invalid={!!formState.error}
             disabled={formState.submitted}
             placeholder="coupon code"
-            onChange={(e) => setFormData({ coupon_code: e.target.value })}
+            onChange={(e) => setFormData({ coupon_code: e.target.value.toUpperCase() })}
           />
         </Col>
         <Col md="6">

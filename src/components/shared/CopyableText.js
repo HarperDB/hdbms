@@ -17,22 +17,24 @@ const CopyableText = ({ text, beforeText, afterText }) => {
 
   return (
     <Row noGutters className="copyable-text-holder">
-      {text && (
-        <>
-          {canCopyToClipboard && (
-            <Col className="copy-icon">
-              <Button title="Copy this value" onClick={copyURL} color="link">
-                <i className="fa fa-copy text-small" />
-              </Button>
-            </Col>
-          )}
-          <Col className="text-container">
+      {canCopyToClipboard && text && (
+        <Col className="copy-icon">
+          <Button title="Copy this value" onClick={copyURL} color="link">
+            <i className="fa fa-copy text-small" />
+          </Button>
+        </Col>
+      )}
+      <Col className="text-container">
+        {text ? (
+          <>
             {beforeText}
             {text}
             {afterText}
-          </Col>
-        </>
-      )}
+          </>
+        ) : (
+          <span>&nbsp;</span>
+        )}
+      </Col>
     </Row>
   );
 };

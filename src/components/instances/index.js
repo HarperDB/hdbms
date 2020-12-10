@@ -63,7 +63,7 @@ const InstancesIndex = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
 
-  useInterval(() => instances?.length && instances.some((i) => i.status === 'CREATE_IN_PROGRESS') && refreshInstances(), config.refresh_content_interval);
+  useInterval(() => instances?.length && instances.some((i) => i.status === 'CREATE_IN_PROGRESS') && refreshInstances(), config.refresh_content_interval / 5);
 
   useEffect(() => {
     if (mounted && instances && isOrgOwner) {

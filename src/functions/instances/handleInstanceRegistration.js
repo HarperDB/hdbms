@@ -8,20 +8,13 @@ import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChan
 
 export default async ({ auth, customer_id, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
   try {
-    let registration = await registrationInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
+    let registration = await registrationInfo({ auth: instanceAuth, url });
 
     if (registration.error && registration.message === 'Login failed' && !is_local) {
-      const result = await handleCloudInstanceUsernameChange({
-        instance_id,
-        instanceAuth,
-        url,
-        is_local,
-        compute_stack_id,
-        customer_id,
-      });
+      const result = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
 
       if (result) {
-        registration = await registrationInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
+        registration = await registrationInfo({ auth: instanceAuth, url });
       } else {
         return {
           status: 'LOGIN FAILED',
@@ -74,23 +67,9 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       };
     }
 
-    const fingerprint = await getFingerprint({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
-    const license = await createLicense({
-      auth,
-      compute_stack_id,
-      customer_id,
-      fingerprint,
-    });
-
-    const apply = await setLicense({
-      auth: instanceAuth,
-      key: license.key,
-      company: license.company.toString(),
-      url,
-      is_local,
-      compute_stack_id,
-      customer_id,
-    });
+    const fingerprint = await getFingerprint({ auth: instanceAuth, url });
+    const license = await createLicense({ auth, compute_stack_id, customer_id, fingerprint });
+    const apply = await setLicense({ auth: instanceAuth, key: license.key, company: license.company.toString(), url });
 
     if (apply.error) {
       return {
@@ -101,13 +80,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       };
     }
 
-    restartInstance({
-      auth: instanceAuth,
-      url,
-      is_local,
-      compute_stack_id,
-      customer_id,
-    });
+    restartInstance({ auth: instanceAuth, url });
 
     return {
       status: 'APPLYING LICENSE',

@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "1.6.9",
+  "version": "1.6.10",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -43,9 +43,6 @@
     "use-persisted-state": "^0.3.0",
     "whatwg-fetch": "^3.2.0"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -60,7 +57,7 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.0.5",

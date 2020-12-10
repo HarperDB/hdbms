@@ -11,7 +11,7 @@ import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './CardInstanceUpdateRole';
 
 const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
-  const [formState, setFormState] = useState({});
+  const [formState, setFormState] = useState();
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
@@ -27,7 +27,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
-          setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB' });
+          setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (result.error && result.message === 'Login failed' && !is_local) {
           const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
             instance_id,

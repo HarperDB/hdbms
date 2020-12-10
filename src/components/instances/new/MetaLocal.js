@@ -59,7 +59,7 @@ const MetaLocal = () => {
           } else if (currentUser.error && currentUser.type === 'catch') {
             setFormState({
               error: is_ssl ? "You may need to accept the instance's self-signed cert" : "Can't reach non-SSL instance. Enable SSL?",
-              url: is_ssl ? url : 'https://harperdbhelp.zendesk.com/hc/en-us/articles/115000831074-SSL-with-HarperDB',
+              url: is_ssl ? url : 'https://harperdb.io/developers/documentation/security/configuration/',
             });
           } else {
             const instanceData = {

@@ -34,7 +34,7 @@ const LinksIndex = () => (
         <span className="floating-card-header">SQL Features Matrix</span>
         <Card className="my-3">
           <CardBody>
-            <Button color="purple" block href="https://harperdbhelp.zendesk.com/hc/en-us/articles/115001803433-SQL-Features-Matrix" target="_blank" rel="noopener noreferrer">
+            <Button color="purple" block href="https://harperdb.io/developers/documentation/sql-overview/sql-features-matrix/" target="_blank" rel="noopener noreferrer">
               HarperDB SQL Guides
             </Button>
           </CardBody>
