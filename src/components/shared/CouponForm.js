@@ -4,6 +4,8 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 import appState from '../../functions/state/appState';
 
@@ -16,8 +18,10 @@ let controller;
 
 const CouponForm = () => {
   const { customer_id } = useParams();
+  const { search } = useLocation();
+  const { code } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
-  const [formData, setFormData] = useState({ coupon_code: '' });
+  const [formData, setFormData] = useState({ coupon_code: code });
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
 
@@ -54,7 +58,12 @@ const CouponForm = () => {
   }, [formData]);
 
   useAsyncEffect(
-    () => setMounted(true),
+    () => {
+      setMounted(true);
+      if (formData.coupon_code) {
+        setFormState({ submitted: true });
+      }
+    },
     () => setMounted(false),
     []
   );
@@ -71,7 +80,7 @@ const CouponForm = () => {
             invalid={!!formState.error}
             disabled={formState.submitted}
             placeholder="coupon code"
-            onChange={(e) => setFormData({ coupon_code: e.target.value })}
+            onChange={(e) => setFormData({ coupon_code: e.target.value.toUpperCase() })}
           />
         </Col>
         <Col md="6">

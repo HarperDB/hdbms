@@ -41,6 +41,8 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');
+          setFormState({});
+          setFormData({});
           setFlipState(false);
         } else {
           if (instanceAuth) setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });

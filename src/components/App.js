@@ -1,9 +1,10 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
+import queryString from 'query-string';
 
 import appState from '../functions/state/appState';
 import usePersistedUser from '../functions/state/persistedUser';
@@ -41,6 +42,8 @@ let controller;
 const App = () => {
   const history = useHistory();
   const alert = useAlert();
+  const { search, pathname } = useLocation();
+  const { redirect } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const products = useStoreState(appState, (s) => s.products);
@@ -64,11 +67,16 @@ const App = () => {
   }, [version.studio]);
 
   useEffect(() => {
-    if (window.ORIBI && auth?.email) {
-      window.ORIBI.api('setUserEmail', auth.email);
-    }
-    if (auth?.update_password) {
-      history.push('/update-password');
+    if (auth?.email) {
+      if (window.ORIBI) {
+        window.ORIBI.api('setUserEmail', auth.email);
+      }
+      if (auth?.update_password) {
+        history.push('/update-password');
+      }
+      if (redirect) {
+        history.push(redirect);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth?.email]);
@@ -125,7 +133,7 @@ const App = () => {
                 <Route component={config.maintenance ? Maintenance : SignUp} exact path="/sign-up" />
                 <Route component={isMaintenance ? Maintenance : ResetPassword} exact path="/reset-password" />
                 <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
-                <Redirect to="/" />
+                <Redirect to={`/?redirect=${pathname}${search}`} />
               </Switch>
             </Suspense>
           </ErrorBoundary>

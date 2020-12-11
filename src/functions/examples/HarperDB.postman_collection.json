@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "dd9f6d33-13a6-4c65-8a63-a719d9b4b900",
 		"name": "HarperDB 2.2.0",
-		"description": "• <a href=\"https://studio.harperdb.io/\">HarperDB Studio</a>\n\n• <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/115008571247-Getting-Started\">Installation & Getting Started</a>\n\n• <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/115010248827-How-do-I-login-authenticate-with-HarperDB-\">Guide on Basic Auth</a>\n\n• <a href=\"https://harperdbhelp.zendesk.com/hc/en-us\">HarperDB Support</a>\n\n• <a href=\"https://olddocs.harperdb.io\">Past Release Documentation</a>",
+		"description": "• <a href=\"https://studio.harperdb.io/\">HarperDB Studio</a>\n\n• <a href=\"https://harperdb.io/developers/documentation/install-harperdb/\">Installation & Getting Started</a>\n\n• <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/115010248827-How-do-I-login-authenticate-with-HarperDB-\">Guide on Basic Auth</a>\n\n• <a href=\"https://harperdbhelp.zendesk.com/hc/en-us\">HarperDB Support</a>\n\n• <a href=\"https://olddocs.harperdb.io\">Past Release Documentation</a>",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -4110,7 +4110,7 @@
 								"{{HDB_ENDPOINT}}"
 							]
 						},
-						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n\n<ul>\n<li>\n<b>operation</b> <i> (required) </i> - must always be 'add_role'\n</li>\n\n<li>\n<b>role</b> <i>(required)</i> - name of role you are defining \n</li>\n\n<li>\n<b>permission </b><i>(required)</i> - object defining permissions for users associated with this role\n</li>\n<ul>\n<li>\n<b>permission.super_user</b> <i>(optional)</i> - boolean which, if set to true, gives users associated with this role full access to all operations and methods. If not included, value will be assumed to be false.\n</li>\n</ul>\n</ul>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/360051486534\"> view our help desk article </a>"
+						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n\n<ul>\n<li>\n<b>operation</b> <i> (required) </i> - must always be 'add_role'\n</li>\n\n<li>\n<b>role</b> <i>(required)</i> - name of role you are defining \n</li>\n\n<li>\n<b>permission </b><i>(required)</i> - object defining permissions for users associated with this role\n</li>\n<ul>\n<li>\n<b>permission.super_user</b> <i>(optional)</i> - boolean which, if set to true, gives users associated with this role full access to all operations and methods. If not included, value will be assumed to be false.\n</li>\n</ul>\n</ul>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdb.io/developers/documentation/security/users-roles/\"> view our docs </a>"
 					},
 					"response": [
 						{
@@ -4340,7 +4340,7 @@
 								"{{HDB_ENDPOINT}}"
 							]
 						},
-						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n<br/>\n<ul>\n<li><b>operation</b><i> (required)</i> - must always be 'alter_role'</li>\n\n<li><b>id</b><i> (required)</i> - the id value for the role you are altering</li>\n\n<li><b>role</b><i> (optional)</i> - name value to update on the role you are altering</li>\n\n<li><b>permission </b><i>(required)</i> - object defining permissions for users associated with this role </li>\n\n<ul>\n<li> \n<b>permission.super_user</b> <i>(optional)</i> - boolean which, if set to true, gives users associated with this role full access to all operations and methods. If not included, value will be assumed to be false.\n</li>\n</ul>\n</ul>\n<br/>\n\nTo learn more about managing roles <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/360051486534\">view our help desk article</a>"
+						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n<br/>\n<ul>\n<li><b>operation</b><i> (required)</i> - must always be 'alter_role'</li>\n\n<li><b>id</b><i> (required)</i> - the id value for the role you are altering</li>\n\n<li><b>role</b><i> (optional)</i> - name value to update on the role you are altering</li>\n\n<li><b>permission </b><i>(required)</i> - object defining permissions for users associated with this role </li>\n\n<ul>\n<li> \n<b>permission.super_user</b> <i>(optional)</i> - boolean which, if set to true, gives users associated with this role full access to all operations and methods. If not included, value will be assumed to be false.\n</li>\n</ul>\n</ul>\n<br/>\n\nTo learn more about managing roles <a href=\"https://harperdb.io/developers/documentation/security/users-roles/\"> view our docs</a>"
 					},
 					"response": [
 						{
@@ -4461,7 +4461,7 @@
 								"{{HDB_ENDPOINT}}"
 							]
 						},
-						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n\n<ul>\n<li><b>operation </b><i>(required)</i> - this must always be drop_role </li>\n<li><b>id </b><i>(required) </i> - this is the id of the role you are dropping\n</ul>\n<br/>\nNOTE: You cannot drop a role with associated users.\n<br/>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/360051486534\"> view our help desk article </a>"
+						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n\n<ul>\n<li><b>operation </b><i>(required)</i> - this must always be drop_role </li>\n<li><b>id </b><i>(required) </i> - this is the id of the role you are dropping\n</ul>\n<br/>\nNOTE: You cannot drop a role with associated users.\n<br/>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdb.io/developers/documentation/security/users-roles/\"> view our docs </a>"
 					},
 					"response": [
 						{
@@ -4742,7 +4742,7 @@
 								"{{HDB_ENDPOINT}}"
 							]
 						},
-						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n<ul>\n<li><b>operation </b> <i>(required) </i> - must always be 'user_info'</li>\n</ul>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/360051486534\"> view our help desk article </a>"
+						"description": "<i><b>Operation is restricted to super_user roles only</b></i>\n<ul>\n<li><b>operation </b> <i>(required) </i> - must always be 'user_info'</li>\n</ul>\n<br/>\nTo learn more about managing roles <a href=\"https://harperdb.io/developers/documentation/security/users-roles/\"> view our docs </a>"
 					},
 					"response": [
 						{
@@ -5301,7 +5301,6 @@
 					"response": []
 				}
 			],
-			"description": "The community version of HarperDB has a couple limits:\n\n<ul>\n<li>3 nodes per system</li>\n</ul>\n\nTo remove these limits you need an Enterprise License. \n\nIf you're already part of an enterprise and need to generate a license key, you may run the \"Get Fingerprint\" operation below and use it to generate a key by following <a href=\"https://harperdbhelp.zendesk.com/hc/en-us/articles/115003571393-How-To-Register-HarperDB\">these instructions</a>. You can use the resulting key in the \"Set License\" operation.\n\nTo become an Enterprise customer, please email <a href=\"mailto:license@hareprdb.io\">license@hareprdb.io</a>.",
 			"event": [
 				{
 					"listen": "prerequest",

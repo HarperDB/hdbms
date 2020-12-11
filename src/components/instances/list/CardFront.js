@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useHistory, useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -63,7 +63,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
   useAsyncEffect(async () => {
     if (processing) return false;
 
-    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK', 'CREATE_FAILED'].includes(status)) {
+    if (['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK', 'CREATE_FAILED', 'DELETE_FAILED'].includes(status)) {
       return setInstanceData({
         ...instanceData,
         status:
@@ -73,8 +73,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
             ? 'UPDATING INSTANCE'
             : status === 'CREATE_FAILED'
             ? 'CREATE FAILED'
+            : status === 'DELETE_FAILED'
+            ? 'DELETE FAILED'
             : 'CONFIGURING NETWORK',
-        error: status === 'CREATE_FAILED',
+        error: ['CREATE_FAILED', 'DELETE_FAILED'].includes(status),
         retry: status === 'CONFIGURING_NETWORK',
       });
     }
@@ -88,7 +90,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
     }
 
     if (instanceData.status === 'APPLYING LICENSE') {
-      const restartResult = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
+      const restartResult = await userInfo({ auth: instanceAuth, url });
       if (!restartResult.error) {
         setInstanceData({ ...instanceData, status: 'OK', error: false, retry: false });
       }
@@ -161,16 +163,30 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
                     setFlipState={setFlipState}
                     compute_stack_id={compute_stack_id}
                     instance_name={instance_name}
-                    onlyDelete={instanceData.status === 'CREATE FAILED'}
+                    onlyDelete={['CREATE FAILED', 'DELETE FAILED'].includes(instanceData.status)}
                   />
                 </Col>
               </Row>
-              <CopyableText text={url} />
-              <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
-              <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
-              <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
-              <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-              <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} textClass={iopsClass} />
+
+              {['CREATE FAILED', 'DELETE FAILED'].includes(instanceData.status) ? (
+                <>
+                  <CopyableText />
+                  <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
+                  <CardFrontStatusRow label="IF ISSUE PERSISTS" isReady value="" />
+                  <Button color="danger" block href="https://harperdbhelp.zendesk.com/hc/en-us/requests/new" target="_blank" rel="noopener noreferrer" className="mt-3">
+                    Create A Support Ticket
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <CopyableText text={url} />
+                  <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
+                  <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
+                  <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
+                  <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
+                  <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} textClass={iopsClass} />
+                </>
+              )}
             </CardBody>
           )}
         </Card>
