@@ -2,7 +2,7 @@ import queryLMS from '../queryLMS';
 
 export default async (props) =>
   queryLMS({
-    endpoint: 'v2/addInstance',
+    endpoint: 'addInstance',
     method: 'POST',
     payload: Object.entries({
       customer_id: props.customer_id,
