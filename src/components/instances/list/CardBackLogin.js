@@ -11,7 +11,7 @@ import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './CardInstanceUpdateRole';
 
 const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
-  const [formState, setFormState] = useState();
+  const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
