@@ -1,5 +1,5 @@
 export default {
-  studio_version: '1.6.12',
+  studio_version: '1.6.13',
   env: 'dev',
   stripe_public_key: 'pk_test_XXXXXXXXXXXXXXXXXXXXXX',
   lms_api_url: 'XXXXXXXXXXXXXXXXXXXXXXXX',
