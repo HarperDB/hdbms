@@ -19,7 +19,7 @@ const NewInstanceCard = () => {
           <div className="my-4">
             <i className="fa fa-2x fa-plus-circle new-instance-plus" />
           </div>
-          <span>Import Existing HarperDB Instance</span>
+          <span>Register User-Installed Instance</span>
         </CardBody>
       </Card>
     </Col>

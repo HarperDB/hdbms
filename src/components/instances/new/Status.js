@@ -32,7 +32,8 @@ const Status = ({ closeAndResetModal }) => {
       const error = response.message?.indexOf('Can only have 1 free instance') !== -1 ? 'You are limited to 1 free cloud instance' : response.message;
       setFormState({ submitted: false, error });
     } else {
-      setInstanceAuths({ ...instanceAuths, [response.instance_id]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
+      const returnedComputeStackId = response.compute_stack_id || response.instance_id;
+      setInstanceAuths({ ...instanceAuths, [returnedComputeStackId]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
       await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length });
       alert.success(response.message);
       closeAndResetModal();

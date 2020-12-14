@@ -94,10 +94,10 @@ const Datatable = ({ query }) => {
   }, [query.query]);
 
   useInterval(() => {
-    if (tableState.autoRefresh && loading) setLastUpdate(Date.now());
+    if (tableState.autoRefresh && !loading) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
-  return loading || tableState.message || tableState.access_errors ? (
+  return tableState.message || tableState.access_errors ? (
     <EmptyPrompt error={tableState.error} accessErrors={tableState.access_errors} loading={loading} message={tableState.message || 'Executing Query'} cancel={cancel} />
   ) : tableState.tableData?.length ? (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
