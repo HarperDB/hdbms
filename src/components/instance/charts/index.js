@@ -14,7 +14,6 @@ import PlaceholderChart from './PlaceholderChart';
 import getCharts from '../../../functions/api/lms/getCharts';
 import removeChart from '../../../functions/api/lms/removeChart';
 import config from '../../../config';
-import Loader from '../../shared/Loader';
 
 let controller;
 
@@ -26,7 +25,6 @@ const DashboardIndex = () => {
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const charts = useStoreState(instanceState, (s) => s.charts);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(true);
 
   const handleRemoveChart = useCallback(
@@ -43,21 +41,14 @@ const DashboardIndex = () => {
   );
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchData = async () => {
-      setLoading(true);
       controller = new AbortController();
       await getCharts({ auth, customer_id, compute_stack_id, signal: controller.signal });
-      if (isMounted) setLoading(false);
     };
 
     if (auth) fetchData();
 
-    return () => {
-      controller?.abort();
-      isMounted = false;
-    };
+    return () => controller?.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, lastUpdate]);
 
@@ -75,9 +66,7 @@ const DashboardIndex = () => {
         </CardBody>
       </Card>
       <Row>
-        {loading && !charts?.length ? (
-          <Loader header="loading charts" spinner />
-        ) : charts?.length ? (
+        {charts?.length ? (
           charts.map((chart) => <DashboardChart key={chart.id} chart={chart} removeChart={handleRemoveChart} confirmDelete={confirmDelete} setConfirmDelete={setConfirmDelete} />)
         ) : (
           <Col lg="6" xs="12" className="mb-3">

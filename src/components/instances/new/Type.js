@@ -26,7 +26,7 @@ const Type = () => {
         <Col xs="12" lg="6" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">Create HarperDB Cloud Instance</div>
+              <div className="text-bold text-center">Create New HarperDB Cloud Instance</div>
               <hr />
               <ul>
                 <li>Free License Tier Available!</li>

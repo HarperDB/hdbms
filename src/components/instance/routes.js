@@ -29,6 +29,14 @@ const Routes = ({ super_user }) => {
       icon: 'search',
       iconCode: 'f002',
     },
+    {
+      component: Charts,
+      path: `/o/:customer_id/i/:compute_stack_id/charts`,
+      link: 'charts',
+      label: 'charts',
+      icon: 'chart-line',
+      iconCode: 'f201',
+    },
   ];
 
   const superUserRoutes = [
@@ -55,14 +63,6 @@ const Routes = ({ super_user }) => {
       label: 'roles',
       icon: 'check-square',
       iconCode: 'f14a',
-    },
-    {
-      component: Charts,
-      path: `/o/:customer_id/i/:compute_stack_id/charts`,
-      link: 'charts',
-      label: 'charts',
-      icon: 'chart-line',
-      iconCode: 'f201',
     },
     {
       component: Metrics,
