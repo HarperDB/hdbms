@@ -7,7 +7,7 @@ import Loader from '../shared/Loader';
 
 const ProfileIndex = () => (
   <>
-    <SubNav routes={routes} />
+    <SubNav />
     <Suspense fallback={<Loader header=" " spinner />}>
       <Switch>
         {routes.map((route) => (

@@ -18,7 +18,7 @@ const OrganizationsIndex = () => {
 
   return isOrgOwner ? (
     <main id="organization">
-      <SubNav routes={hydratedRoutes} />
+      <SubNav />
       <Suspense fallback={<Loader header=" " spinner />}>
         <Switch>
           {hydratedRoutes.map((route) => (

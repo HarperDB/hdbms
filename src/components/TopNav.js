@@ -83,17 +83,30 @@ const TopNav = ({ isMaintenance }) => {
                     </NavLink>
                   </NavItem>
                   {showManageIcon && (
-                    <NavItem>
-                      <NavLink
-                        id="manageOrganization"
-                        isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
-                        title="Manage Organization"
-                        to={`/o/${customer.customer_id}/users`}
-                      >
-                        <i className="fa fa-gears d-inline-block" />
-                        <span className="d-none d-lg-inline-block">&nbsp;manage</span>
-                      </NavLink>
-                    </NavItem>
+                    <>
+                      <NavItem>
+                        <NavLink
+                          id="manageOrganizationUsers"
+                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/users`) !== -1}
+                          title="Manage Organization Users"
+                          to={`/o/${customer.customer_id}/users`}
+                        >
+                          <i className="fa fa-gears d-inline-block" />
+                          <span className="d-none d-lg-inline-block">&nbsp;users</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          id="manageOrganizationBilling"
+                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
+                          title="Manage Organization Billing"
+                          to={`/o/${customer.customer_id}/billing`}
+                        >
+                          <i className="fa fa-credit-card-alt d-inline-block" />
+                          <span className="d-none d-lg-inline-block">&nbsp;billing</span>
+                        </NavLink>
+                      </NavItem>
+                    </>
                   )}
                 </div>
               </div>
