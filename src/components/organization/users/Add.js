@@ -69,7 +69,7 @@ const Add = ({ refreshUsers, userEmails }) => {
               />
 
               <Button id="addOrganizationUser" color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
-                Add User
+                Add Org User
               </Button>
             </CardBody>
           </Card>

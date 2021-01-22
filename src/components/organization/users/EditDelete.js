@@ -46,7 +46,7 @@ const EditDelete = () => {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
       <Row>
         <Col xs="4" className="py-1">
-          Delete User
+          Delete Org User
           <br />
           <span className="text-small">user will be removed from this organization</span>
         </Col>

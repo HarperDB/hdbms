@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "1.6.15",
+  "version": "1.6.16",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -34,7 +34,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",
     "react-scripts": "^4.0.1",
-    "react-select": "^3.1.0",
+    "react-select": "^4.0.1",
     "react-table": "^7.6.1",
     "react-toggle": "^4.1.1",
     "reactstrap": "^8.5.1",

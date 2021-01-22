@@ -34,7 +34,7 @@ const UsersIndex = () => {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <span className="floating-card-header">add user</span>
+        <span className="floating-card-header">add org user</span>
         <AddUserForm refreshUsers={refreshUsers} userEmails={users && users.map((u) => u.orgs[0].status !== 'declined' && u)} />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">

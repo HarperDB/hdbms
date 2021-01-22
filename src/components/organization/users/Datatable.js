@@ -71,7 +71,7 @@ const Datatable = () => {
   return (
     <>
       <Row className="floating-card-header">
-        <Col>existing users</Col>
+        <Col>existing org users</Col>
         <Col className="text-right">
           <Button
             color="link"

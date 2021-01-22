@@ -14,7 +14,7 @@ const Edit = ({ userEmail }) => {
   return (
     <>
       <div className="floating-card-header">
-        existing users &gt; edit &gt; <b>{userEmail}</b>
+        existing org users &gt; edit &gt; <b>{userEmail}</b>
       </div>
       <Card className="my-3">
         <CardBody>
