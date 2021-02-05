@@ -22,9 +22,11 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const theme = useStoreState(appState, (s) => s.theme);
+  const [currentValue, setCurrentValue] = useState({});
   const [rowValue, setRowValue] = useState({});
   const [confirmDelete, setConfirmDelete] = useState();
   const [changed, setChanged] = useState(false);
+  const [validJSON, setValidJSON] = useState(false);
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
@@ -38,9 +40,9 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
       delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
       delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
       delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
-      setRowValue(rowData);
+      setCurrentValue(rowData);
     } else {
-      setRowValue(newEntityAttributes || {});
+      setCurrentValue(newEntityAttributes || {});
     }
   }, [hash]);
 
@@ -104,7 +106,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
           <Card className="mb-2 json-editor-holder">
             <CardBody>
               <JSONInput
-                placeholder={rowValue}
+                placeholder={currentValue}
                 height="350px"
                 theme="light_mitsuketa_tribute"
                 colors={{
@@ -116,12 +118,16 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                   number: '#ea4c89',
                   primitive: '#ffa500',
                 }}
+                style={{
+                  warningBox: { display: 'none' },
+                }}
                 locale={locale}
                 width="100%"
-                waitAfterKeyPress={1000}
                 confirmGood={false}
+                waitAfterKeyPress={1000}
                 onChange={(value) => {
-                  setChanged(true);
+                  setValidJSON(!value.error);
+                  setChanged(JSON.stringify(value.jsObject) !== JSON.stringify(currentValue));
                   setRowValue(value.jsObject);
                 }}
               />
@@ -139,7 +145,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
             </Col>
             {action === 'add' ? (
               <Col md="8">
-                <Button disabled={!changed} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                <Button disabled={!changed || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                   <i className="fa fa-save" />
                 </Button>
               </Col>
@@ -164,7 +170,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                   </Button>
                 </Col>
                 <Col md="4">
-                  <Button disabled={!changed} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                  <Button disabled={!changed || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                     <i className="fa fa-save" />
                   </Button>
                 </Col>
