@@ -9,11 +9,12 @@ import appState from '../../../functions/state/appState';
 
 import removePaymentMethod from '../../../functions/api/lms/removePaymentMethod';
 import FormStatus from '../../shared/FormStatus';
+import BadCard from './BadCard';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const CardStatic = ({ setEditingCard, customerCard, formStateHeight }) => {
+const CardStatic = ({ setEditingCard, customerCard, formStateHeight, badCard }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const instances = useStoreState(appState, (s) => s.instances);
@@ -55,6 +56,7 @@ const CardStatic = ({ setEditingCard, customerCard, formStateHeight }) => {
       ) : (
         <Card>
           <CardBody>
+            {badCard && <BadCard />}
             <Row>
               <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
                 card number
