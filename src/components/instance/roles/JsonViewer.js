@@ -16,7 +16,7 @@ import buildPermissionStructure from '../../../functions/instance/buildPermissio
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const JsonViewer = ({ showAttributes }) => {
+const JsonViewer = ({ showAttributes, fetchRoles }) => {
   const alert = useAlert();
   const { compute_stack_id, customer_id, role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
@@ -29,6 +29,8 @@ const JsonViewer = ({ showAttributes }) => {
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
   const [loading, setLoading] = useState(false);
+  const [changed, setChanged] = useState(false);
+  const [validJSON, setValidJSON] = useState(true);
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
@@ -56,16 +58,17 @@ const JsonViewer = ({ showAttributes }) => {
     }
 
     setLoading(true);
+    setChanged(false);
     const permission = { super_user: false, ...newPermissions };
     const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
     setLoading(false);
 
     if (response.error) {
       alert.error(`${response.message} Permissions reset.`);
-      setNewPermissions(activePermissions);
-    } else {
-      alert.success('Permissions updated successfully');
+      return setNewPermissions(activePermissions);
     }
+    alert.success('Permissions updated successfully');
+    fetchRoles();
     return instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
@@ -74,7 +77,7 @@ const JsonViewer = ({ showAttributes }) => {
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <JSONInput
-        placeholder={newPermissions}
+        placeholder={activePermissions}
         height="calc(100vh - 340px)"
         theme="light_mitsuketa_tribute"
         colors={{
@@ -86,14 +89,21 @@ const JsonViewer = ({ showAttributes }) => {
           number: '#ea4c89',
           primitive: '#ffa500',
         }}
+        style={{
+          warningBox: { display: 'none' },
+        }}
         locale={locale}
         width="100%"
         waitAfterKeyPress={1000}
         confirmGood={false}
-        onChange={(value) => setNewPermissions(value.jsObject)}
+        onChange={(value) => {
+          setValidJSON(!value.error);
+          setChanged(JSON.stringify(value.jsObject) !== JSON.stringify(activePermissions));
+          setNewPermissions(value.jsObject);
+        }}
       />
       <hr />
-      <Button id="updateRolePermissions" block color="success" disabled={loading} onClick={submitRecord}>
+      <Button id="updateRolePermissions" block color="success" disabled={loading || !changed || !validJSON} onClick={submitRecord}>
         {loading ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Update Role Permissions</span>}
       </Button>
     </ErrorBoundary>
