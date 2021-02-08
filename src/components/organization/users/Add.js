@@ -4,6 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useHistory } from 'react-router';
 
 import appState from '../../../functions/state/appState';
 
@@ -14,6 +15,7 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 const Add = ({ refreshUsers, userEmails }) => {
+  const history = useHistory();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -49,7 +51,21 @@ const Add = ({ refreshUsers, userEmails }) => {
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
       <div className="mt-3 mb-4">
-        {formState.processing ? (
+        {auth.email_bounced ? (
+          <Card>
+            <CardBody>
+              <b>Unable to Add New Org User</b>
+              <br />
+              <br />
+              Your email address seems to be unreachable. Please update it to ensure billing, upgrade, and other critical system announcements reach you.
+              <br />
+              <br />
+              <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+                Update My Email
+              </Button>
+            </CardBody>
+          </Card>
+        ) : formState.processing ? (
           <FormStatus height={formStateHeight} status="processing" header="Adding User" subhead="The Account Airedale Is A Good Boy" />
         ) : formState.success ? (
           <FormStatus height={formStateHeight} status="success" header="Success!" subhead={formState.success} />

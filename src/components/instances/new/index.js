@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useCallback } from 'react';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Card, CardBody, Button, Row, Col } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -56,7 +56,34 @@ const NewInstanceIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  return auth.email_bounced ? (
+    <Modal id="new-instance-modal" isOpen className={theme} centered fade={false}>
+      <ModalBody>
+        <Card>
+          <CardBody>
+            <div className="p-4 pb-0 text-center">
+              <b>Unable to Create New Instance</b>
+              <br />
+              <br />
+              Your email address seems to be unreachable. Please update it to ensure billing, upgrade, and other critical system announcements reach you.
+            </div>
+            <Row>
+              <Col sm="6">
+                <Button id="cancelNewOrg" onClick={() => history.push('/organizations')} title="Cancel New Org" block className="mt-3" color="grey">
+                  Cancel
+                </Button>
+              </Col>
+              <Col sm="6">
+                <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+                  Update My Email
+                </Button>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      </ModalBody>
+    </Modal>
+  ) : (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">

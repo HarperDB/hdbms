@@ -114,6 +114,7 @@ const TopNav = ({ isMaintenance }) => {
                 <NavLink id="manageProfile" title="Manage My Profile" to="/profile">
                   <i className="fa fa-user" />
                   <span className="d-none d-lg-inline-block">&nbsp;profile</span>
+                  {auth?.email_bounced ? <span className="badge">!</span> : null}
                 </NavLink>
               </NavItem>
             </>

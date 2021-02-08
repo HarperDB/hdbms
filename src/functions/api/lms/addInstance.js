@@ -5,6 +5,7 @@ export default async (props) =>
     endpoint: 'v2/addInstance',
     method: 'POST',
     payload: Object.entries({
+      user_id: props.auth.user_id,
       customer_id: props.customer_id,
       instance_name: props.instance_name,
       is_local: props.is_local,
