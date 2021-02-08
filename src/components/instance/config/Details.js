@@ -46,7 +46,7 @@ const Details = () => {
             <Col md="4" xs="12">
               <ContentContainer header="Instance API Auth Header (this user)" className="mb-3">
                 <div className="nowrap-scroll">
-                  <CopyableText text={authHeader} beforeText="Basic " />
+                  <CopyableText text={authHeader} beforeText="Basic " obscure />
                 </div>
               </ContentContainer>
             </Col>

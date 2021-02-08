@@ -93,7 +93,7 @@ const RolesIndex = () => {
           <Card className="my-3">
             <CardBody className="full-height">
               <Suspense fallback={<Loader header=" " spinner />}>
-                <JSONViewer showAttributes={formState.showAttributes} />
+                <JSONViewer showAttributes={formState.showAttributes} fetchRoles={fetchRoles} />
               </Suspense>
             </CardBody>
           </Card>
