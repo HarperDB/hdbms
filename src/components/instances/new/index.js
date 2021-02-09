@@ -23,11 +23,13 @@ import ConfirmOrderForm from './Confirm';
 import OrderStatus from './Status';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 import getUser from '../../../functions/api/lms/getUser';
+import VisitCard from '../../shared/VisitCard';
 
 const NewInstanceIndex = () => {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const badCard = useStoreState(appState, (s) => s.customer?.current_payment_status?.status === 'invoice.payment_failed');
   const { purchaseStep = 'type', customer_id } = useParams();
   const theme = useStoreState(appState, (s) => s.theme);
   const [, setNewInstance] = useNewInstance({});
@@ -69,14 +71,39 @@ const NewInstanceIndex = () => {
             </div>
             <Row>
               <Col sm="6">
-                <Button id="cancelNewOrg" onClick={() => history.push('/organizations')} title="Cancel New Org" block className="mt-3" color="grey">
+                <Button id="cancelNewInstance" onClick={() => history.push(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
                   Cancel
                 </Button>
               </Col>
               <Col sm="6">
-                <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+                <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-2" color="danger">
                   Update My Email
                 </Button>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      </ModalBody>
+    </Modal>
+  ) : badCard ? (
+    <Modal id="new-instance-modal" isOpen className={theme} centered fade={false}>
+      <ModalBody>
+        <Card>
+          <CardBody>
+            <div className="p-4 pb-0 text-center">
+              <b>The Credit Card On File Has An Issue</b>
+              <br />
+              <br />
+              Please update it to proceed, as well as to ensure uninterrupted service for this organization&apos;s existing instances.
+            </div>
+            <Row>
+              <Col sm="6">
+                <Button id="cancelNewInstance" onClick={() => history.push(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
+                  Cancel
+                </Button>
+              </Col>
+              <Col sm="6">
+                <VisitCard label="Update Credit Card" onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/instances/new`)} />
               </Col>
             </Row>
           </CardBody>
