@@ -1,5 +1,4 @@
 export default ({ theme }) => ({
-  iconStyle: 'solid',
   style: {
     base: {
       iconColor: '#403b8a',
