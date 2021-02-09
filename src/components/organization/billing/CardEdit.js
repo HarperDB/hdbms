@@ -17,7 +17,7 @@ import CreditCardForm from '../../shared/CreditCardForm';
 import FormStatus from '../../shared/FormStatus';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import BadCard from './BadCard';
+import BadCard from '../../shared/BadCard';
 
 const CardEdit = ({ setEditingCard, customerCard, formStateHeight, badCard }) => {
   const { customer_id } = useParams();

@@ -9,7 +9,7 @@ import appState from '../../../functions/state/appState';
 
 import removePaymentMethod from '../../../functions/api/lms/removePaymentMethod';
 import FormStatus from '../../shared/FormStatus';
-import BadCard from './BadCard';
+import BadCard from '../../shared/BadCard';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';

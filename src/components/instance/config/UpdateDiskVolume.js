@@ -11,6 +11,8 @@ import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
 import ChangeSummary from './ChangeSummary';
+import BadCard from '../../shared/BadCard';
+import VisitCard from '../../shared/VisitCard';
 import updateInstance from '../../../functions/api/lms/updateInstance';
 import commaNumbers from '../../../functions/util/commaNumbers';
 
@@ -20,6 +22,7 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const badCard = useStoreState(appState, (s) => s.customer?.current_payment_status?.status === 'invoice.payment_failed');
   const compute = useStoreState(instanceState, (s) => s.compute);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -122,18 +125,21 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
             Try again at: {new Date(new Date(last_volume_resize).getTime() + 21600000).toLocaleTimeString()}
           </CardBody>
         </Card>
+      ) : hasChanged && (formData?.storage_price || compute?.compute_price) && badCard ? (
+        <div className="mt-3">
+          <BadCard />
+          <VisitCard
+            disabled={!hasChanged || formState.submitted}
+            label="Update Credit Card"
+            onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
+          />
+        </div>
       ) : hasChanged && (formData?.storage_price || compute?.compute_price) && !hasCard ? (
-        <Button
-          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/i/${compute_stack_id}/config`)}
-          title="Confirm Instance Details"
-          block
+        <VisitCard
           disabled={!hasChanged || formState.submitted}
-          color="danger"
-          className="mt-2"
-          id="addCardToAccount"
-        >
-          Add Credit Card To Account
-        </Button>
+          label="Add Credit Card To Account"
+          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
+        />
       ) : hasChanged ? (
         <>
           <ChangeSummary
