@@ -3,7 +3,7 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody } from 'reactstrap';
 
 import instanceState from '../../../functions/state/instanceState';
-import getConfig from '../../../functions/api/instance/getConfig';
+import getConfiguration from '../../../functions/api/instance/getConfiguration';
 
 const InstanceConfig = () => {
   const url = useStoreState(instanceState, (s) => s.url);
@@ -12,7 +12,7 @@ const InstanceConfig = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await getConfig({ auth, url });
+      const data = await getConfiguration({ auth, url });
       setState(data);
     };
     if (auth && url) {
