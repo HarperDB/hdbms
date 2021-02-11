@@ -19,16 +19,16 @@ const Profile = () => {
 
   const submit = () => {
     setFormState({ submitted: true });
-    const { firstname, lastname, github_repo } = formData;
-    if (!firstname || !lastname) {
+    const { firstname, lastname, github_repo, email } = formData;
+    if (!firstname || !lastname || !email) {
       setFormState({ error: 'All fields are required' });
     } else if (github_repo && !isURL(github_repo)) {
       setFormState({ error: 'github repo must be a valid URL' });
-    } else if (auth.firstname === firstname && auth.lastname === lastname && auth.github_repo === github_repo) {
+    } else if (auth.firstname === firstname && auth.lastname === lastname && auth.github_repo === github_repo && auth.email === email) {
       setFormState({ error: 'Nothing seems to have changed' });
     } else {
       setFormState({ processing: true });
-      updateUser({ auth, firstname, lastname, user_id: auth.user_id, github_repo });
+      updateUser({ auth, firstname, lastname, user_id: auth.user_id, github_repo, email });
     }
   };
 
@@ -72,10 +72,19 @@ const Profile = () => {
               <CardBody>
                 <Row>
                   <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    email address
+                    {auth?.email_bounced && !auth?.profileSuccess ? <span className="text-danger">please provide a valid email address</span> : <span>{auth.email}</span>}
                   </Col>
                   <Col md="6" xs="12">
-                    <div className="input-static text-center">{auth.email}</div>
+                    <Input
+                      id="email"
+                      type="text"
+                      className={`mb-0 text-center ${auth?.email_bounced && !auth?.profileSuccess ? 'error' : ''}`}
+                      name="email"
+                      placeholder="email address"
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      value={formData.email || ''}
+                      disabled={formState.submitted}
+                    />
                   </Col>
                   <Col xs="12">
                     <hr className="my-2" />

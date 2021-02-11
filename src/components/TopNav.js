@@ -104,6 +104,7 @@ const TopNav = ({ isMaintenance }) => {
                         >
                           <i className="fa fa-credit-card-alt d-inline-block" />
                           <span className="d-none d-lg-inline-block">&nbsp;billing</span>
+                          {customer?.current_payment_status?.status === 'invoice.payment_failed' ? <span className="badge">!</span> : null}
                         </NavLink>
                       </NavItem>
                     </>
@@ -114,6 +115,7 @@ const TopNav = ({ isMaintenance }) => {
                 <NavLink id="manageProfile" title="Manage My Profile" to="/profile">
                   <i className="fa fa-user" />
                   <span className="d-none d-lg-inline-block">&nbsp;profile</span>
+                  {auth?.email_bounced ? <span className="badge">!</span> : null}
                 </NavLink>
               </NavItem>
             </>

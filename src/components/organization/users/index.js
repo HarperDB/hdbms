@@ -10,6 +10,7 @@ import EditUser from './Edit';
 import AddUserForm from './Add';
 import getUsers from '../../../functions/api/lms/getUsers';
 import config from '../../../config';
+import getCustomer from '../../../functions/api/lms/getCustomer';
 
 const UsersIndex = () => {
   const { user_id, customer_id } = useParams();
@@ -24,7 +25,10 @@ const UsersIndex = () => {
   }, [auth, customer_id]);
 
   useEffect(
-    () => refreshUsers(),
+    () => {
+      refreshUsers();
+      getCustomer({ auth, customer_id });
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

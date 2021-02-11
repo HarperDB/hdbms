@@ -17,8 +17,9 @@ import CreditCardForm from '../../shared/CreditCardForm';
 import FormStatus from '../../shared/FormStatus';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
+import BadCard from '../../shared/BadCard';
 
-const CardEdit = ({ setEditingCard, customerCard, formStateHeight }) => {
+const CardEdit = ({ setEditingCard, customerCard, formStateHeight, badCard }) => {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -76,6 +77,7 @@ const CardEdit = ({ setEditingCard, customerCard, formStateHeight }) => {
       ) : (
         <Card>
           <CardBody>
+            {badCard && <BadCard />}
             <CreditCardForm setFormData={setFormData} formData={formData} />
             <hr className="my-2" />
             <Row>

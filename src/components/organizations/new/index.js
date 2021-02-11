@@ -43,7 +43,32 @@ const NewOrgIndex = () => {
   return (
     <Modal id="new-org-modal" isOpen className={theme} centered fade={false}>
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-        {formState.submitted ? (
+        {auth.email_bounced ? (
+          <ModalBody>
+            <Card>
+              <CardBody>
+                <div className="p-4 pb-0 text-center">
+                  <b>Unable to Create New Organization</b>
+                  <br />
+                  <br />
+                  Your email address seems to be unreachable. Please update it to ensure billing, upgrade, and other critical system announcements reach you.
+                </div>
+                <Row>
+                  <Col sm="6">
+                    <Button id="cancelNewOrg" onClick={() => history.push('/organizations')} title="Cancel New Org" block className="mt-3" color="grey">
+                      Cancel
+                    </Button>
+                  </Col>
+                  <Col sm="6">
+                    <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+                      Update My Email
+                    </Button>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </ModalBody>
+        ) : formState.submitted ? (
           <ModalBody>
             <Card>
               <CardBody>

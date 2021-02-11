@@ -7,6 +7,7 @@ export default async ({ auth, email, customer_id }) =>
     payload: {
       email,
       customer_id,
+      user_id: auth.user_id,
     },
     auth,
   });
