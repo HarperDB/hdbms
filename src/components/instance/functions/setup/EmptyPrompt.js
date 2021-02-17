@@ -8,11 +8,7 @@ const EmptyPrompt = ({ headline, description, icon }) => (
       <CardBody>
         <div className="empty-prompt narrow">
           {icon}
-          {headline && (
-            <div className="mt-3">
-              <b>{headline}</b>
-            </div>
-          )}
+          {headline && <div className="mt-3">{headline}</div>}
           <div className="mt-3">{description}</div>
         </div>
       </CardBody>

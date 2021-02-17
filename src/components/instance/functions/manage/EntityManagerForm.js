@@ -8,7 +8,7 @@ import queryInstance from '../../../../functions/api/queryInstance';
 import instanceState from '../../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../../functions/util/isAlphaNumericUnderscore';
-import buildCustomAPI from '../../../../functions/instance/buildCustomAPI';
+import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
@@ -58,7 +58,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => 
       return alert.error(result.message);
     }
 
-    return buildCustomAPI({ auth, url });
+    return buildCustomFunctions({ auth, url });
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);

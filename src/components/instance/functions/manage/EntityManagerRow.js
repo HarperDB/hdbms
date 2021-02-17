@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../../functions/api/queryInstance';
 import instanceState from '../../../../functions/state/instanceState';
-import buildCustomAPI from '../../../../functions/instance/buildCustomAPI';
+import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 
 const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const history = useHistory();
@@ -32,7 +32,7 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping 
       return alert.error(result.message);
     }
 
-    return buildCustomAPI({ auth, url });
+    return buildCustomFunctions({ auth, url });
   };
 
   const selectItemForDrop = () => {

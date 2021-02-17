@@ -2,7 +2,7 @@ import queryInstance from '../queryInstance';
 
 export default async ({ auth, url }) =>
   queryInstance({
-    operation: { operation: 'custom_api_status' },
+    operation: { operation: 'get_custom_functions' },
     auth,
     url,
   });

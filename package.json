@@ -14,6 +14,7 @@
     "lint": "eslint --fix src && npx stylelint --fix \"src/**/*.scss\""
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.0.10",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
     "apexcharts": "^3.20.0",
@@ -63,7 +64,7 @@
     "prettier": "^2.0.5",
     "sass": "^1.28.0",
     "stylelint": "^13.6.1",
-    "stylelint-config-sass-guidelines": "^7.0.0",
+    "stylelint-config-sass-guidelines": "^8.0.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.1.0",
     "stylelint-scss": "^3.18.0"

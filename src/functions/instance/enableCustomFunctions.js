@@ -1,10 +1,10 @@
 import queryInstance from '../api/queryInstance';
 
-export default async ({ username, auth, url }) =>
+export default async ({ auth, url }) =>
   queryInstance({
     operation: {
       operation: 'configure_cluster',
-      CUSTOM_API_USER: username,
+      CUSTOM_FUNCTIONS: true,
     },
     auth,
     url,

@@ -9,7 +9,7 @@ const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './co
 const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
-const Custom = lazy(() => import(/* webpackChunkName: "custom-endpoints" */ './customapi'));
+const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ './functions'));
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 const Routes = ({ super_user }) => {
@@ -66,10 +66,10 @@ const Routes = ({ super_user }) => {
       iconCode: 'f14a',
     },
     {
-      component: Custom,
-      path: `/o/:customer_id/i/:compute_stack_id/custom-api/:endpoint?`,
-      link: 'custom-api',
-      label: 'custom api',
+      component: Functions,
+      path: `/o/:customer_id/i/:compute_stack_id/functions/:endpoint?`,
+      link: 'functions',
+      label: 'functions',
       icon: 'project-diagram',
       iconCode: 'f542',
     },
