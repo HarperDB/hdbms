@@ -4,9 +4,9 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import queryInstance from '../../../../functions/api/queryInstance';
 import instanceState from '../../../../functions/state/instanceState';
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
+import dropCustomFunction from '../../../../functions/api/instance/dropCustomFunction';
 
 const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
   const history = useHistory();
@@ -19,18 +19,15 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping 
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    const operation = {
-      operation: 'drop_custom_api_endpoint',
-      name: item,
-    };
-
-    const result = await queryInstance({ operation, auth, url });
+    const result = await dropCustomFunction({ auth, url, function_name: item });
 
     if (result.error) {
       toggleConfirmDropItem(false);
       setConfirmedDropItem(false);
       return alert.error(result.message);
     }
+
+    alert.success(result.message);
 
     return buildCustomFunctions({ auth, url });
   };

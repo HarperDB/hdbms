@@ -4,11 +4,26 @@ import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import queryInstance from '../../../../functions/api/queryInstance';
 import instanceState from '../../../../functions/state/instanceState';
 
-import isAlphaNumericUnderscore from '../../../../functions/util/isAlphaNumericUnderscore';
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
+import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
+
+const generateFunctionTemplate = (entityName) => `'use strict'
+
+module.exports = async (server, options) => {
+  server.route({
+    url: '/${entityName}',
+    method: 'GET',
+    handler: async (request, response) => {
+      // your code here
+      // use an hdbCore method: options.hdbCore.searchByHash('dev', 'dog', [9], ['*'])
+      // make a call to the hdbAPI: await options.hdbApiClient.request({})
+      // return using the response object: response.send({ dog1, dog2 })
+    }
+  })
+}
+`;
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => {
   const history = useHistory();
@@ -24,33 +39,20 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => 
     e.preventDefault();
     let error = false;
 
+    console.log(entityName);
+
     if (!entityName || items.includes(entityName)) {
       toggleNameError(true);
       error = true;
-    }
-
-    if (entityName && !isAlphaNumericUnderscore(entityName)) {
-      toggleNameError(true);
-      error = true;
-      alert.error('You may only use alphanumeric characters or underscores.');
-    }
-
-    if (entityName && entityName.match(/^[0-9]+$/)) {
-      toggleNameError(true);
-      error = true;
-      alert.error('You may not provide a number as a name.');
     }
 
     if (error) return false;
 
     setAddingItem(true);
 
-    const operation = {
-      operation: `create_custom_api_endpoint`,
-      name: entityName,
-    };
+    const function_content = generateFunctionTemplate(entityName);
 
-    const result = await queryInstance({ operation, auth, url });
+    const result = await setCustomFunction({ auth, url, function_name: entityName, function_content });
 
     if (result.error) {
       setAddingItem(false);
