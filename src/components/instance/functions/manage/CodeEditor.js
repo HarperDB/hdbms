@@ -25,11 +25,11 @@ const CodeEditor = ({ refreshApi }) => {
     const response = await setCustomFunction({ auth, url, function_name: endpoint, function_content: code });
 
     if (response.error) {
-      alert.error('There was an error updating this function. Please try again later.');
-      setEditorToFile();
+      alert.error(response.message);
     } else {
-      alert.success('Function updated successfully');
+      alert.success(response.message);
     }
+    setEditorToFile();
   };
 
   useEffect(() => setEditorToFile(), [endpoint, setEditorToFile]);
