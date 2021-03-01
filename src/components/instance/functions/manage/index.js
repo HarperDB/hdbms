@@ -24,7 +24,7 @@ const ManageIndex = ({ refreshApi, loading }) => {
     if (!endpoint && custom_functions?.endpoints?.length) {
       history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/${custom_functions?.endpoints[0]}`);
     }
-  }, [endpoint, custom_functions?.endpoints, customer_id, compute_stack_id]);
+  }, [endpoint, custom_functions?.endpoints, customer_id, compute_stack_id, history]);
 
   return (
     <>

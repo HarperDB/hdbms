@@ -1,14 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import Editor from '@monaco-editor/react';
-import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import { useStoreState } from 'pullstate';
+import { useAlert } from 'react-alert';
 
+import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import instanceState from '../../../../functions/state/instanceState';
+import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 
 const CodeEditor = ({ refreshApi }) => {
   const { endpoint } = useParams();
-  const custom_api = useStoreState(instanceState, (s) => s.custom_api);
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const [code, setCode] = useState();
+  const alert = useAlert();
+
+  const setEditorToFile = useCallback(async () => {
+    const endpoint_code = await getCustomFunction({ auth, url, function_name: endpoint });
+    setCode(endpoint_code?.message);
+  }, [auth, url, endpoint, setCode]);
+
+  const handleSubmit = async () => {
+    const response = await setCustomFunction({ auth, url, function_name: endpoint, function_content: code });
+
+    if (response.error) {
+      alert.error('There was an error updating this function. Please try again later.');
+      setEditorToFile();
+    } else {
+      alert.success('Function updated successfully');
+    }
+  };
+
+  useEffect(() => setEditorToFile(), [endpoint, setEditorToFile]);
 
   return (
     <>
@@ -22,8 +46,22 @@ const CodeEditor = ({ refreshApi }) => {
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody className="code-editor-holder">
-          <Editor height="100%" defaultLanguage="javascript" defaultValue="// some comment" theme="vs-dark" />
+        <CardBody>
+          <div className="code-editor-holder">
+            <Editor height="100%" defaultLanguage="javascript" value={code} theme="vs-dark" onChange={setCode} />
+          </div>
+          <Row>
+            <Col md="6" className="mt-2">
+              <Button id="reset" block color="grey" onClick={setEditorToFile}>
+                <i className="fa fa-undo" />
+              </Button>
+            </Col>
+            <Col md="6" className="mt-2">
+              <Button id="addEditItem" onClick={handleSubmit} block color="success">
+                <i className="fa fa-save" />
+              </Button>
+            </Col>
+          </Row>
         </CardBody>
       </Card>
     </>

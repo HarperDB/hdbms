@@ -11,7 +11,6 @@ import buildCustomFunctions from '../../../functions/instance/buildCustomFunctio
 const ClusteringIndex = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -22,7 +21,7 @@ const ClusteringIndex = () => {
       await buildCustomFunctions({ auth, url });
       setLoading(false);
     }
-  }, [auth, url, compute_stack_id]);
+  }, [auth, url]);
 
   useEffect(refreshApi, [refreshApi]);
 

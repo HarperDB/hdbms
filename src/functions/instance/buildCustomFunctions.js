@@ -1,10 +1,10 @@
 import instanceState from '../state/instanceState';
-import customApiStatus from '../api/instance/customFunctionsStatus';
-import customApiEndpoints from '../api/instance/getCustomFunctions';
+import customFunctionsStatus from '../api/instance/customFunctionsStatus';
+import getCustomFunctions from '../api/instance/getCustomFunctions';
 
 const buildCustomFunctions = async ({ auth, url }) => {
-  const { is_enabled, port } = await customApiStatus({ auth, url });
-  const endpoints = is_enabled ? await customApiEndpoints({ auth, url }) : [];
+  const { is_enabled, port } = await customFunctionsStatus({ auth, url });
+  const endpoints = is_enabled ? await getCustomFunctions({ auth, url }) : [];
 
   const custom_functions = {
     is_enabled,
