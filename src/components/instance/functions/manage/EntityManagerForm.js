@@ -11,18 +11,22 @@ import setCustomFunction from '../../../../functions/api/instance/setCustomFunct
 
 const generateFunctionTemplate = (entityName) => `'use strict'
 
-module.exports = async (server, options) => {
+async function ${entityName} (server, { hdbApiStream, hdbApiClient, hdbCore }) {
   server.route({
     url: '/${entityName}',
     method: 'GET',
     handler: async (request, response) => {
       // your code here
-      // use an hdbCore method: options.hdbCore.searchByHash('dev', 'dog', [9], ['*'])
-      // make a call to the hdbAPI: await options.hdbApiClient.request({})
+      // use an hdbCore method: hdbCore.searchByHash('dev', 'dog', [9], ['*'])
+      // make a call to the hdbAPI: await hdbApiClient.request({})
       // return using the response object: response.send({ dog1, dog2 })
+      response.send({ message: '/${entityName} endpoint has been created' });
     }
   })
 }
+
+module.exports = ${entityName};
+module.exports.autoPrefix = ''
 `;
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => {
@@ -38,8 +42,6 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => 
   const createItem = async (e) => {
     e.preventDefault();
     let error = false;
-
-    console.log(entityName);
 
     if (!entityName || items.includes(entityName)) {
       toggleNameError(true);

@@ -28,8 +28,8 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping 
     }
 
     alert.success(result.message);
-
-    return buildCustomFunctions({ auth, url });
+    await buildCustomFunctions({ auth, url });
+    return history.push(baseUrl);
   };
 
   const selectItemForDrop = () => {
