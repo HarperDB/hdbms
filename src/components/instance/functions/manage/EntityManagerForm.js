@@ -9,24 +9,46 @@ import instanceState from '../../../../functions/state/instanceState';
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 
-const generateFunctionTemplate = (entityName) => `'use strict'
+const generateFunctionTemplate = (entityName) => `'use strict';
 
-async function ${entityName} (server, { hdbApiStream, hdbApiClient, hdbCore }) {
+// add your own dependencies and helper methods within your custom functions directory
+const filter = require('../helpers/filter');
+const authenticator = require('../helpers/authenticator');
+
+module.exports = async (server, { hdbCore, logger }) => {
+  // THIS IS A POST ROUTE WITH AN OPERATION IN THE REQUEST BODY
+  // IT USES THE hdbCore.preValidation HOOK TO PROCESS BASIC OR TOKEN AUTH
+  // IT USES THE hdbCore.request METHOD TO EXECUTE THE VALIDATED REQUEST
   server.route({
     url: '/${entityName}',
+    method: 'POST',
+    preValidation: hdbCore.preValidation,
+    handler: hdbCore.request,
+  })
+  
+  // THIS IS A GET ROUTE
+  // IT USES A CUSTOM preValidation HOOK, "authenticator", TO AUTHORIZE THE REQUEST
+  // IT USES THE hdbCore.requestWithoutAuthentication METHOD TO EXECUTE THE REQUEST
+  // IT USES A CUSTOM FUNCTION, "filter", TO FORMAT THE RESPONSE
+  server.route({
+    url: '/${entityName}/:id',
     method: 'GET',
-    handler: async (request, response) => {
-      // your code here
-      // use an hdbCore method: hdbCore.searchByHash('dev', 'dog', [9], ['*'])
-      // make a call to the hdbAPI: await hdbApiClient.request({})
-      // return using the response object: response.send({ dog1, dog2 })
-      response.send({ message: '/${entityName} endpoint has been created' });
+    preValidation: authenticator,
+    handler: (request) => {
+      // set your request body to any standard HarperDB operation
+      request.body= {
+        operation: 'sql',
+        sql: \`SELECT * FROM dev.dogs WHERE id = \${request.params.id}\`
+      };
+      // await the result of the requestWithoutAuthentication call
+      const result = await hdbCore.requestWithoutAuthentication(request);
+      // return the filtered result
+      return filter(result, ['dog_name', 'owner_name', 'breed']);
     }
   })
 }
 
-module.exports = ${entityName};
-module.exports.autoPrefix = ''
+module.exports.autoPrefix = ''; // YOU CAN USE THIS PREFIX FOR VERSIONS, OR ROOT PATH
 `;
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => {
