@@ -4,17 +4,21 @@ import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { useHistory } from 'react-router';
 
 import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import instanceState from '../../../../functions/state/instanceState';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
 
-const CodeEditor = ({ refreshApi }) => {
-  const { endpoint } = useParams();
+const CodeEditor = ({ refreshCustomFunctions, restarting }) => {
+  const { customer_id, compute_stack_id, endpoint } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const directory = useStoreState(instanceState, (s) => s.custom_functions?.directory);
   const [code, setCode] = useState();
   const alert = useAlert();
+  const history = useHistory();
 
   const setEditorToFile = useCallback(async () => {
     const endpoint_code = await getCustomFunction({ auth, url, function_name: endpoint });
@@ -23,12 +27,13 @@ const CodeEditor = ({ refreshApi }) => {
 
   const handleSubmit = async () => {
     const response = await setCustomFunction({ auth, url, function_name: endpoint, function_content: code });
-
+    await restartInstance({ auth, url });
     if (response.error) {
       alert.error(response.message);
     } else {
       alert.success(response.message);
     }
+    history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/${endpoint}/restarting`);
     setEditorToFile();
   };
 
@@ -37,11 +42,16 @@ const CodeEditor = ({ refreshApi }) => {
   return (
     <>
       <Row className="floating-card-header">
-        <Col>edit endpoint file &gt; {endpoint}</Col>
+        <Col>
+          edit{' '}
+          <i>
+            {directory}/routes/{endpoint}.js
+          </i>
+        </Col>
         <Col className="text-right">
-          <Button color="link" onClick={refreshApi} className="mr-2">
+          <Button disabled={restarting} color="link" onClick={refreshCustomFunctions} className="mr-2">
             <span className="mr-2">refresh endpoints</span>
-            <i title="Refresh Roles" className="fa fa-refresh" />
+            <i title="Refresh Endpoint Files" className="fa fa-refresh" />
           </Button>
         </Col>
       </Row>

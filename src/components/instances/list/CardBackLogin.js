@@ -10,7 +10,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './CardInstanceUpdateRole';
 
-const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
+const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -22,7 +22,7 @@ const CardBackLogin = ({ customer_id, compute_stack_id, url, is_ssl, setFlipStat
       if (!user || !pass) {
         setFormState({ error: 'All fields are required' });
       } else {
-        const result = await userInfo({ auth: { user, pass }, url, is_local, compute_stack_id, customer_id });
+        const result = await userInfo({ auth: { user, pass }, url });
 
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });

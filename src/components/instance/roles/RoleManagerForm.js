@@ -39,7 +39,7 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
       },
     });
     setEntity({});
-    listRoles({ auth, url, is_local, compute_stack_id, customer_id });
+    listRoles({ auth, url });
     return setTimeout(() => history.push(`${baseUrl}/${response.id}`), 100);
   };
 

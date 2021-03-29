@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Redirect, Route, Switch, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -19,6 +19,7 @@ import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
+import registrationInfo from '../../functions/api/instance/registrationInfo';
 
 const InstanceIndex = () => {
   const { compute_stack_id, customer_id } = useParams();
@@ -33,7 +34,7 @@ const InstanceIndex = () => {
   const instances = useStoreState(appState, (s) => s.instances);
   const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const restarting = useStoreState(instanceState, (s) => s.restarting);
   const alert = useAlert();
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
@@ -45,7 +46,7 @@ const InstanceIndex = () => {
     }
   }, [auth, customer_id]);
 
-  useEffect(() => {
+  useAsyncEffect(() => {
     if (auth && customer_id) {
       getAlarms({ auth, customer_id });
     }
@@ -61,6 +62,7 @@ const InstanceIndex = () => {
     if (thisInstance && instanceAuth) {
       instanceState.update(() => Object.entries(thisInstance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
       const { error } = await buildInstanceStructure({ auth: instanceAuth, url: thisInstance.url });
+      await registrationInfo({ auth: instanceAuth, url: thisInstance.url });
       setLoadingInstance(false);
       if (error) {
         setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
@@ -84,11 +86,14 @@ const InstanceIndex = () => {
 
   useInterval(async () => {
     if (url) {
-      const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
-      if (result.error) {
+      const result = await userInfo({ auth: instanceAuth, url });
+      if (result.error && !restarting) {
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
-      } else {
+      } else if (!result.error) {
+        instanceState.update((s) => {
+          s.restarting = false;
+        });
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuth, super: result.role?.permission?.super_user } });
       }
     }

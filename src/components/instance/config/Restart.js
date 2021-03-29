@@ -4,7 +4,6 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { useAlert } from 'react-alert';
-import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../functions/state/instanceState';
 import userInfo from '../../../functions/api/instance/userInfo';
@@ -12,11 +11,9 @@ import config from '../../../config';
 import restartInstance from '../../../functions/api/instance/restartInstance';
 
 const Restart = ({ instanceAction, setInstanceAction }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const [formState, setFormState] = useState({});
@@ -26,7 +23,7 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
     const { submitted } = formState;
     if (submitted) {
       setInstanceAction('Restarting');
-      const response = await restartInstance({ auth, url, is_local, compute_stack_id, customer_id });
+      const response = await restartInstance({ auth, url });
 
       if (response.error) {
         setInstanceAction(false);
@@ -36,7 +33,7 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
   }, [formState]);
 
   const checkInstance = async () => {
-    const response = await userInfo({ auth, url, is_local, compute_stack_id, customer_id });
+    const response = await userInfo({ auth, url });
     if (!response.error) {
       setFormData({});
       setFormState({});

@@ -60,7 +60,7 @@ const JsonViewer = ({ showAttributes, fetchRoles }) => {
     setLoading(true);
     setChanged(false);
     const permission = { super_user: false, ...newPermissions };
-    const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
+    const response = await alterRole({ permission, id: role_id, auth, url });
     setLoading(false);
 
     if (response.error) {

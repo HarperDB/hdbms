@@ -12,11 +12,10 @@ import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 
 const User = () => {
-  const { compute_stack_id, customer_id } = useParams();
+  const { compute_stack_id } = useParams();
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
 
@@ -32,7 +31,7 @@ const User = () => {
       } else if (!isAlphaUnderscore(username)) {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
-        const response = await createClusterUser({ username, password, role: cluster_role, auth, url, is_local, compute_stack_id, customer_id });
+        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
         if (!response.error) {
           buildNetwork({ auth, url, instances, compute_stack_id });
         } else {

@@ -5,6 +5,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import Setup from './setup';
 import Manage from './manage';
+import ComingSoon from './comingsoon';
 import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/buildCustomFunctions';
 
@@ -12,32 +13,34 @@ const ClusteringIndex = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
+  const restarting = useStoreState(instanceState, (s) => s.restarting);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const refreshApi = useCallback(async () => {
-    if (auth && url) {
+  const refreshCustomFunctions = useCallback(async () => {
+    if (auth && url && !restarting) {
       setLoading(true);
       await buildCustomFunctions({ auth, url });
       setLoading(false);
     }
-  }, [auth, url]);
+  }, [auth, url, restarting]);
 
-  useEffect(refreshApi, [refreshApi]);
+  useEffect(refreshCustomFunctions, [refreshCustomFunctions]);
 
   useEffect(() => {
     if (custom_functions) {
       setShowManage(!!custom_functions.is_enabled && !!custom_functions.port);
-      setLoading(false);
     }
   }, [custom_functions]);
 
   return !custom_functions ? (
-    <Loader header="loading custom api" spinner />
+    <Loader header="loading custom functions" spinner />
+  ) : custom_functions.error ? (
+    <ComingSoon />
   ) : showManage ? (
-    <Manage refreshApi={refreshApi} loading={loading} setLoading={setLoading} />
+    <Manage refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
   ) : (
-    <Setup refreshApi={refreshApi} loading={loading} setLoading={setLoading} />
+    <Setup refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
   );
 };
 

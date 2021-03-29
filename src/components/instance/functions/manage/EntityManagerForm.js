@@ -8,6 +8,7 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
 
 const generateFunctionTemplate = (entityName) => `'use strict';
 
@@ -51,7 +52,7 @@ module.exports = async (server, { hdbCore, logger }) => {
 module.exports.autoPrefix = ''; // YOU CAN USE THIS PREFIX FOR VERSIONS, OR ROOT PATH
 `;
 
-const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => {
+const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting }) => {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -84,7 +85,8 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => 
       return alert.error(result.message);
     }
 
-    return buildCustomFunctions({ auth, url });
+    await buildCustomFunctions({ auth, url });
+    return restartInstance({ auth, url });
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);
@@ -120,7 +122,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl }) => 
           </Button>
         ) : (
           <>
-            <Button id="createItem" color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
+            <Button id="createItem" color="success" className="round mr-1" disabled={restarting} onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button id="toggleCreate" color="black" className="round" onClick={() => toggleCreate(false)}>

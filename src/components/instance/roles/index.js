@@ -26,17 +26,16 @@ const RolesIndex = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
 
   const fetchRoles = useCallback(async () => {
     setLoading(true);
-    await listRoles({ auth, url, is_local, compute_stack_id, customer_id });
+    await listRoles({ auth, url });
     await registrationInfo({ auth, url });
     setLoading(false);
-  }, [auth, url, is_local, compute_stack_id, customer_id]);
+  }, [auth, url]);
 
   useEffect(() => {
     if (roles) {

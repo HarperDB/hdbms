@@ -28,7 +28,7 @@ const defaultTableState = {
 
 let controller;
 
-const Datatable = () => {
+const Datatable = ({ lastUpdate, setLastUpdate }) => {
   const { customer_id } = useParams();
   const history = useHistory();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -36,7 +36,6 @@ const Datatable = () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const [tableState, setTableState] = useState(defaultTableState);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(true);
   const sortParam = tableState.sorted[0]?.id;
   const sortDesc = tableState.sorted[0]?.desc;
 

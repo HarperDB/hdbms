@@ -47,8 +47,8 @@ const buildCurrent = ({ extantTablePermissions, attributes, showAttributes }) =>
     }),
 });
 
-export default async ({ auth, url, currentRolePermissions, version, is_local, compute_stack_id, customer_id, showAttributes }) => {
-  const dbResponse = await describeAll({ auth, url, is_local, compute_stack_id, customer_id });
+export default async ({ auth, url, currentRolePermissions, version, showAttributes }) => {
+  const dbResponse = await describeAll({ auth, url });
   const permissionStructure = {};
   const [major, minor, patch] = version.split('.');
   const legacy = version !== '2.0.000' && major <= 2 && minor <= 1 && patch <= 2;

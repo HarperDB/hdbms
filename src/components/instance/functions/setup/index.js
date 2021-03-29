@@ -14,12 +14,10 @@ import EmptyPrompt from './EmptyPrompt';
 
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
-import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
-import userInfo from '../../../../functions/api/instance/userInfo';
-import enableCustomAPI from '../../../../functions/instance/enableCustomFunctions';
+import enableCustomFunctions from '../../../../functions/instance/enableCustomFunctions';
 
-const SetupIndex = () => {
+const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -28,24 +26,15 @@ const SetupIndex = () => {
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
-      await enableCustomAPI({ auth, url });
+      await enableCustomFunctions({ auth, url });
       if (window.ORIBI) window.ORIBI.api('track', 'enabled custom api');
       await restartInstance({ auth, url });
-      setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
 
-  const checkInstance = useCallback(async () => {
-    const response = await userInfo({ auth, url });
-    if (!response.error) {
-      await buildCustomFunctions({ auth, url });
-      setFormState({});
-    }
-  }, [auth, url]);
-
   useInterval(() => {
-    if (formState.restarting) {
-      checkInstance();
+    if (restarting) {
+      refreshCustomFunctions();
     }
   }, 5000);
 

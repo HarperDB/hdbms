@@ -7,8 +7,9 @@ import { useAlert } from 'react-alert';
 import instanceState from '../../../../functions/state/instanceState';
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import dropCustomFunction from '../../../../functions/api/instance/dropCustomFunction';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
 
-const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
+const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping, restarting }) => {
   const history = useHistory();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -29,6 +30,7 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping 
 
     alert.success(result.message);
     await buildCustomFunctions({ auth, url });
+    await restartInstance({ auth, url });
     return history.push(baseUrl);
   };
 
@@ -50,7 +52,7 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping 
   const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item}`));
 
   return (
-    <Row key={item} title={`View${isActive ? 'ing' : ''} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive} tabIndex="0">
+    <Row key={item} title={`View${isActive ? 'ing' : ''} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={restarting ? null : handleSetActive} tabIndex="0">
       <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
       <Col className="item-action">
         {confirmedDropItem ? (

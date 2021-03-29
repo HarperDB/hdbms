@@ -12,13 +12,12 @@ import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
 const EditPassword = () => {
-  const { customer_id, compute_stack_id, username } = useParams();
+  const { username } = useParams();
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const updatePassword = async () => {
     const { password } = formData;
@@ -27,11 +26,11 @@ const EditPassword = () => {
       setFormState({ error: 'password is required' });
     } else {
       setFormState({ submitted: true });
-      const response = await alterUser({ auth, url, username, password, is_local, compute_stack_id, customer_id });
+      const response = await alterUser({ auth, url, username, password });
       setFormData({});
       if (response.message.indexOf('updated') !== -1) {
         alert.success('password updated');
-        listUsers({ auth, url, is_local, compute_stack_id, customer_id });
+        listUsers({ auth, url });
         setFormState({});
       } else {
         alert.error(response.message);

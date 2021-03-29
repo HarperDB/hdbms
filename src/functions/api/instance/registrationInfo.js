@@ -10,6 +10,7 @@ export default async ({ auth, url }) => {
   const data = result.error ? {} : result;
 
   instanceState.update((s) => {
+    s.useRoleIdInsteadOfRoleName = data.version.substr(0, 2) === '2.';
     s.registration = data;
   });
 
