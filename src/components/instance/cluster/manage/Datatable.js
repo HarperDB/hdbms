@@ -36,12 +36,12 @@ const Datatable = ({ refreshNetwork, loading }) => {
         <Col className="text-right">
           <Button color="link" onClick={refreshNetwork} className="mr-2">
             <span className="mr-2">refresh network</span>
-            <i title="Refresh Roles" className="fa fa-refresh" />
+            <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
         </Col>
       </Row>
       <Card className="my-3">
-        <CardBody className="react-table-holder">
+        <CardBody className={`react-table-holder ${loading ? 'loading' : ''}`}>
           {tableData.length ? (
             <DataTable
               columns={dataTableColumns}
@@ -51,7 +51,6 @@ const Datatable = ({ refreshNetwork, loading }) => {
               totalPages={tableState.totalPages}
               showFilter={tableState.showFilter}
               sorted={tableState.sorted}
-              loading={loading}
               onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
               onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
               onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}

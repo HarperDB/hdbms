@@ -11,7 +11,7 @@ import instanceState from '../../../../functions/state/instanceState';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 
-const CodeEditor = ({ refreshCustomFunctions, restarting }) => {
+const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
   const { customer_id, compute_stack_id, endpoint } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -51,7 +51,7 @@ const CodeEditor = ({ refreshCustomFunctions, restarting }) => {
         <Col className="text-right">
           <Button disabled={restarting} color="link" onClick={refreshCustomFunctions} className="mr-2">
             <span className="mr-2">refresh endpoints</span>
-            <i title="Refresh Endpoint Files" className="fa fa-refresh" />
+            <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
         </Col>
       </Row>

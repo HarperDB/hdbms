@@ -13,7 +13,7 @@ import EmptyPrompt from './EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
-const ManageIndex = ({ refreshCustomFunctions, restarting }) => {
+const ManageIndex = ({ refreshCustomFunctions, restarting, loading }) => {
   const { customer_id, endpoint } = useParams();
   const history = useHistory();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -38,7 +38,7 @@ const ManageIndex = ({ refreshCustomFunctions, restarting }) => {
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">
           {endpoint ? (
-            <CodeEditor refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
+            <CodeEditor refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} loading={loading} />
           ) : (
             <EmptyPrompt refreshCustomFunctions={refreshCustomFunctions} headline={`Please ${custom_functions.endpoints.length ? 'choose' : 'create'} an endpoint at left`} />
           )}

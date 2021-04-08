@@ -38,7 +38,7 @@ const ClusteringIndex = () => {
   ) : custom_functions.error ? (
     <ComingSoon />
   ) : showManage ? (
-    <Manage refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
+    <Manage refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} loading={loading} />
   ) : (
     <Setup refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
   );

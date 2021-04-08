@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
