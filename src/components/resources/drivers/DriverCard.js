@@ -11,9 +11,10 @@ const DriverCard = ({ icon, name, docs, urls }) => (
       <Card className="integration-driver-card">
         <CardBody className="pt-3">
           <b className="d-block">{name}</b>
-          <div className="d-block text-truncate">
-            <a className="text-small text-darkgrey" href={docs ? `http://cdn.cdata.com/help/FHE/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
-              {docs ? `http://cdn.cdata.com/help/FHE/${docs}/default.htm` : urls[0].link}
+          <div className="d-block text-small text-truncate mt-1">
+            docs:{' '}
+            <a className="text-darkgrey" href={docs ? `http://cdn.cdata.com/help/FHF/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
+              {docs ? `http://cdn.cdata.com/help/FHF/${docs}/default.htm` : urls[0].link}
             </a>
           </div>
           <i className={`card-icon fa fa-lg fa-${icon} text-darkgrey`} />
