@@ -15,10 +15,9 @@ import isNumeric from '../../../functions/util/isNumeric';
 import config from '../../../config';
 
 const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, seriesAttributes, user_id }, removeChart, confirmDelete, setConfirmDelete }) => {
-  const { compute_stack_id, customer_id } = useParams();
+  const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
-  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const theme = useStoreState(appState, (s) => s.theme);
   const canDelete = useStoreState(appState, (s) => s.auth?.user_id === user_id);
   const [chartData, setChartData] = useState(false);
@@ -40,7 +39,7 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
       setLoading(true);
       if (controller) controller.abort();
       controller = new AbortController();
-      const newChartData = await sql({ sql: query, auth, url, is_local, compute_stack_id, customer_id, signal: controller.signal });
+      const newChartData = await sql({ sql: query, auth, url, signal: controller.signal });
 
       if (!newChartData.error && newChartData.length) {
         const columns = Object.keys(newChartData[0]);

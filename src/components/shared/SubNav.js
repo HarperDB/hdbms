@@ -12,13 +12,7 @@ import addError from '../../functions/api/lms/addError';
 const SubNav = ({ routes = [] }) => {
   const history = useHistory();
   const location = useLocation();
-
   const currentRoute = routes?.find((r) => r.link === location.pathname) || routes[0];
-  const activeRoute = {
-    label: currentRoute?.label,
-    value: currentRoute?.link,
-    iconCode: currentRoute?.iconCode,
-  };
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
@@ -42,8 +36,8 @@ const SubNav = ({ routes = [] }) => {
                 width="200px"
                 onChange={({ value }) => history.push(value)}
                 options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode }))}
-                value={activeRoute}
-                defaultValue={activeRoute.value}
+                value={{ ...currentRoute, value: currentRoute?.link }}
+                defaultValue={currentRoute?.link}
                 isSearchable={false}
                 isClearable={false}
                 styles={{

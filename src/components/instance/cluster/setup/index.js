@@ -47,17 +47,17 @@ const SetupIndex = () => {
         customer_id,
       });
       if (window.ORIBI) window.ORIBI.api('track', 'enabled clustering');
-      await restartInstance({ auth, url, is_local, compute_stack_id, customer_id });
+      await restartInstance({ auth, url });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
 
   const checkInstance = useCallback(async () => {
-    const response = await userInfo({ auth, url, is_local, compute_stack_id, customer_id });
+    const response = await userInfo({ auth, url });
     if (!response.error) {
       buildNetwork({ auth, url, instances, compute_stack_id });
     }
-  }, [auth, url, is_local, compute_stack_id, customer_id, instances]);
+  }, [auth, url, compute_stack_id, instances]);
 
   useInterval(() => {
     if (formState.restarting) {

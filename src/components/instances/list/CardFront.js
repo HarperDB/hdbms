@@ -49,7 +49,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
     if (!instanceAuth) {
       setFlipState('login');
     } else if (instanceData.status === 'OK') {
-      const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
+      const result = await userInfo({ auth: instanceAuth, url });
       if (result.error) {
         setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
         setFormState({ error: result.message });

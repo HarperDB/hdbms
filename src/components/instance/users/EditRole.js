@@ -14,14 +14,13 @@ import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
 const EditRole = () => {
-  const { customer_id, compute_stack_id, username } = useParams();
+  const { username } = useParams();
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const roles = useStoreState(instanceState, (s) => s.roles.map((r) => ({ label: r.role, value: r.id })));
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
 
   const updateRole = async () => {
@@ -33,11 +32,11 @@ const EditRole = () => {
       setFormState({ error: 'user already has this role' });
     } else {
       setFormState({ submitted: true });
-      const response = await alterUser({ auth, url, username, role: newRole, is_local, compute_stack_id, customer_id });
+      const response = await alterUser({ auth, url, username, role: newRole });
 
       if (response.message.indexOf('updated') !== -1) {
         alert.success('user role updated');
-        listUsers({ auth, url, is_local, compute_stack_id, customer_id });
+        listUsers({ auth, url });
         setFormState({});
       } else {
         alert.error(response.message);

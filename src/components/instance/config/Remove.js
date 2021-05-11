@@ -53,7 +53,7 @@ const Remove = ({ setInstanceAction }) => {
   ) : (
     <>
       <Input
-        id="instance_name"
+        id="instance_name_remove"
         onChange={(e) => setFormData({ delete_instance_name: e.target.value })}
         type="text"
         title="instance_name"

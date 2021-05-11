@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Button, Card, CardBody } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router';
 
 import instanceState from '../../../functions/state/instanceState';
 
@@ -14,20 +13,16 @@ import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listRoles from '../../../functions/api/instance/listRoles';
-import listUsers from '../../../functions/api/instance/listUsers';
 
-const Add = () => {
-  const { compute_stack_id, customer_id } = useParams();
+const Add = ({ setLastUpdate }) => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const cardHeight = '224px';
-
-  const fetchRoles = useCallback(() => listRoles({ auth, url, is_local, compute_stack_id, customer_id }), [auth, url, is_local, compute_stack_id, customer_id]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -43,10 +38,10 @@ const Add = () => {
         setFormState({ error: 'User already exists' });
       } else {
         setFormState({ processing: true });
-        const response = await addUser({ auth, role, username, password, url, is_local, compute_stack_id, customer_id });
+        const response = await addUser({ auth, role, username, password, url });
 
         if (response.message.indexOf('successfully') !== -1) {
-          listUsers({ auth, url, is_local, compute_stack_id, customer_id });
+          setLastUpdate(Date.now());
           setFormState({ success: response.message });
         } else {
           setFormState({ error: response.message });
@@ -58,11 +53,9 @@ const Add = () => {
 
   useAsyncEffect(() => setFormState({}), [formData]);
 
-  useAsyncEffect(() => {
-    if (roles) setFormData({ ...formData, role: false });
-  }, [roles]);
+  useAsyncEffect(() => roles && setFormData({ ...formData, role: false }), [roles]);
 
-  useEffect(fetchRoles, [fetchRoles]);
+  useEffect(() => listRoles({ auth, url }), [auth, url]);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
@@ -98,7 +91,7 @@ const Add = () => {
               className="react-select-container"
               classNamePrefix="react-select"
               onChange={({ value }) => setFormData({ ...formData, role: value })}
-              options={roles && roles.map((r) => ({ label: r.role, value: r.id }))}
+              options={roles && roles.map((r) => ({ label: r.role, value: useRoleId ? r.id : r.role }))}
               value={roles && formData.role && roles.find((r) => r.value === formData.role)}
               isSearchable={false}
               isClearable={false}

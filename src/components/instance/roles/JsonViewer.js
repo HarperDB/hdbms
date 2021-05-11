@@ -18,13 +18,12 @@ import addError from '../../../functions/api/lms/addError';
 
 const JsonViewer = ({ showAttributes, fetchRoles }) => {
   const alert = useAlert();
-  const { compute_stack_id, customer_id, role_id } = useParams();
+  const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const version = useStoreState(instanceState, (s) => s.registration?.version);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const theme = useStoreState(appState, (s) => s.theme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
@@ -34,16 +33,8 @@ const JsonViewer = ({ showAttributes, fetchRoles }) => {
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
-      const defaultActivePermissions = await buildPermissionStructure({
-        auth,
-        url,
-        version,
-        currentRolePermissions: roles.find((r) => r.id === role_id).permission,
-        is_local,
-        compute_stack_id,
-        customer_id,
-        showAttributes,
-      });
+      const currentRolePermissions = roles.find((r) => r.id === role_id).permission;
+      const defaultActivePermissions = await buildPermissionStructure({ auth, url, version, currentRolePermissions, showAttributes });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
     }
@@ -60,7 +51,7 @@ const JsonViewer = ({ showAttributes, fetchRoles }) => {
     setLoading(true);
     setChanged(false);
     const permission = { super_user: false, ...newPermissions };
-    const response = await alterRole({ permission, id: role_id, auth, url, is_local, compute_stack_id, customer_id });
+    const response = await alterRole({ permission, id: role_id, auth, url });
     setLoading(false);
 
     if (response.error) {

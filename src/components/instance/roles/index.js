@@ -8,7 +8,6 @@ import instanceState from '../../../functions/state/instanceState';
 import EntityManager from './RoleManager';
 import Loader from '../../shared/Loader';
 import listRoles from '../../../functions/api/instance/listRoles';
-import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));
 
@@ -22,21 +21,20 @@ const defaultState = {
 };
 
 const RolesIndex = () => {
-  const { compute_stack_id, role_id, customer_id } = useParams();
+  const { role_id, customer_id } = useParams();
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const roles = useStoreState(instanceState, (s) => s.roles);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const roles = useStoreState(instanceState, (s) => s.roles, [compute_stack_id]);
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
 
   const fetchRoles = useCallback(async () => {
     setLoading(true);
-    await listRoles({ auth, url, is_local, compute_stack_id, customer_id });
-    await registrationInfo({ auth, url });
+    await listRoles({ auth, url });
     setLoading(false);
-  }, [auth, url, is_local, compute_stack_id, customer_id]);
+  }, [auth, url]);
 
   useEffect(() => {
     if (roles) {
@@ -57,7 +55,7 @@ const RolesIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role_id, roles]);
 
-  useEffect(fetchRoles, [fetchRoles]);
+  useEffect(fetchRoles, [fetchRoles, compute_stack_id]);
 
   return (
     <Row id="roles">

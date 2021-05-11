@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
 
 import { useAlert } from 'react-alert';
 import instanceState from '../../../functions/state/instanceState';
@@ -11,24 +10,22 @@ import dropRole from '../../../functions/api/instance/dropRole';
 import listRoles from '../../../functions/api/instance/listRoles';
 
 const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
-  const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const handleDropItem = async () => {
     if (!isConfirmingDropItem) return false;
 
-    const result = await dropRole({ auth, url, id: item.id, is_local, compute_stack_id, customer_id });
+    const result = await dropRole({ auth, url, id: item.id });
 
     if (result.error) {
       return alert.error(result.message);
     }
 
-    listRoles({ auth, url, is_local, compute_stack_id, customer_id });
+    listRoles({ auth, url });
 
     return isActive ? setTimeout(() => history.push(baseUrl), 100) : false;
   };
