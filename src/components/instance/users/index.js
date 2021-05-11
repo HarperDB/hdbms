@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
@@ -10,14 +10,15 @@ const EditUser = lazy(() => import(/* webpackChunkName: "instance-users-edit" */
 
 const UsersIndex = () => {
   const { username } = useParams();
+  const [lastUpdate, setLastUpdate] = useState(true);
 
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <AddUserForm />
+        <AddUserForm setLastUpdate={setLastUpdate} />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12" className="pb-5">
-        <Suspense fallback={<Loader header=" " spinner />}>{username ? <EditUser /> : <DataTable />}</Suspense>
+        <Suspense fallback={<Loader header=" " spinner />}>{username ? <EditUser /> : <DataTable lastUpdate={lastUpdate} setLastUpdate={setLastUpdate} />}</Suspense>
       </Col>
     </Row>
   );

@@ -35,8 +35,8 @@ const defaultTableState = {
 
 const BrowseIndex = () => {
   const history = useHistory();
-  const { schema, table, action, customer_id } = useParams();
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
+  const { schema, table, action, customer_id, compute_stack_id } = useParams();
+  // const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);

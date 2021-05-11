@@ -13,7 +13,7 @@ import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
 const EditDelete = () => {
-  const { customer_id, compute_stack_id, username } = useParams();
+  const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
   const [formData, setFormData] = useState({});
@@ -21,18 +21,17 @@ const EditDelete = () => {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
 
   const deleteUser = async () => {
     if (formData.delete_username !== username) {
       alert.error('Please type the username to delete this user');
     } else {
       setFormState({ submitted: true });
-      const response = await dropUser({ auth, username, url, is_local, compute_stack_id, customer_id });
+      const response = await dropUser({ auth, username, url });
 
       if (response.message.indexOf('successfully') !== -1) {
         alert.success(response.message);
-        listUsers({ auth, url, is_local, compute_stack_id, customer_id });
+        listUsers({ auth, url });
         setFormState({});
         setTimeout(() => history.push(pathname.replace(`/users/${username}`, '/users')), 0);
       } else {

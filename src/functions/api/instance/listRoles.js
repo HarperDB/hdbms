@@ -7,11 +7,14 @@ export default async ({ auth, url }) => {
     auth,
     url,
   });
+
   const data = Array.isArray(result) ? result : [];
 
+  const roles = [...data].sort((a, b) => (a.role.toLowerCase() > b.role.toLowerCase() ? 1 : -1));
+
   instanceState.update((s) => {
-    s.roles = [...data].sort((a, b) => (a.role.toLowerCase() > b.role.toLowerCase() ? 1 : -1));
+    s.roles = roles;
   });
 
-  return data;
+  return roles;
 };

@@ -33,7 +33,6 @@ const InstanceIndex = () => {
   const instances = useStoreState(appState, (s) => s.instances);
   const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const alert = useAlert();
   const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
@@ -84,7 +83,7 @@ const InstanceIndex = () => {
 
   useInterval(async () => {
     if (url) {
-      const result = await userInfo({ auth: instanceAuth, url, is_local, compute_stack_id, customer_id });
+      const result = await userInfo({ auth: instanceAuth, url });
       if (result.error) {
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
