@@ -1,5 +1,4 @@
 import commaNumbers from '../util/commaNumbers';
-import iopsMapper from './iopsMapper';
 
 const buildRadioSelectStorageOptions = (plans) => {
   const storageOptionsArray = [];
@@ -9,7 +8,7 @@ const buildRadioSelectStorageOptions = (plans) => {
     const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])].filter((s) => !subscription_id || s !== freeTier);
 
     return sizes.map((data_volume_size) => {
-      const iops = iopsMapper[data_volume_size];
+      const iops = 3000;
       const pricing_tier = tiers.find((p) => (p.up_to && data_volume_size <= p.up_to) || !p.up_to);
       const storage_price = subscription_id ? 0 : data_volume_size * (pricing_tier.unit_amount / 100);
       const storage_price_string = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}` : 'FREE';

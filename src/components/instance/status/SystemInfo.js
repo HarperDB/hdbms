@@ -12,7 +12,6 @@ import systemInformation from '../../../functions/api/instance/systemInformation
 import ContentContainer from '../../shared/ContentContainer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-import IopsInfoModal from '../../shared/IopsInfoModal';
 
 let controller;
 
@@ -128,7 +127,7 @@ const SystemInfo = () => {
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal error={iopsAlarms} iops={storage?.iops} />} className="mb-3">
+                <ContentContainer header="Disk IOPS" className="mb-3">
                   <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
                 </ContentContainer>
               </Col>
