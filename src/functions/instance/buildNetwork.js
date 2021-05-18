@@ -35,7 +35,7 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
 
   const network = {
     is_enabled,
-    cluster_role: cluster_role?.id,
+    cluster_role,
     cluster_user: cluster_user?.username,
     inbound_connections: message || !is_enabled ? [] : processConnections(status.inbound_connections),
     outbound_connections: message || !is_enabled ? [] : processConnections(status.outbound_connections),

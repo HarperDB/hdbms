@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/ContentContainer';
 import CopyableText from '../../shared/CopyableText';
-import IopsInfoModal from '../../shared/IopsInfoModal';
 
 const Details = () => {
   const { compute_stack_id } = useParams();
@@ -21,7 +20,7 @@ const Details = () => {
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const authHeader = auth?.user ? `${btoa(`${auth.user}:${auth.pass}`)}` : '...';
-  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} BASE / 3000 BURST`;
+  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
 
   return (
     <>
@@ -84,7 +83,7 @@ const Details = () => {
                   </ContentContainer>
                 </Col>
                 <Col md="2" sm="4" xs="6">
-                  <ContentContainer header="Disk IOPS" subheader={<IopsInfoModal iops={storage?.iops} />} className="mb-3 text-nowrap">
+                  <ContentContainer header="Disk IOPS" className="mb-3 text-nowrap">
                     <div className="nowrap-scroll">{iopsString}</div>
                   </ContentContainer>
                 </Col>
