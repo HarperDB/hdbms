@@ -37,7 +37,14 @@ harperdb install`}
           <Card className="my-3">
             <CardBody className="installation">
               If you need to install HarperDB on a device without access to NPM, you can fetch the installer using the link below.
-              <Button id="downloadCurrentVersion" disabled={!version.location} color="purple" block className="mt-3 mb-4" href={version?.location}>
+              <Button
+                id="downloadCurrentVersion"
+                disabled={!version.number}
+                color="purple"
+                block
+                className="mt-3 mb-4"
+                href={`https://registry.npmjs.org/harperdb/-/harperdb-${version?.number}.tgz`}
+              >
                 Download Install Package
               </Button>
               <hr />
