@@ -4,12 +4,12 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import createClusterUser from '../../../../functions/instance/createClusterUser';
 import instanceState from '../../../../functions/state/instanceState';
 import appState from '../../../../functions/state/appState';
 
 import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
+import createClusterUser from '../../../../functions/instance/createClusterUser';
 
 const User = () => {
   const { compute_stack_id } = useParams();

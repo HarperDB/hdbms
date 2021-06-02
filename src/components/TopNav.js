@@ -91,7 +91,7 @@ const TopNav = ({ isMaintenance }) => {
                           title="Manage Organization Users"
                           to={`/o/${customer.customer_id}/users`}
                         >
-                          <i className="fa fa-gears d-inline-block" />
+                          <i className="fa fa-users d-inline-block" />
                           <span className="d-none d-lg-inline-block">&nbsp;users</span>
                         </NavLink>
                       </NavItem>

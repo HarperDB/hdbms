@@ -55,6 +55,9 @@ const Subnav = ({ routes = [] }) => {
     iconCode: currentRoute?.iconCode,
   };
 
+  const navigate = ({ value, has_auth, is_unavailable }) =>
+    is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : history.push(`/o/${customer_id}/instances/login`);
+
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Navbar className="app-subnav">
@@ -62,9 +65,7 @@ const Subnav = ({ routes = [] }) => {
           <SelectDropdown
             className="react-select-container"
             classNamePrefix="react-select"
-            onChange={({ value, has_auth, is_unavailable }) =>
-              is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : history.push(`/o/${customer_id}/instances/login`)
-            }
+            onChange={navigate}
             options={options || []}
             value={activeOption}
             defaultValue={activeOption.value}

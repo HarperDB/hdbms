@@ -1,6 +1,11 @@
 import queryInstance from '../queryInstance';
+import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url }) =>
+export default async ({ auth, url }) => {
+  instanceState.update((s) => {
+    s.restarting = true;
+  });
+
   queryInstance({
     operation: {
       operation: 'restart',
@@ -8,3 +13,4 @@ export default async ({ auth, url }) =>
     auth,
     url,
   });
+};

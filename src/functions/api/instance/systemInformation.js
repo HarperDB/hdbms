@@ -64,7 +64,7 @@ export default async ({ auth, url, signal, refresh, is_local }) => {
 
   const cpuInfo = `${result.cpu.manufacturer} ${result.cpu.brand}`;
   const cpuCores = `${result.cpu.physicalCores} physical / ${result.cpu.cores} virtual`;
-  const cpuLoad = result.cpu.current_load.currentload;
+  const cpuLoad = result.cpu.current_load.currentLoad || result.cpu.current_load.currentload || 0;
   const cpuStatus = cpuLoad > 90 ? 'danger' : cpuLoad > 75 ? 'warning' : 'success';
 
   const networkTransfered = result.network.stats.reduce((a, b) => a + b.tx_bytes, 0) / B2GB1000;
@@ -73,20 +73,20 @@ export default async ({ auth, url, signal, refresh, is_local }) => {
   const networkLatencyStatus = networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
 
   const systemInfo = {
-    totalMemory: totalMemory.toFixed(2),
-    usedMemory: usedMemory.toFixed(2),
-    freeMemory: freeMemory.toFixed(2),
+    totalMemory: totalMemory?.toFixed(2),
+    usedMemory: usedMemory?.toFixed(2),
+    freeMemory: freeMemory?.toFixed(2),
     memoryStatus,
-    totalDisk: totalDisk.toFixed(2),
-    usedDisk: usedDisk.toFixed(2),
-    freeDisk: freeDisk.toFixed(2),
+    totalDisk: totalDisk?.toFixed(2),
+    usedDisk: usedDisk?.toFixed(2),
+    freeDisk: freeDisk?.toFixed(2),
     diskStatus,
     cpuInfo,
     cpuCores,
-    cpuLoad: cpuLoad.toFixed(2),
+    cpuLoad: cpuLoad?.toFixed(2),
     cpuStatus,
-    networkTransfered: networkTransfered.toFixed(2),
-    networkReceived: networkReceived.toFixed(2),
+    networkTransfered: networkTransfered?.toFixed(2),
+    networkReceived: networkReceived?.toFixed(2),
     networkLatency,
     networkLatencyStatus,
   };
