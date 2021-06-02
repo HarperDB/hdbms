@@ -158,5 +158,12 @@
       }
     }
   }
+
+  &.loading {
+    .action * {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+  }
 }
 

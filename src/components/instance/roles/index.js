@@ -8,6 +8,7 @@ import instanceState from '../../../functions/state/instanceState';
 import EntityManager from './RoleManager';
 import Loader from '../../shared/Loader';
 import listRoles from '../../../functions/api/instance/listRoles';
+import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));
 
@@ -33,6 +34,7 @@ const RolesIndex = () => {
   const fetchRoles = useCallback(async () => {
     setLoading(true);
     await listRoles({ auth, url });
+    await registrationInfo({ auth, url });
     setLoading(false);
   }, [auth, url]);
 

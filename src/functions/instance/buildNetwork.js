@@ -25,11 +25,9 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
   const schema = await describeAll({ auth, url });
   const { structure } = buildInstanceDataStructure(schema);
-
   const roles = await listRoles({ auth, url });
   const users = await listUsers({ auth, url });
   const { is_enabled, node_name, status, message } = await clusterStatus({ auth, url });
-
   const cluster_role = roles.find((r) => r.permission.cluster_user);
   const cluster_user = cluster_role && users.find((u) => u.role === cluster_role.role);
 
