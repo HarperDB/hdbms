@@ -39,11 +39,11 @@ harperdb install`}
               If you need to install HarperDB on a device without access to NPM, you can fetch the installer using the link below.
               <Button
                 id="downloadCurrentVersion"
-                disabled={!version?.number}
+                disabled={!version.number}
                 color="purple"
                 block
                 className="mt-3 mb-4"
-                href={`https://registry.npmjs.org/harperdb/-/harperdb-${version.number}.tgz`}
+                href={`https://registry.npmjs.org/harperdb/-/harperdb-${version?.number}.tgz`}
               >
                 Download Install Package
               </Button>

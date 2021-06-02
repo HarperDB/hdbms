@@ -22,10 +22,11 @@ const defaultState = {
 };
 
 const RolesIndex = () => {
-  const { compute_stack_id, role_id, customer_id } = useParams();
+  const { role_id, customer_id } = useParams();
+  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const roles = useStoreState(instanceState, (s) => s.roles);
+  const roles = useStoreState(instanceState, (s) => s.roles, [compute_stack_id]);
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
@@ -56,7 +57,7 @@ const RolesIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role_id, roles]);
 
-  useEffect(fetchRoles, [fetchRoles]);
+  useEffect(fetchRoles, [fetchRoles, compute_stack_id]);
 
   return (
     <Row id="roles">

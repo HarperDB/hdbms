@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "1.6.22",
+  "version": "1.6.27",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -58,14 +58,14 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.0.5",
     "sass": "^1.28.0",
     "stylelint": "^13.6.1",
     "stylelint-config-sass-guidelines": "^8.0.0",
-    "stylelint-config-standard": "^21.0.0",
+    "stylelint-config-standard": "^22.0.0",
     "stylelint-order": "^4.1.0",
     "stylelint-scss": "^3.18.0"
   }

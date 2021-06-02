@@ -4,7 +4,6 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import createClusterUser from '../../../../functions/instance/createClusterUser';
 import instanceState from '../../../../functions/state/instanceState';
 import appState from '../../../../functions/state/appState';
 
@@ -16,7 +15,8 @@ const User = () => {
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
+  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
+  const cluster_role = useStoreState(instanceState, (s) => (useRoleId ? s.network?.cluster_role.id : s.network?.cluster_role.role));
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
 
   const [formState, setFormState] = useState({});

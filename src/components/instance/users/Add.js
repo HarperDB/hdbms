@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Button, Card, CardBody } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
@@ -19,12 +19,10 @@ const Add = ({ setLastUpdate }) => {
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const useRoleIdInsteadOfRoleName = useStoreState(instanceState, (s) => s.useRoleIdInsteadOfRoleName);
+  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const cardHeight = '224px';
-
-  const fetchRoles = useCallback(() => listRoles({ auth, url }), [auth, url]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;
@@ -55,11 +53,9 @@ const Add = ({ setLastUpdate }) => {
 
   useAsyncEffect(() => setFormState({}), [formData]);
 
-  useAsyncEffect(() => {
-    if (roles) setFormData({ ...formData, role: false });
-  }, [roles]);
+  useAsyncEffect(() => roles && setFormData({ ...formData, role: false }), [roles]);
 
-  useEffect(fetchRoles, [fetchRoles]);
+  useEffect(() => listRoles({ auth, url }), [auth, url]);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
@@ -95,7 +91,7 @@ const Add = ({ setLastUpdate }) => {
               className="react-select-container"
               classNamePrefix="react-select"
               onChange={({ value }) => setFormData({ ...formData, role: value })}
-              options={roles && roles.map((r) => ({ label: r.role, value: useRoleIdInsteadOfRoleName ? r.id : r.role }))}
+              options={roles && roles.map((r) => ({ label: r.role, value: useRoleId ? r.id : r.role }))}
               value={roles && formData.role && roles.find((r) => r.value === formData.role)}
               isSearchable={false}
               isClearable={false}

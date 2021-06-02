@@ -15,7 +15,7 @@ export default async ({ instance_id, instanceAuth, url }) => {
     return false;
   }
 
-  const role = roles.find((r) => r.permission.super_user).id;
+  const { role } = roles.find((r) => r.permission.super_user);
 
   await addUser({
     auth: {

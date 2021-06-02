@@ -7,7 +7,6 @@ import buildClusteringTable from './buildClusteringTable';
 import clusterConfigColumns from './buildClusterConfigColumns';
 import describeAll from '../api/instance/describeAll';
 import buildInstanceDataStructure from './buildInstanceDataStructure';
-import registrationInfo from '../api/instance/registrationInfo';
 
 const processConnections = (connections) =>
   connections
@@ -24,23 +23,17 @@ const processConnections = (connections) =>
 
 const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
   const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-
-  const registration = await registrationInfo({ auth, url });
-  const useRoleIdInsteadOfRoleName = registration?.version?.substr(0, 2) === '2.';
-
   const schema = await describeAll({ auth, url });
   const { structure } = buildInstanceDataStructure(schema);
-
   const roles = await listRoles({ auth, url });
   const users = await listUsers({ auth, url });
   const { is_enabled, node_name, status, message } = await clusterStatus({ auth, url });
-
   const cluster_role = roles.find((r) => r.permission.cluster_user);
   const cluster_user = cluster_role && users.find((u) => u.role === cluster_role.role);
 
   const network = {
     is_enabled,
-    cluster_role: useRoleIdInsteadOfRoleName ? cluster_role?.id : cluster_role?.role,
+    cluster_role,
     cluster_user: cluster_user?.username,
     inbound_connections: message || !is_enabled ? [] : processConnections(status.inbound_connections),
     outbound_connections: message || !is_enabled ? [] : processConnections(status.outbound_connections),

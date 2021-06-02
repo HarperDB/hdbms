@@ -41,9 +41,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
   const iopsClass = alarms && alarms['Disk I/O'] ? 'text-danger' : '';
-  const iopsString = is_local
-    ? 'HARDWARE LIMIT'
-    : `${storage?.iops} / ${alarms && alarms['Disk I/O'] ? `${alarms['Disk I/O']} ALARM${alarms['Disk I/O'] > 1 ? 'S' : ''}` : '3000 BURST'}`;
+  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} ${alarms && alarms['Disk I/O'] ? `/ ${alarms['Disk I/O']} ALARM${alarms['Disk I/O'] > 1 ? 'S' : ''}` : ''}`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {

@@ -60,7 +60,7 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
   ) : (
     <>
       <Input
-        id="instance_name"
+        id="instance_name_restart"
         onChange={(e) => setFormData({ restart_instance_name: e.target.value })}
         type="text"
         title="instance_name"
