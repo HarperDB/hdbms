@@ -9,6 +9,7 @@ import appState from '../../../../functions/state/appState';
 
 import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
+import createClusterUser from '../../../../functions/instance/createClusterUser';
 
 const User = () => {
   const { compute_stack_id } = useParams();
