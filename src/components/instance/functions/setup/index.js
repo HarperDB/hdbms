@@ -52,7 +52,7 @@ const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {formState.restarting ? (
+        {restarting ? (
           <EmptyPrompt description="Configuring Custom Functions" icon={<i className="fa fa-spinner fa-spin" />} />
         ) : custom_functions_port ? (
           <EmptyPrompt
