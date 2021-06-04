@@ -53,12 +53,12 @@ const SystemInfo = () => {
       <Row className="floating-card-header">
         <Col>host system</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-right">
-          <Button color="link" title="Update Metrics" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
+        <Col className="text-md-end">
+          <Button color="link" title="Update Metrics" className="me-2" onClick={() => setLastUpdate(Date.now())}>
             <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
-            <span className="mr-2">auto</span>
+            <span className="me-2">auto</span>
             <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
           </Button>
         </Col>

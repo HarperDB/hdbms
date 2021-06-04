@@ -54,7 +54,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
             <Col xs="10" className="org-name">
               {customer_name}
             </Col>
-            <Col xs="2" className="status-icons text-right">
+            <Col xs="2" className="status-icons text-end">
               {loading ? (
                 <i className="status-icon fa fa-spinner fa-spin text-purple" />
               ) : status === 'accepted' ? (
@@ -73,8 +73,8 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
           <CardFrontStatusRow label="INSTANCES" isReady value={total_instance_count || '...'} />
           <div className="action-buttons">
             {status === 'invited' && (
-              <Row noGutters>
-                <Col xs="6" className="pr-1">
+              <Row className="g-0">
+                <Col xs="6" className="pe-1">
                   <Button
                     title={`Decline invitation to ${customer_name} organization`}
                     disabled={!!loading}
@@ -86,7 +86,7 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
                     {loading === 'declined' ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Decline</span>}
                   </Button>
                 </Col>
-                <Col xs="6" className="pl-1">
+                <Col xs="6" className="ps-1">
                   <Button
                     title={`Accept invitation to ${customer_name} organization`}
                     disabled={!!loading}

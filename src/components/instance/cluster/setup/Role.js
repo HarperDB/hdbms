@@ -38,7 +38,7 @@ const Role = () => {
       <Col xs="10" className="text">
         Cluster Role
       </Col>
-      <Col xs="2" className="text text-right">
+      <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>

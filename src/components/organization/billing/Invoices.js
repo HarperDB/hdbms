@@ -43,10 +43,10 @@ const Invoices = () => {
                 <Col xs="6" className="text text-bold text-small">
                   date
                 </Col>
-                <Col xs="3" className="text-right text-bold text-small">
+                <Col xs="3" className="text-end text-bold text-small">
                   amount
                 </Col>
-                <Col xs="3" className="text-right text-bold text-small">
+                <Col xs="3" className="text-end text-bold text-small">
                   print
                 </Col>
               </Row>
@@ -57,10 +57,10 @@ const Invoices = () => {
                     <Col xs="6" className="text text-nowrap">
                       {new Date(i.created * 1000).toLocaleString()}
                     </Col>
-                    <Col xs="3" className="text-right text text-nowrap">
+                    <Col xs="3" className="text-end text text-nowrap">
                       ${(i.total / 100).toFixed(2)}
                     </Col>
-                    <Col xs="3" className="text-right text text-nowrap">
+                    <Col xs="3" className="text-end text text-nowrap">
                       <a title="print invoice" href={i.hosted_invoice_url} target="_blank" rel="noopener noreferrer">
                         <i className="fa fa-print text-purple" />
                       </a>

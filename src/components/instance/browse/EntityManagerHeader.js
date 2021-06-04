@@ -5,12 +5,12 @@ const EntityManagerHeader = ({ items, itemType, toggleDropItem, isDropping, togg
   <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items?.length ? (
-      <Col className="text-right">
+      <Col className="text-end">
         <Button
           id="toggleRemove"
           color="link"
           title={`Remove ${itemType}s`}
-          className="add-remove mr-3"
+          className="add-remove me-3"
           onClick={() => {
             toggleDropItem(!isDropping);
             toggleCreate(false);
@@ -22,7 +22,7 @@ const EntityManagerHeader = ({ items, itemType, toggleDropItem, isDropping, togg
           id="toggleCreate"
           color="link"
           title={`Add ${itemType}`}
-          className="add-remove mr-1"
+          className="add-remove me-1"
           onClick={() => {
             toggleCreate(!isCreating);
             toggleDropItem(false);

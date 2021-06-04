@@ -65,7 +65,7 @@ const InstancesIndex = () => {
 
   useInterval(
     () => instances?.length && instances.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),
-    config.refresh_content_interval / 5
+    config.refresh_content_interval
   );
 
   useEffect(() => {

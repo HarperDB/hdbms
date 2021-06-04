@@ -22,7 +22,7 @@ const CreditCardForm = ({ setFormData, formData }) => {
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           card number
         </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
+        <Col md="6" xs="12" className="text-md-end text-center">
           <div className={`fake-input ${formState.cardError ? 'error' : ''}`}>
             <CardNumberElement
               options={themedCardOptions}
@@ -43,7 +43,7 @@ const CreditCardForm = ({ setFormData, formData }) => {
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           expiration
         </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
+        <Col md="6" xs="12" className="text-md-end text-center">
           <div className={`fake-input ${formState.expError ? 'error' : ''}`}>
             <CardExpiryElement
               options={themedCardOptions}
@@ -64,7 +64,7 @@ const CreditCardForm = ({ setFormData, formData }) => {
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           cvc
         </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
+        <Col md="6" xs="12" className="text-md-end text-center">
           <div className={`fake-input ${formState.cvcError ? 'error' : ''}`}>
             <CardCvcElement
               id="ccCVC"
@@ -85,7 +85,7 @@ const CreditCardForm = ({ setFormData, formData }) => {
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
           billing postal code
         </Col>
-        <Col md="6" xs="12" className="text-md-right text-center">
+        <Col md="6" xs="12" className="text-md-end text-center">
           <Input
             id="ccPostalCode"
             onChange={(e) =>

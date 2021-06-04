@@ -49,7 +49,7 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
   return instanceAction === 'Restarting' ? (
     <Card className="error">
       <CardBody>
-        <i className="fa fa-spin fa-spinner mr-2" />
+        <i className="fa fa-spin fa-spinner me-2" />
         instance restarting. please wait.
       </CardBody>
     </Card>

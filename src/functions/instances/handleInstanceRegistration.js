@@ -10,7 +10,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
 
-    if (registration.error && registration.message === 'Login failed' && !is_local) {
+    if (((registration.error && registration.message === 'Login failed') || registration.error === 'Login failed') && !is_local) {
       const result = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
 
       if (result) {
@@ -24,7 +24,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       }
     }
 
-    if (registration.error && registration.message === 'Login failed') {
+    if ((registration.error && registration.message === 'Login failed') || registration.error === 'Login failed') {
       return {
         status: 'LOGIN FAILED',
         error: true,
@@ -35,14 +35,6 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
     if (registration.error && ['UPDATING INSTANCE', 'CONFIGURING NETWORK'].includes(status)) {
       return {
         status,
-        error: false,
-        retry: true,
-      };
-    }
-
-    if (registration.error && status === 'UPDATING INSTANCE') {
-      return {
-        status: 'FINALIZING UPDATE',
         error: false,
         retry: true,
       };

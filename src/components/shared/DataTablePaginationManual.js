@@ -10,7 +10,7 @@ const DataTablePaginationManual = ({ page, pageSize, totalPages, onPageChange, o
       </Button>
     </Col>
     <Col xs="12" sm="4" className="paginator">
-      <i className="fa fa-book mr-2" />
+      <i className="fa fa-book me-2" />
       <Input className="mb-2" type="number" value={page + 1} min={1} max={totalPages} onChange={(e) => onPageChange(e.target.value - 1)} />
       <div className="page-count">&nbsp;/&nbsp;{totalPages}</div>
     </Col>

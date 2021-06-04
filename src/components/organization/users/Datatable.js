@@ -72,12 +72,12 @@ const Datatable = () => {
     <>
       <Row className="floating-card-header">
         <Col>existing org users</Col>
-        <Col className="text-right">
+        <Col className="text-end">
           <Button
             color="link"
             tabIndex="0"
             title="Filter Users"
-            className="mr-3"
+            className="me-3"
             onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
           >
             <i className="fa fa-search" />

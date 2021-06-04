@@ -64,7 +64,7 @@ const DetailsLocal = () => {
       <Row>
         <Col sm="6">
           <Button id="backToBasicInfo" onClick={() => history.push(`/o/${customer_id}/instances/new/meta_local`)} title="Back to Basic Info" block className="mt-3" color="purple">
-            <i className="fa fa-chevron-circle-left mr-2" />
+            <i className="fa fa-chevron-circle-left me-2" />
             Basic Info
           </Button>
         </Col>
@@ -78,7 +78,7 @@ const DetailsLocal = () => {
             color="purple"
           >
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
-            <i className="fa fa-chevron-circle-right ml-2" />
+            <i className="fa fa-chevron-circle-right ms-2" />
           </Button>
         </Col>
       </Row>

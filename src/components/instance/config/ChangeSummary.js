@@ -9,7 +9,7 @@ const ChangeSummary = ({ which, compute, storage, total }) => (
           Compute
           {which === 'compute' && ' (new)'}
         </Col>
-        <Col xs="6" className="text-nowrap text-right text-truncate">
+        <Col xs="6" className="text-nowrap text-end text-truncate">
           {compute}
         </Col>
         <Col xs="12">
@@ -21,7 +21,7 @@ const ChangeSummary = ({ which, compute, storage, total }) => (
           Storage
           {which === 'storage' && ' (new)'}
         </Col>
-        <Col xs="6" className="text-nowrap text-right text-truncate">
+        <Col xs="6" className="text-nowrap text-end text-truncate">
           {storage}
         </Col>
         <Col xs="12">
@@ -32,7 +32,7 @@ const ChangeSummary = ({ which, compute, storage, total }) => (
         <Col xs="6" className="text-nowrap">
           <b>New Total</b>
         </Col>
-        <Col xs="6" className="text-nowrap text-right text-truncate">
+        <Col xs="6" className="text-nowrap text-end text-truncate">
           <b>{total}</b>
         </Col>
       </Row>

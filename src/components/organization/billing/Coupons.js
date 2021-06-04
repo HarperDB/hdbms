@@ -26,7 +26,7 @@ const Coupons = () => {
                   <hr className="my-2" />
                   <Row>
                     <Col xs="6">{coupon.name}</Col>
-                    <Col xs="6" className="text-right">
+                    <Col xs="6" className="text-end">
                       ${parseInt(coupon.amount_off / 100, 10)}
                     </Col>
                   </Row>
@@ -37,7 +37,7 @@ const Coupons = () => {
                 <Col xs="6">
                   <b>Total Credit</b>
                 </Col>
-                <Col xs="6" className="text-right">
+                <Col xs="6" className="text-end">
                   <b>${stripe_coupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>
                 </Col>
               </Row>

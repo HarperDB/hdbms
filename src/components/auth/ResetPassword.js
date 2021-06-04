@@ -82,7 +82,7 @@ const ResetPassword = () => {
                   Back to Sign In
                 </NavLink>
               </Col>
-              <Col xs="6" className="text-right">
+              <Col xs="6" className="text-end">
                 <NavLink to="/sign-up" className="login-nav-link">
                   Sign Up for Free
                 </NavLink>

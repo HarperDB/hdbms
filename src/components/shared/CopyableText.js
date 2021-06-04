@@ -16,7 +16,7 @@ const CopyableText = ({ text, beforeText, afterText, obscure = false }) => {
   );
 
   return (
-    <Row noGutters className="copyable-text-holder">
+    <Row className="copyable-text-holder g-0">
       {canCopyToClipboard && text && (
         <Col className="copy-icon">
           <Button title="Copy this value" onClick={copyURL} color="link">

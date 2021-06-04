@@ -114,7 +114,7 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
           </CardBody>
         </Card>
       ) : hasChanged && !canChange ? (
-        <Card className="error mt-3 text-left">
+        <Card className="error mt-3 text-start">
           <CardBody>
             You may update disk size every 6 hours
             <br />

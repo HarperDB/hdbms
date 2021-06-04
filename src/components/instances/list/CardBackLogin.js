@@ -28,7 +28,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
-        } else if (result.error && result.message === 'Login failed' && !is_local) {
+        } else if (((result.error && result.message === 'Login failed') || result.error === 'Login failed') && !is_local) {
           const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
             instance_id,
             instanceAuth: { user, pass },
@@ -41,10 +41,10 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
           } else {
             setFormState({ error: 'Login failed.' });
           }
-        } else if (result.error && result.message === 'Login failed') {
+        } else if ((result.error && result.message === 'Login failed') || result.error === 'Login failed') {
           setFormState({ error: 'Login failed.' });
         } else if (result.error) {
-          setFormState({ error: result.message });
+          setFormState({ error: result.message || result.error });
         } else {
           setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
           setFlipState(false);
@@ -80,8 +80,8 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   placeholder="password"
                   disabled={formState.submitted}
                 />
-                <Row noGutters>
-                  <Col xs="6" className="pr-1">
+                <Row className="g-0">
+                  <Col xs="6" className="pe-1">
                     <Button
                       onClick={() => {
                         setFormData({});
@@ -96,7 +96,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                       Cancel
                     </Button>
                   </Col>
-                  <Col xs="6" className="pl-1">
+                  <Col xs="6" className="ps-1">
                     <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
                       Log In
                     </Button>
@@ -105,7 +105,7 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                 {formState.error && (
                   <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
                     {formState.error}
-                    {formState.url && <i className="ml-2 fa fa-lg fa-external-link-square text-purple" />}
+                    {formState.url && <i className="ms-2 fa fa-lg fa-external-link-square text-purple" />}
                   </a>
                 )}
               </>

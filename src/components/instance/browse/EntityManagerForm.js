@@ -120,12 +120,12 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       )}
       <Col className="item-action">
         {addingItem ? (
-          <Button color="success" className="round mr-1">
+          <Button color="success" className="round me-1">
             <i className="fa fa-spinner fa-spin text-white" />
           </Button>
         ) : (
           <>
-            <Button id="createItem" color="success" className="round mr-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
+            <Button id="createItem" color="success" className="round me-1" onClick={createItem} onKeyDown={(e) => e.keyCode !== 13 || createItem(e)}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button id="toggleCreate" color="black" className="round" onClick={() => toggleCreate(false)}>

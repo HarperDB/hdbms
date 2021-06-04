@@ -5,7 +5,7 @@ const DataTableRow = ({ prepareRow, row, onRowClick = false }) => {
   prepareRow(row);
 
   return (
-    <Row onClick={() => onRowClick && onRowClick(row.original)} noGutters>
+    <Row onClick={() => onRowClick && onRowClick(row.original)} className="g-0">
       {row.cells.map((cell) => (
         <Col key={`${cell.row.id}-${cell.column.id}`} className={['publish', 'subscribe'].includes(cell.column.id) ? 'action' : ''}>
           {cell.render('Cell')}

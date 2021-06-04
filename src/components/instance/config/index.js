@@ -59,7 +59,7 @@ const ConfigIndex = () => {
             <Col>
               <span className="floating-card-header">update ram</span>
             </Col>
-            <Col className="text-right">
+            <Col className="text-end">
               {(!!compute_subscription_id || !!unusedCompute.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}
@@ -85,7 +85,7 @@ const ConfigIndex = () => {
             <Col>
               <span className="floating-card-header">update storage</span>
             </Col>
-            <Col className="text-right">
+            <Col className="text-end">
               {(!!storage_subscription_id || !!unusedStorage.length) && (
                 <span className="floating-card-header">
                   prepaid:{' '}

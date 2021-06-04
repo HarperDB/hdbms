@@ -97,15 +97,15 @@ const Datatable = ({ lastUpdate, setLastUpdate }) => {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>existing users</Col>
-        <Col className="text-right">
-          <Button color="link" onClick={() => setLastUpdate(Date.now())} className="mr-2">
+        <Col className="text-end">
+          <Button color="link" onClick={() => setLastUpdate(Date.now())} className="me-2">
             <i title="Refresh Structure" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <span className="mx-3 text">|</span>
           <Button
             color="link"
             title="Filter Users"
-            className="mr-2"
+            className="me-2"
             onClick={() => setTableState({ ...tableState, filtered: tableState.showFilter ? [] : tableState.filtered, showFilter: !tableState.showFilter })}
           >
             <i className="fa fa-search" />

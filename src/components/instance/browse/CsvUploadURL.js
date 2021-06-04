@@ -85,12 +85,12 @@ const CsvUploadURL = () => {
         <Col xs="4">
           {formState.error ? (
             <div className="text-danger csv-status">
-              <i className="fa fa-exclamation-triangle mr-3" />
+              <i className="fa fa-exclamation-triangle me-3" />
               {formState.error}
             </div>
           ) : formState.uploading ? (
             <div className="csv-status">
-              <i className="fa fa-spin fa-spinner mr-3" />
+              <i className="fa fa-spin fa-spinner me-3" />
               uploading .csv into {schema}.{table}
             </div>
           ) : (

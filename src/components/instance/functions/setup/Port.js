@@ -43,7 +43,7 @@ const Port = () => {
   return custom_functions_port ? (
     <Row>
       <Col xs="10">Custom Functions Port {custom_functions_port}</Col>
-      <Col xs="2" className="text-right">
+      <Col xs="2" className="text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>

@@ -48,9 +48,9 @@ const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
             {directory}/routes/{endpoint}.js
           </i>
         </Col>
-        <Col className="text-right">
-          <Button disabled={restarting} color="link" onClick={refreshCustomFunctions} className="mr-2">
-            <span className="mr-2">refresh endpoints</span>
+        <Col className="text-end">
+          <Button disabled={restarting} color="link" onClick={refreshCustomFunctions} className="me-2">
+            <span className="me-2">refresh endpoints</span>
             <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
         </Col>

@@ -59,7 +59,7 @@ const Confirm = () => {
             <Col sm="4" className="text-nowrap text-grey">
               Instance Name
             </Col>
-            <Col sm="8" className="text-sm-right text-nowrap">
+            <Col sm="8" className="text-sm-end text-nowrap">
               {newInstance.instance_name}
             </Col>
           </Row>
@@ -68,7 +68,7 @@ const Confirm = () => {
             <Col sm="4" className="text-nowrap text-grey">
               Admin User
             </Col>
-            <Col sm="8" className="text-sm-right text-nowrap">
+            <Col sm="8" className="text-sm-end text-nowrap">
               {newInstance.user}
             </Col>
           </Row>
@@ -77,7 +77,7 @@ const Confirm = () => {
             <Col sm="4" className="text-nowrap text-grey">
               Admin Password
             </Col>
-            <Col sm="8" className="text-sm-right text-nowrap">
+            <Col sm="8" className="text-sm-end text-nowrap">
               {newInstance.pass}
             </Col>
           </Row>
@@ -88,7 +88,7 @@ const Confirm = () => {
                 <Col sm="4" className="text-nowrap text-grey">
                   Host
                 </Col>
-                <Col sm="8" className="text-sm-right text-nowrap">
+                <Col sm="8" className="text-sm-end text-nowrap">
                   {newInstance.host}
                 </Col>
               </Row>
@@ -97,7 +97,7 @@ const Confirm = () => {
                 <Col sm="4" className="text-nowrap text-grey">
                   Port
                 </Col>
-                <Col sm="8" className="text-sm-right text-nowrap">
+                <Col sm="8" className="text-sm-end text-nowrap">
                   {newInstance.port}
                 </Col>
               </Row>
@@ -106,7 +106,7 @@ const Confirm = () => {
                 <Col sm="4" className="text-nowrap text-grey">
                   Uses SSL
                 </Col>
-                <Col sm="8" className="text-sm-right text-nowrap">
+                <Col sm="8" className="text-sm-end text-nowrap">
                   {newInstance.is_ssl ? 'yes' : 'no'}
                 </Col>
               </Row>
@@ -118,7 +118,7 @@ const Confirm = () => {
                 <Col sm="4" className="text-nowrap text-grey">
                   Instance URL
                 </Col>
-                <Col sm="8" className="text-sm-right text-nowrap">
+                <Col sm="8" className="text-sm-end text-nowrap">
                   {newInstance.instance_name}-{subdomain}.harperdbcloud.com
                 </Col>
               </Row>
@@ -127,7 +127,7 @@ const Confirm = () => {
                 <Col sm="4" className="text-nowrap text-grey">
                   Instance Region
                 </Col>
-                <Col sm="8" className="text-sm-right text-nowrap">
+                <Col sm="8" className="text-sm-end text-nowrap">
                   {newInstance.instance_region}
                 </Col>
               </Row>
@@ -136,10 +136,10 @@ const Confirm = () => {
                 <Col sm="6" className="text-nowrap text-grey">
                   Instance Storage
                 </Col>
-                <Col xs="4" sm="2" className="text-sm-right text-nowrap">
+                <Col xs="4" sm="2" className="text-sm-end text-nowrap">
                   {newInstance.data_volume_size_string}
                 </Col>
-                <Col xs="8" sm="4" className="text-sm-right text-nowrap text-truncate">
+                <Col xs="8" sm="4" className="text-sm-end text-nowrap text-truncate">
                   {newInstance.storage_price_string_with_interval}
                 </Col>
               </Row>
@@ -150,10 +150,10 @@ const Confirm = () => {
             <Col sm="6" className="text-nowrap text-grey">
               Instance RAM
             </Col>
-            <Col xs="4" sm="2" className="text-sm-right text-nowrap">
+            <Col xs="4" sm="2" className="text-sm-end text-nowrap">
               {newInstance.compute_ram_string}
             </Col>
-            <Col xs="8" sm="4" className="text-sm-right text-nowrap text-truncate">
+            <Col xs="8" sm="4" className="text-sm-end text-nowrap text-truncate">
               {newInstance.compute_price_string_with_interval}
             </Col>
           </Row>
@@ -162,7 +162,7 @@ const Confirm = () => {
             <Col sm="8" className="text-nowrap text-grey">
               Instance Total Price
             </Col>
-            <Col sm="4" className="text-sm-right text-nowrap">
+            <Col sm="4" className="text-sm-end text-nowrap">
               <b>{totalPriceString}</b>
             </Col>
           </Row>
@@ -180,8 +180,8 @@ const Confirm = () => {
         </div>
       )}
       <hr className="my-3" />
-      <Row noGutters>
-        <Col xs="2" sm="1" className="text-nowrap overflow-hidden pl-2">
+      <Row className="g-0">
+        <Col xs="2" sm="1" className="text-nowrap overflow-hidden ps-2">
           <RadioCheckbox
             id="agreeToTermsAndConditions"
             className={formState.error ? 'error' : ''}
@@ -190,7 +190,7 @@ const Confirm = () => {
             options={{ value: config.tc_version }}
           />
         </Col>
-        <Col xs="10" sm="11" className="text-small pt-1 pr-2">
+        <Col xs="10" sm="11" className="text-small pt-1 pe-2">
           I agree to HarperDB&apos;s&nbsp;
           <a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
             Privacy Policy
@@ -211,14 +211,14 @@ const Confirm = () => {
             className="mt-3"
             color="purple"
           >
-            <i className="fa fa-chevron-circle-left mr-2" />
+            <i className="fa fa-chevron-circle-left me-2" />
             Instance Details
           </Button>
         </Col>
         <Col sm="6">
           <Button id="addInstance" onClick={() => setFormState({ submitted: true })} title="Confirm Instance Details" block className="mt-3" color="purple">
             Add Instance
-            <i className="fa fa-check-circle ml-2" />
+            <i className="fa fa-check-circle ms-2" />
           </Button>
         </Col>
       </Row>

@@ -33,9 +33,9 @@ const Datatable = ({ refreshNetwork, loading }) => {
     <>
       <Row className="floating-card-header">
         <Col>manage clustering</Col>
-        <Col className="text-right">
-          <Button color="link" onClick={refreshNetwork} className="mr-2">
-            <span className="mr-2">refresh network</span>
+        <Col className="text-end">
+          <Button color="link" onClick={refreshNetwork} className="me-2">
+            <span className="me-2">refresh network</span>
             <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
         </Col>

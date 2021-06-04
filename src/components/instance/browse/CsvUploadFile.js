@@ -97,7 +97,7 @@ const CsvUploadFile = () => {
             <div className="text-danger csv-status">{formState.error}</div>
           ) : formState.uploading ? (
             <div className="csv-status">
-              <i className="fa fa-spin fa-spinner mr-3" />
+              <i className="fa fa-spin fa-spinner me-3" />
               inserting {commaNumbers(formData.records)} records into {schema}.{table}
             </div>
           ) : formState.processed ? (
@@ -111,7 +111,7 @@ const CsvUploadFile = () => {
               }}
             >
               <span className="text-nowrap text-small">
-                <i className="fa fa-thumbs-up text-success mr-3" />
+                <i className="fa fa-thumbs-up text-success me-3" />
                 {commaNumbers(formData.records)} records. Click here to replace file.
               </span>
             </Button>

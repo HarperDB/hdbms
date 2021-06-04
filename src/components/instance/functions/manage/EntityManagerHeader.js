@@ -5,13 +5,13 @@ const EntityManagerHeader = ({ items, toggleDropItem, isDropping, toggleCreate, 
   <Row className="floating-card-header">
     <Col>custom function files</Col>
     {items?.length ? (
-      <Col className="text-right">
+      <Col className="text-end">
         <Button
           disabled={restarting}
           id="toggleRemove"
           color="link"
           title="Remove Functions"
-          className="add-remove mr-3"
+          className="add-remove me-3"
           onClick={() => {
             toggleDropItem(!isDropping);
             toggleCreate(false);
@@ -24,7 +24,7 @@ const EntityManagerHeader = ({ items, toggleDropItem, isDropping, toggleCreate, 
           id="toggleCreate"
           color="link"
           title="Add Function"
-          className="add-remove mr-1"
+          className="add-remove me-1"
           onClick={() => {
             toggleCreate(!isCreating);
             toggleDropItem(false);

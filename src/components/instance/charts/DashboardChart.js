@@ -76,10 +76,10 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
           {confirmDelete === id ? (
             <ButtonGroup size="sm" className="chart-remove-confirm">
               <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
-                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
+                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ms-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
               </Button>
               <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
-                cancel <i className="ml-2 fa fa-times" />
+                cancel <i className="ms-2 fa fa-times" />
               </Button>
             </ButtonGroup>
           ) : (
@@ -107,10 +107,10 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
           {confirmDelete === id ? (
             <ButtonGroup size="sm" className="chart-remove-confirm">
               <Button disabled={deleting} title="Remove this chart" color="success" onClick={() => handleRemoveChart(confirmDelete)}>
-                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ml-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
+                {deleting ? 'deleting chart' : 'confirm delete chart'} <i className={`ms-2 fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
               </Button>
               <Button disabled={deleting} title="Do not remove this chart" color="danger" onClick={() => setConfirmDelete(false)}>
-                cancel <i className="ml-2 fa fa-times" />
+                cancel <i className="ms-2 fa fa-times" />
               </Button>
             </ButtonGroup>
           ) : canDelete ? (
