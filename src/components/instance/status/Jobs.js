@@ -61,12 +61,12 @@ const Jobs = () => {
       <Row className="floating-card-header">
         <Col>jobs</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-right">
-          <Button color="link" title="Update Jobs" className="mr-2" onClick={() => setLastUpdate(Date.now())}>
+        <Col className="text-md-end">
+          <Button color="link" title="Update Jobs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
             <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
-            <span className="mr-2">auto</span>
+            <span className="me-2">auto</span>
             <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
           </Button>
         </Col>
@@ -81,7 +81,7 @@ const Jobs = () => {
               date
             </Col>
             {!loading && jobsError ? (
-              <Col xs="6" className="text-right text-danger text-bold">
+              <Col xs="6" className="text-end text-danger text-bold">
                 <b>job fetch error: {new Date().toLocaleTimeString().toLowerCase()}</b>
               </Col>
             ) : (

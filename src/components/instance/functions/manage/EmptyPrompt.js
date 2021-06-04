@@ -1,11 +1,11 @@
 import React from 'react';
 import { CardBody, Card, Button } from 'reactstrap';
 
-const EmptyPrompt = ({ headline, description, icon, refreshApi }) => (
+const EmptyPrompt = ({ headline, description, icon, refreshCustomFunctions }) => (
   <>
-    <div className="floating-card-header text-right">
-      <Button color="link" onClick={refreshApi} className="mr-2">
-        <span className="mr-2">refresh endpoints</span>
+    <div className="floating-card-header text-end">
+      <Button color="link" onClick={refreshCustomFunctions} className="me-2">
+        <span className="me-2">refresh endpoints</span>
         <i title="Refresh Roles" className="fa fa-refresh" />
       </Button>
     </div>

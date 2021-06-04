@@ -60,7 +60,7 @@ const DashboardIndex = () => {
         <CardBody className="text-center">
           To add charts to the dashboard, execute a
           <Button id="goToQueryPage" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="purple" className="px-2 mx-2">
-            <i className="fa fa-search text-small mr-2 " /> query
+            <i className="fa fa-search text-small me-2 " /> query
           </Button>
           Then click &quot;create chart&quot;
         </CardBody>

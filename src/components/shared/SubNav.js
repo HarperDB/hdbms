@@ -23,7 +23,7 @@ const SubNav = ({ routes = [] }) => {
               {routes.map((route) => (
                 <NavItem key={route.path}>
                   <NavLink title={route.link} className="nav-link" to={route.link || route.path}>
-                    <i className={`d-none d-sm-inline-block fa mr-1 fa-${route.icon}`} />
+                    <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
                     {route.label}
                   </NavLink>
                 </NavItem>

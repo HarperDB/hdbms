@@ -149,11 +149,11 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
         >
           {!flipState && (
             <CardBody>
-              <Row>
-                <Col xs="10" className="instance-name">
+              <Row className="g-0">
+                <Col xs="9" className="instance-name">
                   {instance_name}
                 </Col>
-                <Col xs="2" className="instance-icons">
+                <Col xs="3" className="instance-icons">
                   <CardFrontIcons
                     isOrgOwner={isOrgOwner}
                     isReady={isReady}

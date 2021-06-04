@@ -21,7 +21,7 @@ const StructureReloader = ({ label = 'instance', centerText = false }) => {
   return (
     <span className={`structure-reloader ${centerText ? 'd-block text-center' : ''}`}>
       <Button color="link" onClick={refresh}>
-        <i title="Refresh Structure" className={`fa mr-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+        <i title="Refresh Structure" className={`fa me-2 ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
         {label}
       </Button>
     </span>

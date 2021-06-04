@@ -52,7 +52,7 @@ const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping })
       <Col className="item-action">
         {isConfirmingDropItem ? (
           <>
-            <Button id="confirmDropRole" color="danger" className="round mr-1" title={`confirm drop ${item.role}`} onClick={confirmItemForDrop}>
+            <Button id="confirmDropRole" color="danger" className="round me-1" title={`confirm drop ${item.role}`} onClick={confirmItemForDrop}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button color="black" className="round" title={`Cancel drop ${item.role}`} onClick={cancelConfirmDrop}>

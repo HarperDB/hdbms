@@ -3,7 +3,7 @@ import { Card, CardBody } from 'reactstrap';
 
 const SetupIndex = () => (
   <>
-    <div className="floating-card-header text-right">&nbsp;</div>
+    <div className="floating-card-header text-end">&nbsp;</div>
     <Card className="my-3">
       <CardBody>
         <div className="empty-prompt narrow">

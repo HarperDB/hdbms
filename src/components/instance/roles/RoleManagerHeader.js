@@ -5,11 +5,11 @@ const RoleManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggle
   <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items && items.length ? (
-      <Col className="text-right">
+      <Col className="text-end">
         <Button
           color="link"
           title={`Remove ${itemType}s`}
-          className="add-remove mr-3"
+          className="add-remove me-3"
           onClick={() => {
             toggleDropItem(!isDropping);
             toggleCreate(false);
@@ -20,7 +20,7 @@ const RoleManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggle
         <Button
           color="link"
           title={`Add ${itemType}`}
-          className="add-remove mr-1"
+          className="add-remove me-1"
           onClick={() => {
             toggleCreate(!isCreating);
             toggleDropItem(false);

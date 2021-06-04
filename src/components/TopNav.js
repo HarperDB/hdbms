@@ -58,10 +58,10 @@ const TopNav = ({ isMaintenance }) => {
           </NavLink>
         </div>
 
-        <Nav className="ml-auto" navbar>
+        <Nav className="ms-auto" navbar>
           {loggedIn && !isMaintenance && (
             <>
-              <NavItem className="ml-0">
+              <NavItem className="ms-0">
                 <NavLink id="viewOrganizations" title="View or Switch Organizations" to="/organizations">
                   <i className="fa fa-building-o d-inline-block" />
                   <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
@@ -71,7 +71,7 @@ const TopNav = ({ isMaintenance }) => {
               <div className={`active-org ${customer && pathname.indexOf(customer?.customer_id) !== -1 ? 'open' : ''}`}>
                 <div className="text-white org-name">{customer.customer_name}</div>
                 <div className="org-actions">
-                  <NavItem className="ml-0">
+                  <NavItem className="ms-0">
                     <NavLink
                       id="viewOrganizationInstances"
                       title="View Organization Instances"

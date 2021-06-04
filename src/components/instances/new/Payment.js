@@ -77,7 +77,7 @@ const Payment = () => {
             color="purple"
             className="mt-3"
           >
-            <i className="fa fa-chevron-circle-left mr-2" />
+            <i className="fa fa-chevron-circle-left me-2" />
             Instance Details
           </Button>
         </Col>
@@ -91,7 +91,7 @@ const Payment = () => {
             className="mt-3"
           >
             Review Instance Details
-            <i className="fa fa-chevron-circle-right ml-2" />
+            <i className="fa fa-chevron-circle-right ms-2" />
           </Button>
         </Col>
       </Row>
@@ -128,7 +128,7 @@ const Payment = () => {
             className="mt-3"
             color="purple"
           >
-            <i className="fa fa-chevron-circle-left mr-2" />
+            <i className="fa fa-chevron-circle-left me-2" />
             Instance Details
           </Button>
         </Col>
@@ -143,7 +143,7 @@ const Payment = () => {
             color="purple"
           >
             Add Card To Account
-            <i className="fa fa-chevron-circle-right ml-2" />
+            <i className="fa fa-chevron-circle-right ms-2" />
           </Button>
         </Col>
       </Row>

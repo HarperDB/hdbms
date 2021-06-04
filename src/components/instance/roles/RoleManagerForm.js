@@ -63,7 +63,7 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
           />
         </Col>
         <Col className="item-action">
-          <Button id="createRole" color="success" className="round mr-1">
+          <Button id="createRole" color="success" className="round me-1">
             <i className="fa fa-check text-white" />
           </Button>
           <Button color="black" className="round" onClick={() => toggleCreate(false)}>

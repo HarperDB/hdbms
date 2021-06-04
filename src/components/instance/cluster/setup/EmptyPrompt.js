@@ -3,7 +3,7 @@ import { CardBody, Card } from 'reactstrap';
 
 const EmptyPrompt = ({ headline, description, icon }) => (
   <>
-    <div className="floating-card-header text-right">&nbsp;</div>
+    <div className="floating-card-header text-end">&nbsp;</div>
     <Card className="my-3">
       <CardBody>
         <div className="empty-prompt narrow">

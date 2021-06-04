@@ -5,7 +5,7 @@ import StructureReloader from '../../shared/StructureReloader';
 
 const EmptyPrompt = ({ message }) => (
   <>
-    <div className="floating-card-header text-right">
+    <div className="floating-card-header text-end">
       <StructureReloader label="refresh schemas and tables" />
     </div>
     <Card className="my-3">

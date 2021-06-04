@@ -73,18 +73,18 @@ const RolesIndex = () => {
               <Col>edit role &gt; {formState.roleName}</Col>
             </>
           )}
-          <Col className="text-md-right">
+          <Col className="text-md-end">
             {formState.canEdit && (
               <>
                 <Button color="link" tabIndex="0" title="Show Attributes" onClick={() => setFormState({ ...formState, showAttributes: !formState.showAttributes })}>
-                  <span className="mr-2">show all attributes</span>
+                  <span className="me-2">show all attributes</span>
                   <i className={`fa fa-lg fa-toggle-${formState.showAttributes ? 'on' : 'off'}`} />
                 </Button>
                 <span className="mx-3 text">|</span>
               </>
             )}
-            <Button color="link" onClick={fetchRoles} className="mr-2">
-              <span className="mr-2">refresh roles</span>
+            <Button color="link" onClick={fetchRoles} className="me-2">
+              <span className="me-2">refresh roles</span>
               <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
             </Button>
           </Col>

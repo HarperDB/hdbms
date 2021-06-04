@@ -10,7 +10,7 @@ const NodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
       <Col xs="10" className="text">
         Cluster Node Name
       </Col>
-      <Col xs="2" className="text text-right">
+      <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>

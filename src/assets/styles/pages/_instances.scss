@@ -33,6 +33,7 @@
         height: 15px;
         line-height: 1 !important;
         overflow: hidden;
+        padding-top: 2px;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
@@ -40,27 +41,19 @@
       .instance-icons {
         cursor: pointer;
         position: relative;
-        width: 15px;
+        text-align: right;
 
         .instance-icon {
-          font-size: 12px;
-          position: absolute;
-          right: 35px;
-          top: 0;
+          margin-left: 10px;
 
           i {
             font-size: 12px;
-          }
-
-          &:first-child {
-            right: 15px;
-            top: 0;
           }
         }
       }
 
       .copyable-text-holder {
-        margin: 8px 0 12px;
+        margin: 12px 0;
 
         .text-container {
           font-size: 12px !important;

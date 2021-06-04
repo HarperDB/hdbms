@@ -100,7 +100,7 @@ const SignIn = () => {
                   Sign Up for Free
                 </NavLink>
               </Col>
-              <Col xs="6" className="text-right">
+              <Col xs="6" className="text-end">
                 <NavLink to="/reset-password" className="login-nav-link">
                   Reset Password
                 </NavLink>

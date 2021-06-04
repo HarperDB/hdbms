@@ -12,7 +12,7 @@ const Refresh = ({ refreshInstances }) => {
 
   return (
     <Button className="refresh-instances" color="link" onClick={handleClick}>
-      <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'} mr-2`} />
+      <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'} me-2`} />
       <span className="d-none d-md-inline-block">refresh</span>
     </Button>
   );

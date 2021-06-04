@@ -124,14 +124,14 @@ const MetaCloud = () => {
       <Row>
         <Col sm="6">
           <Button id="instanceTypeButton" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
-            <i className="fa fa-chevron-circle-left mr-2" />
+            <i className="fa fa-chevron-circle-left me-2" />
             Instance Type
           </Button>
         </Col>
         <Col sm="6">
           <Button id="instanceDetailsButton" onClick={() => setFormState({ submitted: true })} title="Instance Details" block className="mt-3" color="purple">
             Instance Details
-            <i className="fa fa-chevron-circle-right ml-2" />
+            <i className="fa fa-chevron-circle-right ms-2" />
           </Button>
         </Col>
       </Row>

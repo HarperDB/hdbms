@@ -4,7 +4,7 @@ import { Row, Col } from 'reactstrap';
 const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter }) =>
   headerGroups.map((headerGroup) => (
     <div {...headerGroup.getHeaderGroupProps()}>
-      <Row className="header" noGutters>
+      <Row className="header g-0">
         {headerGroup.headers.map((column) => (
           <Col
             key={column.id}
@@ -16,7 +16,7 @@ const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter }) =
         ))}
       </Row>
       {showFilter && (
-        <Row noGutters className="filter">
+        <Row className="filter g-0">
           {headerGroup.headers.map((column) => (
             <Col key={column.id} className={['publish', 'subscribe'].includes(column.id) ? 'action' : ''}>
               {column.render('Filter')}

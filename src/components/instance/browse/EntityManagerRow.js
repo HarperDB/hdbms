@@ -68,7 +68,7 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
           </Button>
         ) : isConfirmingDropItem ? (
           <>
-            <Button id="confirmDropItem" color="danger" className="round mr-1" title={`confirm drop ${itemType} ${item}`} onClick={confirmItemForDrop}>
+            <Button id="confirmDropItem" color="danger" className="round me-1" title={`confirm drop ${itemType} ${item}`} onClick={confirmItemForDrop}>
               <i className="fa fa-check text-white" />
             </Button>
             <Button id="cancelDropItem" color="black" className="round" title={`Cancel drop ${itemType} ${item}`} onClick={cancelConfirmDrop}>

@@ -127,7 +127,7 @@ const ChartModal = ({ setShowChartModal, tableData, query }) => {
             <hr className="my-2" />
           </Col>
           <Col lg="4" className="py-2 text-nowrap d-flex justify-content-center align-items-center">
-            <Button className="mr-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>
+            <Button className="me-2" color="link" onClick={() => setChart({ ...chart, shared: !chart.shared })}>
               <i className={`fa fa-lg text-purple fa-toggle-${chart.shared ? 'on' : 'off'}`} />
             </Button>
             visible to all org users
@@ -146,7 +146,7 @@ const ChartModal = ({ setShowChartModal, tableData, query }) => {
             <hr className="my-2" />
             <div className="">
               {chart.seriesAttributes.map((a) => (
-                <Button color="danger" size="sm" className="mr-2" onClick={() => removeSeriesAttribute(a)} key={a}>
+                <Button color="danger" size="sm" className="me-2" onClick={() => removeSeriesAttribute(a)} key={a}>
                   [x] {a}
                 </Button>
               ))}

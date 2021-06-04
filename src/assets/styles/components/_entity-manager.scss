@@ -6,7 +6,7 @@
     overflow: hidden;
 
     .card-body {
-      padding: 0 15px;
+      padding: 0 0.75rem;
 
       &.scrollable {
         max-height: calc(50vh - 160px);

@@ -25,8 +25,8 @@ const QueryHistory = ({ setQuery, query }) => {
       <div id="query-history">
         <Row className="floating-card-header">
           <Col xs="9">query history (click to load)</Col>
-          <Col xs="3" className="text-right">
-            <Button color="link" title="Refresh Results" className="mr-2" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })}>
+          <Col xs="3" className="text-end">
+            <Button color="link" title="Refresh Results" className="me-2" onClick={() => setQueries({ ...queries, [compute_stack_id]: [] })}>
               <i className="fa fa-trash" />
             </Button>
           </Col>

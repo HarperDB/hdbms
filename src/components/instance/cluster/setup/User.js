@@ -54,7 +54,7 @@ const User = () => {
         <hr className="my-3" />
       </Col>
       <Col xs="10">Cluster User</Col>
-      <Col xs="2" className="text-right">
+      <Col xs="2" className="text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>
