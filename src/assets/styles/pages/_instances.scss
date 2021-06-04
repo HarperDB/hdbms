@@ -32,8 +32,8 @@
       .instance-name {
         height: 15px;
         line-height: 1 !important;
-        padding-top: 2px;
         overflow: hidden;
+        padding-top: 2px;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
@@ -46,9 +46,9 @@
         .instance-icon {
           margin-left: 10px;
 
-            i {
-              font-size: 12px;
-            }
+          i {
+            font-size: 12px;
+          }
         }
       }
 
