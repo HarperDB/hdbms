@@ -9,7 +9,7 @@ import instanceState from '../../../../functions/state/instanceState';
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import dropCustomFunction from '../../../../functions/api/instance/dropCustomFunction';
 import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
+import restartService from '../../../../functions/api/instance/restartService';
 
 const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping, itemType, restarting }) => {
   const { project } = useParams();
@@ -38,7 +38,7 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping,
     }
 
     alert.success(result.message);
-    restartInstance({ auth, url, service: 'custom_functions' });
+    restartService({ auth, url, service: 'custom_functions' });
     await buildCustomFunctions({ auth, url });
     return history.push(baseUrl);
   };

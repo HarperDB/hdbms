@@ -8,9 +8,9 @@ import { useAlert } from 'react-alert';
 import instanceState from '../../../../functions/state/instanceState';
 import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
+import restartService from '../../../../functions/api/instance/restartService';
 
-const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
+const CodeEditor = ({ refreshCustomFunctions, loading, restarting }) => {
   const { compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -31,7 +31,7 @@ const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
     if (response.error) {
       alert.error(response.message);
     } else {
-      restartInstance({ auth, url, service: 'custom_functions' });
+      restartService({ auth, url, service: 'custom_functions' });
       alert.success(response.message);
     }
     setEditorToFile();
@@ -54,7 +54,7 @@ const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
             <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <span className="mx-3 text">|</span>
-          <Button disabled={restarting} color="link" onClick={() => restartInstance({ auth, url, service: 'custom_functions' })} className="me-2">
+          <Button disabled={restarting} color="link" onClick={() => restartService({ auth, url, service: 'custom_functions' })} className="me-2">
             <span className="me-2">restart custom functions server</span>
             <i title="Refresh Endpoint Files" className={`fa ${restarting ? 'fa-spinner fa-spin' : 'fa-stop-circle'}`} />
           </Button>

@@ -10,7 +10,7 @@ import buildCustomFunctions from '../../../../functions/instance/buildCustomFunc
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
 import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
+import restartService from '../../../../functions/api/instance/restartService';
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
@@ -62,7 +62,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       return alert.error(result.message);
     }
 
-    restartInstance({ auth, url, service: 'custom_functions' });
+    restartService({ auth, url, service: 'custom_functions' });
     await buildCustomFunctions({ auth, url });
     return history.push(`${baseUrl}/${entityName}`);
   };
