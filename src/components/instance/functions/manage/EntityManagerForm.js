@@ -11,6 +11,7 @@ import setCustomFunction from '../../../../functions/api/instance/setCustomFunct
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
 import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';
+import isAlphaNumericHyphen from '../../../../functions/util/isAlphaNumericHyphen';
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
@@ -29,6 +30,12 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
     if (!entityName || items.includes(entityName)) {
       toggleNameError(true);
       error = true;
+    }
+
+    if (entityName && !isAlphaNumericHyphen(entityName)) {
+      toggleNameError(true);
+      error = true;
+      alert.error('You may only use alphanumeric characters or dashes.');
     }
 
     if (error) return false;

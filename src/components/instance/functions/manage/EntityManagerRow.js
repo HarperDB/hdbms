@@ -62,7 +62,9 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping,
 
   return (
     <Row key={item} title={`View${isActive ? 'ing' : ''} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={restarting ? null : handleSetActive} tabIndex="0">
-      <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>{isConfirmingDropItem ? `drop ${item}?` : item}</Col>
+      <Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>
+        {isConfirmingDropItem ? `drop ${item}?` : itemType === 'projects' ? `/${item}` : item}
+      </Col>
       <Col className="item-action">
         {confirmedDropItem ? (
           <Button tabIndex="-1" disabled color="purple" className="round">

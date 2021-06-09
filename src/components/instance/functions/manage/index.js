@@ -51,7 +51,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
           s.restarting_service = false;
         });
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
   }, 1000);
