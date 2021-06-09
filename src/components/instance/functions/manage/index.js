@@ -15,9 +15,8 @@ import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
 const ManageIndex = ({ refreshCustomFunctions, loading }) => {
-  const { customer_id, project, file } = useParams();
+  const { customer_id, compute_stack_id, project, file } = useParams();
   const history = useHistory();
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const restarting = useStoreState(instanceState, (s) => s.restarting_service === 'custom_functions');
   const cf_server_url = useStoreState(instanceState, (s) => `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
