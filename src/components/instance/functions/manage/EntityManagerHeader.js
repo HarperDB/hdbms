@@ -1,9 +1,12 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-const EntityManagerHeader = ({ items, toggleDropItem, isDropping, toggleCreate, isCreating, restarting }) => (
+const EntityManagerHeader = ({ items, toggleDropItem, isDropping, toggleCreate, project, isCreating, restarting, itemType }) => (
   <Row className="floating-card-header">
-    <Col>custom function files</Col>
+    <Col>
+      {itemType} {project ? `in ${project} project` : ''}
+    </Col>
+
     {items?.length ? (
       <Col className="text-end">
         <Button

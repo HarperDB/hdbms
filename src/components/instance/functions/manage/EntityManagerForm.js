@@ -8,10 +8,11 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
+import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
 
-const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting }) => {
+const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -34,9 +35,26 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
 
     setAddingItem(true);
 
-    const function_content = generateFunctionTemplate(entityName);
+    let result;
 
-    const result = await setCustomFunction({ auth, url, function_name: entityName, function_content });
+    if (itemType === 'projects') {
+      result = await addCustomFunctionProject({
+        auth,
+        url,
+        project: entityName,
+      });
+    } else {
+      const function_content = generateFunctionTemplate(itemType);
+
+      result = await setCustomFunction({
+        auth,
+        url,
+        project,
+        type: itemType,
+        file: entityName,
+        function_content,
+      });
+    }
 
     if (result.error) {
       setAddingItem(false);
@@ -44,8 +62,9 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       return alert.error(result.message);
     }
 
+    restartInstance({ auth, url, service: 'custom_functions' });
     await buildCustomFunctions({ auth, url });
-    return restartInstance({ auth, url });
+    return history.push(`${baseUrl}/${entityName}`);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);

@@ -10,7 +10,7 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import Port from './Port';
 import Enable from './Enable';
-import EmptyPrompt from './EmptyPrompt';
+import EmptyPrompt from '../../../shared/EmptyPrompt';
 
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';

@@ -4,40 +4,40 @@ import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
 
-import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import instanceState from '../../../../functions/state/instanceState';
+import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 
 const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
-  const { customer_id, compute_stack_id, endpoint } = useParams();
+  const { compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const directory = useStoreState(instanceState, (s) => s.custom_functions?.directory);
   const [code, setCode] = useState();
   const alert = useAlert();
-  const history = useHistory();
 
   const setEditorToFile = useCallback(async () => {
-    const endpoint_code = await getCustomFunction({ auth, url, function_name: endpoint });
-    setCode(endpoint_code?.message);
-  }, [auth, url, endpoint, setCode]);
+    if (project && type && file && file !== 'undefined') {
+      const endpoint_code = await getCustomFunction({ auth, url, project, type, file });
+      setCode(endpoint_code?.message);
+    }
+  }, [auth, url, project, type, file, setCode]);
 
   const handleSubmit = async () => {
-    const response = await setCustomFunction({ auth, url, function_name: endpoint, function_content: code });
-    await restartInstance({ auth, url });
+    const response = await setCustomFunction({ auth, url, function_content: code, project, type, file });
+
     if (response.error) {
       alert.error(response.message);
     } else {
+      restartInstance({ auth, url, service: 'custom_functions' });
       alert.success(response.message);
     }
-    history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/${endpoint}/restarting`);
     setEditorToFile();
   };
 
-  useEffect(() => setEditorToFile(), [endpoint, setEditorToFile]);
+  useEffect(() => setEditorToFile(), [project, file, setEditorToFile, compute_stack_id]);
 
   return (
     <>
@@ -45,13 +45,18 @@ const CodeEditor = ({ refreshCustomFunctions, restarting, loading }) => {
         <Col>
           edit{' '}
           <i>
-            {directory}/routes/{endpoint}.js
+            {directory}/{project}/{type}/{file}.js
           </i>
         </Col>
         <Col className="text-end">
-          <Button disabled={restarting} color="link" onClick={refreshCustomFunctions} className="me-2">
+          <Button disabled={loading} color="link" onClick={refreshCustomFunctions}>
             <span className="me-2">refresh endpoints</span>
             <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+          </Button>
+          <span className="mx-3 text">|</span>
+          <Button disabled={restarting} color="link" onClick={() => restartInstance({ auth, url, service: 'custom_functions' })} className="me-2">
+            <span className="me-2">restart custom functions server</span>
+            <i title="Refresh Endpoint Files" className={`fa ${restarting ? 'fa-spinner fa-spin' : 'fa-stop-circle'}`} />
           </Button>
         </Col>
       </Row>
