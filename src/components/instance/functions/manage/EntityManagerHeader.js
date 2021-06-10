@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'reactstrap';
 
 const EntityManagerHeader = ({ items, toggleDropItem, isDropping, toggleCreate, project, isCreating, restarting, itemType }) => (
   <Row className="floating-card-header">
-    <Col>{itemType === 'routes' ? `routes in /${project}` : itemType === 'helpers' ? `helpers for ${project}` : 'projects (route prefixes)'}</Col>
+    <Col>{itemType === 'routes' ? `routes in /${project}` : itemType === 'helpers' ? `helpers for ${project}` : 'projects'}</Col>
 
     {items?.length ? (
       <Col className="text-end">

@@ -12,7 +12,7 @@ const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, proje
   useEffect(() => {
     toggleCreate();
     toggleDropItem();
-  }, [activeItem, items]);
+  }, [activeItem, items.length]);
 
   return (
     <div className="entity-manager">

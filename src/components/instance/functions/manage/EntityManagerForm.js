@@ -11,7 +11,8 @@ import setCustomFunction from '../../../../functions/api/instance/setCustomFunct
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
 import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';
-import isAlphaNumericHyphen from '../../../../functions/util/isAlphaNumericHyphen';
+import isAlphaNumericHyphenSlash from '../../../../functions/util/isAlphaNumericHyphenSlash';
+import isAlphaNumericUnderscore from '../../../../functions/util/isAlphaNumericUnderscore';
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
@@ -32,10 +33,14 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       error = true;
     }
 
-    if (entityName && !isAlphaNumericHyphen(entityName)) {
+    if (entityName && itemType === 'projects' && !isAlphaNumericHyphenSlash(entityName)) {
       toggleNameError(true);
       error = true;
-      alert.error('You may only use alphanumeric characters or dashes.');
+      alert.error('Project names may only contain letters, numbers, hyphens, or forward slashes.');
+    } else if (!isAlphaNumericUnderscore(entityName)) {
+      toggleNameError(true);
+      error = true;
+      alert.error('File names may only contain letters, numbers, and underscores.');
     }
 
     if (error) return false;
@@ -97,7 +102,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
           disabled={addingItem}
           type="text"
           name="name"
-          placeholder="name"
+          placeholder={itemType === 'projects' ? 'ex: api, api/v1, api/v1/dogs' : 'ex: routes, post, public'}
         />
       </Col>
       <Col className="item-action">
