@@ -4,14 +4,16 @@ import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
+import { useHistory } from 'react-router';
 
 import instanceState from '../../../../functions/state/instanceState';
 import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import restartService from '../../../../functions/api/instance/restartService';
 
-const CodeEditor = ({ refreshCustomFunctions, loading, restarting }) => {
-  const { compute_stack_id, project, type, file } = useParams();
+const CodeEditor = () => {
+  const history = useHistory();
+  const { customer_id, compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const directory = useStoreState(instanceState, (s) => s.custom_functions?.directory);
@@ -43,20 +45,15 @@ const CodeEditor = ({ refreshCustomFunctions, loading, restarting }) => {
     <>
       <Row className="floating-card-header">
         <Col>
-          edit{' '}
+          edit &gt;&nbsp;
           <i>
             {directory}/{project}/{type}/{file}.js
           </i>
         </Col>
         <Col className="text-end">
-          <Button disabled={loading} color="link" onClick={refreshCustomFunctions}>
-            <span className="me-2">refresh endpoints</span>
-            <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
-          </Button>
-          <span className="mx-3 text">|</span>
-          <Button disabled={restarting} color="link" onClick={() => restartService({ auth, url, service: 'custom_functions' })} className="me-2">
-            <span className="me-2">restart custom functions server</span>
-            <i title="Refresh Endpoint Files" className={`fa ${restarting ? 'fa-spinner fa-spin' : 'fa-stop-circle'}`} />
+          <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/deploy/${project}`)} color="link" className="me-2">
+            <span className="me-2">deploy {project} project</span>
+            <i title="Deploy Project" className="fa fa-share" />
           </Button>
         </Col>
       </Row>

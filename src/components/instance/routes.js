@@ -68,7 +68,7 @@ const roles = {
 
 const functions = {
   component: Functions,
-  path: `/o/:customer_id/i/:compute_stack_id/functions/:project?/:type?/:file?`,
+  path: `/o/:customer_id/i/:compute_stack_id/functions/:action?/:project?/:type?/:file?`,
   link: 'functions',
   label: 'functions',
   icon: 'project-diagram',

@@ -110,6 +110,10 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
       status: instanceData.status,
     });
 
+    console.log(compute_stack_id, instanceAuths[compute_stack_id], registrationResult);
+
+    setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuths[compute_stack_id], version: registrationResult.version } });
+
     setProcessing(false);
 
     if (['UNABLE TO CONNECT', 'LOGIN FAILED'].includes(registrationResult.instance) && ['APPLYING LICENSE', 'CONFIGURING NETWORK'].includes(instanceData.status)) {
@@ -118,7 +122,7 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
 
     if (['PLEASE LOG IN', 'LOGIN FAILED'].includes(registrationResult.instance)) {
       if (instanceAuth) {
-        setInstanceAuths({ ...instanceAuths, [compute_stack_id]: false });
+        setInstanceAuths({ ...instanceAuths, [compute_stack_id]: null });
       }
       if (['PLEASE LOG IN', 'LOGIN FAILED', 'UNABLE TO CONNECT'].includes(instanceData.status)) {
         registrationResult.instance = 'LOGIN FAILED';
