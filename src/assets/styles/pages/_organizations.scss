@@ -29,9 +29,10 @@
     }
 
     .org-name {
-      height: 15px;
+      height: 17px;
       line-height: 1 !important;
       overflow: hidden;
+      padding-top: 2px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -39,27 +40,25 @@
     .status-icons {
       cursor: pointer;
       position: relative;
-      width: 15px;
+      text-align: right;
 
       .status-icon {
-        font-size: 12px !important;
-        position: absolute;
-        right: 15px;
-        top: 0;
+        margin-left: 10px;
 
-        &.disabled {
-          color: $color-grey !important;
+        i {
+          font-size: 12px;
         }
       }
     }
 
     .org-status {
-      font-size: $font-size-small;
-      height: 20px;
-      margin: 7px 0 8px;
+      margin: 12px 0;
+      font-size: 12px !important;
+      padding-top: 1px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      height: 16px;
     }
 
     .action-buttons {
