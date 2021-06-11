@@ -5,7 +5,7 @@ import EntityManagerForm from './EntityManagerForm';
 import EntityManagerRow from './EntityManagerRow';
 import EntityManagerHeader from './EntityManagerHeader';
 
-const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, project }) => {
+const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, project, showForm }) => {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -25,6 +25,7 @@ const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, proje
         toggleCreate={toggleCreate}
         restarting={restarting}
         project={project}
+        showForm={showForm}
       />
       <Card className="my-3">
         {items && items.length ? (
@@ -44,7 +45,7 @@ const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, proje
           </CardBody>
         ) : null}
 
-        {(items && !items.length) || isCreating ? (
+        {(showForm && items && !items.length) || isCreating ? (
           <CardBody>
             <EntityManagerForm
               items={items}

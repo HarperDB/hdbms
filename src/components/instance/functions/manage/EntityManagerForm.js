@@ -11,8 +11,7 @@ import setCustomFunction from '../../../../functions/api/instance/setCustomFunct
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
 import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';
-import isAlphaNumericHyphenSlash from '../../../../functions/util/isAlphaNumericHyphenSlash';
-import isAlphaNumericUnderscore from '../../../../functions/util/isAlphaNumericUnderscore';
+import isAlphaNumericUnderscoreHyphen from '../../../../functions/util/isAlphaNumericUnderscoreHyphen';
 
 const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
@@ -33,14 +32,10 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       error = true;
     }
 
-    if (entityName && itemType === 'projects' && !isAlphaNumericHyphenSlash(entityName)) {
+    if (entityName && !isAlphaNumericUnderscoreHyphen(entityName)) {
       toggleNameError(true);
       error = true;
-      alert.error('Project names may only contain letters, numbers, hyphens, or forward slashes.');
-    } else if (!isAlphaNumericUnderscore(entityName)) {
-      toggleNameError(true);
-      error = true;
-      alert.error('File names may only contain letters, numbers, and underscores.');
+      alert.error(`${itemType === 'projects' ? 'Project' : 'File'} names may only contain letters, numbers, hyphens, or underscores.`);
     }
 
     if (error) return false;
@@ -102,7 +97,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
           disabled={addingItem}
           type="text"
           name="name"
-          placeholder={itemType === 'projects' ? 'ex: api, api/v1, api/v1/dogs' : 'ex: routes, post, public'}
+          placeholder={itemType === 'projects' ? 'ex: api, api-v1, dogs' : itemType === 'routes' ? 'ex: v1, post, public' : 'ex: filter, auth, queries'}
         />
       </Col>
       <Col className="item-action">
