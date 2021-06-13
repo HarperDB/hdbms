@@ -52,13 +52,13 @@
     }
 
     .org-status {
-      margin: 12px 0;
       font-size: 12px !important;
-      padding-top: 1px;
+      height: 16px;
+      margin: 12px 0;
       overflow: hidden;
+      padding-top: 1px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      height: 16px;
     }
 
     .action-buttons {

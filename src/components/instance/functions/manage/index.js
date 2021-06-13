@@ -92,7 +92,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
           ) : project ? (
             <CodeEditor refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
           ) : (
-            <EmptyPrompt refreshCustomFunctions={refreshCustomFunctions} headline={`Please ${custom_functions.endpoints.length ? 'choose' : 'create'} a project at left.`} />
+            <EmptyPrompt refreshCustomFunctions={refreshCustomFunctions} headline={`Please ${custom_functions?.endpoints.length ? 'choose' : 'create'} a project at left.`} />
           )}
         </Col>
       </Row>

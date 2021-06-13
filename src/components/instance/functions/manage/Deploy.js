@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
 
-import getCustomFunctionProject from '../../../../functions/api/instance/getCustomFunctionProject';
-import deployCustomFunctionProject from '../../../../functions/api/instance/deployCustomFunctionProject';
-import restartService from '../../../../functions/api/instance/restartService';
 import DataTable from '../../../shared/DataTable';
 import buildCustomFunctionDeployColumns from '../../../../functions/instance/buildCustomFunctionDeployColumns';
 import useInstanceAuth from '../../../../functions/state/instanceAuths';

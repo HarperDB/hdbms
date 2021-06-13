@@ -34,7 +34,7 @@ const Status = ({ closeAndResetModal }) => {
     } else {
       const returnedComputeStackId = response.compute_stack_id || response.instance_id;
       setInstanceAuths({ ...instanceAuths, [returnedComputeStackId]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } });
-      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
       alert.success(response.message);
       closeAndResetModal();
     }
