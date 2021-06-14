@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -12,6 +12,10 @@ import DataTable from '../../../shared/DataTable';
 import buildCustomFunctionDeployColumns from '../../../../functions/instance/buildCustomFunctionDeployColumns';
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 import packageCustomFunctionProject from '../../../../functions/api/instance/packageCustomFunctionProject';
+import customFunctionsStatus from '../../../../functions/api/instance/customFunctionsStatus';
+import getCustomFunctions from '../../../../functions/api/instance/getCustomFunctions';
+import deployCustomFunctionProject from '../../../../functions/api/instance/deployCustomFunctionProject';
+import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
 
 const defaultTableState = {
   filtered: [],
@@ -32,9 +36,74 @@ const Deploy = () => {
   const url = useStoreState(instanceState, (s) => s.url);
   const [{ payload, file }, setPayloadAndFile] = useState([]);
   const returnUrl = `/o/${customer_id}/i/${compute_stack_id}/functions/edit/${project}`;
-  const tableData = useStoreState(appState, (s) => s.instances.filter((i) => i.compute_stack_id !== compute_stack_id));
-  const dataTableColumns = buildCustomFunctionDeployColumns({ project, payload, file, loading: !payload, instanceAuths });
+  const instances = useStoreState(appState, (s) => s.instances.filter((i) => i.compute_stack_id !== compute_stack_id));
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useReducer((state, newState) => ({ ...state, ...newState }), {});
   const [tableState, setTableState] = useState(defaultTableState);
+
+  const handleReturn = useCallback(() => history.push(returnUrl), [history, returnUrl]);
+
+  const updateInstanceCFStatus = useCallback(
+    async (destination_compute_stack_id, action) => {
+      const thisInstance = tableData.find((i) => i.compute_stack_id === destination_compute_stack_id);
+      const instanceAuth = instanceAuths[destination_compute_stack_id];
+
+      if (thisInstance && instanceAuth) {
+        setLoading({ [destination_compute_stack_id]: action });
+        let now_has_current_project = false;
+        const custom_functions_status = await customFunctionsStatus({ auth: instanceAuth, url: thisInstance.url });
+        if (!custom_functions_status.error) {
+          const instance_custom_functions = await getCustomFunctions({ auth: instanceAuth, url: thisInstance.url });
+          now_has_current_project = Object.keys(instance_custom_functions).includes(project);
+        }
+
+        tableData.map((instance) => {
+          if (instance.compute_stack_id === destination_compute_stack_id) {
+            instance.custom_functions_status = custom_functions_status;
+            instance.has_current_project = now_has_current_project;
+          }
+          return instance;
+        });
+
+        setTableData(tableData);
+        setLoading({ [destination_compute_stack_id]: null });
+      }
+    },
+    [instanceAuths, project, tableData]
+  );
+
+  const handleClick = useCallback(
+    async (destination_compute_stack_id, action) => {
+      const thisInstance = tableData.find((i) => i.compute_stack_id === destination_compute_stack_id);
+      const instanceAuth = instanceAuths[destination_compute_stack_id];
+
+      if (thisInstance && instanceAuth) {
+        setLoading({ [destination_compute_stack_id]: action });
+
+        if (action === 'deploy') {
+          await deployCustomFunctionProject({
+            auth: instanceAuth,
+            url: thisInstance.url,
+            payload,
+            project,
+            file,
+          });
+        } else {
+          await dropCustomFunctionProject({
+            auth: instanceAuth,
+            url: thisInstance.url,
+            project,
+          });
+        }
+
+        setTimeout(() => {
+          setLoading({ [destination_compute_stack_id]: false });
+          updateInstanceCFStatus(destination_compute_stack_id, action);
+        }, 1000);
+      }
+    },
+    [file, instanceAuths, payload, project, tableData, updateInstanceCFStatus]
+  );
 
   useAsyncEffect(async () => {
     if (auth && url && project) {
@@ -44,6 +113,26 @@ const Deploy = () => {
     }
   }, [auth, url, project]);
 
+  useAsyncEffect(async () => {
+    if (instances) {
+      const loadedInstances = await Promise.all(
+        instances.map(async (instance) => {
+          const instanceAuth = instanceAuths[instance.compute_stack_id];
+          let instance_custom_functions = {};
+          if (instanceAuth) {
+            const custom_functions_status = await customFunctionsStatus({ auth: instanceAuth, url: instance.url });
+            if (!custom_functions_status.error) {
+              instance_custom_functions = await getCustomFunctions({ auth: instanceAuth, url: instance.url });
+            }
+            return { ...instance, custom_functions_status, has_auth: true, has_current_project: Object.keys(instance_custom_functions).includes(project) };
+          }
+          return { ...instance, custom_functions_status: false };
+        })
+      );
+      setTableData(loadedInstances);
+    }
+  }, [instances, project]);
+
   useEffect(() => {
     setTableState({
       ...tableState,
@@ -51,8 +140,6 @@ const Deploy = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTableState, tableState.pageSize]);
-
-  const handleReturn = () => history.push(returnUrl);
 
   return (
     <>
@@ -69,7 +156,7 @@ const Deploy = () => {
         <CardBody className="react-table-holder">
           {tableData.length ? (
             <DataTable
-              columns={dataTableColumns}
+              columns={buildCustomFunctionDeployColumns({ initializing: !payload, loading, handleClick })}
               data={tableData}
               page={tableState.page}
               pageSize={tableState.pageSize}

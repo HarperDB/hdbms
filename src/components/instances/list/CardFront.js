@@ -110,8 +110,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
       status: instanceData.status,
     });
 
-    console.log(compute_stack_id, instanceAuths[compute_stack_id], registrationResult);
-
     setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuths[compute_stack_id], version: registrationResult.version } });
 
     setProcessing(false);

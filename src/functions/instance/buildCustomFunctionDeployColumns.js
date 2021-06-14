@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-import deployCustomFunctionProject from '../api/instance/deployCustomFunctionProject';
-import dropCustomFunctionProject from '../api/instance/dropCustomFunctionProject';
-
-export default ({ project, payload, file, loading, instanceAuths }) => [
+export default ({ initializing, loading, handleClick }) => [
   {
     Header: 'instance name',
     accessor: 'instance_name',
@@ -14,7 +11,7 @@ export default ({ project, payload, file, loading, instanceAuths }) => [
     accessor: 'url',
   },
   {
-    Header: 'capable',
+    Header: 'cf capable',
     id: 'hdb-narrow-cfcapable',
     Cell: ({
       row: {
@@ -23,7 +20,7 @@ export default ({ project, payload, file, loading, instanceAuths }) => [
     }) => (custom_functions_status.error ? 'no' : 'yes'),
   },
   {
-    Header: 'enabled',
+    Header: 'cf enabled',
     id: 'hdb-narrow-cfenabled',
     Cell: ({
       row: {
@@ -32,30 +29,25 @@ export default ({ project, payload, file, loading, instanceAuths }) => [
     }) => (custom_functions_status.is_enabled ? 'yes' : 'no'),
   },
   {
+    Header: 'has project',
+    id: 'hdb-narrow-cfhasproject',
+    Cell: ({
+      row: {
+        original: { has_current_project },
+      },
+    }) => (has_current_project ? 'yes' : 'no'),
+  },
+  {
     Header: 'deploy',
     id: 'hdb-narrow-deploy',
     Cell: ({
       row: {
-        original: { compute_stack_id, url, custom_functions_status },
+        original: { compute_stack_id, custom_functions_status, has_auth },
       },
     }) =>
-      custom_functions_status.is_enabled ? (
-        <Button
-          color="success"
-          block
-          size="sm"
-          disabled={loading || !instanceAuths[compute_stack_id] || !custom_functions_status.is_enabled}
-          onClick={() =>
-            deployCustomFunctionProject({
-              auth: instanceAuths[compute_stack_id],
-              url,
-              payload,
-              project,
-              file,
-            })
-          }
-        >
-          <i className={`fa ${loading || !instanceAuths[compute_stack_id] ? 'fa-spinner fa-spin' : 'fa-share'}`} />
+      custom_functions_status.is_enabled && has_auth ? (
+        <Button color="success" block size="sm" disabled={initializing || loading[compute_stack_id]} onClick={() => handleClick(compute_stack_id, 'deploy')}>
+          <i className={`fa ${loading[compute_stack_id] === 'deploy' ? 'fa-spinner fa-spin' : 'fa-share'}`} />
         </Button>
       ) : null,
   },
@@ -64,24 +56,12 @@ export default ({ project, payload, file, loading, instanceAuths }) => [
     id: 'hdb-narrow-remove',
     Cell: ({
       row: {
-        original: { compute_stack_id, url, custom_functions_status },
+        original: { compute_stack_id, custom_functions_status, has_current_project, has_auth },
       },
     }) =>
-      custom_functions_status.is_enabled ? (
-        <Button
-          color="danger"
-          block
-          size="sm"
-          disabled={!instanceAuths[compute_stack_id] || !custom_functions_status.is_enabled}
-          onClick={() =>
-            dropCustomFunctionProject({
-              auth: instanceAuths[compute_stack_id],
-              url,
-              project,
-            })
-          }
-        >
-          <i className="fa fa-trash" />
+      custom_functions_status.is_enabled && has_current_project && has_auth ? (
+        <Button color="danger" block size="sm" disabled={loading[compute_stack_id]} onClick={() => handleClick(compute_stack_id, 'drop')}>
+          <i className={`fa ${loading[compute_stack_id] === 'drop' ? 'fa-spinner fa-spin' : 'fa-trash'}`} />
         </Button>
       ) : null,
   },

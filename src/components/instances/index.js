@@ -19,12 +19,10 @@ import getInstances from '../../functions/api/lms/getInstances';
 import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
-import useInstanceAuth from '../../functions/state/instanceAuths';
 
 const InstancesIndex = () => {
   const history = useHistory();
   const { action, customer_id } = useParams();
-  const [instanceAuths] = useInstanceAuth({});
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
@@ -58,9 +56,9 @@ const InstancesIndex = () => {
 
   const refreshInstances = useCallback(() => {
     if (auth && products && regions && subscriptions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
     }
-  }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
+  }, [auth, customer_id, instances, products, regions, subscriptions]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
