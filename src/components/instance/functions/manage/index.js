@@ -62,7 +62,14 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
       <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
           <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-            <EntityManager itemType="projects" items={Object.keys(custom_functions?.endpoints) || []} activeItem={project} baseUrl={baseUrl} restarting={restarting} />
+            <EntityManager
+              itemType="projects"
+              items={Object.keys(custom_functions?.endpoints) || []}
+              activeItem={project}
+              baseUrl={baseUrl}
+              restarting={restarting}
+              showForm={action === 'edit'}
+            />
             {project && action === 'edit' && (
               <EntityManager
                 itemType="routes"
@@ -71,6 +78,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
                 activeItem={file}
                 baseUrl={`${baseUrl}/${project}/routes`}
                 restarting={restarting}
+                showForm={action === 'edit'}
               />
             )}
             {project && action === 'edit' && (
@@ -81,6 +89,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
                 activeItem={file}
                 baseUrl={`${baseUrl}/${project}/helpers`}
                 restarting={restarting}
+                showForm={action === 'edit'}
               />
             )}
             <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />

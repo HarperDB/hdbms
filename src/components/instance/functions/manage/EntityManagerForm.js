@@ -97,7 +97,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
           disabled={addingItem}
           type="text"
           name="name"
-          placeholder={itemType === 'projects' ? 'ex: api, api-v1, dogs' : 'ex: routes, post, public'}
+          placeholder={itemType === 'projects' ? 'ex: api, api-v1, dogs' : itemType === 'routes' ? 'ex: v1, post, public' : 'ex: filter, auth, queries'}
         />
       </Col>
       <Col className="item-action">
