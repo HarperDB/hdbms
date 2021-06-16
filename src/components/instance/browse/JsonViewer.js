@@ -27,20 +27,27 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const [confirmDelete, setConfirmDelete] = useState();
   const [changed, setChanged] = useState(false);
   const [validJSON, setValidJSON] = useState(false);
+  const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
-      history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
+      history.push(baseUrl);
     }
   }, []);
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
       const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url });
-      delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
-      delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
-      delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
-      setCurrentValue(rowData);
+
+      if (rowData) {
+        delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
+        delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
+        delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
+        setCurrentValue(rowData);
+      } else {
+        history.push(baseUrl);
+        alert.error('Unable to find record with that hash_attribute');
+      }
     } else {
       setCurrentValue(newEntityAttributes || {});
     }
