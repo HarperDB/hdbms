@@ -52,7 +52,8 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
           s.restarting_service = false;
         });
       } catch (e) {
-        // console.log(e);
+        // eslint-disable-next-line no-console
+        console.log(e);
       }
     }
   }, 1000);
