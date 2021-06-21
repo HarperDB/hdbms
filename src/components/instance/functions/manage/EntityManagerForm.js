@@ -8,10 +8,12 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
 import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
+import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
+import restartService from '../../../../functions/api/instance/restartService';
+import isAlphaNumericUnderscoreHyphen from '../../../../functions/util/isAlphaNumericUnderscoreHyphen';
 
-const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting }) => {
+const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -30,13 +32,36 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       error = true;
     }
 
+    if (entityName && !isAlphaNumericUnderscoreHyphen(entityName)) {
+      toggleNameError(true);
+      error = true;
+      alert.error(`${itemType === 'projects' ? 'Project' : 'File'} names may only contain letters, numbers, hyphens, or underscores.`);
+    }
+
     if (error) return false;
 
     setAddingItem(true);
 
-    const function_content = generateFunctionTemplate(entityName);
+    let result;
 
-    const result = await setCustomFunction({ auth, url, function_name: entityName, function_content });
+    if (itemType === 'projects') {
+      result = await addCustomFunctionProject({
+        auth,
+        url,
+        project: entityName,
+      });
+    } else {
+      const function_content = generateFunctionTemplate(itemType);
+
+      result = await setCustomFunction({
+        auth,
+        url,
+        project,
+        type: itemType,
+        file: entityName,
+        function_content,
+      });
+    }
 
     if (result.error) {
       setAddingItem(false);
@@ -44,8 +69,9 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       return alert.error(result.message);
     }
 
+    restartService({ auth, url, service: 'custom_functions' });
     await buildCustomFunctions({ auth, url });
-    return restartInstance({ auth, url });
+    return history.push(`${baseUrl}/${entityName}`);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);
@@ -71,7 +97,7 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
           disabled={addingItem}
           type="text"
           name="name"
-          placeholder="name"
+          placeholder={itemType === 'projects' ? 'ex: api, api-v1, dogs' : itemType === 'routes' ? 'ex: v1, post, public' : 'ex: filter, auth, queries'}
         />
       </Col>
       <Col className="item-action">

@@ -26,6 +26,7 @@ export default ({ auth, url, is_local, customer_id, buildNetwork }) => [
   },
   {
     Header: 'publish',
+    id: 'hdb-narrow-publish',
     Cell: ({
       row: {
         original: { compute_stack_id, instance_host, clusterPort, subscriptions, publish, channel },
@@ -54,6 +55,7 @@ export default ({ auth, url, is_local, customer_id, buildNetwork }) => [
   },
   {
     Header: 'subscribe',
+    id: 'hdb-narrow-subscribe',
     Cell: ({
       row: {
         original: { compute_stack_id, instance_host, clusterPort, subscriptions, subscribe, channel },

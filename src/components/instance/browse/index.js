@@ -10,12 +10,12 @@ import instanceState from '../../../functions/state/instanceState';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
+import EmptyPrompt from '../../shared/EmptyPrompt';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
 const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JsonViewer'));
 const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
-const EmptyPrompt = lazy(() => import(/* webpackChunkName: "browse-emptyprompt" */ './EmptyPrompt'));
 const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/StructureReloader'));
 
 const defaultTableState = {

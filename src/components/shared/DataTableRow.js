@@ -7,7 +7,7 @@ const DataTableRow = ({ prepareRow, row, onRowClick = false }) => {
   return (
     <Row onClick={() => onRowClick && onRowClick(row.original)} className="g-0">
       {row.cells.map((cell) => (
-        <Col key={`${cell.row.id}-${cell.column.id}`} className={['publish', 'subscribe'].includes(cell.column.id) ? 'action' : ''}>
+        <Col key={`${cell.row.id}-${cell.column.id}`} className={cell.column.id.indexOf('hdb-narrow') !== -1 ? 'action' : ''}>
           {cell.render('Cell')}
         </Col>
       ))}

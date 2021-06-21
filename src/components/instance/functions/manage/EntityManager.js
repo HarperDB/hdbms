@@ -5,18 +5,28 @@ import EntityManagerForm from './EntityManagerForm';
 import EntityManagerRow from './EntityManagerRow';
 import EntityManagerHeader from './EntityManagerHeader';
 
-const EntityManager = ({ items, activeItem, baseUrl, restarting }) => {
+const EntityManager = ({ items, activeItem, baseUrl, restarting, itemType, project, showForm }) => {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
   useEffect(() => {
     toggleCreate();
     toggleDropItem();
-  }, [activeItem, items]);
+  }, [activeItem, items.length]);
 
   return (
     <div className="entity-manager">
-      <EntityManagerHeader items={items} isDropping={isDropping} toggleDropItem={toggleDropItem} isCreating={isCreating} toggleCreate={toggleCreate} restarting={restarting} />
+      <EntityManagerHeader
+        items={items}
+        itemType={itemType}
+        isDropping={isDropping}
+        toggleDropItem={toggleDropItem}
+        isCreating={isCreating}
+        toggleCreate={toggleCreate}
+        restarting={restarting}
+        project={project}
+        showForm={showForm}
+      />
       <Card className="my-3">
         {items && items.length ? (
           <CardBody className={`scrollable ${isCreating ? 'creating' : ''}`}>
@@ -28,22 +38,25 @@ const EntityManager = ({ items, activeItem, baseUrl, restarting }) => {
                 isActive={activeItem === item}
                 isDropping={isDropping}
                 toggleDropItem={toggleDropItem}
+                itemType={itemType}
                 restarting={restarting}
               />
             ))}
           </CardBody>
         ) : null}
 
-        {(items && !items.length) || isCreating ? (
+        {(showForm && items && !items.length) || isCreating ? (
           <CardBody>
             <EntityManagerForm
               items={items}
+              itemType={itemType}
               baseUrl={baseUrl}
               isDropping={isDropping}
               toggleDropItem={toggleDropItem}
               isCreating={isCreating}
               toggleCreate={toggleCreate}
               restarting={restarting}
+              project={project}
             />
           </CardBody>
         ) : items && !items.length && !isCreating ? (

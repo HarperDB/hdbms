@@ -9,7 +9,7 @@ import ComingSoon from './comingsoon';
 import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/buildCustomFunctions';
 
-const ClusteringIndex = () => {
+const CustomFunctionsIndex = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
@@ -38,10 +38,10 @@ const ClusteringIndex = () => {
   ) : custom_functions.error ? (
     <ComingSoon />
   ) : showManage ? (
-    <Manage refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} loading={loading} />
+    <Manage refreshCustomFunctions={refreshCustomFunctions} loading={loading} />
   ) : (
     <Setup refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
   );
 };
 
-export default ClusteringIndex;
+export default CustomFunctionsIndex;

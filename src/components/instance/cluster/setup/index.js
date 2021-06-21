@@ -14,7 +14,7 @@ import User from './User';
 import Port from './Port';
 import Enable from './Enable';
 import NodeName from './NodeName';
-import EmptyPrompt from './EmptyPrompt';
+import EmptyPrompt from '../../../shared/EmptyPrompt';
 
 import configureCluster from '../../../../functions/api/instance/configureCluster';
 import restartInstance from '../../../../functions/api/instance/restartInstance';

@@ -38,7 +38,9 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       return alert.error(result.message);
     }
 
-    return buildInstanceStructure({ auth, url });
+    await buildInstanceStructure({ auth, url });
+
+    return history.push(baseUrl);
   };
 
   const selectItemForDrop = () => {

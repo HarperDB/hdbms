@@ -12,6 +12,7 @@ import CardFrontStatusRow from '../../shared/CardFrontStatusRow';
 import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
+import CardFrontIcons from './CardFrontIcons';
 
 const CardFront = ({ customer_name, customer_id, total_instance_count, status, setFlipState }) => {
   const auth = useStoreState(appState, (s) => s.auth);
@@ -36,36 +37,16 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
     }
   };
 
-  const handleCardFlipIconClick = (e) => {
-    e.stopPropagation();
-    const action = e.currentTarget.getAttribute('data-action');
-    if (action === 'delete' && total_instance_count) {
-      alert.error('You must remove all instances from an Organization before deleting it.');
-    } else {
-      setFlipState(action);
-    }
-  };
-
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
       <Card className={`instance ${canChooseOrganization ? 'clickable' : ''}`} onClick={chooseOrganization}>
         <CardBody>
-          <Row>
+          <Row className="g-0">
             <Col xs="10" className="org-name">
               {customer_name}
             </Col>
             <Col xs="2" className="status-icons text-end">
-              {loading ? (
-                <i className="status-icon fa fa-spinner fa-spin text-purple" />
-              ) : status === 'accepted' ? (
-                <Button data-action="leave" className="status-icon" color="link" title={`Leave ${customer_name} organization`} onClick={handleCardFlipIconClick}>
-                  <i className="fa fa-times-circle text-purple" />
-                </Button>
-              ) : status === 'owner' ? (
-                <Button data-action="delete" className="status-icon" color="link" title={`Delete ${customer_name} organization`} onClick={handleCardFlipIconClick}>
-                  <i className={`fa fa-trash delete text-purple ${total_instance_count ? 'disabled' : ''}`} />
-                </Button>
-              ) : null}
+              <CardFrontIcons status={status} loading={loading} customer_name={customer_name} setFlipState={setFlipState} total_instance_count={total_instance_count} />
             </Col>
           </Row>
           <div className="org-status">ORG ID: {customer_id}</div>
