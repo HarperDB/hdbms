@@ -15,7 +15,7 @@ export default async () => {
     let regions = [];
 
     if (Array.isArray(response)) {
-      regions = response.filter((r) => r.value !== 'us-east-2');
+      regions = response;
     }
 
     return appState.update((s) => {
