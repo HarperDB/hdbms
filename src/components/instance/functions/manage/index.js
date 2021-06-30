@@ -15,6 +15,7 @@ import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
+import StaticEntityStatus from './StaticEntityStatus';
 
 const ManageIndex = ({ refreshCustomFunctions, loading }) => {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
@@ -72,27 +73,36 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
               showForm={action === 'edit'}
             />
             {project && action === 'edit' && (
-              <EntityManager
-                itemType="routes"
-                items={(project && custom_functions?.endpoints[project]?.routes) || []}
-                project={project}
-                activeItem={file}
-                baseUrl={`${baseUrl}/${project}/routes`}
-                restarting={restarting}
-                showForm={action === 'edit'}
-              />
+              <>
+                <EntityManager
+                  itemType="routes"
+                  items={(project && custom_functions?.endpoints[project]?.routes) || []}
+                  project={project}
+                  activeItem={file}
+                  baseUrl={`${baseUrl}/${project}/routes`}
+                  restarting={restarting}
+                  showForm={action === 'edit'}
+                />
+                <EntityManager
+                  itemType="helpers"
+                  items={(project && custom_functions?.endpoints[project]?.helpers) || []}
+                  project={project}
+                  activeItem={file}
+                  baseUrl={`${baseUrl}/${project}/helpers`}
+                  restarting={restarting}
+                  showForm={action === 'edit'}
+                />
+                <StaticEntityStatus url={cf_server_url} project={project} fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} />
+              </>
             )}
-            {project && action === 'edit' && (
-              <EntityManager
-                itemType="helpers"
-                items={(project && custom_functions?.endpoints[project]?.helpers) || []}
-                project={project}
-                activeItem={file}
-                baseUrl={`${baseUrl}/${project}/helpers`}
-                restarting={restarting}
-                showForm={action === 'edit'}
-              />
-            )}
+            <hr className="mt-0" />
+            <div className="floating-card-header">
+              <div className="text-bold mb-1">Root File Directory</div>
+              <div className="text-truncate text-nowrap mb-3">{custom_functions.directory}</div>
+              <div className="text-bold mb-1">Custom Functions Server URL</div>
+              <div className="text-truncate text-nowrap">{cf_server_url}</div>
+            </div>
+            <hr />
             <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
           </ErrorBoundary>
         </Col>
