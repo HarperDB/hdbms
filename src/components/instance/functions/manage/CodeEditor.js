@@ -16,7 +16,6 @@ const CodeEditor = () => {
   const { customer_id, compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const directory = useStoreState(instanceState, (s) => s.custom_functions?.directory);
   const [code, setCode] = useState();
   const alert = useAlert();
 
@@ -49,18 +48,18 @@ const CodeEditor = () => {
         <Col>
           edit &gt;&nbsp;
           <i>
-            {directory}/{project}
+            /{project}
             {file && file !== 'undefined' && `/${type}/${file}.js`}
           </i>
         </Col>
         <Col className="text-end">
           <Button onClick={setEditorToFile} color="link" className="me-2">
-            <span className="me-2">reload file</span>
+            <span className="me-2">reload</span>
             <i title="Reload File" className="fa fa-refresh" />
           </Button>
           <span className="mx-3 text">|</span>
           <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/deploy/${project}`)} color="link" className="me-2">
-            <span className="me-2">deploy {project} project</span>
+            <span className="me-2">deploy</span>
             <i title="Deploy Project" className="fa fa-share" />
           </Button>
         </Col>

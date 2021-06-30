@@ -95,6 +95,14 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
                 <StaticEntityStatus url={cf_server_url} project={project} fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} />
               </>
             )}
+            <hr className="mt-0" />
+            <div className="floating-card-header">
+              <div className="text-bold mb-1">Root File Directory</div>
+              <div className="text-truncate text-nowrap mb-3">{custom_functions.directory}</div>
+              <div className="text-bold mb-1">Custom Functions Server URL</div>
+              <div className="text-truncate text-nowrap">{cf_server_url}</div>
+            </div>
+            <hr />
             <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
           </ErrorBoundary>
         </Col>

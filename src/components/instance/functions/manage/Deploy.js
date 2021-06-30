@@ -147,7 +147,7 @@ const Deploy = () => {
         <Col>deploy {project && `> ${project}`}</Col>
         <Col className="text-end">
           <Button onClick={handleReturn} color="link" className="me-2">
-            <span className="me-2">edit {project} project</span>
+            <span className="me-2">edit</span>
             <i title="Edit Project" className="fa fa-edit" />
           </Button>
         </Col>
