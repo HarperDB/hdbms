@@ -5,11 +5,11 @@ const LinksIndex = () => (
   <main id="support">
     <Row>
       <Col lg="3" className="mb-3">
-        <span className="floating-card-header">Instance API Docs</span>
+        <span className="floating-card-header">Full API Documenation</span>
         <Card className="my-3">
           <CardBody>
-            <Button color="purple" block href="https://docs.harperdb.io" target="_blank" rel="noopener noreferrer">
-              Visit docs.harperdb.io
+            <Button color="purple" block href="https://api.harperdb.io" target="_blank" rel="noopener noreferrer">
+              Visit api.harperdb.io
             </Button>
           </CardBody>
         </Card>
