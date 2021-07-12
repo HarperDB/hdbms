@@ -39,10 +39,10 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
             setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: true } });
             setFlipState(false);
           } else {
-            setFormState({ error: 'Login failed.' });
+            setFormState({ error: 'Login failed. Using instance credentials?', url: 'https://harperdb.io/docs/harperdb-studio/instances/#instance-login' });
           }
         } else if ((result.error && result.message === 'Login failed') || result.error === 'Login failed') {
-          setFormState({ error: 'Login failed.' });
+          setFormState({ error: 'Login failed. Using instance credentials?', url: 'https://harperdb.io/docs/harperdb-studio/instances/#instance-login' });
         } else if (result.error) {
           setFormState({ error: result.message || result.error });
         } else {
@@ -67,8 +67,8 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   onChange={(e) => setFormData({ ...formData, user: e.target.value })}
                   className="text-center mb-1"
                   type="text"
-                  title="username"
-                  placeholder="user"
+                  title="instance user"
+                  placeholder="instance user"
                   disabled={formState.submitted}
                 />
                 <Input
@@ -76,8 +76,8 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
                   className="text-center mb-2"
                   type="password"
-                  title="password"
-                  placeholder="password"
+                  title="instance password"
+                  placeholder="instance password"
                   disabled={formState.submitted}
                 />
                 <Row className="g-0">
