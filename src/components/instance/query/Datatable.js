@@ -41,7 +41,7 @@ const Datatable = ({ query }) => {
 
   const cancel = () => {
     if (controller) controller.abort();
-    setTableState({ ...defaultTableState, reload: true });
+    setTableState(defaultTableState);
     setLoading(false);
   };
 
@@ -57,9 +57,9 @@ const Datatable = ({ query }) => {
         setLoading(false);
 
         if (response.error && response.message === 'Aborted') {
-          setTableState({ ...tableState, message: false, error: false });
+          setTableState({ ...tableState, message: 'query canceled, please execute a new query to proceed', error: false });
         } else if (response.error) {
-          setTableState({ ...tableState, message: `Error fetching data: ${response.message}`, access_errors: response.access_errors, error: true });
+          setTableState({ ...tableState, message: `error fetching data: ${response.message}`, access_errors: response.access_errors, error: true });
         } else if (response.message) {
           setTableState({ ...tableState, message: response.message, error: false });
         } else if (isMounted) {
@@ -68,7 +68,7 @@ const Datatable = ({ query }) => {
             ...response,
             totalPages: Math.ceil((response.tableData?.length || 20) / 20),
             error: false,
-            message: false,
+            message: response.totalRecords ? false : 'no records matched your query',
             sorted: [],
           });
         }
@@ -85,11 +85,7 @@ const Datatable = ({ query }) => {
   }, [query, lastUpdate]);
 
   useEffect(() => {
-    if (query.query) {
-      setTableState({ ...defaultTableState, reload: true });
-    } else {
-      setTableState({ ...tableState, tableData: false, error: false, message: false, reload: false });
-    }
+    setTableState(defaultTableState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.query]);
 
@@ -97,8 +93,8 @@ const Datatable = ({ query }) => {
     if (tableState.autoRefresh && !loading) setLastUpdate(Date.now());
   }, config.refresh_content_interval);
 
-  return tableState.message || tableState.access_errors ? (
-    <EmptyPrompt error={tableState.error} accessErrors={tableState.access_errors} loading={loading} message={tableState.message || 'Executing Query'} cancel={cancel} />
+  return loading || tableState.message || tableState.access_errors ? (
+    <EmptyPrompt error={tableState.error} accessErrors={tableState.access_errors} loading={loading} message={loading ? false : tableState.message} cancel={cancel} />
   ) : tableState.tableData?.length ? (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <DataTableHeader
@@ -133,7 +129,7 @@ const Datatable = ({ query }) => {
       {showChartModal && <ChartModal setShowChartModal={setShowChartModal} tableData={tableState.tableData} query={query.query.replace(/\n/g, ' ').trim()} />}
     </ErrorBoundary>
   ) : (
-    <EmptyPrompt message="Please execute a SQL query to proceed" />
+    <EmptyPrompt message="please execute a SQL query to proceed" />
   );
 };
 
