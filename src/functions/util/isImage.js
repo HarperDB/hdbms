@@ -1,1 +1,1 @@
-export default (string) => string && ['jpg', 'png', 'gif'].includes(string.split('.').pop());
+export default (string) => string && (string.match(/^https?.*\.(jpeg|jpg|gif|png)$/) || string.indexOf('data:image') !== -1);

@@ -12,10 +12,10 @@ const EmptyPrompt = ({ message, loading = false, error = false, accessErrors = f
         <CardBody>
           <div className="empty-prompt">
             <div className="mb-2">&nbsp;{loading && <i className="fa fa-spinner fa-spin" />}&nbsp;</div>
-            <div className={`mb-2 ${error ? 'text-danger' : ''}`}>&nbsp;{message}&nbsp;</div>
+            {message && <div className={`mb-2 ${error ? 'text-danger' : ''}`}>&nbsp;{message}&nbsp;</div>}
             {loading && cancel && (
               <Button color="purple" size="sm" className="px-3" onClick={cancel}>
-                Cancel Query
+                cancel query
               </Button>
             )}
             {error && tableErrors && tableErrors.length ? (
