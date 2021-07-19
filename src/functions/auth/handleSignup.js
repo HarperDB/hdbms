@@ -44,9 +44,9 @@ export default async ({ formData }) => {
       error: response.message.replace('Bad request: ', '').replace(/['"]+/g, ''),
     };
   }
-  if (window.ORIBI) {
-    window.ORIBI.api('setUserEmail', email);
-    window.ORIBI.api('track', 'successful_signup');
+  if (window._kmq) {
+    window._kmq.push(['identify', email]);
+    window._kmq.push(['record', 'successful_signup']);
   }
 
   if (response.temp_password) {

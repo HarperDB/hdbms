@@ -68,8 +68,8 @@ const App = () => {
 
   useEffect(() => {
     if (auth?.email) {
-      if (window.ORIBI) {
-        window.ORIBI.api('setUserEmail', auth.email);
+      if (window._kmq) {
+        window._kmq.push(['identify', auth.email]);
       }
       if (auth?.update_password) {
         history.push('/update-password');

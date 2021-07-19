@@ -39,7 +39,7 @@ const CouponForm = () => {
             setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
-            if (window.ORIBI) window.ORIBI.api('track', 'user added coupon');
+            if (window._kmq) window._kmq.push(['record', 'user added coupon']);
             await getCustomer({ auth, customer_id });
             if (mounted) {
               setFormData({ coupon_code: '' });

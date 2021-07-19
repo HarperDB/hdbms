@@ -9,7 +9,7 @@ const ExamplesIndex = ({ showCustomMessage }) => {
   const { folder } = useParams();
 
   useEffect(() => {
-    if (window.ORIBI) window.ORIBI.api('track', `visited ${showCustomMessage ? 'resources' : 'instance'} - example code`);
+    if (window._kmq) window._kmq.push(['record', `visited ${showCustomMessage ? 'resources' : 'instance'} - example code`]);
   }, [showCustomMessage]);
 
   return (

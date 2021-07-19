@@ -52,7 +52,7 @@ const Payment = () => {
           setTimeout(() => setFormState({}), 2000);
         } else {
           await addPaymentMethod({ auth, payment_method_id: paymentMethod.id, stripe_id: stripeId, customer_id });
-          if (window.ORIBI) window.ORIBI.api('track', 'added credit card - new instance');
+          if (window._kmq) window._kmq.push(['record', 'added credit card - new instance']);
           await getCustomer({ auth, customer_id });
           setFormState({ success: true });
         }

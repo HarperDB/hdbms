@@ -37,7 +37,7 @@ const Add = ({ refreshUsers, userEmails }) => {
         if (response.error) {
           setFormState({ error: response.message });
         } else {
-          if (window.ORIBI) window.ORIBI.api('track', 'added org user');
+          if (window._kmq) window._kmq.push(['record', 'added org user']);
           refreshUsers();
           setFormState({ success: response.message });
         }

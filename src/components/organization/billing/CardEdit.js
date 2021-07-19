@@ -51,7 +51,7 @@ const CardEdit = ({ setEditingCard, customerCard, formStateHeight, badCard }) =>
             setFormState({ error: response.message });
             setTimeout(() => setFormState({}), 2000);
           } else {
-            if (window.ORIBI) window.ORIBI.api('track', 'added credit card - billing page');
+            if (window._kmq) window._kmq.push(['record', 'added credit card - billing page']);
             setFormState({ success: response.message });
             await getCustomer({ auth, customer_id });
 

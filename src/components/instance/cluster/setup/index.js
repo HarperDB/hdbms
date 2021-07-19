@@ -46,7 +46,7 @@ const SetupIndex = () => {
         is_local,
         customer_id,
       });
-      if (window.ORIBI) window.ORIBI.api('track', 'enabled clustering');
+      if (window._kmq) window._kmq.push(['record', 'enabled clustering']);
       await restartInstance({ auth, url });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }
