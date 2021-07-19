@@ -21,6 +21,7 @@
     "react/prop-types": 0,
     "react/no-danger": 0,
     "no-unused-vars": 1,
-    "react/button-has-type": 1
+    "react/button-has-type": 1,
+    "no-underscore-dangle": ["warn", { "allow": ["_kmq", "_kmk"] }]
   }
 }

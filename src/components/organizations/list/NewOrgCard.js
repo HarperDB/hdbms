@@ -10,7 +10,7 @@ const NewOrgCard = () => {
   const history = useHistory();
 
   const handleClick = () => {
-    if (window.ORIBI) window.ORIBI.api('track', 'clicked new org card');
+    if (window._kmq) window._kmq.push(['record', 'clicked new org card']);
     history.push('/organizations/new');
   };
 

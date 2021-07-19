@@ -9,7 +9,7 @@ const InstallationIndex = () => {
   const version = useStoreState(appState, (s) => s.version);
 
   useEffect(() => {
-    if (window.ORIBI) window.ORIBI.api('track', 'visited resources - installation');
+    if (window._kmq) window._kmq.push(['record', 'visited resources - installation']);
   }, []);
 
   return (

@@ -7,7 +7,7 @@ const NewInstanceCard = () => {
   const { customer_id } = useParams();
 
   const handleClick = () => {
-    if (window.ORIBI) window.ORIBI.api('track', 'clicked new instance card');
+    if (window._kmq) window._kmq.push(['record', 'clicked new instance card']);
     history.push(`/o/${customer_id}/instances/new`);
   };
 

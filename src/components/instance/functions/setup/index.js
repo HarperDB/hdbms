@@ -27,7 +27,7 @@ const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       await enableCustomFunctions({ auth, url });
-      if (window.ORIBI) window.ORIBI.api('track', 'enabled custom api');
+      if (window._kmq) window._kmq.push(['record', 'enabled custom functions']);
       await restartInstance({ auth, url });
     }
   }, [formState.submitted]);
