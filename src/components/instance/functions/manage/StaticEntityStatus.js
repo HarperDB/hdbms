@@ -12,7 +12,7 @@ const StaticEntityStatus = ({ url, project, fileCount }) => (
             <Button tabIndex="-1" color={fileCount ? 'success' : 'danger'} disabled={!fileCount} className="round me-1">
               {fileCount}
             </Button>
-            <Button tabIndex="-1" color="purple" className="round" disabled={!fileCount} href={url} target="_blank" rel="noopener noreferrer">
+            <Button tabIndex="-1" color="purple" className="round" disabled={!fileCount} href={`${url}/${project}/static`} target="_blank" rel="noopener noreferrer">
               <i title="View UI" className="fa fa-share" />
             </Button>
           </Col>
