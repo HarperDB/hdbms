@@ -42,7 +42,7 @@ const Confirm = () => {
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
-        if (window._kmq) window._kmq.push(['record', 'purchased instance', analyticsProductsArray]);
+        if (window._kmq) window._kmq.push(['record', totalPrice ? 'purchased instance' : 'created free instance', analyticsProductsArray]);
         setNewInstance({ ...newInstance, tc_version });
         setTimeout(() => history.push(`/o/${customer_id}/instances/new/status`), 0);
       } else {
