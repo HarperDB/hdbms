@@ -11,6 +11,7 @@ import instanceState from '../../../../functions/state/instanceState';
 const Port = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const is_local = useStoreState(instanceState, (s) => s.is_local);
   const custom_functions_port = useStoreState(instanceState, (s) => s.custom_functions?.port);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ port: custom_functions_port || 9926 });
@@ -40,14 +41,7 @@ const Port = () => {
     }
   }, [formData]);
 
-  return custom_functions_port ? (
-    <Row>
-      <Col xs="10">Custom Functions Port {custom_functions_port}</Col>
-      <Col xs="2" className="text-end">
-        <i className="fa fa-check-circle fa-lg text-success" />
-      </Col>
-    </Row>
-  ) : (
+  return is_local && !custom_functions_port ? (
     <>
       <div className="text-nowrap mb-3">Custom Functions Port</div>
       <Input
@@ -68,6 +62,13 @@ const Port = () => {
         </Card>
       )}
     </>
+  ) : (
+    <Row>
+      <Col xs="10">Custom Functions Port {is_local ? custom_functions_port : 'Set'}</Col>
+      <Col xs="2" className="text-end">
+        <i className="fa fa-check-circle fa-lg text-success" />
+      </Col>
+    </Row>
   );
 };
 

@@ -29,7 +29,7 @@ const CustomFunctionsIndex = () => {
 
   useEffect(() => {
     if (custom_functions) {
-      setShowManage(!!custom_functions.is_enabled && !!custom_functions.port);
+      setShowManage(custom_functions.is_enabled && custom_functions.port);
     }
   }, [custom_functions]);
 
