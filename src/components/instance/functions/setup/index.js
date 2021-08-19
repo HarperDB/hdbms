@@ -28,7 +28,7 @@ const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
     if (formState.submitted) {
       await enableCustomFunctions({ auth, url });
       if (window._kmq) window._kmq.push(['record', 'enabled custom functions']);
-      await restartInstance({ auth, url });
+      setTimeout(() => restartInstance({ auth, url }), 1000);
     }
   }, [formState.submitted]);
 

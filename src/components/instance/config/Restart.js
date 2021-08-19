@@ -25,7 +25,7 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
       setInstanceAction('Restarting');
       const response = await restartInstance({ auth, url });
 
-      if (response.error) {
+      if (response?.error) {
         setInstanceAction(false);
         alert.error('There was an error restarting your instance. Please try again later.');
       }

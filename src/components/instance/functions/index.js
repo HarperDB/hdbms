@@ -28,9 +28,7 @@ const CustomFunctionsIndex = () => {
   useEffect(refreshCustomFunctions, [refreshCustomFunctions]);
 
   useEffect(() => {
-    if (custom_functions) {
-      setShowManage(custom_functions.is_enabled && custom_functions.port);
-    }
+    setShowManage(custom_functions?.is_enabled && custom_functions?.port);
   }, [custom_functions]);
 
   return !custom_functions ? (

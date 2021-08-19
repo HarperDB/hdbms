@@ -6,7 +6,7 @@ export default async ({ auth, url }) => {
     s.restarting = true;
   });
 
-  queryInstance({
+  return queryInstance({
     operation: {
       operation: 'restart',
     },
