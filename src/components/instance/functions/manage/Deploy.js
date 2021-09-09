@@ -16,6 +16,7 @@ import customFunctionsStatus from '../../../../functions/api/instance/customFunc
 import getCustomFunctions from '../../../../functions/api/instance/getCustomFunctions';
 import deployCustomFunctionProject from '../../../../functions/api/instance/deployCustomFunctionProject';
 import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
+import restartService from '../../../../functions/api/instance/restartService';
 
 const defaultTableState = {
   filtered: [],
@@ -87,6 +88,11 @@ const Deploy = () => {
             payload,
             project,
             file,
+          });
+          await restartService({
+            auth: instanceAuth,
+            url: thisInstance.url,
+            service: 'custom_functions',
           });
         } else {
           await dropCustomFunctionProject({

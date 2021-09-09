@@ -34,7 +34,7 @@ const CodeEditor = () => {
     if (response.error) {
       alert.error(response.message);
     } else {
-      restartService({ auth, url, service: 'custom_functions' });
+      setTimeout(() => restartService({ auth, url, service: 'custom_functions' }), 500);
       alert.success(response.message);
     }
     setEditorToFile();

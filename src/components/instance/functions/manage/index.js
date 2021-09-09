@@ -16,13 +16,14 @@ import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
+import CopyableText from '../../../shared/CopyableText';
 
 const ManageIndex = ({ refreshCustomFunctions, loading }) => {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
   const history = useHistory();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const restarting = useStoreState(instanceState, (s) => s.restarting_service === 'custom_functions');
-  const cf_server_url = useStoreState(instanceState, (s) => `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
+  const cf_server_url = useStoreState(instanceState, (s) => s.custom_functions_url || `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/functions/${action}`;
 
   useEffect(() => {
@@ -98,9 +99,9 @@ const ManageIndex = ({ refreshCustomFunctions, loading }) => {
             <hr className="mt-0" />
             <div className="floating-card-header">
               <div className="text-bold mb-1">Root File Directory</div>
-              <div className="text-truncate text-nowrap mb-3">{custom_functions.directory}</div>
-              <div className="text-bold mb-1">Custom Functions Server URL</div>
-              <div className="text-truncate text-nowrap">{cf_server_url}</div>
+              <CopyableText text={custom_functions.directory} />
+              <div className="text-bold mb-1 mt-3">Custom Functions Server URL</div>
+              <CopyableText text={cf_server_url} />
             </div>
             <hr />
             <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />

@@ -69,9 +69,11 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       return alert.error(result.message);
     }
 
-    restartService({ auth, url, service: 'custom_functions' });
-    await buildCustomFunctions({ auth, url });
-    return history.push(`${baseUrl}/${entityName}`);
+    return setTimeout(async () => {
+      await restartService({ auth, url, service: 'custom_functions' });
+      await buildCustomFunctions({ auth, url });
+      return history.push(`${baseUrl}/${entityName}`);
+    }, 500);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);
