@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useStoreState } from 'pullstate';
+import useInterval from 'use-interval';
 
 import instanceState from '../../../functions/state/instanceState';
 
@@ -8,6 +9,7 @@ import Manage from './manage';
 import ComingSoon from './comingsoon';
 import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/buildCustomFunctions';
+import EmptyPrompt from '../../shared/EmptyPrompt';
 
 const CustomFunctionsIndex = () => {
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -16,6 +18,7 @@ const CustomFunctionsIndex = () => {
   const restarting = useStoreState(instanceState, (s) => s.restarting);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [configuring, setConfiguring] = useState(false);
 
   const refreshCustomFunctions = useCallback(async () => {
     if (auth && url && !restarting) {
@@ -28,17 +31,27 @@ const CustomFunctionsIndex = () => {
   useEffect(refreshCustomFunctions, [refreshCustomFunctions]);
 
   useEffect(() => {
-    setShowManage(custom_functions?.is_enabled && custom_functions?.port);
+    const isConfigured = custom_functions?.is_enabled && custom_functions?.port;
+    setShowManage(isConfigured);
+    if (isConfigured) {
+      setConfiguring(false);
+    }
   }, [custom_functions]);
+
+  useInterval(() => {
+    if (configuring) refreshCustomFunctions();
+  }, 2000);
 
   return !custom_functions ? (
     <Loader header="loading custom functions" spinner />
   ) : custom_functions.error ? (
     <ComingSoon />
+  ) : configuring ? (
+    <EmptyPrompt description="Configuring Custom Functions" icon={<i className="fa fa-spinner fa-spin" />} />
   ) : showManage ? (
     <Manage refreshCustomFunctions={refreshCustomFunctions} loading={loading} />
   ) : (
-    <Setup refreshCustomFunctions={refreshCustomFunctions} restarting={restarting} />
+    <Setup setConfiguring={setConfiguring} />
   );
 };
 
