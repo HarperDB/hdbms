@@ -72,8 +72,8 @@ harperdb install`}
                 Click here to see all possible ENV vars
               </a>
               <Code className="mt-3">
-                {`--HDB_USERNAME ("HDB_ADMIN")
---HDB_PASSWORD ("password")
+                {`--HDB_ADMIN_USERNAME ("HDB_ADMIN")
+--HDB_ADMIN_PASSWORD ("password")
 --CLUSTERING ("true")
 --CLUSTERING_USER ("cluster_user")
 --CLUSTERING_PASSWORD("password")
