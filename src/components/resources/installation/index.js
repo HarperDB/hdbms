@@ -19,7 +19,7 @@ const InstallationIndex = () => {
           <span className="floating-card-header">Local Install Via NPM</span>
           <Card className="my-3">
             <CardBody className="installation">
-              HarperDB requires NodeJS v12.x and NPM, available by{' '}
+              HarperDB requires <b>NodeJS v14.17.3</b> and NPM, available by{' '}
               <a target="_blank" rel="noopener noreferrer" href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">
                 clicking here
               </a>
@@ -67,12 +67,17 @@ harperdb install`}
               <Code className="mt-3">-v &lt;host-data-path&gt;:/opt/harperdb/hdb</Code>
               <hr />
               Add initial config arguments (default):
+              <br />
+              <a href="https://harperdb.io/docs/reference/configuration-file/" target="_blank" rel="noreferrer">
+                Click here to see all possible ENV vars
+              </a>
               <Code className="mt-3">
-                {`--INIT_HDB_USERNAME ("HDB_ADMIN")
---INIT_HDB_PASSWORD ("password")
---INIT_CLUSTER_USERNAME ("cluster_user")
---INIT_CLUSTER_PASSWORD("password")
---INIT_NODE_NAME ("docker_node")`}
+                {`--HDB_USERNAME ("HDB_ADMIN")
+--HDB_PASSWORD ("password")
+--CLUSTERING ("true")
+--CLUSTERING_USER ("cluster_user")
+--CLUSTERING_PASSWORD("password")
+--NODE_NAME ("docker_node")`}
               </Code>
             </CardBody>
           </Card>

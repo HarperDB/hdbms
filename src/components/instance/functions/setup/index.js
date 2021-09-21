@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
-import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
@@ -17,7 +16,7 @@ import addError from '../../../../functions/api/lms/addError';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 import enableCustomFunctions from '../../../../functions/instance/enableCustomFunctions';
 
-const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
+const SetupIndex = ({ setConfiguring }) => {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -27,16 +26,13 @@ const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
   useAsyncEffect(async () => {
     if (formState.submitted) {
       await enableCustomFunctions({ auth, url });
+      setConfiguring(true);
       if (window._kmq) window._kmq.push(['record', 'enabled custom functions']);
-      setTimeout(() => restartInstance({ auth, url }), 1000);
+      setTimeout(() => {
+        restartInstance({ auth, url });
+      }, 1000);
     }
   }, [formState.submitted]);
-
-  useInterval(() => {
-    if (restarting) {
-      refreshCustomFunctions();
-    }
-  }, 5000);
 
   return (
     <Row id="clustering">
@@ -52,11 +48,9 @@ const SetupIndex = ({ refreshCustomFunctions, restarting }) => {
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {restarting ? (
-          <EmptyPrompt description="Configuring Custom Functions" icon={<i className="fa fa-spinner fa-spin" />} />
-        ) : custom_functions_port ? (
+        {custom_functions_port ? (
           <EmptyPrompt
-            headline="You're all set!"
+            headline="Enable Custom Functions"
             description="Click the button at left to enable Custom Functions. NOTE: We'll restart the instance when you click this button."
             icon={<i className="fa fa-thumbs-up text-success" />}
           />
