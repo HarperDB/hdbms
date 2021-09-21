@@ -19,7 +19,7 @@ const InstallationIndex = () => {
           <span className="floating-card-header">Local Install Via NPM</span>
           <Card className="my-3">
             <CardBody className="installation">
-              HarperDB requires NodeJS v12.x and NPM, available by{' '}
+              HarperDB requires <b>NodeJS v14.17.3</b> and NPM, available by{' '}
               <a target="_blank" rel="noopener noreferrer" href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">
                 clicking here
               </a>
