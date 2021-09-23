@@ -11,6 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
+import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
@@ -36,6 +37,8 @@ const defaultTableState = {
 const BrowseIndex = () => {
   const history = useHistory();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
@@ -71,6 +74,8 @@ const BrowseIndex = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
+
+  useEffect(() => buildInstanceStructure({ auth, url }), [auth, url]);
 
   return (
     <Row>
