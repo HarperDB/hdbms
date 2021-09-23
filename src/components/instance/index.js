@@ -68,7 +68,7 @@ const InstanceIndex = () => {
         setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
       }
     }
-  }, [compute_stack_id, thisInstance]);
+  }, [thisInstance]);
 
   useAsyncEffect(() => {
     if (mounted && url && instanceAuth?.super) {
