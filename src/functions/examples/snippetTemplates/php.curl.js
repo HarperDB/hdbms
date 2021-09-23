@@ -1,6 +1,4 @@
-export default ({ url, auth, body }) => `<?php
-
-$curl = curl_init();
+export default ({ url, auth, body }) => `$curl = curl_init();
 
 curl_setopt_array($curl, array(
   CURLOPT_URL => "${url}",

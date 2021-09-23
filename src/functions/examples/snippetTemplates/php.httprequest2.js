@@ -1,5 +1,5 @@
-export default ({ url, auth, body }) => `<?php
-require_once 'HTTP/Request2.php';
+export default ({ url, auth, body }) => `require_once 'HTTP/Request2.php';
+
 $request = new HTTP_Request2();
 $request->setUrl('${url}');
 $request->setMethod(HTTP_Request2::METHOD_POST);
