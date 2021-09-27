@@ -60,25 +60,16 @@ harperdb install`}
           <span className="floating-card-header">Docker Container</span>
           <Card className="my-3">
             <CardBody className="installation">
-              Running HarperDB in a Docker container is as easy as fetching a stick.
-              <Code className="mt-3">docker run -d -p harperdb/hdb</Code>
-              <hr />
-              Add a volume to persist data
-              <Code className="mt-3">-v &lt;host-data-path&gt;:/opt/harperdb/hdb</Code>
-              <hr />
-              Add initial config arguments (default):
-              <br />
-              <a href="https://harperdb.io/docs/reference/configuration-file/" target="_blank" rel="noreferrer">
-                Click here to see all possible ENV vars
-              </a>
-              <Code className="mt-3">
-                {`--HDB_ADMIN_USERNAME ("HDB_ADMIN")
---HDB_ADMIN_PASSWORD ("password")
---CLUSTERING ("true")
---CLUSTERING_USER ("cluster_user")
---CLUSTERING_PASSWORD("password")
---NODE_NAME ("docker_node")`}
-              </Code>
+              Run a HarperDB container in the background, with the HDB_ROOT directory mounted to the container host, and expose the HarperDB API port on the container host:
+              <Code className="mt-3">{`docker run -d
+  -v /host/directory:/opt/harperdb/hdb
+  -e HDB_ADMIN_USERNAME=HDB_ADMIN
+  -e HDB_ADMIN_PASSWORD=password
+  -p 9925:9925
+  harperdb/harperdb`}</Code>
+              <Button color="purple" block className="mt-3 mb-4" href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer">
+                Visit Docker Hub to see more code examples
+              </Button>
             </CardBody>
           </Card>
         </Col>
