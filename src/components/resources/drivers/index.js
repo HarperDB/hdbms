@@ -9,17 +9,17 @@ const DriversIndex = () => (
     <Card className="my-3">
       <CardBody>
         <Row>
-          <DriverCard icon="file-excel-o" name="Excel (Windows exe)" docs="xls" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/Excel/setup.exe' }]} />
-          <DriverCard icon="coffee" name="JDBC" docs="jdbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/JDBC/setup.zip' }]} />
-          <DriverCard icon="windows" name="ODBC Windows" docs="odbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Windows/odbc_windows.exe' }]} />
-          <DriverCard icon="apple" name="ODBC Mac" docs="odbc" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Mac/odbc_mac.dmg' }]} />
+          <DriverCard icon="file-excel-o" name="Excel (Windows exe)" docs="xls" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHXG-A_7867.exe' }]} />
+          <DriverCard icon="coffee" name="JDBC" docs="jdbc" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FARG-V_7867setup.zip' }]} />
+          <DriverCard icon="windows" name="ODBC Windows" docs="odbc" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-A_7867.exe' }]} />
+          <DriverCard icon="apple" name="ODBC Mac" docs="odbc" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-M_7867.dmg' }]} />
           <DriverCard
             icon="linux"
             name="ODBC Linux (RPM)"
             docs="odbc"
             urls={[
-              { label: 'i686', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.rpm' },
-              { label: 'x86_64', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.rpm' },
+              { label: 'i686', link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-U_7867_setup.i686.rpm' },
+              { label: 'x86_64', link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-U_7867_setup.x86_64.rpm' },
             ]}
           />
           <DriverCard
@@ -27,14 +27,14 @@ const DriversIndex = () => (
             name="ODBC Linux (DEB)"
             docs="odbc"
             urls={[
-              { label: 'i686', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.i686.deb' },
-              { label: 'x86_64', link: 'https://dou1lpys04in1.cloudfront.net/ODBC_Linux/setup.x86_64.deb' },
+              { label: 'i686', link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-U_7867_setup.i686.deb' },
+              { label: 'x86_64', link: 'https://cdatabuilds.s3.amazonaws.com/support/FHDG-U_7867_setup.x86_64.deb' },
             ]}
           />
-          <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/ADO/setup_ado.exe' }]} />
-          <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/BizTalk/setup.exe' }]} />
-          <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/Cmdlets/setup.exe' }]} />
-          <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ link: 'https://dou1lpys04in1.cloudfront.net/SSIS/ssis.exe' }]} />
+          <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHRG-A_7687.exe' }]} />
+          <DriverCard icon="windows" name="BizTalk" docs="bt" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHZG-A_7867.exe' }]} />
+          <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHMG-A_7867.exe' }]} />
+          <DriverCard icon="windows" name="SSIS" docs="rssis" urls={[{ link: 'https://cdatabuilds.s3.amazonaws.com/support/FHSG-A_7867.exe' }]} />
         </Row>
       </CardBody>
     </Card>
