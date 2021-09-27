@@ -23,7 +23,7 @@ const Logs = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(true);
-  const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message.indexOf(i) !== -1));
+  const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message && l.message.indexOf(i) !== -1));
   const [lastUpdate, setLastUpdate] = useState(true);
 
   useEffect(() => {

@@ -75,7 +75,7 @@ const BrowseIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
 
-  useEffect(() => buildInstanceStructure({ auth, url }), [auth, url]);
+  useEffect(() => buildInstanceStructure({ auth, url }), [auth, url, schema, table]);
 
   return (
     <Row>
