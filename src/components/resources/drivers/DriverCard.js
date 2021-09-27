@@ -13,8 +13,8 @@ const DriverCard = ({ icon, name, docs, urls }) => (
           <b className="d-block">{name}</b>
           <div className="d-block text-small text-truncate mt-1">
             docs:{' '}
-            <a className="text-darkgrey" href={docs ? `http://cdn.cdata.com/help/FHF/${docs}/default.htm` : urls[0].link} target="_blank" rel="noopener noreferrer">
-              {docs ? `http://cdn.cdata.com/help/FHF/${docs}/default.htm` : urls[0].link}
+            <a className="text-darkgrey" href={docs ? `http://cdn.cdata.com/help/FHG/${docs}` : urls[0].link} target="_blank" rel="noopener noreferrer">
+              {docs ? `http://cdn.cdata.com/help/FHF/${docs}` : urls[0].link}
             </a>
           </div>
           <i className={`card-icon fa fa-lg fa-${icon} text-darkgrey`} />
