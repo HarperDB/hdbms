@@ -9,7 +9,6 @@ import config from '../../../config';
 
 import readLog from '../../../functions/api/instance/readLog';
 import LogRow from './LogsRow';
-import logMessagesToIgnore from '../../../functions/instance/logMessagesToIgnore';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
@@ -21,9 +20,7 @@ const Logs = () => {
   const logs = useStoreState(instanceState, (s) => s.logs);
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(true);
-  const filteredLogs = logs && logs.filter((l) => showDetail || !logMessagesToIgnore.some((i) => l.message && l.message.indexOf(i) !== -1));
   const [lastUpdate, setLastUpdate] = useState(true);
 
   useEffect(() => {
@@ -60,11 +57,6 @@ const Logs = () => {
             <span className="me-2">auto</span>
             <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
           </Button>
-          <span className="mx-3 text">|</span>
-          <Button color="link" title="view detailed logs" onClick={() => setShowDetail(!showDetail)}>
-            <span className="me-2">detailed</span>
-            <i className={`fa fa-lg fa-toggle-${showDetail ? 'on' : 'off'}`} />
-          </Button>
         </Col>
       </Row>
       <Card className="my-3">
@@ -82,12 +74,12 @@ const Logs = () => {
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
-            {loading && !filteredLogs && !autoRefresh ? (
+            {loading && !logs && !autoRefresh ? (
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : filteredLogs?.length ? (
-              filteredLogs.map((l, i) => (
+            ) : logs?.length ? (
+              logs.map((l, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <LogRow key={i} {...l} />
               ))

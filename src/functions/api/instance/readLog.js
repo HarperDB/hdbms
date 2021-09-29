@@ -27,9 +27,10 @@ export default async ({ auth, url, signal, currentLogCount }) => {
   }
 
   const logs = file || dailyRotateFile;
+  const filteredLogs = (Array.isArray(logs) && logs.filter((l) => l.message)) || [];
 
   return instanceState.update((s) => {
-    s.logs = (Array.isArray(logs) && logs.filter((l) => l.message)) || [];
+    s.logs = filteredLogs;
     s.logsError = false;
   });
 };
