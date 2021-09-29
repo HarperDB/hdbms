@@ -66,7 +66,7 @@ const MetaCloud = () => {
                       instance_name: e.target.value
                         .replace(/^0+/, '')
                         .replace(/^-+/, '')
-                        .replace(/[^a-zA-Z0-9\d-]+/gi, '')
+                        .replace(/[^a-zA-Z\d-]+/gi, '')
                         .substring(0, 15)
                         .toLowerCase(),
                     })
