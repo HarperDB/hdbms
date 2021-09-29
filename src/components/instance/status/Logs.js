@@ -83,7 +83,7 @@ const Logs = () => {
                 // eslint-disable-next-line react/no-array-index-key
                 <LogRow key={i} {...l} />
               ))
-            ) : logs && !logs.length ? (
+            ) : !logs.length ? (
               <div className="pt-5 text-center">no logs found</div>
             ) : (
               <div className="pt-5 text-center">no logs found in this view</div>
