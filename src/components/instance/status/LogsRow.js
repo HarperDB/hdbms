@@ -16,7 +16,7 @@ const LogsRow = ({ level, timestamp, message }) => (
         {new Date(timestamp).toLocaleTimeString()}
       </Col>
       <Col xs="12" className="mt-1">
-        {isObject(message) ? JSON.stringify(message) : message}
+        {isObject(message) && message.error ? message.error : isObject(message) ? JSON.stringify(message) : message}
       </Col>
     </Row>
   </div>
