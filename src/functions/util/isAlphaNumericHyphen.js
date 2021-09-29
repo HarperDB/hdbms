@@ -1,1 +1,1 @@
-export default (string) => string.match(/^[a-zA-Z0-9-]+$/);
+export default (string) => string.match(/^[a-zA-Z\d-]+$/);
