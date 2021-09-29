@@ -77,12 +77,12 @@ const CsvUploadURL = () => {
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row>
-        <Col xs="4" className="py-1">
+        <Col xs="12" lg="4" className="pt-1 pb-2">
           Import A CSV File From URL
           <br />
           <span className="text-small">csv must be publicly accessible</span>
         </Col>
-        <Col xs="4">
+        <Col xs="12" lg="4">
           {formState.error ? (
             <div className="text-danger csv-status">
               <i className="fa fa-exclamation-triangle me-3" />
@@ -106,7 +106,7 @@ const CsvUploadURL = () => {
             />
           )}
         </Col>
-        <Col xs="4">
+        <Col xs="12" lg="4">
           {formState.error ? (
             <Button
               id="clearURL"

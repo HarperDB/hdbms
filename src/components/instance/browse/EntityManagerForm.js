@@ -37,7 +37,7 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       alert.error('You may only use alphanumeric characters or underscores.');
     }
 
-    if (entityName && entityName.match(/^[0-9]+$/)) {
+    if (entityName && entityName.match(/^\d+$/)) {
       toggleNameError(true);
       error = true;
       alert.error('You may not provide a number as a name.');

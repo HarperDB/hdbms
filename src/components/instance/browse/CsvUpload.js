@@ -21,12 +21,12 @@ const CsvUpload = () => {
           <CsvUploadFile />
           <hr className="my-3" />
           <Row>
-            <Col xs="8" className="py-1">
+            <Col lg="8" className="py-1 d-none d-lg-inline-block">
               Return to Table
               <br />
               <span className="text-small">do not upload csv data</span>
             </Col>
-            <Col xs="4">
+            <Col xs="12" lg="4">
               <Button id="returnToTable" block color="grey" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
                 Return to Table
               </Button>

@@ -87,12 +87,12 @@ const CsvUploadFile = () => {
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row>
-        <Col xs="4" className="py-1">
+        <Col xs="12" lg="4" className="pt-1 pb-2">
           Upload A CSV File
           <br />
           <span className="text-small">from your computer (10MB limit)</span>
         </Col>
-        <Col xs="4">
+        <Col xs="12" lg="4">
           {formState.error ? (
             <div className="text-danger csv-status">{formState.error}</div>
           ) : formState.uploading ? (
@@ -130,7 +130,7 @@ const CsvUploadFile = () => {
             </Dropzone>
           )}
         </Col>
-        <Col xs="4">
+        <Col xs="12" lg="4">
           {formState.error ? (
             <Button
               id="clearFile"
