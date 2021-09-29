@@ -113,7 +113,7 @@ const MetaLocal = () => {
                       instance_name: e.target.value
                         .replace(/^0+/, '')
                         .replace(/^-+/, '')
-                        .replace(/[^a-zA-Z\d-]+/gi, '')
+                        .replace(/[^a-z\d-]+/gi, '')
                         .substring(0, 15)
                         .toLowerCase(),
                     })
