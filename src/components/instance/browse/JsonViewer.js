@@ -25,8 +25,9 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const [currentValue, setCurrentValue] = useState({});
   const [rowValue, setRowValue] = useState({});
   const [confirmDelete, setConfirmDelete] = useState();
-  const [changed, setChanged] = useState(false);
-  const [validJSON, setValidJSON] = useState(false);
+  const [validJSON, setValidJSON] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
 
   useAsyncEffect(async () => {
@@ -40,10 +41,15 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
       const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url });
 
       if (rowData) {
+        const hash_attribute = rowData[hashAttribute];
+        const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
+        const updatedtime = rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
+
         delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
         delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
         delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
-        setCurrentValue(rowData);
+
+        setCurrentValue({ [hashAttribute]: hash_attribute, ...rowData, __createdtime__: createdtime, __updatedtime__: updatedtime });
       } else {
         history.push(baseUrl);
         alert.error('Unable to find record with that hash_attribute');
@@ -57,7 +63,9 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
     e.preventDefault();
     if (!rowValue) alert.error('Please insert valid JSON to proceed');
     if (!action || !rowValue) return false;
-    if (action === 'edit') rowValue[hashAttribute] = hash;
+
+    setSaving(true);
+
     await queryInstance({
       operation: {
         operation: action === 'edit' ? 'update' : 'insert',
@@ -77,6 +85,9 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
+
+    setDeleting(true);
+
     await queryInstance({ operation: { operation: 'delete', schema, table, hash_values: [hash] }, auth, url });
     return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
@@ -90,22 +101,13 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
       <Card className="my-3">
         <CardBody>
           <ul className="text-small">
-            <li>
-              The auto-maintained fields &quot;<b>__createdtime__</b>&quot; &amp; &quot;<b>__updatedtime__</b>&quot; have been hidden from this view.
-            </li>
-            {action === 'add' ? (
+            {action === 'add' && (
               <>
                 <li>
                   The hash_attribute for this table is &quot;<b>{hashAttribute}</b>&quot;, and will auto-generate. You may manually add it if you want to specify its value.
                 </li>
                 <li>
                   <b>You may paste in an array</b> if you want to add more than one record at a time.
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  The hash_attribute for this table is &quot;<b>{hashAttribute}</b>&quot;, and has a value of &quot;<b>{hash}</b>&quot;. It has also been hidden from this view.
                 </li>
               </>
             )}
@@ -131,10 +133,8 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                 locale={locale}
                 width="100%"
                 confirmGood={false}
-                waitAfterKeyPress={1000}
                 onChange={(value) => {
                   setValidJSON(!value.error);
-                  setChanged(JSON.stringify(value.jsObject) !== JSON.stringify(currentValue));
                   setRowValue(value.jsObject);
                 }}
               />
@@ -145,40 +145,46 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
               {confirmDelete ? (
                 <div className="pt-2">Delete this record?</div>
               ) : (
-                <Button id="backToTable" block color="black" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}>
+                <Button
+                  disabled={saving || deleting}
+                  id="backToTable"
+                  block
+                  color="black"
+                  onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}
+                >
                   <i className="fa fa-chevron-left" />
                 </Button>
               )}
             </Col>
             {action === 'add' ? (
               <Col md="8">
-                <Button disabled={!changed || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
-                  <i className="fa fa-save" />
+                <Button disabled={!validJSON || saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                  <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                 </Button>
               </Col>
             ) : confirmDelete ? (
               <>
                 <Col md="4" className="mt-2">
-                  <Button id="cancelDelete" block color="black" onClick={() => setConfirmDelete(false)}>
+                  <Button disabled={saving || deleting} id="cancelDelete" block color="black" onClick={() => setConfirmDelete(false)}>
                     <i className="fa fa-ban" />
                   </Button>
                 </Col>
                 <Col md="4">
-                  <Button id="deleteRecord" className="mt-2" onClick={deleteRecord} block color="success">
-                    <i className="fa fa-check" />
+                  <Button disabled={saving || deleting} id="deleteRecord" className="mt-2" onClick={deleteRecord} block color="success">
+                    <i className={`fa ${deleting ? 'fa-spinner fa-spin' : 'fa-check'}`} />
                   </Button>
                 </Col>
               </>
             ) : (
               <>
                 <Col md="4" className="mt-2">
-                  <Button id="confirmDelete" block color="danger" onClick={() => setConfirmDelete(hash)}>
+                  <Button disabled={saving || deleting} id="confirmDelete" block color="danger" onClick={() => setConfirmDelete(hash)}>
                     <i className="fa fa-trash" />
                   </Button>
                 </Col>
                 <Col md="4">
-                  <Button disabled={!changed || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
-                    <i className="fa fa-save" />
+                  <Button disabled={!validJSON || saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                    <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                   </Button>
                 </Col>
               </>
