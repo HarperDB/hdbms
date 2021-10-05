@@ -133,6 +133,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                 locale={locale}
                 width="100%"
                 confirmGood={false}
+                waitAfterKeyPress={30000}
                 onChange={(value) => {
                   setValidJSON(!value.error);
                   setRowValue(value.jsObject);
