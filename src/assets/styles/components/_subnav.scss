@@ -126,13 +126,12 @@
     margin-right: 10px;
     padding-top: 7px;
     position: relative;
-    width: 160px;
+    width: 95px;
   }
 
   .filter-holder {
     max-width: 270px;
     position: relative;
-    width: 100%;
 
     input {
       background: $faint-white-overlay !important;
@@ -153,5 +152,10 @@
   .refresh-instances {
     color: $color-white;
     margin-left: 15px;
+    width: 35px;
+
+    @media screen and (min-width: 768px) {
+      width: 105px;
+    }
   }
 }
