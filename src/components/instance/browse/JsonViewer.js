@@ -39,16 +39,13 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   useAsyncEffect(async () => {
     if (action === 'edit') {
       const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url });
-
       if (rowData) {
         const hash_attribute = rowData[hashAttribute];
         const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
         const updatedtime = rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
-
         delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
         delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
         delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
-
         setCurrentValue({ [hashAttribute]: hash_attribute, ...rowData, __createdtime__: createdtime, __updatedtime__: updatedtime });
       } else {
         history.push(baseUrl);
@@ -61,11 +58,10 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
 
   const submitRecord = async (e) => {
     e.preventDefault();
-    if (!rowValue) alert.error('Please insert valid JSON to proceed');
-    if (!action || !rowValue) return false;
+    if (!rowValue || !validJSON) alert.error('Please insert valid JSON to proceed');
+    if (!action || !rowValue || !validJSON) return false;
 
     setSaving(true);
-
     await queryInstance({
       operation: {
         operation: action === 'edit' ? 'update' : 'insert',
@@ -85,9 +81,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
   const deleteRecord = async (e) => {
     e.preventDefault();
     if (!action) return false;
-
     setDeleting(true);
-
     await queryInstance({ operation: { operation: 'delete', schema, table, hash_values: [hash] }, auth, url });
     return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
@@ -134,7 +128,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                 width="100%"
                 confirmGood={false}
                 waitAfterKeyPress={30000}
-                onChange={(value) => {
+                onBlur={(value) => {
                   setValidJSON(!value.error);
                   setRowValue(value.jsObject);
                 }}
@@ -159,7 +153,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
             </Col>
             {action === 'add' ? (
               <Col md="8">
-                <Button disabled={!validJSON || saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                <Button disabled={saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                   <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                 </Button>
               </Col>
@@ -184,7 +178,7 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
                   </Button>
                 </Col>
                 <Col md="4">
-                  <Button disabled={!validJSON || saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                  <Button disabled={saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                     <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                   </Button>
                 </Col>
