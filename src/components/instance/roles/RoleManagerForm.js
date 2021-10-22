@@ -3,14 +3,17 @@ import { Row, Col, Button, Input, Form } from 'reactstrap';
 import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
 import addRole from '../../../functions/api/instance/addRole';
 import instanceState from '../../../functions/state/instanceState';
 import listRoles from '../../../functions/api/instance/listRoles';
+import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 
 const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
+  const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -21,9 +24,19 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
   const createItem = async (e) => {
     e.preventDefault();
 
-    if (!entity.name || existing_roles.includes(entity.name)) {
+    if (!entity.name) {
       setEntity({ ...entity, error: true });
-      return false;
+      return alert.error('You must provide a role name');
+    }
+
+    if (existing_roles.includes(entity.name)) {
+      setEntity({ ...entity, error: true });
+      return alert.error('Role with that name already exists');
+    }
+
+    if (!isAlphaUnderscore(entity.name)) {
+      setEntity({ ...entity, error: true });
+      return alert.error('Role names must have only letters and underscores');
     }
 
     const response = await addRole({
@@ -38,9 +51,15 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
         super_user: itemType === 'super user',
       },
     });
+
+    if (response.error) {
+      setEntity({ ...entity, error: true });
+      return alert.error(response.message);
+    }
+
     setEntity({});
-    listRoles({ auth, url });
-    return setTimeout(() => history.push(`${baseUrl}/${response.id}`), 100);
+    await listRoles({ auth, url });
+    return history.push(`${baseUrl}/${response.id}`);
   };
 
   useEffect(() => toggleDropItem(), [toggleDropItem]);
