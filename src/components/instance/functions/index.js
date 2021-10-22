@@ -40,7 +40,7 @@ const CustomFunctionsIndex = () => {
       await setEditorToFile();
       setLoading(false);
     }
-  }, [auth, url, restarting]);
+  }, [auth, url, restarting, setEditorToFile]);
 
   useEffect(refreshCustomFunctions, [refreshCustomFunctions]);
 
