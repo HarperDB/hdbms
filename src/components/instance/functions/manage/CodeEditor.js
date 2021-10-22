@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
@@ -7,26 +7,15 @@ import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router';
 
 import instanceState from '../../../../functions/state/instanceState';
-import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import restartService from '../../../../functions/api/instance/restartService';
 
-const CodeEditor = () => {
+const CodeEditor = ({ setEditorToFile, code, setCode }) => {
   const history = useHistory();
+  const alert = useAlert();
   const { customer_id, compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const [code, setCode] = useState();
-  const alert = useAlert();
-
-  const setEditorToFile = useCallback(async () => {
-    if (project && type && file && file !== 'undefined') {
-      const endpoint_code = await getCustomFunction({ auth, url, project, type, file });
-      setCode(endpoint_code?.message);
-    } else {
-      setCode(false);
-    }
-  }, [auth, url, project, type, file, setCode]);
 
   const handleSubmit = async () => {
     const response = await setCustomFunction({ auth, url, function_content: code, project, type, file });
