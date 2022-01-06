@@ -7,7 +7,7 @@ import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/ContentContainer';
 import CopyableText from '../../shared/CopyableText';
 
-const Details = () => {
+function Details() {
   const { compute_stack_id } = useParams();
   const url = useStoreState(instanceState, (s) => s.url);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -94,6 +94,6 @@ const Details = () => {
       </Card>
     </>
   );
-};
+}
 
 export default Details;

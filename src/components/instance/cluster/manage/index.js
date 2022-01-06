@@ -11,7 +11,7 @@ import ManageErrorModal from './ErrorModal';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
-const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {
+function ManageIndex({ refreshNetwork, loading, setLoading }) {
   const [showModal, setShowModal] = useState(false);
   const clustering = useStoreState(instanceState, (s) => s.clustering);
 
@@ -39,6 +39,6 @@ const ManageIndex = ({ refreshNetwork, loading, setLoading }) => {
       <ManageErrorModal showModal={showModal} setShowModal={setShowModal} />
     </>
   );
-};
+}
 
 export default ManageIndex;

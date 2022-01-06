@@ -11,7 +11,7 @@ import ContentContainer from '../../shared/ContentContainer';
 import RadioCheckbox from '../../shared/RadioCheckbox';
 import DetailsSubheader from './DetailsSubheader';
 
-const DetailsLocal = () => {
+function DetailsLocal() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -89,6 +89,6 @@ const DetailsLocal = () => {
       )}
     </>
   );
-};
+}
 
 export default DetailsLocal;

@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import CsvUploadURL from './CsvUploadURL';
 import CsvUploadFile from './CsvUploadFile';
 
-const CsvUpload = () => {
+function CsvUpload() {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
 
@@ -36,5 +36,5 @@ const CsvUpload = () => {
       </Card>
     </div>
   );
-};
+}
 export default CsvUpload;

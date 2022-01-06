@@ -15,7 +15,7 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-const SystemInfo = () => {
+function SystemInfo() {
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -138,5 +138,5 @@ const SystemInfo = () => {
       <br />
     </ErrorBoundary>
   );
-};
+}
 export default SystemInfo;

@@ -22,7 +22,7 @@ const generateMonths = () => {
   return months.reverse();
 };
 
-const PlaceholderChart = () => {
+function PlaceholderChart() {
   const theme = useStoreState(appState, (s) => s.theme);
   return (
     <Chart
@@ -50,6 +50,6 @@ const PlaceholderChart = () => {
       height={220}
     />
   );
-};
+}
 
 export default PlaceholderChart;

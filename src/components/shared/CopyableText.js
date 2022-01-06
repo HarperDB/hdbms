@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { useAlert } from 'react-alert';
 
-const CopyableText = ({ text, beforeText, afterText, obscure = false }) => {
+function CopyableText({ text, beforeText, afterText, obscure = false }) {
   const alert = useAlert();
   const canCopyToClipboard = navigator.clipboard;
 
@@ -37,6 +37,6 @@ const CopyableText = ({ text, beforeText, afterText, obscure = false }) => {
       </Col>
     </Row>
   );
-};
+}
 
 export default CopyableText;

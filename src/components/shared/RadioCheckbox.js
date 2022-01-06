@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const RadioCheckbox = ({ required, onChange, options, type, defaultValue, ...rest }) => {
+function RadioCheckbox({ required, onChange, options, type, defaultValue, ...rest }) {
   const optionsArray = !options.length ? [options] : options;
   const [value, setValue] = useState([]);
 
@@ -43,6 +43,6 @@ const RadioCheckbox = ({ required, onChange, options, type, defaultValue, ...res
         ))}
     </div>
   );
-};
+}
 
 export default RadioCheckbox;

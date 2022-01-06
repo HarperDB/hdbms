@@ -21,7 +21,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-const Datatable = () => {
+function Datatable() {
   const { customer_id } = useParams();
   const alert = useAlert();
   const history = useHistory();
@@ -105,6 +105,6 @@ const Datatable = () => {
       </Card>
     </>
   );
-};
+}
 
 export default Datatable;

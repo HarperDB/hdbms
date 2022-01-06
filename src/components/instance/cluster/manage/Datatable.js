@@ -16,7 +16,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-const Datatable = ({ refreshNetwork, loading }) => {
+function Datatable({ refreshNetwork, loading }) {
   const tableData = useStoreState(instanceState, (s) => s.clusterDataTable);
   const dataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
   const [tableState, setTableState] = useState(defaultTableState);
@@ -63,6 +63,6 @@ const Datatable = ({ refreshNetwork, loading }) => {
       </Card>
     </>
   );
-};
+}
 
 export default Datatable;

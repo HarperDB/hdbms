@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 
-const ActionConnectionClosed = ({ handleRemoveNode, showModal, loading }) => (
-  <>
+function ActionConnectionClosed({ handleRemoveNode, showModal, loading }) {
+  return <>
     <Button color="danger" className="round me-1" title="Why isn't this instance clustering?" disabled={loading} onClick={showModal}>
       <i className="fa fa-exclamation" />
     </Button>
@@ -10,6 +10,6 @@ const ActionConnectionClosed = ({ handleRemoveNode, showModal, loading }) => (
       <i className={`fa ${loading ? 'fa-spin fa-spinner' : 'fa-minus'} text-white`} />
     </Button>
   </>
-);
+}
 
 export default ActionConnectionClosed;

@@ -10,7 +10,7 @@ import instanceState from '../../../../functions/state/instanceState';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
 import restartService from '../../../../functions/api/instance/restartService';
 
-const CodeEditor = ({ setEditorToFile, code, setCode }) => {
+function CodeEditor({ setEditorToFile, code, setCode }) {
   const history = useHistory();
   const alert = useAlert();
   const { customer_id, compute_stack_id, project, type, file } = useParams();
@@ -83,6 +83,6 @@ const CodeEditor = ({ setEditorToFile, code, setCode }) => {
       </Card>
     </>
   );
-};
+}
 
 export default CodeEditor;

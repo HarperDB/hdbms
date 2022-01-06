@@ -8,7 +8,7 @@ import buildCustomFunctions from '../../../../functions/instance/buildCustomFunc
 import setCustomFunctionsPort from '../../../../functions/instance/setCustomFunctionsPort';
 import instanceState from '../../../../functions/state/instanceState';
 
-const Port = () => {
+function Port() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -70,6 +70,6 @@ const Port = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default Port;

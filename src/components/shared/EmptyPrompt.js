@@ -1,8 +1,8 @@
 import React from 'react';
 import { CardBody, Card } from 'reactstrap';
 
-const EmptyPrompt = ({ headline, description, icon }) => (
-  <>
+function EmptyPrompt({ headline, description, icon }) {
+  return <>
     <div className="floating-card-header text-end">&nbsp;</div>
     <Card className="my-3">
       <CardBody>
@@ -14,6 +14,6 @@ const EmptyPrompt = ({ headline, description, icon }) => (
       </CardBody>
     </Card>
   </>
-);
+}
 
 export default EmptyPrompt;

@@ -25,7 +25,7 @@ import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscr
 import getUser from '../../../functions/api/lms/getUser';
 import VisitCard from '../../shared/VisitCard';
 
-const NewInstanceIndex = () => {
+function NewInstanceIndex() {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -138,6 +138,6 @@ const NewInstanceIndex = () => {
       </ModalBody>
     </Modal>
   );
-};
+}
 
 export default NewInstanceIndex;

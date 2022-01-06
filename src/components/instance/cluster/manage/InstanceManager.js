@@ -11,7 +11,7 @@ import InstanceManagerRow from './InstanceManagerRow';
 import addNode from '../../../../functions/api/instance/addNode';
 import removeNode from '../../../../functions/api/instance/removeNode';
 
-const InstanceManager = ({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) => {
+function InstanceManager({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) {
   const { customer_id } = useParams();
   const alert = useAlert();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -74,6 +74,6 @@ const InstanceManager = ({ items, itemType, setShowModal, loading, setLoading, r
       </Card>
     </div>
   );
-};
+}
 
 export default InstanceManager;

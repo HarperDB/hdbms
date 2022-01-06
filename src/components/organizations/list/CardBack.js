@@ -4,6 +4,8 @@ import CardBackLeave from './CardBackLeave';
 import CardBackDelete from './CardBackDelete';
 
 // eslint-disable-next-line react/destructuring-assignment
-const CardBack = (params) => (params.flipState === 'leave' ? <CardBackLeave {...params} /> : <CardBackDelete {...params} />);
+function CardBack(params) {
+  return params.flipState === 'leave' ? <CardBackLeave {...params} /> : <CardBackDelete {...params} />
+}
 
 export default CardBack;

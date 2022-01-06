@@ -16,7 +16,7 @@ import updateInstance from '../../../functions/api/lms/updateInstance';
 import commaNumbers from '../../../functions/util/commaNumbers';
 import VisitCard from '../../shared/VisitCard';
 
-const UpdateRAM = ({ setInstanceAction, showPrepaidCompute }) => {
+function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -41,7 +41,7 @@ const UpdateRAM = ({ setInstanceAction, showPrepaidCompute }) => {
   const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const newTotal = (storage?.storage_price || 0) + (formData?.compute_price || 0);
-  const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
+  const newTotalString = newTotal ? `${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
   const hasChanged = compute?.stripe_plan_id !== formData.stripe_plan_id || formData.compute_subscription_id !== compute?.compute_subscription_id;
 
   const resetFormData = () => setFormData({ compute_stack_id, customer_id, ...compute });
@@ -154,6 +154,6 @@ const UpdateRAM = ({ setInstanceAction, showPrepaidCompute }) => {
       ) : null}
     </>
   );
-};
+}
 
 export default UpdateRAM;

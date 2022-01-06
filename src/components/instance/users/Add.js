@@ -14,7 +14,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listRoles from '../../../functions/api/instance/listRoles';
 
-const Add = ({ setLastUpdate }) => {
+function Add({ setLastUpdate }) {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
@@ -107,6 +107,6 @@ const Add = ({ setLastUpdate }) => {
       )}
     </ErrorBoundary>
   );
-};
+}
 
 export default Add;

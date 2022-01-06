@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-const DataTableRow = ({ prepareRow, row, onRowClick = false }) => {
+function DataTableRow({ prepareRow, row, onRowClick = false }) {
   prepareRow(row);
 
   return (
@@ -13,6 +13,6 @@ const DataTableRow = ({ prepareRow, row, onRowClick = false }) => {
       ))}
     </Row>
   );
-};
+}
 
 export default DataTableRow;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Card, CardBody } from 'reactstrap';
 
-const ErrorFallback = ({ error, componentStack, extraClass = undefined }) => (
-  <Card className={`error-boundary mb-3 ${extraClass}`}>
+function ErrorFallback({ error, componentStack, extraClass = undefined }) {
+  return <Card className={`error-boundary mb-3 ${extraClass}`}>
     <CardBody>
       <b>Component Error {new Date().toLocaleTimeString()}</b>
       <hr className="my-1" />
@@ -16,6 +16,6 @@ const ErrorFallback = ({ error, componentStack, extraClass = undefined }) => (
       </Button>
     </CardBody>
   </Card>
-);
+}
 
 export default ErrorFallback;

@@ -13,7 +13,7 @@ import addCustomFunctionProject from '../../../../functions/api/instance/addCust
 import restartService from '../../../../functions/api/instance/restartService';
 import isAlphaNumericUnderscoreHyphen from '../../../../functions/util/isAlphaNumericUnderscoreHyphen';
 
-const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) => {
+function EntityManagerForm({ items, toggleDropItem, toggleCreate, baseUrl, restarting, itemType, project }) {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -120,6 +120,6 @@ const EntityManagerForm = ({ items, toggleDropItem, toggleCreate, baseUrl, resta
       </Col>
     </Row>
   );
-};
+}
 
 export default EntityManagerForm;

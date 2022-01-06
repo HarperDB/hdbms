@@ -3,8 +3,8 @@ import { Row, Col } from 'reactstrap';
 
 import isObject from '../../../functions/util/isObject';
 
-const AlarmsRow = ({ date, type, message }) => (
-  <div className="item-row">
+function AlarmsRow({ date, type, message }) {
+  return <div className="item-row">
     <Row>
       <Col xs="3" className="text-danger text-nowrap">
         {type}
@@ -17,6 +17,6 @@ const AlarmsRow = ({ date, type, message }) => (
       </Col>
     </Row>
   </div>
-);
+}
 
 export default AlarmsRow;

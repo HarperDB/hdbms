@@ -10,7 +10,7 @@ import Setup from './setup';
 import Manage from './manage';
 import Loader from '../../shared/Loader';
 
-const ClusteringIndex = () => {
+function ClusteringIndex() {
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -51,6 +51,6 @@ const ClusteringIndex = () => {
   ) : (
     <Setup refreshNetwork={refreshNetwork} loading={loading} setLoading={setLoading} />
   );
-};
+}
 
 export default ClusteringIndex;

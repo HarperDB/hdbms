@@ -16,7 +16,7 @@ const clearFilter = () => {
   });
 };
 
-const Search = () => {
+function Search() {
   const filterSearch = useStoreState(appState, (s) => s.filterSearch);
 
   return (
@@ -37,6 +37,6 @@ const Search = () => {
       )}
     </div>
   );
-};
+}
 
 export default Search;

@@ -9,8 +9,8 @@ import Refresh from './filter/Refresh';
 import ErrorFallback from '../shared/ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 
-const SubNav = ({ refreshInstances }) => (
-  <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+function SubNav({ refreshInstances }) {
+  return <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
     <Navbar className="app-subnav">
       <Nav navbar>
         <Local />
@@ -20,6 +20,6 @@ const SubNav = ({ refreshInstances }) => (
       </Nav>
     </Navbar>
   </ErrorBoundary>
-);
+}
 
 export default SubNav;

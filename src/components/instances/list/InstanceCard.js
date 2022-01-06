@@ -8,7 +8,7 @@ import CardBack from './CardBack';
 import ErrorFallbackCard from '../../shared/ErrorFallbackCard';
 import addError from '../../../functions/api/lms/addError';
 
-const InstanceCard = ({ flippedCard, setFlippedCard, compute_stack_id, customer_id, ...rest }) => {
+function InstanceCard({ flippedCard, setFlippedCard, compute_stack_id, customer_id, ...rest }) {
   const [flipState, setFlipState] = useState(false);
 
   useEffect(() => {
@@ -44,6 +44,6 @@ const InstanceCard = ({ flippedCard, setFlippedCard, compute_stack_id, customer_
       </ErrorBoundary>
     </Col>
   );
-};
+}
 
 export default InstanceCard;

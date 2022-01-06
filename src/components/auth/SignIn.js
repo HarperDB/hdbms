@@ -10,7 +10,7 @@ import getUser from '../../functions/api/lms/getUser';
 import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/Loader';
 
-const SignIn = () => {
+function SignIn() {
   const { search } = useLocation();
   const { user, token } = queryString.parse(search, { decode: false });
   const auth = useStoreState(appState, (s) => s.auth);
@@ -111,6 +111,6 @@ const SignIn = () => {
       )}
     </div>
   );
-};
+}
 
 export default SignIn;

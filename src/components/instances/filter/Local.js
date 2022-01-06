@@ -15,7 +15,7 @@ const icons = {
   unchecked: <div>local</div>,
 };
 
-const Local = () => {
+function Local() {
   const filterLocal = useStoreState(appState, (s) => s.filterLocal);
 
   return (
@@ -23,6 +23,6 @@ const Local = () => {
       <ToggleButton width="100%" icons={icons} checked={filterLocal} id="filterLocal" onChange={updateFilter} />
     </div>
   );
-};
+}
 
 export default Local;

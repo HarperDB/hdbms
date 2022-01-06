@@ -15,7 +15,7 @@ import getIntegrations from '../../../functions/api/lms/getIntegrations';
 import integrationLanguageOptions from '../../../functions/resources/integrationLanguageOptions';
 import getUser from '../../../functions/api/lms/getUser';
 
-const Add = () => {
+function Add() {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -152,6 +152,6 @@ const Add = () => {
       </ErrorBoundary>
     </>
   );
-};
+}
 
 export default Add;

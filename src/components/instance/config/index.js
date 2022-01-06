@@ -17,7 +17,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 
-const ConfigIndex = () => {
+function ConfigIndex() {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -129,6 +129,6 @@ const ConfigIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default ConfigIndex;

@@ -15,7 +15,7 @@ import CreditCardForm from '../../shared/CreditCardForm';
 import FormStatus from '../../shared/FormStatus';
 import ContentContainer from '../../shared/ContentContainer';
 
-const Payment = () => {
+function Payment() {
   const history = useHistory();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -149,6 +149,6 @@ const Payment = () => {
       </Row>
     </>
   );
-};
+}
 
 export default Payment;

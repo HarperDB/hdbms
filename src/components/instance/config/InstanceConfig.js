@@ -5,7 +5,7 @@ import { Card, CardBody } from 'reactstrap';
 import instanceState from '../../../functions/state/instanceState';
 import getConfiguration from '../../../functions/api/instance/getConfiguration';
 
-const InstanceConfig = () => {
+function InstanceConfig() {
   const url = useStoreState(instanceState, (s) => s.url);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const [state, setState] = useState({});
@@ -30,6 +30,6 @@ const InstanceConfig = () => {
       </Card>
     </>
   );
-};
+}
 
 export default InstanceConfig;

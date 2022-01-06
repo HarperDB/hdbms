@@ -20,7 +20,7 @@ import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 
-const InstancesIndex = () => {
+function InstancesIndex() {
   const history = useHistory();
   const { action, customer_id } = useParams();
   const alert = useAlert();
@@ -102,6 +102,6 @@ const InstancesIndex = () => {
       )}
     </div>
   );
-};
+}
 
 export default InstancesIndex;

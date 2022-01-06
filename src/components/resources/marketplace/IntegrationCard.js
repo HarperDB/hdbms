@@ -11,7 +11,7 @@ import Code from '../../shared/Code';
 import appState from '../../../functions/state/appState';
 import getIntegrations from '../../../functions/api/lms/getIntegrations';
 
-const IntegrationCard = ({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command }, icon = false }) => {
+function IntegrationCard({ id, status, avg_rating, user_rating, author_user_id, meta: { name, description, language, homepage, install_command }, icon = false }) {
   const auth = useStoreState(appState, (s) => s.auth);
   const alert = useAlert();
   const [sendingRating, setSendingRating] = useState(false);
@@ -108,6 +108,6 @@ const IntegrationCard = ({ id, status, avg_rating, user_rating, author_user_id, 
       </ErrorBoundary>
     </Col>
   );
-};
+}
 
 export default IntegrationCard;

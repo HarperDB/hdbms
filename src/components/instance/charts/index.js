@@ -17,7 +17,7 @@ import config from '../../../config';
 
 let controller;
 
-const DashboardIndex = () => {
+function DashboardIndex() {
   const { customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -80,6 +80,6 @@ const DashboardIndex = () => {
       </Row>
     </div>
   );
-};
+}
 
 export default DashboardIndex;

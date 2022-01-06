@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import Role from './EditRole';
 import Delete from './EditDelete';
 
-const Edit = ({ userEmail }) => {
+function Edit({ userEmail }) {
   const { user_id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -38,6 +38,6 @@ const Edit = ({ userEmail }) => {
       </Card>
     </>
   );
-};
+}
 
 export default Edit;

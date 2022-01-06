@@ -31,7 +31,7 @@ const defaultTableState = {
 
 let controller;
 
-const Datatable = ({ query }) => {
+function Datatable({ query }) {
   const [lastUpdate, setLastUpdate] = useState();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -131,6 +131,6 @@ const Datatable = ({ query }) => {
   ) : (
     <EmptyPrompt message="please execute a SQL query to proceed" />
   );
-};
+}
 
 export default Datatable;

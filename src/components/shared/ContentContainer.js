@@ -1,7 +1,7 @@
 import React from 'react';
 
-const ContentContainer = ({ children, header, subheader, maxHeight = 'auto', minHeight = 'auto', className }) => (
-  <div className={`content-container ${className}`}>
+function ContentContainer({ children, header, subheader, maxHeight = 'auto', minHeight = 'auto', className }) {
+  return <div className={`content-container ${className}`}>
     <div className="header-container">
       <span className="header">{header}</span>
       <span className="subheader">{subheader}</span>
@@ -10,6 +10,6 @@ const ContentContainer = ({ children, header, subheader, maxHeight = 'auto', min
       {children}
     </div>
   </div>
-);
+}
 
 export default ContentContainer;

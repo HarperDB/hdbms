@@ -7,7 +7,7 @@ import instanceState from '../../functions/state/instanceState';
 import appState from '../../functions/state/appState';
 import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
 
-const StructureReloader = ({ label = 'instance', centerText = false }) => {
+function StructureReloader({ label = 'instance', centerText = false }) {
   const { compute_stack_id } = useParams();
   const loading = useStoreState(instanceState, (s) => s.loading);
   const instances = useStoreState(appState, (s) => s.instances);
@@ -26,6 +26,6 @@ const StructureReloader = ({ label = 'instance', centerText = false }) => {
       </Button>
     </span>
   );
-};
+}
 
 export default StructureReloader;

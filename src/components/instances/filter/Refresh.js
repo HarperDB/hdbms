@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'reactstrap';
 
-const Refresh = ({ refreshInstances }) => {
+function Refresh({ refreshInstances }) {
   const [loading, setLoading] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -16,6 +16,6 @@ const Refresh = ({ refreshInstances }) => {
       <span className="d-none d-md-inline-block">refresh</span>
     </Button>
   );
-};
+}
 
 export default Refresh;

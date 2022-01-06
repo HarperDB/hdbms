@@ -12,7 +12,7 @@ import getUsers from '../../../functions/api/lms/getUsers';
 import config from '../../../config';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 
-const UsersIndex = () => {
+function UsersIndex() {
   const { user_id, customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const users = useStoreState(appState, (s) => s.users);
@@ -46,6 +46,6 @@ const UsersIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default UsersIndex;

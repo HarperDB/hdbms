@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-const NewOrgCard = () => {
+function NewOrgCard() {
   const history = useHistory();
 
   const handleClick = () => {
@@ -29,6 +29,6 @@ const NewOrgCard = () => {
       </ErrorBoundary>
     </Col>
   );
-};
+}
 
 export default NewOrgCard;

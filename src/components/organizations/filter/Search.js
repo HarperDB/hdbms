@@ -6,7 +6,7 @@ import appState from '../../../functions/state/appState';
 import updateFilter from '../../../functions/organizations/updateFilter';
 import clearFilter from '../../../functions/organizations/clearFilter';
 
-const Search = () => {
+function Search() {
   const orgSearch = useStoreState(appState, (s) => s.orgSearch);
 
   return (
@@ -19,6 +19,6 @@ const Search = () => {
       )}
     </>
   );
-};
+}
 
 export default Search;

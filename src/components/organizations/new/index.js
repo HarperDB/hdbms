@@ -13,7 +13,7 @@ import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const NewOrgIndex = () => {
+function NewOrgIndex() {
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const history = useHistory();
@@ -177,6 +177,6 @@ const NewOrgIndex = () => {
       </ErrorBoundary>
     </Modal>
   );
-};
+}
 
 export default NewOrgIndex;

@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import isURL from '../../../functions/util/isURL';
 
-const Profile = () => {
+function Profile() {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState(auth);
@@ -67,8 +67,7 @@ const Profile = () => {
         ) : formState.error ? (
           <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
         ) : (
-          <>
-            <Card className="mb-3">
+          <Card className="mb-3">
               <CardBody>
                 <Row>
                   <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
@@ -147,11 +146,10 @@ const Profile = () => {
                 </Button>
               </CardBody>
             </Card>
-          </>
         )}
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default Profile;

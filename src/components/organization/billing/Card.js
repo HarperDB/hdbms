@@ -6,7 +6,7 @@ import appState from '../../../functions/state/appState';
 import StaticCard from './CardStatic';
 import EditCard from './CardEdit';
 
-const Card = () => {
+function Card() {
   const [editingCard, setEditingCard] = useState(false);
   const hasCard = useStoreState(appState, (s) => s.hasCard, [editingCard]);
   const badCard = useStoreState(appState, (s) => s.customer?.current_payment_status?.status === 'invoice.payment_failed');
@@ -21,6 +21,6 @@ const Card = () => {
       )}
     </div>
   );
-};
+}
 
 export default Card;

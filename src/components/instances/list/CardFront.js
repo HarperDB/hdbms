@@ -23,7 +23,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage }) => {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage }) {
   const { customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -193,6 +193,6 @@ const CardFront = ({ compute_stack_id, instance_id, url, status, instance_name, 
       )}
     </ErrorBoundary>
   );
-};
+}
 
 export default CardFront;

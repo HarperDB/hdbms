@@ -5,7 +5,7 @@ import DataTable from './Datatable';
 import QueryWindow from './QueryWindow';
 import QueryHistory from './QueryHistory';
 
-const QueryIndex = () => {
+function QueryIndex() {
   const [query, setQuery] = useState(false);
 
   return (
@@ -19,6 +19,6 @@ const QueryIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default QueryIndex;

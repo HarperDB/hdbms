@@ -14,7 +14,7 @@ import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const CardStatic = ({ setEditingCard, customerCard, formStateHeight, badCard }) => {
+function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const instances = useStoreState(appState, (s) => s.instances);
@@ -113,6 +113,6 @@ const CardStatic = ({ setEditingCard, customerCard, formStateHeight, badCard }) 
       )}
     </ErrorBoundary>
   );
-};
+}
 
 export default CardStatic;

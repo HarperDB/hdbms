@@ -10,7 +10,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import TutorialManager from './TutorialManager';
 
-const TutorialsIndex = () => {
+function TutorialsIndex() {
   const history = useHistory();
   const { video_id } = useParams();
   const [items, setItems] = useState([]);
@@ -65,6 +65,6 @@ const TutorialsIndex = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default TutorialsIndex;

@@ -16,7 +16,7 @@ import addError from '../../../../functions/api/lms/addError';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 import enableCustomFunctions from '../../../../functions/instance/enableCustomFunctions';
 
-const SetupIndex = ({ setConfiguring }) => {
+function SetupIndex({ setConfiguring }) {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -64,6 +64,6 @@ const SetupIndex = ({ setConfiguring }) => {
       </Col>
     </Row>
   );
-};
+}
 
 export default SetupIndex;

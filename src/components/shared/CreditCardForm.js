@@ -10,7 +10,7 @@ import appState from '../../functions/state/appState';
 import ErrorFallback from './ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 
-const CreditCardForm = ({ setFormData, formData }) => {
+function CreditCardForm({ setFormData, formData }) {
   const { customer_id } = useParams();
   const [formState, setFormState] = useState({});
   const theme = useStoreState(appState, (s) => s.theme);
@@ -99,6 +99,6 @@ const CreditCardForm = ({ setFormData, formData }) => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default CreditCardForm;

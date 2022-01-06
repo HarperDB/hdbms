@@ -10,26 +10,60 @@ import config from '../../../config';
 import DataTableHeader from './BrowseDatatableHeader';
 import DataTable from '../../shared/DataTable';
 import getTableData from '../../../functions/instance/getTableData';
+import getTablePagination from '../../../functions/instance/getTablePagination';
 
 let controller;
+let controller2;
+let controller3;
 
-const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
+function BrowseDatatable({ tableState, setTableState, activeTable }) {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const [totalPages, setTotalPages] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingFilter, setLoadingFilter] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(true);
 
   useEffect(() => {
+    controller?.abort();
+    controller2?.abort();
+    controller3?.abort();
+    setLoadingFilter(false);
+    setLoading(false);
+
     let isMounted = true;
+
+    const fetchPagination = async () => {
+      setLoadingFilter(true);
+      setTotalPages(false);
+      controller3 = new AbortController();
+
+      const { newTotalRecords, newTotalPages } = await getTablePagination({
+        schema,
+        table,
+        filtered: tableState.filtered,
+        pageSize: tableState.pageSize,
+        auth,
+        url,
+        signal: controller3.signal,
+      });
+      if (isMounted) {
+        setLoadingFilter(false);
+        setTotalPages(newTotalPages);
+        setTotalRecords(newTotalRecords);
+      }
+    };
 
     const fetchData = async () => {
       if (!tableState.filtered.length) {
         setLoading(true);
       }
       controller = new AbortController();
-      const { newData, newTotalPages, newTotalRecords, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+      controller2 = new AbortController();
+      const { newData, newTotalRecords, newTotalPages, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -39,15 +73,24 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
         auth,
         url,
         signal: controller.signal,
+        signal2: controller2.signal,
       });
+
       if (isMounted) {
         setLoading(false);
         if (!newData.error) {
+          if (!tableState.filtered.length) {
+            setTotalPages(newTotalPages);
+            setTotalRecords(newTotalRecords);
+          } else if (newData.length < tableState.pageSize) {
+            setTotalPages(1);
+            setTotalRecords(newData.length);
+          } else {
+            fetchPagination();
+          }
           setTableState({
             ...tableState,
             tableData: newData,
-            totalPages: newTotalPages,
-            totalRecords: newTotalRecords,
             newEntityAttributes,
             hashAttribute,
             dataTableColumns,
@@ -61,6 +104,8 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
 
     return () => {
       controller?.abort();
+      controller2?.abort();
+      controller3?.abort();
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +116,9 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
   return (
     <>
       <DataTableHeader
-        totalRecords={tableState.totalRecords}
+        totalRecords={totalRecords}
         loading={loading}
+        loadingFilter={loadingFilter}
         autoRefresh={tableState.autoRefresh}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
@@ -86,7 +132,7 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
             data={tableState.tableData || []}
             currentPage={tableState.page}
             pageSize={tableState.pageSize}
-            totalPages={tableState.totalPages}
+            totalPages={totalPages || 0}
             showFilter={tableState.showFilter}
             sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
@@ -100,6 +146,6 @@ const BrowseDatatable = ({ tableState, setTableState, activeTable }) => {
       </Card>
     </>
   );
-};
+}
 
 export default BrowseDatatable;

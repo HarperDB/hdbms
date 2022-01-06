@@ -3,6 +3,7 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
@@ -14,10 +15,11 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-const Logs = () => {
+function Logs() {
+  const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const logs = useStoreState(instanceState, (s) => s.logs);
+  const logs = useStoreState(instanceState, (s) => s.logs, [compute_stack_id]);
   const logsError = useStoreState(instanceState, (s) => s.logsError);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -78,12 +80,12 @@ const Logs = () => {
               <div className="pt-5 text-center">
                 <i className="fa fa-spinner fa-spin text-lightgrey" />
               </div>
-            ) : logs?.length ? (
+            ) : logs && logs.length ? (
               logs.map((l, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <LogRow key={i} {...l} />
               ))
-            ) : !logs.length ? (
+            ) : logs && !logs.length ? (
               <div className="pt-5 text-center">no logs found</div>
             ) : (
               <div className="pt-5 text-center">no logs found in this view</div>
@@ -93,6 +95,6 @@ const Logs = () => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Logs;

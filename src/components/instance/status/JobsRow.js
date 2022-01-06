@@ -3,8 +3,8 @@ import { Row, Col } from 'reactstrap';
 
 import isObject from '../../../functions/util/isObject';
 
-const JobsRow = ({ end_datetime, start_datetime, status, message }) => (
-  <div className="item-row">
+function JobsRow({ end_datetime, start_datetime, status, message }) {
+  return <div className="item-row">
     <Row>
       <Col xs="3" className={`text-nowrap ${status.toLowerCase()}`}>
         {status}
@@ -23,6 +23,6 @@ const JobsRow = ({ end_datetime, start_datetime, status, message }) => (
       </Col>
     </Row>
   </div>
-);
+}
 
 export default JobsRow;

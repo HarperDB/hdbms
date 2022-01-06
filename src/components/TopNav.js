@@ -8,7 +8,7 @@ import appState from '../functions/state/appState';
 import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/ErrorFallback';
 
-const TopNav = ({ isMaintenance }) => {
+function TopNav({ isMaintenance }) {
   const { pathname } = useLocation();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -156,6 +156,6 @@ const TopNav = ({ isMaintenance }) => {
       </Navbar>
     </ErrorBoundary>
   );
-};
+}
 
 export default TopNav;

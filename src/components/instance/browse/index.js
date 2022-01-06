@@ -22,8 +22,6 @@ const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-relo
 const defaultTableState = {
   tableData: [],
   dataTableColumns: [],
-  totalPages: 0,
-  totalRecords: 0,
   filtered: [],
   sorted: [],
   page: 0,
@@ -34,7 +32,7 @@ const defaultTableState = {
   hashAttribute: false,
 };
 
-const BrowseIndex = () => {
+function BrowseIndex() {
   const history = useHistory();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -104,6 +102,6 @@ const BrowseIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default BrowseIndex;

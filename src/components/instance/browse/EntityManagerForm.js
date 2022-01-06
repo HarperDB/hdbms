@@ -10,7 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
 import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
-const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) => {
+function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) {
   const history = useHistory();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -136,6 +136,6 @@ const EntityManagerForm = ({ items, itemType, activeSchema, toggleDropItem, togg
       </Col>
     </Row>
   );
-};
+}
 
 export default EntityManagerForm;

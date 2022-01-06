@@ -15,7 +15,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
+function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
   const alert = useAlert();
   const history = useHistory();
@@ -189,6 +189,6 @@ const JsonViewer = ({ newEntityAttributes, hashAttribute }) => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default JsonViewer;

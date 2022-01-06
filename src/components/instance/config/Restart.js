@@ -10,7 +10,7 @@ import userInfo from '../../../functions/api/instance/userInfo';
 import config from '../../../config';
 import restartInstance from '../../../functions/api/instance/restartInstance';
 
-const Restart = ({ instanceAction, setInstanceAction }) => {
+function Restart({ instanceAction, setInstanceAction }) {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -98,6 +98,6 @@ const Restart = ({ instanceAction, setInstanceAction }) => {
       )}
     </>
   );
-};
+}
 
 export default Restart;

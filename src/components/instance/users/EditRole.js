@@ -13,7 +13,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
-const EditRole = () => {
+function EditRole() {
   const { username } = useParams();
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -78,6 +78,6 @@ const EditRole = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default EditRole;

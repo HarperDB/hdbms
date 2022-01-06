@@ -5,7 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const QueryWindow = ({ setQuery, query }) => {
+function QueryWindow({ setQuery, query }) {
   const [formData, setFormData] = useState('');
   const [formState, setFormState] = useState(false);
   const submitRef = createRef();
@@ -81,6 +81,6 @@ const QueryWindow = ({ setQuery, query }) => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default QueryWindow;

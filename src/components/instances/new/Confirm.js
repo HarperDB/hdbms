@@ -14,7 +14,7 @@ import CouponForm from '../../shared/CouponForm';
 import RadioCheckbox from '../../shared/RadioCheckbox';
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-const Confirm = () => {
+function Confirm() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -28,7 +28,7 @@ const Confirm = () => {
   const totalPriceString = allPrePaid
     ? 'PREPAID'
     : totalPrice
-    ? `$${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
+    ? `${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
     : somePrePaid
     ? 'PREPAID / FREE'
     : 'FREE';
@@ -229,6 +229,6 @@ const Confirm = () => {
       )}
     </>
   );
-};
+}
 
 export default Confirm;

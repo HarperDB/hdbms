@@ -15,7 +15,7 @@ const icons = {
   unchecked: <div>cloud</div>,
 };
 
-const Cloud = () => {
+function Cloud() {
   const filterCloud = useStoreState(appState, (s) => s.filterCloud);
 
   return (
@@ -23,6 +23,6 @@ const Cloud = () => {
       <ToggleButton width="100%" icons={icons} checked={filterCloud} onChange={updateFilter} />
     </div>
   );
-};
+}
 
 export default Cloud;

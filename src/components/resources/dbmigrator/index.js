@@ -7,8 +7,8 @@ import Screenshot1 from '../../../assets/images/migrator/screenshot1.png';
 import Screenshot2 from '../../../assets/images/migrator/screenshot2.png';
 import Screenshot3 from '../../../assets/images/migrator/screenshot3.png';
 
-const DBMigratorIndex = () => (
-  <main id="support">
+function DBMigratorIndex() {
+  return <main id="support">
     <span className="floating-card-header">HarperDB Migrator</span>
     <Card className="my-3">
       <CardBody>
@@ -42,6 +42,6 @@ const DBMigratorIndex = () => (
       </CardBody>
     </Card>
   </main>
-);
+}
 
 export default DBMigratorIndex;

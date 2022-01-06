@@ -10,7 +10,7 @@ import FormStatus from '../../shared/FormStatus';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const Password = () => {
+function Password() {
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -127,6 +127,6 @@ const Password = () => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default Password;

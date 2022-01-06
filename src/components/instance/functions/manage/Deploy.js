@@ -29,7 +29,7 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-const Deploy = () => {
+function Deploy() {
   const { customer_id, compute_stack_id, project } = useParams();
   const history = useHistory();
   const [instanceAuths] = useInstanceAuth({});
@@ -181,6 +181,6 @@ const Deploy = () => {
       </Card>
     </>
   );
-};
+}
 
 export default Deploy;

@@ -16,7 +16,7 @@ import VisitCard from '../../shared/VisitCard';
 import updateInstance from '../../../functions/api/lms/updateInstance';
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
+function UpdateDiskVolume({ setInstanceAction, showPrepaidStorage }) {
   const { customer_id, compute_stack_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -51,7 +51,7 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
   const totalFreeCloudInstances = auth.orgs.filter((o) => auth.user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const newTotal = (formData?.storage_price || 0) + (compute?.compute_price || 0);
-  const newTotalString = newTotal ? `$${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
+  const newTotalString = newTotal ? `${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
   const hasChanged =
     storage?.data_volume_size !== formData.data_volume_size ||
     storage?.stripe_storage_plan_id !== formData.stripe_storage_plan_id ||
@@ -173,6 +173,6 @@ const UpdateDiskVolume = ({ setInstanceAction, showPrepaidStorage }) => {
       ) : null}
     </>
   );
-};
+}
 
 export default UpdateDiskVolume;

@@ -8,7 +8,7 @@ import EntityManagerHeader from './RoleManagerHeader';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
+function RoleManager({ items, activeItem, showForm, baseUrl, itemType }) {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -53,6 +53,6 @@ const RoleManager = ({ items, activeItem, showForm, baseUrl, itemType }) => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default RoleManager;

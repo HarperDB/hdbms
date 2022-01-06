@@ -1,8 +1,8 @@
 import { Col, Row, Card, CardBody } from 'reactstrap';
 import React from 'react';
 
-const ChangeSummary = ({ which, compute, storage, total }) => (
-  <Card className="my-3">
+function ChangeSummary({ which, compute, storage, total }) {
+  return <Card className="my-3">
     <CardBody className="p-2 text-small">
       <Row>
         <Col xs="6" className="text-nowrap">
@@ -38,6 +38,6 @@ const ChangeSummary = ({ which, compute, storage, total }) => (
       </Row>
     </CardBody>
   </Card>
-);
+}
 
 export default ChangeSummary;

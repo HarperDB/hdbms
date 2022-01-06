@@ -8,7 +8,7 @@ import instanceState from '../../../../functions/state/instanceState';
 import addRole from '../../../../functions/api/instance/addRole';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 
-const Role = () => {
+function Role() {
   const { compute_stack_id, customer_id } = useParams();
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -47,6 +47,6 @@ const Role = () => {
       Create Cluster Role
     </Button>
   );
-};
+}
 
 export default Role;

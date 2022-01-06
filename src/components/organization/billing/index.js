@@ -11,7 +11,7 @@ import getCustomer from '../../../functions/api/lms/getCustomer';
 import appState from '../../../functions/state/appState';
 import getInstances from '../../../functions/api/lms/getInstances';
 
-const BillingIndex = () => {
+function BillingIndex() {
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const products = useStoreState(appState, (s) => s.products);
@@ -48,6 +48,6 @@ const BillingIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default BillingIndex;

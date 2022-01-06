@@ -9,7 +9,7 @@ import ActionConnectionClosed from './ActionConnectionClosed';
 import ActionConnectionOpen from './ActionConnectionOpen';
 import ActionConnecting from './ActionConnecting';
 
-const InstanceManagerRow = ({ setShowModal, item, itemType, loading, handleAddNode, handleRemoveNode, refreshNetwork }) => {
+function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNode, handleRemoveNode, refreshNetwork }) {
   const { customer_id } = useParams();
   const history = useHistory();
 
@@ -52,6 +52,6 @@ const InstanceManagerRow = ({ setShowModal, item, itemType, loading, handleAddNo
       </Col>
     </Row>
   );
-};
+}
 
 export default InstanceManagerRow;
