@@ -23,7 +23,7 @@ import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 
-const SetupIndex = () => {
+function SetupIndex() {
   const { customer_id, compute_stack_id } = useParams();
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
@@ -118,6 +118,6 @@ const SetupIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default SetupIndex;

@@ -12,7 +12,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
-const EditDelete = () => {
+function EditDelete() {
   const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -68,6 +68,6 @@ const EditDelete = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default EditDelete;

@@ -4,8 +4,8 @@ import { Row, Col } from 'reactstrap';
 import ProfileForm from './Profile';
 import PasswordForm from './Password';
 
-const ProfileIndex = () => (
-  <Row>
+function ProfileIndex() {
+  return <Row>
     <Col md="6" className="mb-4">
       <span className="floating-card-header">profile</span>
       <ProfileForm />
@@ -15,6 +15,6 @@ const ProfileIndex = () => (
       <PasswordForm />
     </Col>
   </Row>
-);
+}
 
 export default ProfileIndex;

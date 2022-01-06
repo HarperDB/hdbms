@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-const ErrorModal = ({ showModal, setShowModal }) => {
+function ErrorModal({ showModal, setShowModal }) {
   const { compute_stack_id } = useParams();
   const instance_name = useStoreState(instanceState, (s) => s.instance_name, [compute_stack_id]);
 
@@ -32,6 +32,6 @@ const ErrorModal = ({ showModal, setShowModal }) => {
       </ModalBody>
     </Modal>
   );
-};
+}
 
 export default ErrorModal;

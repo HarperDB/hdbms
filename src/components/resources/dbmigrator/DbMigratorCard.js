@@ -5,8 +5,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const DbMigratorCard = ({ icon, name, urls }) => (
-  <Col lg="4" xs="12" className="mb-3">
+function DbMigratorCard({ icon, name, urls }) {
+  return <Col lg="4" xs="12" className="mb-3">
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Card className="integration-driver-card">
         <CardBody className="pt-3">
@@ -26,6 +26,6 @@ const DbMigratorCard = ({ icon, name, urls }) => (
       </Card>
     </ErrorBoundary>
   </Col>
-);
+}
 
 export default DbMigratorCard;

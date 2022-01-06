@@ -7,7 +7,7 @@ import isEmail from '../../functions/util/isEmail';
 import resetPassword from '../../functions/api/lms/resetPassword';
 import Loader from '../shared/Loader';
 
-const ResetPassword = () => {
+function ResetPassword() {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -93,6 +93,6 @@ const ResetPassword = () => {
       )}
     </div>
   );
-};
+}
 
 export default ResetPassword;

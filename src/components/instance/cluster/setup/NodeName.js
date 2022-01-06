@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-const NodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
-  nodeNameMatch ? (
+function NodeName({ nodeNameMatch, setNodeNameMatch }) {
+  return nodeNameMatch ? (
     <Row>
       <Col xs="12">
         <hr className="my-3" />
@@ -21,6 +21,7 @@ const NodeName = ({ nodeNameMatch, setNodeNameMatch }) =>
         Set Cluster Node Name
       </Button>
     </>
-  );
+  )
+}
 
 export default NodeName;

@@ -7,7 +7,7 @@ import Password from './EditPassword';
 import Role from './EditRole';
 import Delete from './EditDelete';
 
-const Edit = () => {
+function Edit() {
   const { username } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -41,6 +41,6 @@ const Edit = () => {
       </Card>
     </>
   );
-};
+}
 
 export default Edit;

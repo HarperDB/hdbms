@@ -146,6 +146,7 @@
       }
 
       .page-count {
+        white-space: nowrap;
         display: inline-block;
         height: 100%;
         padding-top: 11px;
@@ -166,4 +167,3 @@
     }
   }
 }
-

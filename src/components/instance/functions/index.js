@@ -13,7 +13,7 @@ import buildCustomFunctions from '../../../functions/instance/buildCustomFunctio
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import getCustomFunction from '../../../functions/api/instance/getCustomFunction';
 
-const CustomFunctionsIndex = () => {
+function CustomFunctionsIndex() {
   const { project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -67,6 +67,6 @@ const CustomFunctionsIndex = () => {
   ) : (
     <Setup setConfiguring={setConfiguring} />
   );
-};
+}
 
 export default CustomFunctionsIndex;

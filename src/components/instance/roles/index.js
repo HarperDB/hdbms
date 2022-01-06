@@ -21,7 +21,7 @@ const defaultState = {
   showAttributes: false,
 };
 
-const RolesIndex = () => {
+function RolesIndex() {
   const { role_id, customer_id } = useParams();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -69,9 +69,7 @@ const RolesIndex = () => {
       <Col xl="9" lg="8" md="7" xs="12">
         <Row className="floating-card-header">
           {formState.canEdit && (
-            <>
-              <Col>edit role &gt; {formState.roleName}</Col>
-            </>
+            <Col>edit role &gt; {formState.roleName}</Col>
           )}
           <Col className="text-md-end">
             {formState.canEdit && (
@@ -111,6 +109,6 @@ const RolesIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default RolesIndex;

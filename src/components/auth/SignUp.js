@@ -9,7 +9,7 @@ import handleSignup from '../../functions/auth/handleSignup';
 import Loader from '../shared/Loader';
 import appState from '../../functions/state/appState';
 
-const SignUp = () => {
+function SignUp() {
   const { search } = useLocation();
   const { code, htuk, pageName, pageUri } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
@@ -176,6 +176,6 @@ const SignUp = () => {
       </div>
     </div>
   );
-};
+}
 
 export default SignUp;

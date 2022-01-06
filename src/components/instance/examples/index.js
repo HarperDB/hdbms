@@ -2,6 +2,8 @@ import React from 'react';
 
 import Examples from '../../shared/examples';
 
-const InstanceExamples = () => <Examples />;
+function InstanceExamples() {
+  return <Examples />
+}
 
 export default InstanceExamples;

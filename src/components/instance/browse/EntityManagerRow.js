@@ -8,7 +8,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
 
-const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) => {
+function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) {
   const history = useHistory();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -89,6 +89,6 @@ const EntityManagerRow = ({ item, itemType, baseUrl, isActive, toggleDropItem, i
       </Col>
     </Row>
   );
-};
+}
 
 export default EntityManagerRow;

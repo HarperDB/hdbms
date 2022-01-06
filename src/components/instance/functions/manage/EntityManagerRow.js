@@ -11,7 +11,7 @@ import dropCustomFunction from '../../../../functions/api/instance/dropCustomFun
 import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';
 
-const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping, itemType, restarting }) => {
+function EntityManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping, itemType, restarting }) {
   const { project } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -91,6 +91,6 @@ const EntityManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping,
       </Col>
     </Row>
   );
-};
+}
 
 export default EntityManagerRow;

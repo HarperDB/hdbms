@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 
-const LinksIndex = () => (
-  <main id="support">
+function LinksIndex() {
+  return <main id="support">
     <Row>
       <Col lg="3" className="mb-3">
         <span className="floating-card-header">Full API Documenation</span>
@@ -52,6 +52,6 @@ const LinksIndex = () => (
       </Col>
     </Row>
   </main>
-);
+}
 
 export default LinksIndex;

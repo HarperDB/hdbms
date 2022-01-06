@@ -11,9 +11,11 @@ import isImage from '../../functions/util/isImage';
 import addError from '../../functions/api/lms/addError';
 import ErrorFallback from './ErrorFallback';
 
-const TextViewer = ({ value }) => <div className="text-renderer">{value}</div>;
+function TextViewer({ value }) {
+  return <div className="text-renderer">{value}</div>
+}
 
-const ImageViewer = ({ src }) => {
+function ImageViewer({ src }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewError, setPreviewError] = useState(false);
 
@@ -30,7 +32,7 @@ const ImageViewer = ({ src }) => {
       ) : null}
     </div>
   );
-};
+}
 
 const handlCellValues = (value) => {
   const dataType = Object.prototype.toString.call(value);
@@ -54,7 +56,7 @@ const defaultColumn = {
 };
 
 // Our table component
-const DataTable = ({
+function DataTable({
   columns,
   data,
   currentPage,
@@ -69,39 +71,25 @@ const DataTable = ({
   sorted,
   loading,
   manual = false,
-}) => {
-  const {
-    headerGroups,
-    page,
-    rows,
-    prepareRow,
-    state,
-    setAllFilters,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-      onFilteredChange,
-      onSortedChange,
-      onPageChange,
-      onPageSizeChange,
-      onRowClick,
-      manualPagination: manual,
-      manualFilters: manual,
-      initialState: { pageIndex: currentPage, pageSize },
-    },
-    useFilters,
-    usePagination
-  );
+}) {
+  const { headerGroups, page, rows, prepareRow, state, setAllFilters, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize } =
+    useTable(
+      {
+        columns,
+        data,
+        defaultColumn,
+        onFilteredChange,
+        onSortedChange,
+        onPageChange,
+        onPageSizeChange,
+        onRowClick,
+        manualPagination: manual,
+        manualFilters: manual,
+        initialState: { pageIndex: currentPage, pageSize },
+      },
+      useFilters,
+      usePagination
+    );
   const [localLoading, setLocalLoading] = useState(true);
 
   const iterable = manual || !page.length ? rows : page;
@@ -109,7 +97,7 @@ const DataTable = ({
   useEffect(() => {
     if (!showFilter && state.filters.length) {
       setAllFilters([]);
-    } else if (state.filters) {
+    } else if (state.filters.length) {
       onFilteredChange(state.filters);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,6 +142,6 @@ const DataTable = ({
       )}
     </ErrorBoundary>
   );
-};
+}
 
 export default DataTable;

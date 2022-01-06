@@ -5,8 +5,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const DriverCard = ({ icon, name, docs, urls }) => (
-  <Col xl="4" lg="6" xs="12" className="mb-3">
+function DriverCard({ icon, name, docs, urls }) {
+  return <Col xl="4" lg="6" xs="12" className="mb-3">
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Card className="integration-driver-card">
         <CardBody className="pt-3">
@@ -32,6 +32,6 @@ const DriverCard = ({ icon, name, docs, urls }) => (
       </Card>
     </ErrorBoundary>
   </Col>
-);
+}
 
 export default DriverCard;

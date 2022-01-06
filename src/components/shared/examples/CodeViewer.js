@@ -15,7 +15,7 @@ import ErrorFallback from '../ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import Code from '../Code';
 
-const CodeViewer = ({ showCustomMessage }) => {
+function CodeViewer({ showCustomMessage }) {
   const { folder, method } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -111,6 +111,6 @@ const CodeViewer = ({ showCustomMessage }) => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default CodeViewer;

@@ -16,7 +16,7 @@ import addError from '../../functions/api/lms/addError';
 
 let controller;
 
-const CouponForm = () => {
+function CouponForm() {
   const { customer_id } = useParams();
   const { search } = useLocation();
   const { code } = queryString.parse(search);
@@ -94,6 +94,6 @@ const CouponForm = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default CouponForm;

@@ -11,7 +11,7 @@ import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 import createClusterUser from '../../../../functions/instance/createClusterUser';
 
-const User = () => {
+function User() {
   const { compute_stack_id } = useParams();
   const instances = useStoreState(appState, (s) => s.instances);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -88,6 +88,6 @@ const User = () => {
       )}
     </>
   );
-};
+}
 
 export default User;

@@ -2,8 +2,8 @@ import { Card, CardBody, Row, Col } from 'reactstrap';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Loader = ({ header, body, spinner, links = false, relative = false }) => (
-  <div className={`loader ${relative ? 'relative' : ''}`}>
+function Loader({ header, body, spinner, links = false, relative = false }) {
+  return <div className={`loader ${relative ? 'relative' : ''}`}>
     <Card className="mb-3">
       <CardBody className="text-center">
         <div className="mb-3">&nbsp;{header}&nbsp;</div>
@@ -25,6 +25,6 @@ const Loader = ({ header, body, spinner, links = false, relative = false }) => (
       </Row>
     )}
   </div>
-);
+}
 
 export default Loader;

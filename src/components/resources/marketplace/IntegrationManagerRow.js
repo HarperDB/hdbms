@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router';
 
-const IntegrationManagerRow = ({ item, baseUrl, isActive }) => {
+function IntegrationManagerRow({ item, baseUrl, isActive }) {
   const history = useHistory();
 
   const handleSetActive = () => (isActive ? false : history.push(`${baseUrl}/${item}`));
@@ -19,6 +19,6 @@ const IntegrationManagerRow = ({ item, baseUrl, isActive }) => {
       </Col>
     </Row>
   );
-};
+}
 
 export default IntegrationManagerRow;

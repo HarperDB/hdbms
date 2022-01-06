@@ -14,7 +14,7 @@ import Loader from '../shared/Loader';
 import addError from '../../functions/api/lms/addError';
 import ErrorFallbackCard from '../shared/ErrorFallbackCard';
 
-const OrganizationsIndex = () => {
+function OrganizationsIndex() {
   const { list, action } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -52,6 +52,6 @@ const OrganizationsIndex = () => {
       {action === 'new' && <NewOrgModal />}
     </div>
   );
-};
+}
 
 export default OrganizationsIndex;

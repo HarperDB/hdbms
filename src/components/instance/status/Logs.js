@@ -14,7 +14,7 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-const Logs = () => {
+function Logs() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const logs = useStoreState(instanceState, (s) => s.logs);
@@ -93,6 +93,6 @@ const Logs = () => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Logs;

@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import dropRole from '../../../functions/api/instance/dropRole';
 import listRoles from '../../../functions/api/instance/listRoles';
 
-const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping }) => {
+function RoleManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping }) {
   const history = useHistory();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
@@ -71,6 +71,6 @@ const RoleManagerRow = ({ item, baseUrl, isActive, toggleDropItem, isDropping })
       </Col>
     </Row>
   );
-};
+}
 
 export default RoleManagerRow;

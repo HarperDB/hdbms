@@ -3,8 +3,8 @@ import { Button, Col, Row } from 'reactstrap';
 
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-const DatatableHeader = ({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) => (
-  <Row className="floating-card-header">
+function DatatableHeader({ totalRecords, loading, autoRefresh, setAutoRefresh, showFilter, filtered, setLastUpdate, toggleFilter, setShowChartModal }) {
+  return <Row className="floating-card-header">
     <Col xs="12" md="3">
       {commaNumbers(totalRecords)} record
       {totalRecords !== 1 ? 's' : ''}
@@ -29,6 +29,6 @@ const DatatableHeader = ({ totalRecords, loading, autoRefresh, setAutoRefresh, s
       </Button>
     </Col>
   </Row>
-);
+}
 
 export default DatatableHeader;

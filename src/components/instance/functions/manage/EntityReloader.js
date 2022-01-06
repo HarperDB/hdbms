@@ -6,7 +6,7 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import restartService from '../../../../functions/api/instance/restartService';
 
-const EntityReloader = ({ loading, refreshCustomFunctions, restarting }) => {
+function EntityReloader({ loading, refreshCustomFunctions, restarting }) {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
 
@@ -24,6 +24,6 @@ const EntityReloader = ({ loading, refreshCustomFunctions, restarting }) => {
       <hr className="d-block d-md-none mt-4" />
     </span>
   );
-};
+}
 
 export default EntityReloader;

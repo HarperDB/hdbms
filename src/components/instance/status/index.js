@@ -6,9 +6,8 @@ import Logs from './Logs';
 import Jobs from './Jobs';
 import Alarms from './Alarms';
 
-const MetricsIndex = () => (
-  <>
-    <Row id="config">
+function MetricsIndex() {
+  return <Row id="config">
       <Col xs="12">
         <SystemInfo />
       </Col>
@@ -22,7 +21,6 @@ const MetricsIndex = () => (
         <Alarms />
       </Col>
     </Row>
-  </>
-);
+}
 
 export default MetricsIndex;

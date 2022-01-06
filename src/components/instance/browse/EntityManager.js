@@ -5,7 +5,7 @@ import EntityManagerForm from './EntityManagerForm';
 import EntityManagerRow from './EntityManagerRow';
 import EntityManagerHeader from './EntityManagerHeader';
 
-const EntityManager = ({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) => {
+function EntityManager({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
 
@@ -64,6 +64,6 @@ const EntityManager = ({ items, activeItem, activeSchema = false, showForm, base
       </Card>
     </div>
   );
-};
+}
 
 export default EntityManager;

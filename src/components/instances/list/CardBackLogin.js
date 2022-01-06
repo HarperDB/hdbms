@@ -10,7 +10,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './CardInstanceUpdateRole';
 
-const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) => {
+function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -115,6 +115,6 @@ const CardBackLogin = ({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default CardBackLogin;

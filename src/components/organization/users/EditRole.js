@@ -13,7 +13,7 @@ import getUsers from '../../../functions/api/lms/getUsers';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-const EditRole = () => {
+function EditRole() {
   const { user_id } = useParams();
   const { customer_id } = useParams();
   const alert = useAlert();
@@ -82,6 +82,6 @@ const EditRole = () => {
       )}
     </ErrorBoundary>
   );
-};
+}
 
 export default EditRole;

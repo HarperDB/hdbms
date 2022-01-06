@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router';
 
 import commaNumbers from '../../../functions/util/commaNumbers';
 
-const BrowseDatatableHeader = ({ totalRecords, loading, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) => {
+function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) {
   const history = useHistory();
   const { compute_stack_id, schema, table, customer_id } = useParams();
 
@@ -14,7 +14,7 @@ const BrowseDatatableHeader = ({ totalRecords, loading, refresh, autoRefresh, to
         {schema}
         &nbsp;
         {table && `> ${table} > `}
-        {!autoRefresh && loading ? (
+        {!autoRefresh && (loading || loadingFilter) ? (
           <i className="fa fa-spinner fa-spin" />
         ) : (
           <span>
@@ -59,6 +59,6 @@ const BrowseDatatableHeader = ({ totalRecords, loading, refresh, autoRefresh, to
       </Col>
     </Row>
   );
-};
+}
 
 export default BrowseDatatableHeader;

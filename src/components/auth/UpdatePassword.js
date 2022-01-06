@@ -9,7 +9,7 @@ import appState from '../../functions/state/appState';
 import updatePassword from '../../functions/api/lms/updatePassword';
 import Loader from '../shared/Loader';
 
-const UpdatePassword = () => {
+function UpdatePassword() {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -82,6 +82,6 @@ const UpdatePassword = () => {
       )}
     </div>
   );
-};
+}
 
 export default UpdatePassword;

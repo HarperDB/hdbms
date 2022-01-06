@@ -5,8 +5,8 @@ import routes from './routes';
 import SubNav from '../shared/SubNav';
 import Loader from '../shared/Loader';
 
-const ProfileIndex = () => (
-  <>
+function ProfileIndex() {
+  return <>
     <SubNav />
     <Suspense fallback={<Loader header=" " spinner />}>
       <Switch>
@@ -17,6 +17,6 @@ const ProfileIndex = () => (
       </Switch>
     </Suspense>
   </>
-);
+}
 
 export default ProfileIndex;

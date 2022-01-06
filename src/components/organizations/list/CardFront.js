@@ -14,7 +14,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import CardFrontIcons from './CardFrontIcons';
 
-const CardFront = ({ customer_name, customer_id, total_instance_count, status, setFlipState }) => {
+function CardFront({ customer_name, customer_id, total_instance_count, status, setFlipState }) {
   const auth = useStoreState(appState, (s) => s.auth);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -86,5 +86,5 @@ const CardFront = ({ customer_name, customer_id, total_instance_count, status, s
       </Card>
     </ErrorBoundary>
   );
-};
+}
 export default CardFront;

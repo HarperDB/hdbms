@@ -21,9 +21,10 @@ import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
 import registrationInfo from '../../functions/api/instance/registrationInfo';
 
-const InstanceIndex = () => {
+function InstanceIndex() {
   const { compute_stack_id, customer_id } = useParams();
   const [loadingInstance, setLoadingInstance] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(false);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
   const auth = useStoreState(appState, (s) => s.auth);
@@ -85,9 +86,10 @@ const InstanceIndex = () => {
   );
 
   useInterval(async () => {
-    if (url) {
+    if (url && !loadingUser) {
+      setLoadingUser(true);
       const result = await userInfo({ auth: instanceAuth, url });
-      if (result.error && !restarting) {
+      if (result.error && result.message !== 'Network request failed' && !restarting) {
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
       } else if (!result.error) {
@@ -96,6 +98,7 @@ const InstanceIndex = () => {
         });
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuth, super: result.role?.permission?.super_user } });
       }
+      setLoadingUser(false);
     }
   }, config.refresh_content_interval);
 
@@ -116,6 +119,6 @@ const InstanceIndex = () => {
       )}
     </>
   );
-};
+}
 
 export default InstanceIndex;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-const EntityManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
-  <Row className="floating-card-header">
+function EntityManagerHeader({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) {
+  return <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items?.length ? (
       <Col className="text-end">
@@ -33,6 +33,6 @@ const EntityManagerHeader = ({ items, itemType, toggleDropItem, isDropping, togg
       </Col>
     ) : null}
   </Row>
-);
+}
 
 export default EntityManagerHeader;

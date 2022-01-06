@@ -16,7 +16,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 let controller;
 
-const Alarms = () => {
+function Alarms() {
   const { customer_id } = useParams();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(appState, (s) => s.auth);
@@ -91,6 +91,6 @@ const Alarms = () => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Alarms;

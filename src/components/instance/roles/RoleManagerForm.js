@@ -10,7 +10,7 @@ import instanceState from '../../../functions/state/instanceState';
 import listRoles from '../../../functions/api/instance/listRoles';
 import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 
-const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) => {
+function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
   const { compute_stack_id, customer_id } = useParams();
   const history = useHistory();
   const alert = useAlert();
@@ -92,6 +92,6 @@ const RoleManagerForm = ({ itemType, toggleDropItem, toggleCreate, baseUrl }) =>
       </Row>
     </Form>
   );
-};
+}
 
 export default RoleManagerForm;

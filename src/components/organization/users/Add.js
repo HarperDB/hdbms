@@ -14,7 +14,7 @@ import FormStatus from '../../shared/FormStatus';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-const Add = ({ refreshUsers, userEmails }) => {
+function Add({ refreshUsers, userEmails }) {
   const history = useHistory();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -93,6 +93,6 @@ const Add = ({ refreshUsers, userEmails }) => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default Add;

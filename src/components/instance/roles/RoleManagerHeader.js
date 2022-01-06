@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-const RoleManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) => (
-  <Row className="floating-card-header">
+function RoleManagerHeader({ items, itemType, toggleDropItem, isDropping, toggleCreate, isCreating, showForm }) {
+  return <Row className="floating-card-header">
     <Col>{itemType}s</Col>
     {showForm && items && items.length ? (
       <Col className="text-end">
@@ -31,6 +31,6 @@ const RoleManagerHeader = ({ items, itemType, toggleDropItem, isDropping, toggle
       </Col>
     ) : null}
   </Row>
-);
+}
 
 export default RoleManagerHeader;

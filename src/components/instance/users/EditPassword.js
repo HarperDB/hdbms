@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listUsers from '../../../functions/api/instance/listUsers';
 
-const EditPassword = () => {
+function EditPassword() {
   const { username } = useParams();
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -66,6 +66,6 @@ const EditPassword = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 
 export default EditPassword;

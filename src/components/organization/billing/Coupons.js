@@ -10,7 +10,7 @@ import CouponForm from '../../shared/CouponForm';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const Coupons = () => {
+function Coupons() {
   const { customer_id } = useParams();
   const stripe_coupons = useStoreState(appState, (s) => s.customer.stripe_coupons);
 
@@ -47,6 +47,6 @@ const Coupons = () => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Coupons;

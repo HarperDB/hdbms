@@ -7,7 +7,7 @@ import SubNav from '../shared/SubNav';
 import appState from '../../functions/state/appState';
 import Loader from '../shared/Loader';
 
-const OrganizationsIndex = () => {
+function OrganizationsIndex() {
   const history = useHistory();
   const { customer_id } = useParams();
   const hydratedRoutes = routes({ customer_id });
@@ -33,6 +33,6 @@ const OrganizationsIndex = () => {
   ) : primaryOrgRedirect ? (
     <Redirect to={primaryOrgRedirect} />
   ) : null;
-};
+}
 
 export default OrganizationsIndex;

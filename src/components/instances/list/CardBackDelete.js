@@ -14,7 +14,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getUser from '../../../functions/api/lms/getUser';
 
-const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) => {
+function CardBackDelete({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) {
   const alert = useAlert();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -112,6 +112,6 @@ const CardBackDelete = ({ compute_stack_id, instance_name, is_local, setFlipStat
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default CardBackDelete;

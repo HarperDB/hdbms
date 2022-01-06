@@ -7,8 +7,8 @@ import ErrorFallback from '../../shared/ErrorFallback';
 
 import addError from '../../../functions/api/lms/addError';
 
-const TutorialManager = ({ items, baseUrl, videoId }) => (
-  <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+function TutorialManager({ items, baseUrl, videoId }) {
+  return <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
     <div className="entity-manager">
       <div className="floating-card-header">Tutorials</div>
       <Card className="my-3">
@@ -24,6 +24,6 @@ const TutorialManager = ({ items, baseUrl, videoId }) => (
       </Card>
     </div>
   </ErrorBoundary>
-);
+}
 
 export default TutorialManager;

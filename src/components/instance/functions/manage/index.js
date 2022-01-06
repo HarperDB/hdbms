@@ -18,7 +18,7 @@ import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
-const ManageIndex = ({ refreshCustomFunctions, loading, setEditorToFile, code, setCode }) => {
+function ManageIndex({ refreshCustomFunctions, loading, setEditorToFile, code, setCode }) {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
   const history = useHistory();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
@@ -61,8 +61,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading, setEditorToFile, code, s
   }, 1000);
 
   return (
-    <>
-      <Row id="clustering">
+    <Row id="clustering">
         <Col xl="3" lg="4" md="6" xs="12">
           <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
             <EntityManager
@@ -117,8 +116,7 @@ const ManageIndex = ({ refreshCustomFunctions, loading, setEditorToFile, code, s
           )}
         </Col>
       </Row>
-    </>
   );
-};
+}
 
 export default ManageIndex;

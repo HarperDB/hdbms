@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 
 import addError from '../../../functions/api/lms/addError';
 
-const IntegrationManager = () => {
+function IntegrationManager() {
   const { type } = useParams();
   const types = useStoreState(appState, (s) => (s.integrations ? Object.keys(s.integrations).filter((k) => s.integrations[k].length) : ['active']));
   const baseUrl = '/resources/marketplace';
@@ -26,6 +26,6 @@ const IntegrationManager = () => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default IntegrationManager;

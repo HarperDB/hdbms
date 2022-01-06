@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router';
 import { Card, CardBody, Col } from 'reactstrap';
 
-const NewInstanceCard = () => {
+function NewInstanceCard() {
   const history = useHistory();
   const { customer_id } = useParams();
 
@@ -24,6 +24,6 @@ const NewInstanceCard = () => {
       </Card>
     </Col>
   );
-};
+}
 
 export default NewInstanceCard;

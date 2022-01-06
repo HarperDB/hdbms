@@ -16,7 +16,7 @@ import buildPermissionStructure from '../../../functions/instance/buildPermissio
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const JsonViewer = ({ showAttributes, fetchRoles }) => {
+function JsonViewer({ showAttributes, fetchRoles }) {
   const alert = useAlert();
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
@@ -99,6 +99,6 @@ const JsonViewer = ({ showAttributes, fetchRoles }) => {
       </Button>
     </ErrorBoundary>
   );
-};
+}
 
 export default JsonViewer;

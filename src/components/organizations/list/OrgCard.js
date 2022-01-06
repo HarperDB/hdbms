@@ -8,7 +8,7 @@ import CardBack from './CardBack';
 import ErrorFallbackCard from '../../shared/ErrorFallbackCard';
 import addError from '../../../functions/api/lms/addError';
 
-const OrgCard = ({ flippedCard, setFlippedCard, customer_id, ...rest }) => {
+function OrgCard({ flippedCard, setFlippedCard, customer_id, ...rest }) {
   const [flipState, setFlipState] = useState(false);
 
   useEffect(() => {
@@ -35,6 +35,6 @@ const OrgCard = ({ flippedCard, setFlippedCard, customer_id, ...rest }) => {
       </ErrorBoundary>
     </Col>
   );
-};
+}
 
 export default OrgCard;

@@ -3,8 +3,8 @@ import { Row, Col } from 'reactstrap';
 
 import isObject from '../../../functions/util/isObject';
 
-const LogsRow = ({ level, timestamp, message }) => (
-  <div className="item-row">
+function LogsRow({ level, timestamp, message }) {
+  return <div className="item-row">
     <Row>
       <Col xs="3" className={`text-nowrap ${level.toLowerCase()}`}>
         {level.toUpperCase()}
@@ -20,6 +20,6 @@ const LogsRow = ({ level, timestamp, message }) => (
       </Col>
     </Row>
   </div>
-);
+}
 
 export default LogsRow;

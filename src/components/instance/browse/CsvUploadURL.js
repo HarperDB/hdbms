@@ -12,7 +12,7 @@ import csvURLLoad from '../../../functions/api/instance/csvURLLoad';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-const CsvUploadURL = () => {
+function CsvUploadURL() {
   const history = useHistory();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -134,5 +134,5 @@ const CsvUploadURL = () => {
       </Row>
     </ErrorBoundary>
   );
-};
+}
 export default CsvUploadURL;

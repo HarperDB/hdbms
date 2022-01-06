@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import useNewInstance from '../../../functions/state/newInstance';
 
-const Type = () => {
+function Type() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
@@ -21,8 +21,7 @@ const Type = () => {
   }, [formData]);
 
   return (
-    <>
-      <Row>
+    <Row>
         <Col xs="12" lg="6" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
@@ -70,8 +69,7 @@ const Type = () => {
           </Card>
         </Col>
       </Row>
-    </>
   );
-};
+}
 
 export default Type;

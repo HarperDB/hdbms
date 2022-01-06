@@ -28,7 +28,7 @@ const defaultTableState = {
 
 let controller;
 
-const Datatable = ({ lastUpdate, setLastUpdate }) => {
+function Datatable({ lastUpdate, setLastUpdate }) {
   const { customer_id } = useParams();
   const history = useHistory();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -133,6 +133,6 @@ const Datatable = ({ lastUpdate, setLastUpdate }) => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Datatable;

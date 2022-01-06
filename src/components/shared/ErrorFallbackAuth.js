@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 import ErrorFallback from './ErrorFallback';
 import config from '../../config';
 
-const ErrorFallbackAuth = ({ error, componentStack, resetErrorBoundary }) => (
-  <div id="login-form">
+function ErrorFallbackAuth({ error, componentStack, resetErrorBoundary }) {
+  return <div id="login-form">
     <div id="login-logo" title="HarperDB Logo" />
     <div className="version">Studio v{config.studio_version}</div>
     <ErrorFallback error={error} componentStack={componentStack} />
@@ -15,6 +15,6 @@ const ErrorFallbackAuth = ({ error, componentStack, resetErrorBoundary }) => (
       </NavLink>
     </div>
   </div>
-);
+}
 
 export default ErrorFallbackAuth;

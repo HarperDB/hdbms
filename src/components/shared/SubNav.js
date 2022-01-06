@@ -9,7 +9,7 @@ import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from './ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 
-const SubNav = ({ routes = [] }) => {
+function SubNav({ routes = [] }) {
   const history = useHistory();
   const location = useLocation();
   const currentRoute = routes?.find((r) => r.link === location.pathname) || routes[0];
@@ -51,6 +51,6 @@ const SubNav = ({ routes = [] }) => {
       </Navbar>
     </ErrorBoundary>
   );
-};
+}
 
 export default SubNav;

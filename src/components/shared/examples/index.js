@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import ExampleManager from './ExampleManager';
 import CodeViewer from './CodeViewer';
 
-const ExamplesIndex = ({ showCustomMessage }) => {
+function ExamplesIndex({ showCustomMessage }) {
   const { folder } = useParams();
 
   useEffect(() => {
@@ -23,6 +23,6 @@ const ExamplesIndex = ({ showCustomMessage }) => {
       </Col>
     </Row>
   );
-};
+}
 
 export default ExamplesIndex;

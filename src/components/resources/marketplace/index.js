@@ -22,7 +22,7 @@ const logoMapper = {
   ruby: lazy(() => import('../../../assets/images/svg/ruby.svg')),
 };
 
-const MarketplaceIndex = () => {
+function MarketplaceIndex() {
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
   const integrations = useStoreState(appState, (s) => s.integrations);
@@ -74,6 +74,6 @@ const MarketplaceIndex = () => {
       </Col>
     </Row>
   );
-};
+}
 
 export default MarketplaceIndex;

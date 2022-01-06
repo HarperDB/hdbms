@@ -5,7 +5,7 @@ import { useStoreState } from 'pullstate';
 import appState from '../../../functions/state/appState';
 import Code from '../../shared/Code';
 
-const InstallationIndex = () => {
+function InstallationIndex() {
   const version = useStoreState(appState, (s) => s.version);
 
   useEffect(() => {
@@ -76,6 +76,6 @@ harperdb install`}
       </Row>
     </main>
   );
-};
+}
 
 export default InstallationIndex;

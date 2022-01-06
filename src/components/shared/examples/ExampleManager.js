@@ -14,7 +14,7 @@ import generateFolderLinks from '../../../functions/examples/generateFolderLinks
 import generateMethodLinks from '../../../functions/examples/generateMethodLinks';
 import addError from '../../../functions/api/lms/addError';
 
-const ExampleManager = ({ type }) => {
+function ExampleManager({ type }) {
   const history = useHistory();
   const { customer_id, compute_stack_id, folder, method } = useParams();
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
@@ -66,6 +66,6 @@ const ExampleManager = ({ type }) => {
       </div>
     </ErrorBoundary>
   );
-};
+}
 
 export default ExampleManager;

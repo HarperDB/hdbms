@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
 
-const SetupIndex = () => (
-  <>
+function SetupIndex() {
+  return <>
     <div className="floating-card-header text-end">&nbsp;</div>
     <Card className="my-3">
       <CardBody>
@@ -22,6 +22,6 @@ const SetupIndex = () => (
       </CardBody>
     </Card>
   </>
-);
+}
 
 export default SetupIndex;

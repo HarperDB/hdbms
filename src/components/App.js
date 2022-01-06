@@ -39,7 +39,7 @@ const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile')
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
-const App = () => {
+function App() {
   const history = useHistory();
   const alert = useAlert();
   const { search, pathname } = useLocation();
@@ -147,6 +147,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;

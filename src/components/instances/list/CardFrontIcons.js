@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
-const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, instance_name, isOrgOwner, onlyDelete }) => {
+function CardFrontIcons({ isReady, showLogout, setFlipState, compute_stack_id, instance_name, isOrgOwner, onlyDelete }) {
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
 
   const logOut = useCallback((e) => {
@@ -36,6 +36,6 @@ const CardFrontIcons = ({ isReady, showLogout, setFlipState, compute_stack_id, i
       )}
     </>
   );
-};
+}
 
 export default CardFrontIcons;

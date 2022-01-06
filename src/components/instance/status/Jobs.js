@@ -14,7 +14,7 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-const Jobs = () => {
+function Jobs() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const jobs = useStoreState(instanceState, (s) => s.jobs);
@@ -111,6 +111,6 @@ const Jobs = () => {
       </Card>
     </ErrorBoundary>
   );
-};
+}
 
 export default Jobs;

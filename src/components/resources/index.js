@@ -5,8 +5,8 @@ import routes from './routes';
 import SubNav from '../shared/SubNav';
 import Loader from '../shared/Loader';
 
-const ResourcesIndex = () => (
-  <>
+function ResourcesIndex() {
+  return <>
     <SubNav routes={routes} />
     <Suspense fallback={<Loader header=" " spinner />}>
       <Switch>
@@ -17,6 +17,6 @@ const ResourcesIndex = () => (
       </Switch>
     </Suspense>
   </>
-);
+}
 
 export default ResourcesIndex;

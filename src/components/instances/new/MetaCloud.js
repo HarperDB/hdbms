@@ -12,7 +12,7 @@ import ContentContainer from '../../shared/ContentContainer';
 import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 
-const MetaCloud = () => {
+function MetaCloud() {
   const history = useHistory();
   const { customer_id } = useParams();
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
@@ -142,6 +142,6 @@ const MetaCloud = () => {
       )}
     </>
   );
-};
+}
 
 export default MetaCloud;

@@ -14,7 +14,7 @@ import chartOptions from '../../../functions/charts/chartOptions';
 import isNumeric from '../../../functions/util/isNumeric';
 import config from '../../../config';
 
-const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, seriesAttributes, user_id }, removeChart, confirmDelete, setConfirmDelete }) => {
+function DashboardChart({ chart: { query, name, id, type, labelAttribute, seriesAttributes, user_id }, removeChart, confirmDelete, setConfirmDelete }) {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -130,6 +130,6 @@ const DashboardChart = ({ chart: { query, name, id, type, labelAttribute, series
       </Card>
     </Col>
   );
-};
+}
 
 export default DashboardChart;

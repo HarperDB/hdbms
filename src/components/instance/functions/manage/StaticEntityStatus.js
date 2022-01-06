@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 
-const StaticEntityStatus = ({ url, project, fileCount }) => (
-  <div className="entity-manager">
+function StaticEntityStatus({ url, project, fileCount }) {
+  return <div className="entity-manager">
     <div className="floating-card-header">/{project}/static</div>
     <Card className="my-3">
       <CardBody>
@@ -20,6 +20,6 @@ const StaticEntityStatus = ({ url, project, fileCount }) => (
       </CardBody>
     </Card>
   </div>
-);
+}
 
 export default StaticEntityStatus;

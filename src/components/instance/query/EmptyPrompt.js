@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardBody, Card, Button } from 'reactstrap';
 
-const EmptyPrompt = ({ message, loading = false, error = false, accessErrors = false, cancel = false }) => {
+function EmptyPrompt({ message, loading = false, error = false, accessErrors = false, cancel = false }) {
   const tableErrors = accessErrors && accessErrors.filter((t) => t.type === 'table');
   const attributeErrors = accessErrors && accessErrors.filter((t) => t.type === 'attribute');
 
@@ -48,6 +48,6 @@ const EmptyPrompt = ({ message, loading = false, error = false, accessErrors = f
       </Card>
     </>
   );
-};
+}
 
 export default EmptyPrompt;
