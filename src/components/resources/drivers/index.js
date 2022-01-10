@@ -16,7 +16,7 @@ function DriversIndex() {
               docs="powerbi"
               urls={[
                 {
-                  link: '/drivers/HarperDBPowerBIConnector.exe',
+                  link: 'https://harperdb-drivers.s3.amazonaws.com/HarperDBPowerBIConnector.exe',
                 },
               ]}
             />
@@ -27,11 +27,11 @@ function DriversIndex() {
               urls={[
                 {
                   label: 'Windows',
-                  link: '/drivers/HarperDBTableauConnector.exe',
+                  link: 'https://harperdb-drivers.s3.amazonaws.com/HarperDBTableauConnector.exe',
                 },
                 {
                   label: 'Unix/Linux/Mac',
-                  link: '/drivers/HarperDBTableauConnector_UnixLinuxMac.zip',
+                  link: 'https://harperdb-drivers.s3.amazonaws.com/HarperDBTableauConnector_UnixLinuxMac.zip',
                 },
               ]}
             />
