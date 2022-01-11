@@ -5,7 +5,6 @@ import { positions, Provider } from 'react-alert';
 import { Elements } from '@stripe/react-stripe-js';
 import Analytics from 'react-router-ga';
 
-import './functions/util/textDecoderPolyfill';
 import stripePromise from './functions/stripe/stripePromise';
 import config from './config';
 import App from './components/App';
