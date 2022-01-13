@@ -35,7 +35,7 @@ function SetupIndex({ setConfiguring }) {
   }, [formState.submitted]);
 
   return (
-    <Row id="clustering">
+    <Row id="functions">
       <Col xl="3" lg="4" md="5" xs="12">
         <span className="floating-card-header">enable custom functions</span>
         <Card className="my-3">
