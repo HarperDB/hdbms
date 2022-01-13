@@ -1,0 +1,16 @@
+#functions {
+  .entity-manager {
+    .card {
+      .card-body {
+        &.scrollable {
+          max-height: calc(27.8vh - 160px);
+          min-height: 110px;
+
+          &.creating {
+            max-height: calc(27.8vh - 209px);
+          }
+        }
+      }
+    }
+  }
+}
