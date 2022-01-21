@@ -17,20 +17,25 @@
     padding: 0 1rem;
   }
 
+  .container-fluid {
+    padding: 0;
+  }
+
   .navbar-brand {
     margin-right: 0;
     position: relative;
+    padding: 0;
 
     #logo {
-      background-image: url('../../images/logo/logo_circle.png');
+      background-image: url('../../images/logo/logo_dog.png');
       background-position: center left;
       background-repeat: no-repeat;
       background-size: contain;
-      height: 35px;
-      width: 140px;
+      height: 34.5px;
+      width: 167.5px;
 
       @media screen and (max-width: 530px) {
-        background-image: url('../../images/logo/logo_circle_only.png');
+        background-image: url('../../images/logo/logo_dog_only.png');
         width: 40px;
       }
     }
