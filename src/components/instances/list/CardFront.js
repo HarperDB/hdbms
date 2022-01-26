@@ -23,7 +23,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage }) {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
   const history = useHistory();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -37,11 +37,10 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
+  const typeString = wavelength_zone_id ? 'HARPERDB WAVELENGTH' : is_local ? 'USER_MANAGED' : 'HARPERDB CLOUD';
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
-  const iopsClass = alarms && alarms['Disk I/O'] ? 'text-danger' : '';
-  const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops} ${alarms && alarms['Disk I/O'] ? `/ ${alarms['Disk I/O']} ALARM${alarms['Disk I/O'] > 1 ? 'S' : ''}` : ''}`;
 
   const handleCardClick = useCallback(async () => {
     if (!instanceAuth) {
@@ -181,10 +180,10 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
                 <>
                   <CopyableText text={url} />
                   <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
+                  <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
                   <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
                   <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
                   <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-                  <CardFrontStatusRow label="IOPS" isReady={isReady} value={iopsString} textClass={iopsClass} />
                 </>
               )}
             </CardBody>

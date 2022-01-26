@@ -22,13 +22,20 @@ function DetailsCloud() {
     appState,
     (s) => s.subscriptions?.cloud_storage?.filter((p) => p.value.active && p.value.storage_quantity_available >= p.value.data_volume_size) || []
   );
-  const products = useStoreState(appState, (s) => (newInstance.showPrepaidCompute ? unusedCompute : s.products.cloud_compute.filter((p) => p.value.active)), [
-    newInstance.showPrepaidCompute,
-  ]);
+  const products = useStoreState(
+    appState,
+    (s) =>
+      newInstance.is_wavelength
+        ? s.products.wavelength_compute.filter((p) => p.value.active)
+        : newInstance.showPrepaidCompute
+        ? unusedCompute
+        : s.products.cloud_compute.filter((p) => p.value.active),
+    [newInstance.showPrepaidCompute]
+  );
   const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)), [
     newInstance.showPrepaidStorage,
   ]);
-  const regions = useStoreState(appState, (s) => s.regions);
+  const regions = useStoreState(appState, (s) => (newInstance.is_wavelength ? s.wavelengthRegions : s.regions));
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });

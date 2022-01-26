@@ -1,6 +1,7 @@
 import getCurrentVersion from '../api/lms/getCurrentVersion';
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
+import getWavelengthRegions from '../api/lms/getWavelengthRegions';
 import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
@@ -30,6 +31,7 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller }
   getCurrentVersion();
   getProducts();
   getRegions();
+  getWavelengthRegions();
   getPostManCollection();
 
   const unsubscribeAuth = appState.subscribe(

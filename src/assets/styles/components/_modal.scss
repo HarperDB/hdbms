@@ -1,14 +1,23 @@
 #new-instance-modal,
 #new-org-modal {
+  max-width: 90%;
+
   .card {
     box-shadow: none !important;
   }
 
   .instance-form-card-holder {
-    &:first-child {
-      @media screen and (max-width: 991px) {
-        margin-bottom: 1rem;
+    @media screen and (max-width: 991px) {
+      margin-bottom: 1rem;
+      &:last-child {
+        @media screen and (max-width: 991px) {
+          margin-bottom: 0;
+        }
       }
+    }
+    .instance-form-card-body {
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }

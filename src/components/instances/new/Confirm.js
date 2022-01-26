@@ -25,13 +25,9 @@ function Confirm() {
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
   const allPrePaid = newInstance.compute_subscription_id && (newInstance.is_local || newInstance.storage_subscription_id);
   const somePrePaid = newInstance.compute_subscription_id || newInstance.storage_subscription_id;
-  const totalPriceString = allPrePaid
-    ? 'PREPAID'
-    : totalPrice
-    ? `${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
-    : somePrePaid
-    ? 'PREPAID / FREE'
-    : 'FREE';
+  const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
+  const instance_region_label = newInstance.is_wavelength ? wavelengthRegions.find((r) => r.value === newInstance.instance_region).label : newInstance.instance_region;
+  const totalPriceString = allPrePaid ? 'PREPAID' : totalPrice ? `${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}` : somePrePaid ? 'PREPAID / FREE' : 'FREE';
   const analyticsProductsArray = [{ name: 'compute', id: newInstance.compute_ram_string, price: newInstance?.compute_price || 0 }];
   if (!newInstance.is_local) {
     analyticsProductsArray.push({ name: 'storage', id: newInstance.data_volume_size_string, price: newInstance?.storage_price || 0 });
@@ -128,7 +124,7 @@ function Confirm() {
                   Instance Region
                 </Col>
                 <Col sm="8" className="text-sm-end text-nowrap">
-                  {newInstance.instance_region}
+                  {instance_region_label}
                 </Col>
               </Row>
               <hr />
