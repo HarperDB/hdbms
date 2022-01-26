@@ -10,7 +10,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import CardInstanceUpdateRole from './CardInstanceUpdateRole';
 
-function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local }) {
+function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState, instance_id, is_local, wavelength_zone_id }) {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -26,6 +26,8 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
 
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
+        } else if (result.error && wavelength_zone_id && result.type === 'catch') {
+          setFormState({ error: "Can't reach Wavelength instance. Verizon network?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (((result.error && result.message === 'Login failed') || result.error === 'Login failed') && !is_local) {
@@ -53,6 +55,12 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
     }
   }, [formState]);
 
+  const keyDown = (e) => {
+    if (e.code === 'Enter') {
+      setFormState({ submitted: true });
+    }
+  };
+
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Card className="instance">
@@ -70,6 +78,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   title="instance user"
                   placeholder="instance user"
                   disabled={formState.submitted}
+                  onKeyDown={keyDown}
                 />
                 <Input
                   id="password"
@@ -79,6 +88,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   title="instance password"
                   placeholder="instance password"
                   disabled={formState.submitted}
+                  onKeyDown={keyDown}
                 />
                 <Row className="g-0">
                   <Col xs="6" className="pe-1">
@@ -98,7 +108,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   </Col>
                   <Col xs="6" className="ps-1">
                     <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
-                      Log In
+                      {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Log In</span>}
                     </Button>
                   </Col>
                 </Row>

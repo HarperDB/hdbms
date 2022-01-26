@@ -46,9 +46,9 @@ function QueryWindow({ setQuery, query }) {
               className="sql-query-textarea"
               value={formData}
               onKeyDown={(e) => {
-                if (e.keyCode === 13 && e.metaKey) {
+                if (e.code === 'Enter' && e.metaKey) {
                   setFormState({ submitted: true });
-                } else if (e.keyCode === 9) {
+                } else if (e.code === 'Tab') {
                   e.preventDefault();
                   document.execCommand('insertHTML', false, '&#009');
                 }

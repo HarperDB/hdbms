@@ -35,10 +35,10 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const [processing, setProcessing] = useState(false);
   const [formState, setFormState] = useState({});
   const isReady = useMemo(() => !modifyingStatus.includes(instanceData.status), [instanceData.status]);
+  const statusString = wavelength_zone_id && instanceData.status === 'UNABLE TO CONNECT' ? 'UNABLE TO CONENCT - ON VERIZON?' : instanceData.status;
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
   const typeString = wavelength_zone_id ? 'HARPERDB WAVELENGTH' : is_local ? 'USER_MANAGED' : 'HARPERDB CLOUD';
-  const typeClass = wavelength_zone_id && instanceData.status === 'UNABLE TO CONNECT' ? 'text-danger' : '';
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
@@ -180,8 +180,8 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
               ) : (
                 <>
                   <CopyableText text={url} />
-                  <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
-                  <CardFrontStatusRow label="TYPE" isReady value={typeString} textClass={typeClass} bottomDivider />
+                  <CardFrontStatusRow label="STATUS" isReady value={statusString} textClass={statusClass} bottomDivider />
+                  <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
                   <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
                   <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
                   <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />

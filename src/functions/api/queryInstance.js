@@ -2,8 +2,11 @@ import { fetch } from 'whatwg-fetch';
 
 export default async ({ operation, auth, url, authType = undefined, signal = undefined }) => {
   try {
+    const controller = new AbortController();
+    const id = setTimeout(() => (['user_info', 'registration_info'].includes(operation.operation) ? controller.abort() : null), 1000);
+
     const request = await fetch(url, {
-      signal,
+      signal: signal || controller.signal,
       method: 'POST',
       body: JSON.stringify(operation),
       headers: {
@@ -11,6 +14,8 @@ export default async ({ operation, auth, url, authType = undefined, signal = und
         authorization: authType === 'token' ? `Bearer ${auth.token}` : `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
       },
     });
+
+    clearTimeout(id);
 
     const response = await request.json();
 
