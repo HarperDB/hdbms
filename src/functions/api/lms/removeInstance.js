@@ -7,6 +7,7 @@ export default async ({ auth, customer_id, compute_stack_id, wavelength_zone_id 
     payload: {
       customer_id,
       compute_stack_id,
+      compute_stack_wl_id: compute_stack_id,
     },
     auth,
   });
