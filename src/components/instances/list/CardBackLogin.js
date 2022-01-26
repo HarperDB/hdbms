@@ -27,7 +27,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         if (is_ssl && result.error && result.type === 'catch') {
           setFormState({ error: 'Login failed. Click to verify status?', url });
         } else if (result.error && wavelength_zone_id && result.type === 'catch') {
-          setFormState({ error: "Can't reach Wavelength instance. Verizon network?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
+          setFormState({ error: "Can't reach Wavelength instance. On Verizon's network?", url: false });
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (((result.error && result.message === 'Login failed') || result.error === 'Login failed') && !is_local) {
