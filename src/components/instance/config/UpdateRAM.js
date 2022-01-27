@@ -26,13 +26,13 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   const compute = useStoreState(instanceState, (s) => s.compute);
   const storage = useStoreState(instanceState, (s) => s.storage);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const is_wavelegnth = useStoreState(instanceState, (s) => s.wavelength_zone_id);
+  const is_wavelength = useStoreState(instanceState, (s) => s.wavelength_zone_id);
   const compute_subscription_id = useStoreState(instanceState, (s) => s.compute_subscription_id);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
 
-  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : is_wavelegnth ? 'wavelength_compute' : 'cloud_compute']);
+  const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : is_wavelength ? 'wavelength_compute' : 'cloud_compute']);
   const filteredSubscriptions = useStoreState(appState, (s) =>
-    s.subscriptions[is_local ? 'local_compute' : is_wavelegnth ? 'wavelength_compute' : 'cloud_compute'].filter(
+    s.subscriptions[is_local ? 'local_compute' : is_wavelength ? 'wavelength_compute' : 'cloud_compute'].filter(
       (p) => p.value.compute_subscription_id === compute_subscription_id || p.value.compute_quantity_available
     )
   );

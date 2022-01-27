@@ -1,6 +1,8 @@
 #new-instance-modal,
 #new-org-modal {
-  max-width: 90%;
+  &.modal-lg {
+    max-width: 830px;
+  }
 
   .card {
     box-shadow: none !important;

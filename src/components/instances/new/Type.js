@@ -28,7 +28,7 @@ function Type() {
       <Col xs="12" lg={wavelengthRegions ? 4 : 6} className="instance-form-card-holder">
         <Card>
           <CardBody className="instance-form-card-body">
-            <div className="text-bold text-center">Create New HarperDB Cloud Instance</div>
+            <div className="text-bold text-center">HarperDB Cloud Instance</div>
             <hr />
             <ul>
               <li>Free License Tier Available!</li>
@@ -50,11 +50,11 @@ function Type() {
         <Col xs="12" lg="4" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">Create New 5G Wavelength Instance</div>
+              <div className="text-bold text-center">5G Wavelength Instance</div>
               <hr />
               <ul>
-                <li>Accessible within Verizon network</li>
-                <li>No public internet = blazing speed</li>
+                <li>Accessible on Verizon network</li>
+                <li>Blazing fast speeds</li>
                 <li>Managed by HarperDB</li>
                 <li>HarperDB License Included</li>
                 <li>24/7 Customer Support</li>
@@ -81,11 +81,11 @@ function Type() {
                   Click Here To Install HarperDB
                 </a>
               </li>
-              <li>Browse Instance Data</li>
-              <li>Configure Users, Roles, Clustering</li>
-              <li>Manage Instance Licenses</li>
-              <li>Handle Version Upgrades</li>
-              <li>Instance Credentials Stay Local</li>
+              <li>Managed by HarperDB</li>
+              <li>Licensed Annually</li>
+              <li>24/7 Community Support</li>
+              <li>Choose RAM</li>
+              <li>Upgrade On Demand</li>
             </ul>
             <hr />
             <Button id="createLocalInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: true, is_wavelength: false })}>
