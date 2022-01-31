@@ -12,7 +12,7 @@ function Type() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
-  const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions.length);
+  const wavelengthRegions = useStoreState(appState, (s) => !!s.wavelengthRegions.length);
   const [formData, setFormData] = useState({});
 
   useAsyncEffect(() => {
