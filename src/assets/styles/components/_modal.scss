@@ -51,7 +51,7 @@
         padding: 0;
         margin-right: 5px;
         &::before {
-          font-family: "FontAwesome";
+          font-family: "FontAwesome", sans-serif;
           content: "\f00d";
           color: $color-white;
         }
