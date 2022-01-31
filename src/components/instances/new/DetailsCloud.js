@@ -16,6 +16,7 @@ function DetailsCloud() {
   const history = useHistory();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const [newInstance, setNewInstance] = useNewInstance({});
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
@@ -40,7 +41,7 @@ function DetailsCloud() {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
   const isFree = !formData.compute_price && !formData.compute_subscription_id && !formData.storage_price && !formData.storage_subscription_id;
-  const needsCard = products && storage && !hasCard && !isFree;
+  const needsCard = products && storage && !hasCard && !isFree && !is_unpaid;
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;

@@ -250,8 +250,10 @@
       background: $gradient-white-lightgrey !important;
       color: $black-overlay !important;
 
-      .close {
-        color: $black-overlay !important;
+      .btn-close {
+        &::before {
+          color: $black-overlay !important;
+        }
       }
     }
   }

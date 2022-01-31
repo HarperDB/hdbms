@@ -19,12 +19,14 @@ import getInstances from '../../functions/api/lms/getInstances';
 import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
+import Unpaid from '../shared/Unpaid';
 
 function InstancesIndex() {
   const history = useHistory();
   const { action, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
@@ -91,6 +93,7 @@ function InstancesIndex() {
       <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
+          {is_unpaid && <Unpaid />}
           <Row>
             {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
             <InstanceList />
