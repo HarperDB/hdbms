@@ -34,22 +34,26 @@ function CardEdit({ setEditingCard, customerCard, formStateHeight, badCard }) {
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
     if (submitted && !processing) {
-      const { card, expire, cvc, postal_code } = formData;
-      if (!card || !expire || !cvc || !postal_code) {
+      const { card, expire, cvc, postal_code, line1, line2, state, city, country } = formData;
+      if (!card || !expire || !cvc || !postal_code || !line1 || !state || !city || !country) {
         setFormState({ error: 'All fields are required' });
       } else {
-        const payload = await stripe.createPaymentMethod({ type: 'card', card: elements.getElement(CardNumberElement), billing_details: { address: { postal_code } } });
+        const payload = await stripe.createPaymentMethod({
+          type: 'card',
+          card: elements.getElement(CardNumberElement),
+          billing_details: { address: { postal_code, line1, line2, state, city, country } },
+        });
         setFormState({ processing: true });
 
         if (payload.error) {
-          setFormState({ error: payload.error.message });
-          setTimeout(() => setFormState({}), 2000);
+          setFormState({ ...formState, error: payload.error.message });
+          setTimeout(() => setFormState({ ...formState, error: false }), 2000);
         } else {
           const response = await addPaymentMethod({ auth, payment_method_id: payload.paymentMethod.id, stripe_id, customer_id });
 
           if (response.error) {
-            setFormState({ error: response.message });
-            setTimeout(() => setFormState({}), 2000);
+            setFormState({ ...formState, error: response.message });
+            setTimeout(() => setFormState({ ...formState, error: false }), 2000);
           } else {
             if (window._kmq) window._kmq.push(['record', 'added credit card - billing page']);
             setFormState({ success: response.message });

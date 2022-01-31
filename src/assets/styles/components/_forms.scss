@@ -13,6 +13,7 @@ textarea,
   font-weight: $font-weight-light;
   height: 38px;
   transition: none;
+  width: 100%;
 
   &.is-invalid,
   &.error {
@@ -87,4 +88,9 @@ textarea {
     font-size: 0.5rem !important;
     margin-top: -5px;
   }
+}
+
+#ccCountry,
+#ccRegion {
+  padding-left: 5px;
 }

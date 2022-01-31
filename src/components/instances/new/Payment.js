@@ -34,15 +34,15 @@ function Payment() {
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
     if (submitted && !processing) {
-      const { card, expire, cvc, postal_code } = formData;
-      if (!card || !expire || !cvc || !postal_code) {
+      const { card, expire, cvc, postal_code, line1, line2, state, city, country } = formData;
+      if (!card || !expire || !cvc || !postal_code || !line1 || !state || !city || !country) {
         setFormState({ error: 'All fields are required' });
         setTimeout(() => setFormState({}), 2000);
       } else {
         const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: 'card',
           card: elements.getElement(CardNumberElement),
-          billing_details: { address: { postal_code } },
+          billing_details: { address: { postal_code, line1, line2, state, city, country } },
         });
 
         setFormState({ processing: true });

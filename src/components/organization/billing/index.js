@@ -43,13 +43,13 @@ function BillingIndex() {
         </Col>
       )}
       <Col md="6">
-        <span className="floating-card-header">coupons</span>
-        <Coupons />
-        <br />
         <span className="floating-card-header">card</span>
         <CreditCard />
       </Col>
       <Col md="6">
+        <span className="floating-card-header">coupons</span>
+        <Coupons />
+        <br />
         <span className="floating-card-header">invoices</span>
         <Invoices />
       </Col>

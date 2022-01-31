@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Input, Row } from 'reactstrap';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -62,7 +63,7 @@ function CreditCardForm({ setFormData, formData }) {
           <hr className="my-2" />
         </Col>
         <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-          cvc
+          cvcc
         </Col>
         <Col md="6" xs="12" className="text-md-end text-center">
           <div className={`fake-input ${formState.cvcError ? 'error' : ''}`}>
@@ -78,6 +79,101 @@ function CreditCardForm({ setFormData, formData }) {
               }}
             />
           </div>
+        </Col>
+        <Col xs="12">
+          <hr className="my-2" />
+        </Col>
+        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+          country
+        </Col>
+        <Col md="6" xs="12" className="text-md-end text-center">
+          <CountryDropdown
+            id="ccCountry"
+            valueType="short"
+            value={formData.country}
+            priorityOptions={['CA', 'US', 'GB']}
+            defaultOptionLabel="select your country"
+            onChange={(val) =>
+              setFormData({
+                ...formData,
+                country: val,
+              })
+            }
+          />
+        </Col>
+        <Col xs="12">
+          <hr className="my-2" />
+        </Col>
+        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+          state/province
+        </Col>
+        <Col md="6" xs="12" className="text-md-end text-center">
+          <RegionDropdown
+            id="ccRegion"
+            blankOptionLabel="select country first"
+            defaultOptionLabel="select state / province"
+            valueType="short"
+            countryValueType="short"
+            country={formData.country}
+            value={formData.state}
+            onChange={(val) =>
+              setFormData({
+                ...formData,
+                state: val,
+              })
+            }
+          />
+        </Col>
+        <Col xs="12">
+          <hr className="my-2" />
+        </Col>
+        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+          address
+        </Col>
+        <Col md="6" xs="12" className="text-md-end text-center">
+          <Input
+            id="ccLine1"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                line1: e.target.value,
+              })
+            }
+          />
+        </Col>
+        <Col xs="12">
+          <hr className="my-2" />
+        </Col>
+        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+          apt/unit
+        </Col>
+        <Col md="6" xs="12" className="text-md-end text-center">
+          <Input
+            id="ccApt"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                line2: e.target.value,
+              })
+            }
+          />
+        </Col>
+        <Col xs="12">
+          <hr className="my-2" />
+        </Col>
+        <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+          city
+        </Col>
+        <Col md="6" xs="12" className="text-md-end text-center">
+          <Input
+            id="ccCity"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                city: e.target.value,
+              })
+            }
+          />
         </Col>
         <Col xs="12">
           <hr className="my-2" />

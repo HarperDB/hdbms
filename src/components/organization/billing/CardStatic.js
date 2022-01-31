@@ -89,6 +89,51 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 <hr className="my-2" />
               </Col>
               <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                country
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.country}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                state/province
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.state}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                address
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.line1}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                apt/unit
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.line2}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                city
+              </Col>
+              <Col md="6" xs="12">
+                <div className="input-static">{customerCard?.billing_details?.address?.city}</div>
+              </Col>
+              <Col xs="12">
+                <hr className="my-2" />
+              </Col>
+              <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
                 billing postal code
               </Col>
               <Col md="6" xs="12">
