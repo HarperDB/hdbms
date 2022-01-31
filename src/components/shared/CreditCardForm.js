@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Input, Row } from 'reactstrap';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
