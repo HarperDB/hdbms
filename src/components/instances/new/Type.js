@@ -46,29 +46,6 @@ function Type() {
           </CardBody>
         </Card>
       </Col>
-      {wavelengthRegions && 1 === 2 && (
-        <Col xs="12" lg="4" className="instance-form-card-holder">
-          <Card>
-            <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">5G Wavelength Instance</div>
-              <hr />
-              <ul>
-                <li>Accessible on Verizon network</li>
-                <li>Blazing fast speeds</li>
-                <li>Managed by HarperDB</li>
-                <li>HarperDB License Included</li>
-                <li>24/7 Customer Support</li>
-                <li>Choose RAM and Disk Size</li>
-                <li>Scale On Demand</li>
-              </ul>
-              <hr />
-              <Button id="createWavelengthInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false, is_wavelength: true })}>
-                Create 5G Wavelength Instance
-              </Button>
-            </CardBody>
-          </Card>
-        </Col>
-      )}
       <Col xs="12" lg={wavelengthRegions ? 4 : 6} className="instance-form-card-holder">
         <Card>
           <CardBody className="instance-form-card-body">
