@@ -46,7 +46,7 @@ function Type() {
           </CardBody>
         </Card>
       </Col>
-      {wavelengthRegions && (
+      {wavelengthRegions && 1 === 2 && (
         <Col xs="12" lg="4" className="instance-form-card-holder">
           <Card>
             <CardBody className="instance-form-card-body">
