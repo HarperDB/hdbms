@@ -28,8 +28,11 @@ function Payment() {
   const stripe = useStripe();
   const elements = useElements();
   const isLocal = newInstance.is_local;
-  const computeProduct = products[isLocal ? 'local_compute' : 'cloud_compute'].find((p) => p.value === newInstance.stripe_plan_id);
-  const storageProduct = isLocal ? { price: 0 } : products.cloud_storage.find((p) => p.value === newInstance.data_volume_size);
+  const isWavelength = newInstance.is_wavelength;
+  const computeProduct = products[isLocal ? 'local_compute' : isWavelength ? 'wavelength_compute' : 'cloud_compute'].find(
+    (p) => p.value.stripe_plan_id === newInstance.stripe_plan_id
+  );
+  const storageProduct = isLocal ? { price: 0 } : products.cloud_storage.find((p) => p.value.data_volume_size === newInstance.data_volume_size);
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
@@ -61,12 +64,12 @@ function Payment() {
   }, [formState]);
 
   return formState.processing ? (
-    <FormStatus height="400px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
+    <FormStatus height="650px" status="processing" header="Adding Card To Your Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
   ) : formState.error ? (
-    <FormStatus height="400px" status="error" header={formState.error} subhead="Please try again" />
+    <FormStatus height="650px" status="error" header={formState.error} subhead="Please try again" />
   ) : formState.success || hasCard ? (
     <>
-      <FormStatus height="346px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
+      <FormStatus height="650px" status="success" header="Success!" subhead="Credit Card was successfully added to your account." />
       <Row>
         <Col sm="6">
           <Button
@@ -101,14 +104,14 @@ function Payment() {
       <Card id="paymentDetails">
         <CardBody>
           <div className="mb-4">
-            {computeProduct?.price ? (
+            {computeProduct?.value?.compute_price ? (
               <div className="mb-2">
-                The selected <b>instance type</b> has a cost of <b>{computeProduct?.priceStringWithInterval}</b>.
+                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>.
               </div>
             ) : null}
-            {storageProduct?.price ? (
+            {storageProduct?.value?.storage_price ? (
               <div className="mb-2">
-                The selected <b>storage size</b> has a cost of <b>{storageProduct?.priceStringWithInterval}</b>.
+                The selected <b>storage size</b> has a cost of <b>{storageProduct?.value?.storage_price_string_with_interval}</b>.
               </div>
             ) : null}
             Please add a credit card to your account using the form below. If you registered using a promo code, your card will not be charged until your promo credits run out.
