@@ -16,6 +16,7 @@ function Remove({ setInstanceAction }) {
   const auth = useStoreState(appState, (s) => s.auth);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
+  const wavelength_zone_id = useStoreState(instanceState, (s) => s.wavelength_zone_id);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -30,7 +31,7 @@ function Remove({ setInstanceAction }) {
       } else {
         setInstanceAction('Removing');
 
-        const response = await removeInstance({ auth, customer_id, compute_stack_id });
+        const response = await removeInstance({ auth, customer_id, compute_stack_id, wavelength_zone_id });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');

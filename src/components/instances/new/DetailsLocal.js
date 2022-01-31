@@ -14,6 +14,7 @@ import DetailsSubheader from './DetailsSubheader';
 function DetailsLocal() {
   const history = useHistory();
   const { customer_id } = useParams();
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const [newInstance, setNewInstance] = useNewInstance({});
   const unusedCompute = useStoreState(
     appState,
@@ -26,7 +27,7 @@ function DetailsLocal() {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...products[0]?.value, ...newInstance });
   const isFree = !formData.compute_price || !!formData.compute_subscription_id;
-  const needsCard = products && !hasCard && !isFree;
+  const needsCard = products && !hasCard && !isFree && !is_unpaid;
 
   useAsyncEffect(() => {
     const { submitted } = formState;

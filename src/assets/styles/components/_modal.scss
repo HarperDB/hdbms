@@ -1,14 +1,25 @@
 #new-instance-modal,
 #new-org-modal {
+  &.modal-lg {
+    max-width: 830px;
+  }
+
   .card {
     box-shadow: none !important;
   }
 
   .instance-form-card-holder {
-    &:first-child {
-      @media screen and (max-width: 991px) {
-        margin-bottom: 1rem;
+    @media screen and (max-width: 991px) {
+      margin-bottom: 1rem;
+      &:last-child {
+        @media screen and (max-width: 991px) {
+          margin-bottom: 0;
+        }
       }
+    }
+    .instance-form-card-body {
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }
@@ -32,13 +43,18 @@
         background-size: 3px 3px;
       }
 
-      .close {
+      .btn-close {
         background: none !important;
         border: 0;
-        color: $color-white;
-        font-size: 30px;
+        font-size: 18px;
         line-height: 1;
         padding: 0;
+        margin-right: 5px;
+        &::before {
+          font-family: "FontAwesome", sans-serif;
+          content: "\f00d";
+          color: $color-white;
+        }
       }
 
       .modal-title {

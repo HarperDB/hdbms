@@ -7,6 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 import CreditCard from './Card';
 import Invoices from './Invoices';
 import Coupons from './Coupons';
+import Unpaid from '../../shared/Unpaid';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 import appState from '../../../functions/state/appState';
 import getInstances from '../../../functions/api/lms/getInstances';
@@ -18,6 +19,7 @@ function BillingIndex() {
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
 
   useEffect(
     () => {
@@ -35,14 +37,19 @@ function BillingIndex() {
 
   return (
     <Row>
+      {is_unpaid && (
+        <Col xs="12">
+          <Unpaid />
+        </Col>
+      )}
       <Col md="6">
-        <span className="floating-card-header">coupons</span>
-        <Coupons />
-        <br />
         <span className="floating-card-header">card</span>
         <CreditCard />
       </Col>
       <Col md="6">
+        <span className="floating-card-header">coupons</span>
+        <Coupons />
+        <br />
         <span className="floating-card-header">invoices</span>
         <Invoices />
       </Col>

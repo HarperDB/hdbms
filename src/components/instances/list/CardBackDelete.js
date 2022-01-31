@@ -14,7 +14,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import getUser from '../../../functions/api/lms/getUser';
 
-function CardBackDelete({ compute_stack_id, instance_name, is_local, setFlipState, flipState }) {
+function CardBackDelete({ compute_stack_id, instance_name, is_local, setFlipState, flipState, wavelength_zone_id }) {
   const alert = useAlert();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -37,7 +37,7 @@ function CardBackDelete({ compute_stack_id, instance_name, is_local, setFlipStat
           error: 'instance name is not correct',
         });
       } else {
-        const response = await removeInstance({ auth, customer_id, compute_stack_id });
+        const response = await removeInstance({ auth, customer_id, compute_stack_id, wavelength_zone_id: wavelength_zone_id || false });
 
         if (response.error) {
           alert.error('There was an error removing your instance. Please try again later.');

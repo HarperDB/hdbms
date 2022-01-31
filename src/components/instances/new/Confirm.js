@@ -13,6 +13,7 @@ import useNewInstance from '../../../functions/state/newInstance';
 import CouponForm from '../../shared/CouponForm';
 import RadioCheckbox from '../../shared/RadioCheckbox';
 import commaNumbers from '../../../functions/util/commaNumbers';
+import Unpaid from '../../shared/Unpaid';
 
 function Confirm() {
   const history = useHistory();
@@ -20,18 +21,15 @@ function Confirm() {
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
   const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
   const allPrePaid = newInstance.compute_subscription_id && (newInstance.is_local || newInstance.storage_subscription_id);
   const somePrePaid = newInstance.compute_subscription_id || newInstance.storage_subscription_id;
-  const totalPriceString = allPrePaid
-    ? 'PREPAID'
-    : totalPrice
-    ? `${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
-    : somePrePaid
-    ? 'PREPAID / FREE'
-    : 'FREE';
+  const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
+  const instance_region_label = newInstance.is_wavelength ? wavelengthRegions.find((r) => r.value === newInstance.instance_region).label : newInstance.instance_region;
+  const totalPriceString = allPrePaid ? 'PREPAID' : totalPrice ? `${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}` : somePrePaid ? 'PREPAID / FREE' : 'FREE';
   const analyticsProductsArray = [{ name: 'compute', id: newInstance.compute_ram_string, price: newInstance?.compute_price || 0 }];
   if (!newInstance.is_local) {
     analyticsProductsArray.push({ name: 'storage', id: newInstance.data_volume_size_string, price: newInstance?.storage_price || 0 });
@@ -128,7 +126,7 @@ function Confirm() {
                   Instance Region
                 </Col>
                 <Col sm="8" className="text-sm-end text-nowrap">
-                  {newInstance.instance_region}
+                  {instance_region_label}
                 </Col>
               </Row>
               <hr />
@@ -169,7 +167,9 @@ function Confirm() {
         </CardBody>
       </Card>
       <hr className="my-3" />
-      {stripeCoupons?.length ? (
+      {is_unpaid ? (
+        <Unpaid />
+      ) : stripeCoupons?.length ? (
         <div className="px-2 text-center text-success">
           This organization has <b>{stripeCoupons.length}</b> coupon{stripeCoupons.length > 1 && 's'} on file, good for a total product credit of{' '}
           <b>${stripeCoupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.

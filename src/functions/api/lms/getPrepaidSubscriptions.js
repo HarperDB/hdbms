@@ -23,6 +23,7 @@ export default async ({ auth, customer_id, stripe_id }) => {
       s.subscriptions = {
         cloud_storage: buildRadioSelectStorageOptions(response.cloud_storage || []),
         cloud_compute: buildRadioSelectProductOptions(response.cloud_compute || []),
+        wavelength_compute: buildRadioSelectProductOptions(response.wavelength_compute || []),
         local_compute: buildRadioSelectProductOptions(response.local_compute || []),
       };
     });

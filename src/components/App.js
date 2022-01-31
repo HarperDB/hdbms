@@ -17,6 +17,7 @@ import ErrorFallbackAuth from './shared/ErrorFallbackAuth';
 
 import getProducts from '../functions/api/lms/getProducts';
 import getRegions from '../functions/api/lms/getRegions';
+import getWavelengthRegions from '../functions/api/lms/getWavelengthRegions';
 import getCurrentVersion from '../functions/api/lms/getCurrentVersion';
 import getPostManCollection from '../functions/examples/getPostManCollection';
 import checkVersion from '../functions/app/checkVersion';
@@ -48,6 +49,7 @@ function App() {
   const theme = useStoreState(appState, (s) => s.theme);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
+  const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
   const version = useStoreState(appState, (s) => s.version);
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
@@ -94,6 +96,7 @@ function App() {
   useInterval(() => {
     if (!products) getProducts();
     if (!regions) getRegions();
+    if (!wavelengthRegions) getWavelengthRegions();
     if (!postmanCollection) getPostManCollection();
   }, config.refresh_content_interval);
 
