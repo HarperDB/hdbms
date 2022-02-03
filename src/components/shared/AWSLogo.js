@@ -1,6 +1,6 @@
 import React from 'react';
 
-function VerizonLogo({ height = 12 }) {
+function AWSLogo({ height = 12 }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.9 306.4" width={height * 2} height={height}>
       <path
@@ -17,4 +17,4 @@ function VerizonLogo({ height = 12 }) {
   );
 }
 
-export default VerizonLogo;
+export default AWSLogo;
