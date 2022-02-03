@@ -18,7 +18,7 @@ function NewInstanceCard() {
     <Col xs="12" md="6" lg="4" xl="3" className="mb-4">
       <Card tabIndex="0" id="newInstanceCard" title="Add New Instance" className="instance new" onKeyDown={(e) => e.keyCode !== 13 || handleClick()} onClick={handleClick}>
         <CardBody className="d-flex flex-column align-items-center justify-content-center">
-          <span>Create New {is_lumen ? 'Lumen Edge HarperDB' : 'HarperDB Cloud'} Instance</span>
+          <span>Create New {is_lumen ? 'Lumen Edge' : 'HarperDB Cloud'} Instance</span>
           <div className="my-4">
             <i className="fa fa-2x fa-plus-circle new-instance-plus" />
           </div>
