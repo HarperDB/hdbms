@@ -126,19 +126,21 @@ function TopNav({ isMaintenance }) {
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
           </NavItem>
-          <NavItem>
-            <Button
-              color="link"
-              id="changeTheme"
-              tabIndex="0"
-              title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
-              onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
-              onClick={() => toggleTheme(nextTheme)}
-            >
-              <i className="fas fa-palette" />
-              <span className="d-none d-lg-inline-block">&nbsp;theme</span>
-            </Button>
-          </NavItem>
+          {theme !== 'lumen' && (
+            <NavItem>
+              <Button
+                color="link"
+                id="changeTheme"
+                tabIndex="0"
+                title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
+                onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
+                onClick={() => toggleTheme(nextTheme)}
+              >
+                <i className="fas fa-palette" />
+                <span className="d-none d-lg-inline-block">&nbsp;theme</span>
+              </Button>
+            </NavItem>
+          )}
           <NavItem>
             {loggedIn ? (
               <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>

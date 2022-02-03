@@ -8,6 +8,7 @@ import refreshUser from './refreshUser';
 
 export default ({ auth, history, setFetchingUser, setPersistedUser, controller }) => {
   const canonical = document.querySelector('link[rel="canonical"]');
+  const is_lumen = window.location.host.indexOf('lumen') !== -1;
 
   history.listen(() => {
     canonical.href = window.location.href;
@@ -44,7 +45,8 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller }
 
   appState.update((s) => {
     s.auth = { email: auth?.email, pass: auth?.pass };
-    s.theme = auth?.theme;
+    s.theme = is_lumen ? 'lumen' : auth?.theme !== 'lumen' ? auth?.theme : 'purple';
+    s.is_lumen = is_lumen;
   });
 
   return unsubscribeAuth;

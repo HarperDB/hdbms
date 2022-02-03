@@ -123,9 +123,16 @@ function MetaCloud() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="instanceTypeButton" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button
+            id="instanceTypeButton"
+            onClick={() => history.push(`/o/${customer_id}/instances/new/provider_cloud`)}
+            title="Back to Instance Type"
+            block
+            className="mt-3"
+            color="purple"
+          >
             <i className="fa fa-chevron-circle-left me-2" />
-            Instance Type
+            Cloud Provider
           </Button>
         </Col>
         <Col sm="6">
