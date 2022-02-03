@@ -9,7 +9,7 @@ import ContentContainer from '../../shared/ContentContainer';
 import VerizonLogo from '../../shared/VerizonLogo';
 import AWSLogo from '../../shared/AWSLogo';
 
-function MetaCloud() {
+function ProviderCloud() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -96,4 +96,4 @@ function MetaCloud() {
   );
 }
 
-export default MetaCloud;
+export default ProviderCloud;
