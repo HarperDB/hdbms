@@ -12,20 +12,23 @@ function Type() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
-  const is_lumen = useStoreState(appState, (s) => s.is_lumen);
   const [formData, setFormData] = useState({});
-  const manager_label = is_lumen ? 'Lumen' : 'HarperDB';
-  const hosting_location = is_lumen ? 'Lumen Edge' : 'AWS or Verizon Wavelength';
-  const instance_label = is_lumen ? `Lumen Edge HarperDB Instance` : 'HarperDB Cloud Instance';
+  const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
+  const managerLabelString = platform === 'lumen' ? 'Lumen' : 'HarperDB';
+  const hostingLocationString = platform === 'lumen' ? 'Lumen Edge' : platform === 'verizon' ? 'AWS Verizon Wavelength' : 'AWS or Verizon Wavelength';
 
   useAsyncEffect(() => {
     const { is_local } = formData;
     if (is_local !== undefined) {
-      setNewInstance({ customer_id, is_local, is_lumen });
+      setNewInstance({ customer_id, is_local, platform });
       setTimeout(
         () =>
           history.push(
-            is_local ? `/o/${customer_id}/instances/new/meta_local` : is_lumen ? `/o/${customer_id}/instances/new/meta_cloud` : `/o/${customer_id}/instances/new/provider_cloud`
+            is_local
+              ? `/o/${customer_id}/instances/new/meta_local`
+              : platform === 'HarperDB'
+              ? `/o/${customer_id}/instances/new/provider_cloud`
+              : `/o/${customer_id}/instances/new/meta_cloud`
           ),
         0
       );
@@ -37,12 +40,12 @@ function Type() {
       <Col xs="12" lg="6" className="instance-form-card-holder">
         <Card>
           <CardBody className="instance-form-card-body">
-            <div className="text-bold text-center">{instance_label}</div>
+            <div className="text-bold text-center text-capitalize">{hostingLocationString} HarperDB Instance</div>
             <hr />
             <ul>
               <li>Free License Tier Available!</li>
-              <li>Hosted on {hosting_location}</li>
-              <li>Managed by {manager_label}</li>
+              <li>Hosted on {hostingLocationString}</li>
+              <li>Managed by {managerLabelString}</li>
               <li>Monthly HarperDB License Included</li>
               <li>24/7 Customer Support</li>
               <li>Choose RAM and Disk Size</li>
@@ -50,7 +53,7 @@ function Type() {
             </ul>
             <hr />
             <Button id="createCloudInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false, is_wavelength: false })}>
-              Create {instance_label}
+              Create {hostingLocationString} Instance
             </Button>
           </CardBody>
         </Card>

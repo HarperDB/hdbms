@@ -24,6 +24,7 @@ import checkVersion from '../functions/app/checkVersion';
 import init from '../functions/app/init';
 import refreshUser from '../functions/app/refreshUser';
 import changeFavIcon from '../functions/app/changeFavIcon';
+import getThemes from '../functions/app/getThemes';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/SignUp'));
@@ -90,6 +91,7 @@ function App() {
 
   useEffect(() => {
     init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller });
+    getThemes(currentTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
