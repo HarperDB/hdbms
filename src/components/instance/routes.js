@@ -30,24 +30,6 @@ const query = {
   iconCode: 'f002',
 };
 
-const charts = {
-  component: Charts,
-  path: `/o/:customer_id/i/:compute_stack_id/charts`,
-  link: 'charts',
-  label: 'charts',
-  icon: 'chart-line',
-  iconCode: 'f201',
-};
-
-const cluster = {
-  component: Cluster,
-  path: `/o/:customer_id/i/:compute_stack_id/cluster`,
-  link: 'cluster',
-  label: 'cluster',
-  icon: 'cubes',
-  iconCode: 'f1e0',
-};
-
 const users = {
   component: Users,
   path: `/o/:customer_id/i/:compute_stack_id/users/:username?`,
@@ -64,6 +46,24 @@ const roles = {
   label: 'roles',
   icon: 'check-square',
   iconCode: 'f14a',
+};
+
+const charts = {
+  component: Charts,
+  path: `/o/:customer_id/i/:compute_stack_id/charts`,
+  link: 'charts',
+  label: 'charts',
+  icon: 'chart-line',
+  iconCode: 'f201',
+};
+
+const cluster = {
+  component: Cluster,
+  path: `/o/:customer_id/i/:compute_stack_id/cluster`,
+  link: 'cluster',
+  label: 'cluster',
+  icon: 'cubes',
+  iconCode: 'f1e0',
 };
 
 const functions = {
@@ -102,6 +102,6 @@ const examples = {
   iconCode: 'f121',
 };
 
-const Routes = ({ super_user }) => (super_user ? [browse, query, charts, cluster, users, roles, functions, metrics, config, examples] : [browse, query, charts, examples]);
+const Routes = ({ super_user }) => (super_user ? [browse, query, users, roles, charts, cluster, functions, metrics, config, examples] : [browse, query, charts, examples]);
 
 export default Routes;

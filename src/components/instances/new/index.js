@@ -14,6 +14,7 @@ import addError from '../../../functions/api/lms/addError';
 import Loader from '../../shared/Loader';
 
 import InstanceTypeForm from './Type';
+import CloudProviderForm from './ProviderCloud';
 import CloudMetadataForm from './MetaCloud';
 import LocalMetadataForm from './MetaLocal';
 import LocalInstanceForm from './DetailsLocal';
@@ -118,6 +119,8 @@ function NewInstanceIndex() {
           <Suspense fallback={<Loader header=" " spinner />}>
             {purchaseStep === 'type' ? (
               <InstanceTypeForm />
+            ) : purchaseStep === 'provider_cloud' ? (
+              <CloudProviderForm />
             ) : purchaseStep === 'meta_local' ? (
               <LocalMetadataForm />
             ) : purchaseStep === 'meta_cloud' ? (

@@ -7,6 +7,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../functions/state/appState';
 import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/ErrorFallback';
+import VerizonLogo from './shared/VerizonLogo';
 
 function TopNav({ isMaintenance }) {
   const { pathname } = useLocation();
@@ -14,8 +15,11 @@ function TopNav({ isMaintenance }) {
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const theme = useStoreState(appState, (s) => s.theme);
-  const nextTheme = !theme || theme === 'purple' ? 'dark' : theme === 'dark' ? 'light' : 'purple';
+  const themes = useStoreState(appState, (s) => s.themes);
+  const themeIndex = themes?.findIndex((t) => t === theme);
+  const nextTheme = !theme || themeIndex === themes.length - 1 ? themes[0] : themes[themeIndex + 1];
   const loggedIn = auth?.user_id;
+
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,9 +57,7 @@ function TopNav({ isMaintenance }) {
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
         <div className="navbar-brand">
-          <NavLink to="/organizations">
-            <div id="logo" title="Go to Organizations Home" />
-          </NavLink>
+          <NavLink to="/organizations">{theme === 'verizon' ? <VerizonLogo height={20} /> : <div id="logo" title="Go to Organizations Home" />}</NavLink>
         </div>
 
         <Nav className="ms-auto" navbar>
@@ -126,19 +128,21 @@ function TopNav({ isMaintenance }) {
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
           </NavItem>
-          <NavItem>
-            <Button
-              color="link"
-              id="changeTheme"
-              tabIndex="0"
-              title={theme === 'dark' ? 'Switch to light theme' : theme === 'purple' ? 'Switch to dark theme' : 'Switch to default theme'}
-              onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
-              onClick={() => toggleTheme(nextTheme)}
-            >
-              <i className="fas fa-palette" />
-              <span className="d-none d-lg-inline-block">&nbsp;theme</span>
-            </Button>
-          </NavItem>
+          {themes.length > 1 && (
+            <NavItem>
+              <Button
+                color="link"
+                id="changeTheme"
+                tabIndex="0"
+                title={`Switch to ${nextTheme} theme`}
+                onKeyDown={(e) => e.keyCode !== 13 || toggleTheme(nextTheme)}
+                onClick={() => toggleTheme(nextTheme)}
+              >
+                <i className="fas fa-palette" />
+                <span className="d-none d-lg-inline-block">&nbsp;theme</span>
+              </Button>
+            </NavItem>
+          )}
           <NavItem>
             {loggedIn ? (
               <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>

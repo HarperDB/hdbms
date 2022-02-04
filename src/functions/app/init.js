@@ -44,7 +44,6 @@ export default ({ auth, history, setFetchingUser, setPersistedUser, controller }
 
   appState.update((s) => {
     s.auth = { email: auth?.email, pass: auth?.pass };
-    s.theme = auth?.theme;
   });
 
   return unsubscribeAuth;

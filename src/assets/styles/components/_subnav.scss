@@ -8,7 +8,7 @@
   justify-content: flex-start;
   left: 0;
   min-width: $min-width;
-  padding: 0 2rem;
+  padding: 0 1rem;
   position: fixed;
   right: 0;
   top: 60px !important;
@@ -16,7 +16,7 @@
   z-index: 98 !important;
 
   @media screen and (max-width: 991px) {
-    padding: 5px 1rem;
+    padding: 5px 0;
   }
 
   .navbar-nav {

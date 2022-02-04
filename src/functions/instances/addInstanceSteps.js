@@ -2,6 +2,9 @@ export default {
   type: {
     label: 'Select Instance Type',
   },
+  provider_cloud: {
+    label: 'Choose Cloud Provider',
+  },
   meta_local: {
     label: 'Instance Info',
   },

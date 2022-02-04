@@ -15,6 +15,7 @@ import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 function MetaCloud() {
   const history = useHistory();
   const { customer_id } = useParams();
+  const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
   const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const [newInstance, setNewInstance] = useNewInstance({});
@@ -123,9 +124,16 @@ function MetaCloud() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="instanceTypeButton" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button
+            id="instanceTypeButton"
+            onClick={() => history.push(`/o/${customer_id}/instances/new/${platform === 'HarperDB' ? 'provider_cloud' : 'type'}`)}
+            title="Back to Instance Type"
+            block
+            className="mt-3"
+            color="purple"
+          >
             <i className="fa fa-chevron-circle-left me-2" />
-            Instance Type
+            {platform === 'HarperDB' ? 'Cloud Provider' : 'Instance Type'}
           </Button>
         </Col>
         <Col sm="6">

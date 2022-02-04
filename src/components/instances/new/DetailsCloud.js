@@ -17,6 +17,7 @@ function DetailsCloud() {
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
+  const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
   const [newInstance, setNewInstance] = useNewInstance({});
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
@@ -26,17 +27,21 @@ function DetailsCloud() {
   const products = useStoreState(
     appState,
     (s) =>
-      newInstance.is_wavelength
+      platform === 'lumen'
+        ? s.products.lumen_compute.filter((p) => p.value.active)
+        : newInstance.is_wavelength || platform === 'verizon'
         ? s.products.wavelength_compute.filter((p) => p.value.active)
         : newInstance.showPrepaidCompute
         ? unusedCompute
         : s.products.cloud_compute.filter((p) => p.value.active),
     [newInstance.showPrepaidCompute]
   );
-  const storage = useStoreState(appState, (s) => (newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)), [
-    newInstance.showPrepaidStorage,
-  ]);
-  const regions = useStoreState(appState, (s) => (newInstance.is_wavelength ? s.wavelengthRegions : s.regions));
+  const storage = useStoreState(
+    appState,
+    (s) => (platform === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
+    [newInstance.showPrepaidStorage]
+  );
+  const regions = useStoreState(appState, (s) => (platform === 'lumen' ? [] : newInstance.is_wavelength || platform === 'verizon' ? s.wavelengthRegions : s.regions));
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
@@ -45,6 +50,7 @@ function DetailsCloud() {
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
+  const canProceedToNextPage = formData.stripe_plan_id && formData.instance_region && (platform === 'lumen' || formData.stripe_storage_plan_id);
 
   useAsyncEffect(() => {
     const { submitted } = formState;
@@ -72,7 +78,11 @@ function DetailsCloud() {
             subheader={<DetailsSubheader hasPrepaid={unusedCompute.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidCompute" />}
             maxHeight="120px"
           >
-            {products.length ? (
+            {!products ? (
+              <div className="text-center">
+                <i className="fa fa-spinner fa-spin text-purple mt-5" />
+              </div>
+            ) : products.length ? (
               <RadioCheckbox
                 id="stripe_plan_id"
                 className="radio-button"
@@ -83,17 +93,15 @@ function DetailsCloud() {
                 defaultValue={products[0]}
               />
             ) : (
-              <div className="text-center">
-                <i className="fa fa-spinner fa-spin text-purple mt-5" />
-              </div>
+              <div className="text-center my-4 py-4">No products available at this time</div>
             )}
           </ContentContainer>
-          <ContentContainer
-            header="Storage Size"
-            subheader={<DetailsSubheader hasPrepaid={unusedStorage.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidStorage" />}
-            maxHeight="120px"
-          >
-            {storage.length ? (
+          {storage && (
+            <ContentContainer
+              header="Storage Size"
+              subheader={<DetailsSubheader hasPrepaid={unusedStorage.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidStorage" />}
+              maxHeight="120px"
+            >
               <RadioCheckbox
                 id="data_volume_size"
                 className="radio-button"
@@ -103,23 +111,27 @@ function DetailsCloud() {
                 options={storage}
                 defaultValue={storage[0]}
               />
-            ) : (
+            </ContentContainer>
+          )}
+          <ContentContainer header="Instance Region" subheader="scroll for more" maxHeight="120px">
+            {!regions ? (
               <div className="text-center">
                 <i className="fa fa-spinner fa-spin text-purple mt-5" />
               </div>
+            ) : regions.length ? (
+              <RadioCheckbox
+                id="instance_region"
+                className="radio-button"
+                type="radio"
+                required
+                onChange={(value) => setFormData({ ...formData, instance_region: value })}
+                options={regions}
+                value={formData.instance_region}
+                defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
+              />
+            ) : (
+              <div className="text-center my-4 py-4">No regions available at this time</div>
             )}
-          </ContentContainer>
-          <ContentContainer header="Instance Region" subheader="scroll for more" maxHeight="120px">
-            <RadioCheckbox
-              id="instance_region"
-              className="radio-button"
-              type="radio"
-              required
-              onChange={(value) => setFormData({ ...formData, instance_region: value })}
-              options={regions}
-              value={formData.instance_region}
-              defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
-            />
           </ContentContainer>
         </CardBody>
       </Card>
@@ -138,6 +150,7 @@ function DetailsCloud() {
             block
             className="mt-3"
             color="purple"
+            disabled={!canProceedToNextPage}
           >
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ms-2" />

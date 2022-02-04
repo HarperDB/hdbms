@@ -12,64 +12,53 @@ function Type() {
   const history = useHistory();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
-  const wavelengthRegions = useStoreState(appState, (s) => !!s.wavelengthRegions.length);
   const [formData, setFormData] = useState({});
+  const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
+  const managerLabelString = platform === 'lumen' ? 'Lumen' : 'HarperDB';
+  const hostingLocationString = platform === 'lumen' ? 'Lumen Edge' : platform === 'verizon' ? 'AWS Verizon Wavelength' : 'AWS or Verizon Wavelength';
 
   useAsyncEffect(() => {
-    const { is_local, is_wavelength } = formData;
-    if (is_local !== undefined && is_wavelength !== undefined) {
-      setNewInstance({ customer_id, is_local, is_wavelength });
-      setTimeout(() => history.push(is_local ? `/o/${customer_id}/instances/new/meta_local` : `/o/${customer_id}/instances/new/meta_cloud`), 0);
+    const { is_local } = formData;
+    if (is_local !== undefined) {
+      setNewInstance({ customer_id, is_local, platform });
+      setTimeout(
+        () =>
+          history.push(
+            is_local
+              ? `/o/${customer_id}/instances/new/meta_local`
+              : platform === 'HarperDB'
+              ? `/o/${customer_id}/instances/new/provider_cloud`
+              : `/o/${customer_id}/instances/new/meta_cloud`
+          ),
+        0
+      );
     }
   }, [formData]);
 
   return (
     <Row>
-      <Col xs="12" lg={wavelengthRegions ? 4 : 6} className="instance-form-card-holder">
+      <Col xs="12" lg="6" className="instance-form-card-holder">
         <Card>
           <CardBody className="instance-form-card-body">
-            <div className="text-bold text-center">HarperDB Cloud Instance</div>
+            <div className="text-bold text-center text-capitalize">{hostingLocationString} HarperDB Instance</div>
             <hr />
             <ul>
               <li>Free License Tier Available!</li>
-              <li>Hosted on AWS</li>
-              <li>Managed by HarperDB</li>
-              <li>HarperDB License Included</li>
+              <li>Hosted on {hostingLocationString}</li>
+              <li>Managed by {managerLabelString}</li>
+              <li>Monthly HarperDB License Included</li>
               <li>24/7 Customer Support</li>
               <li>Choose RAM and Disk Size</li>
               <li>Scale On Demand</li>
             </ul>
             <hr />
             <Button id="createCloudInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false, is_wavelength: false })}>
-              Create HarperDB Cloud Instance
+              Create {hostingLocationString} Instance
             </Button>
           </CardBody>
         </Card>
       </Col>
-      {wavelengthRegions && (
-        <Col xs="12" lg="4" className="instance-form-card-holder">
-          <Card>
-            <CardBody className="instance-form-card-body">
-              <div className="text-bold text-center">5G Wavelength Instance</div>
-              <hr />
-              <ul>
-                <li>Accessible on Verizon network</li>
-                <li>Blazing fast speeds</li>
-                <li>Managed by HarperDB</li>
-                <li>HarperDB License Included</li>
-                <li>24/7 Customer Support</li>
-                <li>Choose RAM and Disk Size</li>
-                <li>Scale On Demand</li>
-              </ul>
-              <hr />
-              <Button id="createWavelengthInstanceButton" className="mt-3" color="purple" block onClick={() => setFormData({ is_local: false, is_wavelength: true })}>
-                Create 5G Wavelength Instance
-              </Button>
-            </CardBody>
-          </Card>
-        </Col>
-      )}
-      <Col xs="12" lg={wavelengthRegions ? 4 : 6} className="instance-form-card-holder">
+      <Col xs="12" lg="6" className="instance-form-card-holder">
         <Card>
           <CardBody className="instance-form-card-body">
             <div className="text-bold text-center">Register User-Installed Instance</div>
@@ -81,7 +70,7 @@ function Type() {
                   Click Here To Install HarperDB
                 </a>
               </li>
-              <li>Managed by HarperDB</li>
+              <li>User-Managed</li>
               <li>Licensed Annually</li>
               <li>24/7 Community Support</li>
               <li>Choose RAM</li>
