@@ -10,7 +10,7 @@ export default ({ title, type, labels, theme }) => {
     chart: {
       type,
       animations: { enabled: false },
-      fontFamily: 'proxima-soft',
+      fontFamily: 'Arial, Helvetica, Verdana, Sans-Serif',
       toolbar: { offsetX: -25, tools: { selection: false, pan: false, zoom: false, zoomin: false, zoomout: false, reset: false } },
     },
     labels,
