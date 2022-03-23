@@ -19,7 +19,6 @@
     "@stripe/stripe-js": "^1.15.0",
     "apexcharts": "^3.27.1",
     "bootstrap-scss": "^5.0.1",
-    "fastestsmallesttextencoderdecoder": "^1.0.22",
     "lolight": "^1.4.0",
     "pullstate": "^1.22.1",
     "query-string": "^7.0.0",
