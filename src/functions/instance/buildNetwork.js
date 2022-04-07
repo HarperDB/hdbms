@@ -44,6 +44,7 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
     instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
     network,
     instance_region: thisInstance.instance_region,
+    instance_wavelength_zone_id: thisInstance.wavelength_zone_id,
   });
 
   const clusterDataTable = buildClusteringTable({ instances: clustering.connected.filter((i) => i.connection.state !== 'closed'), structure });

@@ -1,4 +1,4 @@
-export default ({ instances, network, instance_region }) => {
+export default ({ instances, network, instance_region, instance_wavelength_zone_id }) => {
   const registered = instances
     .filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {
@@ -8,7 +8,9 @@ export default ({ instances, network, instance_region }) => {
       const { instance_name, is_local, compute_stack_id } = i;
       const instance_status = is_local ? 'OK' : i.status;
       const instance_host =
-        instance_region && instance_region === i.instance_region && !i.wavelength_zone_id ? i.private_ip : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
+        instance_region && instance_region === i.instance_region && !i.wavelength_zone_id && !instance_wavelength_zone_id
+          ? i.private_ip
+          : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
       return {
         instance_name,
         instance_url: i.url,
