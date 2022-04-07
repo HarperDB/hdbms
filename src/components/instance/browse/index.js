@@ -35,12 +35,12 @@ const defaultTableState = {
 function BrowseIndex() {
   const history = useHistory();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
-  const auth = useStoreState(instanceState, (s) => s.auth);
+  const [instanceAuths] = useInstanceAuth({});
+  const auth = instanceAuths && instanceAuths[compute_stack_id];
   const url = useStoreState(instanceState, (s) => s.url);
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
-  const [instanceAuths] = useInstanceAuth({});
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super;
   const emptyPromptMessage = showForm
