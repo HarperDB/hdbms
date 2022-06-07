@@ -90,7 +90,7 @@ function DetailsCloud() {
                 required
                 onChange={(value) => setFormData({ ...formData, ...value })}
                 options={products}
-                defaultValue={products[0]}
+                defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value.stripe_plan_id === newInstance.stripe_plan_id) : products[0]}
               />
             ) : (
               <div className="text-center my-4 py-4">No products available at this time</div>
@@ -109,7 +109,7 @@ function DetailsCloud() {
                 required
                 onChange={(value) => setFormData({ ...formData, ...value })}
                 options={storage}
-                defaultValue={storage[0]}
+                defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value.data_volume_size === newInstance.data_volume_size) : storage[0]}
               />
             </ContentContainer>
           )}
