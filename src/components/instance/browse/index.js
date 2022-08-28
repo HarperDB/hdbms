@@ -42,7 +42,8 @@ function BrowseIndex() {
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
-  const showForm = instanceAuths[compute_stack_id]?.super;
+  const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
+  const showTableForm = showForm || instanceAuths[compute_stack_id]?.structure?.includes(schema);
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
@@ -80,7 +81,7 @@ function BrowseIndex() {
       <Col xl="3" lg="4" md="5" xs="12">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
           <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
-          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showForm} />}
+          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showTableForm} />}
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>

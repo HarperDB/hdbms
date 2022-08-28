@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
+import ToggleButton from 'react-toggle';
 import locale from 'react-json-editor-ajrm/locale/en';
-import { Button } from 'reactstrap';
+import { Button, Row, Col, Input } from 'reactstrap';
 import { useParams } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -27,16 +28,29 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const theme = useStoreState(appState, (s) => s.theme);
   const [newPermissions, setNewPermissions] = useState({});
   const [activePermissions, setActivePermissions] = useState({});
+  const [newStructureUser, setNewStructureUser] = useState({});
+  const [activeStructureUser, setActiveStructureUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [validJSON, setValidJSON] = useState(true);
+  const [major, minor] = version.split('.');
+  const hasStructureUser = major >= 3 && (major > 3 || minor >= 3);
+  const jsonHeight = hasStructureUser ? "calc(100vh - 440px)" : "calc(100vh - 340px)"
+
+  const icons = {
+    checked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
+    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
+  };
 
   useAsyncEffect(async () => {
     if (role_id && roles) {
       const currentRolePermissions = roles.find((r) => r.id === role_id).permission;
+      const defaultStructurePermissions = Array.isArray(currentRolePermissions.structure_user) ? currentRolePermissions.structure_user.join(', ') : currentRolePermissions.structure_user || false;
       const defaultActivePermissions = await buildPermissionStructure({ auth, url, version, currentRolePermissions, showAttributes });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
+      setActiveStructureUser(defaultStructurePermissions);
+      setNewStructureUser(defaultStructurePermissions);
     }
   }, [role_id, roles, lastUpdate, showAttributes]);
 
@@ -50,12 +64,21 @@ function JsonViewer({ showAttributes, fetchRoles }) {
 
     setLoading(true);
     setChanged(false);
+
     const permission = { super_user: false, ...newPermissions };
+
+    if (hasStructureUser) {
+      permission.structure_user = newStructureUser === true ? true : newStructureUser ? newStructureUser.split(/[ ,]+/).filter((v) => v!=='') : false;
+    }
+
     const response = await alterRole({ permission, id: role_id, auth, url });
     setLoading(false);
 
     if (response.error) {
-      alert.error(`${response.message} Permissions reset.`);
+      let message = response.role_errors || response.message;
+      message += '. Permissions reset.';
+      alert.error(message);
+      setNewStructureUser(activeStructureUser);
       return setNewPermissions(activePermissions);
     }
     alert.success('Permissions updated successfully');
@@ -67,9 +90,44 @@ function JsonViewer({ showAttributes, fetchRoles }) {
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+      {hasStructureUser && (
+        <>
+          <Row>
+            <Col xs="12" sm="6" md="12" lg="5" xl="4" className="pt-2 pb-2">
+              <ToggleButton
+                width="100%"
+                checked={!!newStructureUser}
+                onChange={() => {
+                  setNewStructureUser(newStructureUser ? false : newStructureUser === false && activeStructureUser ? activeStructureUser : true);
+                  setChanged(true);
+                }}
+                icons={icons}
+              />
+            </Col>
+            {newStructureUser && (
+              <Col xs="12" sm="6" md="12" lg="7" xl="8">
+                <Input
+                  onChange={(e) => {
+                    setNewStructureUser(e.target.value ? e.target.value : true);
+                    setChanged(true);
+                  }}
+                  type="text"
+                  id="permitted_schemas"
+                  title="permitteed schemas"
+                  placeholder="comma-separated schemas, or blank for all"
+                  value={newStructureUser === true ? '' : newStructureUser}
+                  disabled={loading}
+                />
+              </Col>
+            )}
+          </Row>
+          <hr />
+        </>
+      )}
+
       <JSONInput
         placeholder={activePermissions}
-        height="calc(100vh - 340px)"
+        height={jsonHeight}
         theme="light_mitsuketa_tribute"
         colors={{
           background: 'transparent',

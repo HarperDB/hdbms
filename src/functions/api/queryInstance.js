@@ -24,12 +24,14 @@ export default async ({ operation, auth, url, authType = undefined, signal = und
         error: true,
         message: response.error,
         type: 'response',
+        role_errors: response.main_permissions?.join(', '),
         access_errors: response.unauthorized_access?.map((e) => ({
           schema: e.schema,
           table: e.table,
-          type: e.required_attribute_permissions.length ? 'attribute' : 'table',
-          entity: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].attribute_name : e.table,
-          permission: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].required_permissions.join(', ') : e.required_table_permissions.join(', '),
+          type: e.required_attribute_permissions?.length ? 'attribute' : 'table',
+          entity: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.attribute_name : e.table,
+          permission: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.required_permissions.join(', ') : e.required_table_permissions?.join(', '),
+
         })),
       };
     }

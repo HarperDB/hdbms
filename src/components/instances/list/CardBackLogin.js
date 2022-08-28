@@ -48,7 +48,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         } else if (result.error) {
           setFormState({ error: result.message || result.error });
         } else {
-          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user } });
+          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user, structure: result.role.permission.structure_user } });
           setFlipState(false);
         }
       }
