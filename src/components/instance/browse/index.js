@@ -43,7 +43,7 @@ function BrowseIndex() {
   const [tableState, setTableState] = useState(defaultTableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
-  const showTableForm = showForm || instanceAuths[compute_stack_id]?.structure?.includes(schema);
+  const showTableForm = showForm || (instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
