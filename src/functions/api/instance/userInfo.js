@@ -5,4 +5,5 @@ export default async ({ auth, url }) =>
     operation: { operation: 'user_info' },
     auth,
     url,
+    timeout: 5000,
   });

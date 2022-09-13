@@ -5,4 +5,5 @@ export default async ({ auth, url }) =>
     operation: { operation: 'custom_functions_status' },
     auth,
     url,
+    timeout: 1000,
   });

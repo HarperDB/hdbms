@@ -1,9 +1,9 @@
 import { fetch } from 'whatwg-fetch';
 
-export default async ({ operation, auth, url, authType = undefined, signal = undefined }) => {
+export default async ({ operation, auth, url, timeout = 0, authType = undefined, signal = undefined }) => {
   try {
     const controller = new AbortController();
-    const id = setTimeout(() => (['user_info', 'registration_info'].includes(operation.operation) ? controller.abort() : null), 5000);
+    const id = setTimeout(() => (timeout ? controller.abort() : null), timeout);
 
     const request = await fetch(url, {
       signal: signal || controller.signal,
