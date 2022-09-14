@@ -6,6 +6,7 @@ export default async ({ auth, url }) => {
     operation: { operation: 'registration_info' },
     auth,
     url,
+    timeout: 5000,
   });
 
   instanceState.update((s) => {

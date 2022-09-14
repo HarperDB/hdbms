@@ -1,9 +1,9 @@
 import { fetch } from 'whatwg-fetch';
 
-export default async ({ operation, auth, url, authType = undefined, signal = undefined }) => {
+export default async ({ operation, auth, url, timeout = 0, authType = undefined, signal = undefined }) => {
   try {
     const controller = new AbortController();
-    const id = setTimeout(() => (['user_info', 'registration_info'].includes(operation.operation) ? controller.abort() : null), 5000);
+    const id = setTimeout(() => (timeout ? controller.abort() : null), timeout);
 
     const request = await fetch(url, {
       signal: signal || controller.signal,
@@ -24,12 +24,14 @@ export default async ({ operation, auth, url, authType = undefined, signal = und
         error: true,
         message: response.error,
         type: 'response',
+        role_errors: response.main_permissions?.join(', '),
         access_errors: response.unauthorized_access?.map((e) => ({
           schema: e.schema,
           table: e.table,
-          type: e.required_attribute_permissions.length ? 'attribute' : 'table',
-          entity: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].attribute_name : e.table,
-          permission: e.required_attribute_permissions.length ? e.required_attribute_permissions[0].required_permissions.join(', ') : e.required_table_permissions.join(', '),
+          type: e.required_attribute_permissions?.length ? 'attribute' : 'table',
+          entity: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.attribute_name : e.table,
+          permission: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.required_permissions.join(', ') : e.required_table_permissions?.join(', '),
+
         })),
       };
     }

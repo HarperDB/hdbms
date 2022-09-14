@@ -16,6 +16,7 @@ import customFunctionsStatus from '../../../../functions/api/instance/customFunc
 import getCustomFunctions from '../../../../functions/api/instance/getCustomFunctions';
 import deployCustomFunctionProject from '../../../../functions/api/instance/deployCustomFunctionProject';
 import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
+import installNodeModules from '../../../../functions/api/instance/installNodeModules';
 import restartService from '../../../../functions/api/instance/restartService';
 
 const defaultTableState = {
@@ -35,10 +36,14 @@ function Deploy() {
   const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const version = useStoreState(instanceState, (s) => s.registration?.version);
   const [{ payload, file }, setPayloadAndFile] = useState([]);
   const returnUrl = `/o/${customer_id}/i/${compute_stack_id}/functions/edit/${project}`;
   const instances = useStoreState(appState, (s) => s.instances.filter((i) => i.compute_stack_id !== compute_stack_id));
+  const [major, minor] = version.split('.');
+  const canSkipNodeModules = major >= 3 && (major > 3 || minor >= 3);
   const [tableData, setTableData] = useState([]);
+  const [skipNodeModules, setSkipNodeModules] = useState(canSkipNodeModules);
   const [loading, setLoading] = useReducer((state, newState) => ({ ...state, ...newState }), {});
   const [tableState, setTableState] = useState(defaultTableState);
 
@@ -89,6 +94,13 @@ function Deploy() {
             project,
             file,
           });
+          if(skipNodeModules) {
+            await installNodeModules({
+              auth: instanceAuth,
+              url: thisInstance.url,
+              projects: [project],
+            });
+          }
           await restartService({
             auth: instanceAuth,
             url: thisInstance.url,
@@ -108,16 +120,16 @@ function Deploy() {
         }, 1000);
       }
     },
-    [file, instanceAuths, payload, project, tableData, updateInstanceCFStatus]
+    [file, instanceAuths, payload, project, tableData, updateInstanceCFStatus, skipNodeModules]
   );
 
   useAsyncEffect(async () => {
     if (auth && url && project) {
       setPayloadAndFile(false);
-      const payloadAndFile = await packageCustomFunctionProject({ auth, url, project });
+      const payloadAndFile = await packageCustomFunctionProject({ auth, url, project, skip_node_modules: skipNodeModules });
       setPayloadAndFile(payloadAndFile);
     }
-  }, [auth, url, project]);
+  }, [auth, url, project, skipNodeModules]);
 
   useAsyncEffect(async () => {
     if (instances) {
@@ -152,8 +164,17 @@ function Deploy() {
       <Row className="floating-card-header">
         <Col>deploy {project && `> ${project}`}</Col>
         <Col className="text-end">
+          {canSkipNodeModules && (
+            <>
+              <Button color="link" title="Turn on autofresh" onClick={() => setSkipNodeModules(!skipNodeModules)}>
+                <span className="me-2">install dependencies at destination</span>
+                <i className={`fa fa-lg fa-toggle-${skipNodeModules ? 'on' : 'off'}`} />
+              </Button>
+              <span className="mx-3 text">|</span>
+            </>
+          )}
           <Button onClick={handleReturn} color="link" className="me-2">
-            <span className="me-2">edit</span>
+            <span className="me-2">back to edit</span>
             <i title="Edit Project" className="fa fa-edit" />
           </Button>
         </Col>

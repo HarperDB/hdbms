@@ -45,10 +45,10 @@ ul {
 }
 
 hr {
-  background-color: $lighter-grey-overlay; /* Modern Browsers */
+  background-color: $light-grey-overlay; /* Modern Browsers */
   border: 0 none;
   /* Set the hr color */
-  color: $lighter-grey-overlay; /* old IE */
+  color: $light-grey-overlay; /* old IE */
   height: 1px !important;
   overflow: hidden;
 
