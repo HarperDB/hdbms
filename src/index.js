@@ -14,7 +14,7 @@ import './app.scss';
 
 render(
   <Elements stripe={stripePromise} options={{ fonts: [{ cssSrc: 'https://fonts.googleapis.com/css?family=Raleway&display=swap' }] }}>
-    <Provider template={AlertTemplate} timeout={2000} position={positions.TOP_CENTER}>
+    <Provider template={AlertTemplate} timeout={4000} position={positions.TOP_CENTER}>
       <BrowserRouter>
         <Analytics trackPathnameOnly id={config.google_analytics_code}>
           <App />
