@@ -32,7 +32,7 @@ function Add({ setLastUpdate }) {
       if (!username || !role || !password) {
         setFormState({ error: 'All fields must be filled out' });
       } else if (!isAlphaNumericUnderscoreHyphen(username)) {
-        setFormState({ error: 'usernames must have only letters and underscores' });
+        setFormState({ error: 'usernames must have only letters, numbers, hyphens, and underscores' });
         setTimeout(() => setFormState({}), 2000);
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
         setFormState({ error: 'User already exists' });
