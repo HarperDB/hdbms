@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import addUser from '../../../functions/api/instance/addUser';
 import FormStatus from '../../shared/FormStatus';
-import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
+import isAlphaNumericUnderscoreHyphen from '../../../functions/util/isAlphaNumericUnderscoreHyphen';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import listRoles from '../../../functions/api/instance/listRoles';
@@ -31,8 +31,8 @@ function Add({ setLastUpdate }) {
 
       if (!username || !role || !password) {
         setFormState({ error: 'All fields must be filled out' });
-      } else if (!isAlphaUnderscore(username)) {
-        setFormState({ error: 'usernames must have only letters and underscores' });
+      } else if (!isAlphaNumericUnderscoreHyphen(username)) {
+        setFormState({ error: 'usernames must have only letters, numbers, hyphens, and underscores' });
         setTimeout(() => setFormState({}), 2000);
       } else if (users.find((u) => u.username.toLowerCase() === username.toLowerCase())) {
         setFormState({ error: 'User already exists' });
