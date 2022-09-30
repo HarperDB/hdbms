@@ -14,11 +14,7 @@ function DriversIndex() {
               icon="chart-bar"
               name="Power BI (Windows exe)"
               docs="powerbi"
-              urls={[
-                {
-                  link: 'https://harperdb-drivers.s3.amazonaws.com/Power+BI+Connector/setup.exe',
-                },
-              ]}
+              urls={[{ link: 'https://harperdb-drivers.s3.amazonaws.com/Power+BI+Connector/setup.exe' }]}
             />
             <DriverCard
               icon="chart-bar"
@@ -47,13 +43,13 @@ function DriversIndex() {
               icon="linux"
               name="ODBC Linux (RPM)"
               docs="odbc"
-              urls={[{ label: 'x86_64', link: 'https://harperdb-drivers.s3.amazonaws.com/ODBC+Linux+(RPM)/setup.x86_64.rpm' }]}
+              urls={[{ link: 'https://harperdb-drivers.s3.amazonaws.com/ODBC+Linux+(RPM)/setup.x86_64.rpm' }]}
             />
             <DriverCard
               icon="linux"
               name="ODBC Linux (DEB)"
               docs="odbc"
-              urls={[{ label: 'x86_64', link: 'https://harperdb-drivers.s3.amazonaws.com/ODBC+Linux+(DEB)/setup.x86_64.deb' }]}
+              urls={[{ link: 'https://harperdb-drivers.s3.amazonaws.com/ODBC+Linux+(DEB)/setup.x86_64.deb' }]}
             />
             <DriverCard icon="windows" name="ADO" docs="ado" urls={[{ link: 'https://harperdb-drivers.s3.amazonaws.com/ADO.NET+Driver/setup.exe' }]} />
             <DriverCard icon="code" name="Cmdlets" docs="rcmd" urls={[{ link: 'https://harperdb-drivers.s3.amazonaws.com/Powershell+Cmdlets/setup.exe' }]} />
