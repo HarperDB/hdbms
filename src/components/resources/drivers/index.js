@@ -36,7 +36,7 @@ function DriversIndex() {
               name="JDBC"
               docs="jdbc"
               urls={[
-                { label: 'Windows', link: 'https://harperdb-drivers.s3.amazonaws.com/JDBC+(Windows+exe)/setup.exe' },
+                { label: 'Windows', link: 'https://harperdb-drivers.s3.amazonaws.com/JDBC+(Windows+Exe)/setup.exe' },
                 { label: 'Mac', link: 'https://harperdb-drivers.s3.amazonaws.com/JDBC+(Mac+Dmg)/setup.dmg' },
                 { label: 'Driver JAR', link: 'https://harperdb-drivers.s3.amazonaws.com/JDBC+(Driver+Jar)/cdata.jdbc.harperdb.jar' },
               ]}
