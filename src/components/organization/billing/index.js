@@ -11,6 +11,7 @@ import Unpaid from '../../shared/Unpaid';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 import appState from '../../../functions/state/appState';
 import getInstances from '../../../functions/api/lms/getInstances';
+import useInstanceAuth from '../../../functions/state/instanceAuths';
 
 function BillingIndex() {
   const { customer_id } = useParams();
@@ -20,6 +21,7 @@ function BillingIndex() {
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
   const instances = useStoreState(appState, (s) => s.instances);
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
+  const [instanceAuths] = useInstanceAuth({});
 
   useEffect(
     () => {
@@ -31,7 +33,7 @@ function BillingIndex() {
 
   useAsyncEffect(() => {
     if (auth && products && regions && subscriptions && customer_id && !instances?.length) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
     }
   }, [auth, products, regions, customer_id, subscriptions, instances]);
 

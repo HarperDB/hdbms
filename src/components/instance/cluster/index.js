@@ -18,6 +18,8 @@ function ClusteringIndex() {
   const network = useStoreState(instanceState, (s) => s.network);
   const connectedNodes = useStoreState(instanceState, (s) => s.clustering?.connected);
   const aNodeIsConnecting = connectedNodes?.some((c) => c.connection.state === 'connecting');
+  const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
+  const nodeNameMatch = compute_stack_id === name;
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -33,10 +35,10 @@ function ClusteringIndex() {
 
   useEffect(() => {
     if (network) {
-      setShowManage(!!network.is_enabled && !!network.cluster_user && !!network.cluster_role);
+      setShowManage(!!network.is_enabled && !!network.cluster_user && !!network.cluster_role && !!nodeNameMatch);
       setLoading(false);
     }
-  }, [network]);
+  }, [network, nodeNameMatch]);
 
   useInterval(() => {
     if (aNodeIsConnecting) {

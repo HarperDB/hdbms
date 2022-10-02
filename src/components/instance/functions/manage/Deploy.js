@@ -19,16 +19,7 @@ import dropCustomFunctionProject from '../../../../functions/api/instance/dropCu
 import installNodeModules from '../../../../functions/api/instance/installNodeModules';
 import restartService from '../../../../functions/api/instance/restartService';
 
-const defaultTableState = {
-  filtered: [],
-  sorted: [],
-  page: 0,
-  totalPages: 1,
-  pageSize: 20,
-  autoRefresh: false,
-  showFilter: false,
-  lastUpdate: false,
-};
+const defaultTableState = { filtered: [], sorted: [], page: 0, totalPages: 1, pageSize: 20, autoRefresh: false, showFilter: false, lastUpdate: false };
 
 function Deploy() {
   const { customer_id, compute_stack_id, project } = useParams();
@@ -113,7 +104,6 @@ function Deploy() {
             project,
           });
         }
-
         setTimeout(() => {
           setLoading({ [destination_compute_stack_id]: false });
           updateInstanceCFStatus(destination_compute_stack_id, action);

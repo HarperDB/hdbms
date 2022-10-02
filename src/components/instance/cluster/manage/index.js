@@ -29,7 +29,7 @@ function ManageIndex({ refreshNetwork, loading, setLoading }) {
               setShowModal={setShowModal}
             />
             <InstanceManager items={clustering?.unconnected || []} itemType="unconnected" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
-            <InstanceManager items={clustering?.unregistered || []} itemType="unregistered" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
+            <InstanceManager items={clustering?.incompatible || []} itemType="incompatible" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
           </ErrorBoundary>
         </Col>
         <Col xl="9" lg="8" md="6" xs="12">

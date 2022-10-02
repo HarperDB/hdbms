@@ -55,7 +55,7 @@ function InstanceIndex() {
 
   useAsyncEffect(() => {
     if (auth && products && regions && subscriptions && customer_id && !instances?.length) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
     }
   }, [auth, products, regions, customer_id, subscriptions, instances]);
 

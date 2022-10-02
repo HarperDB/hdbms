@@ -1,11 +1,11 @@
-export default ({ instances, network, instance_region, instance_wavelength_zone_id }) => {
+export default ({ instances, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
   const registered = instances
     .filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {
-      const connection = network?.outbound_connections.find((n) => n.name === i.compute_stack_id);
+      const { instance_name, is_local, compute_stack_id, clusterEngine } = i;
+      const connection = network?.connections.find((n) => n.name === i.compute_stack_id);
       const subscriptions = connection?.subscriptions || [];
       const clusterPort = 12345;
-      const { instance_name, is_local, compute_stack_id } = i;
       const instance_status = is_local ? 'OK' : i.status;
       const instance_host =
         instance_region && instance_region === i.instance_region && !i.wavelength_zone_id && !instance_wavelength_zone_id
@@ -20,19 +20,20 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
         clusterPort,
         connection,
         subscriptions,
+        compatible: clusterEngine === instance_cluster_engine,
       };
     });
 
-  const unregistered = network.outbound_connections
-    .filter((c) => !registered.find((r) => r.instance_host === c.host && r.compute_stack_id === c.name))
-    .map((i) => ({
-      instance_name: i.host,
-      compute_stack_id: i.name,
-    }));
+  const incompatible = instances
+  .filter((i) => i.clusterEngine !== instance_cluster_engine)
+  .map((i) => ({
+    instance_name: `v${i.version} - ${i.instance_name}`,
+    compute_stack_id: i.name,
+  }));
 
   return {
-    connected: registered.filter((i) => i.connection),
-    unconnected: registered.filter((i) => !i.connection),
-    unregistered,
+    connected: registered.filter((i) => i.compatible && i.connection),
+    unconnected: registered.filter((i) => i.compatible && !i.connection),
+    incompatible,
   };
 };

@@ -20,6 +20,7 @@ import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 import Unpaid from '../shared/Unpaid';
+import useInstanceAuth from '../../functions/state/instanceAuths';
 
 function InstancesIndex() {
   const history = useHistory();
@@ -34,6 +35,7 @@ function InstancesIndex() {
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const [mounted, setMounted] = useState(false);
+  const [instanceAuths] = useInstanceAuth({});
 
   useEffect(() => {
     if (isOrgOwner && window.userGuiding && instances && !instances.length) {
@@ -57,13 +59,13 @@ function InstancesIndex() {
   }, [customer_id, instances, auth]);
 
   const refreshInstances = useCallback(() => {
-    if (auth && products && regions && subscriptions && customer_id) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+    if (auth && products && regions && subscriptions && customer_id && instanceAuths) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
     }
-  }, [auth, customer_id, instances, products, regions, subscriptions]);
+  }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id]);
+  useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id, instanceAuths]);
 
   useInterval(
     () => instances?.length && instances.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),

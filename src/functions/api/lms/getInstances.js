@@ -4,7 +4,7 @@ import generateInstanceProductDetails from '../../instances/generateInstanceProd
 import addError from './addError';
 import config from '../../../config';
 
-export default async ({ auth, customer_id, products, regions, subscriptions, instanceCount = 0 }) => {
+export default async ({ auth, customer_id, products, regions, subscriptions, instanceCount = 0, instanceAuths }) => {
   let response = null;
 
   try {
@@ -21,8 +21,10 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
     if (Array.isArray(response)) {
       const instances = response.map((instance) => {
         const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
+        const instanceAuth = instanceAuths && instanceAuths[instance.compute_stack_id];
+        const clusterEngine = parseFloat(instanceAuth.version) >=4 ? 'nats' : 'socketcluster';
         /* TODO: Move the licensing, loading, etc. management here. */
-        return { ...instance, ...instanceProductDetails };
+        return { ...instance, version: instanceAuth.version, clusterEngine, ...instanceProductDetails };
       });
 
       return appState.update((s) => {

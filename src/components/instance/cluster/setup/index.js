@@ -22,6 +22,7 @@ import userInfo from '../../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
+import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 
 function SetupIndex() {
   const { customer_id, compute_stack_id } = useParams();
@@ -37,17 +38,25 @@ function SetupIndex() {
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
-      await configureCluster({
-        compute_stack_id,
-        cluster_user,
-        port: 12345,
-        auth,
-        url,
-        is_local,
-        customer_id,
-      });
+      if (parseFloat(auth.version) >= 4) {
+        await setConfiguration({
+          auth,
+          url,
+          clustering_nodeName: compute_stack_id,
+        });
+      } else {
+        await configureCluster({
+          compute_stack_id,
+          cluster_user,
+          port: 12345,
+          auth,
+          url,
+          is_local,
+          customer_id,
+        });
+      }
       if (window._kmq) window._kmq.push(['record', 'enabled clustering']);
-      await restartInstance({ auth, url });
+      restartInstance({ auth, url });
       setTimeout(() => setFormState({ restarting: true }), 100);
     }
   }, [formState.submitted]);
