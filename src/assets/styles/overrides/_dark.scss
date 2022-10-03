@@ -80,6 +80,10 @@
         &.active {
           background-color: transparent !important;
         }
+
+        &.form {
+          border-top: 1px solid $faint-white-overlay !important;
+        }
       }
     }
   }
@@ -229,6 +233,6 @@
   ::-webkit-scrollbar-thumb {
     background-color: $faint-white-overlay;
     border: 2px solid $color-pureblack;
-    border-radius: 5px;
+    border-radius: $border-radius;
   }
 }

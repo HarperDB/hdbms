@@ -79,5 +79,5 @@ hr {
 ::-webkit-scrollbar-thumb {
   background-color: $light-grey-overlay;
   border: 2px solid $color-white;
-  border-radius: 5px;
+  border-radius: $border-radius;
 }
