@@ -41,7 +41,6 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
 
     return false;
   } catch (e) {
-    console.log(e);
     return addError({
       type: 'lms data',
       status: 'error',

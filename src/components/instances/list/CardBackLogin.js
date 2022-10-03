@@ -31,15 +31,11 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         } else if (result.error && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (((result.error && result.message === 'Login failed') || result.error === 'Login failed') && !is_local) {
-          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({
-            instance_id,
-            instanceAuth: { user, pass },
-            url,
-          });
+          const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });
 
           if (handleCloudInstanceUsernameChangeResult) {
             setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: true } });
-            setFlipState(false);
+            setTimeout(() => setFlipState(false), 100);
           } else {
             setFormState({ error: 'Login failed. Using instance credentials?', url: 'https://harperdb.io/docs/harperdb-studio/instances/#instance-login' });
           }
@@ -49,7 +45,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
           setFormState({ error: result.message || result.error });
         } else {
           setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user, structure: result.role.permission.structure_user } });
-          setFlipState(false);
+          setTimeout(() => setFlipState(false), 100);
         }
       }
     }
