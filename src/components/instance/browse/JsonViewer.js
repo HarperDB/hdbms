@@ -38,7 +38,8 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [hash], get_attributes: ['*'] }, auth, url });
+      const typedHash = !Number.isNaN(hash) ? parseInt(hash, 10) : hash;
+      const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [typedHash], get_attributes: ['*'] }, auth, url });
       if (rowData) {
         const hash_attribute = rowData[hashAttribute];
         const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle

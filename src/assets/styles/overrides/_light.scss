@@ -69,7 +69,7 @@
       .react-select__control--is-focused,
       .react-select__indicator-separator {
         background: transparent !important;
-        border-color: $lightest-grey-overlay !important;
+        border-color: $lighter-grey-overlay !important;
 
         .react-select__single-value {
           color: $color-darkgrey;
@@ -164,6 +164,7 @@
   .fake-input,
   .form-control {
     background: $lightest-grey-overlay !important;
+    border: 1px solid $lighter-grey-overlay !important;
     color: $color-darkgrey !important;
 
     &.is-invalid,
@@ -207,7 +208,7 @@
     .react-select__control--is-focused,
     .react-select__indicator-separator {
       background: $lightest-grey-overlay !important;
-      border-color: transparent !important;
+      border-color: $lighter-grey-overlay !important;
 
       .react-select__single-value {
         color: $color-grey;
