@@ -11,15 +11,17 @@
   .instance-form-card-holder {
     @media screen and (max-width: 991px) {
       margin-bottom: 1rem;
+
       &:last-child {
         @media screen and (max-width: 991px) {
           margin-bottom: 0;
         }
       }
     }
+
     .instance-form-card-body {
-      white-space: nowrap;
       overflow: hidden;
+      white-space: nowrap;
     }
   }
 }
@@ -48,12 +50,13 @@
         border: 0;
         font-size: 18px;
         line-height: 1;
-        padding: 0;
         margin-right: 5px;
+        padding: 0;
+
         &::before {
-          font-family: "FontAwesome", sans-serif;
-          content: "\f00d";
           color: $color-white;
+          content: '\f00d';
+          font-family: 'FontAwesome', sans-serif;
         }
       }
 

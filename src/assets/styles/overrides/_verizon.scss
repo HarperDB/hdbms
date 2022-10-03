@@ -1,4 +1,4 @@
-$partner-brand-color: #CD040B;
+$partner-brand-color: #cd040b;
 
 .verizon {
   #app-nav {
@@ -183,6 +183,7 @@ $partner-brand-color: #CD040B;
     &.show {
       background-color: $partner-brand-color !important;
       border-color: $partner-brand-color !important;
+
       .dot {
         background: $partner-brand-color;
       }
@@ -207,6 +208,7 @@ $partner-brand-color: #CD040B;
   .content-container {
     .header-container {
       border-bottom: 1px solid $lighter-grey-overlay;
+
       .subheader {
         color: $partner-brand-color !important;
       }
