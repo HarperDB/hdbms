@@ -30,7 +30,13 @@ const processNatsConnections = async ({ auth, url, thisInstance, instances, conn
 
   return natsConnections.hub.map((c) => {
     const connectedInstance = instances.find((i) => i.host === c.host);
-    return { host: c.host, port: c.port, state: 'open', name: connectedInstance.compute_stack_id, subscriptions: [] };
+    const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance.compute_stack_id);
+    console.log(connectedInstanceSubscriptions);
+    const hydratedSubscriptions = connectedInstanceSubscriptions?.subscriptions?.map((s) => ({ channel: `${s.schema}:${s.table}`, ...s })) || [];
+    console.log(hydratedSubscriptions);
+    const connectionObject = { host: c.host, port: c.port, state: 'open', name: connectedInstance.compute_stack_id, subscriptions: hydratedSubscriptions };
+    console.log(connectionObject)
+    return connectionObject;
   });
 };
 
