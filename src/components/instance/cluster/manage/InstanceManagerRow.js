@@ -11,7 +11,7 @@ function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNo
     <Row className="item-row">
       <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
       <Col className="item-action">
-        {itemType === 'incompatible' ? null
+        {itemType === 'unreachable' ? null
           : item.instance_status === 'CREATE_IN_PROGRESS' ? (
           <Button color="grey" className="round" title="Creating Instance" disabled>
             <i className="fa fa-spin fa-spinner" />
