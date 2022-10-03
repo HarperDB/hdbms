@@ -27,7 +27,7 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
   const incompatible = instances
   .filter((i) => i.clusterEngine !== instance_cluster_engine)
   .map((i) => ({
-    instance_name: `v${i.version} - ${i.instance_name}`,
+    instance_name: i.instance_name,
     compute_stack_id: i.name,
   }));
 
