@@ -22,9 +22,10 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
       const instances = response.map((instance) => {
         const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
         const instanceAuth = instanceAuths && instanceAuths[instance.compute_stack_id];
-        const clusterEngine = parseFloat(instanceAuth.version) >=4 ? 'nats' : 'socketcluster';
+        const clusterEngine = instanceAuth && parseFloat(instanceAuth.version) >=4 ? 'nats' : 'socketcluster';
+        const version = instanceAuth ? instanceAuth.version : '';
         /* TODO: Move the licensing, loading, etc. management here. */
-        return { ...instance, version: instanceAuth.version, clusterEngine, ...instanceProductDetails };
+        return { ...instance, version, clusterEngine, ...instanceProductDetails };
       });
 
       return appState.update((s) => {
