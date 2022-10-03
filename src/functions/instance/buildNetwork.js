@@ -19,24 +19,15 @@ const processNatsConnections = async ({ auth, url, thisInstance, instances, conn
   .map((i) => ({ host: i.host, port: clusterDefaultPort }));
 
   if(unregisteredRoutes.length) {
-    const routesSetObject = await clusterSetRoutes({ auth, url, server: 'hub', routes: unregisteredRoutes });
-    // eslint-disable-next-line no-console
-    console.log(`${routesSetObject.set.length} new NATS ${routesSetObject.message}`);
-  } else {
-    // eslint-disable-next-line no-console
-    console.log('no new NATS routes to add');
+    await clusterSetRoutes({ auth, url, server: 'hub', routes: unregisteredRoutes });
   }
   const natsConnections = await clusterGetRoutes({ auth, url });
 
   return natsConnections.hub.map((c) => {
     const connectedInstance = instances.find((i) => i.host === c.host);
     const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance.compute_stack_id);
-    console.log(connectedInstanceSubscriptions);
     const hydratedSubscriptions = connectedInstanceSubscriptions?.subscriptions?.map((s) => ({ channel: `${s.schema}:${s.table}`, ...s })) || [];
-    console.log(hydratedSubscriptions);
-    const connectionObject = { host: c.host, port: c.port, state: 'open', name: connectedInstance.compute_stack_id, subscriptions: hydratedSubscriptions };
-    console.log(connectionObject)
-    return connectionObject;
+    return { host: c.host, port: c.port, state: 'open', name: connectedInstance.compute_stack_id, subscriptions: hydratedSubscriptions };
   });
 };
 
