@@ -1,6 +1,6 @@
 on:
   workflow_dispatch:
-name: Build
+name: Publish Production
 jobs:
   publishStageStudio:
     runs-on: ubuntu-latest
