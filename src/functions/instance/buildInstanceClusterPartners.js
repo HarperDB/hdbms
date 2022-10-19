@@ -1,8 +1,16 @@
 export default ({ instances, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
+  console.log(instances);
+
   const registered = instances
     .filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {
-      const { instance_name, is_local, compute_stack_id, clusterEngine } = i;
+      const {
+        instance_name,
+        is_local,
+        compute_stack_id,
+        structure,
+        clustering: { engine, enabled, node_name_set },
+      } = i;
       const connection = network?.connections.find((n) => n.name === i.compute_stack_id);
       const subscriptions = connection?.subscriptions || [];
       const clusterPort = 12345;
@@ -20,20 +28,23 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
         clusterPort,
         connection,
         subscriptions,
-        compatible: clusterEngine === instance_cluster_engine,
+        structure,
+        compatible: engine === instance_cluster_engine,
+        configured: enabled && node_name_set,
       };
     });
 
-  const incompatible = instances
-  .filter((i) => i.clusterEngine !== instance_cluster_engine)
-  .map((i) => ({
-    instance_name: i.instance_name,
-    compute_stack_id: i.name,
-  }));
+  const unreachable = instances
+    .filter((i) => i.clustering.engine !== instance_cluster_engine)
+    .map((i) => ({
+      instance_name: i.instance_name,
+      compute_stack_id: i.name,
+    }));
 
   return {
-    connected: registered.filter((i) => i.compatible && i.connection),
-    unconnected: registered.filter((i) => i.compatible && !i.connection),
-    incompatible,
+    connected: registered.filter((i) => i.compatible && i.connection && i.configured),
+    unconnected: registered.filter((i) => i.compatible && !i.connection && i.configured),
+    unconfigured: registered.filter((i) => i.compatible && !i.configured),
+    unreachable,
   };
 };

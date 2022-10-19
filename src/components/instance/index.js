@@ -23,8 +23,9 @@ import registrationInfo from '../../functions/api/instance/registrationInfo';
 
 function InstanceIndex() {
   const { compute_stack_id, customer_id } = useParams();
+  const alert = useAlert();
+  const history = useHistory();
   const [loadingInstance, setLoadingInstance] = useState(true);
-  const [loadingUser, setLoadingUser] = useState(false);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
   const auth = useStoreState(appState, (s) => s.auth);
@@ -36,8 +37,6 @@ function InstanceIndex() {
   const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
   const restarting = useStoreState(instanceState, (s) => s.restarting);
-  const alert = useAlert();
-  const history = useHistory();
   const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
   const [mounted, setMounted] = useState(false);
 
@@ -61,7 +60,7 @@ function InstanceIndex() {
 
   useAsyncEffect(async () => {
     if (thisInstance && instanceAuth) {
-      instanceState.update(() => Object.entries(thisInstance).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}));
+      instanceState.update(() => thisInstance);
       const { error } = await buildInstanceStructure({ auth: instanceAuth, url: thisInstance.url });
       await registrationInfo({ auth: instanceAuth, url: thisInstance.url });
       setLoadingInstance(false);
@@ -86,19 +85,18 @@ function InstanceIndex() {
   );
 
   useInterval(async () => {
-    if (url && !loadingUser) {
-      setLoadingUser(true);
+    if (url) {
       const result = await userInfo({ auth: instanceAuth, url });
       if (result.error && result.message !== 'Network request failed' && !restarting) {
         alert.error('Unable to connect to instance.');
         history.push(`/o/${customer_id}/instances`);
-      } else if (!result.error) {
+      } else if (!result.error && restarting) {
         instanceState.update((s) => {
           s.restarting = false;
         });
+      } else if (!result.error && instanceAuth?.super !== result.role?.permission?.super_user) {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuth, super: result.role?.permission?.super_user } });
       }
-      setLoadingUser(false);
     }
   }, config.refresh_content_interval);
 

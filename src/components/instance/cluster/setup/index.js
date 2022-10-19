@@ -23,10 +23,12 @@ import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
+import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
 function SetupIndex() {
   const { customer_id, compute_stack_id } = useParams();
-  const instances = useStoreState(appState, (s) => s.instances);
+  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
+  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
@@ -43,6 +45,9 @@ function SetupIndex() {
           auth,
           url,
           clustering_nodeName: compute_stack_id,
+          clustering_enabled: true,
+          clustering_user: cluster_user,
+          clustering_hubServer_cluster_network_port: 12345,
         });
       } else {
         await configureCluster({
@@ -64,9 +69,9 @@ function SetupIndex() {
   const checkInstance = useCallback(async () => {
     const response = await userInfo({ auth, url });
     if (!response.error) {
-      buildNetwork({ auth, url, instances, compute_stack_id });
+      buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
     }
-  }, [auth, url, compute_stack_id, instances]);
+  }, [auth, url, getInstancesParams, compute_stack_id, customer_id, instanceAuths]);
 
   useInterval(() => {
     if (formState.restarting) {

@@ -28,7 +28,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
         <Button id="refresh" color="link" tabIndex="0" title={`Refresh table ${table}`} className="me-2" onClick={refresh}>
           <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
         </Button>
-        <Button id="toggleAutoRefresh" color="link" tabIndex="0" style={{ height: '15px' }} title="Turn on Auto-Refresh" onClick={toggleAutoRefresh}>
+        <Button id="toggleAutoRefresh" color="link" tabIndex="0" title="Turn on Auto-Refresh" onClick={toggleAutoRefresh}>
           <span className="me-2">auto</span>
           <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
         </Button>

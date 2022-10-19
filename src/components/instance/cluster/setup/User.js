@@ -10,10 +10,12 @@ import appState from '../../../../functions/state/appState';
 import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 import createClusterUser from '../../../../functions/instance/createClusterUser';
+import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
 function User() {
-  const { compute_stack_id } = useParams();
-  const instances = useStoreState(appState, (s) => s.instances);
+  const { compute_stack_id, customer_id } = useParams();
+  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
+  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
@@ -34,7 +36,7 @@ function User() {
       } else {
         const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
         if (!response.error) {
-          buildNetwork({ auth, url, instances, compute_stack_id });
+          buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
         } else {
           setFormState({ error: response.message });
         }

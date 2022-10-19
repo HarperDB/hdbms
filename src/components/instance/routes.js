@@ -102,6 +102,6 @@ const examples = {
   iconCode: 'f121',
 };
 
-const Routes = ({ super_user }) => (super_user ? [browse, query, users, roles, charts, cluster, functions, metrics, config, examples] : [browse, query, charts, examples]);
+const routes = ({ super_user }) => (super_user ? [browse, query, users, roles, charts, cluster, functions, metrics, config, examples] : [browse, query, charts, examples]);
 
-export default Routes;
+export default routes;

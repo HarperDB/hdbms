@@ -19,6 +19,7 @@
     "@stripe/stripe-js": "^1.15.0",
     "apexcharts": "^3.27.1",
     "bootstrap-scss": "^5.0.1",
+    "deepmerge": "^4.2.2",
     "lolight": "^1.4.0",
     "pullstate": "^1.22.1",
     "query-string": "^7.0.0",
@@ -73,7 +74,7 @@
     "sass": "^1.46.0",
     "stylelint": "^14.0.1",
     "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^28.0.0",
+    "stylelint-config-standard": "^29.0.0",
     "stylelint-order": "^5.0.0",
     "stylelint-scss": "^4.0.0"
   }

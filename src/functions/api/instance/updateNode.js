@@ -35,33 +35,31 @@ export default async ({ channel, subscriptions, buttonState, compute_stack_id, i
   }
 
   // send the query
+  const operation = {
+    operation: 'update_node',
+    name: compute_stack_id,
+    node_name: compute_stack_id,
+    host: instance_host,
+    port: clusterPort,
+    subscriptions: newSubscriptions,
+  };
+
   const updateResult = await queryInstance({
-    operation: {
-      operation: 'update_node',
-      name: compute_stack_id,
-      node_name: compute_stack_id,
-      host: instance_host,
-      port: clusterPort,
-      startTime: new Date().toISOString(),
-      subscriptions: newSubscriptions,
-    },
+    operation,
     auth,
     url,
   });
 
-  if (updateResult.error && parseFloat(auth.version) >= 4) {
-    await queryInstance({
-      operation: {
-        operation: 'add_node',
-        node_name: compute_stack_id,
-        startTime: new Date().toISOString(),
-        subscriptions: newSubscriptions,
-      },
+  if (updateResult.error && updateResult.message.indexOf('add_node') !== -1) {
+    operation.operation = 'add_node';
+    const addResult = await queryInstance({
+      operation,
       auth,
       url,
     });
-  }
 
+    console.log(operation, addResult);
+  }
 
   return instanceState.update((s) => {
     s.lastUpdate = Date.now();

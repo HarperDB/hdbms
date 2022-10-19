@@ -5,12 +5,15 @@ import { useParams } from 'react-router-dom';
 
 import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
+import useInstanceAuth from '../../../../functions/state/instanceAuths';
+
 import addRole from '../../../../functions/api/instance/addRole';
 import buildNetwork from '../../../../functions/instance/buildNetwork';
 
 function Role() {
   const { compute_stack_id, customer_id } = useParams();
-  const instances = useStoreState(appState, (s) => s.instances);
+  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
+  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
@@ -29,7 +32,7 @@ function Role() {
       customer_id,
     });
     if (!response.error) {
-      buildNetwork({ auth, url, instances, compute_stack_id });
+      buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
     }
   };
 

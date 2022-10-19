@@ -4,33 +4,26 @@ import listRoles from '../api/instance/listRoles';
 import instanceState from '../state/instanceState';
 import buildInstanceClusterPartners from './buildInstanceClusterPartners';
 import buildClusteringTable from './buildClusteringTable';
-import clusterConfigColumns from './buildClusterConfigColumns';
+import buildClusterConfigColumns from './buildClusterConfigColumns';
 import clusterGetRoutes from '../api/instance/clusterGetRoutes';
-import clusterSetRoutes from '../api/instance/clusterSetRoutes';
-import describeAll from '../api/instance/describeAll';
-import buildInstanceDataStructure from './buildInstanceDataStructure';
+import getInstances from '../api/lms/getInstances';
+import getConfiguration from '../api/instance/getConfiguration';
 
-// eslint-disable-next-line no-unused-vars
-const processNatsConnections = async ({ auth, url, thisInstance, instances, connections }) => {
-  const clusterDefaultPort = 12345;
-  const existingRoutes = await clusterGetRoutes({ auth, url });
-  const unregisteredRoutes = instances
-  .filter((i) => i.compute_stack_id !== thisInstance.compute_stack_id && i.clusterEngine === thisInstance.clusterEngine && !existingRoutes.hub.find((er) => er.host === i.host && er.port === clusterDefaultPort))
-  .map((i) => ({ host: i.host, port: clusterDefaultPort }));
-
-  if(unregisteredRoutes.length) {
-    await clusterSetRoutes({ auth, url, server: 'hub', routes: unregisteredRoutes });
-  }
+const processNatsConnections = async ({ auth, url, instances, connections }) => {
   const natsConnections = await clusterGetRoutes({ auth, url });
 
-  return natsConnections.hub.map((c) => {
-    const connectedInstance = instances.find((i) => i.host === c.host);
-    const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance.compute_stack_id);
-    const hydratedSubscriptions = connectedInstanceSubscriptions?.subscriptions?.map((s) => ({ channel: `${s.schema}:${s.table}`, ...s })) || [];
-    return { host: c.host, port: c.port, state: 'open', name: connectedInstance.compute_stack_id, subscriptions: hydratedSubscriptions };
-  });
+  return natsConnections.hub
+    .map((c) => {
+      const connectedInstance = instances.find((i) => i.host === c.host);
+      if (!connectedInstance) {
+        return false;
+      }
+      const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance?.compute_stack_id);
+      const hydratedSubscriptions = connectedInstanceSubscriptions?.subscriptions?.map((s) => ({ channel: `${s.schema}:${s.table}`, ...s })) || [];
+      return { host: c.host, port: c.port, state: 'open', name: connectedInstance?.compute_stack_id, subscriptions: hydratedSubscriptions };
+    })
+    .filter((c) => c !== false);
 };
-
 
 const processConnections = ({ connections }) =>
   connections
@@ -45,57 +38,64 @@ const processConnections = ({ connections }) =>
         }))
     : [];
 
-const buildNetwork = async ({ auth, url, instances, compute_stack_id }) => {
-  const thisInstance = instances.find((i) => i.compute_stack_id === compute_stack_id);
-  const schema = await describeAll({ auth, url });
-  const { structure } = buildInstanceDataStructure(schema);
+const buildNetwork = async ({ appAuth, auth, compute_stack_id, customer_id, products, regions, subscriptions, instanceAuths, setLoading }) => {
+  const instances = await getInstances({ auth: appAuth, customer_id, products, regions, subscriptions, instanceAuths });
+
+  const { instance_region, wavelength_zone_id, url, is_local, clustering, structure } = instances.find((i) => i.compute_stack_id === compute_stack_id);
   const roles = await listRoles({ auth, url });
   const users = await listUsers({ auth, url });
   const clusterStatusObject = await clusterStatus({ auth, url });
+  const configurationObject = await getConfiguration({ auth, url });
   const { is_enabled, node_name, status, message, connections } = clusterStatusObject;
   const cluster_role = roles.find((r) => r.permission.cluster_user);
   const cluster_user = cluster_role && users.find((u) => u.role === cluster_role.role);
-  const processedConnections = (message || !is_enabled) ? []
-    : thisInstance.clusterEngine === 'nats' ? await processNatsConnections({ auth, url, thisInstance, instances, connections })
+  const processedConnections =
+    message || !is_enabled
+      ? []
+      : clustering.engine === 'nats'
+      ? await processNatsConnections({ auth, url, instances, connections })
       : processConnections({ connections: status.outbound_connections });
 
   const network = {
     is_enabled,
     cluster_role,
+    cluster_port: clustering.engine === 'nats' ? configurationObject.clustering.hubServer.cluster.network.port : configurationObject.CLUSTERING_PORT,
     cluster_user: cluster_user?.username,
     connections: processedConnections,
     name: node_name,
   };
 
-  const clustering = buildInstanceClusterPartners({
+  const clusterPartners = buildInstanceClusterPartners({
     instances: instances.filter((i) => i.compute_stack_id !== compute_stack_id),
     network,
-    instance_region: thisInstance.instance_region,
-    instance_wavelength_zone_id: thisInstance.wavelength_zone_id,
-    instance_cluster_engine: thisInstance.clusterEngine,
+    instance_region,
+    instance_wavelength_zone_id: wavelength_zone_id,
+    instance_cluster_engine: clustering.engine,
   });
 
-  const clusterDataTable = buildClusteringTable({ instances: clustering.connected.filter((i) => i.connection.state !== 'closed'), structure });
+  const clusterDataTable = buildClusteringTable({ instances: clusterPartners.connected.filter((i) => i.connection.state !== 'closed'), structure });
 
-  const clusterDataTableColumns = clusterConfigColumns({
+  const clusterDataTableColumns = buildClusterConfigColumns({
     auth,
-    url: thisInstance.url,
-    is_local: thisInstance.is_local,
+    url,
+    is_local,
     compute_stack_id,
-    customer_id: thisInstance.customer_id,
-    buildNetwork: () => buildNetwork({ auth, url, instances, compute_stack_id }),
+    customer_id,
+    setLoading,
+    buildNetwork: () => buildNetwork({ appAuth, auth, compute_stack_id, customer_id, products, regions, subscriptions, instanceAuths, setLoading }),
   });
 
   instanceState.update((s) => {
     s.network = network;
-    s.clustering = clustering;
+    s.clusterPartners = clusterPartners;
+    s.clusterEngine = clustering.engine;
     s.clusterDataTable = clusterDataTable;
     s.clusterDataTableColumns = clusterDataTableColumns;
   });
 
   return {
     network,
-    clustering,
+    clusterPartners,
     clusterDataTable,
     clusterDataTableColumns,
   };

@@ -87,17 +87,3 @@
     }
   }
 }
-
-.light {
-  .react-toggle {
-    .react-toggle-track {
-      background: $lighter-grey-overlay !important;
-    }
-
-    &--checked {
-      .react-toggle-track {
-        background-color: $color-success !important;
-      }
-    }
-  }
-}
