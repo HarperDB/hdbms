@@ -1,17 +1,10 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
-import describeTable from './describeTable';
 
 export default async ({ channel, subscriptions, buttonState, compute_stack_id, instance_host, clusterPort, auth, url }) => {
   const newSubscriptions = JSON.parse(JSON.stringify(subscriptions));
   const existingChannelSubscriptionIndex = newSubscriptions.findIndex((s) => s.channel === channel);
   const [schema, table] = channel.split(':');
-  const tableExists = await describeTable({ auth, url, schema, table });
-
-  if (tableExists.error && tableExists.message === `Table '${schema}.${table}' does not exist`) {
-    // eslint-disable-next-line no-console
-    console.log('creating table');
-  }
 
   // if we have no subscription for this node, add it to the subscriptions array
   if (existingChannelSubscriptionIndex === -1) {
