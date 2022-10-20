@@ -58,6 +58,7 @@ export default async ({ channel, subscriptions, buttonState, compute_stack_id, i
       url,
     });
 
+    // eslint-disable-next-line no-console
     console.log(operation, addResult);
   }
 
