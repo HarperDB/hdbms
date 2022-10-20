@@ -12,6 +12,7 @@ import Manage from './manage';
 import Loader from '../../shared/Loader';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
+import clusterStatus from '../../../functions/api/instance/clusterStatus';
 
 function ClusteringIndex() {
   const { customer_id } = useParams();
@@ -54,18 +55,23 @@ function ClusteringIndex() {
     }
   }, [network, nodeNameMatch]);
 
-  useInterval(() => {
-    if (configuring) refreshNetwork();
+  useInterval(async () => {
+    if (configuring) {
+      const currentStatus = await clusterStatus({ auth, url });
+      if (currentStatus?.is_enabled) {
+        refreshNetwork();
+      }
+    }
   }, 2000);
 
-  return !network ? (
-    <Loader header="loading network" spinner />
-  ) : configuring ? (
+  return configuring ? (
     <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
+  ) : !network ? (
+    <Loader header="loading network" spinner />
   ) : showManage ? (
     <Manage refreshNetwork={refreshNetwork} loading={loading || (connectedNodes.length === 1 && aNodeIsConnecting)} setLoading={setLoading} />
   ) : (
-    <Setup refreshNetwork={refreshNetwork} loading={loading} setLoading={setLoading} setConfiguring={setConfiguring} />
+    <Setup setConfiguring={setConfiguring} />
   );
 }
 

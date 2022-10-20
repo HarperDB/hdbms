@@ -1,6 +1,4 @@
 export default ({ instances, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
-  console.log(instances);
-
   const registered = instances
     .filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS')
     .map((i) => {

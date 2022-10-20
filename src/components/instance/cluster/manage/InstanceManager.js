@@ -13,6 +13,7 @@ import addNode from '../../../../functions/api/instance/addNode';
 import removeNode from '../../../../functions/api/instance/removeNode';
 import clusterSetRoutes from '../../../../functions/api/instance/clusterSetRoutes';
 import clusterDeleteRoutes from '../../../../functions/api/instance/clusterDeleteRoutes';
+import restartService from '../../../../functions/api/instance/restartService';
 
 function InstanceManager({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) {
   const { customer_id } = useParams();
@@ -39,6 +40,9 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
           alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
           setLoading(false);
         } else {
+          if (clusterEngine === 'nats') {
+            await restartService({ auth, url, service: 'clustering config' });
+          }
           await refreshNetwork(payload.compute_stack_id);
         }
       }

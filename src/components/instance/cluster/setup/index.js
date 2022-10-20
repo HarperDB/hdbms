@@ -1,13 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
-import useInterval from 'use-interval';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../../functions/state/instanceState';
-import appState from '../../../../functions/state/appState';
 
 import Role from './Role';
 import User from './User';
@@ -18,17 +16,12 @@ import EmptyPrompt from '../../../shared/EmptyPrompt';
 
 import configureCluster from '../../../../functions/api/instance/configureCluster';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
-import userInfo from '../../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
-import buildNetwork from '../../../../functions/instance/buildNetwork';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
-import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
-function SetupIndex() {
+function SetupIndex({ setConfiguring }) {
   const { customer_id, compute_stack_id } = useParams();
-  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
-  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
@@ -62,22 +55,9 @@ function SetupIndex() {
       }
       if (window._kmq) window._kmq.push(['record', 'enabled clustering']);
       restartInstance({ auth, url });
-      setTimeout(() => setFormState({ restarting: true }), 100);
+      setTimeout(() => setConfiguring(true), 0);
     }
   }, [formState.submitted]);
-
-  const checkInstance = useCallback(async () => {
-    const response = await userInfo({ auth, url });
-    if (!response.error) {
-      buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
-    }
-  }, [auth, url, getInstancesParams, compute_stack_id, customer_id, instanceAuths]);
-
-  useInterval(() => {
-    if (formState.restarting) {
-      checkInstance();
-    }
-  }, 5000);
 
   return (
     <Row id="clustering">
@@ -90,15 +70,13 @@ function SetupIndex() {
               {cluster_role && <User />}
               {cluster_user && <Port port={12345} />}
               {cluster_role && cluster_user && <NodeName nodeNameMatch={nodeNameMatch} setNodeNameMatch={setNodeNameMatch} />}
-              {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} disabled={formState.submitted || formState.restarting} />}
+              {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} />}
             </ErrorBoundary>
           </CardBody>
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {formState.restarting ? (
-          <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
-        ) : cluster_role && cluster_user && nodeNameMatch ? (
+        {cluster_role && cluster_user && nodeNameMatch ? (
           <EmptyPrompt
             headline="You're all set!"
             description="Click the button at left to enable clustering. NOTE: We'll restart the instance when you click this button."

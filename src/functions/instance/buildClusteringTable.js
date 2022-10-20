@@ -6,7 +6,6 @@ export default ({ instances, structure }) => {
   const newTableData = [];
   instances.map((instance) => {
     const combinedStructure = deepmerge(instance.structure, structure);
-    console.log(combinedStructure);
     Object.keys(combinedStructure)
       .sort()
       .map((schema, s) => {
