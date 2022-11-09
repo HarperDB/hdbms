@@ -19,6 +19,7 @@ const processInstance = async ({ instance, auth, products, regions, subscription
   const schema = auth && (await describeAll({ auth, url: instance.url }));
   const { structure } = schema ? buildInstanceDataStructure(schema) : { structure: {} };
   const cluster_engine = parseFloat(registration?.version) >= 4 ? 'nats' : 'socketcluster';
+  const instanceURLObject = new URL(instance.url);
 
   const instanceObject = {
     ...instance,
@@ -26,6 +27,7 @@ const processInstance = async ({ instance, auth, products, regions, subscription
     registration,
     user_info,
     structure,
+    host: instanceURLObject.host,
     clustering: {
       engine: cluster_engine,
       enabled: clustering?.is_enabled,
