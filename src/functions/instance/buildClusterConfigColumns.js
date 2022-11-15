@@ -3,7 +3,7 @@ import ToggleButton from 'react-toggle';
 
 import updateNode from '../api/instance/updateNode';
 
-export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) => [
+export default ({ auth, url, is_local, customer_id, buildNetwork }) => [
   {
     Header: 'instance',
     Cell: ({
@@ -35,7 +35,6 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
       <ToggleButton
         checked={publish || false}
         onChange={async () => {
-          setLoading(true);
           await updateNode({
             compute_stack_id,
             instance_host,
@@ -49,8 +48,7 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
             is_local,
             customer_id,
           });
-          await buildNetwork();
-          setLoading(false);
+          buildNetwork();
         }}
       />
     ),
@@ -66,7 +64,6 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
       <ToggleButton
         checked={subscribe || false}
         onChange={async () => {
-          setLoading(true);
           await updateNode({
             compute_stack_id,
             instance_host,
@@ -80,8 +77,7 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
             is_local,
             customer_id,
           });
-          await buildNetwork();
-          setLoading(false);
+          buildNetwork();
         }}
       />
     ),

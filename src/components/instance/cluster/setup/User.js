@@ -13,8 +13,8 @@ import createClusterUser from '../../../../functions/instance/createClusterUser'
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
 function User() {
-  const { compute_stack_id, customer_id } = useParams();
-  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
+  const { compute_stack_id } = useParams();
+  const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -36,7 +36,7 @@ function User() {
       } else {
         const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
         if (!response.error) {
-          buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
+          buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
         } else {
           setFormState({ error: response.message });
         }

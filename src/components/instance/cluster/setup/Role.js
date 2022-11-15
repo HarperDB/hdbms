@@ -12,7 +12,7 @@ import buildNetwork from '../../../../functions/instance/buildNetwork';
 
 function Role() {
   const { compute_stack_id, customer_id } = useParams();
-  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
+  const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -32,7 +32,7 @@ function Role() {
       customer_id,
     });
     if (!response.error) {
-      buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths });
+      buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
     }
   };
 

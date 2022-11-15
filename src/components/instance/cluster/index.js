@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
-import { useParams } from 'react-router-dom';
 
 import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
@@ -15,9 +14,7 @@ import useInstanceAuth from '../../../functions/state/instanceAuths';
 import clusterStatus from '../../../functions/api/instance/clusterStatus';
 
 function ClusteringIndex() {
-  const { customer_id } = useParams();
   const instances = useStoreState(appState, (s) => s.instances);
-  const getInstancesParams = useStoreState(appState, (s) => ({ appAuth: s.auth, products: s.products, regions: s.regions, subscriptions: s.subscriptions }));
   const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -36,11 +33,11 @@ function ClusteringIndex() {
     async (loadId = true) => {
       if (auth && url && instances && compute_stack_id && !restarting) {
         setLoading(loadId);
-        await buildNetwork({ ...getInstancesParams, auth, compute_stack_id, customer_id, instanceAuths, setLoading });
+        await buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
         setLoading(false);
       }
     },
-    [auth, url, instances, compute_stack_id, restarting, getInstancesParams, customer_id, instanceAuths]
+    [auth, url, instances, compute_stack_id, restarting, instanceAuths]
   );
 
   useEffect(refreshNetwork, [refreshNetwork]);
@@ -69,7 +66,7 @@ function ClusteringIndex() {
   ) : !network ? (
     <Loader header="loading network" spinner />
   ) : showManage ? (
-    <Manage refreshNetwork={refreshNetwork} loading={loading || (connectedNodes.length === 1 && aNodeIsConnecting)} setLoading={setLoading} />
+    <Manage refreshNetwork={refreshNetwork} loading={loading || (connectedNodes?.length === 1 && aNodeIsConnecting)} setLoading={setLoading} />
   ) : (
     <Setup setConfiguring={setConfiguring} />
   );

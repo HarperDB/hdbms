@@ -23,14 +23,13 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
-  const clusterEngine = useStoreState(instanceState, (s) => s.clusterEngine, [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => s.clustering.engine, [compute_stack_id]);
 
   const handleAddNode = useCallback(
     async (payload) => {
       setLoading(payload.compute_stack_id);
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
-        setLoading(false);
       } else {
         const result =
           clusterEngine === 'nats'
@@ -46,6 +45,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
           await refreshNetwork(payload.compute_stack_id);
         }
       }
+      setLoading(false);
     },
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert, clusterEngine]
   );
@@ -67,7 +67,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert, clusterEngine]
   );
 
-  const handleConfigureNode = (payload) => history.push(`/o/${customer_id}/i/${payload.compute_stack_id}/cluster`);
+  const handleConfigureNode = useCallback((payload) => history.push(`/o/${customer_id}/i/${payload.compute_stack_id}/cluster`), [history, customer_id]);
 
   return (
     <div className="entity-manager">

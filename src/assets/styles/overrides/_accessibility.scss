@@ -9,7 +9,7 @@ i,
 .btn,
 [role='button'] {
   &:focus {
-    outline: 1px solid $light-white-overlay !important;
+    outline: 1px solid $color-lightpurple !important;
     outline-offset: 3px !important;
   }
 }
@@ -20,39 +20,5 @@ textarea,
 [role='button'] {
   &:focus {
     outline-offset: -1px !important;
-  }
-}
-
-.dark {
-  a,
-  button,
-  input,
-  textarea,
-  .item-row,
-  select,
-  i,
-  .card,
-  .btn,
-  [role='button'] {
-    &:focus {
-      outline-color: $light-white-overlay !important;
-    }
-  }
-}
-
-.light {
-  a,
-  button,
-  input,
-  textarea,
-  .item-row,
-  select,
-  i,
-  .card,
-  .btn,
-  [role='button'] {
-    &:focus {
-      outline-color: $color-lightpurple !important;
-    }
   }
 }

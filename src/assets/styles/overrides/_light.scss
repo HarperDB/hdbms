@@ -356,4 +356,19 @@
   .version {
     color: $color-darkgrey !important;
   }
+
+  a,
+  button,
+  input,
+  textarea,
+  .item-row,
+  select,
+  i,
+  .card,
+  .btn,
+  [role='button'] {
+    &:focus {
+      outline-color: $color-lightpurple !important;
+    }
+  }
 }

@@ -14,14 +14,7 @@ function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNo
       <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
       <Col className="item-action">
         {itemType === 'unreachable' ? null : itemType === 'unconfigured' ? (
-          <ActionUnconfigured
-            loading={isLoading}
-            handleConfigureNode={() =>
-              handleConfigureNode({
-                compute_stack_id: item.compute_stack_id,
-              })
-            }
-          />
+          <ActionUnconfigured loading={isLoading} handleConfigureNode={() => handleConfigureNode({ compute_stack_id: item.compute_stack_id })} />
         ) : item.instance_status === 'CREATE_IN_PROGRESS' ? (
           <Button color="grey" className="round" title="Creating Instance" disabled>
             <i className="fa fa-spin fa-spinner" />
@@ -29,13 +22,7 @@ function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNo
         ) : !item.connection ? (
           <ActionNoConnection
             loading={isLoading}
-            handleAddNode={() =>
-              handleAddNode({
-                compute_stack_id: item.compute_stack_id,
-                instance_host: item.instance_host,
-                clusterPort: item.clusterPort,
-              })
-            }
+            handleAddNode={() => handleAddNode({ compute_stack_id: item.compute_stack_id, instance_host: item.instance_host, clusterPort: item.clusterPort })}
           />
         ) : item.connection?.state === 'closed' ? (
           <ActionConnectionClosed

@@ -44,7 +44,7 @@ export default async ({ endpoint, payload, auth, signal = undefined }) => {
       };
     }
 
-    if (response.error) {
+    if (response.error || response.message === 'Internal server error') {
       if (!payload.loggingIn) {
         addError({ ...errorObject, error: response });
       }
