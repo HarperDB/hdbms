@@ -28,6 +28,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const handleAddNode = useCallback(
     async (payload) => {
       setLoading(payload.compute_stack_id);
+      console.log(clusterEngine);
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
       } else {
@@ -61,6 +62,9 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
         alert.error(result.message);
         setLoading(false);
       } else {
+        if (clusterEngine === 'nats') {
+          await restartService({ auth, url, service: 'clustering config' });
+        }
         await refreshNetwork(payload.compute_stack_id);
       }
     },
