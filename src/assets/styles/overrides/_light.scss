@@ -12,8 +12,11 @@
 
     .navbar-nav {
       .active-org {
-        background: $gradient-white-lightgrey;
-        border-right-color: $color-grey !important;
+        border-right-color: $color-lightgrey !important;
+
+        &.open {
+          border-color: $color-lightgrey !important;
+        }
 
         .org-name {
           color: $color-black !important;
@@ -163,7 +166,7 @@
   textarea,
   .fake-input,
   .form-control {
-    background: $lightest-grey-overlay !important;
+    background: $color-white !important;
     border: 1px solid $lighter-grey-overlay !important;
     color: $color-darkgrey !important;
 
@@ -180,11 +183,9 @@
   .entity-manager {
     .card {
       border: 1px solid $lighter-grey-overlay;
-      box-shadow: 0 0 5px $lighter-grey-overlay !important;
 
       .item-row {
-        background: $lightest-grey-overlay !important;
-
+        background: $color-white !important;
       }
     }
   }

@@ -80,8 +80,8 @@ function User() {
         title="password"
         placeholder="password"
       />
-      <Button color="success" block onClick={() => setFormState({ submitted: true })}>
-        Create Cluster User
+      <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+        {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Create Cluster User'}
       </Button>
       {formState.error && (
         <Card className="mt-3 error">

@@ -120,7 +120,7 @@ function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, togg
       )}
       <Col className="item-action">
         {addingItem ? (
-          <Button color="success" className="round me-1">
+          <Button id="creatingItem" color="success" className="round">
             <i className="fa fa-spinner fa-spin text-white" />
           </Button>
         ) : (

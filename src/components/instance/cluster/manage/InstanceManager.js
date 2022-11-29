@@ -23,7 +23,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
-  const clusterEngine = useStoreState(instanceState, (s) => s.clustering.engine, [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
 
   const handleAddNode = useCallback(
     async (payload) => {

@@ -93,9 +93,8 @@
       }
 
       &.open {
+        border: 1px solid $faint-white-overlay;
         border-radius: $border-radius;
-        border-right: 0 !important;
-        box-shadow: 1px 1px 5px $light-grey-overlay !important;
         flex: 1;
       }
 
