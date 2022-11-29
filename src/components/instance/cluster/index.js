@@ -29,16 +29,11 @@ function ClusteringIndex() {
   const [loading, setLoading] = useState(true);
   const [configuring, setConfiguring] = useState(false);
 
-  const refreshNetwork = useCallback(
-    async (loadId = true) => {
-      if (auth && url && instances && compute_stack_id && !restarting) {
-        setLoading(loadId);
-        await buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
-        setLoading(false);
-      }
-    },
-    [auth, url, instances, compute_stack_id, restarting, instanceAuths]
-  );
+  const refreshNetwork = useCallback(async () => {
+    if (auth && url && instances && compute_stack_id && !restarting) {
+      await buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths, setLoading });
+    }
+  }, [auth, url, instances, compute_stack_id, restarting, instanceAuths]);
 
   useEffect(refreshNetwork, [refreshNetwork]);
 

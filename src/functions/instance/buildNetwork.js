@@ -69,7 +69,8 @@ const processConnections = ({ connections }) =>
         }))
     : [];
 
-const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAuths }) => {
+const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAuths, setLoading }) => {
+  setLoading(true);
   const hydratedInstances = await Promise.all(
     instances.filter((i) => !!instanceAuths[i.compute_stack_id]).map((instance) => processInstance({ instance, auth: instanceAuths[instance.compute_stack_id] }))
   );
@@ -114,7 +115,7 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
     is_local: thisInstance.is_local,
     compute_stack_id,
     customer_id: thisInstance.customer_id,
-    buildNetwork: () => buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths }),
+    buildNetwork: () => buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths, setLoading }),
   });
 
   instanceState.update((s) => {
@@ -124,6 +125,8 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
     s.clusterDataTableColumns = clusterDataTableColumns;
     s.instances = hydratedInstances;
   });
+
+  setLoading(false);
 
   return {
     network,
