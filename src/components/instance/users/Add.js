@@ -99,7 +99,7 @@ function Add({ setLastUpdate }) {
               placeholder="select a role"
               styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
-            <Button id="addInstanceUser" color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+            <Button id="addInstanceUser" color="success" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
               Add User
             </Button>
           </CardBody>

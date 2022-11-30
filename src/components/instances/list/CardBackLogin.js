@@ -44,7 +44,10 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         } else if (result.error) {
           setFormState({ error: result.message || result.error });
         } else {
-          setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user, structure: result.role.permission.structure_user } });
+          setInstanceAuths({
+            ...instanceAuths,
+            [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user, structure: result.role.permission.structure_user },
+          });
           setTimeout(() => setFlipState(false), 100);
         }
       }
@@ -103,7 +106,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                     </Button>
                   </Col>
                   <Col xs="6" className="ps-1">
-                    <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="purple" disabled={formState.submitted}>
+                    <Button onClick={() => setFormState({ submitted: true })} title="Log Into Instance" block color="success" disabled={formState.submitted}>
                       {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Log In</span>}
                     </Button>
                   </Col>

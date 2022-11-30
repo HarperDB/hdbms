@@ -14,7 +14,7 @@ function EmptyPrompt({ message, loading = false, error = false, accessErrors = f
             <div className="mb-2">&nbsp;{loading && <i className="fa fa-spinner fa-spin" />}&nbsp;</div>
             {message && <div className={`mb-2 ${error ? 'text-danger' : ''}`}>&nbsp;{message}&nbsp;</div>}
             {loading && cancel && (
-              <Button color="purple" size="sm" className="px-3" onClick={cancel}>
+              <Button color="danger" size="sm" className="px-3" onClick={cancel}>
                 cancel query
               </Button>
             )}

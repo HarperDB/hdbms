@@ -33,7 +33,7 @@ function IntegrationCard({ id, status, avg_rating, user_rating, author_user_id, 
   };
 
   return (
-    <Col xl="6" xs="12" className="mb-3">
+    <Col xl="4" md="6" xs="12" className="mb-3">
       <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
         <Card className="integration-driver-card">
           <CardBody className="pt-3">

@@ -71,7 +71,7 @@ function CardFront({ customer_name, customer_id, total_instance_count, status, s
                   <Button
                     title={`Accept invitation to ${customer_name} organization`}
                     disabled={!!loading}
-                    color="purple"
+                    color="success"
                     block
                     data-status="accepted"
                     onClick={handleUpdateUserOrgs}

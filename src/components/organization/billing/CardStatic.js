@@ -148,7 +148,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 </Button>
               </Col>
               <Col sm="6">
-                <Button id="updateCard" block color="purple" className="mt-3" onClick={() => setEditingCard(true)}>
+                <Button id="updateCard" block color="success" className="mt-3" onClick={() => setEditingCard(true)}>
                   Update Card
                 </Button>
               </Col>

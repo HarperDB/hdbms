@@ -250,4 +250,10 @@
       outline-color: $light-white-overlay !important;
     }
   }
+
+  .btn-pagination {
+    background-color: $color-black !important;
+    color: $color-white !important;
+    border: 1px solid $faint-white-overlay !important;
+  }
 }

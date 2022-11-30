@@ -59,7 +59,7 @@ function EditPassword() {
           />
         </Col>
         <Col xs="4">
-          <Button block color="purple" onClick={updatePassword} disabled={formState.submitted || !formData.password}>
+          <Button block color="success" onClick={updatePassword} disabled={formState.submitted || !formData.password}>
             Update Password
           </Button>
         </Col>

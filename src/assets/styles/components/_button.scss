@@ -94,6 +94,12 @@
     background-color: $color-darkpurple !important;
     color: $color-white !important;
   }
+
+  &.btn-pagination {
+    background-color: $color-white !important;
+    color: $color-black !important;
+    border: 1px solid $lighter-grey-overlay !important;
+  }
 }
 
 .btn-group-sm > .btn {

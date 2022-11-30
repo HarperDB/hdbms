@@ -189,7 +189,7 @@
       }
     }
 
-    &-footer{
+    &-footer {
       color: $color-black;
     }
   }
@@ -209,7 +209,7 @@
     .react-select__control--menu-is-open,
     .react-select__control--is-focused,
     .react-select__indicator-separator {
-      background: $lightest-grey-overlay !important;
+      background: $color-white !important;
       border-color: $lighter-grey-overlay !important;
 
       .react-select__single-value {
@@ -361,6 +361,8 @@
   .version {
     color: $color-darkgrey !important;
   }
+
+
 
   a,
   button,
