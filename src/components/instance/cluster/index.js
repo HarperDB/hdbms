@@ -56,7 +56,7 @@ function ClusteringIndex() {
 
   return configuring ? (
     <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
-  ) : true || !network ? (
+  ) : !network ? (
     <Loader header="loading network" spinner />
   ) : showManage ? (
     <Manage refreshNetwork={refreshNetwork} loading={loading} setLoading={setLoading} />
