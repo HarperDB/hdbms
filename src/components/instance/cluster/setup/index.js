@@ -14,17 +14,15 @@ import Enable from './Enable';
 import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 
-import configureCluster from '../../../../functions/api/instance/configureCluster';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 
 function SetupIndex({ setConfiguring }) {
-  const { customer_id, compute_stack_id } = useParams();
+  const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
-  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
@@ -37,20 +35,19 @@ function SetupIndex({ setConfiguring }) {
         await setConfiguration({
           auth,
           url,
-          clustering_nodeName: compute_stack_id,
           clustering_enabled: true,
+          clustering_nodeName: compute_stack_id,
           clustering_user: cluster_user,
           clustering_hubServer_cluster_network_port: 12345,
         });
       } else {
-        await configureCluster({
-          compute_stack_id,
-          cluster_user,
-          port: 12345,
+        await setConfiguration({
           auth,
           url,
-          is_local,
-          customer_id,
+          CLUSTERING: true,
+          NODE_NAME: compute_stack_id,
+          CLUSTERING_USER: cluster_user,
+          CLUSTERING_PORT: 12345,
         });
       }
       if (window._kmq) window._kmq.push(['record', 'enabled clustering']);

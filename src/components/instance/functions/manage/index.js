@@ -96,10 +96,12 @@ function ManageIndex({ refreshCustomFunctions, loading, setEditorToFile, code, s
             </>
           )}
           <hr className="mt-0" />
-          <div className="text-bold mb-1">Root File Directory</div>
-          <CopyableText text={custom_functions.directory} />
-          <div className="text-bold mb-1 mt-3">Custom Functions Server URL</div>
-          <CopyableText text={cf_server_url} />
+          <div className="entity-manager-footer">
+            <div className="text-bold mb-1">Root File Directory</div>
+            <CopyableText text={custom_functions.directory} />
+            <div className="text-bold mb-1 mt-3">Custom Functions Server URL</div>
+            <CopyableText text={cf_server_url} />
+          </div>
           <hr />
           <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
         </ErrorBoundary>
