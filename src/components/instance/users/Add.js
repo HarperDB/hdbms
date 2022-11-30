@@ -19,7 +19,7 @@ function Add({ setLastUpdate }) {
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
+  const useRoleId = useStoreState(instanceState, (s) => parseFloat(s.registration?.version) < 3);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const cardHeight = '224px';

@@ -20,8 +20,6 @@ function ClusteringIndex() {
   const url = useStoreState(instanceState, (s) => s.url);
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const network = useStoreState(instanceState, (s) => s.network);
-  const connectedNodes = useStoreState(instanceState, (s) => s.clusterPartners?.connected);
-  const aNodeIsConnecting = connectedNodes?.some((c) => c.connection.state === 'connecting');
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
   const restarting = useStoreState(instanceState, (s) => s.restarting);
   const nodeNameMatch = compute_stack_id === name;
@@ -58,10 +56,10 @@ function ClusteringIndex() {
 
   return configuring ? (
     <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
-  ) : !network ? (
+  ) : true || !network ? (
     <Loader header="loading network" spinner />
   ) : showManage ? (
-    <Manage refreshNetwork={refreshNetwork} loading={loading || (connectedNodes?.length === 1 && aNodeIsConnecting)} setLoading={setLoading} />
+    <Manage refreshNetwork={refreshNetwork} loading={loading} setLoading={setLoading} />
   ) : (
     <Setup setConfiguring={setConfiguring} />
   );

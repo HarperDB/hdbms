@@ -60,7 +60,7 @@ function InstancesIndex() {
 
   const refreshInstances = useCallback(() => {
     if (auth && products && regions && subscriptions && customer_id && instanceAuths) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths });
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
     }
   }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
 

@@ -20,7 +20,7 @@ function EditRole() {
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
+  const useRoleId = useStoreState(instanceState, (s) => parseFloat(s.registration?.version) < 3);
   const roles = useStoreState(instanceState, (s) => s.roles.map((r) => ({ label: r.role, value: useRoleId ? r.id : r.role })));
   const thisUser = useStoreState(instanceState, (s) => s.users && s.users.find((u) => u.username === username));
 

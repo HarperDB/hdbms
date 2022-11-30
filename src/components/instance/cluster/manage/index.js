@@ -29,7 +29,7 @@ function ManageIndex({ refreshNetwork, loading, setLoading }) {
               setShowModal={setShowModal}
             />
             <InstanceManager items={clusterPartners?.unconnected || []} itemType="unconnected" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
-            <InstanceManager items={clusterPartners?.unconfigured || []} itemType="unconfigured" loading={loading} refreshNetwork={refreshNetwork} setLoading={setLoading} />
+            <InstanceManager items={clusterPartners?.unconfigured || []} itemType="unconfigured" />
             <InstanceManager items={clusterPartners?.unreachable || []} itemType="unreachable" />
           </ErrorBoundary>
         </Col>

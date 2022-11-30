@@ -70,7 +70,7 @@ const processConnections = ({ connections }) =>
     : [];
 
 const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAuths, setLoading }) => {
-  setLoading(true);
+  setLoading(compute_stack_id);
   const hydratedInstances = await Promise.all(
     instances.filter((i) => !!instanceAuths[i.compute_stack_id]).map((instance) => processInstance({ instance, auth: instanceAuths[instance.compute_stack_id] }))
   );
@@ -116,6 +116,7 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
     compute_stack_id,
     customer_id: thisInstance.customer_id,
     buildNetwork: () => buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths, setLoading }),
+    setLoading,
   });
 
   instanceState.update((s) => {

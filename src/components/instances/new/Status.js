@@ -35,7 +35,7 @@ function Status({ closeAndResetModal }) {
       const returnedComputeStackId = response.compute_stack_id || response.instance_id;
       const updatedInstanceAuths = { ...instanceAuths, [returnedComputeStackId]: { user: newInstance.user, pass: newInstance.pass, super: newInstance.super } };
       setInstanceAuths(updatedInstanceAuths);
-      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length, instanceAuths: updatedInstanceAuths });
+      await getInstances({ auth, customer_id: newInstance.customer_id, products, regions, subscriptions, instanceCount: instances?.length });
       alert.success(response.message);
       closeAndResetModal();
     }

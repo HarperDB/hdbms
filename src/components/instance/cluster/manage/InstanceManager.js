@@ -42,7 +42,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
           if (clusterEngine === 'nats') {
             await restartService({ auth, url, service: 'clustering config' });
           }
-          await refreshNetwork(payload.compute_stack_id);
+          await refreshNetwork();
         }
       }
       setLoading(false);
@@ -64,8 +64,9 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
         if (clusterEngine === 'nats') {
           await restartService({ auth, url, service: 'clustering config' });
         }
-        await refreshNetwork(payload.compute_stack_id);
+        await refreshNetwork();
       }
+      setLoading(false);
     },
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert, clusterEngine]
   );

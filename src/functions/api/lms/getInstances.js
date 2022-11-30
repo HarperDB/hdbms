@@ -4,7 +4,7 @@ import generateInstanceProductDetails from '../../instances/generateInstanceProd
 import addError from './addError';
 import config from '../../../config';
 
-export default async ({ auth, customer_id, products, regions, subscriptions, instanceCount = 0, instanceAuths }) => {
+export default async ({ auth, customer_id, products, regions, subscriptions, instanceCount = 0 }) => {
   let response = null;
 
   try {
@@ -21,11 +21,7 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
     if (Array.isArray(response)) {
       const instances = response.map((instance) => {
         const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
-        const instanceAuth = instanceAuths && instanceAuths[instance.compute_stack_id];
-        const clustering = { engine: instanceAuth && parseFloat(instanceAuth.version) >= 4 ? 'nats' : 'socketcluster' };
-        const version = instanceAuth ? instanceAuth.version : '';
-        /* TODO: Move the licensing, loading, etc. management here. */
-        return { ...instance, version, clustering, ...instanceProductDetails };
+        return { ...instance, ...instanceProductDetails };
       });
 
       const sortedInstances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));

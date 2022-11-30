@@ -26,12 +26,13 @@ function SetupIndex({ setConfiguring }) {
   const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
   const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
   const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
   const [nodeNameMatch, setNodeNameMatch] = useState(compute_stack_id === name);
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
-      if (parseFloat(auth.version) >= 4) {
+      if (clusterEngine === 'nats') {
         await setConfiguration({
           auth,
           url,
