@@ -24,7 +24,7 @@ const processInstance = async ({ instance, auth }) => {
     auth,
     registration,
     structure,
-    host: urlObject.host,
+    host: urlObject.hostname,
     clustering: {
       engine: cluster_engine,
       is_enabled: clustering?.is_enabled,
