@@ -1,14 +1,12 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col } from 'reactstrap';
-import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../functions/state/instanceState';
 import ContentContainer from '../../shared/ContentContainer';
 import CopyableText from '../../shared/CopyableText';
 
-function Details() {
-  const { compute_stack_id } = useParams();
+function Details({ clusterNodeName }) {
   const url = useStoreState(instanceState, (s) => s.url);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
@@ -38,7 +36,7 @@ function Details() {
             <Col md="4" xs="12">
               <ContentContainer header="Instance Node Name (for clustering)" className="mb-3">
                 <div className="nowrap-scroll">
-                  <CopyableText text={compute_stack_id} />
+                  <CopyableText text={clusterNodeName} />
                 </div>
               </ContentContainer>
             </Col>

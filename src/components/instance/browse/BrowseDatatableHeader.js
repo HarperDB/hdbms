@@ -23,8 +23,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
           </span>
         )}
       </Col>
-      <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-      <Col className="text-md-end">
+      <Col className="text-end">
         <Button id="refresh" color="link" tabIndex="0" title={`Refresh table ${table}`} className="me-2" onClick={refresh}>
           <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
         </Button>

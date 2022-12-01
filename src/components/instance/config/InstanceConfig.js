@@ -1,34 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody } from 'reactstrap';
+import locale from 'react-json-editor-ajrm/locale/en';
+import JSONInput from 'react-json-editor-ajrm';
 
-import instanceState from '../../../functions/state/instanceState';
-import getConfiguration from '../../../functions/api/instance/getConfiguration';
+import appState from '../../../functions/state/appState';
 
-function InstanceConfig() {
-  const url = useStoreState(instanceState, (s) => s.url);
-  const auth = useStoreState(instanceState, (s) => s.auth);
-  const [state, setState] = useState({});
-
-  useEffect(() => {
-    const fetch = async () => {
-      const data = await getConfiguration({ auth, url });
-      setState(data);
-    };
-    if (auth && url) {
-      fetch();
-    }
-  }, [auth, url]);
+function InstanceConfig({ instanceConfig }) {
+  const theme = useStoreState(appState, (s) => s.theme);
 
   return (
-    <>
-      <span className="floating-card-header">instance config</span>
-      <Card className="mt-3 mb-4 instance-details">
-        <CardBody>
-          <pre>{JSON.stringify(state)}</pre>
-        </CardBody>
-      </Card>
-    </>
+    <JSONInput
+      placeholder={instanceConfig}
+      height="calc(100vh - 580px)"
+      theme="light_mitsuketa_tribute"
+      viewOnly
+      colors={{
+        background: 'transparent',
+        default: theme === 'dark' ? '#aaa' : '#000',
+        colon: theme === 'dark' ? '#aaa' : '#000',
+        keys: theme === 'dark' ? '#aaa' : '#000',
+        string: '#13c664',
+        number: '#ea4c89',
+        primitive: '#ffa500',
+      }}
+      style={{
+        warningBox: { display: 'none' },
+      }}
+      locale={locale}
+      width="100%"
+      confirmGood={false}
+      waitAfterKeyPress={30000}
+    />
   );
 }
 
