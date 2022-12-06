@@ -1,25 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
-import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
-import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
 import addRole from '../../../../functions/api/instance/addRole';
-import buildNetwork from '../../../../functions/instance/buildNetwork';
 
-function Role() {
+function Role({ refreshStatus, clusterRole }) {
   const { compute_stack_id, customer_id } = useParams();
-  const instances = useStoreState(appState, (s) => s.instances);
-  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role);
+  const [loading, setLoading] = useState(false);
 
   const createClusterUserRole = async () => {
+    setLoading(true);
     const response = await addRole({
       auth,
       url,
@@ -32,22 +28,23 @@ function Role() {
       customer_id,
     });
     if (!response.error) {
-      buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
+      refreshStatus();
+      setLoading(false);
     }
   };
 
-  return cluster_role ? (
+  return clusterRole ? (
     <Row>
       <Col xs="10" className="text">
-        Cluster Role
+        Cluster Role: {clusterRole.role}
       </Col>
       <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>
   ) : (
-    <Button color="success" block onClick={createClusterUserRole}>
-      Create Cluster Role
+    <Button color="success" block disabled={loading} onClick={createClusterUserRole}>
+      {loading ? <i className="fa fa-spinner fa-spin text-white" /> : 'Create Cluster Role'}
     </Button>
   );
 }

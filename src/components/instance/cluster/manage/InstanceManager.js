@@ -92,6 +92,12 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
                 refreshNetwork={refreshNetwork}
               />
             ))
+          ) : !items ? (
+            <Row className="item-row">
+              <Col className="item-label">
+                <i className="fa fa-spinner fa-spin" />
+              </Col>
+            </Row>
           ) : (
             <Row className="item-row">
               <Col className="item-label">There are no {itemType} instances</Col>

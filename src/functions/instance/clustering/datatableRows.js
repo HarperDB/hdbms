@@ -1,9 +1,9 @@
 import React from 'react';
 import ToggleButton from 'react-toggle';
 
-import updateNode from '../api/instance/updateNode';
+import updateNode from '../../api/instance/updateNode';
 
-export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) => [
+export default ({ auth, url, buildNetwork, setLoading }) => [
   {
     Header: 'instance',
     Cell: ({
@@ -29,25 +29,22 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
     id: 'hdb-narrow-publish',
     Cell: ({
       row: {
-        original: { compute_stack_id, instance_host, clusterPort, subscriptions, publish, channel },
+        original: { compute_stack_id, instance_host, instance_name, clusterPort, subscriptions, publish, channel },
       },
     }) => (
       <ToggleButton
         checked={publish || false}
         onChange={async () => {
-          setLoading(true);
+          setLoading(compute_stack_id);
           await updateNode({
-            compute_stack_id,
-            instance_host,
-            clusterPort,
-            subscriptions,
-            publish,
             channel,
-            buttonState: 'togglePublish',
+            subscriptions,
+            instance_host,
+            instance_name,
+            clusterPort,
             auth,
             url,
-            is_local,
-            customer_id,
+            buttonState: 'togglePublish',
           });
           buildNetwork();
         }}
@@ -59,25 +56,22 @@ export default ({ auth, url, is_local, customer_id, buildNetwork, setLoading }) 
     id: 'hdb-narrow-subscribe',
     Cell: ({
       row: {
-        original: { compute_stack_id, instance_host, clusterPort, subscriptions, subscribe, channel },
+        original: { compute_stack_id, instance_host, instance_name, clusterPort, subscriptions, subscribe, channel },
       },
     }) => (
       <ToggleButton
         checked={subscribe || false}
         onChange={async () => {
-          setLoading(true);
+          setLoading(compute_stack_id);
           await updateNode({
-            compute_stack_id,
-            instance_host,
-            clusterPort,
-            subscriptions,
-            subscribe,
             channel,
-            buttonState: 'toggleSubscribe',
+            subscriptions,
+            instance_host,
+            instance_name,
+            clusterPort,
             auth,
             url,
-            is_local,
-            customer_id,
+            buttonState: 'toggleSubscribe',
           });
           buildNetwork();
         }}

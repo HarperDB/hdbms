@@ -18,7 +18,7 @@ import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
-function ManageIndex({ refreshCustomFunctions, loading, setEditorToFile, code, setCode }) {
+function ManageIndex({ refreshCustomFunctions, loading }) {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
   const history = useHistory();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
@@ -110,7 +110,7 @@ function ManageIndex({ refreshCustomFunctions, loading, setEditorToFile, code, s
         {action === 'deploy' ? (
           <Deploy />
         ) : project ? (
-          <CodeEditor refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} setEditorToFile={setEditorToFile} code={code} setCode={setCode} />
+          <CodeEditor />
         ) : (
           <EmptyPrompt refreshCustomFunctions={refreshCustomFunctions} headline={`Please ${custom_functions?.endpoints.length ? 'choose' : 'create'} a project at left.`} />
         )}

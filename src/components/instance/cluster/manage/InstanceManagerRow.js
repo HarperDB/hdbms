@@ -13,7 +13,7 @@ function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNo
     <Row className="item-row">
       <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
       <Col className="item-action">
-        {itemType === 'unreachable' ? null : itemType === 'unconfigured' ? (
+        {itemType === 'incompatible/unreachable' ? null : itemType === 'unconfigured' ? (
           <ActionUnconfigured loading={isLoading} handleConfigureNode={() => handleConfigureNode({ compute_stack_id: item.compute_stack_id })} />
         ) : item.instance_status === 'CREATE_IN_PROGRESS' ? (
           <Button color="grey" className="round" title="Creating Instance" disabled>

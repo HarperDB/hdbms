@@ -9,7 +9,7 @@ import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
 
 import DataTable from '../../../shared/DataTable';
-import buildCustomFunctionDeployColumns from '../../../../functions/instance/buildCustomFunctionDeployColumns';
+import buildCustomFunctionDeployColumns from '../../../../functions/instance/clustering/deployRows';
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 import packageCustomFunctionProject from '../../../../functions/api/instance/packageCustomFunctionProject';
 import customFunctionsStatus from '../../../../functions/api/instance/customFunctionsStatus';
@@ -85,7 +85,7 @@ function Deploy() {
             project,
             file,
           });
-          if(skipNodeModules) {
+          if (skipNodeModules) {
             await installNodeModules({
               auth: instanceAuth,
               url: thisInstance.url,

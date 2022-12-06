@@ -8,7 +8,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
-import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) {
   const history = useHistory();

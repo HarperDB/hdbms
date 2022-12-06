@@ -1,12 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'reactstrap';
+import useAsyncEffect from 'use-async-effect';
+import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router-dom';
 
-function Enable({ setFormState }) {
+import setConfiguration from '../../../../functions/api/instance/setConfiguration';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
+import instanceState from '../../../../functions/state/instanceState';
+
+function Enable({ setConfiguring }) {
+  const { compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
+  const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
+  const [formState, setFormState] = useState({});
+
+  useAsyncEffect(async () => {
+    if (formState.submitted) {
+      if (clusterEngine === 'nats') {
+        await setConfiguration({
+          auth,
+          url,
+          clustering_enabled: true,
+        });
+      } else {
+        await setConfiguration({
+          auth,
+          url,
+          CLUSTERING: true,
+        });
+      }
+      if (window._kmq) window._kmq.push(['record', 'enabled clustering']);
+      restartInstance({ auth, url });
+      setTimeout(() => setConfiguring(true), 0);
+    }
+  }, [formState.submitted]);
+
   return (
     <>
       <hr className="my-3" />
-      <Button color="success" block onClick={() => setFormState({ submitted: true })}>
-        Enable Instance Clustering
+      <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+        {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Enable Instance Clustering'}
       </Button>
     </>
   );

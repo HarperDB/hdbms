@@ -5,22 +5,17 @@ import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
-import appState from '../../../../functions/state/appState';
 
 import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
-import buildNetwork from '../../../../functions/instance/buildNetwork';
-import createClusterUser from '../../../../functions/instance/createClusterUser';
-import useInstanceAuth from '../../../../functions/state/instanceAuths';
+import setConfiguration from '../../../../functions/api/instance/setConfiguration';
+import addUser from '../../../../functions/api/instance/addUser';
 
-function User() {
+function User({ refreshStatus, clusterRole, clusterUser }) {
   const { compute_stack_id } = useParams();
-  const instances = useStoreState(appState, (s) => s.instances);
-  const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const useRoleId = useStoreState(instanceState, (s) => parseFloat(s.registration?.version) < 3);
-  const cluster_role = useStoreState(instanceState, (s) => (useRoleId ? s.network?.cluster_role.id : s.network?.cluster_role.role));
-  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -34,9 +29,22 @@ function User() {
       } else if (!isAlphaUnderscore(username)) {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
-        const response = await createClusterUser({ username, password, role: cluster_role, auth, url });
+        const response = await addUser({ username, password, role: useRoleId ? clusterRole.id : clusterRole.role, auth, url });
         if (!response.error) {
-          buildNetwork({ auth, url, instances, compute_stack_id, instanceAuths });
+          if (clusterEngine === 'nats') {
+            await setConfiguration({
+              auth,
+              url,
+              clustering_user: username,
+            });
+          } else {
+            await setConfiguration({
+              auth,
+              url,
+              CLUSTERING_USER: username,
+            });
+          }
+          refreshStatus();
         } else {
           setFormState({ error: response.message });
         }
@@ -50,7 +58,7 @@ function User() {
     }
   }, [formData]);
 
-  return cluster_user ? (
+  return clusterUser ? (
     <Row>
       <Col xs="12">
         <hr className="my-3" />

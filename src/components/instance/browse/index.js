@@ -11,7 +11,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
-import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));

@@ -12,7 +12,7 @@ import useInstanceAuth from '../../functions/state/instanceAuths';
 
 import SubNav from './Subnav';
 import routes from './routes';
-import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../functions/instance/browse/buildInstanceStructure';
 import Loader from '../shared/Loader';
 import getInstances from '../../functions/api/lms/getInstances';
 import getCustomer from '../../functions/api/lms/getCustomer';

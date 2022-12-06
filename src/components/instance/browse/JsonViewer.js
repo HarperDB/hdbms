@@ -38,7 +38,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      const typedHash = !Number.isNaN(hash) ? parseInt(hash, 10) : hash;
+      const typedHash = Number.isInteger(hash) ? parseInt(hash, 10) : hash;
       const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [typedHash], get_attributes: ['*'] }, auth, url });
       if (rowData) {
         const hash_attribute = rowData[hashAttribute];

@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import { useStoreState } from 'pullstate';
-import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
-
-import instanceState from '../../../../functions/state/instanceState';
 
 import Role from './Role';
 import User from './User';
@@ -13,49 +9,12 @@ import Port from './Port';
 import Enable from './Enable';
 import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
-
-import restartInstance from '../../../../functions/api/instance/restartInstance';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
-import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 
-function SetupIndex({ setConfiguring }) {
+function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
   const { compute_stack_id } = useParams();
-  const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
-  const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
-  const cluster_role = useStoreState(instanceState, (s) => s.network?.cluster_role, [compute_stack_id]);
-  const cluster_user = useStoreState(instanceState, (s) => s.network?.cluster_user, [compute_stack_id]);
-  const name = useStoreState(instanceState, (s) => s.network?.name, [compute_stack_id]);
-  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
-  const [nodeNameMatch, setNodeNameMatch] = useState(compute_stack_id === name);
-  const [formState, setFormState] = useState({});
-
-  useAsyncEffect(async () => {
-    if (formState.submitted) {
-      if (clusterEngine === 'nats') {
-        await setConfiguration({
-          auth,
-          url,
-          clustering_enabled: true,
-          clustering_nodeName: compute_stack_id,
-          clustering_user: cluster_user,
-          clustering_hubServer_cluster_network_port: 12345,
-        });
-      } else {
-        await setConfiguration({
-          auth,
-          url,
-          CLUSTERING: true,
-          NODE_NAME: compute_stack_id,
-          CLUSTERING_USER: cluster_user,
-          CLUSTERING_PORT: 12345,
-        });
-      }
-      if (window._kmq) window._kmq.push(['record', 'enabled clustering']);
-      restartInstance({ auth, url });
-      setTimeout(() => setConfiguring(true), 0);
-    }
-  }, [formState.submitted]);
+  const [nodeName, setNodeName] = useState(false);
 
   return (
     <Row id="clustering">
@@ -64,35 +23,37 @@ function SetupIndex({ setConfiguring }) {
         <Card className="my-3">
           <CardBody>
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-              <Role />
-              {cluster_role && <User />}
-              {cluster_user && <Port port={12345} />}
-              {cluster_role && cluster_user && <NodeName nodeNameMatch={nodeNameMatch} setNodeNameMatch={setNodeNameMatch} />}
-              {cluster_role && cluster_user && nodeNameMatch && <Enable setFormState={setFormState} />}
+              <Role clusterRole={clusterStatus?.cluster_role} refreshStatus={refreshStatus} />
+              {clusterStatus?.cluster_role && <User clusterUser={clusterStatus.cluster_user} clusterRole={clusterStatus.cluster_role} refreshStatus={refreshStatus} />}
+              {clusterStatus?.cluster_user && <Port port={12345} />}
+              {clusterStatus?.cluster_role && clusterStatus?.cluster_user && (
+                <NodeName refreshStatus={refreshStatus} nodeNameSet={clusterStatus?.node_name_set || nodeName} setNodeName={setNodeName} />
+              )}
+              {clusterStatus?.cluster_role && clusterStatus?.cluster_user && clusterStatus?.node_name_set && <Enable setConfiguring={setConfiguring} />}
             </ErrorBoundary>
           </CardBody>
         </Card>
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        {cluster_role && cluster_user && nodeNameMatch ? (
+        {clusterStatus?.cluster_role && clusterStatus?.cluster_user && clusterStatus?.node_name_set ? (
           <EmptyPrompt
             headline="You're all set!"
             description="Click the button at left to enable clustering. NOTE: We'll restart the instance when you click this button."
             icon={<i className="fa fa-thumbs-up text-success" />}
           />
-        ) : cluster_role && cluster_user ? (
+        ) : clusterStatus?.cluster_role && clusterStatus?.cluster_user ? (
           <EmptyPrompt
             headline="Set Instance Cluster Name"
-            description={`We need to set your instance's cluster_name to match your instance_id, which is "${compute_stack_id}". Clustering needs each instance to have a unique name.`}
+            description={`We need to set a unique node name to identify your instance in the cluster. By default, we set it to "${compute_stack_id}", but you can choose your own unique node name.`}
             icon={<i className="fa fa-exclamation-triangle text-warning" />}
           />
-        ) : cluster_user ? (
+        ) : clusterStatus?.cluster_user ? (
           <EmptyPrompt
             headline="Cluster Port Set To: 12345"
             description="If your instance is behind a firewall, you'll need to ensure this port is accessible by other instances if you want to publish/subscribe to/from this instance."
             icon={<i className="fa fa-thumbs-up text-success" />}
           />
-        ) : cluster_role ? (
+        ) : clusterStatus?.cluster_role ? (
           <EmptyPrompt
             headline="Create a Cluster User"
             description="If you have other instances you want to cluster together with this one, make sure the cluster user has the same name and password as those other instances."
