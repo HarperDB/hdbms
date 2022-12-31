@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ channel, subscriptions, buttonState, instance_host, instance_name, clusterPort, clusterName, auth, url }) => {
+export default async ({ channel, subscriptions, buttonState, instance_host, clusterPort, clusterName, auth, url }) => {
   const newSubscriptions = JSON.parse(JSON.stringify(subscriptions));
   const existingChannelSubscriptionIndex = newSubscriptions.findIndex((s) => s.channel === channel);
   const [schema, table] = channel.split(':');
