@@ -29,7 +29,7 @@ export default ({ auth, url, buildNetwork, setLoading }) => [
     id: 'hdb-narrow-publish',
     Cell: ({
       row: {
-        original: { compute_stack_id, instance_host, instance_name, clusterPort, subscriptions, publish, channel },
+        original: { compute_stack_id, instance_host, instance_name, clusterPort, clusterName, subscriptions, publish, channel },
       },
     }) => (
       <ToggleButton
@@ -42,6 +42,7 @@ export default ({ auth, url, buildNetwork, setLoading }) => [
             instance_host,
             instance_name,
             clusterPort,
+            clusterName,
             auth,
             url,
             buttonState: 'togglePublish',
@@ -56,7 +57,7 @@ export default ({ auth, url, buildNetwork, setLoading }) => [
     id: 'hdb-narrow-subscribe',
     Cell: ({
       row: {
-        original: { compute_stack_id, instance_host, instance_name, clusterPort, subscriptions, subscribe, channel },
+        original: { compute_stack_id, instance_host, instance_name, clusterPort, clusterName, subscriptions, subscribe, channel },
       },
     }) => (
       <ToggleButton
@@ -69,6 +70,7 @@ export default ({ auth, url, buildNetwork, setLoading }) => [
             instance_host,
             instance_name,
             clusterPort,
+            clusterName,
             auth,
             url,
             buttonState: 'toggleSubscribe',

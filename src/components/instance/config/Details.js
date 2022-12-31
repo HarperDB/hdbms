@@ -35,9 +35,7 @@ function Details({ clusterNodeName }) {
             </Col>
             <Col md="4" xs="12">
               <ContentContainer header="Instance Node Name (for clustering)" className="mb-3">
-                <div className="nowrap-scroll">
-                  <CopyableText text={clusterNodeName} />
-                </div>
+                <div className="nowrap-scroll">{clusterNodeName ? <CopyableText text={clusterNodeName} /> : 'clustering not enabled'}</div>
               </ContentContainer>
             </Col>
             <Col md="4" xs="12">

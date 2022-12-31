@@ -12,6 +12,7 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
       instance_region && instance_region === i.instance_region && !i.wavelength_zone_id && !instance_wavelength_zone_id
         ? i.private_ip
         : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
+    const clusterName = i.clustering.node_name_set;
 
     return {
       instance_name: i.instance_name,
@@ -20,6 +21,7 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
       instance_status,
       instance_host,
       clusterPort,
+      clusterName,
       connection,
       subscriptions,
       structure: i.structure,

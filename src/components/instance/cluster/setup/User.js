@@ -63,7 +63,7 @@ function User({ refreshStatus, clusterRole, clusterUser }) {
       <Col xs="12">
         <hr className="my-3" />
       </Col>
-      <Col xs="10">Cluster User</Col>
+      <Col xs="10">Cluster User: {clusterUser?.username}</Col>
       <Col xs="2" className="text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>

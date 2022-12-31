@@ -55,7 +55,7 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
         <hr className="my-3" />
       </Col>
       <Col xs="10" className="text">
-        Cluster Node Name
+        Cluster Name: {nodeNameSet}
       </Col>
       <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
@@ -64,7 +64,7 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
   ) : (
     <>
       <hr className="my-3" />
-      <div className="text-nowrap mb-3">Set Clustering Node Name</div>
+      <div className="text-nowrap mb-3">Set Cluster Name</div>
       <Input
         id="nodeName"
         onChange={(e) => setFormData({ nodeName: e.target.value })}
@@ -72,7 +72,6 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
         type="text"
         title="node name"
         placeholder="node name"
-        defaultValue={compute_stack_id}
       />
       <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
         {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Set Clustering Node Name'}

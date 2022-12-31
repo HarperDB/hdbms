@@ -25,6 +25,7 @@ export default ({ instances, structure }) => {
               compute_stack_id: instance.compute_stack_id,
               instance_host: instance.instance_host,
               clusterPort: instance.clusterPort,
+              clusterName: instance.clusterName,
               subscriptions: instance.subscriptions,
               channel,
               publish,
