@@ -2,10 +2,23 @@
   #app-nav {
     background: $color-pureblack !important;
     border-bottom: 1px solid $color-darkestgrey;
+
+    .navbar-nav {
+      .active-org {
+        background: $faintest-white-overlay !important;
+      }
+    }
   }
 
   .app-subnav {
     border-bottom: 1px solid $color-darkestgrey;
+
+    .filter-holder {
+      input {
+        border-color: $faint-white-overlay !important;
+        background: none !important;
+      }
+    }
   }
 
   #app-bg-color {
@@ -213,7 +226,7 @@
     }
 
     input {
-      background: $fainter-white-overlay !important;
+      background: $faintest-white-overlay !important;
     }
   }
 
