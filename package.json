@@ -72,7 +72,7 @@
     "stylelint": "^14.0.1",
     "stylelint-config-sass-guidelines": "^9.0.1",
     "stylelint-config-standard": "^29.0.0",
-    "stylelint-order": "^5.0.0",
+    "stylelint-order": "^6.0.1",
     "stylelint-scss": "^4.0.0"
   }
 }

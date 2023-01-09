@@ -15,8 +15,8 @@
 
     .filter-holder {
       input {
-        border-color: $faint-white-overlay !important;
         background: none !important;
+        border-color: $faint-white-overlay !important;
       }
     }
   }
@@ -266,7 +266,7 @@
 
   .btn-pagination {
     background-color: $color-black !important;
-    color: $color-white !important;
     border: 1px solid $faint-white-overlay !important;
+    color: $color-white !important;
   }
 }
