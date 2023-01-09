@@ -9,8 +9,9 @@ import instanceState from '../../../../functions/state/instanceState';
 import isAlphaUnderscore from '../../../../functions/util/isAlphaUnderscore';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 import addUser from '../../../../functions/api/instance/addUser';
+import configureCluster from '../../../../functions/api/instance/configureCluster';
 
-function User({ refreshStatus, clusterRole, clusterUser }) {
+function User({ refreshStatus, clusterStatus }) {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -29,7 +30,7 @@ function User({ refreshStatus, clusterRole, clusterUser }) {
       } else if (!isAlphaUnderscore(username)) {
         setFormState({ error: 'usernames must have only letters and underscores' });
       } else {
-        const response = await addUser({ username, password, role: useRoleId ? clusterRole.id : clusterRole.role, auth, url });
+        const response = await addUser({ username, password, role: useRoleId ? clusterStatus?.cluster_role.id : clusterStatus?.cluster_role.role, auth, url });
         if (!response.error) {
           if (clusterEngine === 'nats') {
             await setConfiguration({
@@ -38,10 +39,11 @@ function User({ refreshStatus, clusterRole, clusterUser }) {
               clustering_user: username,
             });
           } else {
-            await setConfiguration({
+            await configureCluster({
               auth,
               url,
               CLUSTERING_USER: username,
+              NODE_NAME: clusterStatus.node_name,
             });
           }
           refreshStatus();
@@ -58,12 +60,12 @@ function User({ refreshStatus, clusterRole, clusterUser }) {
     }
   }, [formData]);
 
-  return clusterUser ? (
+  return clusterStatus?.cluster_user ? (
     <Row>
       <Col xs="12">
         <hr className="my-3" />
       </Col>
-      <Col xs="10">Cluster User: {clusterUser?.username}</Col>
+      <Col xs="10">Cluster User: {clusterStatus?.cluster_user.username}</Col>
       <Col xs="2" className="text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>

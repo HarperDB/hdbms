@@ -3,6 +3,7 @@ import { Row, Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
+import useInterval from 'use-interval';
 
 import instanceState from '../../../../functions/state/instanceState';
 
@@ -24,6 +25,8 @@ function ManageIndex({ configuring }) {
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const clusterPartners = useStoreState(instanceState, (s) => s.clusterPartners, [compute_stack_id]);
   const restarting = useStoreState(instanceState, (s) => s.restarting, [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
+  const aNodeIsConnecting = clusterEngine === 'socketcluster' && clusterPartners?.connected.some((c) => c.connection.state === 'connecting');
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,6 +38,8 @@ function ManageIndex({ configuring }) {
   }, [auth, url, instances, compute_stack_id, restarting, instanceAuths, configuring]);
 
   useEffect(refreshNetwork, [refreshNetwork]);
+
+  useInterval(() => aNodeIsConnecting && refreshNetwork(), 1500);
 
   return (
     <>

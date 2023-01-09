@@ -10,7 +10,7 @@ const processNatsConnections = async ({ auth, url, instances, connections }) => 
         return false;
       }
       const connectedInstanceHost = connectedInstance.host === connectedInstance.private_ip ? connectedInstance.private_ip : connectedInstance.host;
-      const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance?.clustering?.node_name_set);
+      const connectedInstanceSubscriptions = connections.find((i) => i.node_name === connectedInstance?.clustering?.node_name);
       const hydratedSubscriptions = connectedInstanceSubscriptions?.subscriptions?.map((s) => ({ channel: `${s.schema}:${s.table}`, ...s })) || [];
       return { host: connectedInstanceHost, port: c.port, state: 'open', name: connectedInstance?.compute_stack_id, subscriptions: hydratedSubscriptions };
     })

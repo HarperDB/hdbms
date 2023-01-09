@@ -7,8 +7,9 @@ import { useParams } from 'react-router-dom';
 import instanceState from '../../../../functions/state/instanceState';
 
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
+import configureCluster from '../../../../functions/api/instance/configureCluster';
 
-function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
+function NodeName({ refreshStatus, clusterStatus }) {
   const { compute_stack_id } = useParams();
 
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -28,16 +29,16 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
           clustering_nodeName: formData.nodeName,
         });
       } else {
-        result = await setConfiguration({
+        result = await configureCluster({
           auth,
           url,
+          CLUSTERING_USER: clusterStatus.config_cluster_user,
           NODE_NAME: formData.nodeName,
         });
       }
       if (result.error) {
         setFormState({ error: result.message });
       } else {
-        setNodeName(formData.nodeName);
         refreshStatus();
       }
     }
@@ -49,13 +50,13 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
     }
   }, [formData]);
 
-  return nodeNameSet ? (
+  return clusterStatus?.node_name ? (
     <Row>
       <Col xs="12">
         <hr className="my-3" />
       </Col>
       <Col xs="10" className="text">
-        Cluster Name: {nodeNameSet}
+        Cluster Name: {clusterStatus?.node_name}
       </Col>
       <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
@@ -72,6 +73,7 @@ function NodeName({ refreshStatus, nodeNameSet, setNodeName }) {
         type="text"
         title="node name"
         placeholder="node name"
+        defaultValue={compute_stack_id}
       />
       <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
         {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Set Clustering Node Name'}

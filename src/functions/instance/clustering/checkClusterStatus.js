@@ -23,9 +23,9 @@ const checkClusterStatus = async ({ auth, url }) => {
   const is_enabled = clusterEngine === 'nats' ? config.clustering.enabled : config.CLUSTERING;
   const config_cluster_user = clusterEngine === 'nats' ? config.clustering.user : config.CLUSTERING_USER;
   const config_cluster_port = clusterEngine === 'nats' ? config.clustering.hubServer.cluster.network.port : config.CLUSTERING_PORT;
-  const node_name_set = clusterEngine === 'nats' ? config.clustering.nodeName : config.NODE_NAME;
+  const node_name = clusterEngine === 'nats' ? config.clustering.nodeName : config.NODE_NAME;
 
-  const is_ready = !!is_enabled && !!cluster_user && !!config_cluster_user && !!cluster_role && !!config_cluster_port && !!node_name_set;
+  const is_ready = !!is_enabled && !!cluster_user && !!config_cluster_user && !!cluster_role && !!config_cluster_port && !!node_name;
 
   return {
     is_ready,
@@ -34,7 +34,7 @@ const checkClusterStatus = async ({ auth, url }) => {
     is_enabled,
     config_cluster_user,
     config_cluster_port,
-    node_name_set,
+    node_name,
     engine: clusterEngine,
     status: clustering?.status,
     message: clustering?.message,

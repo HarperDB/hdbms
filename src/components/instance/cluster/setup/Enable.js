@@ -7,8 +7,9 @@ import { useParams } from 'react-router-dom';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 import instanceState from '../../../../functions/state/instanceState';
+import configureCluster from '../../../../functions/api/instance/configureCluster';
 
-function Enable({ setConfiguring }) {
+function Enable({ setConfiguring, clusterStatus }) {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
@@ -24,9 +25,11 @@ function Enable({ setConfiguring }) {
           clustering_enabled: true,
         });
       } else {
-        await setConfiguration({
+        await configureCluster({
           auth,
           url,
+          CLUSTERING_USER: clusterStatus?.config_cluster_user,
+          NODE_NAME: clusterStatus?.node_name,
           CLUSTERING: true,
         });
       }

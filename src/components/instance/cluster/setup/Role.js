@@ -7,7 +7,7 @@ import instanceState from '../../../../functions/state/instanceState';
 
 import addRole from '../../../../functions/api/instance/addRole';
 
-function Role({ refreshStatus, clusterRole }) {
+function Role({ refreshStatus, clusterStatus }) {
   const { compute_stack_id, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -33,10 +33,10 @@ function Role({ refreshStatus, clusterRole }) {
     }
   };
 
-  return clusterRole ? (
+  return clusterStatus?.cluster_role ? (
     <Row>
       <Col xs="10" className="text">
-        Cluster Role: {clusterRole.role}
+        Cluster Role: {clusterStatus?.cluster_role.role}
       </Col>
       <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
