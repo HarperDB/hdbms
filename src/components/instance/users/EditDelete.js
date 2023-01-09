@@ -61,7 +61,7 @@ function EditDelete() {
           />
         </Col>
         <Col xs="4">
-          <Button id="deleteUser" block color="danger" onClick={deleteUser} disabled={username !== formData.delete_username || formState.submitted}>
+          <Button id="deleteUser" block color="success" onClick={deleteUser} disabled={username !== formData.delete_username || formState.submitted}>
             {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Delete User</span>}
           </Button>
         </Col>

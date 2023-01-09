@@ -38,6 +38,7 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   );
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ compute_stack_id, customer_id, ...compute });
+  const [hasChanged, setHasChanged] = useState(false);
 
   const products = showPrepaidCompute ? filteredSubscriptions : filteredProducts;
   const selectedProduct = products.find((p) => p.value.stripe_plan_id === formData.stripe_plan_id && p.value.compute_subscription_id === formData.compute_subscription_id);
@@ -45,11 +46,18 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const newTotal = (storage?.storage_price || 0) + (formData?.compute_price || 0);
   const newTotalString = newTotal ? `${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
-  const hasChanged = compute?.stripe_plan_id !== formData.stripe_plan_id || formData.compute_subscription_id !== compute?.compute_subscription_id;
 
   const resetFormData = () => setFormData({ compute_stack_id, customer_id, ...compute });
 
   useAsyncEffect(resetFormData, [showPrepaidCompute]);
+
+  useAsyncEffect(() => {
+    setHasChanged(compute?.stripe_plan_id !== formData.stripe_plan_id || formData.compute_subscription_id !== compute?.compute_subscription_id);
+  }, [formData]);
+
+  useAsyncEffect(() => {
+    setHasChanged(false);
+  }, [compute_stack_id]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;

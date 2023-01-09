@@ -136,7 +136,7 @@ function ChartModal({ setShowChartModal, tableData, query }) {
             <hr className="my-2" />
           </Col>
           <Col lg="4">
-            <Button onClick={handleAddChart} block disabled={!canSubmit || submitted} color="purple">
+            <Button onClick={handleAddChart} block disabled={!canSubmit || submitted} color="success">
               {submitted ? <i className="fa fa-spin fa-spinner" /> : <span>Add Chart</span>}
             </Button>
           </Col>

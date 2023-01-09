@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 
 import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
-import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) {
   const history = useHistory();

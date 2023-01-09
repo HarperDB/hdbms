@@ -45,7 +45,7 @@ ul {
 }
 
 hr {
-  background-color: $light-grey-overlay; /* Modern Browsers */
+  background-color: $grey-overlay; /* Modern Browsers */
   border: 0 none;
   /* Set the hr color */
   color: $light-grey-overlay; /* old IE */
@@ -63,8 +63,8 @@ hr {
   color: $color-lightgrey;
   font-size: $font-size-small;
   font-weight: $font-weight-bold;
-  left: 30px;
   position: fixed;
+  right: 30px;
 }
 
 ::-webkit-scrollbar {
@@ -79,5 +79,5 @@ hr {
 ::-webkit-scrollbar-thumb {
   background-color: $light-grey-overlay;
   border: 2px solid $color-white;
-  border-radius: 5px;
+  border-radius: $border-radius;
 }

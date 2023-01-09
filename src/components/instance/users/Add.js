@@ -19,7 +19,7 @@ function Add({ setLastUpdate }) {
   const url = useStoreState(instanceState, (s) => s.url);
   const users = useStoreState(instanceState, (s) => s.users);
   const roles = useStoreState(instanceState, (s) => s.roles);
-  const useRoleId = useStoreState(instanceState, (s) => s.registration?.version.split('.')[0] < 3);
+  const useRoleId = useStoreState(instanceState, (s) => parseFloat(s.registration?.version) < 3);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const cardHeight = '224px';
@@ -99,7 +99,7 @@ function Add({ setLastUpdate }) {
               placeholder="select a role"
               styles={{ placeholder: (styles) => ({ ...styles, textAlign: 'center', width: '100%', color: '#BCBCBC' }) }}
             />
-            <Button id="addInstanceUser" color="purple" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
+            <Button id="addInstanceUser" color="success" className="mt-3" block onClick={() => setFormState({ submitted: true })}>
               Add User
             </Button>
           </CardBody>

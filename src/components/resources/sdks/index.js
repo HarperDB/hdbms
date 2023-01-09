@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -8,8 +8,6 @@ import { useHistory } from 'react-router';
 import IntegrationCard from './IntegrationCard';
 import appState from '../../../functions/state/appState';
 import getIntegrations from '../../../functions/api/lms/getIntegrations';
-import IntegrationManager from './IntegrationManager';
-import AddIntegration from './Add';
 
 let controller;
 
@@ -47,32 +45,26 @@ function MarketplaceIndex() {
   }, [integrations, type]);
 
   return (
-    <Row id="support">
-      <Col xl="3" lg="4" md="5" xs="12">
-        <IntegrationManager />
-        {auth?.email && <AddIntegration />}
-      </Col>
-      <Col xl="9" lg="8" md="7" xs="12">
-        <span className="floating-card-header">Marketplace</span>
-        <Card className="my-3">
-          <CardBody>
-            {!integrations ? (
-              <div className="py-5 text-center">
-                <i className="fa fa-spinner fa-spin text-purple" />
-              </div>
-            ) : integrations[type] && !integrations[type].length ? (
-              <div className="py-5 text-center">We were unable to find any marketplace apps at this time. Please try again later.</div>
-            ) : integrations[type] ? (
-              <Row>
-                {integrations[type].map((integration) => (
-                  <IntegrationCard key={integration.id} {...integration} icon={logoMapper[integration.meta.language]} />
-                ))}
-              </Row>
-            ) : null}
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+    <div id="support">
+      <span className="floating-card-header">SDKs</span>
+      <Card className="my-3">
+        <CardBody>
+          {!integrations ? (
+            <div className="py-5 text-center">
+              <i className="fa fa-spinner fa-spin text-purple" />
+            </div>
+          ) : integrations[type] && !integrations[type].length ? (
+            <div className="py-5 text-center">We were unable to find any marketplace apps at this time. Please try again later.</div>
+          ) : integrations[type] ? (
+            <Row>
+              {integrations[type].map((integration) => (
+                <IntegrationCard key={integration.id} {...integration} icon={logoMapper[integration.meta.language]} />
+              ))}
+            </Row>
+          ) : null}
+        </CardBody>
+      </Card>
+    </div>
   );
 }
 

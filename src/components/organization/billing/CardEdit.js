@@ -100,7 +100,7 @@ function CardEdit({ setEditingCard, customerCard, formStateHeight, badCard }) {
                   onClick={() => setFormState({ submitted: true })}
                   block
                   className="mt-3"
-                  color="purple"
+                  color="success"
                 >
                   {customerCard ? 'Save New Card' : 'Add Card To Account'}
                 </Button>

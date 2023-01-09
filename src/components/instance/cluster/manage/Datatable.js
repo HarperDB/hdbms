@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
@@ -16,9 +16,9 @@ const defaultTableState = {
   lastUpdate: false,
 };
 
-function Datatable({ refreshNetwork, loading }) {
-  const tableData = useStoreState(instanceState, (s) => s.clusterDataTable);
-  const dataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns);
+function Datatable({ refreshNetwork, loading, setLoading }) {
+  const tableData = useStoreState(instanceState, (s) => s.clusterDataTable || []);
+  const dataTableColumns = useStoreState(instanceState, (s) => s.clusterDataTableColumns || []);
   const [tableState, setTableState] = useState(defaultTableState);
 
   useEffect(() => {
@@ -29,12 +29,17 @@ function Datatable({ refreshNetwork, loading }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTableState, tableState.pageSize]);
 
+  const handleRefresh = useCallback(async () => {
+    setLoading(true);
+    refreshNetwork();
+  }, [setLoading, refreshNetwork]);
+
   return (
     <>
       <Row className="floating-card-header">
         <Col>manage clustering</Col>
         <Col className="text-end">
-          <Button color="link" onClick={refreshNetwork} className="me-2">
+          <Button color="link" onClick={handleRefresh} className="me-2">
             <span className="me-2">refresh network</span>
             <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
@@ -42,7 +47,7 @@ function Datatable({ refreshNetwork, loading }) {
       </Row>
       <Card className="my-3">
         <CardBody className={`react-table-holder ${loading ? 'loading' : ''}`}>
-          {tableData.length ? (
+          {tableData?.length ? (
             <DataTable
               columns={dataTableColumns}
               data={tableData}

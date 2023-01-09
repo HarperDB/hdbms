@@ -6,9 +6,9 @@ import { useAlert } from 'react-alert';
 
 import instanceState from '../../../../functions/state/instanceState';
 
-import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
+import buildCustomFunctions from '../../../../functions/instance/functions/buildCustomFunctions';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
-import generateFunctionTemplate from '../../../../functions/instance/generateFunctionTemplate';
+import generateFunctionTemplate from '../../../../functions/instance/functions/generateFunctionTemplate';
 import addCustomFunctionProject from '../../../../functions/api/instance/addCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';
 import isAlphaNumericUnderscoreHyphen from '../../../../functions/util/isAlphaNumericUnderscoreHyphen';

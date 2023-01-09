@@ -1,55 +1,51 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
+import { useParams } from 'react-router-dom';
 
-import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
-import buildNetwork from '../../../functions/instance/buildNetwork';
 
 import Setup from './setup';
 import Manage from './manage';
 import Loader from '../../shared/Loader';
+import EmptyPrompt from '../../shared/EmptyPrompt';
+import checkClusterStatus from '../../../functions/instance/clustering/checkClusterStatus';
 
 function ClusteringIndex() {
-  const instances = useStoreState(appState, (s) => s.instances);
-  const auth = useStoreState(instanceState, (s) => s.auth);
-  const url = useStoreState(instanceState, (s) => s.url);
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
-  const network = useStoreState(instanceState, (s) => s.network);
-  const connectedNodes = useStoreState(instanceState, (s) => s.clustering?.connected);
-  const aNodeIsConnecting = connectedNodes?.some((c) => c.connection.state === 'connecting');
-  const [showManage, setShowManage] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { compute_stack_id } = useParams();
+  const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
+  const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const [clusterStatus, setClusterStatus] = useState(false);
+  const [configuring, setConfiguring] = useState(false);
 
-  const refreshNetwork = useCallback(async () => {
-    if (auth && url && instances && compute_stack_id) {
-      setLoading(true);
-      await buildNetwork({ auth, url, instances, compute_stack_id });
-      setLoading(false);
+  const refreshStatus = useCallback(async () => {
+    if (auth && url) {
+      const result = await checkClusterStatus({ auth, url });
+      setClusterStatus(result);
+      if (result.is_ready) {
+        setConfiguring(false);
+      }
     }
-  }, [auth, url, instances, compute_stack_id]);
+  }, [auth, url]);
 
-  useEffect(refreshNetwork, [refreshNetwork]);
-
-  useEffect(() => {
-    if (network) {
-      setShowManage(!!network.is_enabled && !!network.cluster_user && !!network.cluster_role);
-      setLoading(false);
+  useInterval(async () => {
+    if (configuring) {
+      refreshStatus();
     }
-  }, [network]);
+  }, 3000);
 
-  useInterval(() => {
-    if (aNodeIsConnecting) {
-      refreshNetwork();
-    }
-  }, 1500);
+  useEffect(refreshStatus, [refreshStatus]);
 
-  return !network ? (
+  useEffect(() => setClusterStatus(false), [compute_stack_id]);
+
+  return !clusterStatus ? (
     <Loader header="loading network" spinner />
-  ) : showManage ? (
-    <Manage refreshNetwork={refreshNetwork} loading={loading || (connectedNodes.length === 1 && aNodeIsConnecting)} setLoading={setLoading} />
+  ) : configuring ? (
+    <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
+  ) : clusterStatus.is_ready ? (
+    <Manage configuring={configuring} />
   ) : (
-    <Setup refreshNetwork={refreshNetwork} loading={loading} setLoading={setLoading} />
+    <Setup setConfiguring={setConfiguring} clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
   );
 }
 

@@ -26,12 +26,15 @@
         overflow: hidden;
 
         &.active {
-          background-color: $color-lightergrey;
           font-weight: $font-weight-bold;
         }
 
         &:first-child {
           border-top: 0;
+        }
+
+        &.form {
+          border-top: 1px solid $lighter-grey-overlay !important;
         }
 
         .input-holder {
@@ -86,5 +89,9 @@
 
   .fa-sm {
     font-size: 0.8rem;
+  }
+
+  &-footer {
+    color: $color-white;
   }
 }

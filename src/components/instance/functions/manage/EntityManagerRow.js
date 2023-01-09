@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 import { useParams } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
-import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
+import buildCustomFunctions from '../../../../functions/instance/functions/buildCustomFunctions';
 import dropCustomFunction from '../../../../functions/api/instance/dropCustomFunction';
 import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
 import restartService from '../../../../functions/api/instance/restartService';

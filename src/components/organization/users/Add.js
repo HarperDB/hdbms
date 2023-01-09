@@ -84,7 +84,7 @@ function Add({ refreshUsers, userEmails }) {
                 disabled={formState.submitted}
               />
 
-              <Button id="addOrganizationUser" color="purple" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
+              <Button id="addOrganizationUser" color="success" block onClick={() => setFormState({ submitted: true })} disabled={formState.submitted}>
                 Add Org User
               </Button>
             </CardBody>

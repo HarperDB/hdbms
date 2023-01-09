@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import instanceState from '../../functions/state/instanceState';
 import appState from '../../functions/state/appState';
-import buildInstanceStructure from '../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../functions/instance/browse/buildInstanceStructure';
 
 function StructureReloader({ label = 'instance', centerText = false }) {
   const { compute_stack_id } = useParams();

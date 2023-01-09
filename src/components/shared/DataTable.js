@@ -125,7 +125,7 @@ function DataTable({
         )}
       </div>
       {manual ? (
-        <DataTablePaginationManual page={currentPage} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
+        <DataTablePaginationManual page={currentPage} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} loading={loading} />
       ) : (
         <DataTablePaginationAuto
           previousPage={previousPage}
@@ -138,6 +138,7 @@ function DataTable({
           pageCount={pageCount}
           nextPage={nextPage}
           canNextPage={canNextPage}
+          loading={loading}
         />
       )}
     </ErrorBoundary>

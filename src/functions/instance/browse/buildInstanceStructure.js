@@ -1,7 +1,7 @@
-import instanceState from '../state/instanceState';
-import describeAll from '../api/instance/describeAll';
+import instanceState from '../../state/instanceState';
+import describeAll from '../../api/instance/describeAll';
 import buildInstanceDataStructure from './buildInstanceDataStructure';
-import registrationInfo from '../api/instance/registrationInfo';
+import registrationInfo from '../../api/instance/registrationInfo';
 
 export default async ({ auth, url }) => {
   const schema = await describeAll({ auth, url });

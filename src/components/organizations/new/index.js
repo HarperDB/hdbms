@@ -163,7 +163,7 @@ function NewOrgIndex() {
                   </ContentContainer>
                 </CardBody>
               </Card>
-              <Button id="createOrganization" onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="purple">
+              <Button id="createOrganization" onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="success">
                 Create Organization
               </Button>
               {formState.error && (
