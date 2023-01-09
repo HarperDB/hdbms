@@ -9,6 +9,7 @@ import ActionUnconfigured from './ActionUnconfigured';
 
 function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNode, handleRemoveNode, handleConfigureNode, refreshNetwork }) {
   const isLoading = item.compute_stack_id === loading;
+
   return (
     <Row className="item-row">
       <Col className={`item-label ${item.connection?.state === 'closed' ? 'text-danger' : ''}`}>{item.instance_name}</Col>
