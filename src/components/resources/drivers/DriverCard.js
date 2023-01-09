@@ -5,7 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
-const docsVersion = 'FHG';
+const docsVersion = 'FHF';
 
 function DriverCard({ icon, name, docs, urls }) {
   return (

@@ -8,7 +8,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import instanceState from '../../../functions/state/instanceState';
 
 import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnderscore';
-import buildInstanceStructure from '../../../functions/instance/buildInstanceStructure';
+import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) {
   const history = useHistory();
@@ -120,7 +120,7 @@ function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, togg
       )}
       <Col className="item-action">
         {addingItem ? (
-          <Button color="success" className="round me-1">
+          <Button id="creatingItem" color="success" className="round">
             <i className="fa fa-spinner fa-spin text-white" />
           </Button>
         ) : (

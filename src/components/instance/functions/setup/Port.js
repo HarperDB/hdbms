@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 
 import isNumeric from '../../../../functions/util/isNumeric';
-import buildCustomFunctions from '../../../../functions/instance/buildCustomFunctions';
+import buildCustomFunctions from '../../../../functions/instance/functions/buildCustomFunctions';
 import setCustomFunctionsPort from '../../../../functions/instance/setCustomFunctionsPort';
 import instanceState from '../../../../functions/state/instanceState';
 

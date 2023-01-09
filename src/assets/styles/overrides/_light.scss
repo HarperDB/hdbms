@@ -12,8 +12,12 @@
 
     .navbar-nav {
       .active-org {
-        background: $gradient-white-lightgrey;
-        border-right-color: $color-grey !important;
+        border-right-color: $color-lightgrey !important;
+
+
+        &.open {
+          border-color: $color-lightgrey !important;
+        }
 
         .org-name {
           color: $color-black !important;
@@ -40,7 +44,7 @@
   }
 
   #app-bg-dots {
-    background: radial-gradient($lightest-grey-overlay 1px, transparent 0);
+    background: radial-gradient($lighter-grey-overlay 1px, transparent 0);
     background-size: 3px 3px;
     z-index: -1;
   }
@@ -69,7 +73,7 @@
       .react-select__control--is-focused,
       .react-select__indicator-separator {
         background: transparent !important;
-        border-color: $lightest-grey-overlay !important;
+        border-color: $lighter-grey-overlay !important;
 
         .react-select__single-value {
           color: $color-darkgrey;
@@ -125,22 +129,22 @@
   .card.error,
   .card.success,
   .past-query {
-    border-color: $lighter-grey-overlay !important;
+    border-color: $color-lightgrey !important;
   }
 
   .lolight {
     background-color: $dark-grey-overlay !important;
-    border: 1px solid $lighter-grey-overlay !important;
+    border: 1px solid $color-lightgrey !important;
   }
 
   .loader {
     .card {
       background: $color-white !important;
-      border: 1px solid $lighter-grey-overlay !important;
-      box-shadow: 0 0 5px $lighter-grey-overlay !important;
+      border: 1px solid $color-lightgrey !important;
+      box-shadow: none;
 
       .card-body {
-        background: $gradient-white-lightgrey !important;
+        background: none !important;
         color: $color-darkgrey !important;
       }
     }
@@ -163,7 +167,8 @@
   textarea,
   .fake-input,
   .form-control {
-    background: $lightest-grey-overlay !important;
+    background: $color-white !important;
+    border: 1px solid $color-lightgrey !important;
     color: $color-darkgrey !important;
 
     &.is-invalid,
@@ -178,16 +183,15 @@
 
   .entity-manager {
     .card {
-      border: 1px solid $lighter-grey-overlay;
-      box-shadow: 0 0 5px $lighter-grey-overlay !important;
+      border: 1px solid $color-lightgrey;
 
       .item-row {
-        background: $lightest-grey-overlay !important;
-
-        &.active {
-          background: $lightest-grey-overlay !important;
-        }
+        background: $color-white !important;
       }
+    }
+
+    &-footer {
+      color: $color-black;
     }
   }
 
@@ -206,15 +210,15 @@
     .react-select__control--menu-is-open,
     .react-select__control--is-focused,
     .react-select__indicator-separator {
-      background: $lightest-grey-overlay !important;
-      border-color: transparent !important;
+      background: $color-white !important;
+      border-color: $color-lightgrey !important;
 
       .react-select__single-value {
         color: $color-grey;
       }
 
       .react-select__indicator-separator {
-        background: $lighter-grey-overlay !important;
+        background: $color-lightgrey !important;
       }
     }
 
@@ -223,7 +227,7 @@
     .react-select__option:focus,
     .react-select__option--is-focused {
       background: $color-white !important;
-      border-bottom: 1px solid $lighter-grey-overlay !important;
+      border-bottom: 1px solid $color-lightgrey !important;
       color: $color-grey !important;
 
       &:last-child {
@@ -269,10 +273,22 @@
     box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
   }
 
+  .react-toggle {
+    .react-toggle-track {
+      background: $light-grey-overlay !important;
+    }
+
+    &--checked {
+      .react-toggle-track {
+        background-color: $color-success !important;
+      }
+    }
+  }
+
   #login-form {
     .card {
       background: $color-white !important;
-      border: 1px solid $lighter-grey-overlay !important;
+      border: 1px solid $color-lightgrey !important;
       color: $color-lightgrey !important;
 
       .instructions {
@@ -287,16 +303,16 @@
       }
 
       .sign-up-header {
-        border-bottom: 1px solid $light-grey-overlay;
+        border-bottom: 1px solid $color-lightgrey;
       }
 
       hr {
-        background: $light-grey-overlay;
+        background: $color-lightgrey;
       }
     }
 
     input {
-      background: $lightest-grey-overlay !important;
+      background: $color-white !important;
       color: $color-black !important;
 
       &::placeholder {
@@ -345,5 +361,22 @@
 
   .version {
     color: $color-darkgrey !important;
+  }
+
+
+
+  a,
+  button,
+  input,
+  textarea,
+  .item-row,
+  select,
+  i,
+  .card,
+  .btn,
+  [role='button'] {
+    &:focus {
+      outline-color: $color-lightpurple !important;
+    }
   }
 }

@@ -40,6 +40,7 @@ function UpdateDiskVolume({ setInstanceAction, showPrepaidStorage }) {
 
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ compute_stack_id, customer_id, ...storage });
+  const [hasChanged, setHasChanged] = useState(false);
 
   const products = showPrepaidStorage ? filteredSubscriptions : filteredProducts;
   const selectedProduct = products.find(
@@ -52,15 +53,23 @@ function UpdateDiskVolume({ setInstanceAction, showPrepaidStorage }) {
   const canAddFreeCloudInstance = totalFreeCloudInstances < config.free_cloud_instance_limit;
   const newTotal = (formData?.storage_price || 0) + (compute?.compute_price || 0);
   const newTotalString = newTotal ? `${commaNumbers(newTotal.toFixed(2))}/${compute.compute_interval}` : 'FREE';
-  const hasChanged =
-    storage?.data_volume_size !== formData.data_volume_size ||
-    storage?.stripe_storage_plan_id !== formData.stripe_storage_plan_id ||
-    storage?.storage_subscription_id !== formData.storage_subscription_id;
   const canChange = last_volume_resize ? (Date.now() - new Date(last_volume_resize).getTime()) / 1000 / 3600 > 6 : true;
 
   const resetFormData = () => setFormData({ compute_stack_id, customer_id, ...storage });
 
   useAsyncEffect(resetFormData, [showPrepaidStorage]);
+
+  useAsyncEffect(() => {
+    setHasChanged(
+      storage?.data_volume_size !== formData.data_volume_size ||
+        storage?.stripe_storage_plan_id !== formData.stripe_storage_plan_id ||
+        storage?.storage_subscription_id !== formData.storage_subscription_id
+    );
+  }, [formData]);
+
+  useAsyncEffect(() => {
+    setHasChanged(false);
+  }, [compute_stack_id]);
 
   useAsyncEffect(async () => {
     const { submitted } = formState;

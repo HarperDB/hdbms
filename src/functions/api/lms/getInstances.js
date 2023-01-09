@@ -21,13 +21,16 @@ export default async ({ auth, customer_id, products, regions, subscriptions, ins
     if (Array.isArray(response)) {
       const instances = response.map((instance) => {
         const instanceProductDetails = generateInstanceProductDetails({ instance, products, regions, subscriptions });
-        /* TODO: Move the licensing, loading, etc. management here. */
         return { ...instance, ...instanceProductDetails };
       });
 
-      return appState.update((s) => {
-        s.instances = [...instances].sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
+      const sortedInstances = instances.sort((a, b) => (a.instance_name > b.instance_name ? 1 : -1));
+
+      appState.update((s) => {
+        s.instances = sortedInstances;
       });
+
+      return sortedInstances;
     }
 
     if (!instanceCount) {

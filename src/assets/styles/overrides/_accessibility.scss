@@ -9,7 +9,7 @@ i,
 .btn,
 [role='button'] {
   &:focus {
-    outline: 1px solid $light-white-overlay !important;
+    outline: 1px solid $color-lightpurple !important;
     outline-offset: 3px !important;
   }
 }
@@ -23,36 +23,12 @@ textarea,
   }
 }
 
-.dark {
-  a,
-  button,
-  input,
-  textarea,
-  .item-row,
-  select,
-  i,
-  .card,
-  .btn,
-  [role='button'] {
-    &:focus {
-      outline-color: $light-white-overlay !important;
-    }
-  }
+.navbar-nav .react-toggle--focus {
+  outline: 1px solid $color-lightpurple !important;
+  outline-offset: 3px !important;
 }
 
-.light {
-  a,
-  button,
-  input,
-  textarea,
-  .item-row,
-  select,
-  i,
-  .card,
-  .btn,
-  [role='button'] {
-    &:focus {
-      outline-color: $color-lightpurple !important;
-    }
-  }
+#creatingItem {
+  outline: none !important;
+  outline-offset: 0 !important;
 }

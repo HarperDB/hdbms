@@ -3,8 +3,8 @@ select,
 textarea,
 .fake-input,
 .form-control {
-  background: $lightest-grey-overlay !important;
-  border: 0 !important;
+  background: $color-white !important;
+  border: 1px solid $lighter-grey-overlay !important;
   border-radius: $border-radius;
   box-shadow: none !important;
   color: $color-black;
@@ -62,13 +62,7 @@ textarea {
   white-space: nowrap;
 }
 
-#__lpform_input_idx_0_numspan,
-#__lpform_input_idx_1_numspan,
-#__lpform_input_idx_2_numspan,
-#__lpform_input_idx_3_numspan,
-#__lpform_input_idx_4_numspan {
-  display: none !important;
-}
+
 
 .subdomain-form {
   padding-right: 0;

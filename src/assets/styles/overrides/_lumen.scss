@@ -183,6 +183,7 @@ $partner-brand-color: #0075c9;
     &.show {
       background-color: $partner-brand-color !important;
       border-color: $partner-brand-color !important;
+
       .dot {
         background: $partner-brand-color;
       }
@@ -207,6 +208,7 @@ $partner-brand-color: #0075c9;
   .content-container {
     .header-container {
       border-bottom: 1px solid $lighter-grey-overlay;
+
       .subheader {
         color: $partner-brand-color !important;
       }

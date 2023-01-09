@@ -26,11 +26,7 @@ function Edit() {
           <Delete />
           <hr className="my-3" />
           <Row>
-            <Col xs="8" className="py-1">
-              Return to User List
-              <br />
-              <span className="text-small">make no further changes to this user</span>
-            </Col>
+            <Col xs="8" className="py-1" />
             <Col xs="4">
               <Button id="returnToUserList" block color="grey" onClick={() => history.push(pathname.replace(`/${username}`, ''))}>
                 Return to User List

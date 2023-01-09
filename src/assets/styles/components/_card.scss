@@ -1,5 +1,6 @@
 .floating-card-header {
   color: $color-white;
+  height: 15px !important;
   margin-bottom: 0.5rem !important;
   white-space: nowrap;
 
@@ -16,12 +17,13 @@
 
 .card {
   background: $color-white !important;
-  border: 1px solid $lighter-grey-overlay;
+  border: 1px solid $color-lightgrey;
+  border-radius: $border-radius !important;
   box-shadow: none !important;
   color: $color-darkgrey !important;
 
   .card-body {
-    background: $gradient-white-lightgrey !important;
+    background: $color-white !important;
     height: 100%;
   }
 
