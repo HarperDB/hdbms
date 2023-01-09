@@ -1,48 +1,56 @@
 const routes = `'use strict';
 
-// add your own dependencies via your project's package.json
-const needle = require('needle');
+/* Dependencies
+- import any packages that are listed in your projects package.json
+- for example:
+import needle from 'needle'
+*/
 
-// add and import helper methods from your project's "helpers" directory
-const filter = require('../helpers/filter');
+/* Helpers
+- import any helper methods from your project's "helpers" directory
+- for example:
+import filter from '../helpers/filter.js';
+*/
 
 module.exports = async (server, { hdbCore, logger }) => {
-  // THIS IS A SIMPLE POST ROUTE WITH AN OPERATION IN THE REQUEST BODY
-  // IT USES THE hdbCore.preValidation HOOK TO PROCESS BASIC OR TOKEN AUTH
-  // IT USES THE hdbCore.request METHOD TO EXECUTE THE VALIDATED REQUEST
+  // POST route
+  // with hdbCore.preValidation to process basic auth
+  // uses hdbCore.requese to execute the validated request
   server.route({
     url: '/path/to/my/route',
     method: 'POST',
     preValidation: hdbCore.preValidation,
     handler: hdbCore.request,
   })
-  
-  // THIS GET ROUTE USES A CUSTOM preValidation METHOD TO AUTHORIZE THE REQUEST
-  // IT THEN USES THE hdbCore.requestWithoutAuthentication METHOD TO EXECUTE THE REQUEST
-  // FINALLY, IT USES A CUSTOM FUNCTION, "filter", TO FORMAT THE RESPONSE
+
+  // GET route
+  // with custom validation
+  // uses hdbCore.requestWithoutAuthentication
   server.route({
     url: '/path/to/my/route/:id',
     method: 'GET',
     preValidation: async (request, reply) => {
-      /*
-      *  takes the inbound authorization headers and sends them via http request to an external auth service
-      */
-      const result = await needle('get', 'https://jsonplaceholder.typicode.com/todos/1', { headers: { authorization: request.headers.authorization }});
-
-      /*
-      *  throw an authentication error based on the response body or statusCode
-      */
-      // eslint-disable-next-line no-magic-numbers
-      if (result.body.error || result.statusCode !== 200) {
+      const token = request.headers.authorization
+      const results = hdbCore.requestWithoutAuthentication({
+        body: {
+          operation: 'search_by_hash',
+          schema: 'auth',
+          table: 'tokens',
+          hash_values: [token],
+          get_attributes: ['id']
+        }
+      })
+      if (!results.length) {
         const errorString = result.body.error || 'Sorry, there was an error authenticating your request';
         logger.error(errorString);
         throw new Error(errorString);
       }
     },
     handler: async (request) => {
+      const id = parseInt(request.params.id)
       request.body= {
         operation: 'sql',
-        sql: \`SELECT * FROM dev.dogs WHERE id = \${request.params.id}\`
+        sql: \`SELECT * FROM dev.dogs WHERE id = \${id}\`
       };
 
       /*
@@ -51,17 +59,20 @@ module.exports = async (server, { hdbCore, logger }) => {
        */
       const result = await hdbCore.requestWithoutAuthentication(request);
 
-      return filter(result, ['dog_name', 'owner_name', 'breed']);
+      return result
     }
   });
 };
 `;
 
-const helpers = `'use strict'
-
-module.exports = (result) => {
- // your functionality here
- return result;
+const helpers = `
+/* filters the results, only returning the selected keys */
+export default (result, keys) => {
+  return result.map(r => {
+    const f = {}
+    keys.forEach(k => f[k] = r[k])
+    return f;
+  })
 }
 `;
 
