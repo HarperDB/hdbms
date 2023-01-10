@@ -8,14 +8,13 @@
   width: 100%;
 
   .card {
-    background: $faint-white-overlay !important;
     border: 1px solid $faint-white-overlay !important;
+    background: $faint-white-overlay !important;
     box-shadow: none !important;
     z-index: 2;
 
     .card-body {
       min-height: 205px;
-      background: $faint-white-overlay !important;
       color: $color-white;
 
       .instructions {
