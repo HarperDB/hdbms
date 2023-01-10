@@ -43,7 +43,7 @@
 
     .sign-up-header {
       border-bottom: 1px solid $faint-white-overlay;
-      color: $black;
+      color: $light-white-overlay !important;
       font-size: 1.5rem !important;
       line-height: 1 !important;
       margin-bottom: 25px !important;
@@ -57,7 +57,7 @@
     }
 
     .sign-up-content {
-      color: $black;
+      color: $light-white-overlay !important;
       width: 100%;
 
       h3 {
@@ -67,9 +67,6 @@
     }
 
     .sign-up-form {
-      .subdomain-label {
-        color: $black;
-      }
       .subdomain-explanation {
         color: $color-white;
         display: block;
