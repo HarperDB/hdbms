@@ -78,11 +78,9 @@
 
   input {
     background: $faint-white-overlay !important;
-    color: $color-white !important;
     text-align: center !important;
 
     &::placeholder {
-      color: $white-overlay !important;
       font-family: $font-family-sans;
       font-weight: $font-weight-light;
       text-align: center !important;
