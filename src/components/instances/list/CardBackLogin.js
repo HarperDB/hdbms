@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, Input, Row, Col } from 'reactstrap';
+import { Button, Card, CardBody, Form, Input, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -68,9 +68,10 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
             {formState.error && formState.error.indexOf('This instance was recently') !== -1 ? (
               <CardInstanceUpdateRole formState={formState} setFormData={setFormData} setFormState={setFormState} />
             ) : (
-              <>
+              <Form>
                 <Input
                   id="username"
+                  autoComplete="username"
                   onChange={(e) => setFormData({ ...formData, user: e.target.value })}
                   className="text-center mb-1"
                   type="text"
@@ -81,6 +82,8 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                 />
                 <Input
                   id="password"
+                  name="password"
+                  autoComplete="current-password"
                   onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
                   className="text-center mb-2"
                   type="password"
@@ -117,7 +120,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                     {formState.url && <i className="ms-2 fa fa-lg fa-external-link-square text-purple" />}
                   </a>
                 )}
-              </>
+              </Form>
             )}
           </CardBody>
         )}

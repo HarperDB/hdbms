@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Input, Button, Col, Row } from 'reactstrap';
+import { Card, CardBody, Form, Input, Button, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
@@ -48,26 +48,29 @@ function ResetPassword() {
           <Card className="mb-3">
             <CardBody className="text-center" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
               <div className="instructions">Please enter your account email. If a matching account exists, we&apos;ll send you a password reset link.</div>
-              <Input
-                id="email"
-                onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
-                disabled={formState.submitted}
-                className="mt-3 mb-2 text-center"
-                type="text"
-                title="email"
-                name="email"
-                placeholder="email address"
-              />
-              <Button
-                id="sendPasswordResetEmail"
-                onClick={() => setFormState({ submitted: true })}
-                disabled={formState.submitted}
-                title="Send Password Reset Email"
-                block
-                color="purple"
-              >
-                Send Password Reset Email
-              </Button>
+              <Form>
+                <Input
+                  id="email"
+                  name="email"
+                  autoComplete="email"
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
+                  disabled={formState.submitted}
+                  className="mt-3 mb-2 text-center"
+                  type="text"
+                  title="email"
+                  placeholder="email address"
+                />
+                <Button
+                  id="sendPasswordResetEmail"
+                  onClick={() => setFormState({ submitted: true })}
+                  disabled={formState.submitted}
+                  title="Send Password Reset Email"
+                  block
+                  color="purple"
+                >
+                  Send Password Reset Email
+                </Button>
+              </Form>
             </CardBody>
           </Card>
           {formState.error ? (

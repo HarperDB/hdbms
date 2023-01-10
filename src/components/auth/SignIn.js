@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody, Input, Button, Row, Col } from 'reactstrap';
+import { Card, CardBody, Form, Input, Button, Row, Col } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import queryString from 'query-string';
@@ -57,38 +57,42 @@ function SignIn() {
         <>
           <Card className="mb-3">
             <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
-              <div className="instructions">Please sign into HarperDB Studio</div>
-              <Input
-                id="email"
-                onChange={(e) => {
-                  e.currentTarget.focus();
-                  setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
-                }}
-                value={formData.email || ''}
-                disabled={formState.submitted}
-                className="mb-2 text-center"
-                type="text"
-                title="email"
-                autoComplete="username"
-                placeholder="email address"
-              />
-              <Input
-                id="password"
-                onChange={(e) => {
-                  e.currentTarget.focus();
-                  setFormData({ ...formData, pass: e.target.value });
-                }}
-                value={formData.pass || ''}
-                disabled={formState.submitted}
-                className="mb-2 text-center"
-                type="password"
-                title="password"
-                autoComplete="current-password"
-                placeholder="password"
-              />
-              <Button id="signIn" onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
-                Sign In
-              </Button>
+              <Form>
+                <div className="instructions">Please sign into HarperDB Studio</div>
+                <Input
+                  name="email"
+                  autoComplete="email"
+                  id="email"
+                  onChange={(e) => {
+                    e.currentTarget.focus();
+                    setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
+                  }}
+                  value={formData.email || ''}
+                  disabled={formState.submitted}
+                  className="mb-2 text-center"
+                  type="text"
+                  title="email"
+                  placeholder="email address"
+                />
+                <Input
+                  id="password"
+                  onChange={(e) => {
+                    e.currentTarget.focus();
+                    setFormData({ ...formData, pass: e.target.value });
+                  }}
+                  value={formData.pass || ''}
+                  disabled={formState.submitted}
+                  className="mb-2 text-center"
+                  type="password"
+                  title="password"
+                  name="password"
+                  autoComplete="current-password"
+                  placeholder="password"
+                />
+                <Button id="signIn" onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
+                  Sign In
+                </Button>
+              </Form>
             </CardBody>
           </Card>
           {formState.error ? (
