@@ -15,6 +15,8 @@
 
     .card-body {
       min-height: 205px;
+      background: $faint-white-overlay !important;
+      color: $color-white;
 
       .instructions {
         color: $color-white;
@@ -43,7 +45,6 @@
 
     .sign-up-header {
       border-bottom: 1px solid $faint-white-overlay;
-      color: $black;
       font-size: 1.5rem !important;
       line-height: 1 !important;
       margin-bottom: 25px !important;
@@ -57,7 +58,6 @@
     }
 
     .sign-up-content {
-      color: $black;
       width: 100%;
 
       h3 {
@@ -67,11 +67,7 @@
     }
 
     .sign-up-form {
-      .subdomain-label {
-        color: $black;
-      }
       .subdomain-explanation {
-        color: $color-white;
         display: block;
         font-size: 0.7rem;
         padding-bottom: 8px;
@@ -82,10 +78,12 @@
   input {
     background: $faint-white-overlay !important;
     text-align: center !important;
+    color: $color-white;
 
     &::placeholder {
       font-family: $font-family-sans;
       font-weight: $font-weight-light;
+      color: $white-overlay !important;
       text-align: center !important;
     }
   }

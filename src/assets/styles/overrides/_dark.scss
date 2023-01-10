@@ -221,15 +221,12 @@
   }
 
   #login-form {
-    .card {
+    .card-body {
       background: $color-pureblack !important;
     }
 
     input {
       background: $faintest-white-overlay !important;
-    }
-    .sign-up-header, .sign-up-content {
-      color: $white;
     }
   }
 
