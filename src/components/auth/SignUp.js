@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
+import { Form, Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
@@ -75,9 +75,11 @@ function SignUp() {
               <hr className="mt-4 mb-3 d-block d-md-none" />
             </Col>
             <Col xs="12" md="4">
-              <div className="sign-up-form">
+              <Form className="sign-up-form">
                 <Input
                   id="firstname"
+                  name="fname" 
+                  autoComplete="given-name"
                   className="text-center mb-2"
                   type="text"
                   title="first name"
@@ -88,6 +90,8 @@ function SignUp() {
                 />
                 <Input
                   id="lastname"
+                  name="lname"
+                  autoComplete="family-name"
                   className="text-center mb-2"
                   type="text"
                   title="last name"
@@ -98,6 +102,8 @@ function SignUp() {
                 />
                 <Input
                   id="email"
+                  autoComplete="email"
+                  name="email"
                   className="text-center mb-2"
                   type="text"
                   title="email"
@@ -110,6 +116,7 @@ function SignUp() {
                   <Col className="subdomain-form">
                     <Input
                       id="subdomain"
+                      name="subdomain"
                       className="text-center mb-2"
                       type="text"
                       title="subdomain"
@@ -157,7 +164,7 @@ function SignUp() {
                 <Button id="sign-up" color="purple" block disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}>
                   {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : <span>Sign Up For Free</span>}
                 </Button>
-              </div>
+              </Form>
             </Col>
           </Row>
         </CardBody>
