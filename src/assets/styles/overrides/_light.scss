@@ -341,7 +341,7 @@
     }
 
     .subdomain-label {
-      color: $dark-grey-overlay;
+      color: $dark-grey-overlay !important;
 
       .btn-link {
         color: $light-grey-overlay;
