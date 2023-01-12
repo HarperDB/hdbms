@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - "stage"
-      - "STUDIO-1"
   workflow_dispatch:
 name: Publish Stage
 jobs:
