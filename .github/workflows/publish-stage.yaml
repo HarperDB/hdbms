@@ -89,7 +89,7 @@ jobs:
       run: |
         #!/bin/bash
         cd build
-        scp -r -i private_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
+        scp -r -i ../private_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR \
           "$(pwd)" "ubuntu@studio.harperdb.io:/home/ubuntu/sites/studio-stage/"
     - name: Update version in LMS
       run: |
