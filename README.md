@@ -27,6 +27,8 @@ mkdir -p .cert
 ### Generate the certificate (ran from the root of this project)
 mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
 
+NOTE: If you use Firefox, restart it to get the cert to take effect.
+
 
 ## Magic... how does it work?
 
