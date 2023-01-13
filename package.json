@@ -8,7 +8,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "test": "playwright test",
-    "start": "HTTPS=true react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem react-scripts start",
     "build:dev": "PUBLIC_URL=https://d2uv4fa0aeja0t.cloudfront.net react-scripts build",
     "build:stage": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://dbjxbnqel2bw9.cloudfront.net react-scripts build",
     "build:prod": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://ds5zz9rfvzuta.cloudfront.net react-scripts build",
