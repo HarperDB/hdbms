@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { Button } from 'reactstrap';
+import { useAlert } from 'react-alert';
 
 function CardFrontIcons({ loading, status, customer_name, setFlipState, total_instance_count }) {
+  const alert = useAlert();
+
   const handleCardFlipIconClick = useCallback(
     (e) => {
       e.stopPropagation();
@@ -12,7 +15,7 @@ function CardFrontIcons({ loading, status, customer_name, setFlipState, total_in
         setFlipState(action);
       }
     },
-    [total_instance_count, setFlipState]
+    [total_instance_count, alert, setFlipState]
   );
 
   return loading ? (
