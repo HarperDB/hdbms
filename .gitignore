@@ -2,6 +2,9 @@
 
 /src/config/index.js
 
+# local https certs
+/.cert
+
 # dependencies
 /node_modules
 /.pnp
@@ -25,4 +28,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
-
+/test-results/
+/playwright-report/
+/playwright/.cache/
