@@ -7,6 +7,7 @@ import instanceState from '../../../functions/state/instanceState';
 
 import Setup from './setup';
 import Manage from './manage';
+import ClusterDisabled from './disabled';
 import Loader from '../../shared/Loader';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import checkClusterStatus from '../../../functions/instance/clustering/checkClusterStatus';
@@ -15,8 +16,11 @@ function ClusteringIndex() {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
+  const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
+  const registrationVersion = useStoreState(instanceState, (s) => s.registration?.version, [compute_stack_id])
   const [clusterStatus, setClusterStatus] = useState(false);
   const [configuring, setConfiguring] = useState(false);
+  const clusterDisabled = parseFloat(registrationVersion) >= 4 && !is_local; 
 
   const refreshStatus = useCallback(async () => {
     if (auth && url) {
@@ -38,15 +42,17 @@ function ClusteringIndex() {
 
   useEffect(() => setClusterStatus(false), [compute_stack_id]);
 
-  return !clusterStatus ? (
-    <Loader header="loading network" spinner />
-  ) : configuring ? (
-    <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
-  ) : clusterStatus.is_ready ? (
-    <Manage configuring={configuring} />
-  ) : (
-    <Setup setConfiguring={setConfiguring} clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
-  );
+  return clusterDisabled ? (
+      <ClusterDisabled />
+    ) : !clusterStatus ? (
+      <Loader header="loading network" spinner />
+    ) : configuring ? (
+      <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
+    ) : clusterStatus.is_ready ? (
+      <Manage configuring={configuring} />
+    ) : (
+      <Setup setConfiguring={setConfiguring} clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
+    );
 }
 
 export default ClusteringIndex;
