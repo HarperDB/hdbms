@@ -12,20 +12,28 @@ The comprehensive management suite for HarperDB.
 
 ## Setting up local HTTPS certificates for local development
 
-### Install mkcert tool
-brew install mkcert
 
-### Install nss (only needed if you use Firefox)
-brew install nss
+### Install mkcert tool (OS X)
+```
+brew install mkcert
+brew install nss (if you need Firefox)
+```
+
+### Install mkcert tool (Windows)
+```
+scoop bucket add extras
+scoop install mkcert
+```
+
 
 ### Setup mkcert on your machine (creates a CA)
-mkcert -install
+`mkcert -install`
 
 ### Create .cert directory if it doesn't exist
-mkdir -p .cert
+`mkdir -p .cert`
 
 ### Generate the certificate (ran from the root of this project)
-mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
+`mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"`
 
 NOTE: If you use Firefox, restart it to get the cert to take effect.
 
