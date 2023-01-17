@@ -39,6 +39,8 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
+    - name: show directiory contents
+      run: ls -a
     - uses: actions/upload-artifact@v3
       if: always()
       with:
