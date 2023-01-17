@@ -17,12 +17,21 @@ jobs:
       run: |
         #!/bin/bash
         
+        # install cert-util
+        sudo apt install libnss3-tools
+
+        # install mkcert from pre-existing binaries
         curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
         chmod +x mkcert-v*-linux-amd64
         sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert 
 
+        # create a local CA 
         mkcert -install
+
+        # create a local dir for cert and key files
         mkdir -p .cert
+
+        # cert and key files
         mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
     - name: Install dependencies
       run: yarn
