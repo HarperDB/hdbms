@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ReactCardFlip from 'react-card-flip';
 import { Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import CardFront from './CardFront';
-import CardBack from './CardBack';
 import ErrorFallbackCard from '../../shared/ErrorFallbackCard';
 import addError from '../../../functions/api/lms/addError';
+import CardBackLogin from './CardBackLogin';
+import CardBackDelete from './CardBackDelete';
 
 function InstanceCard({ flippedCard, setFlippedCard, compute_stack_id, customer_id, ...rest }) {
   const [flipState, setFlipState] = useState(false);
@@ -37,10 +37,13 @@ function InstanceCard({ flippedCard, setFlippedCard, compute_stack_id, customer_
         }
         FallbackComponent={ErrorFallbackCard}
       >
-        <ReactCardFlip infinite isFlipped={flipState} flipSpeedBackToFront={0.25} flipSpeedFrontToBack={0.25} flipDirection="vertical">
+        {!flipState ? (
           <CardFront setFlipState={setFlipState} flipState={flipState} customer_id={customer_id} compute_stack_id={compute_stack_id} {...rest} />
-          <CardBack setFlipState={setFlipState} flipState={flipState} customer_id={customer_id} compute_stack_id={compute_stack_id} {...rest} />
-        </ReactCardFlip>
+        ) : flipState === 'login' ? (
+          <CardBackLogin setFlipState={setFlipState} flipState={flipState} customer_id={customer_id} compute_stack_id={compute_stack_id} {...rest} />
+        ) : (
+          <CardBackDelete setFlipState={setFlipState} flipState={flipState} customer_id={customer_id} compute_stack_id={compute_stack_id} {...rest} />
+        )}
       </ErrorBoundary>
     </Col>
   );
