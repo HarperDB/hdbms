@@ -13,6 +13,17 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 14.17.3
+    - name: Install local CA for https tests
+      run: |
+        #!/bin/bash
+        
+        curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+        chmod +x mkcert-v*-linux-amd64
+        sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert 
+
+        mkcert -install
+        mkdir -p .cert
+        mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
     - name: Install dependencies
       run: yarn
     - name: Install Playwright Browsers
