@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navbar, Nav, NavItem } from 'reactstrap';
 import SelectDropdown from 'react-select';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
+
+// NOTE: use history was imported from 'react-router' not 'react-router-dom'. why?
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../functions/state/appState';
@@ -18,7 +19,7 @@ import useInstanceAuth from '../../functions/state/instanceAuths';
 function Subnav({ routes = [] }) {
   const { compute_stack_id, customer_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const defaultBrowseURL = useStoreState(instanceState, (s) => s.defaultBrowseURL);
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts.total, [compute_stack_id]);
@@ -55,8 +56,9 @@ function Subnav({ routes = [] }) {
     iconCode: currentRoute?.iconCode,
   };
 
-  const navigate = ({ value, has_auth, is_unavailable }) =>
-    is_unavailable ? false : has_auth ? history.push(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : history.push(`/o/${customer_id}/instances/login`);
+  // TODO: rename this, added 'Fn' because conflicts with new navigate replacement for history obj.
+  const navigateFn = ({ value, has_auth, is_unavailable }) =>
+    is_unavailable ? false : has_auth ? navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : navigate(`/o/${customer_id}/instances/login`);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
@@ -65,7 +67,7 @@ function Subnav({ routes = [] }) {
           <SelectDropdown
             className="react-select-container"
             classNamePrefix="react-select"
-            onChange={navigate}
+            onChange={navigateFn}
             options={options || []}
             value={activeOption}
             defaultValue={activeOption.value}
@@ -100,7 +102,7 @@ function Subnav({ routes = [] }) {
             className="react-select-container"
             classNamePrefix="react-select"
             width="200px"
-            onChange={({ value }) => history.push(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
+            onChange={({ value }) => navigate(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
             options={
               activeRoute.value ? routes.filter((r) => r.link !== activeRoute.value).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode })) : null
             }

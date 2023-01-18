@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import getCurrentVersion from '../api/lms/getCurrentVersion';
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
@@ -6,20 +8,24 @@ import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 
-export default ({ auth, history, setFetchingUser, setPersistedUser, controller }) => {
+export default ({ auth, navigate, setFetchingUser, setPersistedUser, controller }) => {
   const canonical = document.querySelector('link[rel="canonical"]');
+  const location = useLocation()
 
-  history.listen(() => {
+  // TODO: re-wrote this without history.listen. no analog in navigate.
+  // react use effect w/ location as a dep. when it changes, update canonical.href to window.location.href.
+
+  useEffect(() => {
     canonical.href = window.location.href;
-  });
+  }, [location]);
 
-  if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(history.location.pathname)) {
+  if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);
     return setPersistedUser({});
   }
 
-  if (['/sign-in'].includes(history.location.pathname)) {
-    history.push('/');
+  if (['/sign-in'].includes(location.pathname)) {
+    navigate.push('/');
   }
 
   if (!auth?.email) {

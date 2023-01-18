@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, isDropping, activeSchema }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
@@ -40,7 +40,7 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 
     await buildInstanceStructure({ auth, url });
 
-    return history.push(baseUrl);
+    return navigate(baseUrl);
   };
 
   const selectItemForDrop = () => {
@@ -58,7 +58,7 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
     toggleConfirmDropItem(false);
   };
 
-  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item}`));
+  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : navigate(`${baseUrl}/${item}`));
 
   return (
     <Row key={item} title={`View${isActive ? 'ing' : ''} ${itemType} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive} tabIndex="0">

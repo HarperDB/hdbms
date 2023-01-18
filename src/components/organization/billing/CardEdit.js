@@ -3,8 +3,7 @@ import { Button, Row, Col, Card, CardBody } from 'reactstrap';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useHistory, useParams } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -27,7 +26,7 @@ function CardEdit({ setEditingCard, customerCard, formStateHeight, badCard }) {
   const [formState, setFormState] = useState({});
   const stripe = useStripe();
   const elements = useElements();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { search } = useLocation();
   const { returnURL } = queryString.parse(search);
 
@@ -60,7 +59,7 @@ function CardEdit({ setEditingCard, customerCard, formStateHeight, badCard }) {
             await getCustomer({ auth, customer_id });
 
             if (returnURL) {
-              history.push(returnURL);
+              navigate(returnURL);
             } else {
               setEditingCard(false);
             }

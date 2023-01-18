@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalHeader, ModalBody, Input, Button, Row, Col, Card, CardBody } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -16,12 +16,12 @@ import addError from '../../../functions/api/lms/addError';
 function NewOrgIndex() {
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
 
-  const closeModal = () => history.push(`/organizations`);
+  const closeModal = () => navigate(`/organizations`);
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
@@ -55,12 +55,12 @@ function NewOrgIndex() {
                 </div>
                 <Row>
                   <Col sm="6">
-                    <Button id="cancelNewOrg" onClick={() => history.push('/organizations')} title="Cancel New Org" block className="mt-3" color="grey">
+                    <Button id="cancelNewOrg" onClick={() => navigate('/organizations')} title="Cancel New Org" block className="mt-3" color="grey">
                       Cancel
                     </Button>
                   </Col>
                   <Col sm="6">
-                    <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+                    <Button id="updateEmail" onClick={() => navigate('/profile')} title="Update My Email" block className="mt-3" color="danger">
                       Update My Email
                     </Button>
                   </Col>

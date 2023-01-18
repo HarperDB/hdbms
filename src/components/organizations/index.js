@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Row } from 'reactstrap';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import { ErrorBoundary } from 'react-error-boundary';
@@ -16,7 +16,7 @@ import ErrorFallbackCard from '../shared/ErrorFallbackCard';
 
 function OrganizationsIndex() {
   const { list, action } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
 
   useEffect(() =>
@@ -31,7 +31,7 @@ function OrganizationsIndex() {
   useEffect(() => {
     const activeOrgs = auth?.orgs.filter((o) => ['accepted', 'owner'].includes(o.status));
     if (activeOrgs.length === 1 && (!list || list === 'sign-up')) {
-      history.push(`/o/${auth.orgs[0].customer_id}/instances`);
+      navigate.push(`/o/${auth.orgs[0].customer_id}/instances`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, list]);

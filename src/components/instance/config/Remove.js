@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Input, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
 import instanceState from '../../../functions/state/instanceState';
@@ -11,7 +11,7 @@ import removeInstance from '../../../functions/api/lms/removeInstance';
 
 function Remove({ setInstanceAction }) {
   const { customer_id, compute_stack_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const instance_name = useStoreState(instanceState, (s) => s.instance_name);
@@ -41,7 +41,7 @@ function Remove({ setInstanceAction }) {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push(`/o/${customer_id}/instances`), 3000);
+          setTimeout(() => navigate(`/o/${customer_id}/instances`), 3000);
         }
       }
     }

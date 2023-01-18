@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -7,11 +7,11 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 function NewOrgCard() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (window._kmq) window._kmq.push(['record', 'clicked new org card']);
-    history.push('/organizations/new');
+    navigate('/organizations/new');
   };
 
   return (

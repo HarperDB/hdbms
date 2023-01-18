@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, Redirect, useNavigate, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
@@ -42,7 +42,7 @@ const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
 function App() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const { search, pathname } = useLocation();
   const { redirect } = queryString.parse(search);
@@ -75,10 +75,10 @@ function App() {
         window._kmq.push(['identify', auth.email]);
       }
       if (auth?.update_password) {
-        history.push('/update-password');
+        navigate('/update-password');
       }
       if (redirect) {
-        history.push(redirect);
+        navigate(redirect);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +90,8 @@ function App() {
   }, [showVersionAlert]);
 
   useEffect(() => {
-    init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller });
+    // TODO: navigate passed into init isn't compatible with inti's history.listen call
+    init({ auth: persistedUser, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

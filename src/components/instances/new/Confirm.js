@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
 import React, { useState } from 'react';
 import { Col, Row, Button, Card, CardBody } from 'reactstrap';
-import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
@@ -16,7 +15,7 @@ import commaNumbers from '../../../functions/util/commaNumbers';
 import Unpaid from '../../shared/Unpaid';
 
 function Confirm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -48,7 +47,7 @@ function Confirm() {
       if (tc_version) {
         if (window._kmq) window._kmq.push(['record', totalPrice ? 'purchased instance' : 'created free instance', analyticsProductsArray]);
         setNewInstance({ ...newInstance, tc_version });
-        setTimeout(() => history.push(`/o/${customer_id}/instances/new/status`), 0);
+        setTimeout(() => navigate(`/o/${customer_id}/instances/new/status`), 0);
       } else {
         setFormState({ error: 'Please agree to the Privacy Policy and Cloud Terms of Service.' });
       }
@@ -211,7 +210,7 @@ function Confirm() {
       <Row>
         <Col sm="6">
           <Button
-            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
+            onClick={() => navigate(`/o/${customer_id}/instances/new/details_${newInstance.is_local ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

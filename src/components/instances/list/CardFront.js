@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import useAsyncEffect from 'use-async-effect';
@@ -25,7 +25,7 @@ const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
@@ -52,7 +52,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
         setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
         setFormState({ error: result.message });
       } else {
-        history.push(`/o/${customer_id}/i/${compute_stack_id}`);
+        navigate(`/o/${customer_id}/i/${compute_stack_id}`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

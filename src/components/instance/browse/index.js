@@ -1,7 +1,6 @@
 import React, { useState, useEffect, lazy } from 'react';
 import { Row, Col } from 'reactstrap';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -33,7 +32,7 @@ const defaultTableState = {
 };
 
 function BrowseIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
@@ -48,21 +47,23 @@ function BrowseIndex() {
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
 
+  const location = useLocation();
+
   useEffect(() => {
     if (structure) {
       const schemas = Object.keys(structure);
       const tables = Object.keys(structure?.[schema] || {});
 
       switch (true) {
-        case !schemas.length && history.location.pathname !== '/browse':
+        case !schemas.length && location.pathname !== '/browse':
           setEntities({ schemas: [], tables: [], activeTable: false });
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse`);
           break;
         case schemas.length && !schemas.includes(schema):
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
           break;
         case tables.length && !tables.includes(table):
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
           break;
         default:
           if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {

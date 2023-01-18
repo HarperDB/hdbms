@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -11,7 +11,7 @@ import isAlphaNumericUnderscore from '../../../functions/util/isAlphaNumericUnde
 import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 
 function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, toggleCreate, baseUrl }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -79,7 +79,7 @@ function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, togg
 
   useEffect(() => {
     if (entityName && items.find((i) => i === entityName)) {
-      history.push(`${baseUrl}/${entityName}`);
+      navigate(`${baseUrl}/${entityName}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);

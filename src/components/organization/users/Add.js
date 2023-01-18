@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Input, Button, CardBody, Card } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useHistory } from 'react-router';
 
 import appState from '../../../functions/state/appState';
 
@@ -15,7 +14,7 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 function Add({ refreshUsers, userEmails }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
@@ -60,7 +59,7 @@ function Add({ refreshUsers, userEmails }) {
               Your email address seems to be unreachable. Please update it to ensure billing, upgrade, and other critical system announcements reach you.
               <br />
               <br />
-              <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-3" color="danger">
+              <Button id="updateEmail" onClick={() => navigate('/profile')} title="Update My Email" block className="mt-3" color="danger">
                 Update My Email
               </Button>
             </CardBody>

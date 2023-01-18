@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
@@ -13,7 +12,7 @@ import DetailsSubheader from './DetailsSubheader';
 import config from '../../../config';
 
 function DetailsCloud() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
@@ -60,7 +59,7 @@ function DetailsCloud() {
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
       } else if (stripe_plan_id && stripe_storage_plan_id && instance_region && instance_type && data_volume_size) {
         setNewInstance({ ...newInstance, ...formData });
-        setTimeout(() => history.push(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
+        setTimeout(() => navigate(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -137,7 +136,7 @@ function DetailsCloud() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="backToBasicInfo" onClick={() => history.push(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button id="backToBasicInfo" onClick={() => navigate(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left me-2" />
             Basic Info
           </Button>

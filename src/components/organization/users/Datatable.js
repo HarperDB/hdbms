@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
 import appState from '../../../functions/state/appState';
@@ -24,7 +24,7 @@ const defaultTableState = {
 function Datatable() {
   const { customer_id } = useParams();
   const alert = useAlert();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [tableState, setTableState] = useState(defaultTableState);
   const sortParam = tableState.sorted[0]?.id;
   const sortDesc = tableState.sorted[0]?.desc;
@@ -40,7 +40,7 @@ function Datatable() {
       if (auth.user_id === user_id) {
         alert.error('Edit your own profile by clicking the user icon in the top nav');
       } else {
-        history.push(`/o/${customer_id}/users/${user_id}`);
+        navigate(`/o/${customer_id}/users/${user_id}`);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

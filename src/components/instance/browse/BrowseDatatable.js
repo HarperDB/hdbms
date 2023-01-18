@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import useInterval from 'use-interval';
 import { Card, CardBody } from 'reactstrap';
 import { useStoreState } from 'pullstate';
@@ -17,7 +17,7 @@ let controller2;
 let controller3;
 
 function BrowseDatatable({ tableState, setTableState, activeTable }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -140,7 +140,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
-            onRowClick={(rowData) => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}
+            onRowClick={(rowData) => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}
           />
         </CardBody>
       </Card>

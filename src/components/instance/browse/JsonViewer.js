@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -18,7 +18,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
   const alert = useAlert();
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -32,7 +32,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
-      history.push(baseUrl);
+      navigate(baseUrl);
     }
   }, []);
 
@@ -49,7 +49,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
         delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
         setCurrentValue({ [hashAttribute]: hash_attribute, ...rowData, __createdtime__: createdtime, __updatedtime__: updatedtime });
       } else {
-        history.push(baseUrl);
+        navigate(baseUrl);
         alert.error('Unable to find record with that hash_attribute');
       }
     } else {
@@ -76,7 +76,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
-    return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+    return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
   };
 
   const deleteRecord = async (e) => {
@@ -84,7 +84,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
     if (!action) return false;
     setDeleting(true);
     await queryInstance({ operation: { operation: 'delete', schema, table, hash_values: [hash] }, auth, url });
-    return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
+    return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
   };
 
   return (
@@ -146,7 +146,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
                   id="backToTable"
                   block
                   color="black"
-                  onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}
+                  onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`)}
                 >
                   <i className="fa fa-chevron-left" />
                 </Button>

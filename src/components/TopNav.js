@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Navbar, Nav, NavItem, Button } from 'reactstrap';
-import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -11,7 +11,7 @@ import VerizonLogo from './shared/VerizonLogo';
 
 function TopNav({ isMaintenance }) {
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -41,7 +41,7 @@ function TopNav({ isMaintenance }) {
     appState.update((s) => {
       s.auth = false;
     });
-    history.push('/');
+    navigate('/');
   };
 
   return (

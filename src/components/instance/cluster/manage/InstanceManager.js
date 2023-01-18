@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
 
 import instanceState from '../../../../functions/state/instanceState';
 
@@ -17,7 +16,7 @@ import restartService from '../../../../functions/api/instance/restartService';
 
 function InstanceManager({ items, itemType, setShowModal, loading, setLoading, refreshNetwork }) {
   const { customer_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
@@ -71,7 +70,8 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert, clusterEngine]
   );
 
-  const handleConfigureNode = useCallback((payload) => history.push(`/o/${customer_id}/i/${payload.compute_stack_id}/cluster`), [history, customer_id]);
+  // TODO: check this 'navigate' dep, which was adapted from history.
+  const handleConfigureNode = useCallback((payload) => navigate(`/o/${customer_id}/i/${payload.compute_stack_id}/cluster`), [navigate, customer_id]);
 
   return (
     <div className="entity-manager">

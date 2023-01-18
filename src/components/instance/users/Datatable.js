@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
@@ -30,7 +30,7 @@ let controller;
 
 function Datatable({ lastUpdate, setLastUpdate }) {
   const { customer_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -41,7 +41,7 @@ function Datatable({ lastUpdate, setLastUpdate }) {
 
   const rowClick = useCallback(
     (user_id) => {
-      history.push(`/o/${customer_id}/i/${compute_stack_id}/users/${user_id}`);
+      navigate(`/o/${customer_id}/i/${compute_stack_id}/users/${user_id}`);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [compute_stack_id, customer_id]

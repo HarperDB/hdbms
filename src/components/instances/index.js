@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Row } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
@@ -23,7 +22,7 @@ import Unpaid from '../shared/Unpaid';
 import useInstanceAuth from '../../functions/state/instanceAuths';
 
 function InstancesIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { action, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -77,7 +76,7 @@ function InstancesIndex() {
       alert.success('You have been made an owner of this organization');
     } else if (mounted && instances && !isOrgUser) {
       alert.error('You have been removed from this organization');
-      history.push('/');
+      navigate('/');
     } else if (mounted && instances) {
       alert.success('You are no longer an owner of this organization');
     }

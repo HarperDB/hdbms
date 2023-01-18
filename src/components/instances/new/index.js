@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useCallback } from 'react';
 import { Modal, ModalHeader, ModalBody, Card, CardBody, Button, Row, Col } from 'reactstrap';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -27,7 +26,7 @@ import getUser from '../../../functions/api/lms/getUser';
 import VisitCard from '../../shared/VisitCard';
 
 function NewInstanceIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
   const badCard = useStoreState(appState, (s) => s.customer?.current_payment_status?.status === 'invoice.payment_failed');
@@ -38,14 +37,16 @@ function NewInstanceIndex() {
   const closeAndResetModal = useCallback(() => {
     if (purchaseStep !== 'status') {
       setNewInstance({});
-      setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
+      setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
     }
-  }, [customer_id, history, purchaseStep, setNewInstance]);
+    // NOTE: moved history to navigate, still make sense to use history as a dep here?
+  }, [customer_id, navigate, purchaseStep, setNewInstance]);
 
   const finishOrder = useCallback(() => {
     setNewInstance({});
-    setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
-  }, [customer_id, history, setNewInstance]);
+    setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
+    // NOTE: moved history to navigate, still make sense to use history as a dep here?
+  }, [customer_id, navigate, setNewInstance]);
 
   const refreshSubscriptions = useCallback(() => {
     if (auth && customer_id && stripe_id) {
@@ -72,12 +73,12 @@ function NewInstanceIndex() {
             </div>
             <Row>
               <Col sm="6">
-                <Button id="cancelNewInstance" onClick={() => history.push(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
+                <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
                   Cancel
                 </Button>
               </Col>
               <Col sm="6">
-                <Button id="updateEmail" onClick={() => history.push('/profile')} title="Update My Email" block className="mt-2" color="danger">
+                <Button id="updateEmail" onClick={() => navigate('/profile')} title="Update My Email" block className="mt-2" color="danger">
                   Update My Email
                 </Button>
               </Col>
@@ -99,12 +100,12 @@ function NewInstanceIndex() {
             </div>
             <Row>
               <Col sm="6">
-                <Button id="cancelNewInstance" onClick={() => history.push(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
+                <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
                   Cancel
                 </Button>
               </Col>
               <Col sm="6">
-                <VisitCard label="Update Credit Card" onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/instances/new`)} />
+                <VisitCard label="Update Credit Card" onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/instances/new`)} />
               </Col>
             </Row>
           </CardBody>
