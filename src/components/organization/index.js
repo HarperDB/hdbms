@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Redirect, Route, Switch, useLocation, useParams } from 'react-router-dom';
+import { Redirect, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import routes from './routes';
@@ -20,12 +20,12 @@ function OrganizationsIndex() {
     <main id="organization">
       <SubNav />
       <Suspense fallback={<Loader header=" " spinner />}>
-        <Switch>
+        <Routes>
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} component={route.component} />
           ))}
           <Redirect to={`/o/${customer_id}/users`} />
-        </Switch>
+        </Routes>
       </Suspense>
     </main>
   ) : isOrgUser ? (

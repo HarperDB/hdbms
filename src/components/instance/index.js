@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { Redirect, Route, Switch, useParams, useNavigate } from 'react-router-dom';
+import { Redirect, Route, Routes, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
@@ -104,12 +104,12 @@ function InstanceIndex() {
       <SubNav routes={hydratedRoutes} />
       {isOrgUser && instances && !loadingInstance ? (
         <Suspense fallback={<Loader header=" " spinner />}>
-          <Switch>
+          <Routes>
             {hydratedRoutes.map((route) => (
               <Route key={route.path} path={route.path} component={route.component} />
             ))}
             <Redirect to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} />
-          </Switch>
+          </Routes>
         </Suspense>
       ) : (
         <Loader header="loading instance" spinner />

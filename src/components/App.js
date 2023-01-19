@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Switch, Redirect, useNavigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Redirect, useNavigate, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
@@ -119,7 +119,7 @@ function App() {
         ) : loggedIn ? (
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Switch>
+              <Routes>
                 <Route component={isMaintenance ? Maintenance : UpdatePassword} path="/update-password" />
                 <Route component={isMaintenance ? Maintenance : Profile} path="/profile" />
                 <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
@@ -128,19 +128,19 @@ function App() {
                 <Route component={isMaintenance ? Maintenance : Organization} path="/o/:customer_id/:view?" />
                 <Route component={isMaintenance ? Maintenance : Organizations} path="/:list?/:action?" />
                 <Redirect to="/" />
-              </Switch>
+              </Routes>
             </Suspense>
           </ErrorBoundary>
         ) : (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Switch>
+              <Routes>
                 <Route component={SignIn} exact path="/" />
                 <Route component={config.maintenance ? Maintenance : SignUp} exact path="/sign-up" />
                 <Route component={isMaintenance ? Maintenance : ResetPassword} exact path="/reset-password" />
                 <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
                 <Redirect to={`/?redirect=${pathname}${search}`} />
-              </Switch>
+              </Routes>
             </Suspense>
           </ErrorBoundary>
         )}

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Routes } from 'react-router-dom';
 
 import routes from './routes';
 import SubNav from '../shared/SubNav';
@@ -9,12 +9,12 @@ function ProfileIndex() {
   return <>
     <SubNav />
     <Suspense fallback={<Loader header=" " spinner />}>
-      <Switch>
+      <Routes>
         {routes.map((route) => (
           <Route key={route.path} path={route.path} component={route.component} />
         ))}
         <Redirect to="/profile/profile" />
-      </Switch>
+      </Routes>
     </Suspense>
   </>
 }
