@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { Redirect, Route, Routes, useParams, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';
@@ -108,7 +108,7 @@ function InstanceIndex() {
             {hydratedRoutes.map((route) => (
               <Route key={route.path} path={route.path} component={route.component} />
             ))}
-            <Redirect to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} />
+            <Navigate to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} replace />
           </Routes>
         </Suspense>
       ) : (

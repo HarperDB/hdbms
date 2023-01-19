@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Redirect, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import routes from './routes';
@@ -24,14 +24,14 @@ function OrganizationsIndex() {
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} component={route.component} />
           ))}
-          <Redirect to={`/o/${customer_id}/users`} />
+          <Navigate to={`/o/${customer_id}/users`} replace />
         </Routes>
       </Suspense>
     </main>
   ) : isOrgUser ? (
-    <Redirect to={`/o/${customer_id}/instances`} />
+    <Navigate to={`/o/${customer_id}/instances`} replace />
   ) : primaryOrgRedirect ? (
-    <Redirect to={primaryOrgRedirect} />
+    <Navigate to={primaryOrgRedirect} replace />
   ) : null;
 }
 

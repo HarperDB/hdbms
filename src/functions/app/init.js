@@ -17,7 +17,7 @@ export default ({ auth, navigate, setFetchingUser, setPersistedUser, controller 
 
   useEffect(() => {
     canonical.href = window.location.href;
-  }, [location]);
+  }, [canonical, location]);
 
   if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);
