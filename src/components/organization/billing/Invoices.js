@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Row, Col, CardBody, Card } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';

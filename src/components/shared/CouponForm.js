@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Input } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
 import appState from '../../functions/state/appState';
