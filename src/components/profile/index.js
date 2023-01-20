@@ -13,7 +13,7 @@ function ProfileIndex() {
         {routes.map((route) => (
           <Route key={route.path} path={route.path} component={route.component} />
         ))}
-        <Navigate to="/profile/profile" replace />
+        <Route path="*" element={<Navigate to="/profile/profile" replace />} />
       </Routes>
     </Suspense>
   </>

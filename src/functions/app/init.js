@@ -21,7 +21,7 @@ export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, c
   }
 
   if (['/sign-in'].includes(location.pathname)) {
-    navigate.push('/');
+    navigate('/');
   }
 
   if (!auth?.email) {

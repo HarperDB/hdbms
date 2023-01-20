@@ -13,7 +13,7 @@ function ResourcesIndex() {
         {routes.map((route) => (
           <Route key={route.path} path={route.path} component={route.component} />
         ))}
-        <Navigate to="/resources/installation" replace />
+        <Route path="*" element={<Navigate to="/resources/installation" replace />} />
       </Routes>
     </Suspense>
   </>

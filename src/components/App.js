@@ -128,15 +128,16 @@ function App() {
         ) : loggedIn ? (
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
+              {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
               <Routes>
-                <Route component={isMaintenance ? Maintenance : UpdatePassword} path="/update-password" />
-                <Route component={isMaintenance ? Maintenance : Profile} path="/profile" />
-                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
-                <Route component={isMaintenance ? Maintenance : Instance} path="/o/:customer_id/i/:compute_stack_id" />
-                <Route component={isMaintenance ? Maintenance : Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route component={isMaintenance ? Maintenance : Organization} path="/o/:customer_id/:view?" />
-                <Route component={isMaintenance ? Maintenance : Organizations} path="/:list?/:action?" />
-                <Route element={ <Navigate to="/" replace /> } />
+                <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
+                <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile" />
+                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/:view?" />
+                <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id" />
+                <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/:view?" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
+                <Route element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>
@@ -144,10 +145,10 @@ function App() {
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Routes>
-                <Route component={SignIn} path="/" />
-                <Route component={config.maintenance ? Maintenance : SignUp} path="/sign-up" />
-                <Route component={isMaintenance ? Maintenance : ResetPassword} path="/reset-password" />
-                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
+                <Route element={SignIn} path="/" />
+                <Route element={config.maintenance ? Maintenance : SignUp} path="/sign-up" />
+                <Route element={isMaintenance ? Maintenance : ResetPassword} path="/reset-password" />
+                <Route element={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
                 <Route element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>

@@ -105,10 +105,14 @@ function InstanceIndex() {
       {isOrgUser && instances && !loadingInstance ? (
         <Suspense fallback={<Loader header=" " spinner />}>
           <Routes>
+            {/* TODO: investigate hydratedRoutes concept */ }
             {hydratedRoutes.map((route) => (
               <Route key={route.path} path={route.path} component={route.component} />
             ))}
-            <Navigate to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} replace />
+            {/* TODO: investigate the relative path behavior, make sure that '*' is right.  can we specify these routes in App? */ }
+            <Route path='*' element={
+              <Navigate to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} replace />
+            } />
           </Routes>
         </Suspense>
       ) : (
