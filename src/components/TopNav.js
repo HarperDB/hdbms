@@ -77,7 +77,6 @@ function TopNav({ isMaintenance }) {
                     <NavLink
                       id="viewOrganizationInstances"
                       title="View Organization Instances"
-                      isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1}
                       to={`/o/${customer.customer_id}/instances`}
                     >
                       <i className="fa fa-th d-inline-block" />
@@ -89,7 +88,6 @@ function TopNav({ isMaintenance }) {
                       <NavItem>
                         <NavLink
                           id="manageOrganizationUsers"
-                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/users`) !== -1}
                           title="Manage Organization Users"
                           to={`/o/${customer.customer_id}/users`}
                         >
@@ -100,7 +98,6 @@ function TopNav({ isMaintenance }) {
                       <NavItem>
                         <NavLink
                           id="manageOrganizationBilling"
-                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
                           title="Manage Organization Billing"
                           to={`/o/${customer.customer_id}/billing`}
                         >
@@ -150,7 +147,7 @@ function TopNav({ isMaintenance }) {
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign out</span>
               </Button>
             ) : (
-              <NavLink id="goToLogin" title="Log In" exact to="/">
+              <NavLink id="goToLogin" title="Log In" to="/">
                 <i className="fa fa-sign-in" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign in</span>
               </NavLink>
