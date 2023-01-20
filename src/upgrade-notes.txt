@@ -1,0 +1,2 @@
+- fix [history] dependencies, in files with a 'NOTE:'
+- react-router-ga is incompat w/ rrd v6. taken out for now. implement later w/ react-ga and useLocation / useEffect hook in App();
