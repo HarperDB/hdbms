@@ -8,16 +8,12 @@ import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 
-export default ({ auth, navigate, setFetchingUser, setPersistedUser, controller }) => {
+export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, controller }) => {
   const canonical = document.querySelector('link[rel="canonical"]');
-  const location = useLocation()
 
-  // TODO: re-wrote this without history.listen. no analog in navigate.
-  // react use effect w/ location as a dep. when it changes, update canonical.href to window.location.href.
-
-  useEffect(() => {
-    canonical.href = window.location.href;
-  }, [canonical, location]);
+  // TODO: was calling history.listen here to set canonical url to window.location.href on location change,
+  // but navigate api differs from history api.  using useLocation() now.
+  // TODO: moved that logic to a hook in main app component for now.
 
   if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);

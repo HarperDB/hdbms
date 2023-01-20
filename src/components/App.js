@@ -42,9 +42,11 @@ const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
 function App() {
+  const canonicalUrl = document.querySelector('link[rel="canonical"]');
   const navigate = useNavigate();
   const alert = useAlert();
-  const { search, pathname } = useLocation();
+  const location =  useLocation();
+  const { search, pathname } = location; 
   const { redirect } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -89,9 +91,16 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showVersionAlert]);
 
+  // TODO: dig into what this is all about.
+  useEffect(() => {
+    canonicalUrl.href = window.location.href;
+  }, [canonicalUrl, location]);
+
+
   useEffect(() => {
     // TODO: navigate passed into init isn't compatible with inti's history.listen call
-    init({ auth: persistedUser, navigate, setFetchingUser, setPersistedUser, controller });
+ 
+    init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -127,7 +136,7 @@ function App() {
                 <Route component={isMaintenance ? Maintenance : Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
                 <Route component={isMaintenance ? Maintenance : Organization} path="/o/:customer_id/:view?" />
                 <Route component={isMaintenance ? Maintenance : Organizations} path="/:list?/:action?" />
-                <Navigate to="/" replace />
+                <Route element={ <Navigate to="/" replace /> } />
               </Routes>
             </Suspense>
           </ErrorBoundary>
@@ -135,11 +144,11 @@ function App() {
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Routes>
-                <Route component={SignIn} exact path="/" />
-                <Route component={config.maintenance ? Maintenance : SignUp} exact path="/sign-up" />
-                <Route component={isMaintenance ? Maintenance : ResetPassword} exact path="/reset-password" />
+                <Route component={SignIn} path="/" />
+                <Route component={config.maintenance ? Maintenance : SignUp} path="/sign-up" />
+                <Route component={isMaintenance ? Maintenance : ResetPassword} path="/reset-password" />
                 <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
-                <Navigate to={`/?redirect=${pathname}${search}`} replace />
+                <Route element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>

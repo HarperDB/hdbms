@@ -20,6 +20,7 @@ root.render(
     <Provider template={AlertTemplate} timeout={4000} position={positions.TOP_CENTER}>
       <BrowserRouter>
           {/* NOTE: removed Analytics tag, incompatible with react router v6 */}
+          {/* TODO: re-impliment GA functionality for rrdv6 */}
           <App />
       </BrowserRouter>
     </Provider>
