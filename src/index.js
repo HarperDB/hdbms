@@ -5,7 +5,6 @@ import { positions, Provider } from 'react-alert';
 import { Elements } from '@stripe/react-stripe-js';
 
 // incompatible with react-router-dom v6
-import Analytics from 'react-router-ga';
 
 import stripePromise from './functions/stripe/stripePromise';
 import config from './config';
@@ -20,10 +19,8 @@ root.render(
   <Elements stripe={stripePromise} options={{ fonts: [{ cssSrc: 'https://fonts.googleapis.com/css?family=Raleway&display=swap' }] }}>
     <Provider template={AlertTemplate} timeout={4000} position={positions.TOP_CENTER}>
       <BrowserRouter>
-        {/* Analytics is incompatible with react router v6 */}
-        <Analytics trackPathnameOnly id={config.google_analytics_code}>
+          {/* NOTE: removed Analytics tag, incompatible with react router v6 */}
           <App />
-        </Analytics>
       </BrowserRouter>
     </Provider>
   </Elements>
