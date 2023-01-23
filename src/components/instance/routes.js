@@ -68,7 +68,7 @@ const cluster = {
 
 const functions = {
   component: Functions,
-  path: `/o/:customer_id/i/:compute_stack_id/functions/:action?/:project?/:type?/:file?`,
+  path: `functions/:action?/:project?/:type?/:file?`,
   link: 'functions',
   label: 'functions',
   icon: 'project-diagram',
@@ -77,7 +77,7 @@ const functions = {
 
 const metrics = {
   component: Metrics,
-  path: `/o/:customer_id/i/:compute_stack_id/status`,
+  path: `status`,
   link: 'status',
   label: 'status',
   icon: 'tachometer',
@@ -86,7 +86,7 @@ const metrics = {
 
 const config = {
   component: Config,
-  path: `/o/:customer_id/i/:compute_stack_id/config`,
+  path: `config`,
   link: 'config',
   label: 'config',
   icon: 'wrench',
@@ -95,7 +95,7 @@ const config = {
 
 const examples = {
   component: Examples,
-  path: `/o/:customer_id/i/:compute_stack_id/examples/:folder?/:method?`,
+  path: `examples/:folder?/:method?`,
   link: 'examples',
   label: 'example code',
   icon: 'code',
