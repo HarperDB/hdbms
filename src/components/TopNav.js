@@ -120,7 +120,10 @@ function TopNav({ isMaintenance }) {
             </>
           )}
           <NavItem>
-            <NavLink id="viewResources" title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
+            <NavLink
+              id="viewResources"
+              title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code"
+              to="/resources">
               <i className="fas fa-tools" />
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>

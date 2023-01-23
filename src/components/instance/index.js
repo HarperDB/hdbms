@@ -1,4 +1,4 @@
-import React, { lazy, useState, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Navigate, Route, Routes, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -19,27 +19,6 @@ import getAlarms from '../../functions/api/lms/getAlarms';
 import config from '../../config';
 import userInfo from '../../functions/api/instance/userInfo';
 import registrationInfo from '../../functions/api/instance/registrationInfo';
-
-import Browse, { metadata as browseRouterData } from './browse';
-import { metadata as chartsRouterData } from  './charts'; 
-import { metadata as queryRouterData } from './query';
-import { metadata as clusterRouterData } from './cluster';
-import { metadata as configRouterData } from './config';
-import { metadata as metricsRouterData } from './status';
-import { metadata as usersRouterData }  from './users';
-import { metadata as rolesRouterData }  from './roles';
-import { metadata as functionsRouterData }  from './functions';
-import { metadata as examplesRouterData } from './examples';
-
-const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
-const Query = lazy(() => import(/* webpackChunkName: "instance-charts" */ './query'));
-const Cluster = lazy(() => import(/* webpackChunkName: "instance-charts" */ './cluster'));
-const Config = lazy(() => import(/* webpackChunkName: "instance-charts" */ './config'));
-const Metrics = lazy(() => import(/* webpackChunkName: "instance-charts" */ './status'));
-const Users = lazy(() => import(/* webpackChunkName: "instance-charts" */ './users'));
-const Roles = lazy(() => import(/* webpackChunkName: "instance-charts" */ './roles'));
-const Functions = lazy(() => import(/* webpackChunkName: "instance-charts" */ './functions'));
-const Examples = lazy(() => import(/* webpackChunkName: "instance-charts" */ './examples'));
 
 function InstanceIndex() {
   const { compute_stack_id, customer_id } = useParams();
@@ -120,57 +99,20 @@ function InstanceIndex() {
     }
   }, config.refresh_content_interval);
 
-  const f = () => ( <Browse />);
-
   return (
     <>
       <SubNav routes={hydratedRoutes} />
       {isOrgUser && instances && !loadingInstance ? (
         <Suspense fallback={<Loader header=" " spinner />}>
           <Routes>
-            <Route
-              path={browseRouterData.path}
-              key={browseRouterData.path}
-              element={f()} />
-            <Route
-              path={queryRouterData.path}
-              key={queryRouterData.path}
-              element={ <Query /> } />
-            <Route
-              path={usersRouterData.path}
-              key={usersRouterData.path}
-              element={ <Users /> } />
-            <Route
-              key={rolesRouterData.path}
-              path={rolesRouterData.path}
-              element={ <Roles /> } />
-            <Route
-              path={chartsRouterData.path}
-              key={chartsRouterData.path}
-              element={ <Charts /> } />
-            <Route
-              path={clusterRouterData.path}
-              key={clusterRouterData.path}
-              element={ <Cluster /> } />
-            <Route
-              path={functionsRouterData.path}
-              key={functionsRouterData.path}
-              element={ <Functions /> } />
-            <Route
-              path={metricsRouterData.path}
-              key={metricsRouterData.path}
-              element={ <Metrics /> } />
-            <Route
-              path={configRouterData.path}
-              key={configRouterData.path}
-              element={ <Config /> } />
-            <Route
-              path={examplesRouterData.path}
-              key={examplesRouterData.path}
-              element={ <Examples /> } />
-            <Route path="*" element={
-              <Navigate to={browseRouterData.path} replace />
-            } />
+          {
+            hydratedRoutes.map(route => (
+              <Route path={route.path} key={route.path} element={ route.element }/>
+            ))
+          }
+          <Route path="*" element={
+            <Navigate to={hydratedRoutes[0].path} replace />
+          } />
           </Routes>
         </Suspense>
       ) : (

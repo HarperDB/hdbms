@@ -13,7 +13,7 @@ const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ '
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 const browse = {
-  component: () => ( <Browse />),
+  element: <Browse />,
   path: `browse/:schema?/:table?/:action?/:hash?`,
   link: 'browse',
   label: 'browse',
@@ -22,7 +22,7 @@ const browse = {
 };
 
 const query = {
-  component: () => ( <Query /> ),
+  element: <Query />,
   path: `query`,
   link: 'query',
   label: 'query',
@@ -31,7 +31,7 @@ const query = {
 };
 
 const users = {
-  component: () => ( <Users /> ),
+  element: <Users />,
   path: `users/:username?`,
   link: 'users',
   label: 'users',
@@ -40,7 +40,7 @@ const users = {
 };
 
 const roles = {
-  component: () => ( <Roles />),
+  element: <Roles />,
   path: `roles/:role_id?`,
   link: 'roles',
   label: 'roles',
@@ -49,7 +49,7 @@ const roles = {
 };
 
 const charts = {
-  component: () => ( <Charts />),
+  element: <Charts />,
   path: `charts`,
   link: 'charts',
   label: 'charts',
@@ -58,7 +58,7 @@ const charts = {
 };
 
 const cluster = {
-  component: () => (<Cluster />),
+  element: <Cluster />,
   path: `cluster`,
   link: 'cluster',
   label: 'cluster',
@@ -67,7 +67,7 @@ const cluster = {
 };
 
 const functions = {
-  component: () => (<Functions />),
+  element: <Functions />,
   path: `functions/:action?/:project?/:type?/:file?`,
   link: 'functions',
   label: 'functions',
@@ -76,7 +76,7 @@ const functions = {
 };
 
 const metrics = {
-  component: () => (<Metrics />),
+  element: <Metrics />,
   path: `status`,
   link: 'status',
   label: 'status',
@@ -85,7 +85,7 @@ const metrics = {
 };
 
 const config = {
-  component: () => (<Config />),
+  element: <Config />,
   path: `config`,
   link: 'config',
   label: 'config',
@@ -94,7 +94,7 @@ const config = {
 };
 
 const examples = {
-  component: () => (<Examples />),
+  element: <Examples />,
   path: `examples/:folder?/:method?`,
   link: 'examples',
   label: 'example code',

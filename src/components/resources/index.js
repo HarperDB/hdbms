@@ -10,10 +10,15 @@ function ResourcesIndex() {
     <SubNav routes={routes} />
     <Suspense fallback={<Loader header=" " spinner />}>
       <Routes>
-        {routes.map((route) => (
-          <Route key={route.path} path={route.path} component={route.component} />
-        ))}
-        <Route path="*" element={<Navigate to="/resources/installation" replace />} />
+        {
+          routes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))
+        }
+        {/*
+        <Route key="installation" path="installation" element={routes[0].element} />
+        */}
+        <Route path="*"element={ <Navigate replace to="installation" /> } />
       </Routes>
     </Suspense>
   </>
