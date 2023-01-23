@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, React } from 'react';
 
 import Browse from './browse';
 
@@ -13,8 +13,8 @@ const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ '
 const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 const browse = {
-  component: Browse,
-  path: `/o/:customer_id/i/:compute_stack_id/browse/:schema?/:table?/:action?/:hash?`,
+  component: () => ( <Browse />),
+  path: `browse/:schema?/:table?/:action?/:hash?`,
   link: 'browse',
   label: 'browse',
   icon: 'list',
@@ -22,8 +22,8 @@ const browse = {
 };
 
 const query = {
-  component: Query,
-  path: `/o/:customer_id/i/:compute_stack_id/query`,
+  component: () => ( <Query /> ),
+  path: `query`,
   link: 'query',
   label: 'query',
   icon: 'search',
@@ -31,8 +31,8 @@ const query = {
 };
 
 const users = {
-  component: Users,
-  path: `/o/:customer_id/i/:compute_stack_id/users/:username?`,
+  component: () => ( <Users /> ),
+  path: `users/:username?`,
   link: 'users',
   label: 'users',
   icon: 'users',
@@ -40,8 +40,8 @@ const users = {
 };
 
 const roles = {
-  component: Roles,
-  path: `/o/:customer_id/i/:compute_stack_id/roles/:role_id?`,
+  component: () => ( <Roles />),
+  path: `roles/:role_id?`,
   link: 'roles',
   label: 'roles',
   icon: 'check-square',
@@ -49,8 +49,8 @@ const roles = {
 };
 
 const charts = {
-  component: Charts,
-  path: `/o/:customer_id/i/:compute_stack_id/charts`,
+  component: () => ( <Charts />),
+  path: `charts`,
   link: 'charts',
   label: 'charts',
   icon: 'chart-line',
@@ -58,8 +58,8 @@ const charts = {
 };
 
 const cluster = {
-  component: Cluster,
-  path: `/o/:customer_id/i/:compute_stack_id/cluster`,
+  component: () => (<Cluster />),
+  path: `cluster`,
   link: 'cluster',
   label: 'cluster',
   icon: 'cubes',
@@ -67,7 +67,7 @@ const cluster = {
 };
 
 const functions = {
-  component: Functions,
+  component: () => (<Functions />),
   path: `functions/:action?/:project?/:type?/:file?`,
   link: 'functions',
   label: 'functions',
@@ -76,7 +76,7 @@ const functions = {
 };
 
 const metrics = {
-  component: Metrics,
+  component: () => (<Metrics />),
   path: `status`,
   link: 'status',
   label: 'status',
@@ -85,7 +85,7 @@ const metrics = {
 };
 
 const config = {
-  component: Config,
+  component: () => (<Config />),
   path: `config`,
   link: 'config',
   label: 'config',
@@ -94,7 +94,7 @@ const config = {
 };
 
 const examples = {
-  component: Examples,
+  component: () => (<Examples />),
   path: `examples/:folder?/:method?`,
   link: 'examples',
   label: 'example code',

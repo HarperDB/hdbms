@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import getCurrentVersion from '../api/lms/getCurrentVersion';
 import getProducts from '../api/lms/getProducts';

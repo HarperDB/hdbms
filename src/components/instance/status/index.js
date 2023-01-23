@@ -6,6 +6,14 @@ import Logs from './Logs';
 import Jobs from './Jobs';
 import Alarms from './Alarms';
 
+
+export const metadata = {
+  path: `status`,
+  link: 'status',
+  label: 'status',
+  icon: 'tachometer',
+  iconCode: 'f0e4',
+}
 function MetricsIndex() {
   return <Row id="config">
       <Col xs="12">

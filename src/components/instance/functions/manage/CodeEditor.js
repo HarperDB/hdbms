@@ -39,7 +39,9 @@ function CodeEditor() {
     setEditorToFile();
   };
 
-  useEffect(() => setEditorToFile(), [project, file, setEditorToFile, compute_stack_id]);
+  useEffect(() => {
+    setEditorToFile();
+  }, [project, file, setEditorToFile, compute_stack_id]);
 
   return (
     <>

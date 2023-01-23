@@ -11,6 +11,14 @@ import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/functions/buildCustomFunctions';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 
+export const metadata = {
+  path: `functions/:action?/:project?/:type?/:file?`,
+  link: 'functions',
+  label: 'functions',
+  icon: 'project-diagram',
+  iconCode: 'f542',
+};
+
 function CustomFunctionsIndex() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -28,7 +36,9 @@ function CustomFunctionsIndex() {
     }
   }, [auth, url, restarting]);
 
-  useEffect(refreshCustomFunctions, [refreshCustomFunctions]);
+  useEffect(() => {
+    refreshCustomFunctions(); 
+  }, [refreshCustomFunctions]);
 
   useEffect(() => {
     const isConfigured = custom_functions?.is_enabled && custom_functions?.port;

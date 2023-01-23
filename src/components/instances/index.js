@@ -64,7 +64,9 @@ function InstancesIndex() {
   }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refreshInstances, [auth, products, regions, subscriptions, customer_id, instanceAuths]);
+  useEffect(() => {
+    refreshInstances() 
+  }, [auth, products, regions, subscriptions, customer_id, instanceAuths]);
 
   useInterval(
     () => instances?.length && instances.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),

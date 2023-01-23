@@ -21,6 +21,14 @@ import InstanceConfig from './InstanceConfig';
 import getConfiguration from '../../../functions/api/instance/getConfiguration';
 import ConfigLoader from './ConfigLoader';
 
+export const metadata = {
+  path: `config`,
+  link: 'config',
+  label: 'config',
+  icon: 'wrench',
+  iconCode: 'f0ad',
+}
+
 function ConfigIndex() {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);

@@ -75,7 +75,9 @@ function EntityManagerForm({ items, itemType, activeSchema, toggleDropItem, togg
     return buildInstanceStructure({ auth, url });
   };
 
-  useEffect(() => toggleDropItem(), [toggleDropItem]);
+  useEffect(() => {
+    toggleDropItem()
+  }, [toggleDropItem]);
 
   useEffect(() => {
     if (entityName && items.find((i) => i === entityName)) {

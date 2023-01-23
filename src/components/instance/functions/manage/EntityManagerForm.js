@@ -76,7 +76,9 @@ function EntityManagerForm({ items, toggleDropItem, toggleCreate, baseUrl, resta
     }, 500);
   };
 
-  useEffect(() => toggleDropItem(), [toggleDropItem]);
+  useEffect(() => {
+    toggleDropItem()
+  }, [toggleDropItem]);
 
   useEffect(() => {
     if (entityName && items.find((i) => i === entityName)) {

@@ -4,7 +4,6 @@ import SelectDropdown from 'react-select';
 import { NavLink, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
-// NOTE: use history was imported from 'react-router' not 'react-router-dom'. why?
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../functions/state/appState';
@@ -49,12 +48,14 @@ function Subnav({ routes = [] }) {
     },
     [compute_stack_id]
   );
+  // FIXME: routes are relative now.
   const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
   const activeRoute = {
     label: currentRoute?.label,
     value: currentRoute?.link,
     iconCode: currentRoute?.iconCode,
   };
+
 
   // TODO: rename this, added 'Fn' because conflicts with new navigate replacement for history obj.
   const navigateFn = ({ value, has_auth, is_unavailable }) =>

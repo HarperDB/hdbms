@@ -51,11 +51,15 @@ function Add({ setLastUpdate }) {
     }
   }, [formState]);
 
-  useAsyncEffect(() => setFormState({}), [formData]);
+  useAsyncEffect(() => {
+    setFormState({})
+  }, [formData]);
 
   useAsyncEffect(() => roles && setFormData({ ...formData, role: false }), [roles]);
 
-  useEffect(() => listRoles({ auth, url }), [auth, url]);
+  useEffect(() => {
+    listRoles({ auth, url })
+  }, [auth, url]);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

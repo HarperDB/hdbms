@@ -75,7 +75,9 @@ function BrowseIndex() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
 
-  useEffect(() => buildInstanceStructure({ auth, url }), [auth, url, schema, table]);
+  useEffect(() => {
+    buildInstanceStructure({ auth, url })
+  }, [auth, url, schema, table]);
 
   return (
     <Row>
@@ -105,5 +107,13 @@ function BrowseIndex() {
     </Row>
   );
 }
+
+export const metadata = {
+  path: `browse/:schema?/:table?/:action?/:hash?`,
+  link: 'browse',
+  label: 'browse',
+  icon: 'list',
+  iconCode: 'f03a',
+};
 
 export default BrowseIndex;

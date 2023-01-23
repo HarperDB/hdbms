@@ -61,7 +61,9 @@ function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
     return navigate(`${baseUrl}/${response.id}`);
   };
 
-  useEffect(() => toggleDropItem(), [toggleDropItem]);
+  useEffect(() => {
+    toggleDropItem()
+  }, [toggleDropItem]);
 
   return (
     <Form onSubmit={createItem}>
