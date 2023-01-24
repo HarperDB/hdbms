@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { browserLocation, Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -97,14 +97,12 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showVersionAlert]);
 
-  // TODO: dig into what this is all about.
   useEffect(() => {
     canonicalUrl.href = window.location.href;
-  }, [canonicalUrl, location]);
+  }, [location, canonicalUrl]);
 
 
   useEffect(() => {
-    // TODO: navigate passed into init isn't compatible with inti's history.listen call
  
     init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
