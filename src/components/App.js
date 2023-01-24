@@ -1,5 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { browserLocation, Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
@@ -62,6 +63,11 @@ function App() {
   const loggedIn = auth?.user_id;
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
   const isMaintenance = version?.maintenance && isNotEmployee;
+  ReactGA.initialize(config.google_analytics_code);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, [location.pathname]);
 
   useEffect(() => {
     changeFavIcon(currentTheme);
