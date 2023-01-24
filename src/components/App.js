@@ -149,7 +149,7 @@ function App() {
                 <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
                 <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
                 <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
-                <Route element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
+                <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>
