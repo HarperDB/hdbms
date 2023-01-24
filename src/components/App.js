@@ -136,7 +136,7 @@ function App() {
                 <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
                 <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/:view?" />
-                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" /> {/* is :list being bound to organizations? */ }
                 <Route element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
@@ -145,10 +145,10 @@ function App() {
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Routes>
-                <Route element={SignIn} path="/" />
-                <Route element={config.maintenance ? Maintenance : SignUp} path="/sign-up" />
-                <Route element={isMaintenance ? Maintenance : ResetPassword} path="/reset-password" />
-                <Route element={isMaintenance ? Maintenance : Resources} path="/resources/:view?/*" />
+                <Route element={<SignIn />} path="/" />
+                <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
+                <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
+                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/:view?/*" />
                 <Route element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>
