@@ -48,7 +48,7 @@ function Subnav({ routes = [] }) {
     },
     [compute_stack_id]
   );
-  // FIXME: routes are relative now.
+
   const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
   const activeRoute = {
     label: currentRoute?.label,
@@ -57,9 +57,16 @@ function Subnav({ routes = [] }) {
   };
 
 
-  // TODO: rename this, added 'Fn' because conflicts with new navigate replacement for history obj.
-  const navigateFn = ({ value, has_auth, is_unavailable }) =>
-    is_unavailable ? false : has_auth ? navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`) : navigate(`/o/${customer_id}/instances/login`);
+  const navigateFn = ({ value, has_auth, is_unavailable }) => {
+    if (!is_unavailable) {
+      return false
+    }
+    if (has_auth) {
+      navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`)
+    } else {
+      navigate(`/o/${customer_id}/instances/login`)
+    }
+  }
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

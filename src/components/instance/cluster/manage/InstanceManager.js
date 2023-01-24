@@ -70,7 +70,6 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
     [setLoading, auth, url, is_local, customer_id, refreshNetwork, alert, clusterEngine]
   );
 
-  // TODO: check this 'navigate' dep, which was adapted from history.
   const handleConfigureNode = useCallback((payload) => navigate(`/o/${customer_id}/i/${payload.compute_stack_id}/cluster`), [navigate, customer_id]);
 
   return (
