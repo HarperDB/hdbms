@@ -6,16 +6,16 @@ const Billing = lazy(() => import(/* webpackChunkName: "organization-billing" */
 const Routes = ({ customer_id }) => [
   {
     element: <Users />,
-    path: `/o/:customer_id/users/:user_id?`,
-    link: `/o/${customer_id}/users`,
+    path: `users/:user_id?`,
+    link: `users`,
     label: 'users',
     icon: 'users',
     iconCode: 'f0c0',
   },
   {
     element: <Billing />,
-    path: `/o/:customer_id/billing`,
-    link: `/o/${customer_id}/billing`,
+    path: `billing`,
+    link: `billing`,
     label: 'billing',
     icon: 'credit-card-alt',
     iconCode: 'f283',

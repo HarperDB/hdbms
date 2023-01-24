@@ -139,8 +139,8 @@ function App() {
                 <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/:view?" />
-                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" /> {/* is :list being bound to organizations? */ }
+                <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
                 <Route element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>

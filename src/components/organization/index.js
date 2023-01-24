@@ -24,14 +24,18 @@ function OrganizationIndex() {
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
-          <Route element={ <Navigate to={`/o/${customer_id}/users`} replace /> } />
+          <Route path="*" element={ <Navigate to='users' replace /> } />
         </Routes>
       </Suspense>
     </main>
   ) : isOrgUser ? (
-    <Navigate to={`/o/${customer_id}/instances`} replace />
+    <Routes>
+      <Route path="*" element={ <Navigate to='instances' replace /> } />
+    </Routes>
   ) : primaryOrgRedirect ? (
-    <Navigate to={primaryOrgRedirect} replace />
+    <Routes>
+      <Route path="*" element={ <Navigate to={primaryOrgRedirect} replace /> } />
+    </Routes>
   ) : null;
 }
 
