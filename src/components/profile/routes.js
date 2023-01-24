@@ -1,11 +1,11 @@
-import { lazy } from 'react';
+import { lazy, React } from 'react';
 
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
 
 const Routes = [
   {
-    component: Profile,
-    path: '/profile',
+    element: <Profile />,
+    path: '',
     link: 'profile',
     label: 'profile',
     icon: 'user',

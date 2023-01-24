@@ -131,7 +131,7 @@ function App() {
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
               <Routes>
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
-                <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile" />
+                <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />

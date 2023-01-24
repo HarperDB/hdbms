@@ -15,10 +15,7 @@ function ResourcesIndex() {
             <Route key={route.path} path={route.path} element={route.element} />
           ))
         }
-        {/*
-        <Route key="installation" path="installation" element={routes[0].element} />
-        */}
-        <Route path="*"element={ <Navigate replace to="installation" /> } />
+        <Route path="*"element={ <Navigate to="installation" replace /> } />
       </Routes>
     </Suspense>
   </>
