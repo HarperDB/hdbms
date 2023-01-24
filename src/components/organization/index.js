@@ -7,7 +7,7 @@ import SubNav from '../shared/SubNav';
 import appState from '../../functions/state/appState';
 import Loader from '../shared/Loader';
 
-function OrganizationsIndex() {
+function OrganizationIndex() {
   const location = useLocation();
   const { customer_id } = useParams();
   const hydratedRoutes = routes({ customer_id });
@@ -24,7 +24,7 @@ function OrganizationsIndex() {
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
-          <Navigate to={`/o/${customer_id}/users`} replace />
+          <Route element={ <Navigate to={`/o/${customer_id}/users`} replace /> } />
         </Routes>
       </Suspense>
     </main>
@@ -35,4 +35,4 @@ function OrganizationsIndex() {
   ) : null;
 }
 
-export default OrganizationsIndex;
+export default OrganizationIndex;
