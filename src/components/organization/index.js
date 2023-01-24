@@ -22,7 +22,7 @@ function OrganizationsIndex() {
       <Suspense fallback={<Loader header=" " spinner />}>
         <Routes>
           {hydratedRoutes.map((route) => (
-            <Route key={route.path} path={route.path} component={route.component} />
+            <Route key={route.path} path={route.path} element={route.element} />
           ))}
           <Navigate to={`/o/${customer_id}/users`} replace />
         </Routes>
