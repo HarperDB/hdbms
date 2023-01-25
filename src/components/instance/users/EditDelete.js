@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useLocation, useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
@@ -15,7 +14,7 @@ import listUsers from '../../../functions/api/instance/listUsers';
 function EditDelete() {
   const { username } = useParams();
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const alert = useAlert();
@@ -33,7 +32,7 @@ function EditDelete() {
         alert.success(response.message);
         listUsers({ auth, url });
         setFormState({});
-        setTimeout(() => history.push(pathname.replace(`/users/${username}`, '/users')), 0);
+        setTimeout(() => navigate(pathname.replace(`/users/${username}`, '/users')), 0);
       } else {
         alert.error(response.message);
         setFormState({});

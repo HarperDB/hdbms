@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useLocation, useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import appState from '../../../functions/state/appState';
@@ -15,7 +14,7 @@ import instanceState from '../../../functions/state/instanceState';
 function EditDelete() {
   const { user_id, customer_id } = useParams();
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
@@ -34,7 +33,7 @@ function EditDelete() {
           s.lastUpdate = Date.now();
         });
         setFormState({});
-        setTimeout(() => history.push(pathname.replace(`/${user_id}`, '')), 100);
+        setTimeout(() => navigate(pathname.replace(`/${user_id}`, '')), 100);
       } else {
         alert.error(response.message);
         setFormState({});

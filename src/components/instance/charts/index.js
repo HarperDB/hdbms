@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardBody, Button, Col, Row } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import useInterval from 'use-interval';
 
@@ -17,9 +16,17 @@ import config from '../../../config';
 
 let controller;
 
+export const metadata = {
+  path: `charts`,
+  link: 'charts',
+  label: 'charts',
+  icon: 'chart-line',
+  iconCode: 'f201',
+};
+
 function DashboardIndex() {
   const { customer_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
@@ -59,7 +66,7 @@ function DashboardIndex() {
       <Card className="mb-4">
         <CardBody className="text-center">
           To add charts to the dashboard, execute a
-          <Button id="goToQueryPage" onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="success" className="px-2 mx-2">
+          <Button id="goToQueryPage" onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/query`)} size="sm" color="success" className="px-2 mx-2">
             <i className="fa fa-search text-small me-2 " /> query
           </Button>
           Then click &quot;create chart&quot;

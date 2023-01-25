@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 
 import appState from '../../../../functions/state/appState';
@@ -23,7 +22,7 @@ const defaultTableState = { filtered: [], sorted: [], page: 0, totalPages: 1, pa
 
 function Deploy() {
   const { customer_id, compute_stack_id, project } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [instanceAuths] = useInstanceAuth({});
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -38,7 +37,8 @@ function Deploy() {
   const [loading, setLoading] = useReducer((state, newState) => ({ ...state, ...newState }), {});
   const [tableState, setTableState] = useState(defaultTableState);
 
-  const handleReturn = useCallback(() => history.push(returnUrl), [history, returnUrl]);
+  // NOTE: not sure about 'navigate' dep. this was adapted from migration from history to navigate.
+  const handleReturn = useCallback(() => navigate(returnUrl), [navigate, returnUrl]);
 
   const updateInstanceCFStatus = useCallback(
     async (destination_compute_stack_id, action) => {

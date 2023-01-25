@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody } from 'reactstrap';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -15,7 +14,7 @@ import generateMethodLinks from '../../../functions/examples/generateMethodLinks
 import addError from '../../../functions/api/lms/addError';
 
 function ExampleManager({ type }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id, compute_stack_id, folder, method } = useParams();
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [items, setItems] = useState([]);
@@ -34,14 +33,14 @@ function ExampleManager({ type }) {
         const newItems = generateFolderLinks(postmanCollection);
         setItems(newItems);
         if (!folder) {
-          history.push(`${baseUrl}/${newItems[0]}`);
+          navigate(`${baseUrl}/${newItems[0]}`);
         }
       }
       if (folder && type === 'method') {
         const newItems = generateMethodLinks(postmanCollection, folder);
         setItems(newItems);
         if (!method) {
-          history.push(`${baseUrl}/${newItems[0]}`);
+          navigate(`${baseUrl}/${newItems[0]}`);
         }
       }
     }

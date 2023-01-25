@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import appState from '../../../functions/state/appState';
 import useNewInstance from '../../../functions/state/newInstance';
@@ -16,7 +15,7 @@ import FormStatus from '../../shared/FormStatus';
 import ContentContainer from '../../shared/ContentContainer';
 
 function Payment() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
@@ -74,7 +73,7 @@ function Payment() {
         <Col sm="6">
           <Button
             id="instanceDetailsButton"
-            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => navigate(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             color="purple"
@@ -88,7 +87,7 @@ function Payment() {
           <Button
             id="reviewInstanceDetails"
             title="Review Instance Details"
-            onClick={() => history.push(`/o/${customer_id}/instances/new/confirm`)}
+            onClick={() => navigate(`/o/${customer_id}/instances/new/confirm`)}
             block
             color="purple"
             className="mt-3"
@@ -125,7 +124,7 @@ function Payment() {
         <Col sm="6">
           <Button
             id="instanceDetailsButton"
-            onClick={() => history.push(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
+            onClick={() => navigate(`/o/${customer_id}/instances/new/details_${isLocal ? 'local' : 'cloud'}`)}
             title="Back to Instance Details"
             block
             className="mt-3"

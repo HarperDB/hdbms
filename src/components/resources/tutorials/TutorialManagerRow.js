@@ -1,10 +1,10 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 function TutorialManagerRow({ videoId, title, baseUrl, isActive }) {
-  const history = useHistory();
-  const handleSetActive = () => (isActive ? false : history.push(`${baseUrl}/${videoId}`));
+  const navigate = useNavigate();
+  const handleSetActive = () => (isActive ? false : navigate(`${baseUrl}/${videoId}`));
 
   return (
     <Row title={`View${isActive ? 'ing' : ''} ${title}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive} tabIndex="0">

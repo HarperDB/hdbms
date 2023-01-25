@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -13,7 +13,7 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 function CsvUploadURL() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -40,13 +40,13 @@ function CsvUploadURL() {
         instanceState.update((s) => {
           s.lastUpdate = Date.now();
         });
-        return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+        return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
       } catch (e) {
         return setTimeout(() => {
           instanceState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
         }, 2000);
       }
     },

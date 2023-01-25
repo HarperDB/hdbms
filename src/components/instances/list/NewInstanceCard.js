@@ -1,17 +1,17 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardBody, Col } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import appState from '../../../functions/state/appState';
 
 function NewInstanceCard() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const platformName = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
 
   const handleClick = () => {
     if (window._kmq) window._kmq.push(['record', 'clicked new instance card']);
-    history.push(`/o/${customer_id}/instances/new`);
+    navigate(`/o/${customer_id}/instances/new`);
   };
 
   return (

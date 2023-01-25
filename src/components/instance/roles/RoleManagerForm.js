@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Input, Form } from 'reactstrap';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
 import addRole from '../../../functions/api/instance/addRole';
@@ -12,7 +11,7 @@ import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 
 function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
   const { compute_stack_id, customer_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -59,10 +58,12 @@ function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
 
     setEntity({});
     await listRoles({ auth, url });
-    return history.push(`${baseUrl}/${response.id}`);
+    return navigate(`${baseUrl}/${response.id}`);
   };
 
-  useEffect(() => toggleDropItem(), [toggleDropItem]);
+  useEffect(() => {
+    toggleDropItem()
+  }, [toggleDropItem]);
 
   return (
     <Form onSubmit={createItem}>

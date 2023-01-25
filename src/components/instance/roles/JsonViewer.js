@@ -3,7 +3,7 @@ import JSONInput from 'react-json-editor-ajrm';
 import ToggleButton from 'react-toggle';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Row, Col, Input } from 'reactstrap';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import useAsyncEffect from 'use-async-effect';

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import useNewInstance from '../../../functions/state/newInstance';
 import ContentContainer from '../../shared/ContentContainer';
@@ -10,7 +9,7 @@ import VerizonLogo from '../../shared/VerizonLogo';
 import AWSLogo from '../../shared/AWSLogo';
 
 function ProviderCloud() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const [newInstance, setNewInstance] = useNewInstance({});
   const [formState, setFormState] = useState({});
@@ -22,7 +21,7 @@ function ProviderCloud() {
     if (submitted) {
       if (is_wavelength !== undefined) {
         setNewInstance({ ...newInstance, is_wavelength });
-        setTimeout(() => history.push(`/o/${customer_id}/instances/new/meta_cloud`), 0);
+        setTimeout(() => navigate(`/o/${customer_id}/instances/new/meta_cloud`), 0);
       } else {
         setFormState({ error: 'Please choose a cloud provider' });
       }
@@ -80,7 +79,7 @@ function ProviderCloud() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="instanceTypeButton" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button id="instanceTypeButton" onClick={() => navigate(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left me-2" />
             Instance Type
           </Button>

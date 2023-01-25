@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
 import buildCustomFunctions from '../../../../functions/instance/functions/buildCustomFunctions';
@@ -13,7 +12,7 @@ import restartService from '../../../../functions/api/instance/restartService';
 
 function EntityManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping, itemType, restarting }) {
   const { project } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const [confirmedDropItem, setConfirmedDropItem] = useState(false);
@@ -40,7 +39,7 @@ function EntityManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping,
     alert.success(result.message);
     restartService({ auth, url, service: 'custom_functions' });
     await buildCustomFunctions({ auth, url });
-    return history.push(baseUrl);
+    return navigate(baseUrl);
   };
 
   const selectItemForDrop = () => {
@@ -58,7 +57,7 @@ function EntityManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping,
     toggleConfirmDropItem(false);
   };
 
-  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item}`));
+  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : navigate(`${baseUrl}/${item}`));
 
   return (
     <Row key={item} title={`View${isActive ? 'ing' : ''} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={restarting ? null : handleSetActive} tabIndex="0">

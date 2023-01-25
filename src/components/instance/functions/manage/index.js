@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import useInterval from 'use-interval';
 
 import instanceState from '../../../../functions/state/instanceState';
@@ -20,7 +19,7 @@ import CopyableText from '../../../shared/CopyableText';
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const restarting = useStoreState(instanceState, (s) => s.restarting_service === 'custom_functions');
   const cf_server_url = useStoreState(instanceState, (s) => s.custom_functions_url || `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
@@ -32,19 +31,20 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     if (hasProjects && project && !projectIsInEndpoints) {
       const firstProject = project && Object.keys(custom_functions?.endpoints)[0];
-      history.push(`${baseUrl}/${firstProject}`);
+      navigate(`${baseUrl}/${firstProject}`);
     } else if (hasProjects && project && !file) {
       const firstRouteFile = project && custom_functions?.endpoints[project]?.routes[0];
       const firstHelperFile = project && custom_functions?.endpoints[project]?.helpers[0];
       const defaultType = firstRouteFile ? 'routes' : 'helpers';
-      history.push(`${baseUrl}/${project}/${defaultType}/${firstRouteFile || firstHelperFile}`);
+      navigate(`${baseUrl}/${project}/${defaultType}/${firstRouteFile || firstHelperFile}`);
     } else if (hasProjects && !project) {
       const firstProject = Object.keys(custom_functions?.endpoints)[0];
-      history.push(`${baseUrl}/${firstProject}`);
+      navigate(`${baseUrl}/${firstProject}`);
     } else if (!hasProjects) {
-      history.push(baseUrl);
+      navigate(baseUrl);
     }
-  }, [custom_functions?.endpoints, customer_id, compute_stack_id, history, action, project, file, baseUrl]);
+    // NOTE: moved history object to navigate, make sense to track this as dep?
+  }, [custom_functions?.endpoints, customer_id, compute_stack_id, navigate, action, project, file, baseUrl]);
 
   useInterval(async () => {
     if (cf_server_url && restarting) {

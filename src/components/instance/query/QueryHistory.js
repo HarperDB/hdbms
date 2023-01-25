@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { CardBody, Card, Row, Col, Button } from 'reactstrap';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import useQueryHistory from '../../../functions/state/instanceQueries';

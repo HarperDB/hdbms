@@ -1,7 +1,6 @@
 import React, { useState, useEffect, lazy } from 'react';
 import { Row, Col } from 'reactstrap';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -33,7 +32,8 @@ const defaultTableState = {
 };
 
 function BrowseIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
@@ -54,15 +54,15 @@ function BrowseIndex() {
       const tables = Object.keys(structure?.[schema] || {});
 
       switch (true) {
-        case !schemas.length && history.location.pathname !== '/browse':
+        case !schemas.length && location.pathname !== '/browse':
           setEntities({ schemas: [], tables: [], activeTable: false });
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse`);
           break;
         case schemas.length && !schemas.includes(schema):
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
           break;
         case tables.length && !tables.includes(table):
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
           break;
         default:
           if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {
@@ -74,7 +74,9 @@ function BrowseIndex() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure, schema, table, compute_stack_id]);
 
-  useEffect(() => buildInstanceStructure({ auth, url }), [auth, url, schema, table]);
+  useEffect(() => {
+    buildInstanceStructure({ auth, url });
+  }, [auth, url, schema, table]);
 
   return (
     <Row>
@@ -97,12 +99,20 @@ function BrowseIndex() {
           ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
           ) : (
-            <EmptyPrompt message={emptyPromptMessage} />
+            <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
           )}
         </ErrorBoundary>
       </Col>
     </Row>
   );
 }
+
+export const metadata = {
+  path: `browse/:schema?/:table?/:action?/:hash?`,
+  link: 'browse',
+  label: 'browse',
+  icon: 'list',
+  iconCode: 'f03a',
+};
 
 export default BrowseIndex;

@@ -37,7 +37,9 @@ function ManageIndex({ configuring }) {
     }
   }, [auth, url, instances, compute_stack_id, restarting, instanceAuths, configuring]);
 
-  useEffect(refreshNetwork, [refreshNetwork]);
+  useEffect(() => {
+    refreshNetwork()
+  }, [refreshNetwork]);
 
   useInterval(() => aNodeIsConnecting && refreshNetwork(), 1500);
 

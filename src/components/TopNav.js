@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Navbar, Nav, NavItem, Button } from 'reactstrap';
-import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -11,7 +11,7 @@ import VerizonLogo from './shared/VerizonLogo';
 
 function TopNav({ isMaintenance }) {
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -41,7 +41,7 @@ function TopNav({ isMaintenance }) {
     appState.update((s) => {
       s.auth = false;
     });
-    history.push('/');
+    navigate('/');
   };
 
   return (
@@ -77,7 +77,6 @@ function TopNav({ isMaintenance }) {
                     <NavLink
                       id="viewOrganizationInstances"
                       title="View Organization Instances"
-                      isActive={() => pathname.indexOf(`/o/${customer.customer_id}/i`) !== -1}
                       to={`/o/${customer.customer_id}/instances`}
                     >
                       <i className="fa fa-th d-inline-block" />
@@ -89,7 +88,6 @@ function TopNav({ isMaintenance }) {
                       <NavItem>
                         <NavLink
                           id="manageOrganizationUsers"
-                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/users`) !== -1}
                           title="Manage Organization Users"
                           to={`/o/${customer.customer_id}/users`}
                         >
@@ -100,7 +98,6 @@ function TopNav({ isMaintenance }) {
                       <NavItem>
                         <NavLink
                           id="manageOrganizationBilling"
-                          isActive={(match, browserLoc) => match || browserLoc.pathname.indexOf(`/o/${customer.customer_id}/billing`) !== -1}
                           title="Manage Organization Billing"
                           to={`/o/${customer.customer_id}/billing`}
                         >
@@ -123,7 +120,10 @@ function TopNav({ isMaintenance }) {
             </>
           )}
           <NavItem>
-            <NavLink id="viewResources" title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
+            <NavLink
+              id="viewResources"
+              title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code"
+              to="/resources">
               <i className="fas fa-tools" />
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
@@ -150,7 +150,7 @@ function TopNav({ isMaintenance }) {
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign out</span>
               </Button>
             ) : (
-              <NavLink id="goToLogin" title="Log In" exact to="/">
+              <NavLink id="goToLogin" title="Log In" to="/">
                 <i className="fa fa-sign-in" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign in</span>
               </NavLink>
