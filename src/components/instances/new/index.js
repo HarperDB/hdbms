@@ -39,13 +39,11 @@ function NewInstanceIndex() {
       setNewInstance({});
       setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
     }
-    // NOTE: moved history to navigate, still make sense to use history as a dep here?
   }, [customer_id, navigate, purchaseStep, setNewInstance]);
 
   const finishOrder = useCallback(() => {
     setNewInstance({});
     setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
-    // NOTE: moved history to navigate, still make sense to use history as a dep here?
   }, [customer_id, navigate, setNewInstance]);
 
   const refreshSubscriptions = useCallback(() => {
