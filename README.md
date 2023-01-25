@@ -10,6 +10,34 @@ The comprehensive management suite for HarperDB.
     - [react-router](https://reacttraining.com/react-router/) for navigation
     - [pullstate](https://lostpebble.github.io/pullstate/) for global state management
 
+## Setting up local HTTPS certificates for local development
+
+
+### Install mkcert tool (OS X)
+```
+brew install mkcert
+brew install nss (if you need Firefox)
+```
+
+### Install mkcert tool (Windows)
+```
+scoop bucket add extras
+scoop install mkcert
+```
+
+
+### Setup mkcert on your machine (creates a CA)
+`mkcert -install`
+
+### Create .cert directory if it doesn't exist
+`mkdir -p .cert`
+
+### Generate the certificate (ran from the root of this project)
+`mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"`
+
+NOTE: If you use Firefox, restart it to get the cert to take effect.
+
+
 ## Magic... how does it work?
 
 Follow these steps to run a local version of HarperDB Studio.
