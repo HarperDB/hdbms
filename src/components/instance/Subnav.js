@@ -56,17 +56,15 @@ function Subnav({ routes = [] }) {
     iconCode: currentRoute?.iconCode,
   };
 
-
   const navigateFn = ({ value, has_auth, is_unavailable }) => {
     if (!is_unavailable) {
-      return false
+      return false;
     }
     if (has_auth) {
-      navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`)
-    } else {
-      navigate(`/o/${customer_id}/instances/login`)
+      return navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`);
     }
-  }
+    return navigate(`/o/${customer_id}/instances/login`);
+  };
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>

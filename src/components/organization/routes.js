@@ -3,7 +3,7 @@ import { lazy, React } from 'react';
 const Users = lazy(() => import(/* webpackChunkName: "organization-users" */ './users'));
 const Billing = lazy(() => import(/* webpackChunkName: "organization-billing" */ './billing'));
 
-const Routes = ({ customer_id }) => [
+const Routes = () => [
   {
     element: <Users />,
     path: `users/:user_id?`,

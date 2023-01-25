@@ -10,7 +10,7 @@ import Loader from '../shared/Loader';
 function OrganizationIndex() {
   const location = useLocation();
   const { customer_id } = useParams();
-  const hydratedRoutes = routes({ customer_id });
+  const hydratedRoutes = routes();
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
   const primaryOrgId = useStoreState(appState, (s) => s.auth && s.auth?.orgs[0].customer_id);
@@ -24,17 +24,17 @@ function OrganizationIndex() {
           {hydratedRoutes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
-          <Route path="*" element={ <Navigate to='users' replace /> } />
+          <Route path="*" element={<Navigate to="users" replace />} />
         </Routes>
       </Suspense>
     </main>
   ) : isOrgUser ? (
     <Routes>
-      <Route path="*" element={ <Navigate to='instances' replace /> } />
+      <Route path="*" element={<Navigate to="instances" replace />} />
     </Routes>
   ) : primaryOrgRedirect ? (
     <Routes>
-      <Route path="*" element={ <Navigate to={primaryOrgRedirect} replace /> } />
+      <Route path="*" element={<Navigate to={primaryOrgRedirect} replace />} />
     </Routes>
   ) : null;
 }

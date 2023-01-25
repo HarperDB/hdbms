@@ -33,6 +33,7 @@ const defaultTableState = {
 
 function BrowseIndex() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
@@ -46,8 +47,6 @@ function BrowseIndex() {
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
-
-  const location = useLocation();
 
   useEffect(() => {
     if (structure) {
@@ -76,7 +75,7 @@ function BrowseIndex() {
   }, [structure, schema, table, compute_stack_id]);
 
   useEffect(() => {
-    buildInstanceStructure({ auth, url })
+    buildInstanceStructure({ auth, url });
   }, [auth, url, schema, table]);
 
   return (
@@ -100,7 +99,7 @@ function BrowseIndex() {
           ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
           ) : (
-            <EmptyPrompt message={emptyPromptMessage} />
+            <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
           )}
         </ErrorBoundary>
       </Col>
