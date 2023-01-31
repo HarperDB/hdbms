@@ -5,7 +5,7 @@ const buildRadioSelectStorageOptions = (plans) => {
 
   plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, available = undefined }) => {
     const freeTier = tiers.find((t) => !!t.up_to).up_to;
-    const data_volume_sizes = [freeTier, 10, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500];
+    const data_volume_sizes = [freeTier, 10, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000];
     const sizes = [...new Set(data_volume_sizes)].filter((s) => !subscription_id || s !== freeTier);
 
     return sizes.map((data_volume_size) => {
