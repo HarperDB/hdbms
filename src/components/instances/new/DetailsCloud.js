@@ -40,6 +40,7 @@ function DetailsCloud() {
     (s) => (platform === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
     [newInstance.showPrepaidStorage]
   );
+
   const regions = useStoreState(appState, (s) => (platform === 'lumen' ? [] : newInstance.is_wavelength || platform === 'verizon' ? s.wavelengthRegions : s.regions));
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
