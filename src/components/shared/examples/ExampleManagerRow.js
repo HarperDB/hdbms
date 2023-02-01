@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 function ExampleManagerRow({ item, baseUrl, isActive }) {
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const handleSetActive = () => (isActive ? false : history.push(`${baseUrl}/${item}`));
+  const handleSetActive = () => (isActive ? false : navigate(`${baseUrl}/${item}`));
 
   return (
     <Row key={item} title={`View${isActive ? 'ing' : ''} ${item}`} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive} tabIndex="0">

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Col, Row } from 'reactstrap';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import Dropzone from 'react-dropzone';
 import useAsyncEffect from 'use-async-effect';
@@ -15,7 +15,7 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 function CsvUploadFile() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { schema, table, customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -39,10 +39,10 @@ function CsvUploadFile() {
         if (status !== 'COMPLETE' && mounted) {
           return setTimeout(() => validateData(uploadJobId), 1000);
         }
-        return setTimeout(() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+        return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
       } catch (e) {
         return setTimeout(() => {
-          history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
         }, 2000);
       }
     },

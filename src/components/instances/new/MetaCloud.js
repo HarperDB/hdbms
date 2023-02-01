@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
@@ -13,7 +12,7 @@ import isAlphaUnderscore from '../../../functions/util/isAlphaUnderscore';
 import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 
 function MetaCloud() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
@@ -42,7 +41,7 @@ function MetaCloud() {
         setFormState({ error: 'instance names are limited to 16 characters' });
       } else if (instance_name.length && user.length && pass.length) {
         setNewInstance({ ...newInstance, instance_name: instance_name.replace(/-+$/, ''), user, pass, is_ssl: true, super: true });
-        setTimeout(() => history.push(`/o/${customer_id}/instances/new/details_cloud`), 0);
+        setTimeout(() => navigate(`/o/${customer_id}/instances/new/details_cloud`), 0);
       } else {
         setFormState({ error: 'All fields must be filled out.' });
       }
@@ -126,7 +125,7 @@ function MetaCloud() {
         <Col sm="6">
           <Button
             id="instanceTypeButton"
-            onClick={() => history.push(`/o/${customer_id}/instances/new/${platform === 'HarperDB' ? 'provider_cloud' : 'type'}`)}
+            onClick={() => navigate(`/o/${customer_id}/instances/new/${platform === 'HarperDB' ? 'provider_cloud' : 'type'}`)}
             title="Back to Instance Type"
             block
             className="mt-3"

@@ -5,7 +5,8 @@ const buildRadioSelectStorageOptions = (plans) => {
 
   plans.map(({ tiers, interval, active, id, subscription_id = undefined, name = undefined, available = undefined }) => {
     const freeTier = tiers.find((t) => !!t.up_to).up_to;
-    const sizes = [...new Set([freeTier, 10, 100, 250, 500, 1000])].filter((s) => !subscription_id || s !== freeTier);
+    const data_volume_sizes = [freeTier, 10, 100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000];
+    const sizes = [...new Set(data_volume_sizes)].filter((s) => !subscription_id || s !== freeTier);
 
     return sizes.map((data_volume_size) => {
       const iops = 3000;
@@ -13,7 +14,7 @@ const buildRadioSelectStorageOptions = (plans) => {
       const storage_price = subscription_id ? 0 : data_volume_size * (pricing_tier.unit_amount / 100);
       const storage_price_string = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}` : 'FREE';
       const storage_price_string_with_interval = subscription_id ? name : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE';
-      const data_volume_size_string = data_volume_size === 1000 ? '1TB' : `${data_volume_size}GB`;
+      const data_volume_size_string = data_volume_size >= 1000 ? `${data_volume_size/1000}TB` : `${data_volume_size}GB`;
       const prepaid_disk_space_available = !available ? 0 : available > 1000 ? `${(available / 1024).toFixed(2)}TB` : `${available}GB`;
       const label = `${data_volume_size_string}  •  ${
         subscription_id ? `${name}  •  ${prepaid_disk_space_available} remaining` : storage_price ? `$${commaNumbers(storage_price.toFixed(2))}/${interval}` : 'FREE'

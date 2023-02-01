@@ -3,7 +3,7 @@ import { Col, Input, Row } from 'reactstrap';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import cardOptions from '../../functions/stripe/cardOptions';

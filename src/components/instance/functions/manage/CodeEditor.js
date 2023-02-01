@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import Editor from '@monaco-editor/react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
 
 import instanceState from '../../../../functions/state/instanceState';
 import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
@@ -12,7 +11,7 @@ import restartService from '../../../../functions/api/instance/restartService';
 import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
 
 function CodeEditor() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const { customer_id, compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -40,7 +39,9 @@ function CodeEditor() {
     setEditorToFile();
   };
 
-  useEffect(() => setEditorToFile(), [project, file, setEditorToFile, compute_stack_id]);
+  useEffect(() => {
+    setEditorToFile();
+  }, [project, file, setEditorToFile, compute_stack_id]);
 
   return (
     <>
@@ -58,7 +59,7 @@ function CodeEditor() {
             <i title="Reload File" className="fa fa-refresh" />
           </Button>
           <span className="mx-3 text">|</span>
-          <Button onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/functions/deploy/${project}`)} color="link" className="me-2">
+          <Button onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/functions/deploy/${project}`)} color="link" className="me-2">
             <span className="me-2">deploy</span>
             <i title="Deploy Project" className="fa fa-share" />
           </Button>

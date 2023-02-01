@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
@@ -17,7 +16,7 @@ import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 import userInfo from '../../../functions/api/instance/userInfo';
 
 function MetaLocal() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const instanceNames = useStoreState(appState, (s) => s.instances.map((i) => i.instance_name));
   const instanceURLs = useStoreState(appState, (s) => s.instances.map((i) => i.url));
@@ -80,7 +79,7 @@ function MetaLocal() {
               }
             }
             setNewInstance({ ...newInstance, ...instanceData });
-            setTimeout(() => history.push(`/o/${customer_id}/instances/new/details_local`), 0);
+            setTimeout(() => navigate(`/o/${customer_id}/instances/new/details_local`), 0);
           }
         } catch (e) {
           setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
@@ -190,7 +189,7 @@ function MetaLocal() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="instanceType" onClick={() => history.push(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
+          <Button id="instanceType" onClick={() => navigate(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left me-2" />
             Instance Type
           </Button>

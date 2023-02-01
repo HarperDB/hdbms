@@ -2,8 +2,7 @@ import React, { lazy } from 'react';
 import { Card, CardBody, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import IntegrationCard from './IntegrationCard';
 import appState from '../../../functions/state/appState';
@@ -21,7 +20,7 @@ const logoMapper = {
 };
 
 function MarketplaceIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const integrations = useStoreState(appState, (s) => s.integrations);
   const { type } = useParams();
@@ -29,7 +28,7 @@ function MarketplaceIndex() {
   useAsyncEffect(
     () => {
       if (!type) {
-        history.push('/resources/marketplace/active');
+        navigate('/resources/marketplace/active');
       }
       controller = new AbortController();
       getIntegrations({ auth, signal: controller.signal });
@@ -40,7 +39,7 @@ function MarketplaceIndex() {
 
   useAsyncEffect(() => {
     if (integrations && (!integrations[type] || !integrations[type].length)) {
-      history.push('/resources/marketplace/active');
+      navigate('/resources/marketplace/active');
     }
   }, [integrations, type]);
 

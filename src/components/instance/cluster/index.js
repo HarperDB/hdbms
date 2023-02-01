@@ -12,6 +12,14 @@ import Loader from '../../shared/Loader';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import checkClusterStatus from '../../../functions/instance/clustering/checkClusterStatus';
 
+export const metadata = {
+  path: `cluster`,
+  link: 'cluster',
+  label: 'cluster',
+  icon: 'cubes',
+  iconCode: 'f1e0',
+}
+
 function ClusteringIndex() {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
@@ -38,9 +46,13 @@ function ClusteringIndex() {
     }
   }, 3000);
 
-  useEffect(refreshStatus, [refreshStatus]);
+  useEffect(() => {
+    refreshStatus()
+  }, [refreshStatus]);
 
-  useEffect(() => setClusterStatus(false), [compute_stack_id]);
+  useEffect(() => {
+    setClusterStatus(false)
+  }, [compute_stack_id]);
 
   return clusterDisabled ? (
       <ClusterDisabled />

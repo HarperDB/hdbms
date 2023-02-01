@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import SelectDropdown from 'react-select';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
@@ -18,7 +18,7 @@ import VisitCard from '../../shared/VisitCard';
 
 function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   const { customer_id, compute_stack_id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
@@ -88,7 +88,7 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
           appState.update((s) => {
             s.lastUpdate = Date.now();
           });
-          setTimeout(() => history.push(`/o/${customer_id}/instances`), 100);
+          setTimeout(() => navigate(`/o/${customer_id}/instances`), 100);
         }
       }
     }
@@ -125,14 +125,14 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
           <VisitCard
             disabled={!hasChanged || formState.submitted}
             label="Update Credit Card"
-            onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
+            onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
           />
         </div>
       ) : hasChanged && (storage?.storage_price || formData?.compute_price) && !hasCard ? (
         <VisitCard
           disabled={!hasChanged || formState.submitted}
           label="Add Credit Card To Account"
-          onClick={() => history.push(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
+          onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
         />
       ) : hasChanged ? (
         <>

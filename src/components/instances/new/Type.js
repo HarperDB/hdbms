@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, CardBody, Button } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import useNewInstance from '../../../functions/state/newInstance';
 import appState from '../../../functions/state/appState';
 
 function Type() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { customer_id } = useParams();
   const [, setNewInstance] = useNewInstance({});
   const [formData, setFormData] = useState({});
@@ -23,7 +22,7 @@ function Type() {
       setNewInstance({ customer_id, is_local, platform });
       setTimeout(
         () =>
-          history.push(
+          navigate(
             is_local
               ? `/o/${customer_id}/instances/new/meta_local`
               : platform === 'HarperDB'

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
@@ -42,9 +43,11 @@ const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
 function App() {
-  const history = useHistory();
+  const canonicalUrl = document.querySelector('link[rel="canonical"]');
+  const navigate = useNavigate();
   const alert = useAlert();
-  const { search, pathname } = useLocation();
+  const location =  useLocation();
+  const { search, pathname } = location; 
   const { redirect } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -60,6 +63,11 @@ function App() {
   const loggedIn = auth?.user_id;
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
   const isMaintenance = version?.maintenance && isNotEmployee;
+  ReactGA.initialize(config.google_analytics_code);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, [location.pathname]);
 
   useEffect(() => {
     changeFavIcon(currentTheme);
@@ -75,10 +83,10 @@ function App() {
         window._kmq.push(['identify', auth.email]);
       }
       if (auth?.update_password) {
-        history.push('/update-password');
+        navigate('/update-password');
       }
       if (redirect) {
-        history.push(redirect);
+        navigate(redirect);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +98,13 @@ function App() {
   }, [showVersionAlert]);
 
   useEffect(() => {
-    init({ auth: persistedUser, history, setFetchingUser, setPersistedUser, controller });
+    canonicalUrl.href = window.location.href;
+  }, [location, canonicalUrl]);
+
+
+  useEffect(() => {
+ 
+    init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -118,28 +132,29 @@ function App() {
         ) : loggedIn ? (
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Switch>
-                <Route component={isMaintenance ? Maintenance : UpdatePassword} path="/update-password" />
-                <Route component={isMaintenance ? Maintenance : Profile} path="/profile" />
-                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
-                <Route component={isMaintenance ? Maintenance : Instance} path="/o/:customer_id/i/:compute_stack_id" />
-                <Route component={isMaintenance ? Maintenance : Instances} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route component={isMaintenance ? Maintenance : Organization} path="/o/:customer_id/:view?" />
-                <Route component={isMaintenance ? Maintenance : Organizations} path="/:list?/:action?" />
-                <Redirect to="/" />
-              </Switch>
+              {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
+              <Routes>
+                <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
+                <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
+                <Route element={<Navigate to="/" replace />} />
+              </Routes>
             </Suspense>
           </ErrorBoundary>
         ) : (
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Switch>
-                <Route component={SignIn} exact path="/" />
-                <Route component={config.maintenance ? Maintenance : SignUp} exact path="/sign-up" />
-                <Route component={isMaintenance ? Maintenance : ResetPassword} exact path="/reset-password" />
-                <Route component={isMaintenance ? Maintenance : Resources} path="/resources/:view?" />
-                <Redirect to={`/?redirect=${pathname}${search}`} />
-              </Switch>
+              <Routes>
+                <Route element={<SignIn />} path="/" />
+                <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
+                <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
+                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
+                <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
+              </Routes>
             </Suspense>
           </ErrorBoundary>
         )}

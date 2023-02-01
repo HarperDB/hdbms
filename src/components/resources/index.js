@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import routes from './routes';
 import SubNav from '../shared/SubNav';
@@ -9,12 +9,14 @@ function ResourcesIndex() {
   return <>
     <SubNav routes={routes} />
     <Suspense fallback={<Loader header=" " spinner />}>
-      <Switch>
-        {routes.map((route) => (
-          <Route key={route.path} path={route.path} component={route.component} />
-        ))}
-        <Redirect to="/resources/installation" />
-      </Switch>
+      <Routes>
+        {
+          routes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))
+        }
+        <Route path="*"element={ <Navigate to="installation" replace /> } />
+      </Routes>
     </Suspense>
   </>
 }

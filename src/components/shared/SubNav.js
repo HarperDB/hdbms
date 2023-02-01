@@ -1,8 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavItem } from 'reactstrap';
 import SelectDropdown from 'react-select';
-import { NavLink, useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import routeIcon from '../../functions/select/routeIcon';
@@ -10,7 +9,7 @@ import ErrorFallback from './ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 
 function SubNav({ routes = [] }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const currentRoute = routes?.find((r) => r.link === location.pathname) || routes[0];
 
@@ -34,7 +33,7 @@ function SubNav({ routes = [] }) {
                 className="react-select-container"
                 classNamePrefix="react-select"
                 width="200px"
-                onChange={({ value }) => history.push(value)}
+                onChange={({ value }) => navigate(value)}
                 options={routes.filter((r) => r.link !== currentRoute.link).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode }))}
                 value={{ ...currentRoute, value: currentRoute?.link }}
                 defaultValue={currentRoute?.link}

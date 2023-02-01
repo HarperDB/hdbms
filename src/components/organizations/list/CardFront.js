@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Col, Row, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -17,11 +17,11 @@ import CardFrontIcons from './CardFrontIcons';
 function CardFront({ customer_name, customer_id, total_instance_count, status, setFlipState }) {
   const auth = useStoreState(appState, (s) => s.auth);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const canChooseOrganization = !loading && ['owner', 'accepted'].includes(status);
 
-  const chooseOrganization = async () => canChooseOrganization && history.push(`/o/${customer_id}/instances`);
+  const chooseOrganization = async () => canChooseOrganization && navigate(`/o/${customer_id}/instances`);
 
   const handleUpdateUserOrgs = async (e) => {
     const newStatus = e.currentTarget.getAttribute('data-status');

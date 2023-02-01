@@ -1,7 +1,6 @@
 import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { CardBody, Card, Button, Col, Row } from 'reactstrap';
-import { useHistory } from 'react-router';
 
 import Role from './EditRole';
 import Delete from './EditDelete';
@@ -9,7 +8,7 @@ import Delete from './EditDelete';
 function Edit({ userEmail }) {
   const { user_id } = useParams();
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -29,7 +28,7 @@ function Edit({ userEmail }) {
               <span className="text-small">make no further changes to this user</span>
             </Col>
             <Col xs="4">
-              <Button id="returnToOrganizationUserList" block color="grey" onClick={() => history.push(pathname.replace(`/${user_id}`, ''))}>
+              <Button id="returnToOrganizationUserList" block color="grey" onClick={() => navigate(pathname.replace(`/${user_id}`, ''))}>
                 Return to User List
               </Button>
             </Col>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Input, Button } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import appState from '../../functions/state/appState';
@@ -10,7 +10,7 @@ import updatePassword from '../../functions/api/lms/updatePassword';
 import Loader from '../shared/Loader';
 
 function UpdatePassword() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
@@ -36,7 +36,7 @@ function UpdatePassword() {
 
   useEffect(() => {
     if (auth?.passwordSuccess) {
-      history.push('/');
+      navigate('/');
     } else if (auth?.passwordError) {
       setPasswordError();
     }

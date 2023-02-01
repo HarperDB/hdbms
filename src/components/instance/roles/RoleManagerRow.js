@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
 import { useAlert } from 'react-alert';
@@ -10,7 +10,7 @@ import dropRole from '../../../functions/api/instance/dropRole';
 import listRoles from '../../../functions/api/instance/listRoles';
 
 function RoleManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const alert = useAlert();
   const [isConfirmingDropItem, toggleConfirmDropItem] = useState(false);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -27,7 +27,7 @@ function RoleManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping })
 
     listRoles({ auth, url });
 
-    return isActive ? setTimeout(() => history.push(baseUrl), 100) : false;
+    return isActive ? setTimeout(() => navigate(baseUrl), 100) : false;
   };
 
   const selectItemForDrop = () => {
@@ -44,7 +44,7 @@ function RoleManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping })
     toggleConfirmDropItem(false);
   };
 
-  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : history.push(`${baseUrl}/${item.id}`));
+  const handleSetActive = () => (isActive || isDropping || isConfirmingDropItem ? false : navigate(`${baseUrl}/${item.id}`));
 
   return (
     <Row key={item} className={`item-row ${isActive ? 'active' : ''}`} onClick={handleSetActive}>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Col, Row, Button } from 'reactstrap';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import commaNumbers from '../../../functions/util/commaNumbers';
 
 function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { compute_stack_id, schema, table, customer_id } = useParams();
 
   return (
@@ -41,7 +41,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
           tabIndex="0"
           title={`Add new record to table ${table}`}
           className="me-3"
-          onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
+          onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
         >
           <i className="fa fa-plus" />
         </Button>
@@ -51,7 +51,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
           tabIndex="0"
           className="me-2"
           title={`Bulk Upload CSV to ${table}`}
-          onClick={() => history.push(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
+          onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
         >
           <i className="fa fa-file-text-o" />
         </Button>

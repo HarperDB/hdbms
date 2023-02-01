@@ -1,8 +1,7 @@
 import React, { useState, Suspense } from 'react';
-import { Redirect, Route, Switch, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import { useHistory } from 'react-router';
 import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
@@ -24,7 +23,7 @@ import registrationInfo from '../../functions/api/instance/registrationInfo';
 function InstanceIndex() {
   const { compute_stack_id, customer_id } = useParams();
   const alert = useAlert();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loadingInstance, setLoadingInstance] = useState(true);
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
   const instanceAuth = instanceAuths && instanceAuths[compute_stack_id];
@@ -65,7 +64,7 @@ function InstanceIndex() {
       await registrationInfo({ auth: instanceAuth, url: thisInstance.url });
       setLoadingInstance(false);
       if (error) {
-        setTimeout(() => history.push(`/o/${customer_id}/instances`), 10);
+        setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
       }
     }
   }, [thisInstance]);
@@ -89,7 +88,7 @@ function InstanceIndex() {
       const result = await userInfo({ auth: instanceAuth, url });
       if (result.error && result.message !== 'Network request failed' && !restarting) {
         alert.error('Unable to connect to instance.');
-        history.push(`/o/${customer_id}/instances`);
+        navigate(`/o/${customer_id}/instances`);
       } else if (!result.error && restarting) {
         instanceState.update((s) => {
           s.restarting = false;
@@ -105,12 +104,16 @@ function InstanceIndex() {
       <SubNav routes={hydratedRoutes} />
       {isOrgUser && instances && !loadingInstance ? (
         <Suspense fallback={<Loader header=" " spinner />}>
-          <Switch>
-            {hydratedRoutes.map((route) => (
-              <Route key={route.path} path={route.path} component={route.component} />
-            ))}
-            <Redirect to={`/o/${customer_id}/i/${compute_stack_id}/${hydratedRoutes[0].link}`} />
-          </Switch>
+          <Routes>
+          {
+            hydratedRoutes.map(route => (
+              <Route path={route.path} key={route.path} element={ route.element }/>
+            ))
+          }
+          <Route path="*" element={
+            <Navigate to={hydratedRoutes[0].path} replace />
+          } />
+          </Routes>
         </Suspense>
       ) : (
         <Loader header="loading instance" spinner />

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardBody, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import config from '../../../config';
 import ErrorFallback from '../../shared/ErrorFallback';
@@ -11,7 +10,7 @@ import addError from '../../../functions/api/lms/addError';
 import TutorialManager from './TutorialManager';
 
 function TutorialsIndex() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { video_id } = useParams();
   const [items, setItems] = useState([]);
   const baseUrl = '/resources/tutorials';
@@ -26,7 +25,7 @@ function TutorialsIndex() {
         setItems(result.items);
         if (!activeVideo) {
           const firstVideo = `${baseUrl}/${result.items[0].id}`;
-          history.push(firstVideo);
+          navigate(firstVideo);
         }
       }
     } catch (e) {

@@ -6,20 +6,15 @@ import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 
-export default ({ auth, history, setFetchingUser, setPersistedUser, controller }) => {
-  const canonical = document.querySelector('link[rel="canonical"]');
+export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, controller }) => {
 
-  history.listen(() => {
-    canonical.href = window.location.href;
-  });
-
-  if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(history.location.pathname)) {
+  if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);
     return setPersistedUser({});
   }
 
-  if (['/sign-in'].includes(history.location.pathname)) {
-    history.push('/');
+  if (['/sign-in'].includes(location.pathname)) {
+    navigate('/');
   }
 
   if (!auth?.email) {
