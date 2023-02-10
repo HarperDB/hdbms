@@ -7,6 +7,7 @@
 /.pnp
 .pnp.js
 
+# ignore existing local certificates for HTTPS local dev
 /.cert
 
 # testing
