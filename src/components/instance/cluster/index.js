@@ -18,27 +18,27 @@ export const metadata = {
   label: 'cluster',
   icon: 'cubes',
   iconCode: 'f1e0',
-}
+};
 
 function ClusteringIndex() {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
-  const registrationVersion = useStoreState(instanceState, (s) => s.registration?.version, [compute_stack_id])
+  const registrationVersion = useStoreState(instanceState, (s) => s.registration?.version, [compute_stack_id]);
   const [clusterStatus, setClusterStatus] = useState(false);
   const [configuring, setConfiguring] = useState(false);
-  const clusterDisabled = parseFloat(registrationVersion) >= 4 && !is_local; 
+  const clusterDisabled = parseFloat(registrationVersion) >= 4 && !is_local;
 
   const refreshStatus = useCallback(async () => {
-    if (auth && url) {
+    if (auth && url && !clusterDisabled) {
       const result = await checkClusterStatus({ auth, url });
       setClusterStatus(result);
       if (result.is_ready) {
         setConfiguring(false);
       }
     }
-  }, [auth, url]);
+  }, [auth, url, clusterDisabled]);
 
   useInterval(async () => {
     if (configuring) {
@@ -47,24 +47,24 @@ function ClusteringIndex() {
   }, 3000);
 
   useEffect(() => {
-    refreshStatus()
+    refreshStatus();
   }, [refreshStatus]);
 
   useEffect(() => {
-    setClusterStatus(false)
+    setClusterStatus(false);
   }, [compute_stack_id]);
 
   return clusterDisabled ? (
-      <ClusterDisabled />
-    ) : !clusterStatus ? (
-      <Loader header="loading network" spinner />
-    ) : configuring ? (
-      <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
-    ) : clusterStatus.is_ready ? (
-      <Manage configuring={configuring} />
-    ) : (
-      <Setup setConfiguring={setConfiguring} clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
-    );
+    <ClusterDisabled />
+  ) : !clusterStatus ? (
+    <Loader header="loading network" spinner />
+  ) : configuring ? (
+    <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
+  ) : clusterStatus.is_ready ? (
+    <Manage configuring={configuring} />
+  ) : (
+    <Setup setConfiguring={setConfiguring} clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
+  );
 }
 
 export default ClusteringIndex;

@@ -7,6 +7,7 @@ import useAsyncEffect from 'use-async-effect';
 import instanceState from '../../../../functions/state/instanceState';
 import setConfiguration from '../../../../functions/api/instance/setConfiguration';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
+import checkClusterStatus from '../../../../functions/instance/clustering/checkClusterStatus';
 
 function Enable({ setConfiguring }) {
   const { compute_stack_id } = useParams();
@@ -16,6 +17,7 @@ function Enable({ setConfiguring }) {
   const [formState, setFormState] = useState({});
 
   useAsyncEffect(async () => {
+
     if (formState.submitted) {
       if (clusterEngine === 'nats') {
         await setConfiguration({
@@ -24,10 +26,17 @@ function Enable({ setConfiguring }) {
           customFunctions_enabled: true,
         });
       } else {
+
+        const clusterStatus = await checkClusterStatus({ auth, url });
         await setConfiguration({
           auth,
           url,
+          operation: 'configure_cluster',
           CUSTOM_FUNCTIONS: true,
+          CLUSTERING: Boolean(clusterStatus?.config_cluster_user),
+          CLUSTERING_PORT: clusterStatus?.config_cluster_port,
+          CLUSTERING_USER: clusterStatus?.config_cluster_user,
+          NODE_NAME: clusterStatus?.nodeName
         });
       }
       if (window._kmq) window._kmq.push(['record', 'enabled custom functions']);
