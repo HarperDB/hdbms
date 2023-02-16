@@ -3,7 +3,10 @@ import instanceState from '../../state/instanceState';
 
 export default async ({ auth, url, signal, refresh, is_local }) => {
   const result = await queryInstance({
-    operation: { operation: 'system_information' },
+    operation: {
+      operation: 'system_information',
+      attributes: ['cpu','disk','memory','network','system']
+    },
     auth,
     url,
     signal,
