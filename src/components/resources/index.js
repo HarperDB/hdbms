@@ -15,7 +15,8 @@ function ResourcesIndex() {
             <Route key={route.path} path={route.path} element={route.element} />
           ))
         }
-        <Route path="*"element={ <Navigate to="installation" replace /> } />
+        <Route path="marketplace/active" element={ <Navigate to="../sdks/active" replace /> } />
+        <Route path="*" element={ <Navigate to="installation" replace /> } />
       </Routes>
     </Suspense>
   </>
