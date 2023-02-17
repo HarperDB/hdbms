@@ -57,7 +57,7 @@ function Subnav({ routes = [] }) {
   };
 
   const navigateFn = ({ value, has_auth, is_unavailable }) => {
-    if (!is_unavailable) {
+    if (is_unavailable) {
       return false;
     }
     if (has_auth) {
