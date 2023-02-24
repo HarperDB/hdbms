@@ -11,7 +11,19 @@ const InstanceList = () => {
     filterInstances({ filterSearch: s.filterSearch, filterCloud: s.filterCloud, filterLocal: s.filterLocal, instances: s.instances })
   );
 
-  return instances.map((i) => <InstanceCard key={i.compute_stack_id} {...i} flippedCard={flippedCard} setFlippedCard={setFlippedCard} />);
+  return instances.filter(instance => {
+
+    const { wavelength_zone_id, status } = instance;
+    const deleted_wavelength_instance = wavelength_zone_id && status === 'DELETE_FAILED';
+
+    if (deleted_wavelength_instance) {
+      return false;
+    }
+
+    return true;
+
+  }).map((i) => <InstanceCard key={i.compute_stack_id} {...i} flippedCard={flippedCard} setFlippedCard={setFlippedCard} />);
+
 };
 
 export default InstanceList;
