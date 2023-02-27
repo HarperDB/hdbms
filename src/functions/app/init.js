@@ -29,6 +29,7 @@ export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, c
   getWavelengthRegions();
   getPostManCollection();
 
+  // TODO: when is this called? this is when the theme is set.
   const unsubscribeAuth = appState.subscribe(
     (s) => ({ newAuth: s.auth, newTheme: s.theme }),
     ({ newAuth: { email, pass }, newTheme }) => {
