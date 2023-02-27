@@ -46,7 +46,13 @@ function SystemInfo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, lastUpdate]);
 
-  useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
+  useInterval(() => {
+
+    if (auth && autoRefresh) {
+      setLastUpdate(Date.now());
+    }
+
+  }, config.refresh_content_interval);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
