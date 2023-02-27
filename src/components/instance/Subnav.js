@@ -93,7 +93,7 @@ function Subnav({ routes = [] }) {
               <NavLink
                 title={route.link}
                 className="nav-link"
-                to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+                to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' && defaultBrowseURL ? `${route.link}/${defaultBrowseURL}` : route.link}`}
               >
                 <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
                 {route.label || route.link}

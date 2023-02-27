@@ -17,6 +17,7 @@ function Add({ refreshUsers, userEmails }) {
   const navigate = useNavigate();
   const { customer_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
+
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const formStateHeight = '132px';
@@ -28,7 +29,9 @@ function Add({ refreshUsers, userEmails }) {
       if (!isEmail(email)) {
         setFormState({ error: 'Please enter a valid email' });
       } else if (userEmails && userEmails.includes(email)) {
-        setFormState({ error: 'User already invited' });
+        setFormState({ error: 'This user has already been invited' });
+      } else if (email === auth.email) {
+        setFormState({ error: 'You cannot invite yourself' });
       } else {
         setFormState({ processing: true });
 
