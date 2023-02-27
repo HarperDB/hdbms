@@ -48,6 +48,9 @@ export default async ({ formData }) => {
     window._kmq.push(['identify', email]);
     window._kmq.push(['record', 'successful_signup']);
   }
+  if (window.lintrk) {
+    window.lintrk('track', { conversion_id: 11485730 });
+  }
 
   if (response.temp_password) {
     return getUser({ email, pass: response.temp_password, loggingIn: true });
