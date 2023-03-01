@@ -20,6 +20,12 @@ function UpdatePassword() {
     setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
   };
 
+  useEffect(() => {
+    if (window.lintrk) {
+      window.lintrk('track', { conversion_id: 11485730 });
+    }
+  }, []);
+
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
     if (submitted && !processing) {
