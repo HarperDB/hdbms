@@ -20,6 +20,17 @@ function UpdatePassword() {
     setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
   };
 
+  // NOTE: Marketing requested to send a conversion event when this page is 
+  // loaded to indicate that the user in fact signed up.  Triggering here for now
+  // because the only route to get here is via signup form.  if this becomes a destination
+  // from multiple places, we need a solution that scopes the conversion call to the 
+  // correct action.
+  useEffect(() => {
+    if (window.lintrk) {
+      window.lintrk('track', { conversion_id: 11485730 });
+    }
+  }, []);
+
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
     if (submitted && !processing) {
