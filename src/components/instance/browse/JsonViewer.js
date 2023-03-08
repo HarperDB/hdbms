@@ -38,7 +38,9 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      const typedHash = Number.isInteger(hash) ? parseInt(hash, 10) : hash;
+      // if it's 12 or '12', send 12.  if it's something that can't be parsed as an integer, send as string.
+      const typedHash = Number.isInteger(hash) || (typeof hash === 'string' && `${parseInt(hash, 10)}` === hash) ?
+            parseInt(hash, 10) : hash;
       const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [typedHash], get_attributes: ['*'] }, auth, url });
       if (rowData) {
         const hash_attribute = rowData[hashAttribute];
