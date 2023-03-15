@@ -31,6 +31,8 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
 
+  const isAmbiguousInteger = (h) => `${parseInt(hash, 10)}` === hash; // '101' or 101?
+
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
       navigate(baseUrl);
@@ -39,7 +41,13 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      if (!locationState?.hashValue) {
+
+      let hash_values;
+      // we arrived at this view directly via url entered in (deeplink)
+      if (locationState?.hashValue) {
+          // NOTE: right now this if never executes because of the asyncEffect above that checks for newEntityAttributes and
+          // redirects to baseUrl if not.
+
           // TODO: passing the hash_value through the navigate function and using location.state is a work
           // around for an architectural shortcoming that should be addressed.
           // reason: the sibling component BrowseDataTable is the source of the row data
@@ -53,43 +61,50 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
           // Probably makes more sense to refactor the architecture to consider the JsonViewer 
           // (which should be renamed to JsonEditor since it's not just a viewing mechanism) as
           // a 'child' of the BrowseDataTable component so the row data can be passed to it.
-          navigate(baseUrl);
-          alert.error('Unable to find record with that hash_attribute');
+
+          hash_values = [locationState.hashValue];
       } else {
+          // request both integer as string and integer as integer values if it's ambiguous
+          // since we have to guess at the moment.
+          hash_values = isAmbiguousInteger(hash) ? [ `${hash}`, parseInt(hash, 10) ] : [ hash ];
 
-          const [rowData] = await queryInstance({
-              operation: {
-                  operation: 'search_by_hash',
-                  schema,
-                  table,
-                  hash_values: [locationState.hashValue],
-                  get_attributes: ['*']
-              },
-              auth,
-              url
-          });
+          // TODO: we support floats, so how to disambiguate 4.0 from '4.0' here?
+      }
 
-          if (rowData) {
+      const result = await queryInstance({
+          operation: {
+              operation: 'search_by_hash',
+              schema,
+              table,
+              hash_values,
+              get_attributes: ['*']
+          },
+          auth,
+          url
+      });
 
-            const hash_attribute = rowData[hashAttribute];
-            const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
-            const updatedtime = rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
+      const [rowData] = result;
 
-            delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
-            delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
-            delete rowData[hashAttribute];
+      if (rowData) {
 
-            setCurrentValue({
-                [hashAttribute]: hash_attribute,
-                ...rowData,
-                __createdtime__: createdtime,
-                __updatedtime__: updatedtime
-            });
+        const hash_attribute = rowData[hashAttribute];
+        const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
+        const updatedtime = rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
 
-          } else {
-            navigate(baseUrl);
-            alert.error('Unable to find record with that hash_attribute');
-          }
+        delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
+        delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
+        delete rowData[hashAttribute];
+
+        setCurrentValue({
+            [hashAttribute]: hash_attribute,
+            ...rowData,
+            __createdtime__: createdtime,
+            __updatedtime__: updatedtime
+        });
+
+      } else {
+        navigate(baseUrl);
+        alert.error('Unable to find record with that hash_attribute');
       }
     } else {
       setCurrentValue(newEntityAttributes || {});
