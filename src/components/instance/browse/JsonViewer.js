@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
@@ -18,6 +18,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
   const alert = useAlert();
+  const { state: locationState } = useLocation();
   const navigate = useNavigate();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -30,6 +31,8 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
 
+  const isAmbiguousNumber = (h) => `${parseFloat(h)}` === h;
+
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
       navigate(baseUrl);
@@ -38,18 +41,67 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
   useAsyncEffect(async () => {
     if (action === 'edit') {
-      // if it's 12 or '12', send 12.  if it's something that can't be parsed as an integer, send as string.
-      const typedHash = Number.isInteger(hash) || (typeof hash === 'string' && `${parseInt(hash, 10)}` === hash) ?
-            parseInt(hash, 10) : hash;
-      const [rowData] = await queryInstance({ operation: { operation: 'search_by_hash', schema, table, hash_values: [typedHash], get_attributes: ['*'] }, auth, url });
+
+      let hash_values;
+      // we arrived at this view directly via url entered in (deeplink)
+      if (locationState?.hashValue) {
+          // NOTE: right now this if never executes because of the asyncEffect above that checks for newEntityAttributes and
+          // redirects to baseUrl if not.
+
+          // TODO: passing the hash_value through the navigate function and using location.state is a work
+          // around for an architectural shortcoming that should be addressed.
+          // reason: the sibling component BrowseDataTable is the source of the row data
+          // and has the originally typed hash value, which it requests in paged blocks. this view page
+          // is dependent on that for the real type of the hash_value because from here we only
+          // have the hash_value via its stringified url value, we can't know its type (i.e. '100' or 100).
+          //
+          // passing the hash value through navigate/location allows this typed lookup to work, but
+          // it's not intuitive and may make further refactoring painful.
+          //
+          // Probably makes more sense to refactor the architecture to consider the JsonViewer 
+          // (which should be renamed to JsonEditor since it's not just a viewing mechanism) as
+          // a 'child' of the BrowseDataTable component so the row data can be passed to it.
+
+          hash_values = [locationState.hashValue];
+      } else {
+          // request both integer as string and integer as integer values if it's ambiguous
+          // since we have to guess at the moment.
+          hash_values = isAmbiguousNumber(hash) ? [ `${hash}`, parseInt(hash, 10) ] : [ hash ];
+
+          // TODO: we support floats, so how to disambiguate 4.0 from '4.0' here?
+      }
+
+      const result = await queryInstance({
+          operation: {
+              operation: 'search_by_hash',
+              schema,
+              table,
+              hash_values,
+              get_attributes: ['*']
+          },
+          auth,
+          url
+      });
+
+      const [rowData] = result;
+
       if (rowData) {
+
         const hash_attribute = rowData[hashAttribute];
         const createdtime = rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
         const updatedtime = rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
+
         delete rowData.__createdtime__; // eslint-disable-line no-underscore-dangle
         delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
-        delete rowData[hashAttribute]; // eslint-disable-line no-underscore-dangle
-        setCurrentValue({ [hashAttribute]: hash_attribute, ...rowData, __createdtime__: createdtime, __updatedtime__: updatedtime });
+        delete rowData[hashAttribute];
+
+        setCurrentValue({
+            [hashAttribute]: hash_attribute,
+            ...rowData,
+            __createdtime__: createdtime,
+            __updatedtime__: updatedtime
+        });
+
       } else {
         navigate(baseUrl);
         alert.error('Unable to find record with that hash_attribute');
@@ -82,11 +134,28 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   };
 
   const deleteRecord = async (e) => {
+
     e.preventDefault();
-    if (!action) return false;
+
+    if (!action) {
+        return false;
+    }
+
     setDeleting(true);
-    await queryInstance({ operation: { operation: 'delete', schema, table, hash_values: [hash] }, auth, url });
+
+    await queryInstance({
+        operation: {
+            operation: 'delete',
+            schema,
+            table,
+            hash_values: [locationState.hashValue]
+        },
+        auth,
+        url
+    });
+
     return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
+
   };
 
   return (
