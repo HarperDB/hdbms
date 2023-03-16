@@ -31,7 +31,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
 
-  const isAmbiguousInteger = (h) => `${parseInt(hash, 10)}` === hash; // '101' or 101?
+  const isAmbiguousNumber = (h) => `${parseFloat(h)}` === h;
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
@@ -66,7 +66,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
       } else {
           // request both integer as string and integer as integer values if it's ambiguous
           // since we have to guess at the moment.
-          hash_values = isAmbiguousInteger(hash) ? [ `${hash}`, parseInt(hash, 10) ] : [ hash ];
+          hash_values = isAmbiguousNumber(hash) ? [ `${hash}`, parseInt(hash, 10) ] : [ hash ];
 
           // TODO: we support floats, so how to disambiguate 4.0 from '4.0' here?
       }
