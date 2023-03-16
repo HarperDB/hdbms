@@ -40,6 +40,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   }, []);
 
   useAsyncEffect(async () => {
+      console.log('location state: ', locationState);
     if (action === 'edit') {
 
       let hash_values;
@@ -143,12 +144,13 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
     setDeleting(true);
 
+      console.log('location state: ', locationState);
     await queryInstance({
         operation: {
             operation: 'delete',
             schema,
             table,
-            hash_values: [locationState.hash_value]
+            hash_values: [locationState.hashValue]
         },
         auth,
         url
