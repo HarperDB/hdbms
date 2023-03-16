@@ -148,7 +148,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
             operation: 'delete',
             schema,
             table,
-            hash_values: [locationState.hash_value]
+            hash_values: [locationState.hashValue]
         },
         auth,
         url
