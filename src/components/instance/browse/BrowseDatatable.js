@@ -122,7 +122,9 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         autoRefresh={tableState.autoRefresh}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
-        toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
+        toggleFilter={() => {
+            return setTableState({ ...tableState, showFilter: !tableState.showFilter })
+        }} // FIXME
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
@@ -136,7 +138,9 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             showFilter={tableState.showFilter}
             sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
-            onFilteredChange={(value) => setTableState({ ...tableState, page: 0, filtered: value })}
+            onFilteredChange={(value) => {
+                setTableState({ ...tableState, page: 0, filtered: value })
+            }}
             onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
