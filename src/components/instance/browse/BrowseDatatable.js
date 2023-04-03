@@ -122,9 +122,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         autoRefresh={tableState.autoRefresh}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
-        toggleFilter={() => {
-            return setTableState({ ...tableState, showFilter: !tableState.showFilter })
-        }} // FIXME
+        toggleFilter={() =>  setTableState({ ...tableState, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
