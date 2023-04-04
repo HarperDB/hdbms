@@ -73,12 +73,12 @@ function CodeEditor() {
             </div>
             <Row>
               <Col md="6" className="mt-2">
-                <Button id="reset" block color="grey" onClick={setEditorToFile}>
+                <Button title="restore Custom Function code to last saved state" id="reset" block color="grey" onClick={setEditorToFile}>
                   <i className="fa fa-undo" />
                 </Button>
               </Col>
               <Col md="6" className="mt-2">
-                <Button id="addEditItem" onClick={handleSubmit} block color="success">
+                <Button title="save Custom Function code" id="addEditItem" onClick={handleSubmit} block color="success">
                   <i className="fa fa-save" />
                 </Button>
               </Col>
