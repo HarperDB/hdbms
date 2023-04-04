@@ -16,14 +16,17 @@ function CodeEditor() {
   const { customer_id, compute_stack_id, project, type, file } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const [code, setCode] = useState(false);
+  const [code, setCode] = useState('');
+  const [originalCode, setOriginalCode] = useState('');
 
   const setEditorToFile = useCallback(async () => {
+
     if (project && type && file && file !== 'undefined') {
       const endpoint_code = await getCustomFunction({ auth, url, project, type, file });
       setCode(endpoint_code?.message);
+      setOriginalCode(endpoint_code?.message);
     } else {
-      setCode(false);
+      setCode('');
     }
   }, [auth, url, project, type, file, setCode]);
 
@@ -69,16 +72,27 @@ function CodeEditor() {
         {code ? (
           <CardBody>
             <div className="code-editor-holder">
-              <Editor height="100%" defaultLanguage="javascript" value={code} theme="vs-dark" onChange={setCode} />
+              <Editor
+                height="100%"
+                defaultLanguage="javascript"
+                value={code}
+                theme="vs-dark"
+                onChange={ setCode } />
             </div>
             <Row>
               <Col md="6" className="mt-2">
-                <Button id="reset" block color="grey" onClick={setEditorToFile}>
+                <Button block color="grey"
+                    disabled={ code === originalCode }
+                    onClick={ setEditorToFile }
+                    id="reset"
+                    >
                   <i className="fa fa-undo" />
                 </Button>
               </Col>
               <Col md="6" className="mt-2">
-                <Button id="addEditItem" onClick={handleSubmit} block color="success">
+                <Button block color="success"
+                    id="addEditItem"
+                    onClick={handleSubmit}>
                   <i className="fa fa-save" />
                 </Button>
               </Col>
