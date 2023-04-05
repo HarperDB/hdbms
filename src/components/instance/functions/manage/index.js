@@ -92,7 +92,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
                 restarting={restarting}
                 showForm={action === 'edit'}
               />
-              <StaticEntityStatus url={cf_server_url} project={project} fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} />
             </>
           )}
           <hr className="mt-0" />
