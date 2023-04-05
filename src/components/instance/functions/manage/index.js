@@ -14,7 +14,6 @@ import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
-import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
