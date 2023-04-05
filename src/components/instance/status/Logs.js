@@ -28,8 +28,6 @@ function Logs() {
   useEffect(() => {
     let isMounted = true;
 
-    console.log('hi');
-    console.log(logs);
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
