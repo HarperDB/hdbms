@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate, useLocation, Outlet, useParams } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -42,6 +42,18 @@ const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile')
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
+
+function ValidatedRoute (auth) {
+    // ensure org id is valid for user. if not, redirect to organizations
+    const { customer_id } = useParams();
+
+    if (auth.auth.orgs.some(o => o.customer_id === customer_id)) {
+        return <Outlet />;
+    }
+    return <Navigate to='/organization' replace />;
+
+}
+
 function App() {
   const canonicalUrl = document.querySelector('link[rel="canonical"]');
   const navigate = useNavigate();
@@ -63,6 +75,7 @@ function App() {
   const loggedIn = auth?.user_id;
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
   const isMaintenance = version?.maintenance && isNotEmployee;
+
   ReactGA.initialize(config.google_analytics_code);
 
   useEffect(() => {
@@ -137,9 +150,11 @@ function App() {
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
                 <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
-                <Route element={isMaintenance ? <Maintenance /> : <Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
-                <Route element={isMaintenance ? <Maintenance /> : <Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                <Route element={isMaintenance ? <Maintenance /> : <Organization />} path="/o/:customer_id/*" />
+                <Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
+                    <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+                    <Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                    <Route element={<Organization />} path="/o/:customer_id/*" />
+                </Route>
                 <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
                 <Route element={<Navigate to="/" replace />} />
               </Routes>
