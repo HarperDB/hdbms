@@ -70,8 +70,13 @@ function Logs() {
             <Col xs="3" className="text-bold">
               date
             </Col>
-            <Col xs="6" className="text-end text-bold">
-              {!loading && logsError ? <span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
+            <Col xs="6" className="text-left text-bold">
+              {!loading && logsError ? 
+                  <span className="text-danger">
+                    log fetch error: {new Date().toLocaleTimeString().toLowerCase()}
+                  </span> :
+                  <span>time</span>
+              }
             </Col>
           </Row>
           <hr className="mt-1 mb-0" />
