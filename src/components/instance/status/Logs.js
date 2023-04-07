@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Row, Col, Button } from 'reactstrap';
+import { Card, CardBody, Row, Col, Container, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
 import readLog from '../../../functions/api/instance/readLog';
-import LogRow from './LogsRow';
+import LogRow from './LogRow';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
@@ -63,22 +63,25 @@ function Logs() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-          <Row>
-            <Col xs="3" className="text-bold">
-              status
-            </Col>
-            <Col xs="3" className="text-bold">
-              date
-            </Col>
-            <Col xs="6" className="text-left text-bold">
-              {!loading && logsError ? 
-                  <span className="text-danger">
-                    log fetch error: {new Date().toLocaleTimeString().toLowerCase()}
-                  </span> :
-                  <span>time</span>
-              }
-            </Col>
-          </Row>
+              <Row xs="4">
+                <Col className="text-bold">
+                  status
+                </Col>
+                <Col className="text-bold">
+                  date
+                </Col>
+                <Col className="text-left text-bold">
+                  {!loading && logsError ? 
+                      <span className="text-danger">
+                        log fetch error: {new Date().toLocaleTimeString().toLowerCase()}
+                      </span> :
+                      <span>time</span>
+                  }
+                </Col>
+                <Col className="text-bold">
+                  tags
+                </Col>
+              </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
             {loading && !logs && !autoRefresh ? (
