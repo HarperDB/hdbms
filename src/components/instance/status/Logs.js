@@ -63,7 +63,7 @@ function Logs() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-              <Row xs="4">
+              <Row xs="5">
                 <Col className="text-bold">
                   status
                 </Col>
@@ -77,6 +77,9 @@ function Logs() {
                       </span> :
                       <span>time</span>
                   }
+                </Col>
+                <Col className="text-bold">
+                  thread
                 </Col>
                 <Col className="text-bold">
                   tags
