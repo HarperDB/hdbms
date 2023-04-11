@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreState } from 'pullstate';
-import { Card, CardBody, Row, Col, Container, Button } from 'reactstrap';
+import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router-dom';
