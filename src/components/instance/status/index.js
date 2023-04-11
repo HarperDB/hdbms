@@ -19,10 +19,10 @@ function MetricsIndex() {
       <Col xs="12">
         <SystemInfo />
       </Col>
-      <Col lg="4" xs="12">
+      <Col lg="7" xs="12">
         <Logs />
       </Col>
-      <Col lg="4" xs="12">
+      <Col lg="5" xs="12">
         <Jobs />
       </Col>
       <Col lg="4" xs="12">

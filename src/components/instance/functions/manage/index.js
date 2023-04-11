@@ -14,7 +14,6 @@ import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
-import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
@@ -92,7 +91,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
                 restarting={restarting}
                 showForm={action === 'edit'}
               />
-              <StaticEntityStatus url={cf_server_url} project={project} fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} />
             </>
           )}
           <hr className="mt-0" />
