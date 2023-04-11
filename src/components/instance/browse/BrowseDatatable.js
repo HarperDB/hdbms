@@ -142,7 +142,12 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
-            onRowClick={(rowData) => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`)}
+            onRowClick={(rowData) => {
+                const hashValue = rowData[tableState.hashAttribute];
+                navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`, {
+                    state: { hashValue }
+                })
+            }}
           />
         </CardBody>
       </Card>
