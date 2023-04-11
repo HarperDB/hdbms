@@ -129,7 +129,7 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Network Latency" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>{systemInfo?.networkLatency || '...'}ms</div>
+                  <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>{systemInfo?.networkLatency ? `${systemInfo?.networkLatency} ms` : 'N/A'}</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
