@@ -117,7 +117,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
     if (!action || !rowValue || !validJSON) return false;
 
     setSaving(true);
-    await queryInstance({
+    const { error, message } = await queryInstance({
       operation: {
         operation: action === 'edit' ? 'update' : 'insert',
         schema,
@@ -127,6 +127,15 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
       auth,
       url,
     });
+
+    // FIXME: we fetch userInfo frequently, could use the perms in that payload
+    // to disable any write-oriented form buttons altogether
+    // so we don't create expectation of saving in the first place.
+    if (error) {
+        alert.error(message);
+        return setSaving(false);
+    }
+
     instanceState.update((s) => {
       s.lastUpdate = Date.now();
     });
@@ -143,7 +152,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
 
     setDeleting(true);
 
-    await queryInstance({
+    const { error, message } = await queryInstance({
         operation: {
             operation: 'delete',
             schema,
@@ -153,6 +162,12 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
         auth,
         url
     });
+
+    if (error) {
+        alert.error(message);
+        setConfirmDelete(false);
+        return setDeleting(false);
+    }
 
     return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
 
