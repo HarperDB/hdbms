@@ -19,6 +19,7 @@ function Details({ clusterNodeName }) {
   const is_local = useStoreState(instanceState, (s) => s.is_local);
   const authHeader = auth?.user ? `${btoa(`${auth.user}:${auth.pass}`)}` : '...';
   const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
+  const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
 
   return (
     <>
@@ -47,7 +48,7 @@ function Details({ clusterNodeName }) {
             </Col>
             <Col md="2" sm="4" xs="6">
               <ContentContainer header="Created" className="mb-3">
-                <div className="nowrap-scroll">{new Date(creation_date).toLocaleDateString()}</div>
+                <div className="nowrap-scroll">{formatted_creation_date}</div>
               </ContentContainer>
             </Col>
             {instance_region && (
