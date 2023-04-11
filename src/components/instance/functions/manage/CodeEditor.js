@@ -82,6 +82,7 @@ function CodeEditor() {
             <Row>
               <Col md="6" className="mt-2">
                 <Button block color="grey"
+                    title="Revert Code to Last Saved State"
                     disabled={ code === originalCode }
                     onClick={ setEditorToFile }
                     id="reset"
@@ -91,7 +92,10 @@ function CodeEditor() {
               </Col>
               <Col md="6" className="mt-2">
 
-                <Button block color="success"
+                <Button 
+                    block
+                    title="Save Code to Instance"
+                    color="success"
                     id="addEditItem"
                     onClick={handleSubmit}>
                   <i className="fa fa-save" />
