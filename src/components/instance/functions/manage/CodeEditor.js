@@ -90,6 +90,7 @@ function CodeEditor() {
                 </Button>
               </Col>
               <Col md="6" className="mt-2">
+
                 <Button block color="success"
                     id="addEditItem"
                     onClick={handleSubmit}>
