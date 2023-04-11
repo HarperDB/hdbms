@@ -9,7 +9,7 @@ import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
 import readLog from '../../../functions/api/instance/readLog';
-import LogRow from './LogsRow';
+import LogRow from './LogRow';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 
@@ -63,17 +63,28 @@ function Logs() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-          <Row>
-            <Col xs="3" className="text-bold">
-              status
-            </Col>
-            <Col xs="3" className="text-bold">
-              date
-            </Col>
-            <Col xs="6" className="text-end text-bold">
-              {!loading && logsError ? <span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
-            </Col>
-          </Row>
+              <Row xs="5">
+                <Col className="text-bold">
+                  status
+                </Col>
+                <Col className="text-bold">
+                  date
+                </Col>
+                <Col className="text-left text-bold">
+                  {!loading && logsError ? 
+                      <span className="text-danger">
+                        log fetch error: {new Date().toLocaleTimeString().toLowerCase()}
+                      </span> :
+                      <span>time</span>
+                  }
+                </Col>
+                <Col className="text-bold">
+                  thread
+                </Col>
+                <Col className="text-bold">
+                  tags
+                </Col>
+              </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
             {loading && !logs && !autoRefresh ? (
