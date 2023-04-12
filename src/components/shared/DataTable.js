@@ -97,7 +97,7 @@ function DataTable({
   useEffect(() => {
     if (!showFilter && state.filters.length) {
       setAllFilters([]);
-    } else if (state.filters.length) {
+    } else {
       onFilteredChange(state.filters);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

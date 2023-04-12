@@ -1,6 +1,6 @@
 {
   "name": "harperdb-studio",
-  "version": "4.1.6",
+  "version": "4.1.7",
   "description": "A UI for HarperDB",
   "deploymentUrl": "studio.harperdb.io",
   "private": true,
@@ -31,7 +31,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.2",
     "react-error-boundary": "^3.1.3",
-    "react-ga": "^3.3.1",
+    "react-ga4": "^2.1.0",
     "react-json-editor-ajrm": "^2.5.11",
     "react-router": "6.6.2",
     "react-router-dom": "6.6.2",
