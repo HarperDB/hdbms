@@ -13,8 +13,8 @@ import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
 function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
-  const { compute_stack_id } = useParams();
 
+  const { compute_stack_id } = useParams();
   const showUser = clusterStatus?.cluster_role;
   const showPort = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
   const showName = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
@@ -29,7 +29,7 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
               <Role clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
               {showUser && <User clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showPort && <Port port={12345} />}
+              {showPort && <Port clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
               {showName && <NodeName clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
               {showEnable && <Enable setConfiguring={setConfiguring} clusterStatus={clusterStatus} />}
             </ErrorBoundary>
