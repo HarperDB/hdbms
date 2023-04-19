@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Card, CardBody } from 'reactstrap';
+import { Button, Input, Card, CardBody, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -44,9 +44,6 @@ function Port({ clusterStatus, refreshStatus }) {
       if (result.error) {
         setFormState({ error: result.message });
       } else {
-          // TODO: bug here with the refreshing of the new value 
-          // it's like the react values are propagating too slow
-          // and old values are showing up?
         await refreshStatus();
         setDefaultClusterValue(formData.port);
         setFormState({});
@@ -60,7 +57,19 @@ function Port({ clusterStatus, refreshStatus }) {
     }
   }, [formData]);
 
-  return (
+  return clusterStatus?.config_cluster_port ? (
+    <Row>
+      <Col xs="12">
+        <hr className="my-3" />
+      </Col>
+      <Col xs="10" className="text">
+        Cluster Port: {clusterStatus?.config_cluster_port}
+      </Col>
+      <Col xs="2" className="text text-end">
+        <i className="fa fa-check-circle fa-lg text-success" />
+      </Col>
+    </Row>
+  ) : (
     <>
       <hr className="my-3" />
       <div className="text-nowrap mb-3">Set Clustering Port</div>
