@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Card, CardBody } from 'reactstrap';
+import { Button, Input, Card, CardBody, Row, Col } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
@@ -37,16 +37,11 @@ function Port({ clusterStatus, refreshStatus }) {
           url,
           CLUSTERING_USER: clusterStatus.config_cluster_user,
           CLUSTERING_PORT: formData.port,
-          NODE_NAME: formData.nodeName,
-          
         });
       }
       if (result.error) {
         setFormState({ error: result.message });
       } else {
-          // TODO: bug here with the refreshing of the new value 
-          // it's like the react values are propagating too slow
-          // and old values are showing up?
         await refreshStatus();
         setDefaultClusterValue(formData.port);
         setFormState({});
@@ -60,7 +55,19 @@ function Port({ clusterStatus, refreshStatus }) {
     }
   }, [formData]);
 
-  return (
+  return clusterStatus?.config_cluster_port ? (
+    <Row>
+      <Col xs="12">
+        <hr className="my-3" />
+      </Col>
+      <Col xs="10" className="text">
+        Cluster Port: {clusterStatus?.config_cluster_port}
+      </Col>
+      <Col xs="2" className="text text-end">
+        <i className="fa fa-check-circle fa-lg text-success" />
+      </Col>
+    </Row>
+  ) : (
     <>
       <hr className="my-3" />
       <div className="text-nowrap mb-3">Set Clustering Port</div>
@@ -69,11 +76,15 @@ function Port({ clusterStatus, refreshStatus }) {
         onChange={(e) => setFormData({ port: e.target.value })}
         className={`mb-1 ${formState.error && !formData.port ? 'error' : ''}`}
         type="text"
-        title="node name"
-        placeholder="node name"
+        title="cluster port"
+        placeholder="cluster port number"
         defaultValue={defaultClusterValue}
       />
-      <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+      <Button
+        block
+        color="success"
+        disabled={formState.submitted}
+        onClick={() => setFormState({ submitted: true })}>
         {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Set Clustering Port'}
       </Button>
       {formState.error && (
