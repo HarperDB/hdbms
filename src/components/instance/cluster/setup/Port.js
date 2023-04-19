@@ -37,8 +37,6 @@ function Port({ clusterStatus, refreshStatus }) {
           url,
           CLUSTERING_USER: clusterStatus.config_cluster_user,
           CLUSTERING_PORT: formData.port,
-          NODE_NAME: formData.nodeName,
-          
         });
       }
       if (result.error) {
@@ -78,11 +76,15 @@ function Port({ clusterStatus, refreshStatus }) {
         onChange={(e) => setFormData({ port: e.target.value })}
         className={`mb-1 ${formState.error && !formData.port ? 'error' : ''}`}
         type="text"
-        title="node name"
-        placeholder="node name"
+        title="cluster port"
+        placeholder="cluster port number"
         defaultValue={defaultClusterValue}
       />
-      <Button color="success" disabled={formState.submitted} block onClick={() => setFormState({ submitted: true })}>
+      <Button
+        block
+        color="success"
+        disabled={formState.submitted}
+        onClick={() => setFormState({ submitted: true })}>
         {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Set Clustering Port'}
       </Button>
       {formState.error && (
