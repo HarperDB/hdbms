@@ -3,14 +3,11 @@ import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import Role from './Role';
-import User from './User';
-import Port from './Port';
-import Enable from './Enable';
-import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
+
+import ClusterForm from './ClusterForm';
 
 function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
 
@@ -27,11 +24,7 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
         <Card className="my-3">
           <CardBody>
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-              <Role clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
-              {showUser && <User clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showPort && <Port clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showName && <NodeName clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showEnable && <Enable setConfiguring={setConfiguring} clusterStatus={clusterStatus} />}
+              <ClusterForm clusterStatus={clusterStatus} />
             </ErrorBoundary>
           </CardBody>
         </Card>

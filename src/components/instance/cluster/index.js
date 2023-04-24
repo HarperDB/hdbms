@@ -30,14 +30,17 @@ function ClusteringIndex() {
   const [configuring, setConfiguring] = useState(false);
   const clusterDisabled = parseFloat(registrationVersion) >= 4 && !is_local;
 
+    // FIXME: How can i make this function return the updated values to its nested callers?  
   const refreshStatus = useCallback(async () => {
+      let result;
     if (auth && url && !clusterDisabled) {
-      const result = await checkClusterStatus({ auth, url });
+      result = await checkClusterStatus({ auth, url });
       setClusterStatus(result);
       if (result.is_ready) {
         setConfiguring(false);
       }
     }
+      return result;
   }, [auth, url, clusterDisabled]);
 
   useInterval(async () => {

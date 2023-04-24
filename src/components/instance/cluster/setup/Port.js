@@ -17,14 +17,18 @@ function Port({ clusterStatus, refreshStatus }) {
   const url = useStoreState(instanceState, (s) => s.url);
   const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
 
-  const [formData, setFormData] = useState({});
+  const [defaultClusterValue, setDefaultClusterValue] = useState(clusterStatus?.config_cluster_port);
+  const [formData, setFormData] = useState({port: defaultClusterValue});
   const [formState, setFormState] = useState({});
-  const [defaultClusterValue, setDefaultClusterValue] = useState(clusterStatus?.config_cluster_port || 12345);
+  const [portSaved, setPortSaved] = useState(false); 
 
   // if config has a port value, use that, otherwise ask for it and save it.
   useAsyncEffect(async () => {
+
     if (formState.submitted) {
+
       let result;
+
       if (clusterEngine === 'nats') {
         result = await setConfiguration({
           auth,
@@ -39,14 +43,23 @@ function Port({ clusterStatus, refreshStatus }) {
           CLUSTERING_PORT: formData.port,
         });
       }
+
       if (result.error) {
+
         setFormState({ error: result.message });
+        setPortSaved(false);
+
       } else {
-        await refreshStatus();
-        setDefaultClusterValue(formData.port);
+
+        const newStatus = await refreshStatus();
+        setFormData({ port: newStatus?.config_cluster_port });
+        setDefaultClusterValue(newStatus?.config_cluster_port);
         setFormState({});
+        setPortSaved(true);
+
       }
     }
+
   }, [formState]);
 
   useAsyncEffect(() => {
@@ -55,27 +68,29 @@ function Port({ clusterStatus, refreshStatus }) {
     }
   }, [formData]);
 
-  return clusterStatus?.config_cluster_port ? (
+
+  return portSaved ? (
     <Row>
       <Col xs="12">
         <hr className="my-3" />
       </Col>
       <Col xs="10" className="text">
-        Cluster Port: {clusterStatus?.config_cluster_port}
+        Port: {clusterStatus?.config_cluster_port}
       </Col>
       <Col xs="2" className="text text-end">
         <i className="fa fa-check-circle fa-lg text-success" />
       </Col>
     </Row>
-  ) : (
+  ) : ( 
     <>
       <hr className="my-3" />
       <div className="text-nowrap mb-3">Set Clustering Port</div>
       <Input
         id="clusterPort"
-        onChange={(e) => setFormData({ port: e.target.value })}
+        onChange={(e) => setFormData({ port: parseInt(e.target.value, 10) })}
         className={`mb-1 ${formState.error && !formData.port ? 'error' : ''}`}
-        type="text"
+        type="number"
+        min="1024"
         title="cluster port"
         placeholder="cluster port number"
         defaultValue={defaultClusterValue}
@@ -83,7 +98,7 @@ function Port({ clusterStatus, refreshStatus }) {
       <Button
         block
         color="success"
-        disabled={formState.submitted}
+        disabled={ !formData.port || formData.port < 1024 }
         onClick={() => setFormState({ submitted: true })}>
         {formState.submitted ? <i className="fa fa-spinner fa-spin text-white" /> : 'Set Clustering Port'}
       </Button>
