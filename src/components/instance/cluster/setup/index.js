@@ -24,7 +24,11 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
         <Card className="my-3">
           <CardBody>
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-              <ClusterForm clusterStatus={clusterStatus} />
+              <ClusterForm
+                setConfiguring={setConfiguring}
+                refreshStatus={refreshStatus}
+                clusterStatus={clusterStatus}
+                compute_stack_id={compute_stack_id} />
             </ErrorBoundary>
           </CardBody>
         </Card>

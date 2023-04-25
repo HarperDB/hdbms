@@ -1,69 +1,158 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Card, CardBody } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import { useParams } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
+import cn from 'classnames';
 
-import ClusterFormInput from './ClusterFormInput';
+import instanceState from '../../../../functions/state/instanceState';
+import restartInstance from '../../../../functions/api/instance/restartInstance';
+import setConfiguration from '../../../../functions/api/instance/setConfiguration';
+import configureCluster from '../../../../functions/api/instance/configureCluster';
+import addUser from '../../../../functions/api/instance/addUser';
 
-function ClusterForm({ clusterStatus }) {
+import FormValidationError from '../../../shared/FormValidationError';
+import ClusterField from './ClusterField';
 
-  console.log(clusterStatus);
+function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_stack_id }) {
+
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const clusterEngine = clusterStatus.engine;
+  const clusterPortMin = 1024;
+  const clusterPortMax = 65535;
 
   const [formData, setFormData] = useState({
-    clusterRole: clusterStatus?.cluster_role.role,
-    clusterUser: clusterStatus?.cluster_user.username,
-    port: clusterStatus?.config_cluster_port,
-    clusterNodeName: clusterStatus?.node_name
+    clusterRole: clusterStatus?.cluster_role?.role || '',
+    clusterUsername: clusterStatus?.cluster_user?.username || '',
+    clusterPassword: clusterStatus?.cluster_user?.password || '',
+    clusterPort: clusterStatus?.config_cluster_port || '',
+    clusterNodeName: clusterStatus?.node_name || compute_stack_id
   });
 
-  function formIsValid(data) {
-      console.log(data);
-      return `${parseInt(data.port, 10)}` === data.port &&
-             parseInt(data.port, 10) >= 1024 &&
-             data.clusterNodeName > 0 &&
-             data.clusterRole &&
-             data.clusterUser;
+  const [serverSideError, setServerSideError] = useState(null);
+
+  function formIsValid({ clusterRole, clusterUsername, clusterPassword, clusterPort, clusterNodeName }) {
+      return clusterRole?.length > 0 &&
+             clusterUsername.length > 0 &&
+             clusterPassword.length > 0 &&
+             clusterNodeName.length > 0 &&
+             clusterPort >= clusterPortMin && clusterPort <= clusterPortMax;
   }
 
   function updateForm(update) {
     setFormData({...formData, ...update});
   }
 
-  async function updateClustering(update) {
-      console.log('updateClustering');
+  async function enableClustering() {
+
+    setServerSideError(null);
+
+    // creates cluster user
+    if (!clusterStatus.cluster_user) {
+      const response = await addUser({
+        auth,
+        url,
+        role: formData.clusterRole,
+        username: formData.clusterUsername,
+        password: formData.clusterPassword
+      });
+
+      if (response.error) {
+        setServerSideError(response.message);
+        return;
+      }
+
+    }
+
+    // TODO: update docs when this is finished
+    // https://docs.harperdb.io/docs/harperdb-studio/manage-clustering#initial-configuration
+
+    // enables clustering with port, nodename and cluster_user
+    const result = (clusterEngine === 'nats') ?
+      await setConfiguration({
+        auth,
+        url,
+        clustering_enabled: true,
+        clustering_nodeName: formData.clusterNodeName,
+        clustering_port: formData.clusterPort,
+        clustering_user: formData.clusterUsername
+      }) :
+      await configureCluster({
+        auth,
+        url,
+        CLUSTERING: true,
+        CLUSTERING_PORT: formData.clusterPort,
+        CLUSTERING_USER: formData.clusterUsername,
+        NODE_NAME: formData.clusterNodeName,
+      });
+
+    if (result.error) {
+      setServerSideError(result.message);
+      return;
+    }
+
+    if (window._kmq) {
+      window._kmq.push(['record', 'enabled clustering']);
+    }
+
+    restartInstance({ auth, url });
+    setTimeout(() => setConfiguring(true), 0);
+
+    refreshStatus();
+
   }
 
   return (
     <>
-
-      <ClusterFormInput
+      <ClusterField
         label="Cluster Role"
-        value={formData.clusterUser} />
+        value={formData.clusterRole} />
 
-      <ClusterFormInput
+      <ClusterField
         label="Cluster User"
-        updateFn={(newClusterUser) => updateForm({ clusterUser: newClusterUser }) } 
-        value={formData?.clusterUser}
+        handleChange={(clusterUsername) => updateForm({ clusterUsername }) }
+        value={formData.clusterUsername}
+        validator={(value) => value.trim().length > 0}
+        errorMessage='Please enter a cluster username'
         editable />
 
-      <ClusterFormInput
+      <ClusterField
+        label="Cluster Password"
+        type="password"
+        handleChange={(clusterPassword) => updateForm({ clusterPassword }) }
+        value={formData.clusterPassword}
+        validator={(value) => value.trim().length > 0}
+        errorMessage='Please enter a password'
+        editable />
+
+      <ClusterField
         label="Cluster Port"
-        updateFn={(newPort) => updateForm({ port: newPort }) }
-        value={formData.port}
+        type="number"
+        max={clusterPortMax}
+        min={clusterPortMin}
+        handleChange={(newClusterPort) => updateForm({ clusterPort: newClusterPort })}
+        value={formData.clusterPort}
+        validator={(value) => value >= clusterPortMin && value <= clusterPortMax}
+        errorMessage={`Please enter a port number between ${clusterPortMin} and ${clusterPortMax}`}
         editable />
 
-      {/*
-      <ClusterFormInput label="Cluster Name" update={() => {}} value={formData.clusterNodeName} editable />
-      */}
+      <ClusterField
+        label="Cluster Node Name"
+        handleChange={(newClusterNodeName) => updateForm({ clusterNodeName: newClusterNodeName }) }
+        value={formData.clusterNodeName}
+        validator={(value) => value.length > 0}
+        errorMessage="Please enter a cluster node name"
+        editable />
 
+      <hr className="my-3" />
+      <FormValidationError error={serverSideError} />
       <Button
         block
         color="success"
         disabled={ !formIsValid(formData) }
-        onClick={(e) => updateClustering(formData) }>
+        onClick={ () => enableClustering() }>
         Enable Clustering
       </Button>
+
     </>
   )
 

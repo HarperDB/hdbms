@@ -21,6 +21,14 @@ textarea,
   }
 }
 
+.form-validation-error {
+  color: transparent;
+  padding: 10px 0px;
+  &.error {
+    color: $color-danger;
+  }
+}
+
 textarea {
   height: auto !important;
   resize: none;
