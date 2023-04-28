@@ -23,7 +23,7 @@ function InstanceManagerRow({ setShowModal, item, itemType, loading, handleAddNo
         ) : !item.connection ? (
           <ActionNoConnection
             loading={isLoading}
-            handleAddNode={() => handleAddNode({ compute_stack_id: item.compute_stack_id, instance_host: item.instance_host, clusterPort: item.clusterPort })}
+            handleAddNode={() => handleAddNode({ compute_stack_id: item.compute_stack_id, instance_url: item.instance_url, instance_host: item.instance_host, clusterPort: item.clusterPort })}
           />
         ) : item.connection?.state === 'closed' ? (
           <ActionConnectionClosed

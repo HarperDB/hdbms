@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
-import cn from 'classnames';
 
 import instanceState from '../../../../functions/state/instanceState';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
@@ -21,14 +20,14 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
   const clusterPortMax = 65535;
 
   const [formData, setFormData] = useState({
-    clusterRole: clusterStatus?.cluster_role?.role || '',
-    clusterUsername: clusterStatus?.cluster_user?.username || '',
+    clusterRole: clusterStatus?.cluster_role?.role || '', // implies that it might not exist, but it should.
+    clusterUsername: clusterStatus?.cluster_user?.username || 'cluster_user',
     clusterPassword: clusterStatus?.cluster_user?.password || '',
     clusterPort: clusterStatus?.config_cluster_port || '',
     clusterNodeName: clusterStatus?.node_name || compute_stack_id
   });
 
-  const [serverSideError, setServerSideError] = useState(null);
+  const [serverResponseError, setServerResponseError] = useState(null);
 
   function formIsValid({ clusterRole, clusterUsername, clusterPassword, clusterPort, clusterNodeName }) {
       return clusterRole?.length > 0 &&
@@ -44,7 +43,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
 
   async function enableClustering() {
 
-    setServerSideError(null);
+    setServerResponseError(null);
 
     // creates cluster user
     if (!clusterStatus.cluster_user) {
@@ -57,7 +56,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
       });
 
       if (response.error) {
-        setServerSideError(response.message);
+        setServerResponseError(response.message);
         return;
       }
 
@@ -86,7 +85,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
       });
 
     if (result.error) {
-      setServerSideError(result.message);
+      setServerResponseError(result.message);
       return;
     }
 
@@ -94,7 +93,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
       window._kmq.push(['record', 'enabled clustering']);
     }
 
-    restartInstance({ auth, url });
+    await restartInstance({ auth, url });
     setTimeout(() => setConfiguring(true), 0);
 
     refreshStatus();
@@ -110,7 +109,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
       <ClusterField
         label="Cluster User"
         handleChange={(clusterUsername) => updateForm({ clusterUsername }) }
-        value={formData.clusterUsername}
+        value={formData.clusterUsername }
         validator={(value) => value.trim().length > 0}
         errorMessage='Please enter a cluster username'
         editable />
@@ -144,7 +143,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         editable />
 
       <hr className="my-3" />
-      <FormValidationError error={serverSideError} />
+      <FormValidationError error={serverResponseError} />
       <Button
         block
         color="success"
