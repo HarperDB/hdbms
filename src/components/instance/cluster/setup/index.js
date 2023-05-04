@@ -2,7 +2,9 @@ import React from 'react';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useStoreState } from 'pullstate';
 
+import instanceState from '../../../../functions/state/instanceState';
 import Role from './Role';
 import User from './User';
 import Port from './Port';
@@ -20,6 +22,9 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
   const showPort = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
   const showName = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
   const showEnable = clusterStatus?.cluster_role && clusterStatus?.cluster_user && clusterStatus?.node_name;
+  const ruleArn = useStoreState(instanceState, (s) => s.rule_arn);
+  const isAWSCloud = Boolean(ruleArn);
+  const awsCloudWarning = "HarperDB clustering functionality will not work between AWS cloud instances. We plan to fix this in an upcoming 4.x release."
 
   return (
     <Row id="clustering">
@@ -60,10 +65,8 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
           <EmptyPrompt
             headline="Create a Cluster User"
             description="If you have other instances you want to cluster together with this one, make sure the cluster user has the same name and password as those other instances."
-            warning="HarperDB clustering functionality will not work between AWS cloud instances. We plan to fix this in an upcoming 4.x release."
-            icon={<i className="fa fa-exclamation-triangle text-warning" />} >
-            <div>warning: clustering wont work for aws cloud instances</div>
-          </EmptyPrompt>
+            warning={isAWSCloud ? awsCloudWarning : null}
+            icon={<i className="fa fa-exclamation-triangle text-warning" />} />
         ) : (
           <EmptyPrompt
             headline="Create a Cluster Role"
