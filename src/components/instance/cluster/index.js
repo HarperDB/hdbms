@@ -28,17 +28,16 @@ function ClusteringIndex() {
   const registrationVersion = useStoreState(instanceState, (s) => s.registration?.version, [compute_stack_id]);
   const [clusterStatus, setClusterStatus] = useState(false);
   const [configuring, setConfiguring] = useState(false);
-  const clusterDisabled = parseFloat(registrationVersion) >= 4 && !is_local;
 
   const refreshStatus = useCallback(async () => {
-    if (auth && url && !clusterDisabled) {
+    if (auth && url) {
       const result = await checkClusterStatus({ auth, url });
       setClusterStatus(result);
       if (result.is_ready) {
         setConfiguring(false);
       }
     }
-  }, [auth, url, clusterDisabled]);
+  }, [auth, url]);
 
   useInterval(async () => {
     if (configuring) {
@@ -54,9 +53,7 @@ function ClusteringIndex() {
     setClusterStatus(false);
   }, [compute_stack_id]);
 
-  return clusterDisabled ? (
-    <ClusterDisabled />
-  ) : !clusterStatus ? (
+  return !clusterStatus ? (
     <Loader header="loading network" spinner />
   ) : configuring ? (
     <EmptyPrompt description="Configuring Clustering" icon={<i className="fa fa-spinner fa-spin" />} />
