@@ -9,6 +9,7 @@ import Port from './Port';
 import Enable from './Enable';
 import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
+import WarningTile from '../../../shared/WarningTile';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
@@ -59,8 +60,10 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
           <EmptyPrompt
             headline="Create a Cluster User"
             description="If you have other instances you want to cluster together with this one, make sure the cluster user has the same name and password as those other instances."
-            icon={<i className="fa fa-exclamation-triangle text-warning" />}
-          />
+            warning="HarperDB clustering functionality will not work between AWS cloud instances. We plan to fix this in an upcoming 4.x release."
+            icon={<i className="fa fa-exclamation-triangle text-warning" />} >
+            <div>warning: clustering wont work for aws cloud instances</div>
+          </EmptyPrompt>
         ) : (
           <EmptyPrompt
             headline="Create a Cluster Role"
