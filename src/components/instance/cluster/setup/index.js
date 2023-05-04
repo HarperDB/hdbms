@@ -11,7 +11,6 @@ import Port from './Port';
 import Enable from './Enable';
 import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
-import WarningTile from '../../../shared/WarningTile';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
