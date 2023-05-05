@@ -23,7 +23,7 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
   const showEnable = clusterStatus?.cluster_role && clusterStatus?.cluster_user && clusterStatus?.node_name;
   const ruleArn = useStoreState(instanceState, (s) => s.rule_arn);
   const isAWSCloud = Boolean(ruleArn);
-  const awsCloudWarning = "HarperDB clustering functionality will not work between AWS cloud instances. We plan to fix this in an upcoming 4.x release."
+  const awsCloudWarning = "HarperDB clustering functionality will not work between AWS cloud instances. We are working on upgrading our cloud infrastructure to support clustering functionality."
 
   return (
     <Row id="clustering">
