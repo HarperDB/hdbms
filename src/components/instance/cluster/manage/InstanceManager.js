@@ -32,7 +32,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
       } else {
         // TODO: this needs to be tested for 4.x local
         const result = (clusterEngine === 'nats')
-          ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_url, port: payload.clusterPort }] })
+          ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
           : await addNode({ ...payload, auth, url, is_local, customer_id });
 
         if (result.error) {
