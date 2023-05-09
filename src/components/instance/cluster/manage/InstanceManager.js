@@ -22,29 +22,21 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
-  // FIXME: grabbing version from auth object is a temp fix.  something not updating right on instanceState parent object
-  // when the compute_stack_id changes.
   const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.auth?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
 
-  console.log(items);
   const handleAddNode = useCallback(
     async (payload) => {
       setLoading(payload.compute_stack_id);
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
       } else {
-        // if you select an instance from instance dropdown that is a 3.x,
-        // then switch to a 4.x, the clusterEngine value is wrong.
-        //
-        // Q: why do we call this at all? there is no subscription object, so we'll get a 400 for 3.x and 4.x.
-        // const res2 = await addNode({ ...payload, auth, url, is_local, customer_id });
+        // TODO: this needs to be tested for 4.x local
         const result = (clusterEngine === 'nats')
           ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_url, port: payload.clusterPort }] })
-          : await addNode({ ...payload, auth, url, is_local, customer_id }); // why is this here? isn't this for pub/sub subscriptions?
+          : await addNode({ ...payload, auth, url, is_local, customer_id });
 
         if (result.error) {
-          // FIXME: adjust this in the near future: revise language? revise behavior? can multiple localhost instances
-          // be clustered in dev? in prod?
+          // TODO: review our policy about connecting to localhost instances.
           alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
           setLoading(false);
         } else {
