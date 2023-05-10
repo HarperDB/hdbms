@@ -6,7 +6,7 @@ export default ({ instances, network, instance_region, instance_wavelength_zone_
     const connection =
       instance_cluster_engine === 'socketcluster' ? network?.connections.find((n) => n.name === i.compute_stack_id) : network?.connections.find((n) => n.host === i.host);
     const subscriptions = connection?.subscriptions || [];
-    const clusterPort = 12345;
+    const clusterPort = i?.clustering?.config_cluster_port;
     const instance_status = i.is_local ? 'OK' : i.status;
     const instance_host =
       instance_region && instance_region === i.instance_region && !i.wavelength_zone_id && !instance_wavelength_zone_id
