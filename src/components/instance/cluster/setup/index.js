@@ -7,6 +7,7 @@ import { useStoreState } from 'pullstate';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
+import instanceState from '../../../../functions/state/instanceState';
 
 import ClusterForm from './ClusterForm';
 
