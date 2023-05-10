@@ -21,7 +21,7 @@ jobs:
           lms_api_url: 'https://dev.harperdbcloudservices.com/',
           google_analytics_code: '${{secrets.GOOGLE_ANALYTICS_CODE}}',
           youtube_api_key: '${{secrets.YOUTUBE_API_KEY}}',
-          postman_collection_url: 'https://www.postman.com/collections/ae471be27991a02973d1',
+          postman_collection_url: 'https://www.postman.com/collections/7046690-5a70b340-8fe1-4487-88bd-ffac077c3df8',
           tc_version: '2020-01-01',
           check_version_interval: 300000,
           refresh_content_interval: 15000,
