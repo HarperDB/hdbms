@@ -23,7 +23,8 @@ textarea,
 
 .form-validation-error {
   color: transparent;
-  padding: 10px 0px;
+  padding: 10px 0;
+
   &.error {
     color: $color-danger;
   }

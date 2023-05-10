@@ -2,19 +2,7 @@ import React from 'react';
 
 function AkamaiLogo({ height = 12 }) {
   return (
-    <svg
-      version="1.1"
-      id="Layer_1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      width="423.5px"
-      height="186px"
-      viewBox="0 0 423.5 186"
-      style="enable-background:new 0 0 423.5 186;"
-      xmlSpace="preserve"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width={height * 4.5} height={height} viewBox="0 0 423.5 186" xmlSpace="preserve">
       <g>
         <g>
           <g>
