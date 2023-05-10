@@ -10,6 +10,7 @@ import setConfiguration from '../../../../functions/api/instance/setConfiguratio
 import configureCluster from '../../../../functions/api/instance/configureCluster';
 
 function NodeName({ refreshStatus, clusterStatus }) {
+
   const { compute_stack_id } = useParams();
 
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -66,8 +67,9 @@ function NodeName({ refreshStatus, clusterStatus }) {
     <>
       <hr className="my-3" />
       <div className="text-nowrap mb-3">Set Cluster Name</div>
+      {/* id="nodeName" causes react-dom to fail */}
       <Input
-        id="nodeName"
+        id="clusterNodeName"
         onChange={(e) => setFormData({ nodeName: e.target.value })}
         className={`mb-1 ${formState.error && !formData.nodeName ? 'error' : ''}`}
         type="text"
