@@ -4,19 +4,15 @@ import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../../functions/state/instanceState';
-import Role from './Role';
-import User from './User';
-import Port from './Port';
-import Enable from './Enable';
-import NodeName from './NodeName';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
 
-function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
-  const { compute_stack_id } = useParams();
+import ClusterForm from './ClusterForm';
 
+function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
+
+  const { compute_stack_id } = useParams();
   const showUser = clusterStatus?.cluster_role;
   const showPort = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
   const showName = clusterStatus?.cluster_role && clusterStatus?.cluster_user;
@@ -32,11 +28,11 @@ function SetupIndex({ setConfiguring, clusterStatus, refreshStatus }) {
         <Card className="my-3">
           <CardBody>
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-              <Role clusterStatus={clusterStatus} refreshStatus={refreshStatus} />
-              {showUser && <User clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showPort && <Port port={12345} />}
-              {showName && <NodeName clusterStatus={clusterStatus} refreshStatus={refreshStatus} />}
-              {showEnable && <Enable setConfiguring={setConfiguring} clusterStatus={clusterStatus} />}
+              <ClusterForm
+                setConfiguring={setConfiguring}
+                refreshStatus={refreshStatus}
+                clusterStatus={clusterStatus}
+                compute_stack_id={compute_stack_id} />
             </ErrorBoundary>
           </CardBody>
         </Card>
