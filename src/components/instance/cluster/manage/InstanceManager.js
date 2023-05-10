@@ -30,7 +30,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
       } else {
-        // TODO: this needs to be tested for 4.x local
+
         const result = (clusterEngine === 'nats')
           ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
           : await addNode({ ...payload, auth, url, is_local, customer_id });
