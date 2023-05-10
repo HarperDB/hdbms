@@ -5,7 +5,7 @@ export default {
   lms_api_url: 'XXXXXXXXXXXXXXXXXXXXXXXX',
   google_analytics_code: 'UA-XXXXXXXXXXXXX-3',
   youtube_api_key: 'XXXXXXXXXXXXXXXXXXXXXX',
-  postman_collection_url: 'https://www.postman.com/collections/ac7c0401b58b3ffde967',
+  postman_collection_url: 'https://www.postman.com/collections/7046690-5a70b340-8fe1-4487-88bd-ffac077c3df8',
   tc_version: '2020-01-01',
   check_version_interval: 300000,
   refresh_content_interval: 10000,
