@@ -44,24 +44,22 @@ const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile')
 const versionAlertOptions = { timeout: 0, position: positions.BOTTOM_CENTER };
 let controller;
 
+function ValidatedRoute(auth) {
+  // ensure org id is valid for user. if not, redirect to organizations
+  const { customer_id } = useParams();
 
-function ValidatedRoute (auth) {
-    // ensure org id is valid for user. if not, redirect to organizations
-    const { customer_id } = useParams();
-
-    if (auth.auth.orgs.some(o => o.customer_id === customer_id)) {
-        return <Outlet />;
-    }
-    return <Navigate to='/organization' replace />;
-
+  if (auth.auth.orgs.some((o) => o.customer_id === customer_id)) {
+    return <Outlet />;
+  }
+  return <Navigate to="/organization" replace />;
 }
 
 function App() {
   const canonicalUrl = document.querySelector('link[rel="canonical"]');
   const navigate = useNavigate();
   const alert = useAlert();
-  const location =  useLocation();
-  const { search, pathname } = location; 
+  const location = useLocation();
+  const { search, pathname } = location;
   const { redirect } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
@@ -81,7 +79,7 @@ function App() {
   ReactGA.initialize(config.google_analytics_code);
 
   useEffect(() => {
-    ReactGA.send({ hitType: 'pageview', page: window.location.pathname + window.location.search }); 
+    ReactGA.send({ hitType: 'pageview', page: window.location.pathname + window.location.search });
   }, [location.pathname]);
 
   useEffect(() => {
@@ -116,9 +114,7 @@ function App() {
     canonicalUrl.href = window.location.href;
   }, [location, canonicalUrl]);
 
-
   useEffect(() => {
- 
     init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,9 +149,9 @@ function App() {
                 <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
-                    <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
-                    <Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-                    <Route element={<Organization />} path="/o/:customer_id/*" />
+                  <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+                  <Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+                  <Route element={<Organization />} path="/o/:customer_id/*" />
                 </Route>
                 <Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
                 <Route element={<Navigate to="/" replace />} />

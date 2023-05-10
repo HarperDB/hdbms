@@ -22,7 +22,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const is_local = useStoreState(instanceState, (s) => s.is_local, [compute_stack_id]);
-  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.registration?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
+  const clusterEngine = useStoreState(instanceState, (s) => (parseFloat(s.auth?.version) >= 4 ? 'nats' : 'socketcluster'), [compute_stack_id]);
 
   const handleAddNode = useCallback(
     async (payload) => {
@@ -30,11 +30,13 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
       } else {
-        const result =
-          clusterEngine === 'nats'
-            ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
-            : await addNode({ ...payload, auth, url, is_local, customer_id });
+
+        const result = (clusterEngine === 'nats')
+          ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
+          : await addNode({ ...payload, auth, url, is_local, customer_id });
+
         if (result.error) {
+          // TODO: review our policy about connecting to localhost instances.
           alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
           setLoading(false);
         } else {

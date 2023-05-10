@@ -7,7 +7,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../functions/state/appState';
 import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/ErrorFallback';
-import VerizonLogo from './shared/VerizonLogo';
 
 function TopNav({ isMaintenance }) {
   const { pathname } = useLocation();
@@ -57,7 +56,9 @@ function TopNav({ isMaintenance }) {
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
         <div className="navbar-brand">
-          <NavLink to="/organizations">{theme === 'verizon' ? <VerizonLogo height={20} /> : <div id="logo" title="Go to Organizations Home" />}</NavLink>
+          <NavLink to="/organizations">
+            <div id="logo" title="Go to Organizations Home" />
+          </NavLink>
         </div>
 
         <Nav className="ms-auto" navbar>
@@ -74,11 +75,7 @@ function TopNav({ isMaintenance }) {
                 <div className="text-white org-name">{customer.customer_name}</div>
                 <div className="org-actions">
                   <NavItem className="ms-0">
-                    <NavLink
-                      id="viewOrganizationInstances"
-                      title="View Organization Instances"
-                      to={`/o/${customer.customer_id}/instances`}
-                    >
+                    <NavLink id="viewOrganizationInstances" title="View Organization Instances" to={`/o/${customer.customer_id}/instances`}>
                       <i className="fa fa-th d-inline-block" />
                       <span className="d-none d-lg-inline-block">&nbsp;instances</span>
                     </NavLink>
@@ -86,21 +83,13 @@ function TopNav({ isMaintenance }) {
                   {showManageIcon && (
                     <>
                       <NavItem>
-                        <NavLink
-                          id="manageOrganizationUsers"
-                          title="Manage Organization Users"
-                          to={`/o/${customer.customer_id}/users`}
-                        >
+                        <NavLink id="manageOrganizationUsers" title="Manage Organization Users" to={`/o/${customer.customer_id}/users`}>
                           <i className="fa fa-users d-inline-block" />
                           <span className="d-none d-lg-inline-block">&nbsp;users</span>
                         </NavLink>
                       </NavItem>
                       <NavItem>
-                        <NavLink
-                          id="manageOrganizationBilling"
-                          title="Manage Organization Billing"
-                          to={`/o/${customer.customer_id}/billing`}
-                        >
+                        <NavLink id="manageOrganizationBilling" title="Manage Organization Billing" to={`/o/${customer.customer_id}/billing`}>
                           <i className="fa fa-credit-card-alt d-inline-block" />
                           <span className="d-none d-lg-inline-block">&nbsp;billing</span>
                           {customer?.current_payment_status?.status === 'invoice.payment_failed' ? <span className="badge">!</span> : null}
@@ -120,10 +109,7 @@ function TopNav({ isMaintenance }) {
             </>
           )}
           <NavItem>
-            <NavLink
-              id="viewResources"
-              title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code"
-              to="/resources">
+            <NavLink id="viewResources" title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
               <i className="fas fa-tools" />
               <span className="d-none d-lg-inline-block">&nbsp;resources</span>
             </NavLink>
