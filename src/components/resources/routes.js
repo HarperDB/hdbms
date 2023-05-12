@@ -5,7 +5,6 @@ const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './d
 const SDKs = lazy(() => import(/* webpackChunkName: "support-sdks" */ './sdks'));
 const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ './tutorials'));
 const Examples = lazy(() => import(/* webpackChunkName: "support-examples" */ './examples'));
-const DBMigrator = lazy(() => import(/* webpackChunkName: "support-dbmigrator" */ './dbmigrator'));
 
 const Routes = [
   {
@@ -52,16 +51,6 @@ const Routes = [
     icon: 'cubes',
     iconCode: 'f1b3',
   },
-  /*
-  {
-    element: <DBMigrator />,
-    path: 'dbmigrator',
-    link: 'dbmigrator',
-    label: 'dbmigrator',
-    icon: 'coins',
-    iconCode: 'f51e',
-  },
-  */
   {
     element: <Links />,
     path: 'links',
