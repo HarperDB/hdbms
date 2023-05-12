@@ -17,7 +17,8 @@ const Routes = [
     iconCode: 'f121',
   },
   {
-    // installation instructions now links to our docs
+    // Installation instructions now links to our docs.
+    // Retaining this entry for the navigation.
     element: null,
     path: '.',
     link: 'installation',
