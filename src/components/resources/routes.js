@@ -1,7 +1,6 @@
 import { lazy, React } from 'react';
 
 const Links = lazy(() => import(/* webpackChunkName: "support-links" */ './links'));
-const Installation = lazy(() => import(/* webpackChunkName: "support-installation" */ './installation'));
 const Drivers = lazy(() => import(/* webpackChunkName: "support-drivers" */ './drivers'));
 const SDKs = lazy(() => import(/* webpackChunkName: "support-sdks" */ './sdks'));
 const Tutorials = lazy(() => import(/* webpackChunkName: "support-tutorials" */ './tutorials'));
@@ -10,12 +9,31 @@ const DBMigrator = lazy(() => import(/* webpackChunkName: "support-dbmigrator" *
 
 const Routes = [
   {
-    element: <Installation />,
-    path: 'installation',
+    element: <Examples />,
+    path: 'examples/:folder?/:method?',
+    link: 'examples',
+    label: 'example code',
+    icon: 'code',
+    iconCode: 'f121',
+  },
+  {
+    // installation instructions now links to our docs
+    element: null,
+    path: '.',
     link: 'installation',
     label: 'installation',
     icon: 'wrench',
     iconCode: 'f0ad',
+    external: true,
+    url: 'https://docs.harperdb.io/docs/install-harperdb'
+  },
+  {
+    element: <Tutorials />,
+    path: 'tutorials/:video_id?',
+    link: 'tutorials',
+    label: 'tutorials',
+    icon: 'video-camera',
+    iconCode: 'f03d',
   },
   {
     element: <SDKs />,
@@ -33,6 +51,7 @@ const Routes = [
     icon: 'cubes',
     iconCode: 'f1b3',
   },
+  /*
   {
     element: <DBMigrator />,
     path: 'dbmigrator',
@@ -41,14 +60,7 @@ const Routes = [
     icon: 'coins',
     iconCode: 'f51e',
   },
-  {
-    element: <Tutorials />,
-    path: 'tutorials/:video_id?',
-    link: 'tutorials',
-    label: 'tutorials',
-    icon: 'video-camera',
-    iconCode: 'f03d',
-  },
+  */
   {
     element: <Links />,
     path: 'links',
@@ -56,14 +68,6 @@ const Routes = [
     label: 'links',
     icon: 'external-link-square',
     iconCode: 'f14c',
-  },
-  {
-    element: <Examples />,
-    path: 'examples/:folder?/:method?',
-    link: 'examples',
-    label: 'example code',
-    icon: 'code',
-    iconCode: 'f121',
   },
 ];
 
