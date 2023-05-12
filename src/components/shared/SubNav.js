@@ -21,10 +21,11 @@ function SubNav({ routes = [] }) {
             <Nav navbar className="instance-nav d-none d-md-flex">
               {routes.map((route) => (
                 // react-router-dom as a team considers external urls to be outside of the scope
-                // of the library. see https://github.com/remix-run/react-router/issues/1147#issuecomment-113180174
+                // of the library, so we use a regular anchor tag for external links.
+                // see https://github.com/remix-run/react-router/issues/1147#issuecomment-113180174
                 route.external ?
                   <li key={route.path} className="nav-item">
-                    <a className="nav-link" href={route.url}>
+                    <a className="nav-link" href={route.url} target="_blank">
                         <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
                         {route.label}
                     </a>
