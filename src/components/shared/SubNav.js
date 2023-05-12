@@ -20,12 +20,22 @@ function SubNav({ routes = [] }) {
           <>
             <Nav navbar className="instance-nav d-none d-md-flex">
               {routes.map((route) => (
-                <NavItem key={route.path}>
-                  <NavLink title={route.link} className="nav-link" to={route.link || route.path}>
-                    <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
-                    {route.label}
-                  </NavLink>
-                </NavItem>
+                // react-router-dom as a team considers external urls to be outside of the scope
+                // of the library. see https://github.com/remix-run/react-router/issues/1147#issuecomment-113180174
+                route.external ?
+                  <li key={route.path} className="nav-item">
+                    <a className="nav-link" href={route.url}>
+                        <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
+                        {route.label}
+                    </a>
+                  </li>
+                :
+                  <NavItem key={route.path}>
+                    <NavLink title={route.link} className="nav-link" to={route.link || route.path}>
+                      <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
+                      {route.label}
+                    </NavLink>
+                  </NavItem>
               ))}
             </Nav>
             <Nav navbar className="d-flex d-md-none">
