@@ -17,7 +17,7 @@ export default async () => {
     return appState.update((s) => {
       s.products = {
         cloud_storage: buildRadioSelectStorageOptions(response.find((p) => p.name === 'HarperDB Cloud Storage')?.plans.filter((p) => !p.metadata.prepaid) || []),
-        cloud_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Cloud Monthly (Beta)')?.plans.filter((p) => !p.metadata.prepaid) || []),
+        cloud_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Cloud Monthly')?.plans.filter((p) => !p.metadata.prepaid) || []),
         wavelength_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Cloud Monthly (Wavelength)')?.plans.filter((p) => !p.metadata.prepaid) || []),
         lumen_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'Lumen Edge Compute')?.plans.filter((p) => !p.metadata.prepaid) || []),
         local_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'HarperDB Local Annual')?.plans.filter((p) => !p.metadata.prepaid) || []),
