@@ -25,7 +25,7 @@ function SubNav({ routes = [] }) {
                 // see https://github.com/remix-run/react-router/issues/1147#issuecomment-113180174
                 route.external ?
                   <li key={route.path} className="nav-item">
-                    <a className="nav-link" href={route.url} target="_blank">
+                    <a className="nav-link" href={route.url} target="_blank" rel="noreferrer">
                         <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
                         {route.label}
                     </a>
