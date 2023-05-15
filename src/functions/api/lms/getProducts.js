@@ -13,6 +13,12 @@ const PRODUCT_MAP = {
     'wavelength_compute': 'prod_KloxOQofDaLs7q',
     'cloud_storage': 'prod_GoUJnVwOYvTjU9',
   },
+  stage: {
+    'cloud_compute': 'prod_Gh1XXQx6J8YaJl',
+    'local_compute': 'prod_GoB3yLzygPeGMu',
+    'wavelength_compute': 'prod_KloxOQofDaLs7q',
+    'cloud_storage': 'prod_GoUJnVwOYvTjU9',
+  },
   prod: {
     'cloud_compute': 'prod_GdDIHGH6lzEqgv',
     'local_compute': 'prod_H0Xx9dKkQqhMx9',
