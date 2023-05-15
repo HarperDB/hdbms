@@ -36,9 +36,6 @@ export default async () => {
         cloud_compute: buildRadioSelectProductOptions(response.find((p) => p.id === PRODUCT_MAP[config.env].cloud_compute)?.plans.filter((p) => !p.metadata.prepaid) || []),
         wavelength_compute: buildRadioSelectProductOptions(response.find((p) => p.id === PRODUCT_MAP[config.env].wavelength_compute)?.plans.filter((p) => !p.metadata.prepaid) || []),
         local_compute: buildRadioSelectProductOptions(response.find((p) => p.id === PRODUCT_MAP[config.env].local_compute)?.plans.filter((p) => !p.metadata.prepaid) || []),
-
-        // is this still used? no entry in stripe prod/test products
-        lumen_compute: buildRadioSelectProductOptions(response.find((p) => p.name === 'Lumen Edge Compute')?.plans.filter((p) => !p.metadata.prepaid) || []),
       };
     });
   } catch (e) {
