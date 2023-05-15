@@ -5,7 +5,7 @@ import buildRadioSelectProductOptions from '../../products/buildRadioSelectProdu
 import buildRadioSelectStorageOptions from '../../products/buildRadioSelectStorageOptions';
 import config from '../../../config';
 
-// maps product type -> product type id (from stripe dashboard) 
+// maps product type -> product type id (id is listed on stripe dashboard) 
 const PRODUCT_MAP = {
   dev: {
     'cloud_compute': 'prod_Gh1XXQx6J8YaJl',
@@ -30,8 +30,6 @@ export default async () => {
 
     if (response.error) return false;
 
-    // TODO: map product ids to product names, use id as primary identifier
-    // prevents product name change via stripe dashboard from breaking 
     return appState.update((s) => {
       s.products = {
         cloud_storage: buildRadioSelectStorageOptions(response.find((p) => p.id === PRODUCT_MAP[config.env].cloud_storage)?.plans.filter((p) => !p.metadata.prepaid) || []),
