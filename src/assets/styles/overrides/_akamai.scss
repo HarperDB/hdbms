@@ -208,6 +208,9 @@ $partner-brand-color: #017ac6;
         }
       }
     }
+    &-footer {
+      color: $color-black;
+    }
   }
 
   .content-container {
@@ -216,6 +219,14 @@ $partner-brand-color: #017ac6;
 
       .subheader {
         color: $partner-brand-color !important;
+      }
+    }
+  }
+
+  .react-toggle{
+    &--checked {
+      .react-toggle-track {
+        background-color: $color-warning !important;
       }
     }
   }
@@ -230,7 +241,7 @@ $partner-brand-color: #017ac6;
     .react-select__control--is-focused,
     .react-select__indicator-separator {
       background: $lightest-grey-overlay !important;
-      border-color: transparent !important;
+      // border-color: transparent !important;
 
       .react-select__single-value {
         color: $color-grey;
