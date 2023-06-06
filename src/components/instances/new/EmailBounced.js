@@ -3,8 +3,6 @@ import React from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import VisitCard from '../../shared/VisitCard';
-
 function EmailBounced() {
   const navigate = useNavigate();
   const { customer_id } = useParams();

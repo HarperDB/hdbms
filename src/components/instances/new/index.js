@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useCallback } from 'react';
-import { Modal, ModalHeader, ModalBody, Card, CardBody, Button, Row, Col } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -59,7 +59,7 @@ function NewInstanceIndex() {
   }, []);
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
+    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'xl' : ''} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
