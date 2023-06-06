@@ -24,7 +24,7 @@ function TypeVerizon({ setFormData }) {
 
         <hr />
         <ul className="mb-0">
-          <li>On Verizon 5G Wavelength</li>
+          <li>On Verizon 5G Edge Network</li>
           <li>Billed Monthly</li>
           <li>24/7 Customer Support</li>
           <li>Choose RAM and Disk Size</li>

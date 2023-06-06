@@ -30,7 +30,7 @@ function TypeEnterprise({ setFormData }) {
           <li>24/7 Customer Support</li>
           <li>
             <a href="https://docs.harperdb.io/docs/install-harperdb" target="_blank" rel="noopener noreferrer">
-              Click Here To Install HarperDB
+              Click To View Install Docs
             </a>
           </li>
         </ul>
