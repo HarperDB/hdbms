@@ -13,7 +13,6 @@ import addError from '../../../functions/api/lms/addError';
 import Loader from '../../shared/Loader';
 
 import InstanceTypeForm from './Type';
-import CloudProviderForm from './ProviderCloud';
 import CloudMetadataForm from './MetaCloud';
 import LocalMetadataForm from './MetaLocal';
 import LocalInstanceForm from './DetailsLocal';
@@ -21,9 +20,10 @@ import CloudInstanceForm from './DetailsCloud';
 import CustomerPaymentForm from './Payment';
 import ConfirmOrderForm from './Confirm';
 import OrderStatus from './Status';
+import BadCard from './BadCard';
 import getPrepaidSubscriptions from '../../../functions/api/lms/getPrepaidSubscriptions';
 import getUser from '../../../functions/api/lms/getUser';
-import VisitCard from '../../shared/VisitCard';
+import EmailBounced from './EmailBounced';
 
 function NewInstanceIndex() {
   const navigate = useNavigate();
@@ -58,68 +58,18 @@ function NewInstanceIndex() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return auth.email_bounced ? (
-    <Modal id="new-instance-modal" isOpen className={theme} centered fade={false}>
-      <ModalBody>
-        <Card>
-          <CardBody>
-            <div className="p-4 pb-0 text-center">
-              <b>Unable to Create New Instance</b>
-              <br />
-              <br />
-              Your email address seems to be unreachable. Please update it to ensure billing, upgrade, and other critical system announcements reach you.
-            </div>
-            <Row>
-              <Col sm="6">
-                <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
-                  Cancel
-                </Button>
-              </Col>
-              <Col sm="6">
-                <Button id="updateEmail" onClick={() => navigate('/profile')} title="Update My Email" block className="mt-2" color="danger">
-                  Update My Email
-                </Button>
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </ModalBody>
-    </Modal>
-  ) : badCard ? (
-    <Modal id="new-instance-modal" isOpen className={theme} centered fade={false}>
-      <ModalBody>
-        <Card>
-          <CardBody>
-            <div className="p-4 pb-0 text-center">
-              <b>The Credit Card On File Has An Issue</b>
-              <br />
-              <br />
-              Please update it to proceed, as well as to ensure uninterrupted service for this organization&apos;s existing instances.
-            </div>
-            <Row>
-              <Col sm="6">
-                <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
-                  Cancel
-                </Button>
-              </Col>
-              <Col sm="6">
-                <VisitCard label="Update Credit Card" onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/instances/new`)} />
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </ModalBody>
-    </Modal>
-  ) : (
+  return (
     <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'lg' : ''} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
           <Suspense fallback={<Loader header=" " spinner />}>
-            {purchaseStep === 'type' ? (
+            {auth.email_bounced ? (
+              <EmailBounced />
+            ) : badCard ? (
+              <BadCard />
+            ) : purchaseStep === 'type' ? (
               <InstanceTypeForm />
-            ) : purchaseStep === 'provider_cloud' ? (
-              <CloudProviderForm />
             ) : purchaseStep === 'meta_local' ? (
               <LocalMetadataForm />
             ) : purchaseStep === 'meta_cloud' ? (
