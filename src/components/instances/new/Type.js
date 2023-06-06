@@ -53,6 +53,16 @@ function Type() {
           </Col>
         </>
       )}
+      {theme === 'verizon' && (
+        <>
+          <Col xs="12" xl="6" className="instance-form-card-holder">
+            <TypeVerizon setFormData={setFormData} />
+          </Col>
+          <Col xs="12" xl="6" className="instance-form-card-holder">
+            <TypeEnterprise setFormData={setFormData} />
+          </Col>
+        </>
+      )}
     </Row>
   );
 }
