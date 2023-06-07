@@ -32,7 +32,9 @@ function NewInstanceIndex() {
   const badCard = useStoreState(appState, (s) => s.customer?.current_payment_status?.status === 'invoice.payment_failed');
   const { purchaseStep = 'type', customer_id } = useParams();
   const theme = useStoreState(appState, (s) => s.theme);
+  const themes = useStoreState(appState, (s) => s.themes);
   const [, setNewInstance] = useNewInstance({});
+  const size = purchaseStep === 'type' && themes.length > 1 ? 'xl' : purchaseStep === 'type' ? 'lg' : '';
 
   const closeAndResetModal = useCallback(() => {
     if (purchaseStep !== 'status') {
@@ -59,7 +61,7 @@ function NewInstanceIndex() {
   }, []);
 
   return (
-    <Modal id="new-instance-modal" size={purchaseStep === 'type' ? 'xl' : ''} isOpen className={theme} centered fade={false}>
+    <Modal id="new-instance-modal" size={size} isOpen className={theme} centered fade={false}>
       {purchaseStep !== 'status' && <ModalHeader toggle={closeAndResetModal}>{steps[purchaseStep]?.label}</ModalHeader>}
       <ModalBody className="position-relative">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
