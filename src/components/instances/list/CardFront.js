@@ -11,6 +11,7 @@ import appState from '../../../functions/state/appState';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
+import generateTypeString from '../../../functions/instances/generateTypeString';
 import userInfo from '../../../functions/api/instance/userInfo';
 import addError from '../../../functions/api/lms/addError';
 
@@ -38,13 +39,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const statusString = wavelength_zone_id && instanceData.status === 'UNABLE TO CONNECT' ? 'UNABLE TO CONENCT - ON VERIZON?' : instanceData.status;
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
-  const typeString = wavelength_zone_id
-    ? 'HARPERDB CLOUD - VERIZON 5G'
-    : is_local
-    ? 'HARPERDB ENTERPRISE - USER MANAGED'
-    : cloud_provider === 'akamai'
-    ? 'HARPERDB CLOUD - AKAMAI'
-    : 'HARPERDB CLOUD - AWS';
+  const typeString = generateTypeString({ wavelength_zone_id, is_local, cloud_provider });
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
