@@ -70,6 +70,7 @@
         div {
           overflow: hidden;
           white-space: nowrap;
+          text-overflow: ellipsis;
 
           hr {
             margin-bottom: 0.2rem !important;

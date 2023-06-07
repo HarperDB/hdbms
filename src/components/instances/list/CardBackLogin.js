@@ -22,7 +22,6 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       if (!user || !pass) {
         setFormState({ error: 'All fields are required' });
       } else {
-        setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { user: formData.user, pass: formData.pass, super: true } });
         const result = await userInfo({ auth: { user, pass }, url });
 
         if (is_ssl && is_local && result.error && result.type === 'catch') {

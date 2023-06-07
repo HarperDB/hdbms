@@ -23,7 +23,9 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, cloud_provider, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
+  console.log(compute);
+
   const { customer_id } = useParams();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -38,7 +40,13 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const statusString = wavelength_zone_id && instanceData.status === 'UNABLE TO CONNECT' ? 'UNABLE TO CONENCT - ON VERIZON?' : instanceData.status;
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
-  const typeString = wavelength_zone_id ? 'HARPERDB WAVELENGTH' : is_local ? 'USER_MANAGED' : 'HARPERDB CLOUD';
+  const typeString = wavelength_zone_id
+    ? 'HARPERDB CLOUD - VERIZON 5G'
+    : is_local
+    ? 'HARPERDB ENTERPRISE - USER MANAGED'
+    : cloud_provider === 'akamai'
+    ? 'HARPERDB CLOUD - AKAMAI'
+    : 'HARPERDB CLOUD - AWS';
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
@@ -109,6 +117,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
       url,
       is_local,
       is_ssl,
+      cloud_provider,
       instance_id,
       compute_stack_id,
       compute,
