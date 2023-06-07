@@ -123,10 +123,10 @@ $partner-brand-color: #017ac6;
   }
 
   a {
-    color: $partner-brand-color !important;
+    color: $partner-brand-color;
 
     &:hover {
-      color: $partner-brand-color !important;
+      color: $partner-brand-color;
     }
   }
 

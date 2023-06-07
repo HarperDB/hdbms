@@ -2,7 +2,7 @@ import queryLMS from '../queryLMS';
 
 export default async (props) =>
   queryLMS({
-    endpoint: props.cloud_provider === 'verizon' ? 'wl/addWavelengthInstance' : props.cloud_provider === 'akamai' ? '/addAkamaiInstance' : 'v2/addInstance',
+    endpoint: props.cloud_provider === 'verizon' ? 'wl/addWavelengthInstance' : props.cloud_provider === 'akamai' ? 'addAkamaiInstance' : 'v2/addInstance',
     method: 'POST',
     auth: props.auth,
     payload: Object.entries({

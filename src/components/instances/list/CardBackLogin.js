@@ -24,11 +24,11 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       } else {
         const result = await userInfo({ auth: { user, pass }, url });
 
-        if (is_ssl && result.error && result.type === 'catch') {
+        if (is_ssl && is_local && result.error && result.type === 'catch') {
           setFormState({ error: 'SSL ERROR. ACCEPT SELF-SIGNED CERT?', url });
         } else if (result.error && wavelength_zone_id && result.type === 'catch') {
           setFormState({ error: "Can't reach Wavelength instance. On Verizon?", url: false });
-        } else if (result.error && result.type === 'catch') {
+        } else if (result.error && !is_ssl && is_local && result.type === 'catch') {
           setFormState({ error: "Can't reach non-SSL instance. Enable SSL?", url: 'https://harperdb.io/developers/documentation/security/configuration/' });
         } else if (((result.error && result.message === 'Login failed') || result.error === 'Login failed') && !is_local) {
           const handleCloudInstanceUsernameChangeResult = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth: { user, pass }, url });

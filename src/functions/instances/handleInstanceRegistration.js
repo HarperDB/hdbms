@@ -40,9 +40,9 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, 
       };
     }
 
-    if (registration.error && is_ssl && registration.type === 'catch') {
+    if (registration.error && is_local && is_ssl && registration.type === 'catch') {
       return {
-        status: 'SSL_ERROR',
+        status: 'SSL ERROR',
         error: true,
         retry: true,
       };
