@@ -24,8 +24,6 @@ const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INS
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
 function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, cloud_provider, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
-  console.log(compute);
-
   const { customer_id } = useParams();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -207,9 +205,9 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
                 )}
                 <CardFrontStatusRow label="STATUS" isReady value={statusString} textClass={statusClass} bottomDivider />
                 <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
-                <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
-                <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
-                <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
+                <CardFrontStatusRow label="RAM" isReady value={ramString} bottomDivider />
+                <CardFrontStatusRow label="DISK" isReady value={diskString} textClass={diskClass} bottomDivider />
+                <CardFrontStatusRow label="VERSION" isReady value={instanceData.version} bottomDivider />
               </>
             </CardBody>
           )}
