@@ -94,7 +94,7 @@ function Datatable() {
             totalPages={tableState.totalPages}
             showFilter={tableState.showFilter}
             sorted={tableState.sorted}
-            loading={tableState.loading && !tableState.autoRefresh}
+            loading={!users || (tableState.loading && !tableState.autoRefresh)}
             onFilteredChange={(value) => setTableState({ ...tableState, filtered: value })}
             onSortedChange={(value) => setTableState({ ...tableState, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, pageSize: value })}

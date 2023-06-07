@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Button, Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Col, Row } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useInterval from 'use-interval';
@@ -23,7 +23,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -43,20 +43,25 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
 
-  const handleCardClick = useCallback(async () => {
-    if (!instanceAuth) {
-      setFlipState('login');
-    } else if (instanceData.status === 'OK') {
-      const result = await userInfo({ auth: instanceAuth, url });
-      if (result.error) {
-        setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
-        setFormState({ error: result.message });
-      } else {
-        navigate(`/o/${customer_id}/i/${compute_stack_id}`);
+  const handleCardClick = useCallback(
+    async (e) => {
+      if (['CREATE FAILED', 'DELETE FAILED'].includes(instanceData.status)) {
+        e.stopPropagation();
+      } else if (!instanceAuth) {
+        setFlipState('login');
+      } else if (instanceData.status === 'OK') {
+        const result = await userInfo({ auth: instanceAuth, url });
+        if (result.error) {
+          setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
+          setFormState({ error: result.message });
+        } else {
+          navigate(`/o/${customer_id}/i/${compute_stack_id}`);
+        }
       }
-    }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [instanceAuth, instanceData.status]);
+    [instanceAuth, instanceData.status]
+  );
 
   useAsyncEffect(async () => {
     if (processing) return false;
@@ -103,6 +108,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
       instanceAuth,
       url,
       is_local,
+      is_ssl,
       instance_id,
       compute_stack_id,
       compute,
@@ -168,25 +174,34 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
                 </Col>
               </Row>
 
-              {['CREATE FAILED', 'DELETE FAILED'].includes(instanceData.status) ? (
-                <>
-                  <CopyableText />
-                  <CardFrontStatusRow label="STATUS" isReady value={instanceData.status} textClass={statusClass} bottomDivider />
-                  <CardFrontStatusRow label="IF ISSUE PERSISTS" isReady value="" />
-                  <Button color="danger" block href="https://harperdbhelp.zendesk.com/hc/en-us/requests/new" target="_blank" rel="noopener noreferrer" className="mt-3">
-                    Create A Support Ticket
-                  </Button>
-                </>
-              ) : (
-                <>
+              <>
+                {['CREATE FAILED', 'DELETE FAILED'].includes(instanceData.status) ? (
+                  <div className="copyable-text-holder">
+                    <div className="text-container">
+                      <a href="https://harperdbhelp.zendesk.com/hc/en-us/requests/new" target="_blank" rel="noopener noreferrer" className="text-nowrap text-decoration-none">
+                        <span className="text-danger text-small text-uppercase text-bold">UH OH. CREATE A SUPPORT TICKET?</span>
+                        <i className="ms-2 fa fa-lg fa-external-link-square text-danger" />
+                      </a>
+                    </div>
+                  </div>
+                ) : instanceData.status === 'SSL ERROR' ? (
+                  <div className="copyable-text-holder">
+                    <div className="text-container">
+                      <a href={url} target="_blank" rel="noopener noreferrer" className="text-nowrap text-decoration-none">
+                        <span className="text-danger text-small text-uppercase text-bold">CLICK TO ACCEPT SELF-SIGNED CERT?</span>
+                        {url && <i className="ms-2 fa fa-lg fa-external-link-square text-danger" />}
+                      </a>
+                    </div>
+                  </div>
+                ) : (
                   <CopyableText text={url} />
-                  <CardFrontStatusRow label="STATUS" isReady value={statusString} textClass={statusClass} bottomDivider />
-                  <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
-                  <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
-                  <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
-                  <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
-                </>
-              )}
+                )}
+                <CardFrontStatusRow label="STATUS" isReady value={statusString} textClass={statusClass} bottomDivider />
+                <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
+                <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
+                <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
+                <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
+              </>
             </CardBody>
           )}
         </Card>

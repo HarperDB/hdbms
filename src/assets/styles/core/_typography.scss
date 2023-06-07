@@ -61,6 +61,17 @@ h6 {
   }
 }
 
+.logo-header {
+  align-content: center;
+  display: flex;
+  flex-direction: row;
+  font-size: 22px !important;
+  font-weight: bold;
+  height: 38px;
+  line-height: 25px;
+  padding-top: 6px;
+}
+
 b,
 .text-bold {
   font-weight: $font-weight-bold;

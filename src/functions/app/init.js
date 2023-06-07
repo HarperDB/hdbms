@@ -2,12 +2,12 @@ import getCurrentVersion from '../api/lms/getCurrentVersion';
 import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
 import getWavelengthRegions from '../api/lms/getWavelengthRegions';
+import getAkamaiRegions from '../api/lms/getAkamaiRegions';
 import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 
 export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, controller }) => {
-
   if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);
     return setPersistedUser({});
@@ -27,6 +27,7 @@ export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, c
   getProducts();
   getRegions();
   getWavelengthRegions();
+  getAkamaiRegions();
   getPostManCollection();
 
   // TODO: when is this called? this is when the theme is set.
