@@ -178,6 +178,7 @@ $partner-brand-color: #017ac6;
   .form-control {
     background: $lightest-grey-overlay !important;
     color: $color-darkgrey !important;
+    border: 1px solid $light-grey-overlay !important;
 
     &.is-invalid,
     &.error {

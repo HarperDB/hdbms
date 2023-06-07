@@ -3,7 +3,7 @@ import addCustomer from '../api/lms/addCustomer';
 import isAlphaNumeric from '../util/isAlphaNumeric';
 import getUser from '../api/lms/getUser';
 
-export default async ({ formData }) => {
+export default async ({ formData, theme }) => {
   const { firstname, lastname, email, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
 
   if (!firstname || !lastname || !email || !subdomain) {
@@ -25,6 +25,12 @@ export default async ({ formData }) => {
   if (subdomain.length > 16) {
     return {
       error: 'subdomain: max 16 characters',
+    };
+  }
+
+  if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1) {
+    return {
+      error: 'this portal is restricted to akamai and harperdb',
     };
   }
 
