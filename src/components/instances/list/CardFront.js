@@ -11,6 +11,7 @@ import appState from '../../../functions/state/appState';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
 import handleInstanceRegistration from '../../../functions/instances/handleInstanceRegistration';
+import generateTypeString from '../../../functions/instances/generateTypeString';
 import userInfo from '../../../functions/api/instance/userInfo';
 import addError from '../../../functions/api/lms/addError';
 
@@ -23,7 +24,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, cloud_provider, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -38,7 +39,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const statusString = wavelength_zone_id && instanceData.status === 'UNABLE TO CONNECT' ? 'UNABLE TO CONENCT - ON VERIZON?' : instanceData.status;
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
-  const typeString = wavelength_zone_id ? 'HARPERDB WAVELENGTH' : is_local ? 'USER_MANAGED' : 'HARPERDB CLOUD';
+  const typeString = generateTypeString({ wavelength_zone_id, is_local, cloud_provider });
   const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
   const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
   const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
@@ -109,6 +110,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
       url,
       is_local,
       is_ssl,
+      cloud_provider,
       instance_id,
       compute_stack_id,
       compute,
@@ -198,9 +200,9 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
                 )}
                 <CardFrontStatusRow label="STATUS" isReady value={statusString} textClass={statusClass} bottomDivider />
                 <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
-                <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
-                <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
-                <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
+                <CardFrontStatusRow label="RAM" isReady value={ramString} bottomDivider />
+                <CardFrontStatusRow label="DISK" isReady value={diskString} textClass={diskClass} bottomDivider />
+                <CardFrontStatusRow label="VERSION" isReady value={instanceData.version} bottomDivider />
               </>
             </CardBody>
           )}

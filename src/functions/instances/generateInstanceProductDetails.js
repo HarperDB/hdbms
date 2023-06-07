@@ -1,10 +1,9 @@
 import commaNumbers from '../util/commaNumbers';
+import chooseCompute from './chooseCompute';
 
 export default ({ instance, products, regions, subscriptions }) => {
   try {
-    const computeProducts = instance.compute_subscription_id
-      ? subscriptions[instance.is_local ? 'local_compute' : instance.wavelength_zone_id ? 'wavelength_compute' : 'cloud_compute']
-      : products[instance.is_local ? 'local_compute' : instance.wavelength_zone_id ? 'wavelength_compute' : 'cloud_compute'];
+    const computeProducts = instance.compute_subscription_id ? subscriptions[chooseCompute(instance)] : products[chooseCompute(instance)];
 
     const compute = computeProducts?.find(
       (p) => p.value.stripe_plan_id === instance.stripe_plan_id && (!instance.compute_subscription_id || p.value.compute_subscription_id === instance.compute_subscription_id)
