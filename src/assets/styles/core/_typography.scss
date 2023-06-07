@@ -62,13 +62,13 @@ h6 {
 }
 
 .logo-header {
+  align-content: center;
   display: flex;
   flex-direction: row;
-  height: 38px;
-  font-weight: bold;
   font-size: 22px !important;
+  font-weight: bold;
+  height: 38px;
   line-height: 25px;
-  align-content: center;
   padding-top: 6px;
 }
 

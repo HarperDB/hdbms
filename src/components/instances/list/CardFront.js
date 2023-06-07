@@ -23,7 +23,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
 const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
 
-function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
+function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -103,6 +103,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
       instanceAuth,
       url,
       is_local,
+      is_ssl,
       instance_id,
       compute_stack_id,
       compute,
@@ -176,6 +177,22 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
                   <Button color="danger" block href="https://harperdbhelp.zendesk.com/hc/en-us/requests/new" target="_blank" rel="noopener noreferrer" className="mt-3">
                     Create A Support Ticket
                   </Button>
+                </>
+              ) : instanceData.status === 'SSL_ERROR' ? (
+                <>
+                  <div className="copyable-text-holder">
+                    <div className="text-container">
+                      <a href={url} target="_blank" rel="noopener noreferrer" className="text-nowrap text-decoration-none">
+                        <span className="text-danger text-small text-uppercase text-bold">CLICK TO ACCEPT SELF-SIGNED CERT?</span>
+                        {url && <i className="ms-2 fa fa-lg fa-external-link-square text-danger" />}
+                      </a>
+                    </div>
+                  </div>
+                  <CardFrontStatusRow label="STATUS" isReady value="SSL ERROR" textClass={statusClass} bottomDivider />
+                  <CardFrontStatusRow label="TYPE" isReady value={typeString} bottomDivider />
+                  <CardFrontStatusRow label="RAM" isReady={isReady} value={ramString} bottomDivider />
+                  <CardFrontStatusRow label="DISK" isReady={isReady} value={diskString} textClass={diskClass} bottomDivider />
+                  <CardFrontStatusRow label="VERSION" isReady={isReady} value={instanceData.version} bottomDivider />
                 </>
               ) : (
                 <>

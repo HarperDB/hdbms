@@ -25,7 +25,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         const result = await userInfo({ auth: { user, pass }, url });
 
         if (is_ssl && result.error && result.type === 'catch') {
-          setFormState({ error: 'Login failed. Click to verify status?', url });
+          setFormState({ error: 'SSL ERROR. ACCEPT SELF-SIGNED CERT?', url });
         } else if (result.error && wavelength_zone_id && result.type === 'catch') {
           setFormState({ error: "Can't reach Wavelength instance. On Verizon?", url: false });
         } else if (result.error && result.type === 'catch') {
@@ -115,9 +115,14 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
                   </Col>
                 </Row>
                 {formState.error && (
-                  <a href={formState.url || null} target="_blank" rel="noopener noreferrer" className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap">
-                    {formState.error}
-                    {formState.url && <i className="ms-2 fa fa-lg fa-external-link-square text-purple" />}
+                  <a
+                    href={formState.url || null}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-bold text-center text-small text-danger d-block mt-2 text-nowrap  text-decoration-none"
+                  >
+                    <span className="text-danger">{formState.error}</span>
+                    {formState.url && <i className="ms-2 fa fa-lg fa-external-link-square text-danger" />}
                   </a>
                 )}
               </Form>
