@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.2.0",
-    "@stripe/react-stripe-js": "^1.4.1",
+    "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.15.0",
     "apexcharts": "^3.27.1",
     "bootstrap-scss": "^5.0.1",
