@@ -26,7 +26,7 @@ function InstancesIndex() {
   const { action, customer_id } = useParams();
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
-  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || s.theme === 'akamai');
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
@@ -65,7 +65,7 @@ function InstancesIndex() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    refreshInstances() 
+    refreshInstances();
   }, [auth, products, regions, subscriptions, customer_id, instanceAuths, refreshInstances]);
 
   useInterval(

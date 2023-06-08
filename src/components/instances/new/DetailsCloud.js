@@ -15,8 +15,8 @@ function DetailsCloud() {
   const navigate = useNavigate();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
-  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const [newInstance, setNewInstance] = useNewInstance({});
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || newInstance.cloud_provider === 'akamai');
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
     appState,
