@@ -2,7 +2,6 @@
   padding-bottom: 10px;
 
   .card {
-    box-shadow: 0 0 5px $dark-grey-overlay;
     overflow: hidden;
 
     .card-body {
@@ -31,10 +30,6 @@
 
         &:first-child {
           border-top: 0;
-        }
-
-        &.form {
-          border-top: 1px solid $lighter-grey-overlay !important;
         }
 
         .input-holder {

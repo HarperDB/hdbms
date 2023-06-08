@@ -26,7 +26,7 @@ function SignIn() {
     } else if (!pass) {
       setFormState({ error: 'password is required' });
     } else if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1) {
-      setFormState({ error: 'this portal is restricted to akamai and harperdb' });
+      setFormState({ error: 'portal access denied' });
     } else {
       setFormState({ processing: true });
       getUser({ email, pass, loggingIn: true });

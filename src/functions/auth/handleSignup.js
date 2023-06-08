@@ -30,7 +30,7 @@ export default async ({ formData, theme }) => {
 
   if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1) {
     return {
-      error: 'this portal is restricted to akamai and harperdb',
+      error: 'portal signup denied',
     };
   }
 

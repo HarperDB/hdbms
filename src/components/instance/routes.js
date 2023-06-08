@@ -4,7 +4,7 @@ import Browse from './browse';
 
 const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
-const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './cluster'));
+const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './replication'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
 const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
@@ -59,9 +59,9 @@ const charts = {
 
 const cluster = {
   element: <Cluster />,
-  path: `cluster`,
-  link: 'cluster',
-  label: 'cluster',
+  path: `replication`,
+  link: 'replication',
+  label: 'replication',
   icon: 'cubes',
   iconCode: 'f1e0',
 };
