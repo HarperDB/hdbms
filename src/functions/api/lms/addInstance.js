@@ -2,14 +2,16 @@ import queryLMS from '../queryLMS';
 
 export default async (props) =>
   queryLMS({
-    endpoint: props.is_wavelength ? 'wl/addWavelengthInstance' : 'v2/addInstance',
+    endpoint: props.cloud_provider === 'verizon' ? 'wl/addWavelengthInstance' : props.cloud_provider === 'akamai' ? 'addAkamaiInstance' : 'v2/addInstance',
     method: 'POST',
+    auth: props.auth,
     payload: Object.entries({
       user_id: props.auth.user_id,
       customer_id: props.customer_id,
       instance_name: props.instance_name,
       is_local: props.is_local,
       is_wavelength: props.is_wavelength,
+      is_akamai: props.is_akamai,
       is_ssl: props.is_ssl,
       host: props.host,
       port: props.port,
@@ -21,6 +23,6 @@ export default async (props) =>
       stripe_storage_plan_id: props.stripe_storage_plan_id,
       compute_subscription_id: props.compute_subscription_id,
       storage_subscription_id: props.storage_subscription_id,
+      cloud_provider: props.cloud_provider,
     }).reduce((a, [k, v]) => (v == null ? a : ((a[k] = v), a)), {}),
-    auth: props.auth,
   });

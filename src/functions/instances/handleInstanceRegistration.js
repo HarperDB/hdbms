@@ -6,9 +6,17 @@ import setLicense from '../api/instance/setLicense';
 import createLicense from '../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 
-export default async ({ auth, customer_id, instanceAuth, url, is_local, instance_id, compute_stack_id, compute, status }) => {
+export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, cloud_provider, instance_id, compute_stack_id, compute, status }) => {
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
+
+    if (registration.error && cloud_provider && registration.type === 'catch') {
+      return {
+        status: 'CREATING INSTANCE',
+        error: false,
+        retry: true,
+      };
+    }
 
     if (((registration.error && registration.message === 'Login failed') || registration.error === 'Login failed') && !is_local) {
       const result = await handleCloudInstanceUsernameChange({ instance_id, instanceAuth, url });
@@ -36,6 +44,14 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, instance
       return {
         status,
         error: false,
+        retry: true,
+      };
+    }
+
+    if (registration.error && is_local && is_ssl && registration.type === 'catch') {
+      return {
+        status: 'SSL ERROR',
+        error: true,
         retry: true,
       };
     }

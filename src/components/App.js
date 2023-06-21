@@ -28,6 +28,7 @@ import init from '../functions/app/init';
 import refreshUser from '../functions/app/refreshUser';
 import changeFavIcon from '../functions/app/changeFavIcon';
 import getThemes from '../functions/app/getThemes';
+import getAkamaiRegions from '../functions/api/lms/getAkamaiRegions';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ './auth/SignUp'));
@@ -66,6 +67,7 @@ function App() {
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
+  const akamaiRegions = useStoreState(appState, (s) => s.akamaiRegions);
   const version = useStoreState(appState, (s) => s.version);
   const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
@@ -124,6 +126,7 @@ function App() {
     if (!products) getProducts();
     if (!regions) getRegions();
     if (!wavelengthRegions) getWavelengthRegions();
+    if (!akamaiRegions) getAkamaiRegions();
     if (!postmanCollection) getPostManCollection();
   }, config.refresh_content_interval);
 

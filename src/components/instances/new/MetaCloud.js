@@ -123,14 +123,7 @@ function MetaCloud() {
       </Card>
       <Row>
         <Col sm="6">
-          <Button
-            id="instanceTypeButton"
-            onClick={() => navigate(`/o/${customer_id}/instances/new/${platform === 'HarperDB' ? 'provider_cloud' : 'type'}`)}
-            title="Back to Instance Type"
-            block
-            className="mt-3"
-            color="purple"
-          >
+          <Button id="instanceTypeButton" onClick={() => navigate(`/o/${customer_id}/instances/new/type`)} title="Back to Instance Type" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left me-2" />
             {platform === 'HarperDB' ? 'Cloud Provider' : 'Instance Type'}
           </Button>

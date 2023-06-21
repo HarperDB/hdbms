@@ -15,9 +15,8 @@ function DetailsCloud() {
   const navigate = useNavigate();
   const { customer_id } = useParams();
   const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
-  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
-  const platform = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
   const [newInstance, setNewInstance] = useNewInstance({});
+  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || newInstance.cloud_provider === 'akamai');
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
     appState,
@@ -26,10 +25,12 @@ function DetailsCloud() {
   const products = useStoreState(
     appState,
     (s) =>
-      platform === 'lumen'
-        ? s.products.lumen_compute.filter((p) => p.value.active)
-        : newInstance.is_wavelength || platform === 'verizon'
-        ? s.products.wavelength_compute.filter((p) => p.value.active)
+      newInstance.cloud_provider === 'lumen'
+        ? s.products.lumen_compute?.filter((p) => p.value.active) || []
+        : newInstance.cloud_provider === 'verizon'
+        ? s.products.wavelength_compute?.filter((p) => p.value.active) || []
+        : newInstance.cloud_provider === 'akamai'
+        ? s.products.akamai_compute?.filter((p) => p.value.active) || []
         : newInstance.showPrepaidCompute
         ? unusedCompute
         : s.products.cloud_compute.filter((p) => p.value.active),
@@ -37,11 +38,19 @@ function DetailsCloud() {
   );
   const storage = useStoreState(
     appState,
-    (s) => (platform === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
+    (s) => (newInstance.cloud_provider === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
     [newInstance.showPrepaidStorage]
   );
 
-  const regions = useStoreState(appState, (s) => (platform === 'lumen' ? [] : newInstance.is_wavelength || platform === 'verizon' ? s.wavelengthRegions : s.regions));
+  const regions = useStoreState(appState, (s) =>
+    newInstance.cloud_provider === 'lumen'
+      ? []
+      : newInstance.cloud_provider === 'verizon'
+      ? s.wavelengthRegions
+      : newInstance.cloud_provider === 'akamai'
+      ? s.akamaiRegions
+      : s.regions
+  );
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
@@ -50,7 +59,7 @@ function DetailsCloud() {
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
-  const canProceedToNextPage = formData.stripe_plan_id && formData.instance_region && (platform === 'lumen' || formData.stripe_storage_plan_id);
+  const canProceedToNextPage = formData.stripe_plan_id && formData.instance_region && (newInstance.cloud_provider === 'lumen' || formData.stripe_storage_plan_id);
 
   useAsyncEffect(() => {
     const { submitted } = formState;

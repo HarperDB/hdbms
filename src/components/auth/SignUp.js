@@ -13,13 +13,14 @@ function SignUp() {
   const { search } = useLocation();
   const { code, htuk, pageName, pageUri } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ coupon_code: code, htuk, pageName, pageUri });
   const [showToolTip, setShowToolTip] = useState(false);
 
   useAsyncEffect(async () => {
     if (formState.submitted) {
-      const newFormState = await handleSignup({ formData });
+      const newFormState = await handleSignup({ formData, theme });
       if (!auth.email && newFormState) setFormState(newFormState);
     }
   }, [formState]);
@@ -78,7 +79,7 @@ function SignUp() {
               <Form className="sign-up-form">
                 <Input
                   id="firstname"
-                  name="fname" 
+                  name="fname"
                   autoComplete="given-name"
                   className="text-center mb-2"
                   type="text"

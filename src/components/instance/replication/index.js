@@ -12,9 +12,9 @@ import EmptyPrompt from '../../shared/EmptyPrompt';
 import checkClusterStatus from '../../../functions/instance/clustering/checkClusterStatus';
 
 export const metadata = {
-  path: `cluster`,
-  link: 'cluster',
-  label: 'cluster',
+  path: `replication`,
+  link: 'replication',
+  label: 'replication',
   icon: 'cubes',
   iconCode: 'f1e0',
 };

@@ -27,11 +27,12 @@ export const metadata = {
   label: 'config',
   icon: 'wrench',
   iconCode: 'f0ad',
-}
+};
 
 function ConfigIndex() {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
+  const theme = useStoreState(appState, (s) => s.theme);
   const instanceAuth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url, [compute_stack_id]);
   const stripe_id = useStoreState(appState, (s) => s.customer?.stripe_id);
@@ -83,7 +84,7 @@ function ConfigIndex() {
           <Details clusterNodeName={clusterNodeName} />
         </ErrorBoundary>
       </Col>
-      {isOrgOwner && (
+      {isOrgOwner && theme !== 'akamai' && (
         <Col lg="3" sm="6" xs="12">
           <Row>
             <Col>
@@ -109,7 +110,7 @@ function ConfigIndex() {
           </Card>
         </Col>
       )}
-      {isOrgOwner && !is_local && (
+      {isOrgOwner && !is_local && theme !== 'akamai' && (
         <Col lg="3" sm="6" xs="12">
           <Row>
             <Col>

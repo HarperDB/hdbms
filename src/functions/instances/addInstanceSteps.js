@@ -1,6 +1,6 @@
 export default {
   type: {
-    label: 'Select Instance Type',
+    label: 'Select Hosting Provider',
   },
   provider_cloud: {
     label: 'Choose Cloud Provider',

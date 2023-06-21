@@ -30,10 +30,10 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
       if (payload.instance_host === 'localhost') {
         alert.error("External instances cannot reach that instance's URL");
       } else {
-
-        const result = (clusterEngine === 'nats')
-          ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
-          : await addNode({ ...payload, auth, url, is_local, customer_id });
+        const result =
+          clusterEngine === 'nats'
+            ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
+            : await addNode({ ...payload, auth, url, is_local, customer_id });
 
         if (result.error) {
           // TODO: review our policy about connecting to localhost instances.
@@ -79,7 +79,7 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
       <div className="floating-card-header">{itemType} instances</div>
       <Card className="my-3">
         <CardBody>
-          {items && items.length ? (
+          {items?.length ? (
             items.map((item) => (
               <InstanceManagerRow
                 key={item.instance_name}

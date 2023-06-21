@@ -14,6 +14,7 @@ function SignIn() {
   const { search } = useLocation();
   const { user, token } = queryString.parse(search, { decode: false });
   const auth = useStoreState(appState, (s) => s.auth);
+  const theme = useStoreState(appState, (s) => s.theme);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
 
@@ -24,6 +25,8 @@ function SignIn() {
       setFormState({ error: 'a valid email is required' });
     } else if (!pass) {
       setFormState({ error: 'password is required' });
+    } else if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1) {
+      setFormState({ error: 'portal access denied' });
     } else {
       setFormState({ processing: true });
       getUser({ email, pass, loggingIn: true });
