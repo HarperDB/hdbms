@@ -25,6 +25,7 @@ const PRODUCT_MAP = {
     cloud_compute: 'prod_GdDIHGH6lzEqgv',
     local_compute: 'prod_H0Xx9dKkQqhMx9',
     wavelength_compute: 'prod_KlorPRd9r1RKcz',
+    akamai_compute: 'prod_O7j9wiS1g7kPZU',
     cloud_storage: 'prod_H0XnsrToBa7a7G',
   },
 };
