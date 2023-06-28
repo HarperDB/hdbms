@@ -23,7 +23,6 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const theme = useStoreState(appState, (s) => s.theme);
-  const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
   const monacoRef = useRef(null);
   const [currentValue, setCurrentValue] = useState('{}');
   const [confirmDelete, setConfirmDelete] = useState();
