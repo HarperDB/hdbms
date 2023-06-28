@@ -15,7 +15,7 @@ import queryInstance from '../../../functions/api/queryInstance';
 import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
-function JsonViewer({ newEntityAttributes, hashAttribute }) {
+function JSONEditor({ newEntityAttributes, hashAttribute }) {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
   const alert = useAlert();
   const { state: locationState } = useLocation();
@@ -287,4 +287,4 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   );
 }
 
-export default JsonViewer;
+export default JSONEditor;

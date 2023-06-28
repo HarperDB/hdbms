@@ -14,7 +14,7 @@ import buildInstanceStructure from '../../../functions/instance/browse/buildInst
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
-const JSONViewer = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JsonViewer'));
+const JSONEditor = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JSONEditor'));
 const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
 const StructureReloader = lazy(() => import(/* webpackChunkName: "structure-reloader" */ '../../shared/StructureReloader'));
 
@@ -95,7 +95,7 @@ function BrowseIndex() {
           {schema && table && action === 'csv' && entities.activeTable ? (
             <CSVUpload />
           ) : schema && table && action && entities.activeTable ? (
-            <JSONViewer newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
+            <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
           ) : schema && table && entities.activeTable ? (
             <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
           ) : (
