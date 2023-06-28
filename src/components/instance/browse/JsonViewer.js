@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import JSONInput from 'react-json-editor-ajrm';
+import React, { useState, useEffect, useRef } from 'react';
+import Editor  from '@monaco-editor/react';
 import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
@@ -23,15 +23,26 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const theme = useStoreState(appState, (s) => s.theme);
-  const [currentValue, setCurrentValue] = useState({});
-  const [rowValue, setRowValue] = useState({});
+  const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
+  const monacoRef = useRef(null);
+  const [currentValue, setCurrentValue] = useState('{}');
   const [confirmDelete, setConfirmDelete] = useState();
   const [validJSON, setValidJSON] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
-
   const isAmbiguousNumber = (h) => `${parseFloat(h)}` === h;
+  const editorRef = useRef(null);
+
+  function updateEditorTheme() {
+    /* adjust editor theme when studio theme changes */ 
+
+    if (monacoRef.current?.editor?.setTheme) {
+      monacoRef.current.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'light');
+    }
+  }
+
+  useEffect(updateEditorTheme, [theme]);
 
   useAsyncEffect(async () => {
     if (!newEntityAttributes) {
@@ -58,7 +69,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
           // passing the hash value through navigate/location allows this typed lookup to work, but
           // it's not intuitive and may make further refactoring painful.
           //
-          // Probably makes more sense to refactor the architecture to consider the JsonViewer 
+          // Probably makes more sense to refactor the architecture to consider the JsonViewer
           // (which should be renamed to JsonEditor since it's not just a viewing mechanism) as
           // a 'child' of the BrowseDataTable component so the row data can be passed to it.
 
@@ -95,42 +106,47 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
         delete rowData.__updatedtime__; // eslint-disable-line no-underscore-dangle
         delete rowData[hashAttribute];
 
-        setCurrentValue({
+        const newCurrentValue = {
             [hashAttribute]: hash_attribute,
             ...rowData,
             __createdtime__: createdtime,
             __updatedtime__: updatedtime
-        });
+        }
+        setCurrentValue(JSON.stringify(newCurrentValue, null, 4));
 
       } else {
         navigate(baseUrl);
         alert.error('Unable to find record with that hash_attribute');
       }
     } else {
-      setCurrentValue(newEntityAttributes || {});
+      setCurrentValue(JSON.stringify(newEntityAttributes || {}, null, 4));
     }
   }, [hash]);
 
   const submitRecord = async (e) => {
+
     e.preventDefault();
-    if (!rowValue || !validJSON) alert.error('Please insert valid JSON to proceed');
-    if (!action || !rowValue || !validJSON) return false;
+    if (!currentValue || !validJSON) alert.error('Please insert valid JSON to proceed');
+    if (!action || !currentValue || !validJSON) return false;
 
     setSaving(true);
-    const { error, message } = await queryInstance({
+
+    const rowObject = JSON.parse(currentValue);
+    const payload = {
       operation: {
         operation: action === 'edit' ? 'update' : 'insert',
         schema,
         table,
-        records: action !== 'edit' && Array.isArray(rowValue) ? rowValue : [rowValue],
+        records: action !== 'edit' && Array.isArray(rowObject) ? rowObject : [rowObject],
       },
       auth,
       url,
-    });
+    };
+    const { error, message } = await queryInstance(payload);
 
-    // FIXME: we fetch userInfo frequently, could use the perms in that payload
-    // to disable any write-oriented form buttons altogether
-    // so we don't create expectation of saving in the first place.
+    // FIXME: if we have a permissions-based error here, since we fetch userInfo frequently,
+    // we could use the perms to disable the 'delete' and 'save' buttons if they won't work
+    // anyway.
     if (error) {
         alert.error(message);
         return setSaving(false);
@@ -195,29 +211,21 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
           </ul>
           <Card className="mb-2 json-editor-holder">
             <CardBody>
-              <JSONInput
-                placeholder={currentValue}
+              <Editor
                 height="350px"
-                theme="light_mitsuketa_tribute"
-                colors={{
-                  background: 'transparent',
-                  default: theme === 'dark' ? '#aaa' : '#000',
-                  colon: theme === 'dark' ? '#aaa' : '#000',
-                  keys: theme === 'dark' ? '#aaa' : '#000',
-                  string: '#13c664',
-                  number: '#ea4c89',
-                  primitive: '#ffa500',
+                language="json"
+                value={currentValue}
+                theme="vs-dark"
+                onValidate={(markers) => {
+                  // update validity state
+                  setValidJSON(markers.length === 0);
                 }}
-                style={{
-                  warningBox: { display: 'none' },
+                onChange={(newValue) => {
+                  // update currentEditor status
+                  setCurrentValue(newValue);
                 }}
-                locale={locale}
-                width="100%"
-                confirmGood={false}
-                waitAfterKeyPress={30000}
-                onBlur={(value) => {
-                  setValidJSON(!value.error);
-                  setRowValue(value.jsObject);
+                onMount={(editor, monaco) => {
+                  monacoRef.current = monaco;
                 }}
               />
             </CardBody>
@@ -240,7 +248,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
             </Col>
             {action === 'add' ? (
               <Col md="8">
-                <Button disabled={saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                <Button disabled={saving || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                   <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                 </Button>
               </Col>
@@ -265,7 +273,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
                   </Button>
                 </Col>
                 <Col md="4">
-                  <Button disabled={saving} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
+                  <Button disabled={saving || !validJSON} id="addEditItem" className="mt-2" onClick={submitRecord} block color="success">
                     <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`} />
                   </Button>
                 </Col>
