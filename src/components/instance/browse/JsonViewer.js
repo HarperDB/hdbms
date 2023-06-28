@@ -34,23 +34,21 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
   const isAmbiguousNumber = (h) => `${parseFloat(h)}` === h;
   const editorRef = useRef(null);
 
-  function updateEditorTheme() {
-    /* adjust editor theme when studio theme changes */ 
+  const updateEditorTheme = () => {
+    /* adjust editor theme when studio theme changes */
 
     if (monacoRef.current?.editor?.setTheme) {
       monacoRef.current.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'light');
     }
   }
 
-  useEffect(updateEditorTheme, [theme]);
-
-  useAsyncEffect(async () => {
+  const navigateBackIfNoNewEntityAttributes = () => {
     if (!newEntityAttributes) {
       navigate(baseUrl);
     }
-  }, []);
+  }
 
-  useAsyncEffect(async () => {
+  const initializeEditorContent = async () => {
     if (action === 'edit') {
 
       let hash_values;
@@ -121,7 +119,7 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
     } else {
       setCurrentValue(JSON.stringify(newEntityAttributes || {}, null, 4));
     }
-  }, [hash]);
+  }
 
   const submitRecord = async (e) => {
 
@@ -188,6 +186,10 @@ function JsonViewer({ newEntityAttributes, hashAttribute }) {
     return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 100);
 
   };
+
+  useEffect(updateEditorTheme, [theme]);
+  useAsyncEffect(navigateBackIfNoNewEntityAttributes, []);
+  useAsyncEffect(initializeEditorContent, [hash]);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
