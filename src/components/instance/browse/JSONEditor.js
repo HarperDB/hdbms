@@ -31,7 +31,6 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
   const [deleting, setDeleting] = useState(false);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`;
   const isAmbiguousNumber = (h) => `${parseFloat(h)}` === h;
-  const editorRef = useRef(null);
 
   const updateEditorTheme = () => {
     /* adjust editor theme when studio theme changes */
