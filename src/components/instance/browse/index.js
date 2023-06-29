@@ -41,7 +41,6 @@ function BrowseIndex() {
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
-  console.log('debug: ', tableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
   const showTableForm = showForm || (instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
@@ -92,9 +91,9 @@ function BrowseIndex() {
       setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
 
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(validate, [structure, schema, table, compute_stack_id])
   useEffect(syncInstanceStructure, [auth, url, schema, table]);
 
