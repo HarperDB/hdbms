@@ -41,7 +41,7 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
     }
   }
 
-  const navigateBackIfNoNewEntityAttributes = () => {
+  const navigateBack = () => {
     if (!newEntityAttributes) {
       navigate(baseUrl);
     }
@@ -123,8 +123,14 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
   const submitRecord = async (e) => {
 
     e.preventDefault();
-    if (!currentValue || !validJSON) alert.error('Please insert valid JSON to proceed');
-    if (!action || !currentValue || !validJSON) return false;
+
+    if (!validJSON) {
+      alert.error('Please insert valid JSON to proceed');
+    }
+
+    if (!action || !validJSON) {
+      return false;
+    }
 
     setSaving(true);
 
@@ -141,9 +147,6 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
     };
     const { error, message } = await queryInstance(payload);
 
-    // FIXME: if we have a permissions-based error here, since we fetch userInfo frequently,
-    // we could use the perms to disable the 'delete' and 'save' buttons if they won't work
-    // anyway.
     if (error) {
         alert.error(message);
         return setSaving(false);
@@ -187,7 +190,7 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
   };
 
   useEffect(updateEditorTheme, [theme]);
-  useAsyncEffect(navigateBackIfNoNewEntityAttributes, []);
+  useAsyncEffect(navigateBack, []);
   useAsyncEffect(initializeEditorContent, [hash]);
 
   return (

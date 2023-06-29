@@ -41,6 +41,7 @@ function BrowseIndex() {
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
+  console.log('debug: ', tableState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
   const showTableForm = showForm || (instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
@@ -48,35 +49,54 @@ function BrowseIndex() {
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
 
-  useEffect(() => {
+  const syncInstanceStructure = () => {
+    buildInstanceStructure({ auth, url });
+  }
+
+  const validate = () => {
     if (structure) {
+
+      /*
+       * FIXME: There is a fair amount of logic scattered throughout this 
+       * page that could be put in a router-level validation function.
+       *
+       * Splitting the browse endpoint into /schema/ and /schema/table heirarchy
+       * might ease this.
+       *
+       */
+
       const schemas = Object.keys(structure);
       const tables = Object.keys(structure?.[schema] || {});
 
-      switch (true) {
-        case !schemas.length && location.pathname !== '/browse':
+      if (!schemas.length && location.pathname !== '/browse') {
           setEntities({ schemas: [], tables: [], activeTable: false });
           navigate(`/o/${customer_id}/i/${compute_stack_id}/browse`);
-          break;
-        case schemas.length && !schemas.includes(schema):
-          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
-          break;
-        case tables.length && !tables.includes(table):
-          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
-          break;
-        default:
-          if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {
-            setTableState(defaultTableState);
-          }
-          setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
+          return;
       }
+
+      // redirect to a valid schema if path doesn't match database's schema
+      if (schemas.length && !schemas.includes(schema)) {
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schemas[0]}`);
+          return;
+      }
+
+      // redirect to a valid table if path doesn't match database's schema
+      if (tables.length && !tables.includes(table)) {
+          navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${tables[0]}`);
+          return;
+      }
+
+      if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {
+        setTableState(defaultTableState);
+      }
+      setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure, schema, table, compute_stack_id]);
+  }
 
-  useEffect(() => {
-    buildInstanceStructure({ auth, url });
-  }, [auth, url, schema, table]);
+  useEffect(validate, [structure, schema, table, compute_stack_id])
+  useEffect(syncInstanceStructure, [auth, url, schema, table]);
 
   return (
     <Row>
