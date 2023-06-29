@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Editor  from '@monaco-editor/react';
-import locale from 'react-json-editor-ajrm/locale/en';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import useAsyncEffect from 'use-async-effect';
