@@ -73,7 +73,7 @@ function NewOrgIndex() {
             <Card>
               <CardBody>
                 <div className="p-4 text-center">
-                  <b>Creating Your Organizaation</b>
+                  <b>Creating Your Organization</b>
                   <br />
                   <br />
                   <br />
