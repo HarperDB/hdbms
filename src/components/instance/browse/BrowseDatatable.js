@@ -143,10 +143,14 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
             onRowClick={(rowData) => {
+                 
                 const hashValue = rowData[tableState.hashAttribute];
-                navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${rowData[tableState.hashAttribute]}`, {
+                const encodedHash = encodeURIComponent(hashValue); // encode because the hashValue can contain url components 
+
+                navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${encodedHash}`, {
                     state: { hashValue }
-                })
+                });
+
             }}
           />
         </CardBody>

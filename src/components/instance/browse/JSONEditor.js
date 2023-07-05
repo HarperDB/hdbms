@@ -16,6 +16,7 @@ import ErrorFallback from '../../shared/ErrorFallback';
 
 function JSONEditor({ newEntityAttributes, hashAttribute }) {
   const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
+  const decodedHash = decodeURIComponent(hash); // hash can have uri components
   const alert = useAlert();
   const { state: locationState } = useLocation();
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
       } else {
           // request both integer as string and integer as integer values if it's ambiguous
           // since we have to guess at the moment.
-          hash_values = isAmbiguousNumber(hash) ? [ `${hash}`, parseInt(hash, 10) ] : [ hash ];
+          hash_values = isAmbiguousNumber(hash) ? [ `${decodedHash}`, parseInt(decodedHash, 10) ] : [ decodedHash ];
 
           // TODO: we support floats, so how to disambiguate 4.0 from '4.0' here?
       }
@@ -189,12 +190,12 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
 
   useEffect(updateEditorTheme, [theme]);
   useAsyncEffect(navigateBack, []);
-  useAsyncEffect(initializeEditorContent, [hash]);
+  useAsyncEffect(initializeEditorContent, [decodedHash]);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <span className="floating-card-header">
-        {schema} {table && '>'} {table} {action === 'add' ? '> add new' : hash ? `> edit > ${hash}` : ''}
+        {schema} {table && '>'} {table} {action === 'add' ? '> add new' : decodedHash ? `> edit > ${decodedHash}` : ''}
         &nbsp;
       </span>
       <Card className="my-3">
@@ -270,7 +271,7 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
             ) : (
               <>
                 <Col md="4" className="mt-2">
-                  <Button disabled={saving || deleting} id="confirmDelete" block color="danger" onClick={() => setConfirmDelete(hash)}>
+                  <Button disabled={saving || deleting} id="confirmDelete" block color="danger" onClick={() => setConfirmDelete(decodedHash)}>
                     <i className="fa fa-trash" />
                   </Button>
                 </Col>
