@@ -143,13 +143,17 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
             onRowClick={(rowData) => {
-                 
-                const hashValue = rowData[tableState.hashAttribute];
-                const encodedHash = encodeURIComponent(hashValue); // encode because the hashValue can contain url components 
 
-                navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/edit/${encodedHash}`, {
-                    state: { hashValue }
-                });
+                // encode schema, table and hashValue because they can contain uri components
+                const hashValue = rowData[tableState.hashAttribute];
+                const encodedSchema = encodeURIComponent(schema);
+                const encodedTable = encodeURIComponent(table);
+                const encodedHash = encodeURIComponent(hashValue);
+
+                const url = `/o/${customer_id}/i/${compute_stack_id}/browse/${encodedSchema}/${encodedTable}/edit/${encodedHash}`;
+                const navigateOptions = { state: { hashValue } };
+
+                navigate(url, navigateOptions);
 
             }}
           />

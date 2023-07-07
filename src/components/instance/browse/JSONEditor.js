@@ -15,8 +15,21 @@ import addError from '../../../functions/api/lms/addError';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 function JSONEditor({ newEntityAttributes, hashAttribute }) {
-  const { customer_id, schema, table, hash, action, compute_stack_id } = useParams();
-  const decodedHash = decodeURIComponent(hash); // hash can have uri components
+
+  const {
+    customer_id,
+    schema: encodedSchema,
+    table: encodedTable,
+    hash: encodedHash,
+    action,
+    compute_stack_id
+  } = useParams();
+
+  // hash, table and schema can have uri components
+  const schema = decodeURIComponent(encodedSchema);
+  const table = decodeURIComponent(encodedTable);
+  const hash = decodeURIComponent(encodedHash);
+
   const alert = useAlert();
   const { state: locationState } = useLocation();
   const navigate = useNavigate();
