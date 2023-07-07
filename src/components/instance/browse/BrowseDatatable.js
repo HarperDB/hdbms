@@ -150,10 +150,10 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
                 const encodedTable = encodeURIComponent(table);
                 const encodedHash = encodeURIComponent(hashValue);
 
-                const url = `/o/${customer_id}/i/${compute_stack_id}/browse/${encodedSchema}/${encodedTable}/edit/${encodedHash}`;
+                const recordViewUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${encodedSchema}/${encodedTable}/edit/${encodedHash}`;
                 const navigateOptions = { state: { hashValue } };
 
-                navigate(url, navigateOptions);
+                navigate(recordViewUrl, navigateOptions);
 
             }}
           />
