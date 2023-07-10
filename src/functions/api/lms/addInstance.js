@@ -14,6 +14,7 @@ export default async (props) =>
       is_akamai: props.is_akamai,
       is_ssl: props.is_ssl,
       host: props.host,
+      login_domain: props.login_domain || window.location.host,
       port: props.port,
       instance_region: props.instance_region,
       wavelength_zone_id: props.instance_region,
