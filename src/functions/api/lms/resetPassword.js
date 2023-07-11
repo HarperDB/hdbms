@@ -1,8 +1,8 @@
 import queryLMS from '../queryLMS';
 
-export default async ({ email, login_domain = window.location.host }) =>
+export default async ({ email }) =>
   queryLMS({
     endpoint: 'resetPassword',
     method: 'POST',
-    payload: { email, login_domain },
+    payload: { email },
   });
