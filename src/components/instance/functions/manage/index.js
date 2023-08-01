@@ -25,30 +25,43 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const supportsStaticRoutes = parseFloat(`${majorVersion}.${minorVersion}`) < 4.1;
   const restarting = useStoreState(instanceState, (s) => s.restarting_service === 'custom_functions');
+  // NOTE: use the operationsApi server for cf_server_url in the future.
   const cf_server_url = useStoreState(instanceState, (s) => s.custom_functions_url || `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/functions/${action}`;
 
-  useEffect(() => {
+  const routeToDefaultProject = () => {
+
     const hasProjects = custom_functions?.endpoints && Object.keys(custom_functions?.endpoints).length;
     const projectIsInEndpoints = custom_functions?.endpoints && Object.keys(custom_functions?.endpoints).includes(project);
 
+    let targetUrl;
+
     if (hasProjects && project && !projectIsInEndpoints) {
+
       const firstProject = project && Object.keys(custom_functions?.endpoints)[0];
-      navigate(`${baseUrl}/${firstProject}`);
+      targetUrl = `${baseUrl}/${firstProject}`;
+
     } else if (hasProjects && project && !file) {
+
       const firstRouteFile = project && custom_functions?.endpoints[project]?.routes[0];
       const firstHelperFile = project && custom_functions?.endpoints[project]?.helpers[0];
       const defaultType = firstRouteFile ? 'routes' : 'helpers';
-      navigate(`${baseUrl}/${project}/${defaultType}/${firstRouteFile || firstHelperFile}`);
-    } else if (hasProjects && !project) {
-      const firstProject = Object.keys(custom_functions?.endpoints)[0];
-      navigate(`${baseUrl}/${firstProject}`);
-    } else if (!hasProjects) {
-      navigate(baseUrl);
-    }
-  }, [custom_functions?.endpoints, customer_id, compute_stack_id, navigate, action, project, file, baseUrl]);
+      targetUrl = `${baseUrl}/${project}/${defaultType}/${firstRouteFile || firstHelperFile}`;
 
-  useInterval(async () => {
+    } else if (hasProjects && !project) {
+
+      const firstProject = Object.keys(custom_functions?.endpoints)[0];
+      targetUrl = `${baseUrl}/${firstProject}`;
+
+    } else if (!hasProjects) {
+
+      targetUrl = baseUrl;
+    }
+
+    navigate(targetUrl);
+  }
+
+  const waitForRestartToComplete = async () => {
     if (cf_server_url && restarting) {
       try {
         await fetch(cf_server_url);
@@ -60,7 +73,10 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         console.log(e);
       }
     }
-  }, 1000);
+  }
+
+  useEffect(routeToDefaultProject, [custom_functions?.endpoints, customer_id, compute_stack_id, navigate, action, project, file, baseUrl]);
+  useInterval(waitForRestartToComplete, 1000);
 
   return (
     <Row id="functions">
