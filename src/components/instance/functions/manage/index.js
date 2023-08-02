@@ -79,17 +79,13 @@ function ManageIndex({ componentFiles, refreshCustomFunctions, loading }) {
   useEffect(routeToDefaultProject, [custom_functions?.endpoints, customer_id, compute_stack_id, navigate, action, project, file, baseUrl]);
   useInterval(waitForRestartToComplete, 1000);
 
-  console.log('component files loaded: ', componentFiles);
-
-  function onSelect(e) {
-    console.log(e);
-  }
-
   return (
     <Row id="functions">
       <Col xl="3" lg="4" md="6" xs="12">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <FileBrowser files={componentFiles} onSelect={(dirEntry) => { console.log('file info:', dirEntry)}  }/>
+          <FileBrowser
+            files={componentFiles}
+            onSelect={(dirEntry) => { console.log('file info:', dirEntry)}  }/>
         </ErrorBoundary>
       </Col>
       <Col xl="9" lg="8" md="6" xs="12">

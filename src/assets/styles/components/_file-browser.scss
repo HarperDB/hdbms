@@ -1,0 +1,14 @@
+.file-browser {
+  .file {
+    border: 0;
+    background: transparent;
+    list-style-type: none;
+    color: white ;
+  }
+  .folder.folder-contents-closed {
+    display: none;
+  }
+  .folder.folder-contents-open {
+    display: block;
+  }
+}

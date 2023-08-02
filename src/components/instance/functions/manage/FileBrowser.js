@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
+// TODO:
+// keyboard events are buggy
+// get rid of button outline
+// proper filetype icons 
+// theming
+// test at greater scale
+
 function directorySortComparator(a, b) {
 
-  // sort by whether it's a directory or a regular file
-  // and if that's a tie, sort alphanumerically, ascending.
+  // directories first, then flat files sorted
+  // ascending, alphanumerically
   const A = +Boolean(a.entries);
   const B = +Boolean(b.entries);
 
@@ -17,22 +24,26 @@ function FolderIcon({ isOpen }) {
   return <i className={`fas ${folderClassName}`} />;
 }
 
-function FileIcon() {
+function FiletypeIcon() {
   return <i className='fab fa-js' />;
 }
 
-function File({ directoryEntry, onSelect, toggleClosed, Icon }) {
+function File({ fullPath, directoryEntry, onSelect, toggleClosed, Icon }) {
 
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onSelect so 
   // parent can get file content.
-  const isDirectory = Boolean(directoryEntry.entries);
+
+  const directoryEntryWithFullPath = { ...directoryEntry, fullPath };
   function emitFileInfoOrToggle() {
+
+    const isDirectory = Boolean(directoryEntry.entries);
+
     if (isDirectory) {
       toggleClosed();
     } else {
-      onSelect(directoryEntry);
+      onSelect(directoryEntryWithFullPath);
     }
   }
 
@@ -48,14 +59,16 @@ function File({ directoryEntry, onSelect, toggleClosed, Icon }) {
 
 }
 
-function Directory({ directoryEntry, onSelect }) {
+function Directory({ directoryEntry, parent, onSelect }) {
+  console.log(parent);
 
   const [ open, setOpen ] = useState(true);
 
   return (
-    // folder name
+    // ui:folder name
     <ul className="folder-container">
       <File
+        fullPath={parent}
         Icon={
           /*
            * note: FolderIcon is a func so we can give it
@@ -63,7 +76,7 @@ function Directory({ directoryEntry, onSelect }) {
            */
           directoryEntry.entries ? 
             () => FolderIcon({ isOpen: open })
-          : FileIcon
+          : FiletypeIcon
         }
         directoryEntry={directoryEntry}
         onSelect={onSelect}
@@ -73,11 +86,13 @@ function Directory({ directoryEntry, onSelect }) {
         />
 
       {
-        // folder contents
-        directoryEntry?.entries?.sort(directorySortComparator)?.map(entry => (
+        // ui:folder contents
+        directoryEntry?.entries?.sort(directorySortComparator)?.map((entry) => (
 
           <ul className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
             <Directory
+              key={parent}
+              parent={[parent, entry.name].join('/')}
               directoryEntry={entry}
               onSelect={onSelect} />
           </ul>
@@ -90,6 +105,8 @@ function Directory({ directoryEntry, onSelect }) {
 
 }
 
+// recursive (for now) directory tree representation
+// File component, Directory component, various Icon components
 function FileBrowser({ files, onSelect }) {
 
   if (!files) return null;
@@ -97,12 +114,15 @@ function FileBrowser({ files, onSelect }) {
   return (
     <ul className="file-browser">
       <Directory
+        parent={ `/${files.name}` }
         onSelect={ onSelect }
         directoryEntry={files} />
     </ul>
   )
 
 }
+
+
 
 
 export default FileBrowser
