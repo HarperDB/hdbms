@@ -81,11 +81,15 @@ function ManageIndex({ componentFiles, refreshCustomFunctions, loading }) {
 
   console.log('component files loaded: ', componentFiles);
 
+  function onSelect(e) {
+    console.log(e);
+  }
+
   return (
     <Row id="functions">
       <Col xl="3" lg="4" md="6" xs="12">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <FileBrowser files={componentFiles} />
+          <FileBrowser files={componentFiles} onSelect={(dirEntry) => { console.log('file info:', dirEntry)}  }/>
         </ErrorBoundary>
       </Col>
       <Col xl="9" lg="8" md="6" xs="12">

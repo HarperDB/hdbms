@@ -2,29 +2,42 @@ import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
 function Icon({ isDirectory=false }) {
-  return isDirectory ? <icon className="fas fa-folder-open" /> : null;
+  return isDirectory ? <i className="fas fa-folder-open" /> : null;
 }
 
-function File({ directoryEntry }) {
+function File({ directoryEntry, onSelect, toggleOpen }) {
   
-  const isDirectory = directoryEntry.entries;
+  const isDirectory = Boolean(directoryEntry.entries);
 
-  return <li className="file">
-    <Icon isDirectory={isDirectory }/>
-    <span> { directoryEntry.name }</span>
-  </li>
+  return (<button
+    className="file"
+    onClick={() => {
+      onSelect(directoryEntry)
+      toggleOpen();
+    }}
+    onKeyDown={() => onSelect(directoryEntry) } >
+      <Icon isDirectory={isDirectory }/>
+      <span> { directoryEntry.name }</span>
+  </button>)
+
 }
 
-function FileTree({ directoryEntry, isOpen }) {
-  console.log('directoryEntry: ', directoryEntry);
+function FileTree({ directoryEntry, open, onSelect }) {
+
+  const [ isOpen, setIsOpen ] = useState(open);
+  const visibility = isOpen ? 'closed' : 'open';
+  const toggleOpen = () => {
+    console.log(directoryEntry, visibility);
+    setIsOpen(!isOpen);
+  }
 
   return (
-    <ul>
-      <File directoryEntry={directoryEntry} />
+    <ul className="file-tree">
+      <File directoryEntry={directoryEntry} onSelect={onSelect} toggleOpen={toggleOpen} />
       {
         directoryEntry?.entries?.map(entry => (
-          <ul className="folder folder-open">
-            <FileTree directoryEntry={entry} />
+          <ul className={`folder folder-${visibility}`}>
+            <FileTree open directoryEntry={entry} onSelect={onSelect} />
           </ul>
         ))
       }
@@ -33,13 +46,13 @@ function FileTree({ directoryEntry, isOpen }) {
 
 }
 
-function FileBrowser({ files }) {
+function FileBrowser({ files, onSelect }) {
 
   if (!files) return null;
 
   return (
     <ul className="file-browser">
-      <FileTree directoryEntry={files} />
+      <FileTree open onSelect={ onSelect } directoryEntry={files} />
     </ul>
   )
 
