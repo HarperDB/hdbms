@@ -21,7 +21,7 @@ function directorySortComparator(a, b) {
 
 function FolderIcon({ isOpen }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
-  return <i className={`fas ${folderClassName}`} />;
+  return <i className={`folder-icon fas ${folderClassName}`} />;
 }
 
 function FiletypeIcon() {
