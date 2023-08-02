@@ -1,29 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
-function Icon({ isDirectory=false }) {
-  return isDirectory ? <i className="fas fa-folder-open" /> : null;
-}
-
-function File({ directoryEntry, onSelect, toggleOpen }) {
-  
-  const isDirectory = Boolean(directoryEntry.entries);
-
-  return (
-    <button
-      className="file"
-      onClick={() => {
-        onSelect(directoryEntry)
-        toggleOpen();
-      }}
-      onKeyDown={() => onSelect(directoryEntry) } >
-        <Icon isDirectory={isDirectory }/>
-        <span> { directoryEntry.name }</span>
-    </button>
-  )
-
-}
-
 function directorySortComparator(a, b) {
 
   // sort by whether it's a directory or a regular file
@@ -35,27 +12,72 @@ function directorySortComparator(a, b) {
 
 }
 
-function Directory({ directoryEntry, open, onSelect }) {
+function FolderIcon({ isOpen }) {
+  const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
+  return <i className={`fas ${folderClassName}`} />;
+}
 
-  const [ isOpen, setIsOpen ] = useState(open);
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
+function FileIcon() {
+  return <i className='fab fa-js' />;
+}
+
+function File({ directoryEntry, onSelect, toggleClosed, Icon }) {
+
+  // file receives open/close toggle func from
+  // parent. if it's a dir, calls toggle func on click
+  // if it's a flat file, calls onSelect so 
+  // parent can get file content.
+  const isDirectory = Boolean(directoryEntry.entries);
+  function emitFileInfoOrToggle() {
+    if (isDirectory) {
+      toggleClosed();
+    } else {
+      onSelect(directoryEntry);
+    }
   }
 
   return (
-    <ul className="folder-contents">
+    <button
+      className="file"
+      onClick={ emitFileInfoOrToggle }
+      onKeyDown={ emitFileInfoOrToggle } >
+          <Icon />
+        <span> { directoryEntry.name }</span>
+    </button>
+  )
+
+}
+
+function Directory({ directoryEntry, onSelect }) {
+
+  const [ open, setOpen ] = useState(true);
+
+  return (
+    // folder name
+    <ul className="folder-container">
       <File
+        Icon={
+          /*
+           * note: FolderIcon is a func so we can give it
+           * open args now, but instantiate it later.
+           */
+          directoryEntry.entries ? 
+            () => FolderIcon({ isOpen: open })
+          : FileIcon
+        }
         directoryEntry={directoryEntry}
         onSelect={onSelect}
-        toggleOpen={toggleOpen} />
+        toggleClosed={() => { 
+          setOpen(!open);
+        }}
+        />
 
       {
-        // sort children by 1. dirs first, 2. alpha 
+        // folder contents
         directoryEntry?.entries?.sort(directorySortComparator)?.map(entry => (
 
-          <ul className={`folder folder-${isOpen ? 'open' : 'closed'}`}>
+          <ul className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
             <Directory
-              open
               directoryEntry={entry}
               onSelect={onSelect} />
           </ul>
@@ -75,7 +97,6 @@ function FileBrowser({ files, onSelect }) {
   return (
     <ul className="file-browser">
       <Directory
-        open
         onSelect={ onSelect }
         directoryEntry={files} />
     </ul>
