@@ -89,7 +89,7 @@ const buildCustomFunctions = async ({ auth, url }) => {
 
   // TODO: [] should be {}
   // TODO: rename endpoints to file tree or something more descriptive
-  const endpoints = is_enabled ? await getCustomFunctions({ auth, url }) : [];
+  const endpoints = is_enabled ? await getCustomFunctions({ auth, url }) : {};
 
   const appData = cfToApp(endpoints);
   const cfData = appToCf(appData);
