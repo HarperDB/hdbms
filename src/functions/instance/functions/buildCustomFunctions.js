@@ -28,6 +28,11 @@ import getCustomFunctions from '../../api/instance/getCustomFunctions';
  * }
  */
 
+/*
+ * To support hdb <= 4.1 using current UI features,
+ * adapt custom functions data to current data requirements.
+ *
+ */
 function cfToApp(cfData) {
 
   const appData = {
@@ -59,22 +64,35 @@ function cfToApp(cfData) {
 
 }
 
+// for 4.1 custom functions that have to be shoe-horned into
+// the filebrowser structure.
+
 function appToCf(appData) {
 
-  const cfData = {};
+  const cfData = appData.entries.reduce((projectMemo, project) => {
+
+    projectMemo[project.name] = project.entries.reduce((directoryMemo, directory) => {
+      directoryMemo[directory.name] = directory.entries.map(filename => filename.split('.')[0]);
+      return directoryMemo;
+    }, {});
+
+    return projectMemo;
+
+  }, {});
 
   return cfData;
 
 }
 
-
 const buildCustomFunctions = async ({ auth, url }) => {
   const { is_enabled, port, directory, error, message } = await customFunctionsStatus({ auth, url });
+
+  // TODO: [] should be {}
+  // TODO: rename endpoints to file tree or something more descriptive
   const endpoints = is_enabled ? await getCustomFunctions({ auth, url }) : [];
 
   const appData = cfToApp(endpoints);
   const cfData = appToCf(appData);
-
 
   const custom_functions = {
     is_enabled,
