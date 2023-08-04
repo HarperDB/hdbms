@@ -1,13 +1,21 @@
 import queryInstance from '../queryInstance';
+import { v4 as uuid } from 'uuid';
 
 function addFullPaths(fileTree, root='/') {
 
   if (!fileTree || !fileTree.entries) return;
+  fileTree.key = uuid();
 
   for (const entry of fileTree.entries) {
 
+    // add two properties to directory entry
+    // 1. project, which is the dir under component root on the instance
+    // 2. path, which is the file path relative to the project.
     const currentPath = root === '/' ? entry.name : `${root}/${entry.name}`; 
-    entry.fullPath = currentPath;
+    const [ project, ...pathSegments ] = currentPath.split('/'); 
+    entry.project = project;
+    entry.path = pathSegments.join('/');
+    entry.key = uuid();
 
     addFullPaths(entry, currentPath);
 

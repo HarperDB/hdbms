@@ -98,7 +98,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         {action === 'deploy' ? (
           <Deploy />
         ) : project ? (
-          <WebIDE fileTree={fileTree}  />
+          <WebIDE fileTree={fileTree} />
         ) : (
           <EmptyPrompt
             refreshCustomFunctions={refreshCustomFunctions}

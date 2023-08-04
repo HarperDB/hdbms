@@ -28,14 +28,13 @@ function FiletypeIcon() {
   return <i className='fab fa-js' />;
 }
 
-function File({ fullPath, directoryEntry, onSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, onSelect, toggleClosed, Icon }) {
 
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onSelect so 
   // parent can get file content.
 
-  const directoryEntryWithFullPath = { ...directoryEntry, fullPath };
   function emitFileInfoOrToggle() {
 
     const isDirectory = Boolean(directoryEntry.entries);
@@ -43,7 +42,7 @@ function File({ fullPath, directoryEntry, onSelect, toggleClosed, Icon }) {
     if (isDirectory) {
       toggleClosed();
     } else {
-      onSelect(directoryEntryWithFullPath);
+      onSelect(directoryEntry);
     }
   }
 
@@ -59,7 +58,7 @@ function File({ fullPath, directoryEntry, onSelect, toggleClosed, Icon }) {
 
 }
 
-function Directory({ directoryEntry, parent, onSelect }) {
+function Directory({ directoryEntry, onSelect }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -67,9 +66,8 @@ function Directory({ directoryEntry, parent, onSelect }) {
 
   return (
     // ui:folder name
-    <ul className="folder-container">
+    <ul key={directoryEntry.key} className="folder-container">
       <File
-        fullPath={parent}
         Icon={
           /*
            * note: FolderIcon is a func so we can give it
@@ -89,9 +87,8 @@ function Directory({ directoryEntry, parent, onSelect }) {
       {
         // ui:folder contents
         entries.map((entry) => (
-          <ul key={entry.fullPath} className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
+          <ul key={entry.key} className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
             <Directory
-              parent={[parent, entry.name].join('/')}
               directoryEntry={entry}
               onSelect={onSelect} />
           </ul>
@@ -113,7 +110,6 @@ function FileBrowser({ files, onSelect }) {
   return (
     <ul className="file-browser">
       <Directory
-        parent={null}
         onSelect={ onSelect }
         directoryEntry={files} />
     </ul>
