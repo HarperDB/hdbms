@@ -1,12 +1,12 @@
 import queryInstance from '../queryInstance';
 
-function addFullPaths(fileTree, root='') {
+function addFullPaths(fileTree, root='/') {
 
   if (!fileTree || !fileTree.entries) return;
 
   for (const entry of fileTree.entries) {
 
-    const currentPath = root === '' ? entry.name : `${root}/${entry.name}`; 
+    const currentPath = root === '/' ? entry.name : `${root}/${entry.name}`; 
     entry.fullPath = currentPath;
 
     addFullPaths(entry, currentPath);
@@ -22,6 +22,10 @@ export default async ({ auth, url }) => {
     auth,
     url,
   });
+
+  // for every entry, this appends a fullPath property
+  // that is not present on the server response, but is useful
+  // for improving front end performance and for saving the file back to server.
 
   addFullPaths(fileTree);
 

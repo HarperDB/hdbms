@@ -1,6 +1,7 @@
 import instanceState from '../../state/instanceState';
 import customFunctionsStatus from '../../api/instance/customFunctionsStatus';
 import getCustomFunctions from '../../api/instance/getCustomFunctions';
+import getComponentFiles from '../../api/instance/getComponentFiles';
 
 /*
  * {
@@ -86,6 +87,7 @@ function appToCf(appData) {
 
 const buildCustomFunctions = async ({ auth, url }) => {
   const { is_enabled, port, directory, error, message } = await customFunctionsStatus({ auth, url });
+  const fileTree = await getComponentFiles({ auth, url });
 
   // TODO: [] should be {}
   // TODO: rename endpoints to file tree or something more descriptive
@@ -101,6 +103,7 @@ const buildCustomFunctions = async ({ auth, url }) => {
     directory,
     error,
     message,
+    fileTree
   };
 
   instanceState.update((s) => {

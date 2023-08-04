@@ -60,9 +60,10 @@ function File({ fullPath, directoryEntry, onSelect, toggleClosed, Icon }) {
 }
 
 function Directory({ directoryEntry, parent, onSelect }) {
-  console.log(parent);
 
   const [ open, setOpen ] = useState(true);
+
+  const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 
   return (
     // ui:folder name
@@ -87,11 +88,9 @@ function Directory({ directoryEntry, parent, onSelect }) {
 
       {
         // ui:folder contents
-        directoryEntry?.entries?.sort(directorySortComparator)?.map((entry) => (
-
-          <ul className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
+        entries.map((entry) => (
+          <ul key={entry.fullPath} className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
             <Directory
-              key={parent}
               parent={[parent, entry.name].join('/')}
               directoryEntry={entry}
               onSelect={onSelect} />
@@ -114,7 +113,7 @@ function FileBrowser({ files, onSelect }) {
   return (
     <ul className="file-browser">
       <Directory
-        parent={ `/${files.name}` }
+        parent={null}
         onSelect={ onSelect }
         directoryEntry={files} />
     </ul>

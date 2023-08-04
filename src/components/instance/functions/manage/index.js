@@ -7,9 +7,10 @@ import useInterval from 'use-interval';
 
 import instanceState from '../../../../functions/state/instanceState';
 
+import WebIDE from '../../../shared/webide/WebIDE';
+
+
 import EntityManager from './EntityManager';
-import CodeEditor from './CodeEditor2';
-import FileBrowser from './FileBrowser';
 import Deploy from './Deploy';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
@@ -18,10 +19,11 @@ import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
-function ManageIndex({ componentFiles, refreshCustomFunctions, loading }) {
+function ManageIndex({ refreshCustomFunctions, loading }) {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
   const navigate = useNavigate();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
+  const { fileTree } = custom_functions;
   const registration = useStoreState(instanceState, (s) => s.registration);
   const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const supportsStaticRoutes = parseFloat(`${majorVersion}.${minorVersion}`) < 4.1;
@@ -78,23 +80,31 @@ function ManageIndex({ componentFiles, refreshCustomFunctions, loading }) {
   useEffect(routeToDefaultProject, [custom_functions.endpoints, customer_id, compute_stack_id, navigate, action, project, file, baseUrl]);
   useInterval(waitForRestartToComplete, 1000);
 
+  /*
+   *
+   *
+    turn this into 3 view system.
+    menu: editor view, deploy view (table), reload button 
+   */
   return (
     <Row id="functions">
-      <Col xl="3" lg="4" md="6" xs="12">
-        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <FileBrowser
-            files={componentFiles}
-            onSelect={(dirEntry) => { console.log('file info:', dirEntry)}  }/>
-        </ErrorBoundary>
-      </Col>
+      <ul>
+        <li>edit</li>
+        <li>deploy</li>
+        <li>reload</li>
+      </ul>
       <Col xl="9" lg="8" md="6" xs="12">
+
         {action === 'deploy' ? (
           <Deploy />
         ) : project ? (
-          <CodeEditor />
+          <WebIDE fileTree={fileTree}  />
         ) : (
-          <EmptyPrompt refreshCustomFunctions={refreshCustomFunctions} headline={`Please ${Object.keys(custom_functions.endpoints).length ? 'choose' : 'create'} a project at left.`} />
+          <EmptyPrompt
+            refreshCustomFunctions={refreshCustomFunctions}
+            headline={`Please ${Object.keys(custom_functions.endpoints).length ? 'choose' : 'create'} a project at left.`} />
         )}
+
       </Col>
     </Row>
   );
