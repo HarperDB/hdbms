@@ -1,39 +1,49 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import Editor from '@monaco-editor/react';
-import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
 
-/* 
- * input: file tree
- * hooks: change, save
- */
 
 function WebIDE({ fileTree, onSave, onChange }) {
 
-  const [ code, setCode ] = useState('');
+  const [ fileInfo, setFileInfo ] = useState({
+    content: null,
+    path: null
+  });
 
-  async function updateCurrentFile(file) {
-    const response = await getComponentFile({
-      auth: { user: 'alex', pass: 'alex' },
-      url: 'http://localhost:9825',
-      project: file.project,
-      file: file.path,
+  const auth = { user: 'alex', pass: 'alex' }; 
+  const url = 'http://localhost:9825';
+
+  async function updateCurrentFile({ project, path }) {
+
+    const { message } = await getComponentFile({
+      auth,
+      url,
+      project,
+      file: path
     });
-    setCode(response.message);
+
+    setFileInfo({ content: message, path });
+
   }
+
+  console.log('ide: ', fileInfo?.path);
   // onselect calls get component file, sets code to that, passes that to editor window
   return (
     <Row className="web-ide">
       <Col className="file-browser-container">
-        <FileBrowser files={ fileTree } onSelect={ updateCurrentFile } />
+        <FileBrowser
+          files={ fileTree }
+          selectedFile={ fileInfo?.path }
+          onSelect={ updateCurrentFile } />
       </Col>
-
       <Col className="code-editor-container">
-        <EditorWindow code={ code } />
+        <Card style={{height: '100%' }}>
+          <EditorWindow fileInfo={fileInfo} />
+        </Card>
       </Col>
     </Row>
 

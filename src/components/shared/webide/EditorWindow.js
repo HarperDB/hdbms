@@ -5,15 +5,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-function EditorWindow({ code }) {
+function EditorWindow({ fileInfo }) {
 
   return (
-    <Editor
-      height="100%"
-      defaultLanguage="javascript"
-      value={code}
-      onMount={() => { console.log('editor mounted') }}
-      theme="vs-dark" />
+    <Card style={{height: '100%' }}>
+      <Row>edit &gt; { fileInfo.path }</Row>
+      <Editor
+        height="100%"
+        defaultLanguage="javascript"
+        value={fileInfo.content}
+        onMount={() => { console.log('editor mounted') }}
+        theme="vs-dark" />
+    </Card>
   );
 }
 
