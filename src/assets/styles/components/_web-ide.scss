@@ -1,43 +1,87 @@
-.file-browser {
-  ul, li {
+.web-ide {
+
+  height: 75vh;
+  overflow: hidden;
+  background: black;
+
+  & ul, & li {
     list-style-type: none;
   }
-  .folder-container {
-    padding-left: 0px;
-  }
-  .file {
 
-    &.selected {
-      background: blueviolet;
-    }
+  .file-menu {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 
-    border: 0;
-    background: transparent;
-    list-style-type: none;
-    color: white ;
-    outline: none !important; // TODO: fix this because it is not accessible; style differently
-    margin: 0;
-    padding: 3px 2px;
-
-    .filename-text {
-      padding-left: 5px;
-    }
-
-    .file-icon.fa-js {
-      color: #f7df1e;
-    }
-
-    .folder-icon {
-      color: rgb(143 141 255);
+    .add-folder,
+    .upload-file,
+    .add-file {
+      border: 0;
+      background: transparent;
+      color: white;
+      padding: 0px 5px 0px 0px;
+      margin: 0px 5px 0px 0px;
     }
   }
-  .folder {
-    padding-left: 15px;
+
+  .file-browser-container {
+    padding: 20px;
+      height: 100%;
+      overflow-y: scroll;
+
+    .file-browser {
+
+      .folder-container {
+        padding-left: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+      }
+      .file.file-selected {
+          background: #4a4a4a !important;
+      }
+      .file.folder-selected {
+          border: #4a4a4a 1px dotted !important;
+      }
+
+      .file {
+
+        &.selected {
+        }
+
+        border: 0;
+        background: transparent;
+        list-style-type: none;
+        color: white ;
+        outline: none !important; // TODO: fix this because it is not accessible; style differently
+        margin: 0;
+        padding: 3px 2px;
+
+        .filename-text {
+          padding-left: 5px;
+        }
+
+        .file-icon.fa-js {
+          color: #f7df1e;
+        }
+
+        .folder-icon {
+          color: rgb(143 141 255);
+        }
+      }
+      .folder {
+        padding-left: 15px;
+      }
+      .folder.folder-contents-closed {
+        display: none;
+      }
+      .folder.folder-contents-open {
+        display: block;
+      }
+    }
   }
-  .folder.folder-contents-closed {
-    display: none;
-  }
-  .folder.folder-contents-open {
-    display: block;
-  }
+
 }

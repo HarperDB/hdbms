@@ -83,11 +83,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
    */
   return (
     <Row id="functions">
-      <ul>
-        <li>edit</li>
-        <li>deploy</li>
-        <li>reload</li>
-      </ul>
       <Col>
 
         {action === 'deploy' ? (

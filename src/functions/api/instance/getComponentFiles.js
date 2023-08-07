@@ -1,23 +1,32 @@
 import queryInstance from '../queryInstance';
 import { v4 as uuid } from 'uuid';
 
-function addFullPaths(fileTree, root='/') {
+const COMPONENTS_DIRNAME = 'components';
 
-  if (!fileTree || !fileTree.entries) return;
+function addFullPaths(fileTree, path) {
+
+  if (!fileTree || !fileTree.entries) {
+    return;
+  }
+
+  if (path === COMPONENTS_DIRNAME) {
+    fileTree.path = path;
+  }
+
   fileTree.key = uuid();
 
   for (const entry of fileTree.entries) {
 
-    // add two properties to directory entry
+    // add 3 properties to directory entry:
     // 1. project, which is the dir under component root on the instance
     // 2. path, which is the file path relative to the project.
-    const currentPath = root === '/' ? entry.name : `${root}/${entry.name}`; 
-    const [ project, ...pathSegments ] = currentPath.split('/'); 
-    entry.project = project;
-    entry.path = pathSegments.join('/');
+    // 3. unique key for react dynamic list optimization
+    const newPath = `${path}/${entry.name}`; 
+    entry.project = newPath.split('/')[1]; // 'components/proj';
+    entry.path = newPath;
     entry.key = uuid();
 
-    addFullPaths(entry, currentPath);
+    addFullPaths(entry, newPath);
 
   };
 
@@ -35,7 +44,8 @@ export default async ({ auth, url }) => {
   // that is not present on the server response, but is useful
   // for improving front end performance and for saving the file back to server.
 
-  addFullPaths(fileTree);
+  const root = COMPONENTS_DIRNAME;
+  addFullPaths(fileTree, root);
 
   return fileTree;
 

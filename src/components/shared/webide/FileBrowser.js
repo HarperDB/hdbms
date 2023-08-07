@@ -19,6 +19,8 @@ function directorySortComparator(a, b) {
 
 }
 
+const isDirectory = (entry) => Boolean(entry.entries);
+
 function FolderIcon({ isOpen }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
   return <i className={cn(`folder-icon fas ${folderClassName}`)} />;
@@ -28,14 +30,13 @@ function FiletypeIcon() {
   return <i className={ cn('file-icon fab fa-js') } />;
 }
 
-function File({ directoryEntry, selectedFile, onFileSelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, onDirectorySelect, userOnSelect, toggleClosed, Icon }) {
 
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onFileSelect so 
   // parent can get file content.
   //
-  const isDirectory = entry => Boolean(entry.entries);
 
   function noOp() {
     // TODO: figure out how to handle keyboard events properly.
@@ -44,20 +45,26 @@ function File({ directoryEntry, selectedFile, onFileSelect, userOnSelect, toggle
 
   function handleFileSelection() {
 
-    if (isDirectory(directoryEntry)) {
+    const isDir = isDirectory(directoryEntry);
+    if (isDir) {
       toggleClosed();
+      onDirectorySelect(directoryEntry.path);
     } else {
-      onFileSelect(directoryEntry);
       userOnSelect(directoryEntry);
+      onFileSelect(directoryEntry);
     }
 
   }
 
-  const isSelected = !isDirectory(directoryEntry) && directoryEntry.path === selectedFile;
+  const isFileSelected = directoryEntry.path === selectedFile;
+  const isFolderSelected = directoryEntry.path === selectedDirectory;
 
   return (
     <button
-      className={ cn("file", { selected: isSelected }) }
+      className={cn("file", { 
+        'file-selected': isFileSelected,
+        'folder-selected': isFolderSelected
+      })}
       onClick={ handleFileSelection }
       onKeyDown={ noOp } >
         <Icon className="filename-icon" />
@@ -67,7 +74,7 @@ function File({ directoryEntry, selectedFile, onFileSelect, userOnSelect, toggle
 
 }
 
-function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile }) {
+function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSelect, selectedFile, selectedDirectory }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -78,15 +85,20 @@ function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile })
      () => FolderIcon({ isOpen: open })
      : FiletypeIcon
 
+  const isSelected = directoryEntry.path === selectedDirectory;
+  console.log({ 'selected dir': selectedDirectory, 'this dir\'s path': directoryEntry.path})
+
   return (
     // ui:folder name
     <>
-      <li key={directoryEntry.key} className="folder-container">
+      <li key={directoryEntry.key} className={cn('folder-container')}>
         <File
           Icon={ icon }
           selectedFile={selectedFile}
+          selectedDirectory={selectedDirectory}
           directoryEntry={directoryEntry}
           onFileSelect={onFileSelect}
+          onDirectorySelect={onDirectorySelect}
           userOnSelect={userOnSelect}
           toggleClosed={() => { 
             setOpen(!open);
@@ -96,11 +108,16 @@ function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile })
       {
         entries.map((entry) => (
           <li key={entry.key}>
-            <ul className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
+            <ul className={cn(`folder`, {
+              'folder-contents-open': open,
+              'folder-contents-closed': !open
+            })}>
               <Directory
                 selectedFile={selectedFile}
+                selectedDirectory={selectedDirectory}
                 directoryEntry={entry}
                 onFileSelect={onFileSelect}
+                onDirectorySelect={onDirectorySelect}
                 userOnSelect={userOnSelect} />
             </ul>
           </li>
@@ -114,7 +131,7 @@ function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile })
 
 // recursive (for now) directory tree representation
 // File component, Directory component, various Icon components
-function FileBrowser({ files, userOnSelect, onFileSelect, selectedFile }) {
+function FileBrowser({ files, userOnSelect, onFileSelect, onDirectorySelect, selectedFile, selectedDirectory }) {
 
   if (!files) return null;
 
@@ -122,7 +139,9 @@ function FileBrowser({ files, userOnSelect, onFileSelect, selectedFile }) {
     <ul className="file-browser">
       <Directory
         selectedFile={selectedFile}
+        selectedDirectory={selectedDirectory}
         onFileSelect={onFileSelect}
+        onDirectorySelect={onDirectorySelect}
         userOnSelect={userOnSelect}
         directoryEntry={files} />
     </ul>
