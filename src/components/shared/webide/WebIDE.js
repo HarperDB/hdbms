@@ -7,7 +7,7 @@ import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
 
 
-function WebIDE({ fileTree, onSave, onChange }) {
+function WebIDE({ fileTree, onSave, onSelect }) {
 
   const [ fileInfo, setFileInfo ] = useState({
     content: null,
@@ -17,7 +17,7 @@ function WebIDE({ fileTree, onSave, onChange }) {
   const auth = { user: 'alex', pass: 'alex' }; 
   const url = 'http://localhost:9825';
 
-  async function updateCurrentFile({ project, path }) {
+  async function updateSelectedFile({ project, path }) {
 
     const { message } = await getComponentFile({
       auth,
@@ -30,7 +30,6 @@ function WebIDE({ fileTree, onSave, onChange }) {
 
   }
 
-  console.log('ide: ', fileInfo?.path);
   // onselect calls get component file, sets code to that, passes that to editor window
   return (
     <Row className="web-ide">
@@ -38,7 +37,8 @@ function WebIDE({ fileTree, onSave, onChange }) {
         <FileBrowser
           files={ fileTree }
           selectedFile={ fileInfo?.path }
-          onSelect={ updateCurrentFile } />
+          userOnSelect={ onSelect }
+          onFileSelect={ updateSelectedFile } />
       </Col>
       <Col className="code-editor-container">
         <Card style={{height: '100%' }}>

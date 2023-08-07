@@ -28,11 +28,11 @@ function FiletypeIcon() {
   return <i className={ cn('file-icon fab fa-js') } />;
 }
 
-function File({ directoryEntry, selectedFile, onSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, onFileSelect, userOnSelect, toggleClosed, Icon }) {
 
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
-  // if it's a flat file, calls onSelect so 
+  // if it's a flat file, calls onFileSelect so 
   // parent can get file content.
   //
   const isDirectory = entry => Boolean(entry.entries);
@@ -47,7 +47,8 @@ function File({ directoryEntry, selectedFile, onSelect, toggleClosed, Icon }) {
     if (isDirectory(directoryEntry)) {
       toggleClosed();
     } else {
-      onSelect(directoryEntry);
+      onFileSelect(directoryEntry);
+      userOnSelect(directoryEntry);
     }
 
   }
@@ -66,7 +67,7 @@ function File({ directoryEntry, selectedFile, onSelect, toggleClosed, Icon }) {
 
 }
 
-function Directory({ directoryEntry, onSelect, selectedFile }) {
+function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -88,7 +89,8 @@ function Directory({ directoryEntry, onSelect, selectedFile }) {
           }
           selectedFile={selectedFile}
           directoryEntry={directoryEntry}
-          onSelect={onSelect}
+          onFileSelect={onFileSelect}
+          userOnSelect={userOnSelect}
           toggleClosed={() => { 
             setOpen(!open);
           }}
@@ -103,7 +105,9 @@ function Directory({ directoryEntry, onSelect, selectedFile }) {
             <Directory
               selectedFile={selectedFile}
               directoryEntry={entry}
-              onSelect={onSelect} />
+              onFileSelect={onFileSelect}
+              userOnSelect={userOnSelect}
+            />
           </li>
         </ul>
 
@@ -117,7 +121,7 @@ function Directory({ directoryEntry, onSelect, selectedFile }) {
 
 // recursive (for now) directory tree representation
 // File component, Directory component, various Icon components
-function FileBrowser({ files, onSelect, selectedFile }) {
+function FileBrowser({ files, userOnSelect, onFileSelect, selectedFile }) {
 
   if (!files) return null;
 
@@ -125,7 +129,8 @@ function FileBrowser({ files, onSelect, selectedFile }) {
     <ul className="file-browser">
     <Directory
       selectedFile={selectedFile}
-      onSelect={onSelect}
+      onFileSelect={onFileSelect}
+      userOnSelect={userOnSelect}
       directoryEntry={files} />
     </ul>
   )

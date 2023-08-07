@@ -8,14 +8,19 @@ import { useAlert } from 'react-alert';
 function EditorWindow({ fileInfo }) {
 
   return (
-    <Card style={{height: '100%' }}>
+    <Card style={{height: '100%'}}>
       <Row>edit &gt; { fileInfo.path }</Row>
       <Editor
         height="100%"
         defaultLanguage="javascript"
         value={fileInfo.content}
         onMount={() => { console.log('editor mounted') }}
-        theme="vs-dark" />
+        theme="vs-dark" 
+        options={{
+          minimap: {
+            enabled: false
+          }
+        }}/>
     </Card>
   );
 }
