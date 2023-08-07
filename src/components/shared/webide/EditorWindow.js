@@ -8,15 +8,12 @@ import { useAlert } from 'react-alert';
 function EditorWindow({ code }) {
 
   return (
-    <>
-      <Editor
-        height="100%"
-        defaultLanguage="javascript"
-        value={code}
-        onMount={() => { console.log('editor mounted') }}
-        theme="vs-dark" />
-        EDITOR WINDOW
-    </>
+    <Editor
+      height="100%"
+      defaultLanguage="javascript"
+      value={code}
+      onMount={() => { console.log('editor mounted') }}
+      theme="vs-dark" />
   );
 }
 

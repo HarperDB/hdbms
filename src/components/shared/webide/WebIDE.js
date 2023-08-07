@@ -27,17 +27,16 @@ function WebIDE({ fileTree, onSave, onChange }) {
   }
   // onselect calls get component file, sets code to that, passes that to editor window
   return (
-    <div className="web-ide">
-
-      <div className="file-browser-container">
+    <Row className="web-ide">
+      <Col className="file-browser-container">
         <FileBrowser files={ fileTree } onSelect={ updateCurrentFile } />
-      </div>
+      </Col>
 
-      <div className="code-editor-container">
+      <Col className="code-editor-container">
         <EditorWindow code={ code } />
-      </div>
+      </Col>
+    </Row>
 
-    </div>
   );
 }
 

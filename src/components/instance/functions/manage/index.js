@@ -8,15 +8,10 @@ import useInterval from 'use-interval';
 import instanceState from '../../../../functions/state/instanceState';
 
 import WebIDE from '../../../shared/webide/WebIDE';
-
-
-import EntityManager from './EntityManager';
 import Deploy from './Deploy';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
 import ErrorFallback from '../../../shared/ErrorFallback';
 import addError from '../../../../functions/api/lms/addError';
-import EntityReloader from './EntityReloader';
-import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
@@ -93,7 +88,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         <li>deploy</li>
         <li>reload</li>
       </ul>
-      <Col xl="9" lg="8" md="6" xs="12">
+      <Col>
 
         {action === 'deploy' ? (
           <Deploy />
