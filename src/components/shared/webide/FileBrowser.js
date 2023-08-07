@@ -73,48 +73,41 @@ function Directory({ directoryEntry, userOnSelect, onFileSelect, selectedFile })
 
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 
+  // FolderIcon is a func so we can give it open args now, but instantiate it later.
+  const icon = directoryEntry.entries ?
+     () => FolderIcon({ isOpen: open })
+     : FiletypeIcon
+
   return (
     // ui:folder name
-    <ul key={directoryEntry.key} className="folder-container">
-      <li role="menuitem">
+    <>
+      <li key={directoryEntry.key} className="folder-container">
         <File
-          Icon={
-            /*
-             * note: FolderIcon is a func so we can give it
-             * open args now, but instantiate it later.
-             */
-            directoryEntry.entries ? 
-              () => FolderIcon({ isOpen: open })
-            : FiletypeIcon
-          }
+          Icon={ icon }
           selectedFile={selectedFile}
           directoryEntry={directoryEntry}
           onFileSelect={onFileSelect}
           userOnSelect={userOnSelect}
           toggleClosed={() => { 
             setOpen(!open);
-          }}
-          />
-    </li>
+          }} />
+      </li>
 
-    {
-      // ui:folder contents
-      entries.map((entry) => (
-        <ul key={entry.key} className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
-          <li role="menuitem">
-            <Directory
-              selectedFile={selectedFile}
-              directoryEntry={entry}
-              onFileSelect={onFileSelect}
-              userOnSelect={userOnSelect}
-            />
+      {
+        entries.map((entry) => (
+          <li key={entry.key}>
+            <ul className={`folder folder-contents-${open ? 'open' : 'closed' }`}>
+              <Directory
+                selectedFile={selectedFile}
+                directoryEntry={entry}
+                onFileSelect={onFileSelect}
+                userOnSelect={userOnSelect} />
+            </ul>
           </li>
-        </ul>
+        ))
+      }
+    </>
 
-      ))
-    }
-
-    </ul>
   )
 
 }
@@ -127,11 +120,11 @@ function FileBrowser({ files, userOnSelect, onFileSelect, selectedFile }) {
 
   return (
     <ul className="file-browser">
-    <Directory
-      selectedFile={selectedFile}
-      onFileSelect={onFileSelect}
-      userOnSelect={userOnSelect}
-      directoryEntry={files} />
+      <Directory
+        selectedFile={selectedFile}
+        onFileSelect={onFileSelect}
+        userOnSelect={userOnSelect}
+        directoryEntry={files} />
     </ul>
   )
 
