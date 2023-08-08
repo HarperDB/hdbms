@@ -7,11 +7,17 @@ import setComponentFile from '../../../functions/api/instance/setComponentFile';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
 import FileMenu from './FileMenu';
-import EditorMenu from './EditorMenu';
+import EditorMenu, { SaveButton } from './EditorMenu';
+
+const auth = { user: 'alex', pass: 'alex' }; 
+const url = 'http://localhost:9825';
+
 
 function getPathRelativeToProjectDir(absolutePath) {
 
-  // schema: <root_dir>/<projectName>/relative/path/to/file.<ext>
+  /*
+   * schema: <root_dir>/<projectName>/relative/path/to/file.<ext>
+   */
 
   return absolutePath.split('/').slice(2).join('/');
 
@@ -19,6 +25,7 @@ function getPathRelativeToProjectDir(absolutePath) {
 
 function WebIDE({ fileTree, onSave, onSelect }) {
 
+  const [ isValid, setIsValid ] = useState(true);
   const [ selectedDirectory, setSelectedDirectory ] = useState(null);
   const [ fileInfo, setFileInfo ] = useState({
     content: null,
@@ -26,10 +33,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     project: null
   });
 
-  const auth = { user: 'alex', pass: 'alex' }; 
-  const url = 'http://localhost:9825';
-
-  async function saveCode() {
+  async function saveCodeToInstance() {
 
     const payload = {
       auth,
@@ -72,7 +76,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
   // onselect calls get component file, sets code to that, passes that to editor window
   return (
     <Row className="web-ide">
-      <Col className="file-browser-container">
+      <Col md="3" className="file-browser-container">
         <FileMenu />
         <FileBrowser
           files={ fileTree }
@@ -83,9 +87,21 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           onFileSelect={ updateSelectedFile } />
       </Col>
       <Col className="code-editor-container">
-        <Card style={{height: '100%' }}>
-          <EditorMenu saveCode={ saveCode } />
-          <EditorWindow fileInfo={ fileInfo } onChange={ onCodeUpdate } />
+        <Card style={{ height: '100%' }}>
+          <EditorMenu
+            onSave={ saveCodeToInstance }
+            SaveButton={ () => 
+              <SaveButton
+                disabled={ !isValid }
+                onSave={ saveCodeToInstance } /> 
+            } />
+          <EditorWindow
+            fileInfo={ fileInfo }
+            onChange={ onCodeUpdate }
+            onValidate={(errors) => {
+              setIsValid(errors.length === 0);
+            }}
+          />
         </Card>
       </Col>
     </Row>

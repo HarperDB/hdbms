@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 
 // TODO: update code using whatever monaco hook is available. onupdate.
 // don't allow save if there are errors.
-function EditorWindow({ fileInfo, onChange }) {
+function EditorWindow({ fileInfo, onChange, onValidate }) {
 
   return (
     <Card style={{height: '100%'}}>
@@ -17,8 +17,12 @@ function EditorWindow({ fileInfo, onChange }) {
         defaultLanguage="javascript"
         value={fileInfo.content}
         onMount={() => { console.log('editor mounted') }}
+        onValidate={ onValidate }
         theme="vs-dark" 
-        onChange={onChange}
+        onChange={(update) => {
+          console.log(update);
+          onChange(update);
+        }}
         options={{
           minimap: {
             enabled: false
