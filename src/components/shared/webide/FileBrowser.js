@@ -86,7 +86,6 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
      : FiletypeIcon
 
   const isSelected = directoryEntry.path === selectedDirectory;
-  console.log({ 'selected dir': selectedDirectory, 'this dir\'s path': directoryEntry.path})
 
   return (
     // ui:folder name

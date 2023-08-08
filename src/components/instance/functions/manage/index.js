@@ -88,7 +88,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         {action === 'deploy' ? (
           <Deploy />
         ) : project ? (
-          <WebIDE fileTree={fileTree} onSelect={() => { console.log('userland on select!') }} />
+          <WebIDE
+            fileTree={fileTree}
+            onSelect={() => {
+              console.log('userland on select!') 
+            }}
+          />
         ) : (
           <EmptyPrompt
             refreshCustomFunctions={refreshCustomFunctions}

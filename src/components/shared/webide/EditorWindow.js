@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
+// TODO: update code using whatever monaco hook is available. onupdate.
+// don't allow save if there are errors.
 function EditorWindow({ fileInfo }) {
 
   return (

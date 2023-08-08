@@ -3,32 +3,55 @@ import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import Editor from '@monaco-editor/react';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
+import setComponentFile from '../../../functions/api/instance/setComponentFile';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
 import FileMenu from './FileMenu';
+import EditorMenu from './EditorMenu';
 
+function getPathRelativeToProjectDir(absolutePath) {
+  // schema is root_dir/projectName/relativePaths
+
+  const pathRelativeToProjectDir = absolutePath.split('/').slice(2).join('/');
+  return pathRelativeToProjectDir;
+}
 
 function WebIDE({ fileTree, onSave, onSelect }) {
 
   const [ selectedDirectory, setSelectedDirectory ] = useState(null);
   const [ fileInfo, setFileInfo ] = useState({
     content: null,
-    path: null
+    path: null,
+    project: null
   });
 
   const auth = { user: 'alex', pass: 'alex' }; 
   const url = 'http://localhost:9825';
 
+  async function saveCode() {
+
+    const payload = {
+      auth,
+      url,
+      project: fileInfo.project,
+      file: getPathRelativeToProjectDir(fileInfo.path),
+      payload: fileInfo.content
+    }
+    const response = await setComponentFile(payload);
+
+  }
+
   async function updateSelectedFile({ project, path }) {
 
+    const file = path.split(`components/${project}`).filter(Boolean)[0]; 
     const { message } = await getComponentFile({
       auth,
       url,
       project,
-      file: path.split(`components/${project}`).filter(Boolean)[0] // note: leading '/' seems to be ok w/ 4.2 api
+      file
     });
 
-    setFileInfo({ content: message, path });
+    setFileInfo({ content: message, path, project });
 
   }
 
@@ -54,6 +77,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
       </Col>
       <Col className="code-editor-container">
         <Card style={{height: '100%' }}>
+          <EditorMenu saveCode={ saveCode } />
           <EditorWindow fileInfo={fileInfo} />
         </Card>
       </Col>

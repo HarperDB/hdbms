@@ -9,11 +9,6 @@ function addFullPaths(fileTree, path) {
     return;
   }
 
-  if (path === COMPONENTS_DIRNAME) {
-    fileTree.path = path;
-  }
-
-  fileTree.key = uuid();
 
   for (const entry of fileTree.entries) {
 
@@ -22,7 +17,7 @@ function addFullPaths(fileTree, path) {
     // 2. path, which is the file path relative to the project.
     // 3. unique key for react dynamic list optimization
     const newPath = `${path}/${entry.name}`; 
-    entry.project = newPath.split('/')[1]; // 'components/proj';
+    entry.project = newPath.split('/')[1]; // 'components/<project_name>';
     entry.path = newPath;
     entry.key = uuid();
 
@@ -40,12 +35,9 @@ export default async ({ auth, url }) => {
     url,
   });
 
-  // for every entry, this appends a fullPath property
-  // that is not present on the server response, but is useful
-  // for improving front end performance and for saving the file back to server.
-
-  const root = COMPONENTS_DIRNAME;
-  addFullPaths(fileTree, root);
+  fileTree.path = COMPONENTS_DIRNAME;
+  fileTree.key = uuid();
+  addFullPaths(fileTree, COMPONENTS_DIRNAME);
 
   return fileTree;
 
