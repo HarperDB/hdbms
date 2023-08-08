@@ -3,25 +3,32 @@ import { v4 as uuid } from 'uuid';
 
 const COMPONENTS_DIRNAME = 'components';
 
-function addFullPaths(fileTree, path) {
+function addMetadata(fileTree, path) {
 
   if (!fileTree || !fileTree.entries) {
     return;
   }
 
+  if (path === COMPONENTS_DIRNAME) {
+    fileTree.path = COMPONENTS_DIRNAME;
+    fileTree.key = uuid();
+  }
 
   for (const entry of fileTree.entries) {
 
-    // add 3 properties to directory entry:
-    // 1. project, which is the dir under component root on the instance
-    // 2. path, which is the file path relative to the project.
-    // 3. unique key for react dynamic list optimization
+    /* 
+     * adds 3 properties to directory entry:
+     *   - project, which is the dir under component root on the instance
+     *   - path, which is the file path relative to the project
+     *   - unique key for react dynamic list optimization
+     */
+
     const newPath = `${path}/${entry.name}`; 
-    entry.project = newPath.split('/')[1]; // 'components/<project_name>';
+    entry.project = newPath.split('/')[1];
     entry.path = newPath;
     entry.key = uuid();
 
-    addFullPaths(entry, newPath);
+    addMetadata(entry, newPath);
 
   };
 
@@ -35,9 +42,8 @@ export default async ({ auth, url }) => {
     url,
   });
 
-  fileTree.path = COMPONENTS_DIRNAME;
-  fileTree.key = uuid();
-  addFullPaths(fileTree, COMPONENTS_DIRNAME);
+  addMetadata(fileTree, COMPONENTS_DIRNAME);
+  console.log(fileTree);
 
   return fileTree;
 
