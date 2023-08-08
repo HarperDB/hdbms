@@ -10,10 +10,11 @@ import FileMenu from './FileMenu';
 import EditorMenu from './EditorMenu';
 
 function getPathRelativeToProjectDir(absolutePath) {
-  // schema is root_dir/projectName/relativePaths
 
-  const pathRelativeToProjectDir = absolutePath.split('/').slice(2).join('/');
-  return pathRelativeToProjectDir;
+  // schema: <root_dir>/<projectName>/relative/path/to/file.<ext>
+
+  return absolutePath.split('/').slice(2).join('/');
+
 }
 
 function WebIDE({ fileTree, onSave, onSelect }) {
@@ -36,31 +37,37 @@ function WebIDE({ fileTree, onSave, onSelect }) {
       project: fileInfo.project,
       file: getPathRelativeToProjectDir(fileInfo.path),
       payload: fileInfo.content
-    }
-    const response = await setComponentFile(payload);
+    };
+
+    await setComponentFile(payload);
 
   }
 
+  // sets file info to file that user selects.
   async function updateSelectedFile({ project, path }) {
 
     const file = path.split(`components/${project}`).filter(Boolean)[0]; 
-    const { message } = await getComponentFile({
+    const { message: fileContent } = await getComponentFile({
       auth,
       url,
       project,
       file
     });
 
-    setFileInfo({ content: message, path, project });
+    setFileInfo({
+      content: fileContent,
+      path,
+      project
+    });
 
   }
 
-  async function updateSelectedDirectory(directoryName) {
-
-    setSelectedDirectory(directoryName);
-
+  function onCodeUpdate(updatedCode) {
+    setFileInfo({
+      ...fileInfo,
+      content: updatedCode
+    });
   }
-
 
   // onselect calls get component file, sets code to that, passes that to editor window
   return (
@@ -72,13 +79,13 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           selectedFile={ fileInfo?.path }
           selectedDirectory={ selectedDirectory }
           userOnSelect={ onSelect }
-          onDirectorySelect={ updateSelectedDirectory }
+          onDirectorySelect={ setSelectedDirectory }
           onFileSelect={ updateSelectedFile } />
       </Col>
       <Col className="code-editor-container">
         <Card style={{height: '100%' }}>
           <EditorMenu saveCode={ saveCode } />
-          <EditorWindow fileInfo={fileInfo} />
+          <EditorWindow fileInfo={ fileInfo } onChange={ onCodeUpdate } />
         </Card>
       </Col>
     </Row>
