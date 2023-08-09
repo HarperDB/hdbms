@@ -4,7 +4,7 @@ import cn from 'classnames';
 // TODO:
 // keyboard events are buggy
 // get rid of button outline
-// proper filetype icons 
+// proper filetype icons
 // theming
 // test at greater scale
 
@@ -34,7 +34,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
-  // if it's a flat file, calls onFileSelect so 
+  // if it's a flat file, calls onFileSelect so
   // parent can get file content.
   //
 
@@ -61,7 +61,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
   return (
     <button
-      className={cn("file", { 
+      className={cn("file", {
         'file-selected': isFileSelected,
         'folder-selected': isFolderSelected
       })}
@@ -90,6 +90,8 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
   return (
     // ui:folder name
     <>
+    {
+      directoryEntry.name !== 'components' ?
       <li key={directoryEntry.key} className={cn('folder-container')}>
         <File
           Icon={ icon }
@@ -99,10 +101,12 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
           onFileSelect={onFileSelect}
           onDirectorySelect={onDirectorySelect}
           userOnSelect={userOnSelect}
-          toggleClosed={() => { 
+          toggleClosed={() => {
             setOpen(!open);
           }} />
       </li>
+      : null
+    }
 
       {
         entries.map((entry) => (
