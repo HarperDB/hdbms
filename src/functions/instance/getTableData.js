@@ -78,7 +78,8 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
-  // sort columns, but keep id first, and created and updated last.
+  // sort columns, but keep primary key / hash attribute first, and created and updated last.
+  // NOTE: __created__ and __updated__ might not exist in the schema, only include if they exist.
   const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
   const newEntityAttributes = orderedColumns.reduce((ac, a) => ({ ...ac, [a]: null }), {});
 
