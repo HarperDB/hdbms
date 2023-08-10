@@ -24,6 +24,18 @@ function getPathRelativeToProjectDir(absolutePath) {
 
 }
 
+async function onFileRename(file) {
+  console.log('rename: ', file);
+  /*
+  await setComponentFile({
+    auth,
+    url,
+    project,
+    file
+  });
+  */
+}
+
 function WebIDE({ fileTree, onSave, onSelect }) {
 
   const [ isValid, setIsValid ] = useState(true);
@@ -79,6 +91,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     setComponentDirectory({
       auth,
       url,
+      project: 'untitled',
       file: selectedDirectory, 
     });
   }
@@ -92,7 +105,9 @@ function WebIDE({ fileTree, onSave, onSelect }) {
       <Col md="3" className="file-browser-container">
         <FileMenu
           AddFileButton={
-            () => <AddFileButton onAddFile={ onAddFile } disabled={ !hasProjects } /> 
+            () => <AddFileButton
+              onAddFile={ onAddFile }
+              disabled={ !hasProjects } /> 
           }
           AddFolderButton={
             () => <AddFolderButton onAddFolder={ onAddFolder } />
@@ -103,6 +118,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           selectedFile={ fileInfo?.path }
           selectedDirectory={ selectedDirectory }
           userOnSelect={ onSelect }
+          onFileRename={ onFileRename }
           onDirectorySelect={ setSelectedDirectory }
           onFileSelect={ updateSelectedFile } />
       </Col>
