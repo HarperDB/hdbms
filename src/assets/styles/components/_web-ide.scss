@@ -1,8 +1,13 @@
 .web-ide {
 
+  color: white;
   height: 75vh;
   overflow: hidden;
   background: black;
+
+  hr {
+    border: 0.6px solid white;
+  }
 
   & ul, & li {
     list-style-type: none;
@@ -29,7 +34,7 @@
       margin: 0px 5px 0px 0px;
     }
 
-    .save-code.disabled {
+    button[disabled] {
       color: #5e5e5e;
     }
   }

@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid';
 
 const COMPONENTS_DIRNAME = 'components';
 
+// this 'addMetadata' logic probably belongs in src/functions/instance
+// by convention
 function addMetadata(fileTree, path) {
 
   if (!fileTree || !fileTree.entries) {

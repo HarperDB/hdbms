@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
 export function SaveButton({ disabled, onSave, saveButton }) {
-  const title = disabled ? "Cannot save due to validation errors" : "Save File to Instance";  
+
+  const title = disabled ?
+    "Cannot save due to validation errors"
+  : "Save File to Instance";  
+
   return (
     <button
       disabled={ disabled }
@@ -10,6 +14,7 @@ export function SaveButton({ disabled, onSave, saveButton }) {
       className={ cn("save-code fas fa-save", { disabled }) }
       onClick={ onSave } />
   )
+
 }
 
 function EditorMenu({ onSave, SaveButton }) {

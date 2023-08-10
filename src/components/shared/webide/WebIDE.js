@@ -4,9 +4,10 @@ import Editor from '@monaco-editor/react';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../functions/api/instance/setComponentFile';
+import setComponentDirectory from '../../../functions/api/instance/setComponentDirectory';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
-import FileMenu from './FileMenu';
+import FileMenu, { AddFileButton, AddFolderButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 
 const auth = { user: 'alex', pass: 'alex' }; 
@@ -26,12 +27,13 @@ function getPathRelativeToProjectDir(absolutePath) {
 function WebIDE({ fileTree, onSave, onSelect }) {
 
   const [ isValid, setIsValid ] = useState(true);
-  const [ selectedDirectory, setSelectedDirectory ] = useState(null);
+  const [ selectedDirectory, setSelectedDirectory ] = useState('/');
   const [ fileInfo, setFileInfo ] = useState({
     content: null,
     path: null,
     project: null
   });
+  const hasProjects = fileTree.entries.length > 0;
 
   async function saveCodeToInstance() {
 
@@ -73,11 +75,29 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     });
   }
 
-  // onselect calls get component file, sets code to that, passes that to editor window
+  function onAddFolder() {
+    setComponentDirectory({
+      auth,
+      url,
+      file: selectedDirectory, 
+    });
+  }
+
+  function onAddFile() {
+    console.log('add file to file tree', fileTree);
+  }
+
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
-        <FileMenu />
+        <FileMenu
+          AddFileButton={
+            () => <AddFileButton onAddFile={ onAddFile } disabled={ !hasProjects } /> 
+          }
+          AddFolderButton={
+            () => <AddFolderButton onAddFolder={ onAddFolder } />
+          } />
+        <hr />
         <FileBrowser
           files={ fileTree }
           selectedFile={ fileInfo?.path }
@@ -86,8 +106,7 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           onDirectorySelect={ setSelectedDirectory }
           onFileSelect={ updateSelectedFile } />
       </Col>
-      <Col className="code-editor-container">
-        <Card style={{ height: '100%' }}>
+      <Col className="code-editor-container" style={{ height: '100%' }}>
           <EditorMenu
             onSave={ saveCodeToInstance }
             SaveButton={ () => 
@@ -102,7 +121,6 @@ function WebIDE({ fileTree, onSave, onSelect }) {
               setIsValid(errors.length === 0);
             }}
           />
-        </Card>
       </Col>
     </Row>
 

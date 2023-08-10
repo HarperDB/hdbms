@@ -1,5 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+
 import cn from 'classnames';
+
+function ExternalLink({ href, target, children }) {
+
+  return (
+    <a
+      href={href}
+      target={target}
+      onClick={ window.location.href = href }>
+      { children }
+    </a>
+  );
+
+}
+
+function NoProjects() {
+  return (
+    <div className="no-projects">
+      <p>You have no HarperDB applications yet. Click the <i className="fas fa-folder-plus" /> button in the menu above to create your first application!</p>
+      <p>See the <a href="https://docs.harperdb.io" target="_blank"> documentation </a> for more info on HarperDB Applications.
+      </p>
+    </div>
+  )
+}
 
 // TODO:
 // keyboard events are buggy
@@ -92,20 +117,20 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
     <>
     {
       directoryEntry.name !== 'components' ?
-      <li key={directoryEntry.key} className={cn('folder-container')}>
-        <File
-          Icon={ icon }
-          selectedFile={selectedFile}
-          selectedDirectory={selectedDirectory}
-          directoryEntry={directoryEntry}
-          onFileSelect={onFileSelect}
-          onDirectorySelect={onDirectorySelect}
-          userOnSelect={userOnSelect}
-          toggleClosed={() => {
-            setOpen(!open);
-          }} />
-      </li>
-      : null
+        <li key={directoryEntry.key} className={cn('folder-container')}>
+          <File
+            Icon={ icon }
+            selectedFile={selectedFile}
+            selectedDirectory={selectedDirectory}
+            directoryEntry={directoryEntry}
+            onFileSelect={onFileSelect}
+            onDirectorySelect={onDirectorySelect}
+            userOnSelect={userOnSelect}
+            toggleClosed={() => {
+              setOpen(!open);
+            }} />
+        </li>
+        : null
     }
 
       {
@@ -135,10 +160,11 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 // recursive (for now) directory tree representation
 // File component, Directory component, various Icon components
 function FileBrowser({ files, userOnSelect, onFileSelect, onDirectorySelect, selectedFile, selectedDirectory }) {
+  console.log('files: ', files);
 
   if (!files) return null;
 
-  return (
+  return files.entries.length ? (
     <ul className="file-browser">
       <Directory
         selectedFile={selectedFile}
@@ -148,7 +174,7 @@ function FileBrowser({ files, userOnSelect, onFileSelect, onDirectorySelect, sel
         userOnSelect={userOnSelect}
         directoryEntry={files} />
     </ul>
-  )
+  ) : <NoProjects /> 
 
 
 }
