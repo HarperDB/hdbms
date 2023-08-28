@@ -7,7 +7,7 @@ import setComponentFile from '../../../functions/api/instance/setComponentFile';
 import setComponentDirectory from '../../../functions/api/instance/setComponentDirectory';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
-import FileMenu, { AddFileButton, AddFolderButton } from './FileMenu';
+import FileMenu, { AddFileButton, AddFolderButton, NewFileNameInput } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 
 const auth = { user: 'alex', pass: 'alex' }; 
@@ -25,7 +25,6 @@ function getPathRelativeToProjectDir(absolutePath) {
 }
 
 async function onFileRename(file) {
-  console.log('rename: ', file);
   /*
   await setComponentFile({
     auth,
@@ -90,13 +89,18 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     });
   }
 
-  function onAddFile() {
+  function onAddFile(e) {
+    // traverse file tree until you find entry with path of selectedDirectory.path 
+    // add to its entries a  new file
+    console.log('add file: ', e, selectedDirectory);
     // add a new file component, with editable to true
     // no default name, just an input
 
   }
 
   function onAddFolder() {
+    // add file or dir / input component with input engaged.
+    // if selectedDir, add to that 
     /*
     setComponentDirectory({
       auth,
@@ -107,6 +111,12 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     */
   }
 
+  async function onSetNewFileName(name) {
+    console.log('new full path: ', `${selectedDirectory?.path}/${name}`);
+    // TODO:
+    // try to save new file, if error, alert user it's taken.
+    // make sure NewFileName component is only rendered when the +file or +folder buttons are pressed. and are not visible after exit or successful save.
+  }
 
   return (
     <Row className="web-ide">
@@ -121,7 +131,13 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           }
           AddFolderButton={
             () => <AddFolderButton onAddFolder={ onAddFolder } />
-          } />
+          }
+          NewFileNameInput={
+            () => (
+              <NewFileNameInput onSetNewFileName={ onSetNewFileName } />
+            )
+          }
+        />
         <hr />
         <FileBrowser
           files={ fileTree }
