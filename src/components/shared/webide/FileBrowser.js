@@ -82,8 +82,9 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
     if (isSingleClick) {
       if (isDir) {
-        // one click on dir name just sets it to selected / highlighted
-        onDirectorySelect(directoryEntry);
+        // one click on dir name toggles selected / highlighted state / ui
+        const alreadySelected = directoryEntry?.path === selectedDirectory?.path;
+        onDirectorySelect(alreadySelected ? null : directoryEntry);
       } else {
         // one click on file name sets it to selected / highlighted
         // AND retrieves file content
@@ -101,7 +102,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
   }
 
   const isFileSelected = directoryEntry.path === selectedFile;
-  const isFolderSelected = directoryEntry.path === selectedDirectory.path;
+  const isFolderSelected = directoryEntry.path === selectedDirectory?.path;
 
   return (
     editing ?
@@ -136,7 +137,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
      () => FolderIcon({ isOpen: open })
      : FiletypeIcon
 
-  const isSelected = directoryEntry.path === selectedDirectory.path;
+  const isSelected = directoryEntry.path === selectedDirectory?.path;
 
   return (
     // ui:folder name
