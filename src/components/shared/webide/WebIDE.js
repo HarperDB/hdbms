@@ -39,13 +39,16 @@ async function onFileRename(file) {
 function WebIDE({ fileTree, onSave, onSelect }) {
 
   const [ isValid, setIsValid ] = useState(true);
-  const [ selectedDirectory, setSelectedDirectory ] = useState('/');
+  const [ selectedDirectory, setSelectedDirectory ] = useState(null);
   const [ fileInfo, setFileInfo ] = useState({
     content: null,
     path: null,
     project: null
   });
   const hasProjects = fileTree.entries.length > 0;
+
+  // if a directory is selecte, add file to it. otherwise, this shouldn't be possible.
+  const canAddFile = Boolean(hasProjects && selectedDirectory);
 
   async function saveCodeToInstance() {
 
@@ -87,27 +90,34 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     });
   }
 
+  function onAddFile() {
+    // add a new file component, with editable to true
+    // no default name, just an input
+
+  }
+
   function onAddFolder() {
+    /*
     setComponentDirectory({
       auth,
       url,
       project: 'untitled',
       file: selectedDirectory, 
     });
+    */
   }
 
-  function onAddFile() {
-    console.log('add file to file tree', fileTree);
-  }
 
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
         <FileMenu
           AddFileButton={
-            () => <AddFileButton
-              onAddFile={ onAddFile }
-              disabled={ !hasProjects } /> 
+            () => (
+              <AddFileButton
+                onAddFile={ onAddFile }
+                disabled={ !canAddFile } /> 
+            )
           }
           AddFolderButton={
             () => <AddFolderButton onAddFolder={ onAddFolder } />

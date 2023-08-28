@@ -50,6 +50,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
   const [ editing, setEditing ] = useState(false);
   const [ newFileName, setNewFileName ] = useState(directoryEntry.name);
+  const isDir = isDirectory(directoryEntry);
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onFileSelect so
@@ -61,21 +62,6 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
     // for now, use this to avoid react a11y errors.
   }
 
-  function handleClick(e) {
-
-    // Note: preferring this over handleDoubleClick, as that will fire
-    // 2x for each single click, and then again for the double.
-
-    // single click
-    if (e.detail === 1) {
-      handleFileSelection()
-    // double click
-    } else if (e.detail === 2 && !editing) {
-      setEditing(true);
-    }
-  }
-
-
   async function handleOnBlur(e) {
 
     // blur means the file name has possibly changed:
@@ -86,26 +72,36 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
     //    - but maybe? server takes a minute, the ui will lag. is that a bad thing?
     setEditing(false);
     onFileRename(directoryEntry);
-    reloadFileTree();
-    console.log('value of blurred input: ',  e.target.value);
-    console.log('new file name state: ',  newFileName);
+    //reloadFileTree();
   }
 
-  function handleFileSelection() {
+  function handleFilenameClick(e) {
 
-    const isDir = isDirectory(directoryEntry);
-    if (isDir) {
-      toggleClosed();
-      onDirectorySelect(directoryEntry.path);
-    } else {
-      userOnSelect(directoryEntry);
-      onFileSelect(directoryEntry);
+    const isSingleClick = e.detail === 1; 
+    const isDoubleClick = e.detail === 2;
+
+    if (isSingleClick) {
+      if (isDir) {
+        // one click on dir name just sets it to selected / highlighted
+        onDirectorySelect(directoryEntry);
+      } else {
+        // one click on file name sets it to selected / highlighted
+        // AND retrieves file content
+        onFileSelect(directoryEntry);
+      }
+
+    } else if (isDoubleClick) {
+      if (isDir) {
+        // TODO: double click on dirname renames it
+      } else {
+        // double click on filename renames it
+        onFileRename(directoryEntry);
+      }
     }
-
   }
 
   const isFileSelected = directoryEntry.path === selectedFile;
-  const isFolderSelected = directoryEntry.path === selectedDirectory;
+  const isFolderSelected = directoryEntry.path === selectedDirectory.path;
 
   return (
     editing ?
@@ -115,14 +111,15 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
        onBlur={ handleOnBlur }
        value={ newFileName } />
       : <button
-        className={cn("file", {
-          'file-selected': isFileSelected,
-          'folder-selected': isFolderSelected
-        })}
-        onClick={ handleClick }
+        className={
+          cn('file', {
+            'file-selected': isFileSelected,
+            'folder-selected': isFolderSelected
+          })
+        }
         onKeyDown={ noOp } >
           <Icon className="filename-icon" />
-          <span className="filename-text">{ directoryEntry.name }</span>
+          <span onClick={ handleFilenameClick } className="filename-text">{ directoryEntry.name }</span>
       </button>
   )
 
@@ -139,7 +136,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
      () => FolderIcon({ isOpen: open })
      : FiletypeIcon
 
-  const isSelected = directoryEntry.path === selectedDirectory;
+  const isSelected = directoryEntry.path === selectedDirectory.path;
 
   return (
     // ui:folder name
@@ -191,7 +188,10 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 // recursive (for now) directory tree representation
 // File component, Directory component, various Icon components
 function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirectorySelect, selectedFile, selectedDirectory }) {
-  console.log('files: ', files);
+  /*
+  console.log('selected file: ', selectedFile);
+  console.log('selected dir: ', selectedDirectory.path);
+  */
 
   if (!files) return null;
 
