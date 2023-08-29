@@ -17,12 +17,6 @@ function NoProjects() {
   )
 }
 
-// TODO:
-// keyboard events are buggy
-// get rid of button outline
-// proper filetype icons
-// theming
-// test at greater scale
 
 function directorySortComparator(a, b) {
 

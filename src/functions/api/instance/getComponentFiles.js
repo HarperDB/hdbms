@@ -45,7 +45,7 @@ export default async ({ auth, url }) => {
   });
 
   addMetadata(fileTree, COMPONENTS_DIRNAME);
-  console.log(fileTree);
+  console.log('file tree: ', fileTree);
 
   return fileTree;
 

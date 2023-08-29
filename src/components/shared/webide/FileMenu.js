@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-export function NewFileNameInput({ settingName, onSetNewFileName }) {
+export function NameInput({ isOpen, onCancel, onConfirm, label='' }) {
 
-  const [ name, setName ] = useState('untitled');
+  const [ name, setName ] = useState('');
+  console.log({ isOpen });
 
-  return (
+  return isOpen ? (
     <label>
-      filename:
+      <span>{label}:</span>
       <input
         onChange={(e) => setName(e.target.value) }
         value={name}
-        disabled={settingName}
         title="choose name for your new file or folder" />
-      <button>cancel</button>
-      <button onClick={ (e) => onSetNewFileName(name) }>ok</button>
+      <button onClick={ onCancel } >cancel</button>
+      <button onClick={ 
+        (e) => {
+          onConfirm(name);
+        }
+      }>ok</button>
     </label>
-  )
+  ) : null
 
 }
 
@@ -39,7 +43,7 @@ export function AddFileButton({ disabled, onAddFile }) {
   )
 }
 
-function FileMenu({ AddFileButton, AddFolderButton, NewFileNameInput }) {
+function FileMenu({ AddFileButton, AddFolderButton, NewFileNameInput, NewFolderNameInput }) {
   return (
     <>
       <ul className="file-menu">
@@ -48,6 +52,7 @@ function FileMenu({ AddFileButton, AddFolderButton, NewFileNameInput }) {
           {/* <li><button className="upload-file fas fa-upload" title="upload a file"/></li> */}
       </ul>
       <NewFileNameInput />
+      <NewFolderNameInput />
     </>
   )
 }

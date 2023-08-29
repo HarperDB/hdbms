@@ -4,10 +4,11 @@ import Editor from '@monaco-editor/react';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../functions/api/instance/setComponentFile';
+import addComponent from '../../../functions/api/instance/addComponent';
 import setComponentDirectory from '../../../functions/api/instance/setComponentDirectory';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
-import FileMenu, { AddFileButton, AddFolderButton, NewFileNameInput } from './FileMenu';
+import FileMenu, { AddFileButton, AddFolderButton, NameInput } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 
 const auth = { user: 'alex', pass: 'alex' }; 
@@ -35,7 +36,7 @@ async function onFileRename(file) {
   */
 }
 
-function WebIDE({ fileTree, onSave, onSelect }) {
+function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   const [ isValid, setIsValid ] = useState(true);
   const [ selectedDirectory, setSelectedDirectory ] = useState(null);
@@ -44,9 +45,11 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     path: null,
     project: null
   });
+  const [ editingFileName, setEditingFileName ] = useState(false); 
+  const [ editingFolderName, setEditingFolderName ] = useState(false); 
   const hasProjects = fileTree.entries.length > 0;
 
-  // if a directory is selecte, add file to it. otherwise, this shouldn't be possible.
+  // if a directory is selected, add file to it. otherwise, this shouldn't be possible.
   const canAddFile = Boolean(hasProjects && selectedDirectory);
 
   async function saveCodeToInstance() {
@@ -90,17 +93,19 @@ function WebIDE({ fileTree, onSave, onSelect }) {
   }
 
   function onAddFile(e) {
-    // traverse file tree until you find entry with path of selectedDirectory.path 
-    // add to its entries a  new file
-    console.log('add file: ', e, selectedDirectory);
-    // add a new file component, with editable to true
-    // no default name, just an input
-
+    setEditingFileName(true);
+    setEditingFolderName(false);
   }
 
   function onAddFolder() {
-    // add file or dir / input component with input engaged.
-    // if selectedDir, add to that 
+
+    setEditingFileName(false);
+    setEditingFolderName(true);
+    // if no selectedDirectory, new name is full path, e.g. components/<new folder name>
+
+    // get full new file path
+
+    // create that via instance op.
     /*
     setComponentDirectory({
       auth,
@@ -111,11 +116,42 @@ function WebIDE({ fileTree, onSave, onSelect }) {
     */
   }
 
-  async function onSetNewFileName(name) {
-    console.log('new full path: ', `${selectedDirectory?.path}/${name}`);
-    // TODO:
-    // try to save new file, if error, alert user it's taken.
-    // make sure NewFileName component is only rendered when the +file or +folder buttons are pressed. and are not visible after exit or successful save.
+  async function createNewFile(name) {
+    const newFilepath = `${selectedDirectory.path}/${name}`;
+  }
+
+  async function createNewFolder(folderName) {
+
+    const newProject = !selectedDirectory;
+
+    /*
+     * to create a base-level (project) folder, we have to call addComponent which creates a project.
+     * to create a subdir of a project, we call add component file w/ no payload or name extension
+     */ 
+
+    // TODO: check for failure, might already exist.
+    if (newProject) {
+      await addComponent({
+        auth,
+        url,
+        project: folderName
+      })
+    } else {
+      // get the filepath relative to the project directory 
+      const { path, project } = selectedDirectory;
+      const relativePathStart = `components/${project}`.length;
+      const projectDir = path.substr(relativePathStart);
+      const relativePath = projectDir.length ? `${projectDir}/${folderName}` : folderName;
+      // file should not include 'components/project'
+      await setComponentFile({
+        auth,
+        url,
+        project: selectedDirectory.project, 
+        file: relativePath
+      })
+    }
+
+    await onUpdate();
   }
 
   return (
@@ -134,7 +170,22 @@ function WebIDE({ fileTree, onSave, onSelect }) {
           }
           NewFileNameInput={
             () => (
-              <NewFileNameInput onSetNewFileName={ onSetNewFileName } />
+              <NameInput
+                label="New File Name"
+                onConfirm={ createNewFile }
+                onCancel={() => { setEditingFileName(false) }}
+                isOpen={ editingFileName } 
+              />
+            )
+          }
+          NewFolderNameInput={
+            () => (
+              <NameInput
+                label="New Folder Name"
+                onConfirm={ createNewFolder }
+                onCancel={() => { setEditingFolderName(false) }}
+                isOpen={ editingFolderName } 
+              />
             )
           }
         />

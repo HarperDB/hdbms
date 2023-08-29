@@ -49,6 +49,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     <Row id="functions">
       <Col>
         <WebIDE
+          onUpdate={refreshCustomFunctions}
           fileTree={fileTree}
           onSelect={() => {
             console.log('userland on select!') 
