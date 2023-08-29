@@ -86,34 +86,31 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   }
 
   function onCodeUpdate(updatedCode) {
+
     setFileInfo({
       ...fileInfo,
       content: updatedCode
     });
+
+  }
+
+  function resetEditingInput() {
+    setEditingFileName(false);
+    setEditingFolderName(false);
   }
 
   function onAddFile(e) {
+
     setEditingFileName(true);
     setEditingFolderName(false);
+
   }
 
   function onAddFolder() {
 
     setEditingFileName(false);
     setEditingFolderName(true);
-    // if no selectedDirectory, new name is full path, e.g. components/<new folder name>
 
-    // get full new file path
-
-    // create that via instance op.
-    /*
-    setComponentDirectory({
-      auth,
-      url,
-      project: 'untitled',
-      file: selectedDirectory, 
-    });
-    */
   }
 
   async function createNewFile(newFilename) {
@@ -133,6 +130,9 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
     await onUpdate();
 
+
+    resetEditingInput();
+
   }
 
   async function createNewFolder(folderName) {
@@ -144,7 +144,6 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
      * to create a subdir of a project, we call add component file w/ no payload or name extension
      */ 
 
-    // TODO: check for failure, might already exist.
     if (newProject) {
       await addComponent({
         auth,
@@ -167,6 +166,8 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     }
 
     await onUpdate();
+
+    resetEditingInput();
   }
 
   return (
