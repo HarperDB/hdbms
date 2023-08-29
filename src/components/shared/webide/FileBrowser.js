@@ -31,9 +31,9 @@ function directorySortComparator(a, b) {
 
 const isDirectory = (entry) => Boolean(entry.entries);
 
-function FolderIcon({ isOpen }) {
+function FolderIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
-  return <i className={cn(`folder-icon fas ${folderClassName}`)} />;
+  return <i onClick={toggleClosed} className={cn(`folder-icon fas ${folderClassName}`)} />;
 }
 
 function FiletypeIcon() {
@@ -116,7 +116,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
           <Icon className="filename-icon" />
           <span onClick={ handleFilenameClick } className="filename-text">{ directoryEntry.name }</span>
       </button>
-  )
+  );
 
 }
 
@@ -128,13 +128,12 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 
   // FolderIcon is a func so we can give it open args now, but instantiate it later.
   const icon = directoryEntry.entries ?
-     () => FolderIcon({ isOpen: open })
+     () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
      : FiletypeIcon
 
   const isSelected = directoryEntry.path === selectedDirectory?.path;
 
   return (
-    // ui:folder name
     <>
     {
       directoryEntry.name !== 'components' ?
@@ -147,10 +146,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
             onFileRename={onFileRename}
             onFileSelect={onFileSelect}
             onDirectorySelect={onDirectorySelect}
-            userOnSelect={userOnSelect}
-            toggleClosed={() => {
-              setOpen(!open);
-            }} />
+            userOnSelect={userOnSelect} />
         </li>
         : null
     }
