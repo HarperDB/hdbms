@@ -58,7 +58,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
       auth,
       url,
       project: fileInfo.project,
-      file: getPathRelativeToProjectDir(fileInfo.path),
+      file: getPathRelativeToProjectDir(fileInfo.path), //TODO: doublecheck this path logic
       payload: fileInfo.content
     };
 
@@ -116,8 +116,23 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     */
   }
 
-  async function createNewFile(name) {
-    const newFilepath = `${selectedDirectory.path}/${name}`;
+  async function createNewFile(newFilename) {
+
+    const { path, project } = selectedDirectory;
+    const pathSegments = path.split('/').slice(2); // [0] = 'components', [1] = <project_dir>
+    const relativeDirPath = pathSegments.join('/');
+    const relativeFilepath = relativeDirPath ? `${relativeDirPath}/${newFilename}` : newFilename;
+
+    await setComponentFile({
+      auth,
+      url,
+      project,
+      file: relativeFilepath,
+      payload: `// ${relativeFilepath}`
+    });
+
+    await onUpdate();
+
   }
 
   async function createNewFolder(folderName) {

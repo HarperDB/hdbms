@@ -4,7 +4,6 @@ import cn from 'classnames';
 export function NameInput({ isOpen, onCancel, onConfirm, label='' }) {
 
   const [ name, setName ] = useState('');
-  console.log({ isOpen });
 
   return isOpen ? (
     <label>
