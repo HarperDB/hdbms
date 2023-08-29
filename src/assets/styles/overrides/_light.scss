@@ -43,12 +43,6 @@
     z-index: -2;
   }
 
-  #app-bg-dots {
-    background: radial-gradient($lighter-grey-overlay 1px, transparent 0);
-    background-size: 3px 3px;
-    z-index: -1;
-  }
-
   .app-subnav {
     background: $gradient-white-lightgrey, $light-white-overlay !important;
     border-bottom: 1px solid $color-lightgrey;
