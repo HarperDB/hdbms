@@ -15,7 +15,7 @@ const auth = { user: 'alex', pass: 'alex' };
 const url = 'http://localhost:9825';
 
 
-function getPathRelativeToProjectDir(absolutePath) {
+function getRelativeFilepath(absolutePath) {
 
   /*
    * schema: <root_dir>/<projectName>/relative/path/to/file.<ext>
@@ -48,9 +48,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
   const hasProjects = fileTree.entries.length > 0;
-
-  // if a directory is selected, add file to it. otherwise, this shouldn't be possible.
-  const canAddFile = Boolean(hasProjects && selectedDirectory);
+  const canAddFile = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
 
   async function saveCodeToInstance() {
 
@@ -58,7 +56,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
       auth,
       url,
       project: fileInfo.project,
-      file: getPathRelativeToProjectDir(fileInfo.path), //TODO: doublecheck this path logic
+      file: getRelativeFilepath(fileInfo.path), //TODO: doublecheck this path logic
       payload: fileInfo.content
     };
 
@@ -69,7 +67,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   // sets file info to file that user selects.
   async function updateSelectedFile({ project, path }) {
 
-    const file = path.split(`components/${project}`).filter(Boolean)[0]; 
+    const file = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
       auth,
       url,
@@ -116,9 +114,8 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   async function createNewFile(newFilename) {
 
     const { path, project } = selectedDirectory;
-    const pathSegments = path.split('/').slice(2); // [0] = 'components', [1] = <project_dir>
-    const relativeDirPath = pathSegments.join('/');
-    const relativeFilepath = relativeDirPath ? `${relativeDirPath}/${newFilename}` : newFilename;
+    const relativeDirpath = getRelativeFilepath(path);
+    const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
 
     await setComponentFile({
       auth,
@@ -135,7 +132,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   }
 
-  async function createNewFolder(folderName) {
+  async function createNewFolder(newFolderName) {
 
     const newProject = !selectedDirectory;
 
@@ -148,20 +145,19 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
       await addComponent({
         auth,
         url,
-        project: folderName
+        project: newFolderName
       })
     } else {
-      // get the filepath relative to the project directory 
+
       const { path, project } = selectedDirectory;
-      const relativePathStart = `components/${project}`.length;
-      const projectDir = path.substr(relativePathStart);
-      const relativePath = projectDir.length ? `${projectDir}/${folderName}` : folderName;
-      // file should not include 'components/project'
+      const relativeDirpath = getRelativeFilepath(path);
+      const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
+
       await setComponentFile({
         auth,
         url,
         project: selectedDirectory.project, 
-        file: relativePath
+        file: relativeFilepath
       })
     }
 
