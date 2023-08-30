@@ -1,18 +1,16 @@
 import queryInstance from '../queryInstance';
 import { v4 as uuid } from 'uuid';
 
-const COMPONENTS_DIRNAME = 'components';
-
 // this 'addMetadata' logic probably belongs in src/functions/instance
 // by convention
-function addMetadata(fileTree, path) {
+function addMetadata(fileTree, path, rootDir) {
 
   if (!fileTree || !fileTree.entries) {
     return;
   }
 
-  if (path === COMPONENTS_DIRNAME) {
-    fileTree.path = COMPONENTS_DIRNAME;
+  if (path === rootDir) {
+    fileTree.path = rootDir;
     fileTree.key = uuid();
   }
 
@@ -30,7 +28,7 @@ function addMetadata(fileTree, path) {
     entry.path = newPath;
     entry.key = uuid();
 
-    addMetadata(entry, newPath);
+    addMetadata(entry, newPath, rootDir);
 
   };
 
@@ -44,7 +42,7 @@ export default async ({ auth, url }) => {
     url,
   });
 
-  addMetadata(fileTree, COMPONENTS_DIRNAME);
+  addMetadata(fileTree, fileTree.name, fileTree.name);
 
   return fileTree;
 
