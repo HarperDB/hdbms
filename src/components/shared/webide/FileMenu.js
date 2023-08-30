@@ -23,6 +23,17 @@ export function NameInput({ isOpen, onCancel, onConfirm, label='' }) {
 
 }
 
+export function DeleteFolderButton({ onDeleteFolder, disabled }) {
+  return (
+      <button
+        onClick={ onDeleteFolder }
+        disabled={ disabled }
+        className="delete-folder fas fa-folder-minus"
+        title="delete highlighted folder" />
+  )
+}
+
+
 export function AddFolderButton({ onAddFolder }) {
   return (
       <button
@@ -42,11 +53,12 @@ export function AddFileButton({ disabled, onAddFile }) {
   )
 }
 
-function FileMenu({ AddFileButton, AddFolderButton, NewFileNameInput, NewFolderNameInput }) {
+function FileMenu({ AddFileButton, AddFolderButton, DeleteFolderButton, NewFileNameInput, NewFolderNameInput }) {
   return (
     <>
       <ul className="file-menu">
           <li><AddFolderButton /></li>
+          <li><DeleteFolderButton /></li>
           <li><AddFileButton /></li>
           {/* <li><button className="upload-file fas fa-upload" title="upload a file"/></li> */}
       </ul>

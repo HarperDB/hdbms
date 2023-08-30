@@ -26,6 +26,7 @@
     .save-code,
     .add-folder,
     .upload-file,
+    .delete-folder,
     .add-file {
       border: 0;
       background: transparent;
@@ -56,7 +57,9 @@
         padding-bottom: 0px;
       }
       .file.file-selected {
-          background: #4a4a4a !important;
+        color: #ee81ee;
+          // background: #4a4a4a !important;
+          //border: 1px solid rgb(120,120,120);;
       }
       .file.folder-selected {
           background: #2c2c2c !important;
@@ -65,10 +68,11 @@
 
       .file {
 
+        white-space: nowrap;
+        border: 1px solid transparent;
         &.selected {
         }
 
-        border: 0;
         background: transparent;
         list-style-type: none;
         color: white ;

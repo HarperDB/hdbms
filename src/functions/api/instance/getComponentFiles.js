@@ -37,7 +37,7 @@ function addMetadata(fileTree, path, rootDir) {
 export default async ({ auth, url }) => {
 
   const fileTree = await queryInstance({
-    operation: { operation: 'get_components' },
+    operation: { operation: 'get_component_files' },
     auth,
     url,
   });

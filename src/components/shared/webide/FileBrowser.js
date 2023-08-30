@@ -178,9 +178,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 // A recursive directory tree representation
 function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirectorySelect, selectedFile, selectedDirectory }) {
 
-  if (!files) return null;
-
-  return files.entries.length ? (
+  return files?.entries?.length ? (
     <ul className="file-browser">
       <Directory
         selectedFile={selectedFile}

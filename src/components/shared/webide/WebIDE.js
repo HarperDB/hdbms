@@ -4,15 +4,16 @@ import Editor from '@monaco-editor/react';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../functions/api/instance/setComponentFile';
+import dropComponentFile from '../../../functions/api/instance/dropComponentFile';
 import addComponent from '../../../functions/api/instance/addComponent';
 import setComponentDirectory from '../../../functions/api/instance/setComponentDirectory';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
-import FileMenu, { AddFileButton, AddFolderButton, NameInput } from './FileMenu';
+import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, NameInput } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 
 const auth = { user: 'alex', pass: 'alex' }; 
-const url = 'http://localhost:9825';
+const applicationsAPIUrl = 'http://localhost:9925';
 
 
 /*
@@ -32,7 +33,7 @@ async function onFileRename(file) {
   /*
   await setComponentFile({
     auth,
-    url,
+    applicationsAPIUrl,
     project,
     file
   });
@@ -50,15 +51,16 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   });
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
-  const hasProjects = fileTree.entries.length > 0;
+  const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
 
   // save file to instance 
   async function saveCodeToInstance() {
 
     const payload = {
       auth,
-      url,
+      url: applicationsAPIUrl,
       project: fileInfo.project,
       file: getRelativeFilepath(fileInfo.path), //TODO: doublecheck this path logic
       payload: fileInfo.content
@@ -74,7 +76,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     const file = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
       auth,
-      url,
+      url: applicationsAPIUrl,
       project,
       file
     });
@@ -106,7 +108,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
     await setComponentFile({
       auth,
-      url,
+      url: applicationsAPIUrl,
       project,
       file: relativeFilepath,
       payload: `// file: ${basename}`
@@ -131,7 +133,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     if (newProject) {
       await addComponent({
         auth,
-        url,
+        url: applicationsAPIUrl,
         project: newFolderName
       })
     } else {
@@ -142,7 +144,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
       await setComponentFile({
         auth,
-        url,
+        url: applicationsAPIUrl,
         project: selectedDirectory.project, 
         file: relativeFilepath
       })
@@ -151,6 +153,37 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     await onUpdate();
 
     resetEditingInput();
+  }
+
+  async function deleteFolder() {
+
+    const { path, project } = selectedDirectory;
+    const targetDirpath = getRelativeFilepath(path);
+
+    console.log('delete: ', { project, file: targetDirpath});
+
+    // if we're deleting as top-level directory, that's a project,
+    // so don't pass a file. otherwise pass project name and file/dir
+    // relative to project name as 'file'.
+    if (targetDirpath.length > 0) {
+      await dropComponentFile({
+        auth,
+        url: applicationsAPIUrl,
+        project,
+        file: targetDirpath
+      });
+    } else {
+      await dropComponentFile({
+        auth,
+        url: applicationsAPIUrl,
+        project
+      });
+    }
+
+    await onUpdate();
+
+    setSelectedDirectory(null);
+
   }
 
 
@@ -190,6 +223,9 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           AddFolderButton={
             () => <AddFolderButton onAddFolder={ enableFolderNameInput } />
           }
+          DeleteFolderButton={
+            () => <DeleteFolderButton disabled={ !canDeleteFolder } onDeleteFolder={ deleteFolder } />
+          }
           NewFileNameInput={
             () => (
               <NameInput
@@ -214,6 +250,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
         <hr />
         <FileBrowser
           files={ fileTree }
+          root={ fileTree.path }
           selectedFile={ fileInfo?.path }
           selectedDirectory={ selectedDirectory }
           userOnSelect={ onSelect }
