@@ -17,7 +17,6 @@ function NoProjects() {
   )
 }
 
-
 function directorySortComparator(a, b) {
 
   // directories first, then flat files sorted
@@ -176,13 +175,8 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 
 }
 
-// recursive (for now) directory tree representation
-// File component, Directory component, various Icon components
+// A recursive directory tree representation
 function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirectorySelect, selectedFile, selectedDirectory }) {
-  /*
-  console.log('selected file: ', selectedFile);
-  console.log('selected dir: ', selectedDirectory.path);
-  */
 
   if (!files) return null;
 
@@ -201,6 +195,5 @@ function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirect
 
 
 }
-
 
 export default FileBrowser
