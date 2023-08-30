@@ -1,3 +1,31 @@
+---------------------------------------
+notes on compatibility:
+
+- webide expects a recursive file tree.
+  4.1 has a fixed structure
+  4.2 has a flexible structure.
+
+add folder:
+  top-level folder:
+    4.1: add_custom_function_project
+    4.2: set_component_file with no payload
+  nested folder:
+    4.1: n/a
+    4.2: set_component_file with no payload
+remove folder:
+    top-level folder:
+      4.1: drop_custom_function_project 
+      4.2: drop_component_file
+rename folder:
+
+add file:
+remove file:
+rename file:
+
+---------------------------------------
+
+
+
 edge cases:
 - no components dir?
 - no projects yet.

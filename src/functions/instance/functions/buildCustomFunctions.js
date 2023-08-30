@@ -96,6 +96,9 @@ const buildCustomFunctions = async ({ auth, url }) => {
   const appData = cfToApp(endpoints);
   const cfData = appToCf(appData);
 
+  console.log('app data: ', appData);
+  console.log('filetree: ', fileTree);
+
   const custom_functions = {
     is_enabled,
     port,

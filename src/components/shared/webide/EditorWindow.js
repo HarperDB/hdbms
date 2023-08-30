@@ -16,7 +16,7 @@ function EditorWindow({ fileInfo, onChange, onValidate }) {
         height="100%"
         defaultLanguage="javascript"
         value={fileInfo.content}
-        onMount={() => { console.log('editor mounted') }}
+        onMount={() => { }}
         onValidate={ onValidate }
         theme="vs-dark" 
         onChange={(update) => {
