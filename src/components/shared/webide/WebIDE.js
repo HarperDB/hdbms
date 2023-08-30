@@ -65,7 +65,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   }
 
   // sets file info to file that user selects.
-  async function updateSelectedFile({ project, path }) {
+  async function selectNewFile({ project, path }) {
 
     const file = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
@@ -83,7 +83,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   }
 
-  function onCodeUpdate(updatedCode) {
+  function updateCurrentCodeFile(updatedCode) {
 
     setFileInfo({
       ...fileInfo,
@@ -93,18 +93,20 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   }
 
   function resetEditingInput() {
+
     setEditingFileName(false);
     setEditingFolderName(false);
+
   }
 
-  function onAddFile(e) {
+  function enableFileNameInput(e) {
 
     setEditingFileName(true);
     setEditingFolderName(false);
 
   }
 
-  function onAddFolder() {
+  function enableFolderNameInput() {
 
     setEditingFileName(false);
     setEditingFolderName(true);
@@ -116,13 +118,14 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     const { path, project } = selectedDirectory;
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
+    const [ basename ] = relativeFilepath.split('/').slice(-1);
 
     await setComponentFile({
       auth,
       url,
       project,
       file: relativeFilepath,
-      payload: `// ${relativeFilepath}`
+      payload: `// file: ${basename}`
     });
 
     await onUpdate();
@@ -173,12 +176,12 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           AddFileButton={
             () => (
               <AddFileButton
-                onAddFile={ onAddFile }
+                onAddFile={ enableFileNameInput }
                 disabled={ !canAddFile } /> 
             )
           }
           AddFolderButton={
-            () => <AddFolderButton onAddFolder={ onAddFolder } />
+            () => <AddFolderButton onAddFolder={ enableFolderNameInput } />
           }
           NewFileNameInput={
             () => (
@@ -209,7 +212,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           userOnSelect={ onSelect }
           onFileRename={ onFileRename }
           onDirectorySelect={ setSelectedDirectory }
-          onFileSelect={ updateSelectedFile } />
+          onFileSelect={ selectNewFile } />
       </Col>
       <Col className="code-editor-container" style={{ height: '100%' }}>
           <EditorMenu
@@ -221,7 +224,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
             } />
           <EditorWindow
             fileInfo={ fileInfo }
-            onChange={ onCodeUpdate }
+            onChange={ updateCurrentCodeFile }
             onValidate={(errors) => {
               setIsValid(errors.length === 0);
             }}
