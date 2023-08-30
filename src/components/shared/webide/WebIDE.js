@@ -15,11 +15,14 @@ const auth = { user: 'alex', pass: 'alex' };
 const url = 'http://localhost:9825';
 
 
-function getRelativeFilepath(absolutePath) {
+/*
+ * Parse the relative path, which is what the components api expects.
+ *
+ * note: While 'components' root is not shown in the app,
+ * the full path is components/<project name>/relative/path/to/file.js
+ */
 
-  /*
-   * schema: <root_dir>/<projectName>/relative/path/to/file.<ext>
-   */
+function getRelativeFilepath(absolutePath) {
 
   return absolutePath.split('/').slice(2).join('/');
 
@@ -50,6 +53,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   const hasProjects = fileTree.entries.length > 0;
   const canAddFile = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
 
+  // save file to instance 
   async function saveCodeToInstance() {
 
     const payload = {
@@ -64,7 +68,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   }
 
-  // sets file info to file that user selects.
+  // fetches file from instance and sets in memory file object to that.
   async function selectNewFile({ project, path }) {
 
     const file = getRelativeFilepath(path);
@@ -83,33 +87,13 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   }
 
-  function updateCurrentCodeFile(updatedCode) {
+  // updates current in memory code
+  function updateInMemoryCodeFile(updatedCode) {
 
     setFileInfo({
       ...fileInfo,
       content: updatedCode
     });
-
-  }
-
-  function resetEditingInput() {
-
-    setEditingFileName(false);
-    setEditingFolderName(false);
-
-  }
-
-  function enableFileNameInput(e) {
-
-    setEditingFileName(true);
-    setEditingFolderName(false);
-
-  }
-
-  function enableFolderNameInput() {
-
-    setEditingFileName(false);
-    setEditingFolderName(true);
 
   }
 
@@ -169,6 +153,29 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     resetEditingInput();
   }
 
+
+  function resetEditingInput() {
+
+    setEditingFileName(false);
+    setEditingFolderName(false);
+
+  }
+
+  function enableFileNameInput(e) {
+
+    setEditingFileName(true);
+    setEditingFolderName(false);
+
+  }
+
+  function enableFolderNameInput() {
+
+    setEditingFileName(false);
+    setEditingFolderName(true);
+
+  }
+
+
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
@@ -224,7 +231,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
             } />
           <EditorWindow
             fileInfo={ fileInfo }
-            onChange={ updateCurrentCodeFile }
+            onChange={ updateInMemoryCodeFile }
             onValidate={(errors) => {
               setIsValid(errors.length === 0);
             }}
