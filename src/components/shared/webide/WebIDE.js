@@ -5,9 +5,8 @@ import cn from 'classnames';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../functions/api/instance/setComponentFile';
-import dropComponentFile from '../../../functions/api/instance/dropComponentFile';
 import addComponent from '../../../functions/api/instance/addComponent';
-import setComponentDirectory from '../../../functions/api/instance/setComponentDirectory';
+import dropComponent from '../../../functions/api/instance/dropComponent';
 import FileBrowser from './FileBrowser';
 import EditorWindow from './EditorWindow';
 import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton } from './FileMenu';
@@ -52,7 +51,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/'); 
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName; 
 
-    await dropComponentFile({
+    await dropComponent({
       auth,
       url: applicationsAPIUrl,
       project,
@@ -213,7 +212,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
     const { path, project } = selectedFile;
 
-    await dropComponentFile({
+    await dropComponent({
       auth,
       url: applicationsAPIUrl,
       project,
@@ -235,14 +234,14 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     // so don't pass a file. otherwise pass project name and file/dir
     // relative to project name as 'file'.
     if (targetDirpath.length > 0) {
-      await dropComponentFile({
+      await dropComponent({
         auth,
         url: applicationsAPIUrl,
         project,
         file: targetDirpath
       });
     } else {
-      await dropComponentFile({
+      await dropComponent({
         auth,
         url: applicationsAPIUrl,
         project
