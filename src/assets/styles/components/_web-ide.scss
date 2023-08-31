@@ -13,20 +13,37 @@
     list-style-type: none;
   }
 
+  .file {
+    &:hover {
+      .rename-file{
+        color: white;
+      }
+
+    }
+  }
+
+  .rename-file{
+    margin-left: 8px;
+    color: transparent;
+  }
+
   .file-menu,
   .editor-menu {
     display: flex;
     flex-direction: row;
     color: white;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 20px;
     padding-top: 0;
     padding-bottom: 0;
+    border-bottom: 1px solid #2e2e2e;
 
     .save-code,
+    .deploy-code,
     .add-folder,
     .upload-file,
     .delete-folder,
+    .delete-file,
     .add-file {
       border: 0;
       background: transparent;
@@ -35,16 +52,36 @@
       margin: 0px 5px 0px 0px;
     }
 
+    .save-code {
+      color: #ee81ee;
+    }
+
+    .deploy-code {
+    }
+
     button[disabled] {
       color: #5e5e5e;
     }
   }
 
 
+  .name-input.disabled {
+    display: none;
+  }
+
+
+  .filename-dialog {
+    height: 80px;
+  }
+
+  .code-editor-container {
+    padding: 20px;
+    height: 100%;
+  }
   .file-browser-container {
     padding: 20px;
-      height: 100%;
-      overflow-y: scroll;
+    height: 100%;
+    overflow-y: scroll;
 
     .file-browser {
 

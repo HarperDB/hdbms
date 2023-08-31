@@ -44,6 +44,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
   const [ editing, setEditing ] = useState(false);
   const [ newFileName, setNewFileName ] = useState(directoryEntry.name);
   const isDir = isDirectory(directoryEntry);
+  const renameFileIconClass = 'rename-file';
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onFileSelect so
@@ -68,30 +69,28 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
     //reloadFileTree();
   }
 
-  function handleFilenameClick(e) {
+  function handleToggleSelected(e) {
 
-    const isSingleClick = e.detail === 1; 
-    const isDoubleClick = e.detail === 2;
+      // set the folder/file as currently selected folder/file
+      // visually highlight directory name
+      // note: if directory already highlighted, make sure if we've clicked on the pencil/edit icon
+      // that we don't untoggle directory selection; leave selected if icon clicked. 
+      const iconWasClicked = e.target.classList.contains(renameFileIconClass); 
 
-    if (isSingleClick) {
       if (isDir) {
         // one click on dir name toggles selected / highlighted state / ui
         const alreadySelected = directoryEntry?.path === selectedDirectory?.path;
-        onDirectorySelect(alreadySelected ? null : directoryEntry);
+        if (alreadySelected && iconWasClicked) {
+          return;
+        } else {
+          onDirectorySelect(alreadySelected ? null : directoryEntry);
+        }
       } else {
         // one click on file name sets it to selected / highlighted
         // AND retrieves file content
         onFileSelect(directoryEntry);
       }
 
-    } else if (isDoubleClick) {
-      if (isDir) {
-        // TODO: double click on dirname renames it
-      } else {
-        // double click on filename renames it
-        onFileRename(directoryEntry);
-      }
-    }
   }
 
   const isFileSelected = directoryEntry.path === selectedFile;
@@ -100,11 +99,13 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
   return (
     editing ?
       <Input
-       className="filename-input"
-       onChange={ (e) => setNewFileName(e.target.value) }
-       onBlur={ handleOnBlur }
-       value={ newFileName } />
-      : <button
+        className="filename-input"
+        onChange={ (e) => setNewFileName(e.target.value) }
+        onBlur={ handleOnBlur }
+        value={ newFileName } /> :
+
+      <button
+        onClick={ handleToggleSelected }
         className={
           cn('file', {
             'file-selected': isFileSelected,
@@ -113,7 +114,10 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
         }
         onKeyDown={ noOp } >
           <Icon className="filename-icon" />
-          <span onClick={ handleFilenameClick } className="filename-text">{ directoryEntry.name }</span>
+          <span
+            className="filename-text">{ directoryEntry.name }
+          </span>
+          <i onClick={onFileRename} className={`${renameFileIconClass} fas fa-pencil-alt`} />
       </button>
   );
 
@@ -126,7 +130,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 
   // FolderIcon is a func so we can give it open args now, but instantiate it later.
-  const icon = directoryEntry.entries ?
+  const Icon = directoryEntry.entries ?
      () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
      : FiletypeIcon
 
@@ -134,21 +138,22 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 
   return (
     <>
-    {
-      directoryEntry.name !== 'components' ?
-        <li key={directoryEntry.key} className={cn('folder-container')}>
-          <File
-            Icon={ icon }
-            selectedFile={selectedFile}
-            selectedDirectory={selectedDirectory}
-            directoryEntry={directoryEntry}
-            onFileRename={onFileRename}
-            onFileSelect={onFileSelect}
-            onDirectorySelect={onDirectorySelect}
-            userOnSelect={userOnSelect} />
-        </li>
-        : null
-    }
+      {
+        // FIXME: don't hardcode 'components', get from root .name property of fileTree.
+        directoryEntry.name !== 'components' ?
+          <li key={directoryEntry.key} className={cn('folder-container')}>
+            <File
+              Icon={ Icon }
+              selectedFile={selectedFile}
+              selectedDirectory={selectedDirectory}
+              directoryEntry={directoryEntry}
+              onFileRename={() => { onFileRename(directoryEntry) }}
+              onFileSelect={onFileSelect}
+              onDirectorySelect={onDirectorySelect}
+              userOnSelect={userOnSelect} />
+          </li>
+          : null
+      }
 
       {
         entries.map((entry) => (
@@ -177,8 +182,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 
 // A recursive directory tree representation
 function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirectorySelect, selectedFile, selectedDirectory }) {
-
-  return files?.entries?.length ? (
+  return files?.entries?.length ? 
     <ul className="file-browser">
       <Directory
         selectedFile={selectedFile}
@@ -188,9 +192,8 @@ function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirect
         onDirectorySelect={onDirectorySelect}
         userOnSelect={userOnSelect}
         directoryEntry={files} />
-    </ul>
-  ) : <NoProjects /> 
-
+    </ul> :
+    <NoProjects /> 
 
 }
 

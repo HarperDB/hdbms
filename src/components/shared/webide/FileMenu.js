@@ -1,27 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
 
-export function NameInput({ isOpen, onCancel, onConfirm, label='' }) {
-
-  const [ name, setName ] = useState('');
-
-  return isOpen ? (
-    <label>
-      <span>{label}:</span>
-      <input
-        onChange={(e) => setName(e.target.value) }
-        value={name}
-        title="choose name for your new file or folder" />
-      <button onClick={ onCancel } >cancel</button>
-      <button onClick={ 
-        (e) => {
-          onConfirm(name);
-        }
-      }>ok</button>
-    </label>
-  ) : null
-
-}
 
 export function DeleteFolderButton({ onDeleteFolder, disabled }) {
   return (
@@ -29,10 +7,9 @@ export function DeleteFolderButton({ onDeleteFolder, disabled }) {
         onClick={ onDeleteFolder }
         disabled={ disabled }
         className="delete-folder fas fa-folder-minus"
-        title="delete highlighted folder" />
+        title="delete selected folder" />
   )
 }
-
 
 export function AddFolderButton({ onAddFolder }) {
   return (
@@ -53,17 +30,27 @@ export function AddFileButton({ disabled, onAddFile }) {
   )
 }
 
-function FileMenu({ AddFileButton, AddFolderButton, DeleteFolderButton, NewFileNameInput, NewFolderNameInput }) {
+export function DeleteFileButton({ onDeleteFile, disabled }) {
+  return (
+      <button
+        onClick={ onDeleteFile }
+        disabled={ disabled }
+        className="delete-file fas fa-minus"
+        title="delete selected file" />
+  )
+}
+
+
+function FileMenu({ AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton }) {
   return (
     <>
       <ul className="file-menu">
           <li><AddFolderButton /></li>
           <li><DeleteFolderButton /></li>
           <li><AddFileButton /></li>
+          <li><DeleteFileButton /></li>
           {/* <li><button className="upload-file fas fa-upload" title="upload a file"/></li> */}
       </ul>
-      <NewFileNameInput />
-      <NewFolderNameInput />
     </>
   )
 }
