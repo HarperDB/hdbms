@@ -229,6 +229,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     });
 
     setSelectedFile(null);
+    setSelectedDirectory(null);
 
     await onUpdate();
 
@@ -259,6 +260,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
 
     setSelectedDirectory(null);
+    setSelectedFile(null);
     resetEditingInputs();
 
     await onUpdate();
@@ -313,7 +315,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   function FilenameDialog({ active }) {
 
-    const ModalStyle = {
+    const FilenameDialogStyle = {
       height: '100%',
       width: '100%',
       display: 'flex',
@@ -326,7 +328,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
        return null;
 
     return (
-      <div style={ ModalStyle } className="filename-dialog">
+      <div style={ FilenameDialogStyle } className="filename-dialog">
         <NameInput
           label="Please Choose a New Filename"
           value={selectedFile?.name}
