@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import Editor from '@monaco-editor/react';
 import cn from 'classnames';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
@@ -8,9 +7,10 @@ import setComponentFile from '../../../functions/api/instance/setComponentFile';
 import addComponent from '../../../functions/api/instance/addComponent';
 import dropComponent from '../../../functions/api/instance/dropComponent';
 import FileBrowser from './FileBrowser';
-import EditorWindow from './EditorWindow';
 import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
+import Editor from './Editor'; 
+import EditorWindow from './EditorWindow';
 import NameInput from './NameInput';
 
 const auth = { user: 'alex', pass: 'alex' }; 
@@ -41,9 +41,13 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   const [ renamingFolder, setRenamingFolder ] = useState(false); 
 
   const hasProjects = fileTree?.entries?.length > 0;
+
+  // determines which buttons are available in the file menu 
   const canAddFile = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
   const canDeleteFolder = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
-  const filenameDialogEnabled = editingFileName || editingFolderName || renamingFile || renamingFolder;
+
+  // deteremines which panes show
+  const namingFile = editingFileName || editingFolderName || renamingFile || renamingFolder; // active editing state shows name input
 
   async function renameFile(newFileName, info) {
 
@@ -66,18 +70,22 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
       payload: content
     })
 
-    onUpdate();
+    await onUpdate();
 
   }
 
   async function renameFolder(newFileName, info) {
 
+    console.log('no way to rename a folder yet');
+    /*
     const fileContent = await getComponentFile({
       url: applicationsAPIUrl,
       auth,
       project: info.project,
       file: getRelativeFilepath(info.path)
     })
+    */
+
   }
 
 
@@ -174,6 +182,7 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   }
 
   async function createNewFolder(newFolderName) {
+
 
     const newProject = !selectedDirectory;
 
@@ -294,15 +303,15 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
 
   }
 
-  function NoFileSelected() {
-    return (
+  function NoFileSelected({ active }) {
+    return !active ? null : (
       <div>
         No file selected. Please select or create ( <i className="fas fa-plus" /> ) a file using the menu on the left. 
       </div>
     )
   }
 
-  function FilenameDialog() {
+  function FilenameDialog({ active }) {
 
     const ModalStyle = {
       height: '100%',
@@ -311,6 +320,10 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
       alignItems: 'center',
       justifyContent: 'center'
     };
+
+
+    if (!active)
+       return null;
 
     return (
       <div style={ ModalStyle } className="filename-dialog">
@@ -329,7 +342,12 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
         <NameInput
           label="Please Choose a New Folder Name"
           value={selectedDirectory?.name}
-          onConfirm={ (newName) => renameFolder(newName, selectedDirectory) }
+          onConfirm={ 
+            (newName) => {
+              renameFolder(newName, selectedDirectory)
+              resetEditingInputs();
+            }
+          }
           enabled={ renamingFolder }
           onBlur={() => { resetEditingInputs() }}
           onCancel={() => { resetEditingInputs() }} />
@@ -352,30 +370,21 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     )
   }
 
-
-
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
-        <FileMenu
-          AddFileButton={
-            () => (
-              <AddFileButton
-                onAddFile={ enableFileNameInput }
-                disabled={ !canAddFile } /> 
-            )
-          }
-          AddFolderButton={
-            () => <AddFolderButton onAddFolder={ enableFolderNameInput } />
-          }
-          DeleteFolderButton={
-            () => <DeleteFolderButton disabled={ !canDeleteFolder } onDeleteFolder={ deleteFolder } />
-          }
-          DeleteFileButton={
-            () => <DeleteFileButton disabled={ !selectedFile?.path } onDeleteFile={ deleteFile } />
-          }
-          
-        />
+        <FileMenu>
+          <AddFolderButton onAddFolder={ enableFolderNameInput } />
+          <DeleteFolderButton
+            disabled={ !canDeleteFolder }
+            onDeleteFolder={ deleteFolder } />
+          <AddFileButton
+            onAddFile={ enableFileNameInput }
+            disabled={ !canAddFile } /> 
+          <DeleteFileButton
+            disabled={ !selectedFile?.path }
+            onDeleteFile={ deleteFile } />
+        </FileMenu>
         <FileBrowser
           files={ fileTree }
           root={ fileTree.path }
@@ -395,61 +404,24 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
               onSave={ saveCodeToInstance } /> 
           }
         />
-        {
-
-          filenameDialogEnabled ?
-            <FilenameDialog /> :
-            selectedFile ?
-              <EditorWindow 
-                file={ selectedFile }
-                onChange={ updateInMemoryCodeFile }
-                onValidate={(errors) => {
-                  setIsValid(errors.length === 0);
-                }} /> :
-              <NoFileSelected />
-        }
+      
+        <EditorWindow>
+          <Editor
+            active={ selectedFile && !namingFile }
+            file={ selectedFile }
+            onChange={ updateInMemoryCodeFile }
+            onValidate={(errors) => {
+              setIsValid(errors.length === 0);
+            }} />
+          <FilenameDialog active={ namingFile } />
+          <NoFileSelected active={ !selectedFile && !namingFile } /> 
+      </EditorWindow>
+       
       </Col>
     </Row>
 
   );
 }
 
-
-/*
-// for instructions and file renaming modal
-function FileRenameWindow() {
-
-  const FileRenameWindowStyle = {
-    height: "100%",
-    width:"100%",
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white'
-  };
-
-  const showModal = editingFileName || editingFolderName || renamingFile || renamingFolder;
-
-  return ( 
-    <div style={FileRenameWindowStyle}>
-    { showModal ? <Modal /> : <NoFileSelected /> }
-    </div>
-  )
-
-}
-// TODO: update code using whatever monaco hook is available. onupdate.
-// don't allow save if there are errors.
-function ManagementWindow({ showModal }) {
-
-  return (
-      <Card style={{height: '100%'}}>
-        <div style={ManagementPaneStyle}>
-        { showModal ? <Modal /> : <NoFileSelected /> }
-        </div>
-      </Card>
-  );
-
-}
-*/
 
 export default WebIDE;

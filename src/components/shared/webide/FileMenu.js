@@ -41,17 +41,13 @@ export function DeleteFileButton({ onDeleteFile, disabled }) {
 }
 
 
-function FileMenu({ AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton }) {
+function FileMenu({ children }) {
   return (
-    <>
-      <ul className="file-menu">
-          <li><AddFolderButton /></li>
-          <li><DeleteFolderButton /></li>
-          <li><AddFileButton /></li>
-          <li><DeleteFileButton /></li>
-          {/* <li><button className="upload-file fas fa-upload" title="upload a file"/></li> */}
-      </ul>
-    </>
+    <ul className="file-menu">
+      {
+        children.map(child => <li>{ child }</li>)
+      }
+    </ul>
   )
 }
 

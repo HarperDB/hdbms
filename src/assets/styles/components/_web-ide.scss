@@ -13,10 +13,13 @@
     list-style-type: none;
   }
 
+  .rename-file:hover {
+     color: white !important;
+  }
   .file {
     &:hover {
-      .rename-file{
-        color: white;
+      .rename-file {
+        color: rgb(120,120,120);
       }
 
     }
