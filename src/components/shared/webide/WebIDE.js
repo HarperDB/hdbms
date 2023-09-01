@@ -103,20 +103,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
 
   function FilenameDialog({ active }) {
 
-    const FilenameDialogStyle = {
-      height: '100%',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    };
-
-
     if (!active)
        return null;
 
     return (
-      <div style={ FilenameDialogStyle } className="filename-dialog">
+      <div className="filename-dialog">
         <NameInput
           label="Please Choose a New Filename"
           value={selectedFile?.name}
