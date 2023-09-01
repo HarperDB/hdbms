@@ -13,9 +13,6 @@ import Editor from './Editor';
 import EditorWindow from './EditorWindow';
 import NameInput from './NameInput';
 
-const auth = { user: 'alex', pass: 'alex' }; 
-const applicationsAPIUrl = 'http://localhost:9925';
-
 /*
  * Parse the relative path, which is what the components api expects.
  *
@@ -30,10 +27,10 @@ function getRelativeFilepath(absolutePath) {
 }
 
 
-function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
+function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ isValid, setIsValid ] = useState(true);
-  const [ selectedDirectory, setSelectedDirectory ] = useState(null);
+  const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path, project }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
@@ -43,87 +40,14 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
   const hasProjects = fileTree?.entries?.length > 0;
 
   // determines which buttons are available in the file menu 
-  const canAddFile = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
-  const canDeleteFolder = Boolean(hasProjects && selectedDirectory);  // can only add a file if a target folder is selected
+  const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
 
   // deteremines which panes show
   const namingFile = editingFileName || editingFolderName || renamingFile || renamingFolder; // active editing state shows name input
 
-  async function renameFile(newFileName, info) {
-
-    const { path, name, content, project } = info;
-    const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/'); 
-    const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName; 
-
-    await dropComponent({
-      auth,
-      url: applicationsAPIUrl,
-      project,
-      file: getRelativeFilepath(path)
-    });
-
-    await setComponentFile({
-      auth,
-      url: applicationsAPIUrl,
-      project,
-      file: newFilenameRelativePath,
-      payload: content
-    })
-
-    await onUpdate();
-
-  }
-
-  async function renameFolder(newFileName, info) {
-
-    console.log('no way to rename a folder yet');
-    /*
-    const fileContent = await getComponentFile({
-      url: applicationsAPIUrl,
-      auth,
-      project: info.project,
-      file: getRelativeFilepath(info.path)
-    })
-    */
-
-  }
-
-
-  async function onFileRename(file) {
-
-
-    if (file.entries) {
-      enableRenameFolderInput();
-    } else {
-      enableRenameFileInput();
-    }
-
-    /*
-    await setComponentFile({
-      auth,
-      applicationsAPIUrl,
-      project,
-      file
-    });
-    */
-  }
-  // save file to instance 
-  async function saveCodeToInstance() {
-
-    const payload = {
-      auth,
-      url: applicationsAPIUrl,
-      project: selectedFile.project,
-      file: getRelativeFilepath(selectedFile.path), //TODO: doublecheck this path logic
-      payload: selectedFile.content
-    };
-
-    await setComponentFile(payload);
-
-  }
-
   // updates current in memory code
-  function updateInMemoryCodeFile(updatedCode) {
+  function updateInMemoryCodeFile(updatedCode, selectedFile) {
 
     setSelectedFile({
       ...selectedFile,
@@ -131,142 +55,6 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
     });
 
   }
-
-  // fetches file from instance and sets in memory file object to that.
-  async function selectNewFile({ project, path, name }) {
-
-    const file = getRelativeFilepath(path);
-    const { message: fileContent } = await getComponentFile({
-      auth,
-      url: applicationsAPIUrl,
-      project,
-      file
-    });
-
-    setSelectedFile({
-      content: fileContent,
-      path,
-      project,
-      name
-    });
-
-  }
-
-  async function createNewFile(newFilename) {
-
-    const { path, project } = selectedDirectory;
-    const relativeDirpath = getRelativeFilepath(path);
-    const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
-    const [ basename ] = relativeFilepath.split('/').slice(-1);
-    const payload = `// file: ${basename}`; // FIXME: can't save a file w/ empty payload. request change? 
-
-    await setComponentFile({
-      auth,
-      url: applicationsAPIUrl,
-      project,
-      file: relativeFilepath,
-      payload
-    });
-
-    await onUpdate();
-
-    resetEditingInputs();
-
-    // this isn't triggering panel.
-    setSelectedFile({
-      project,
-      path: relativeFilepath,
-      content: payload
-    });
-
-  }
-
-  async function createNewFolder(newFolderName) {
-
-
-    const newProject = !selectedDirectory;
-
-    /*
-     * to create a base-level (project) folder, we have to call addComponent which creates a project.
-     * to create a subdir of a project, we call add component file w/ no payload or name extension
-     */ 
-
-    if (newProject) {
-      await addComponent({
-        auth,
-        url: applicationsAPIUrl,
-        project: newFolderName
-      })
-    } else {
-
-      const { path, project } = selectedDirectory;
-      const relativeDirpath = getRelativeFilepath(path);
-      const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
-
-      await setComponentFile({
-        auth,
-        url: applicationsAPIUrl,
-        project: selectedDirectory.project, 
-        file: relativeFilepath
-      })
-    }
-
-    // make sure to set the selected directory to newly created one.
-    resetEditingInputs();
-    await onUpdate();
-
-  }
-
-  async function deleteFile() {
-
-    const { path, project } = selectedFile;
-
-    await dropComponent({
-      auth,
-      url: applicationsAPIUrl,
-      project,
-      file: getRelativeFilepath(path)
-    });
-
-    setSelectedFile(null);
-    setSelectedDirectory(null);
-
-    await onUpdate();
-
-  }
-
-  async function deleteFolder() {
-
-    const { path, project } = selectedDirectory;
-    const targetDirpath = getRelativeFilepath(path);
-
-    // if we're deleting as top-level directory, that's a project,
-    // so don't pass a file. otherwise pass project name and file/dir
-    // relative to project name as 'file'.
-    if (targetDirpath.length > 0) {
-      await dropComponent({
-        auth,
-        url: applicationsAPIUrl,
-        project,
-        file: targetDirpath
-      });
-    } else {
-      await dropComponent({
-        auth,
-        url: applicationsAPIUrl,
-        project
-      });
-    }
-
-
-    setSelectedDirectory(null);
-    setSelectedFile(null);
-    resetEditingInputs();
-
-    await onUpdate();
-
-  }
-
 
   function resetEditingInputs() {
 
@@ -335,36 +123,45 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           onBlur={() => { resetEditingInputs() }}
           onConfirm={
             (newName) => {
-              renameFile(newName, selectedFile)
+              onFileRename(newName, selectedFile);
               resetEditingInputs();
             }
           }
           enabled={ renamingFile }
-          onCancel={() => { resetEditingInputs() }} />
+          onCancel={resetEditingInputs} />
         <NameInput
           label="Please Choose a New Folder Name"
-          value={selectedDirectory?.name}
+          value={selectedFolder?.name}
           onConfirm={ 
             (newName) => {
-              renameFolder(newName, selectedDirectory)
+              onFolderRename(newName, selectedFolder)
               resetEditingInputs();
             }
           }
           enabled={ renamingFolder }
-          onBlur={() => { resetEditingInputs() }}
-          onCancel={() => { resetEditingInputs() }} />
+          onBlur={ resetEditingInputs }
+          onCancel={ resetEditingInputs } />
         <NameInput
           label="New File Name"
-          onConfirm={ createNewFile }
-          onCancel={() => { resetEditingInputs() }}
-          onBlur={() => { resetEditingInputs() }}
+          onConfirm={
+            (newFilename) => {
+              onAddFile(newFilename, selectedFolder);
+              resetEditingInputs();
+            }
+          }
+          onCancel={ resetEditingInputs }
+          onBlur={ resetEditingInputs }
           enabled={ editingFileName } 
         />
         <NameInput
           label="New Folder Name"
-          onConfirm={ createNewFolder }
-          onCancel={() => { resetEditingInputs()  }}
-          onBlur={() => { resetEditingInputs() }}
+          onConfirm={
+            (newFolderName) => {
+              onAddFolder(newFolderName, selectedFolder)
+            }
+          }
+          onCancel={resetEditingInputs}
+          onBlur={resetEditingInputs}
           enabled={ editingFolderName } 
         />
 
@@ -379,31 +176,64 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           <AddFolderButton onAddFolder={ enableFolderNameInput } />
           <DeleteFolderButton
             disabled={ !canDeleteFolder }
-            onDeleteFolder={ deleteFolder } />
+            onDeleteFolder={
+              () => {
+                onDeleteFolder(selectedFolder);
+                setSelectedFile(null);
+                setSelectedFolder(null);
+                resetEditingInputs();
+              }
+            } />
           <AddFileButton
             onAddFile={ enableFileNameInput }
             disabled={ !canAddFile } /> 
           <DeleteFileButton
             disabled={ !selectedFile?.path }
-            onDeleteFile={ deleteFile } />
+            onDeleteFile={
+              (selectedFile) => {
+                onDeleteFile(selectedFile);
+                setSelectedFile(null);
+                setSelectedFolder(null);
+              }
+            } />
         </FileMenu>
         <FileBrowser
           files={ fileTree }
           root={ fileTree.path }
           selectedFile={ selectedFile?.path }
-          selectedDirectory={ selectedDirectory }
-          userOnSelect={ onSelect }
-          onFileRename={ onFileRename }
-          onDirectorySelect={ setSelectedDirectory }
-          onFileSelect={ selectNewFile } />
+          selectedFolder={ selectedFolder }
+          onFolderRename={
+            () => {
+              console.log('folder rename not available in 4.2');
+            }
+          }
+          onFileRename={
+            () => {
+              enableRenameFileInput();
+            }
+          }
+          onFolderSelect={ setSelectedFolder }
+          onFileSelect={
+            async (entry) => {
+              const { content } = await onFileSelect(entry);
+              setSelectedFile({
+                ...entry,
+                content
+              });
+            } 
+          } />
       </Col>
       <Col className="code-editor-container" style={{ height: '100%' }}>
         <EditorMenu
-          onSave={ saveCodeToInstance }
+          onSave={
+            () => onSave(selectedFile)
+          }
           SaveButton={ () => 
             <SaveButton
               disabled={ !isValid }
-              onSave={ saveCodeToInstance } /> 
+              onSave={
+                () => onSave(selectedFile)
+              } /> 
           }
         />
       
@@ -411,7 +241,11 @@ function WebIDE({ fileTree, onSave, onSelect, onUpdate }) {
           <Editor
             active={ selectedFile && !namingFile }
             file={ selectedFile }
-            onChange={ updateInMemoryCodeFile }
+            onChange={
+              (updatedCode) => {
+                updateInMemoryCodeFile(updatedCode, selectedFile);
+              }
+            }
             onValidate={(errors) => {
               setIsValid(errors.length === 0);
             }} />

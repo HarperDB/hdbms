@@ -6,7 +6,6 @@ import setComponentFile from '../../../functions/api/instance/setComponentFile.j
 
 import cn from 'classnames';
 
-
 function NoProjects() {
   return (
     <div className="no-projects">
@@ -28,7 +27,7 @@ function directorySortComparator(a, b) {
 
 }
 
-const isDirectory = (entry) => Boolean(entry.entries);
+const isFolder = (entry) => Boolean(entry.entries);
 
 function FolderIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
@@ -39,11 +38,12 @@ function FiletypeIcon() {
   return <i className={ cn('file-icon fab fa-js') } />;
 }
 
-function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, onFileRename, onDirectorySelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
 
   const [ editing, setEditing ] = useState(false);
   const [ newFileName, setNewFileName ] = useState(directoryEntry.name);
-  const isDir = isDirectory(directoryEntry);
+  const isDir = isFolder(directoryEntry);
+  const isLink = Boolean(directoryEntry.package);
   const renameFileIconClass = 'rename-file';
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
@@ -79,11 +79,11 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
       if (isDir) {
         // one click on dir name toggles selected / highlighted state / ui
-        const alreadySelected = directoryEntry?.path === selectedDirectory?.path;
+        const alreadySelected = directoryEntry?.path === selectedFolder?.path;
         if (alreadySelected && iconWasClicked) {
           return;
         } else {
-          onDirectorySelect(alreadySelected ? null : directoryEntry);
+          onFolderSelect(alreadySelected ? null : directoryEntry);
         }
       } else {
         // one click on file name sets it to selected / highlighted
@@ -94,7 +94,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
   }
 
   const isFileSelected = directoryEntry.path === selectedFile;
-  const isFolderSelected = directoryEntry.path === selectedDirectory?.path;
+  const isFolderSelected = directoryEntry.path === selectedFolder?.path;
 
   return (
     editing ?
@@ -123,7 +123,7 @@ function File({ directoryEntry, selectedFile, selectedDirectory, onFileSelect, o
 
 }
 
-function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSelect, onFileRename, selectedFile, selectedDirectory }) {
+function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, onFileRename, selectedFile, selectedFolder }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -134,7 +134,7 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
      () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
      : FiletypeIcon
 
-  const isSelected = directoryEntry.path === selectedDirectory?.path;
+  const isSelected = directoryEntry.path === selectedFolder?.path;
 
   return (
     <>
@@ -145,11 +145,11 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
             <File
               Icon={ Icon }
               selectedFile={selectedFile}
-              selectedDirectory={selectedDirectory}
+              selectedFolder={selectedFolder}
               directoryEntry={directoryEntry}
               onFileRename={() => { onFileRename(directoryEntry) }}
               onFileSelect={onFileSelect}
-              onDirectorySelect={onDirectorySelect}
+              onFolderSelect={onFolderSelect}
               userOnSelect={userOnSelect} />
           </li>
           : null
@@ -162,13 +162,13 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
               'folder-contents-open': open,
               'folder-contents-closed': !open
             })}>
-              <Directory
+              <Folder
                 selectedFile={selectedFile}
-                selectedDirectory={selectedDirectory}
+                selectedFolder={selectedFolder}
                 directoryEntry={entry}
                 onFileSelect={onFileSelect}
                 onFileRename={onFileRename}
-                onDirectorySelect={onDirectorySelect}
+                onFolderSelect={onFolderSelect}
                 userOnSelect={userOnSelect} />
             </ul>
           </li>
@@ -181,15 +181,15 @@ function Directory({ directoryEntry, userOnSelect, onDirectorySelect, onFileSele
 }
 
 // A recursive directory tree representation
-function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onDirectorySelect, selectedFile, selectedDirectory }) {
+function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
   return files?.entries?.length ? 
     <ul className="file-browser">
-      <Directory
+      <Folder
         selectedFile={selectedFile}
-        selectedDirectory={selectedDirectory}
+        selectedFolder={selectedFolder}
         onFileSelect={onFileSelect}
         onFileRename={onFileRename}
-        onDirectorySelect={onDirectorySelect}
+        onFolderSelect={onFolderSelect}
         userOnSelect={userOnSelect}
         directoryEntry={files} />
     </ul> :
