@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Card, CardBody, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import cn from 'classnames';
 
 import getComponentFile from '../../../functions/api/instance/getComponentFile';
@@ -37,6 +37,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   const [ renamingFile, setRenamingFile ] = useState(false); 
   const [ renamingFolder, setRenamingFolder ] = useState(false); 
 
+  console.log(selectedFolder);
   const hasProjects = fileTree?.entries?.length > 0;
 
   // determines which buttons are available in the file menu 
@@ -111,14 +112,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
         <NameInput
           label="Please Choose a New Filename"
           value={selectedFile?.name}
-          onBlur={() => { resetEditingInputs() }}
+          onBlur={resetEditingInputs}
           onConfirm={
             (newName) => {
               onFileRename(newName, selectedFile);
               resetEditingInputs();
             }
           }
-          enabled={ renamingFile }
+          enabled={renamingFile}
           onCancel={resetEditingInputs} />
         <NameInput
           label="Please Choose a New Folder Name"
@@ -129,9 +130,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
               resetEditingInputs();
             }
           }
-          enabled={ renamingFolder }
-          onBlur={ resetEditingInputs }
-          onCancel={ resetEditingInputs } />
+          enabled={renamingFolder}
+          onBlur={resetEditingInputs}
+          onCancel={resetEditingInputs} />
         <NameInput
           label="New File Name"
           onConfirm={
@@ -140,22 +141,22 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
               resetEditingInputs();
             }
           }
-          onCancel={ resetEditingInputs }
-          onBlur={ resetEditingInputs }
-          enabled={ editingFileName } 
+          onCancel={resetEditingInputs}
+          onBlur={resetEditingInputs}
+          enabled={editingFileName} 
         />
         <NameInput
           label="New Folder Name"
           onConfirm={
             (newFolderName) => {
               onAddFolder(newFolderName, selectedFolder)
+              resetEditingInputs();
             }
           }
           onCancel={resetEditingInputs}
           onBlur={resetEditingInputs}
-          enabled={ editingFolderName } 
+          enabled={editingFolderName} 
         />
-
       </div>
     )
   }
@@ -185,25 +186,22 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
+                resetEditingInputs();
               }
             } />
         </FileMenu>
         <FileBrowser
           files={ fileTree }
           root={ fileTree.path }
-          selectedFile={ selectedFile?.path }
-          selectedFolder={ selectedFolder }
+          selectedFile={selectedFile?.path}
+          selectedFolder={selectedFolder}
           onFolderRename={
             () => {
               console.log('folder rename not available in 4.2');
             }
           }
-          onFileRename={
-            () => {
-              enableRenameFileInput();
-            }
-          }
-          onFolderSelect={ setSelectedFolder }
+          onFileRename={enableRenameFileInput}
+          onFolderSelect={setSelectedFolder}
           onFileSelect={
             async (entry) => {
               const { content } = await onFileSelect(entry);
@@ -214,24 +212,25 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             } 
           } />
       </Col>
-      <Col className="code-editor-container" style={{ height: '100%' }}>
+      <Col className="code-editor-container">
         <EditorMenu
           onSave={
             () => onSave(selectedFile)
           }
-          SaveButton={ () => 
-            <SaveButton
-              disabled={ !isValid }
-              onSave={
-                () => onSave(selectedFile)
-              } /> 
+          SaveButton={ 
+            () => ( 
+              <SaveButton
+                disabled={ !isValid }
+                onSave={
+                  () => onSave(selectedFile)
+                } />
+            )
           }
         />
-      
         <EditorWindow>
           <Editor
-            active={ selectedFile && !namingFile }
-            file={ selectedFile }
+            active={selectedFile && !namingFile}
+            file={selectedFile}
             onChange={
               (updatedCode) => {
                 updateInMemoryCodeFile(updatedCode, selectedFile);
@@ -240,13 +239,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             onValidate={(errors) => {
               setIsValid(errors.length === 0);
             }} />
-          <FilenameDialog active={ namingFile } />
-          <NoFileSelected active={ !selectedFile && !namingFile } /> 
-      </EditorWindow>
-       
+          <FilenameDialog active={namingFile} />
+          <NoFileSelected active={!selectedFile && !namingFile} /> 
+        </EditorWindow>
       </Col>
     </Row>
-
   );
 }
 

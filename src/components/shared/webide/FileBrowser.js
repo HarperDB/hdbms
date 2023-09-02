@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from 'reactstrap';
 import { Link } from 'react-router';
-
-import setComponentFile from '../../../functions/api/instance/setComponentFile.js'
-
 import cn from 'classnames';
+import setComponentFile from '../../../functions/api/instance/setComponentFile.js'
 
 function NoProjects() {
   return (
@@ -13,7 +11,7 @@ function NoProjects() {
       <p>See the <a href="https://docs.harperdb.io" target="_blank"> documentation </a> for more info on HarperDB Applications.
       </p>
     </div>
-  )
+  );
 }
 
 function directorySortComparator(a, b) {
@@ -38,6 +36,10 @@ function FiletypeIcon() {
   return <i className={ cn('file-icon fab fa-js') } />;
 }
 
+function PackageIcon() {
+  return <i className={ cn('package-icon fas fa-link') } />;
+}
+
 function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
 
   const [ editing, setEditing ] = useState(false);
@@ -45,6 +47,10 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
   const isDir = isFolder(directoryEntry);
   const isLink = Boolean(directoryEntry.package);
   const renameFileIconClass = 'rename-file';
+  const isFileSelected = directoryEntry.path === selectedFile;
+  const isFolderSelected = directoryEntry.path === selectedFolder?.path;
+
+
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onFileSelect so
@@ -93,33 +99,27 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
 
   }
 
-  const isFileSelected = directoryEntry.path === selectedFile;
-  const isFolderSelected = directoryEntry.path === selectedFolder?.path;
-
-  return (
-    editing ?
-      <Input
-        className="filename-input"
-        onChange={ (e) => setNewFileName(e.target.value) }
-        onBlur={ handleOnBlur }
-        value={ newFileName } /> :
-
-      <button
-        onClick={ handleToggleSelected }
-        className={
-          cn('file', {
-            'file-selected': isFileSelected,
-            'folder-selected': isFolderSelected
-          })
-        }
-        onKeyDown={ noOp } >
-          <Icon className="filename-icon" />
-          <span
-            className="filename-text">{ directoryEntry.name }
-          </span>
-          <i onClick={onFileRename} className={`${renameFileIconClass} fas fa-pencil-alt`} />
-      </button>
-  );
+  return editing ?
+    <Input
+      className="filename-input"
+      onChange={ (e) => setNewFileName(e.target.value) }
+      onBlur={handleOnBlur}
+      value={newFileName} /> :
+    <button
+      onClick={handleToggleSelected}
+      className={
+        cn('file', {
+          'file-selected': isFileSelected,
+          'folder-selected': isFolderSelected
+        })
+      }
+      onKeyDown={noOp} >
+        <Icon className="filename-icon" />
+        <span
+          className="filename-text">{directoryEntry.name}
+        </span>
+        <i onClick={onFileRename} className={`${renameFileIconClass} fas fa-pencil-alt`} />
+    </button>
 
 }
 
@@ -132,7 +132,8 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
   // FolderIcon is a func so we can give it open args now, but instantiate it later.
   const Icon = directoryEntry.entries ?
      () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
-     : FiletypeIcon
+       : directoryEntry.package
+       ? PackageIcon : FiletypeIcon;
 
   const isSelected = directoryEntry.path === selectedFolder?.path;
 
@@ -143,11 +144,15 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
         directoryEntry.name !== 'components' ?
           <li key={directoryEntry.key} className={cn('folder-container')}>
             <File
-              Icon={ Icon }
+              Icon={Icon}
               selectedFile={selectedFile}
               selectedFolder={selectedFolder}
               directoryEntry={directoryEntry}
-              onFileRename={() => { onFileRename(directoryEntry) }}
+              onFileRename={
+                () => {
+                  onFileRename(directoryEntry)
+                }
+              }
               onFileSelect={onFileSelect}
               onFolderSelect={onFolderSelect}
               userOnSelect={userOnSelect} />

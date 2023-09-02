@@ -3,6 +3,7 @@ import { Card } from 'reactstrap';
 
 function EditorWindow({ children }) {
 
+  /*
   const style = {
     height: '100%',
     width: '100%',
@@ -10,9 +11,10 @@ function EditorWindow({ children }) {
     alignItems: 'center',
     justifyContent: 'center'
   };
+  */
 
   return (
-    <Card style={style}>{ children }</Card>
+    <Card className="editor-window">{ children }</Card>
   )
 
 }
