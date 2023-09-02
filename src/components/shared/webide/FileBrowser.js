@@ -37,7 +37,22 @@ function FiletypeIcon() {
 }
 
 function PackageIcon() {
-  return <i className={ cn('package-icon fas fa-link') } />;
+  return <i className={ cn('package-icon fas fa-cube') } />;
+}
+
+function Package({ name, url }) {
+  return (
+    <button
+      onClick={() =>{ console.log('implement package logic') }}
+      className={
+        cn('package')
+      }
+      onKeyDown={() => {}} >
+        <PackageIcon />
+        <span className="package-text">{name}</span>
+    </button>
+  );
+
 }
 
 function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
@@ -130,10 +145,9 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 
   // FolderIcon is a func so we can give it open args now, but instantiate it later.
-  const Icon = directoryEntry.entries ?
+  const FileIcon = directoryEntry.entries ?
      () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
-       : directoryEntry.package
-       ? PackageIcon : FiletypeIcon;
+       : FiletypeIcon;
 
   const isSelected = directoryEntry.path === selectedFolder?.path;
 
@@ -143,19 +157,25 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
         // FIXME: don't hardcode 'components', get from root .name property of fileTree.
         directoryEntry.name !== 'components' ?
           <li key={directoryEntry.key} className={cn('folder-container')}>
-            <File
-              Icon={Icon}
-              selectedFile={selectedFile}
-              selectedFolder={selectedFolder}
-              directoryEntry={directoryEntry}
-              onFileRename={
-                () => {
-                  onFileRename(directoryEntry)
-                }
-              }
-              onFileSelect={onFileSelect}
-              onFolderSelect={onFolderSelect}
-              userOnSelect={userOnSelect} />
+            {
+              directoryEntry.package ?
+                <Package
+                  name={directoryEntry.name}
+                  url={directoryEntry.package} /> :
+                <File
+                  Icon={FileIcon}
+                  selectedFile={selectedFile}
+                  selectedFolder={selectedFolder}
+                  directoryEntry={directoryEntry}
+                  onFileRename={
+                    () => {
+                      onFileRename(directoryEntry)
+                    }
+                  }
+                  onFileSelect={onFileSelect}
+                  onFolderSelect={onFolderSelect}
+                  userOnSelect={userOnSelect} />
+            }
           </li>
           : null
       }
