@@ -29,7 +29,6 @@ function getRelativeFilepath(absolutePath) {
 
 function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
-  const [ isValid, setIsValid ] = useState(true);
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path, project }
   const [ editingFileName, setEditingFileName ] = useState(false); 
@@ -37,7 +36,6 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   const [ renamingFile, setRenamingFile ] = useState(false); 
   const [ renamingFolder, setRenamingFolder ] = useState(false); 
 
-  console.log(selectedFolder);
   const hasProjects = fileTree?.entries?.length > 0;
 
   // determines which buttons are available in the file menu 
@@ -110,7 +108,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
     return (
       <div className="filename-dialog">
         <NameInput
-          label="Please Choose a New Filename"
+          label={`Please Choose a New Filename for '${selectedFile.name}'`}
           value={selectedFile?.name}
           onBlur={resetEditingInputs}
           onConfirm={
@@ -122,7 +120,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           enabled={renamingFile}
           onCancel={resetEditingInputs} />
         <NameInput
-          label="Please Choose a New Folder Name"
+          label={`Please Choose a New Folder Name for 'this'`}
           value={selectedFolder?.name}
           onConfirm={ 
             (newName) => {
@@ -161,6 +159,8 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
     )
   }
 
+  console.log('selectedFile: ', selectedFile);
+
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
@@ -182,7 +182,8 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           <DeleteFileButton
             disabled={ !selectedFile?.path }
             onDeleteFile={
-              (selectedFile) => {
+              (e) => {
+                // bug here? is selectedFile reset when i think it is? 
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
@@ -215,12 +216,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
       <Col className="code-editor-container">
         <EditorMenu
           onSave={
-            () => onSave(selectedFile)
+            async () => {
+              await onSave(selectedFile)
+            }
           }
           SaveButton={ 
             () => ( 
               <SaveButton
-                disabled={ !isValid }
+                disabled={ !selectedFile }
                 onSave={
                   () => onSave(selectedFile)
                 } />
@@ -235,10 +238,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
               (updatedCode) => {
                 updateInMemoryCodeFile(updatedCode, selectedFile);
               }
-            }
-            onValidate={(errors) => {
-              setIsValid(errors.length === 0);
-            }} />
+            } />
           <FilenameDialog active={namingFile} />
           <NoFileSelected active={!selectedFile && !namingFile} /> 
         </EditorWindow>

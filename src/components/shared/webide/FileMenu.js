@@ -43,10 +43,11 @@ export function DeleteFileButton({ onDeleteFile, disabled }) {
 
 function FileMenu({ children }) {
   console.log('children', children);
+  console.log(children);
   return (
     <ul className="file-menu">
       {
-        children.map(child => <li>{ child }</li>)
+        children.map(child => <li>{child}</li>)
       }
     </ul>
   )

@@ -107,13 +107,14 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function deleteFile({ path, project }) {
+  async function deleteFile(f) {
+    console.log(f);
 
     await dropComponent({
       auth,
       url: applicationsAPIUrl,
-      project,
-      file: getRelativeFilepath(path)
+      project: f.project,
+      file: getRelativeFilepath(f.path)
     });
 
     await refreshCustomFunctions();

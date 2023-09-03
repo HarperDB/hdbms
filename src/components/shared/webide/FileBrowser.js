@@ -16,6 +16,8 @@ function NoProjects() {
 
 function directorySortComparator(a, b) {
 
+  // TODO: refactor.
+
   // directories first, then flat files sorted
   // ascending, alphanumerically
   const A = +Boolean(a.entries);
@@ -114,12 +116,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
 
   }
 
-  return editing ?
-    <Input
-      className="filename-input"
-      onChange={ (e) => setNewFileName(e.target.value) }
-      onBlur={handleOnBlur}
-      value={newFileName} /> :
+  return (
     <button
       onClick={handleToggleSelected}
       className={
@@ -135,6 +132,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
         </span>
         <i onClick={onFileRename} className={`${renameFileIconClass} fas fa-pencil-alt`} />
     </button>
+  )
 
 }
 
