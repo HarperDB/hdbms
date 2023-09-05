@@ -75,7 +75,7 @@ function SystemInfo() {
             onClick={
               async () => {
                 setLoading(true);
-                await fetchSystemInfo(true)
+                await fetchSystemInfo(false)
                 setLoading(false);
               }
             }> 
