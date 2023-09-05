@@ -5,6 +5,9 @@ const B2GB1000 = 1000000000; // for mac disk and transfer
 const B2GB1024 = 1073741824; // for non-mac disk
 
 export default async ({ auth, url, signal, refresh, is_local, previousSystemInfo, skip=[] }) => {
+  // NOTE: skip attributes list only supports network and disk, as these are the most expensive ops
+  // therefore, currently when polling refreshing system info, for example, passing 'cpu', 'memory' or 'system'
+  // into the skip list will not have any affect.
   const systemAttributes = ['network','disk','cpu','memory','system'];
   const result = await queryInstance({
     operation: {
@@ -71,7 +74,10 @@ export default async ({ auth, url, signal, refresh, is_local, previousSystemInfo
         ? result.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB1024
         : result.disk.size.reduce((a, b) => a + b.used, 0) / B2GB1024;
 
-  const freeDisk = skip.includes('disk') ? parseFloat(previousSystemInfo.freeDisk) : totalDisk - usedDisk;
+  const freeDisk = skip.includes('disk') ?
+    parseFloat(previousSystemInfo.freeDisk) :
+    totalDisk - usedDisk;
+
   const diskStatus = freeDisk / totalDisk < 0.1 ? 'danger' : freeDisk / totalDisk < 0.25 ? 'warning' : 'success';
 
   // CPU
@@ -81,10 +87,18 @@ export default async ({ auth, url, signal, refresh, is_local, previousSystemInfo
   const cpuStatus = cpuLoad > 90 ? 'danger' : cpuLoad > 75 ? 'warning' : 'success';
 
   // NETWORK
-  const networkTransfered = skip.includes('network') ? parseFloat(previousSystemInfo.networkTransfered) : result.network.stats.reduce((a, b) => a + b.tx_bytes, 0) / B2GB1000;
-  const networkReceived = skip.includes('network') ? parseFloat(previousSystemInfo.networkReceived) : result.network.stats.reduce((a, b) => a + b.rx_bytes, 0) / B2GB1000;
-  const networkLatency = skip.includes('network') ? parseFloat(previousSystemInfo.networkLatency) : result.network.latency.ms;
-  const networkLatencyStatus = skip.includes('network') ? parseFloat(previousSystemInfo.networkLatencyStatus) : networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
+  const networkTransfered = skip.includes('network') ?
+    parseFloat(previousSystemInfo.networkTransfered) :
+    result.network.stats.reduce((a, b) => a + b.tx_bytes, 0) / B2GB1000;
+  const networkReceived = skip.includes('network') ?
+    parseFloat(previousSystemInfo.networkReceived) :
+    result.network.stats.reduce((a, b) => a + b.rx_bytes, 0) / B2GB1000;
+  const networkLatency = skip.includes('network') ?
+    parseFloat(previousSystemInfo.networkLatency) :
+    result.network.latency.ms;
+  const networkLatencyStatus = skip.includes('network') ?
+    parseFloat(previousSystemInfo.networkLatencyStatus) :
+    networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
 
   const systemInfo = {
     totalMemory: totalMemory?.toFixed(2),
