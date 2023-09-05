@@ -28,6 +28,7 @@ function SystemInfo() {
   const [lastUpdate, setLastUpdate] = useState(null);
 
   async function fetchSystemInfo(useCache=false) {
+
     if (useCache) {
 
       await updateSystemInfo({
@@ -52,6 +53,7 @@ function SystemInfo() {
       });
 
     }
+
   }
 
   useEffect(() => {

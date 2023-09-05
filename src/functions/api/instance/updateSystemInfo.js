@@ -43,7 +43,6 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
         cpuCores: '...',
         cpuLoad: '...',
         cpuStatus: 'grey',
-        networkTransfered: '...',
         networkTransferred: '...',
         networkReceived: '...',
         networkLatency: '...',
@@ -107,7 +106,7 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
     cachedSystemInfo.cpuStatus :
     cpuLoad > 90 ?
       'danger' : cpuLoad > 75 ?
-      'warning' : 'success';
+        'warning' : 'success';
 
   // NETWORK
   const networkTransferred = skip.includes('network') ?
@@ -121,7 +120,9 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
     result.network.latency.ms;
   const networkLatencyStatus = skip.includes('network') ?
     parseFloat(cachedSystemInfo.networkLatencyStatus) :
-    networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
+    networkLatency > 1000 ?
+      'danger' : networkLatency > 500 ?
+        'warning' : 'success';
 
   const systemInfo = {
     totalMemory: totalMemory?.toFixed(2),
