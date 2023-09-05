@@ -50,8 +50,7 @@ export default async ({ auth, url, signal, refresh, is_local, attributes=['netwo
   const freeMemory = result.memory.available / B2GB1024;
   const memoryStatus = freeMemory / totalMemory < 0.1 ? 'danger' : freeMemory / totalMemory < 0.25 ? 'warning' : 'success';
 
-  console.log(instanceState);
-  // if 'disk' in attributes, look up as it was before
+  // if top level attribute in skip list, use cached value.
   // otherwise, fetch last value from system info, or display N/A.
   const totalDisk = 
     result.system.platform === 'darwin'

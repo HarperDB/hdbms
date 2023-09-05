@@ -37,7 +37,7 @@ function SystemInfo() {
         signal: controller.signal,
         refresh: !!systemInfo,
         cachedSystemInfo: systemInfo,
-        skip: ['disk', 'network', 'cpu','memory','system']
+        skip: ['disk', 'network']
       });
 
     } else {
