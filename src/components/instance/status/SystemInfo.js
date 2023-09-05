@@ -151,7 +151,7 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="CPU Load" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo.cpuLoad || '...'}%</div>
+                  <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo?.cpuLoad || '...'}%</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
