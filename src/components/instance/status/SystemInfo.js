@@ -29,9 +29,28 @@ function SystemInfo() {
 
   async function fetchSystemInfo(useCache=false) {
     if (useCache) {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
+
+      await updateSystemInfo({
+        auth,
+        url,
+        is_local,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        cachedSystemInfo: systemInfo,
+        skip: ['disk', 'network', 'cpu','memory','system']
+      });
+
     } else {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
+
+      await updateSystemInfo({
+        auth,
+        url,
+        is_local,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        cachedSystemInfo: systemInfo
+      });
+
     }
   }
 
@@ -137,7 +156,7 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Network Volume Up" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.networkTransfered || '...'}GB</div>
+                  <div className="nowrap-scroll">{systemInfo?.networkTransferred || '...'}GB</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
