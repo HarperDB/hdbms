@@ -37,8 +37,15 @@
     align-items: center;
     justify-content: center;
 
-    .current-file-path {
+    .editor {
+      &.current-file-path::before {
+        content: 'file: /';
+      }
+      &.current-file-path {
+        align-self: flex-start;
+      }
     }
+
   }
 
   .file-menu,
