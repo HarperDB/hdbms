@@ -13,7 +13,7 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
   const result = await queryInstance({
     operation: {
       operation: 'system_information',
-      attributes: skip.length ?
+      attributes: skip?.length ?
         systemAttributes.filter(attr => !skip.includes(attr)) :
         systemAttributes,
     },
