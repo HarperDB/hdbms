@@ -78,9 +78,15 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
     }
   }
 
+  // sort columns, but keep primary key / hash attribute first, and created and updated last.
+  // NOTE: __created__ and __updated__ might not exist in the schema, only include if they exist.
   const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
   const newEntityAttributes = orderedColumns.reduce((ac, a) => ({ ...ac, [a]: null }), {});
-  const dataTableColumns = [hashAttribute, ...orderedColumns, '__createdtime__', '__updatedtime__'].map((k) => ({
+
+  if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
+  if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
+
+  const dataTableColumns = [ hashAttribute, ...orderedColumns ].map((k) => ({
     Header: k.toString(),
     accessor: (row) => row[k.toString()],
   }));
