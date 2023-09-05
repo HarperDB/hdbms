@@ -8,7 +8,7 @@ import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
-import systemInformation from '../../../functions/api/instance/systemInformation';
+import updateSystemInfo from '../../../functions/api/instance/updateSystemInfo';
 import ContentContainer from '../../shared/ContentContainer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
@@ -25,7 +25,7 @@ function SystemInfo() {
   const iopsAlarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts['Disk I/O'], [compute_stack_id]);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,7 +33,11 @@ function SystemInfo() {
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
-      await systemInformation({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo });
+      if (lastUpdate) { 
+        await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
+      } else {
+        await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
+      }
       if (isMounted) setLoading(false);
     };
 
@@ -53,6 +57,19 @@ function SystemInfo() {
     }
 
   }, config.refresh_content_interval);
+
+  /*
+  useEffect(() => {
+    const fetchData = async () => {
+
+      console.log('initial system info call');
+      await getSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo });
+
+    };
+
+    fetchData();
+  }, []);
+  */
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
