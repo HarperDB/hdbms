@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Input } from 'reactstrap';
-import { Link } from 'react-router';
+import React, { useState } from 'react';
 import cn from 'classnames';
-import setComponentFile from '../../../functions/api/instance/setComponentFile.js'
 
 function NoProjects() {
   return (
     <div className="no-projects">
       <p>You have no HarperDB applications yet. Click the <i className="fas fa-folder-plus" /> button in the menu above to create your first application!</p>
-      <p>See the <a href="https://docs.harperdb.io" target="_blank"> documentation </a> for more info on HarperDB Applications.
+      <p>See the <a href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.
       </p>
     </div>
   );
@@ -59,10 +56,7 @@ function Package({ name, url }) {
 
 function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
 
-  const [ editing, setEditing ] = useState(false);
-  const [ newFileName, setNewFileName ] = useState(directoryEntry.name);
   const isDir = isFolder(directoryEntry);
-  const isLink = Boolean(directoryEntry.package);
   const renameFileIconClass = 'rename-file';
   const isFileSelected = directoryEntry.path === selectedFile;
   const isFolderSelected = directoryEntry.path === selectedFolder?.path;
@@ -77,19 +71,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
   function noOp() {
     // TODO: figure out how to handle keyboard events properly.
     // for now, use this to avoid react a11y errors.
-  }
-
-  async function handleOnBlur(e) {
-
-    // blur means the file name has possibly changed:
-    // - check if new name differs
-    //  - if so, flip back to filename+icon view
-    //  - call setComponentFile, call getComponentFiles to reload tree.
-    //    - i don't think we need to update the fileEntry value, since reload will take care of that.
-    //    - but maybe? server takes a minute, the ui will lag. is that a bad thing?
-    setEditing(false);
-    onFileRename(directoryEntry);
-    //reloadFileTree();
   }
 
   function handleToggleSelected(e) {
@@ -146,8 +127,6 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
   const FileIcon = directoryEntry.entries ?
      () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
        : FiletypeIcon;
-
-  const isSelected = directoryEntry.path === selectedFolder?.path;
 
   return (
     <>

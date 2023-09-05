@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react';
-import { Row, Col } from 'reactstrap';
-import { ErrorBoundary } from 'react-error-boundary';
+import React from 'react';
 import { useStoreState } from 'pullstate';
-import { useParams, useNavigate } from 'react-router-dom';
 
 import instanceState from '../../../../functions/state/instanceState';
 import getComponentFile from '../../../../functions/api/instance/getComponentFile';
@@ -65,7 +62,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function renameFile(newFileName, info) {
 
-    const { path, name, content, project } = info;
+    const { path, content, project } = info;
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName;
 

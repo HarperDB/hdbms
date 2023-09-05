@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 
 export function DeleteFolderButton({ onDeleteFolder, disabled }) {

@@ -8,21 +8,28 @@ function Editor({ active, file, onValidate, onChange }) {
   if (!active)
     return null;
 
+  // eslint-disable-next-line no-unused-vars
+  const [ componentsDir, ...relativePathSegments] = file.path.split('/');
+  const relativePath = relativePathSegments.join('/');
+
   return (
-    <ReactMonacoEditor
-      height="100%"
-      defaultLanguage="javascript"
-      value={file?.content || ''}
-      onMount={() => { }}
-      onValidate={ onValidate }
-      theme="vs-dark" 
-      onChange={ onChange }
-      options={{
-        automaticLayout: true,
-        minimap: {
-          enabled: false
-        }
-      }} />
+    <>
+      <div className="editor current-file-path">{ relativePath }</div>
+      <ReactMonacoEditor
+        height="100%"
+        defaultLanguage="javascript"
+        value={file?.content || ''}
+        onMount={() => { }}
+        onValidate={ onValidate }
+        theme="vs-dark" 
+        onChange={ onChange }
+        options={{
+          automaticLayout: true,
+          minimap: {
+            enabled: false
+          }
+        }} />
+    </>
   );
 }
 

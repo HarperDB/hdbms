@@ -1,31 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import cn from 'classnames';
+import React, { useState } from 'react';
+import { Col, Row } from 'reactstrap';
 
-import getComponentFile from '../../../functions/api/instance/getComponentFile';
-import setComponentFile from '../../../functions/api/instance/setComponentFile';
-import addComponent from '../../../functions/api/instance/addComponent';
-import dropComponent from '../../../functions/api/instance/dropComponent';
 import FileBrowser from './FileBrowser';
 import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
 import EditorWindow from './EditorWindow';
 import NameInput from './NameInput';
-
-/*
- * Parse the relative path, which is what the components api expects.
- *
- * note: While 'components' root is not shown in the app,
- * the full path is components/<project name>/relative/path/to/file.js
- */
-
-function getRelativeFilepath(absolutePath) {
-
-  return absolutePath.split('/').slice(2).join('/');
-
-}
-
 
 function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
@@ -64,12 +45,15 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
 
   }
 
+  /*
+   * api doesnt support this yet.
   function enableRenameFolderInput(e) {
 
     resetEditingInputs();
     setRenamingFolder(true);
 
   }
+  */
 
   function enableRenameFileInput(e) {
 
