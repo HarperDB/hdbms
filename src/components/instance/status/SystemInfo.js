@@ -29,28 +29,9 @@ function SystemInfo() {
 
   async function fetchSystemInfo(useCache=false) {
     if (useCache) {
-
-      await updateSystemInfo({
-        auth,
-        url,
-        is_local,
-        signal: controller.signal,
-        refresh: !!systemInfo,
-        cachedSystemInfo: systemInfo,
-        skip: ['disk', 'network', 'system']
-      });
-
+      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
     } else {
-
-      await updateSystemInfo({
-        auth,
-        url,
-        is_local,
-        signal: controller.signal,
-        refresh: !!systemInfo,
-        cachedSystemInfo: systemInfo
-      });
-
+      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
     }
   }
 
