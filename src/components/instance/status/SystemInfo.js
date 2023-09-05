@@ -41,7 +41,7 @@ function SystemInfo() {
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
-      await fetchSystemInfo(lastUpdate);
+      await fetchSystemInfo(!!lastUpdate);
       if (isMounted) setLoading(false);
     };
 
