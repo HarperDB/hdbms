@@ -3,16 +3,27 @@ import cn from 'classnames';
 
 export function SaveButton({ disabled, onSave, saveButton }) {
 
-  const title = disabled ?
-    "Cannot save due to validation errors"
-  : "Save File to Instance";  
-
+  const [ loading, setLoading ] = useState(false);
   return (
     <button
       disabled={ disabled }
-      title={ title }
-      className={ cn("save-code fas fa-save", { disabled }) }
-      onClick={ onSave } />
+      title="save file to instance"
+      className={ cn("save-code fas", {
+        disabled, 
+        'fa-save': !loading,
+        'fa-spinner': loading,
+        'fa-spin': loading
+      }) }
+      onClick={ 
+        async (e) => {
+
+          setLoading(true);
+          await onSave();
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
+        }
+      } />
   )
 
 }

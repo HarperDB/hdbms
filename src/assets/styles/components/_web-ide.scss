@@ -59,6 +59,12 @@
     padding-bottom: 0;
     border-bottom: 1px solid #2e2e2e;
 
+
+    & > li {
+      margin: 0px 5px 5px 0px;
+      padding: 0px 5px 0px 0px;
+    }
+
     .save-code,
     .deploy-code,
     .add-folder,
@@ -66,11 +72,12 @@
     .delete-folder,
     .delete-file,
     .add-file {
-      border: 0;
+      border: none;
+      outline: none !important;
       background: transparent;
       color: white;
-      padding: 0px 5px 0px 0px;
-      margin: 0px 5px 0px 0px;
+      padding: 0px;
+      margin: 0px;
     }
 
     .save-code {

@@ -92,7 +92,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
     return (
       <div className="filename-dialog">
         <NameInput
-          label={`Please Choose a New Filename for '${selectedFile.name}'`}
+          label={`Please Choose a New Filename for '${selectedFile?.name}'`}
           value={selectedFile?.name}
           onBlur={resetEditingInputs}
           onConfirm={
@@ -131,8 +131,8 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           label="New Folder Name"
           onConfirm={
             (newFolderName) => {
-              onAddFolder(newFolderName, selectedFolder)
               resetEditingInputs();
+              onAddFolder(newFolderName, selectedFolder)
             }
           }
           onCancel={resetEditingInputs}
@@ -142,8 +142,6 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
       </div>
     )
   }
-
-  console.log('selectedFile: ', selectedFile);
 
   return (
     <Row className="web-ide">
