@@ -8,7 +8,7 @@ import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
 
-import systemInformation from '../../../functions/api/instance/systemInformation';
+import updateSystemInfo from '../../../functions/api/instance/updateSystemInfo';
 import ContentContainer from '../../shared/ContentContainer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
@@ -25,7 +25,15 @@ function SystemInfo() {
   const iopsAlarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts['Disk I/O'], [compute_stack_id]);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(null);
+
+  async function fetchSystemInfo(useCache=false) {
+    if (useCache) {
+      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
+    } else {
+      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
+    }
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -33,7 +41,7 @@ function SystemInfo() {
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
-      await systemInformation({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo });
+      await fetchSystemInfo(lastUpdate);
       if (isMounted) setLoading(false);
     };
 
@@ -60,8 +68,18 @@ function SystemInfo() {
         <Col>host system</Col>
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-end">
-          <Button color="link" title="Update Metrics" className="me-2" onClick={() => setLastUpdate(Date.now())}>
-            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+          <Button
+            color="link"
+            title="Update Metrics"
+            className="me-2"
+            onClick={
+              async () => {
+                setLoading(true);
+                await fetchSystemInfo(true)
+                setLoading(false);
+              }
+            }> 
+              <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="me-2">auto</span>
