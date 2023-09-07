@@ -177,6 +177,10 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function onDeploy(arg) {
+    console.log({ arg });
+  }
+
   async function createNewFile(newFilename, parentFolder) {
 
     const { path, project } = parentFolder;
@@ -209,6 +213,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
       onAddFolder={createNewFolder}
+      onDeploy={onDeploy}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}
       onFileSelect={selectNewFile}

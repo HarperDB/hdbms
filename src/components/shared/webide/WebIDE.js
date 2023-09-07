@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
-
 import FileBrowser from './FileBrowser';
-import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton } from './FileMenu';
+import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton, DeployProjectButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
-import EditorWindow from './EditorWindow';
+import EditorWindow, { EDITOR_WINDOWS } from './EditorWindow';
 import NameInput from './NameInput';
+
 
 function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
@@ -14,17 +14,20 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path, project }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
-  const [ renamingFile, setRenamingFile ] = useState(false); 
-  const [ renamingFolder, setRenamingFolder ] = useState(false); 
+  const [ showDeployWindow, setShowDeployWindow ] = useState(false);
+  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
+  const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
+
+  console.log('active editor window: ',  activeEditorWindow);
 
   const hasProjects = fileTree?.entries?.length > 0;
-
-  // determines which buttons are available in the file menu 
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
   const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
 
-  // deteremines which panes show
-  const namingFile = editingFileName || editingFolderName || renamingFile || renamingFolder; // active editing state shows name input
+  function updateActiveEditorWindow(to, from) {
+    setActiveEditorWindow(to);
+    setPreviousActiveEditorWindow(from);
+  }
 
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode, selectedFile) {
@@ -36,109 +39,113 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
 
   }
 
-  function resetEditingInputs() {
-
-    setEditingFileName(false);
-    setEditingFolderName(false);
-    setRenamingFile(false);
-    setRenamingFolder(false);
-
+  // WINDOWS
+  function DeployWindow({ onDeploy }) {
+    return <div onClick={ onDeploy }>deploy window</div>
   }
 
-  /*
-   * api doesnt support this yet.
-  function enableRenameFolderInput(e) {
-
-    resetEditingInputs();
-    setRenamingFolder(true);
-
-  }
-  */
-
-  function enableRenameFileInput(e) {
-
-    resetEditingInputs();
-    setRenamingFile(true);
-
+  function BlankWindow() {
+    return (
+      <div className="blank-editor-window">
+      Select a File on the left.
+      </div>
+    )
   }
 
-  function enableFileNameInput(e) {
-
-    resetEditingInputs();
-    setEditingFileName(true);
-
-  }
-
-  function enableFolderNameInput() {
-
-    resetEditingInputs();
-    setEditingFolderName(true);
-
-  }
-
-  function NoFileSelected({ active }) {
-    return !active ? null : (
+  function NoFileSelected() {
+    return (
       <div>
         No file selected. Please select or create ( <i className="fas fa-plus" /> ) a file using the menu on the left. 
       </div>
     )
   }
 
-  function FilenameDialog({ active }) {
+  function NameFile() {
+    return (
+      <NameInput
+        label="New File Name"
+        onConfirm={
+          (newFilename) => {
+            onAddFile(newFilename, selectedFolder)
+            // go back to prev window
+            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+          }
+        }
+        onCancel={() => {
+          updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+        }}
+        onEnter={
+          (newFilename) => {
+            onAddFile(newFilename, selectedFolder)
+            // go back to prev window
+            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+          }
+        }
+      />
+    );
+  }
 
-    if (!active)
-       return null;
+  function NameFolder() {
+    return (
+      <NameInput
+        label="New Folder Name"
+        onConfirm={
+          (newFolderName) => {
+            onAddFolder(newFolderName, selectedFolder)
+            // go back to prev window
+            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+          }
+        }
+        onCancel={() => {
+          updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+        }}
+        onEnter={
+          (newFolderName) => {
+            onAddFolder(newFolderName, selectedFolder)
+            // go back to prev window
+            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+          }
+        }
+      />
+    );
+  }
+
+  function RenameFile() {
+    return (
+      <NameInput
+            label={`Please Choose a New Filename for '${selectedFile?.name}'`}
+            value={selectedFile?.name}
+            onBlur={()=>{}}
+            onConfirm={
+              (newName) => {
+                onFileRename(newName, selectedFile);
+              }
+            }
+            enabled={false}
+            onCancel={() => {}} />
+    );
+  }
+
+  function RenameFolder() {
+    return (
+      <NameInput
+        label={`Please Choose a New Folder Name for 'this'`}
+        value={selectedFolder?.name}
+        onConfirm={ 
+          (newName) => {
+            onFolderRename(newName, selectedFolder)
+          }
+        }
+        onBlur={() => {}}
+        onCancel={() => {}} />
+    );
+  }
+
+  function FilenameDialog() {
 
     return (
       <div className="filename-dialog">
-        <NameInput
-          label={`Please Choose a New Filename for '${selectedFile?.name}'`}
-          value={selectedFile?.name}
-          onBlur={resetEditingInputs}
-          onConfirm={
-            (newName) => {
-              onFileRename(newName, selectedFile);
-              resetEditingInputs();
-            }
-          }
-          enabled={renamingFile}
-          onCancel={resetEditingInputs} />
-        <NameInput
-          label={`Please Choose a New Folder Name for 'this'`}
-          value={selectedFolder?.name}
-          onConfirm={ 
-            (newName) => {
-              onFolderRename(newName, selectedFolder)
-              resetEditingInputs();
-            }
-          }
-          enabled={renamingFolder}
-          onBlur={resetEditingInputs}
-          onCancel={resetEditingInputs} />
-        <NameInput
-          label="New File Name"
-          onConfirm={
-            (newFilename) => {
-              onAddFile(newFilename, selectedFolder);
-              resetEditingInputs();
-            }
-          }
-          onCancel={resetEditingInputs}
-          onBlur={resetEditingInputs}
-          enabled={editingFileName} 
-        />
-        <NameInput
-          label="New Folder Name"
-          onConfirm={
-            (newFolderName) => {
-              resetEditingInputs();
-              onAddFolder(newFolderName, selectedFolder)
-            }
-          }
-          onCancel={resetEditingInputs}
-          onBlur={resetEditingInputs}
-          enabled={editingFolderName} 
-        />
+     
       </div>
     )
   }
@@ -147,7 +154,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
         <FileMenu>
-          <AddFolderButton onAddFolder={ enableFolderNameInput } />
+          <AddFolderButton onAddFolder={
+            () => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FOLDER, activeEditorWindow);
+            }
+          } />
           <DeleteFolderButton
             disabled={ !canDeleteFolder }
             onDeleteFolder={
@@ -155,11 +166,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 onDeleteFolder(selectedFolder);
                 setSelectedFile(null);
                 setSelectedFolder(null);
-                resetEditingInputs();
               }
             } />
           <AddFileButton
-            onAddFile={ enableFileNameInput }
+            onAddFile={
+              () => {
+                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE, activeEditorWindow);
+              }
+            }
             disabled={ !canAddFile } /> 
           <DeleteFileButton
             disabled={ !selectedFile?.path }
@@ -169,9 +183,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
-                resetEditingInputs();
               }
             } />
+          <DeployProjectButton onClick={ 
+            () => updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY, activeEditorWindow)
+          } />
         </FileMenu>
         <FileBrowser
           files={ fileTree }
@@ -180,13 +196,20 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           selectedFolder={selectedFolder}
           onFolderRename={
             () => {
+              console.log('to: ', EDITOR_WINDOWS.FILENAME_DIALOG);
+              setActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER);
               console.log('folder rename not available in 4.2');
             }
           }
-          onFileRename={enableRenameFileInput}
+          onFileRename={() => {
+            console.log('to: ', EDITOR_WINDOWS.FILENAME_DIALOG);
+            setActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE);
+          }}
           onFolderSelect={setSelectedFolder}
           onFileSelect={
             async (entry) => {
+              console.log('to: ', EDITOR_WINDOWS.CODE_EDITOR);
+              setActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR);
               const { content } = await onFileSelect(entry);
               setSelectedFile({
                 ...entry,
@@ -212,22 +235,31 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             )
           }
         />
-        <EditorWindow>
-          <Editor
-            active={selectedFile && !namingFile}
-            file={selectedFile}
-            onChange={
-              (updatedCode) => {
-                updateInMemoryCodeFile(updatedCode, selectedFile);
-              }
-            } />
-          <FilenameDialog active={namingFile} />
-          <NoFileSelected active={!selectedFile && !namingFile} /> 
-        </EditorWindow>
+        <EditorWindow
+          activeWindow={ activeEditorWindow }
+          BlankWindow={ BlankWindow }
+          NameFolder={ NameFolder }
+          NameFile={ NameFile }
+          RenameFile={ RenameFile }
+          RenameFolder={ RenameFolder }
+          FilenameDialog={ FilenameDialog }
+          DeployWindow={ DeployWindow }
+          NoFileSelected={ NoFileSelected }
+          CodeEditor={
+            () => (
+              <Editor
+                file={selectedFile}
+                onChange={
+                  (updatedCode) => {
+                    updateInMemoryCodeFile(updatedCode, selectedFile);
+                  }
+                } />
+            )
+          }
+          />
       </Col>
     </Row>
   );
 }
-
 
 export default WebIDE;

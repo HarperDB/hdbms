@@ -1,6 +1,8 @@
 import React from 'react';
+import cn from 'classnames';
 
 
+// change event to onClick
 export function DeleteFolderButton({ onDeleteFolder, disabled }) {
   return (
       <button
@@ -11,6 +13,7 @@ export function DeleteFolderButton({ onDeleteFolder, disabled }) {
   )
 }
 
+// change event to onClick
 export function AddFolderButton({ onAddFolder }) {
   return (
       <button
@@ -20,6 +23,7 @@ export function AddFolderButton({ onAddFolder }) {
   )
 }
 
+// change event to onClick
 export function AddFileButton({ disabled, onAddFile }) {
   return (
       <button
@@ -30,6 +34,7 @@ export function AddFileButton({ disabled, onAddFile }) {
   )
 }
 
+// change event to onClick
 export function DeleteFileButton({ onDeleteFile, disabled }) {
   return (
       <button
@@ -40,10 +45,19 @@ export function DeleteFileButton({ onDeleteFile, disabled }) {
   )
 }
 
+export function DeployProjectButton({ onClick }) {
+  return (
+      <button
+        onClick={ onClick }
+        className={
+          cn("deploy-project fas fa-arrow-alt-circle-up")
+        }
+        title="deploy project" />
+  )
+}
+
 
 function FileMenu({ children }) {
-  console.log('children', children);
-  console.log(children);
   return (
     <ul className="file-menu">
       {

@@ -3,10 +3,7 @@ import ReactMonacoEditor from '@monaco-editor/react';
 
 // TODO: update code using whatever monaco hook is available. onupdate.
 // don't allow save if there are errors.
-function Editor({ active, file, onValidate, onChange }) {
-
-  if (!active)
-    return null;
+function Editor({ file, onValidate, onChange }) {
 
   // eslint-disable-next-line no-unused-vars
   const [ componentsDir, ...relativePathSegments] = file.path.split('/');

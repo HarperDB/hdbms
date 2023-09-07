@@ -1,24 +1,53 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function NameInput({ enabled, onCancel, onConfirm, onBlur, label='', value }) {
+export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label='', value }) {
 
   const [ name, setName ] = useState(value || '');
 
-  if (!enabled)
-    return null;
+  function handleKeyDown(e) {
+
+    if (e.key === 'Enter') {
+      onEnter(e.target.value);
+    } else if (e.key === 'Esc') {
+      onCancel()
+    }
+
+  }
+
+  function preventButtonClickBlur(e) {
+    if (e.relatedTarget) {
+      return
+    }
+    onCancel();
+  }
+  function blurOnEsc(e) {
+    // related target is button when 'ok' is clicked,
+    // null if esc.
+    if (!e.relatedTarget) {
+      onCancel();
+    }
+  }
 
   return (
-    <div className={ cn("name-input", { disabled: !enabled }) }>
+    <div
+      onBlur={ blurOnEsc }
+      tabIndex={0}
+      className={ cn("name-input") }>
       <label>
         <span>{label}:</span>
         <input
           autoFocus
-          onChange={(e) => setName(e.target.value) }
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={ handleKeyDown }
           value={name}
           title="choose name for your new file or folder" />
         <button onClick={ onCancel } >cancel</button>
-        <button onClick={ () => onConfirm(name) }>ok</button>
+        <button onClick={ () => {
+          console.log('confirm');
+          onConfirm(name) 
+
+        }}>ok</button>
       </label>
     </div>
   );
