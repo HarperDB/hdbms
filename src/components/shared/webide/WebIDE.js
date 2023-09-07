@@ -32,10 +32,12 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode, selectedFile) {
 
+    /*
     setSelectedFile({
       ...selectedFile,
       content: updatedCode
     });
+    */
 
   }
 
@@ -79,7 +81,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           (newFilename) => {
             onAddFile(newFilename, selectedFolder)
             // go back to prev window
-            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+            //updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
           }
         }
       />
@@ -197,14 +199,12 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           selectedFolder={selectedFolder}
           onFolderRename={
             () => {
-              console.log('to: ', EDITOR_WINDOWS.FILENAME_DIALOG);
-              setActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER);
-              console.log('folder rename not available in 4.2');
+              updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER, activeEditorWindow);
             }
           }
           onFileRename={() => {
             console.log('to: ', EDITOR_WINDOWS.FILENAME_DIALOG);
-            setActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE);
+              updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE, activeEditorWindow);
           }}
           onFolderSelect={setSelectedFolder}
           onFileSelect={
@@ -215,7 +215,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 ...entry,
                 content
               });
-              setActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR);
+              updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR, activeEditorWindow);
             } 
           } />
       </Col>

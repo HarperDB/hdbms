@@ -7,6 +7,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
 
   function handleKeyDown(e) {
 
+    console.log('hey')
     if (e.key === 'Enter') {
       onEnter(e.target.value);
     } else if (e.key === 'Esc') {
@@ -32,13 +33,16 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
         <span>{label}:</span>
         <input
           autoFocus
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value)
+            console.log('hi');
+          }}
           onKeyDown={ handleKeyDown }
           value={name}
           title="choose name for your new file or folder" />
-        <button onClick={ onCancel } >cancel</button>
+        <button onClick={ onCancel }>cancel</button>
         <button onClick={ () => {
-          onConfirm(name) 
+          onConfirm(name); 
         }}>ok</button>
       </label>
     </div>
