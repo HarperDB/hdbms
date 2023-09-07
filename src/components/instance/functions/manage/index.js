@@ -45,6 +45,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await setComponentFile(payload);
 
+    await refreshCustomFunctions();
+
   }
 
   async function renameFolder(newFolderName, info) {

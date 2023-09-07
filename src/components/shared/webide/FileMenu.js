@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import { v4 as uuid } from 'uuid';
 
 
 // change event to onClick
@@ -61,7 +62,7 @@ function FileMenu({ children }) {
   return (
     <ul className="file-menu">
       {
-        children.map(child => <li>{child}</li>)
+        children.map(child => <li key={ uuid() }>{child}</li>)
       }
     </ul>
   )
