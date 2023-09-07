@@ -3,39 +3,39 @@ import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 
 export const EDITOR_WINDOWS = {
-  DEFAULT: 'CODE_EDITOR',
+  DEFAULT_WINDOW: 'CODE_EDITOR_WINDOW',
   BLANK_WINDOW: 'BLANK_WINDOW',
-  CODE_EDITOR: 'CODE_EDITOR',
-  NAME_FILE: 'NAME_FILE',
-  NAME_FOLDER: 'NAME_FOLDER',
-  RENAME_FILE: 'RENAME_FILE',
-  RENAME_FOLDER: 'RENAME_FOLDER',
-  NO_FILE_SELECTED: 'NO_FILE_SELECTED',
-  DEPLOY: 'DEPLOY'
+  CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
+  NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',
+  NAME_FOLDER_WINDOW: 'NAME_FOLDER_WINDOW',
+  RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
+  RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
+  NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
+  DEPLOY_WINDOW: 'DEPLOY_WINDOW'
 };
 
-export function DeployWindow({ onDeploy }) {
-  return <div onClick={ onDeploy }>deploy window</div>
+export function DeployWindow({ active, onDeploy }) {
+  return !active ? null : <div onClick={ onDeploy }>deploy window</div>
 }
 
-export function BlankWindow() {
-  return (
+export function BlankWindow({ active }) {
+  return !active ? null : (
     <div className="blank-editor-window">
     Select a File on the left.
     </div>
   )
 }
 
-export function NoFileSelectedWindow() {
-  return (
+export function NoFileSelectedWindow({ active }) {
+  return !active ? null : (
     <div>
       No file selected. Please select or create ( <i className="fas fa-plus" /> ) a file using the menu on the left. 
     </div>
   )
 }
 
-export function NameFileWindow({ onConfirm, onCancel }) {
-  return (
+export function NameFileWindow({ active, onConfirm, onCancel }) {
+  return !active ? null : (
     <NameInput
       label="New File Name"
       onEnter={ onConfirm }
@@ -45,9 +45,8 @@ export function NameFileWindow({ onConfirm, onCancel }) {
   );
 }
 
-export function NameFolderWindow({ onConfirm, onCancel }) {
-  console.log( onConfirm, onCancel)
-  return (
+export function NameFolderWindow({ active, onConfirm, onCancel }) {
+  return !active ? null : (
     <NameInput
       label="New Folder Name"
       onConfirm={ onConfirm }
@@ -93,7 +92,13 @@ function RenameFolderWindow() {
 
 
 
-function EditorWindow({ activeWindow, BlankWindow, CodeEditor, RenameFileWindow, RenameFolderWindow, /* RenameFile, RenameFolder, */ DeployWindow, NoFileSelected }) {
+function EditorWindow({ children }) {
+  return <Card className="editor-window">
+  { children } 
+  </Card>
+}
+
+function EditorWindowOld({ activeWindow, BlankWindow, CodeEditor, RenameFileWindow, RenameFolderWindow, /* RenameFile, RenameFolder, */ DeployWindow, NoFileSelected }) {
 
   let CurrentWindow = null;
 

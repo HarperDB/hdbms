@@ -5,6 +5,10 @@ import ReactMonacoEditor from '@monaco-editor/react';
 // don't allow save if there are errors.
 function Editor({ active, file, onChange }) {
 
+  if (!active) {
+    return null;
+  }
+
   // eslint-disable-next-line no-unused-vars
   const [ componentsDir, ...relativePathSegments] = file.path.split('/');
   const relativePath = relativePathSegments.join('/');

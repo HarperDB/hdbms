@@ -32,7 +32,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
     const fileInfo = await onAddFile(newFilename, selectedFolder);
     // show file in editor window.
     setSelectedFile(fileInfo);
-    updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR, activeEditorWindow);
+    updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
 
   function updateActiveEditorWindow(to, from) {
@@ -60,7 +60,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
         <FileMenu>
           <AddFolderButton
             onAddFolder={() => {
-              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FOLDER, activeEditorWindow);
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FOLDER_WINDOW, activeEditorWindow);
             }} />
           <DeleteFolderButton
             disabled={ !canDeleteFolder }
@@ -73,7 +73,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             } />
           <AddFileButton
             onAddFile={() => {
-              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE, activeEditorWindow);
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
             }}
             disabled={ !canAddFile } /> 
           <DeleteFileButton
@@ -87,7 +87,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
               }
             } />
           <DeployProjectButton
-            onClick={ () => updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY, activeEditorWindow) }
+            onClick={ () => updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow) }
             />
         </FileMenu>
         <FileBrowser
@@ -96,10 +96,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           selectedFile={ selectedFile?.path }
           selectedFolder={ selectedFolder }
           onFolderRename={() => {
-            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER, activeEditorWindow);
+            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
           }}
           onFileRename={() => {
-            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE, activeEditorWindow);
+            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
           onFolderSelect={setSelectedFolder}
           onFileSelect={
@@ -109,7 +109,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 ...entry,
                 content
               });
-              updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR, activeEditorWindow);
+              updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
             } 
           } />
       </Col>
@@ -130,29 +130,20 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             )
           }
         />
-        <EditorWindow
-          activeWindow={ activeEditorWindow }
-          BlankWindow={ BlankWindow }
-          NameFolderWindow={ 
-            () => (
-              <NameFolderWindow
-                onConfirm={ (folderName) => addFolder(folderName) }
-                onCancel={ backToPreviousWindow } />
-            )
-          }
-          NameFileWindow={
-            () => {
-              <NameFileWindow 
-                onConfirm={ addFile }
-                onCancel={ backToPreviousWindow } />
-            }
-          }
-          DeployWindow={ DeployWindow }
-          NoFileSelectedWindow={ NoFileSelectedWindow }
-          CodeEditor={
-            () => <Editor file={ selectedFile } onChange={ console.log }/>
-          }
-          />
+        <EditorWindow>
+          <BlankWindow active={ activeEditorWindow === 'BLANK_WINDOW' } />
+          <NameFolderWindow
+            active={ activeEditorWindow === 'NAME_FOLDER_WINDOW' } 
+            onConfirm={ (folderName) => addFolder(folderName) }
+            onCancel={ backToPreviousWindow } />
+          <NameFileWindow 
+            active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 
+            onConfirm={ addFile }
+            onCancel={ backToPreviousWindow } />
+          <DeployWindow active={ activeEditorWindow === 'DEPLOY_WINDOW' } />
+          <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
+          <Editor active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' } file={ selectedFile } onChange={ updateInMemoryCodeFile } />
+        </EditorWindow>
       </Col>
     </Row>
   );
