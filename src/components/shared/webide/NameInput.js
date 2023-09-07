@@ -15,12 +15,6 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
 
   }
 
-  function preventButtonClickBlur(e) {
-    if (e.relatedTarget) {
-      return
-    }
-    onCancel();
-  }
   function blurOnEsc(e) {
     // related target is button when 'ok' is clicked,
     // null if esc.
@@ -44,9 +38,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
           title="choose name for your new file or folder" />
         <button onClick={ onCancel } >cancel</button>
         <button onClick={ () => {
-          console.log('confirm');
           onConfirm(name) 
-
         }}>ok</button>
       </label>
     </div>

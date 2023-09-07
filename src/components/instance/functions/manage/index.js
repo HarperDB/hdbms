@@ -197,6 +197,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     });
 
     await refreshCustomFunctions();
+
     return {
       project,
       path: relativeFilepath,

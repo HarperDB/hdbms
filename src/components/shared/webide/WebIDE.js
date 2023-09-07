@@ -65,10 +65,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
       <NameInput
         label="New File Name"
         onConfirm={
-          (newFilename) => {
-            onAddFile(newFilename, selectedFolder)
-            // go back to prev window
-            updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+          async (newFilename) => {
+            const fileInfo = await onAddFile(newFilename, selectedFolder);
+            // show file in editor window.
+            setSelectedFile(fileInfo);
+            updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR, activeEditorWindow);
           }
         }
         onCancel={() => {
@@ -209,12 +210,12 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           onFileSelect={
             async (entry) => {
               console.log('to: ', EDITOR_WINDOWS.CODE_EDITOR);
-              setActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR);
               const { content } = await onFileSelect(entry);
               setSelectedFile({
                 ...entry,
                 content
               });
+              setActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR);
             } 
           } />
       </Col>
