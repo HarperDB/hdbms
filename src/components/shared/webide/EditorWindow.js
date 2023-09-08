@@ -59,17 +59,14 @@ export function PackageDetailsWindow({ active, packageDetails }) {
     return null;
   }
 
-  const { name, url } = packageDetails;
-  console.log(name,url);
-
   return (
     <div>
       <ul>
         <li>
-          name: { name }
+          name: { packageDetails.name }
         </li>
         <li>
-          url: { url }
+          url: { packageDetails.url }
         </li>
       </ul>
     </div>
@@ -126,10 +123,8 @@ export function DeployWindow({ active, onConfirm, onCancel }) {
   )
 }
 
-function EditorWindow({ children }) {
+export default function EditorWindow({ children }) {
   return <Card className="editor-window">
   { children } 
   </Card>
 }
-
-export default EditorWindow;
