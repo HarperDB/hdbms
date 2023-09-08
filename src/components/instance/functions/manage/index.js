@@ -43,7 +43,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     // TODO: check filepath.
 
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
-    console.log('on save file check:', { selectedFile }, filepathRelativeToProjectDir);
     const payload = {
       auth,
       url: applicationsAPIUrl,
@@ -99,8 +98,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function selectNewFile(selectedFile) {
-
-    console.log('select new file path check: ', selectedFile?.path);
 
     const { path, project, name } = selectedFile;
     // TODO: check filepath.
@@ -172,12 +169,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     if (newProject) {
 
-      console.log('add new folder path check, new project: ', {
-        auth,
-        url: applicationsAPIUrl,
-        project: newFolderName
-      })
-
       await addComponent({
         auth,
         url: applicationsAPIUrl,
@@ -195,11 +186,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         project,
         file: relativeFilepath
       })
-      console.log('add new folder path check, add project to file: ', {
-        auth,
-        url: applicationsAPIUrl,
-        project: newFolderName
-      })
     }
 
     await refreshCustomFunctions();
@@ -207,7 +193,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function onDeploy(projectName, packageUrl) {
-    console.log(projectName, packageUrl);
 
     await deployComponent({
       auth,
@@ -221,7 +206,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       url: applicationsAPIUrl
     });
 
-    refreshCustomFunctions();
+    await refreshCustomFunctions();
+
   }
 
   async function createNewFile(newFilename, parentFolder) {
@@ -244,12 +230,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project,
       file: relativeFilepath,
       payload
-    });
-
-    console.log('inside manageIndex#createNewFile: ', {
-      content: payload,
-      path: [parentFolder.path, newFilename].join('/'),
-      project,
     });
 
     await refreshCustomFunctions();
