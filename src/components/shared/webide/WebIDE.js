@@ -142,7 +142,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
                 disabled={ !selectedFile }
                 onSave={
                   () => {
-                    onSave(selectedFile)
+                    // NOTE: timeout for ux reasons.
+                    setTimeout(() => {
+                      onSave(selectedFile)
+                    }, 200);
                   }
                 } />
             )
@@ -170,7 +173,6 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
           <PackageDetailsWindow
             packageDetails={ selectedPackage }
             active={ activeEditorWindow === 'PACKAGE_DETAILS_WINDOW' } />
-            
         </EditorWindow>
       </Col>
     </Row>
