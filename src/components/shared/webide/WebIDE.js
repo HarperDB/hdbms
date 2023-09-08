@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
-import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton, DeployProjectButton } from './FileMenu';
+import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton, DeployProjectButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
-import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameFolderWindow, PackageDetailsWindow } from './EditorWindow';
+import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
 // setSelectedFile: this is for matching against fileTree for ui highlighting
 // and it's for saving to server.
 
-function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
@@ -23,10 +23,16 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
 
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
-  const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only delete a folder if a target folder is selected
+  const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
 
-  async function addFolder(newFolderName) {
-    onAddFolder(newFolderName, selectedFolder)
+  async function addProject(newProjectName) {
+    onAddProject(newProjectName);
+    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+  }
+
+  async function addProjectFolder(newFolderName) {
+    onAddProjectFolder(newFolderName, selectedFolder)
     // go back to prev window
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
@@ -47,11 +53,17 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
   }
 
   function updateActiveEditorWindow(to, from) {
-    setActiveEditorWindow(to);
-    setPreviousActiveEditorWindow(from);
+    if (to === from) {
+      setPreviousActiveEditorWindow(to);
+      setActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW);
+    } else {
+      setActiveEditorWindow(to);
+      setPreviousActiveEditorWindow(from);
+    }
   }
 
   function backToPreviousWindow() {
+    console.log(previousActiveEditorWindow);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
@@ -71,9 +83,16 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
         <FileMenu>
-          <AddFolderButton
-            onAddFolder={() => {
-              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FOLDER_WINDOW, activeEditorWindow);
+          <AddProjectButton
+            onAddProject={
+              () => {
+                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
+              }
+            } />
+          <AddProjectFolderButton
+            disabled={ !canAddProjectFolder }
+            onAddProjectFolder={() => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
             }} />
           <DeleteFolderButton
             disabled={ !canDeleteFolder }
@@ -154,9 +173,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
         <EditorWindow>
           <BlankWindow active={ activeEditorWindow === 'BLANK_WINDOW' } />
           <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
-          <NameFolderWindow
-            active={ activeEditorWindow === 'NAME_FOLDER_WINDOW' } 
-            onConfirm={ (folderName) => addFolder(folderName) }
+          <NameProjectWindow
+            active={ activeEditorWindow === 'NAME_PROJECT_WINDOW' } 
+            onConfirm={ addProject }
+            onCancel={ backToPreviousWindow } />
+          <NameProjectFolderWindow
+            projectName={selectedFolder?.project}
+            active={ activeEditorWindow === 'NAME_PROJECT_FOLDER_WINDOW' } 
+            onConfirm={ addProjectFolder }
             onCancel={ backToPreviousWindow } />
           <NameFileWindow 
             active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 

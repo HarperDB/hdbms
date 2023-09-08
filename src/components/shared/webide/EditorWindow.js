@@ -7,7 +7,8 @@ export const EDITOR_WINDOWS = {
   BLANK_WINDOW: 'BLANK_WINDOW',
   CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
   NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',
-  NAME_FOLDER_WINDOW: 'NAME_FOLDER_WINDOW',
+  NAME_PROJECT_WINDOW: 'NAME_PROJECT_WINDOW',
+  NAME_PROJECT_FOLDER_WINDOW: 'NAME_PROJECT_FOLDER_WINDOW',
   RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
   NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
@@ -31,10 +32,10 @@ export function NoFileSelectedWindow({ active }) {
   )
 }
 
-export function NameFileWindow({ active, onConfirm, onCancel }) {
+export function NameProjectWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
     <NameInput
-      label="New File Name"
+      label="New Project Name"
       onEnter={ onConfirm }
       onConfirm={ onConfirm }
       onCancel={ onCancel }
@@ -42,12 +43,24 @@ export function NameFileWindow({ active, onConfirm, onCancel }) {
   );
 }
 
-export function NameFolderWindow({ active, onConfirm, onCancel }) {
+export function NameProjectFolderWindow({ active, onConfirm, onCancel, projectName }) {
   return !active ? null : (
     <NameInput
-      label="New Folder Name"
+      label={`New Subdirectory Name for project '${projectName}'`}
       onConfirm={ onConfirm }
       onEnter={ onConfirm }
+      onCancel={ onCancel }
+    />
+  );
+}
+
+
+export function NameFileWindow({ active, onConfirm, onCancel }) {
+  return !active ? null : (
+    <NameInput
+      label="New File Name"
+      onEnter={ onConfirm }
+      onConfirm={ onConfirm }
       onCancel={ onCancel }
     />
   );
@@ -97,7 +110,6 @@ export function DeployWindow({ active, onConfirm, onCancel }) {
   function updatePackageUrl(e) {
     setPackageUrl(e.target.value)
   }
-
 
   return !active ? null : (
     <div className="deploy-form">

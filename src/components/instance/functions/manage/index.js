@@ -154,35 +154,30 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function createNewFolder(newFolderName, parentFolder) {
+  async function createNewProject(newProjectName) {
 
-    const newProject = !parentFolder;
+    await addComponent({
+      auth,
+      url: applicationsAPIUrl,
+      project: newProjectName
+    });
 
-    /*
-     * to create a base-level (project) folder, we have to call addComponent which creates a project.
-     * to create a subdir of a project, we call add component file w/ no payload or name extension
-     */
+    await refreshCustomFunctions();
 
-    if (newProject) {
+  }
 
-      await addComponent({
-        auth,
-        url: applicationsAPIUrl,
-        project: newFolderName
-      })
-    } else {
+  async function createNewProjectFolder(newFolderName, parentFolder) {
 
-      const { path, project } = parentFolder;
-      const relativeDirpath = getRelativeFilepath(path);
-      const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
+    const { path, project } = parentFolder;
+    const relativeDirpath = getRelativeFilepath(path);
+    const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
 
-      await setComponentFile({
-        auth,
-        url: applicationsAPIUrl,
-        project,
-        file: relativeFilepath
-      })
-    }
+    await setComponentFile({
+      auth,
+      url: applicationsAPIUrl,
+      project,
+      file: relativeFilepath
+    })
 
     await refreshCustomFunctions();
 
@@ -241,7 +236,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
-      onAddFolder={createNewFolder}
+      onAddProject={createNewProject}
+      onAddProjectFolder={createNewProjectFolder}
       onDeploy={onDeploy}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}

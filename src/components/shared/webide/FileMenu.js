@@ -3,39 +3,46 @@ import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 
 
-// change event to onClick
 export function DeleteFolderButton({ onDeleteFolder, disabled }) {
   return (
-      <button
-        onClick={ onDeleteFolder }
-        disabled={ disabled }
-        className="delete-folder fas fa-folder-minus"
-        title="delete selected folder" />
+    <button
+      onClick={ onDeleteFolder }
+      disabled={ disabled }
+      className="delete-folder fas fa-folder-minus"
+      title="delete selected folder" />
   )
 }
 
-// change event to onClick
-export function AddFolderButton({ onAddFolder }) {
+export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
   return (
-      <button
-        onClick={ onAddFolder }
-        className="add-folder fas fa-folder-plus"
-        title="add a new folder" />
+    <button
+      disabled={ disabled }
+      onClick={ onAddProjectFolder }
+      className="add-folder fas fa-folder-plus"
+      title={`add a new subdirectory to your project`} />
   )
 }
 
-// change event to onClick
+export function AddProjectButton({ disabled, onAddProject }) {
+  return (
+    <button
+      disabled={ disabled }
+      onClick={ onAddProject }
+      className="add-project fas fa-project-diagram"
+      title="add a new project" />
+  );
+}
+
 export function AddFileButton({ disabled, onAddFile }) {
   return (
-      <button
-        disabled={ disabled }
-        onClick={ onAddFile }
-        className="add-file fas fa-plus"
-        title="add a new file" />
+    <button
+      disabled={ disabled }
+      onClick={ onAddFile }
+      className="add-file fas fa-plus"
+      title="add a new file" />
   )
 }
 
-// change event to onClick
 export function DeleteFileButton({ onDeleteFile, disabled }) {
   return (
       <button
