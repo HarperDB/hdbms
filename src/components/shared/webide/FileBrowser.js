@@ -39,10 +39,10 @@ function PackageIcon() {
   return <i className={ cn('package-icon fas fa-cube') } />;
 }
 
-function Package({ name, url }) {
+function Package({ name, url, onPackageSelect }) {
   return (
     <button
-      onClick={() =>{ console.log('implement package logic') }}
+      onClick={ (e) => onPackageSelect({ name, url, event: e }) }
       className={
         cn('package')
       }
@@ -117,7 +117,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
 
 }
 
-function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, onFileRename, selectedFile, selectedFolder }) {
+function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, onPackageSelect, onFileRename, selectedFile, selectedFolder }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -137,6 +137,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
             {
               directoryEntry.package ?
                 <Package
+                  onPackageSelect={ onPackageSelect }
                   name={directoryEntry.name}
                   url={directoryEntry.package} /> :
                 <File
@@ -171,6 +172,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
                 onFileSelect={onFileSelect}
                 onFileRename={onFileRename}
                 onFolderSelect={onFolderSelect}
+                onPackageSelect={onPackageSelect}
                 userOnSelect={userOnSelect} />
             </ul>
           </li>
@@ -183,8 +185,9 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
 }
 
 // A recursive directory tree representation
-function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
-  return files?.entries?.length ? 
+function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
+  return !files?.entries?.length ?
+    <NoProjects /> : 
     <ul className="file-browser">
       <Folder
         selectedFile={selectedFile}
@@ -192,11 +195,10 @@ function FileBrowser({ files, userOnSelect, onFileSelect, onFileRename, onFolder
         onFileSelect={onFileSelect}
         onFileRename={onFileRename}
         onFolderSelect={onFolderSelect}
+        onPackageSelect={onPackageSelect}
         userOnSelect={userOnSelect}
         directoryEntry={files} />
-    </ul> :
-    <NoProjects /> 
-
+    </ul>
 }
 
 export default FileBrowser

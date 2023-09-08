@@ -47,6 +47,3 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
   );
 
 }
-
-
-

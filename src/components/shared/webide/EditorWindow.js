@@ -11,7 +11,8 @@ export const EDITOR_WINDOWS = {
   RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
   NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
-  DEPLOY_WINDOW: 'DEPLOY_WINDOW'
+  DEPLOY_WINDOW: 'DEPLOY_WINDOW',
+  PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
 };
 
 export function BlankWindow({ active }) {
@@ -50,6 +51,30 @@ export function NameFolderWindow({ active, onConfirm, onCancel }) {
       onCancel={ onCancel }
     />
   );
+}
+
+export function PackageDetailsWindow({ active, packageDetails }) {
+  
+  if (!active) {
+    return null;
+  }
+
+  const { name, url } = packageDetails;
+  console.log(name,url);
+
+  return (
+    <div>
+      <ul>
+        <li>
+          name: { name }
+        </li>
+        <li>
+          url: { url }
+        </li>
+      </ul>
+    </div>
+  );
+
 }
 
 export function DeployWindow({ active, onConfirm, onCancel }) {

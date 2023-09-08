@@ -4,7 +4,7 @@ import FileBrowser from './FileBrowser';
 import FileMenu, { AddFileButton, AddFolderButton, DeleteFolderButton, DeleteFileButton, DeployProjectButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
-import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameFolderWindow } from './EditorWindow';
+import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameFolderWindow, PackageDetailsWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
 // setSelectedFile: this is for matching against fileTree for ui highlighting
@@ -14,6 +14,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
+  const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
   const [ showDeployWindow, setShowDeployWindow ] = useState(false);
@@ -116,6 +117,12 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
             //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
           onFolderSelect={setSelectedFolder}
+          onPackageSelect={
+            ({ name, url }) => {
+              setSelectedPackage({ name, url});
+              updateActiveEditorWindow(EDITOR_WINDOWS.PACKAGE_DETAILS_WINDOW, activeEditorWindow)
+            }
+          }
           onFileSelect={
             async (entry) => {
               const { content } = await onFileSelect(entry);
@@ -143,6 +150,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
         />
         <EditorWindow>
           <BlankWindow active={ activeEditorWindow === 'BLANK_WINDOW' } />
+          <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
           <NameFolderWindow
             active={ activeEditorWindow === 'NAME_FOLDER_WINDOW' } 
             onConfirm={ (folderName) => addFolder(folderName) }
@@ -155,8 +163,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
             active={ activeEditorWindow === 'DEPLOY_WINDOW' } 
             onConfirm={ deployPackage }
             onCancel={ backToPreviousWindow } />
-          <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
-          <Editor active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' } file={ selectedFile } onChange={ updateInMemoryCodeFile } />
+          <Editor
+            active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
+            file={ selectedFile }
+            onChange={ updateInMemoryCodeFile } />
+          <PackageDetailsWindow
+            packageDetails={ selectedPackage }
+            active={ activeEditorWindow === 'PACKAGE_DETAILS_WINDOW' } />
+            
         </EditorWindow>
       </Col>
     </Row>
