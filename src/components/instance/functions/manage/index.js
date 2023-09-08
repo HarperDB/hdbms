@@ -40,8 +40,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     // save file to instance
   async function saveCodeToInstance(selectedFile) {
 
-    // TODO: check filepath.
-
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
     const payload = {
       auth,
@@ -59,7 +57,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function renameFolder(newFolderName, info) {
 
-    // TODO: check filepath.
+    // not supported by instance api yet.
+
     /*
     const fileContent = await getComponentFile({
       url: applicationsAPIUrl,
@@ -73,7 +72,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function renameFile(newFileName, info) {
 
-    // TODO: check filepath.
     const { path, content, project } = info;
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName;
@@ -100,7 +98,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   async function selectNewFile(selectedFile) {
 
     const { path, project, name } = selectedFile;
-    // TODO: check filepath.
     const newFile = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
       auth,
@@ -159,7 +156,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function createNewFolder(newFolderName, parentFolder) {
 
-    // TODO: check filepath.
     const newProject = !parentFolder;
 
     /*
@@ -211,11 +207,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function createNewFile(newFilename, parentFolder) {
-    // FIXME BUG: fileTree metadata schema differs from what you're getting back here.
-    // TODO: figure out a consistent translation from server rep to in-app rep and 
-    // stick to it.
 
-    // TODO: check filepath.
     const { path, project } = parentFolder;
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
