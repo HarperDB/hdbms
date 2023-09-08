@@ -3,7 +3,7 @@ import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 
 export const EDITOR_WINDOWS = {
-  DEFAULT_WINDOW: 'CODE_EDITOR_WINDOW',
+  DEFAULT_WINDOW: 'BLANK_WINDOW',
   BLANK_WINDOW: 'BLANK_WINDOW',
   CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
   NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',

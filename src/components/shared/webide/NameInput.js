@@ -7,7 +7,6 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
 
   function handleKeyDown(e) {
 
-    console.log('hey')
     if (e.key === 'Enter') {
       onEnter(e.target.value);
     } else if (e.key === 'Esc') {
@@ -35,7 +34,6 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
           autoFocus
           onChange={(e) => {
             setName(e.target.value)
-            console.log('hi');
           }}
           onKeyDown={ handleKeyDown }
           value={name}

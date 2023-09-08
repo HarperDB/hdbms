@@ -9,12 +9,10 @@ function Editor({ active, file, onChange }) {
     return null;
   }
 
+  const filePathRelativeToComponentsDir = file.path.split('/').slice(1).join('/');
   // eslint-disable-next-line no-unused-vars
-  const [ componentsDir, ...relativePathSegments] = file.path.split('/');
-  const relativePath = relativePathSegments.join('/');
-
   return <>
-      <div className="editor current-file-path">{ relativePath }</div>
+      <div className="editor current-file-path">?</div>
       <ReactMonacoEditor
         height="100%"
         defaultLanguage="javascript"
@@ -22,7 +20,7 @@ function Editor({ active, file, onChange }) {
         theme="vs-dark" 
         onMount={
           () => {
-            console.log('on mount');
+            console.info('on mount');
           }
         }
         onChange={ onChange }

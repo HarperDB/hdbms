@@ -21,6 +21,9 @@ const applicationsAPIUrl = 'http://localhost:9925';
  */
 
 function getRelativeFilepath(absolutePath) {
+  // for saving to server, which requires skipping root /components dir
+  // and treating /components/projects dir as project name.
+  // filepath is <project>/path/to/file.js
 
   return absolutePath.split('/').slice(2).join('/');
 
@@ -35,11 +38,15 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     // save file to instance
   async function saveCodeToInstance(selectedFile) {
 
+    // TODO: check filepath.
+
+    const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
+    console.log('on save file check:', { selectedFile }, filepathRelativeToProjectDir);
     const payload = {
       auth,
       url: applicationsAPIUrl,
       project: selectedFile.project,
-      file: getRelativeFilepath(selectedFile.path), //TODO: doublecheck this path logic
+      file: filepathRelativeToProjectDir,
       payload: selectedFile.content
     };
 
@@ -51,6 +58,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function renameFolder(newFolderName, info) {
 
+    // TODO: check filepath.
     /*
     const fileContent = await getComponentFile({
       url: applicationsAPIUrl,
@@ -64,6 +72,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function renameFile(newFileName, info) {
 
+    // TODO: check filepath.
     const { path, content, project } = info;
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName;
@@ -87,8 +96,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function selectNewFile({ path, project, name }) {
+  async function selectNewFile(selectedFile) {
 
+    console.log('select new file path check: ', selectedFile?.path);
+
+    const { path, project, name } = selectedFile;
+    // TODO: check filepath.
     const newFile = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
       auth,
@@ -107,7 +120,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function deleteFile(f) {
-    console.log(f);
 
     await dropComponent({
       auth,
@@ -148,6 +160,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function createNewFolder(newFolderName, parentFolder) {
 
+    // TODO: check filepath.
     const newProject = !parentFolder;
 
     /*
@@ -156,6 +169,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
      */
 
     if (newProject) {
+
+      console.log('add new folder path check, new project: ', {
+        auth,
+        url: applicationsAPIUrl,
+        project: newFolderName
+      })
+
       await addComponent({
         auth,
         url: applicationsAPIUrl,
@@ -173,6 +193,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         project,
         file: relativeFilepath
       })
+      console.log('add new folder path check, add project to file: ', {
+        auth,
+        url: applicationsAPIUrl,
+        project: newFolderName
+      })
     }
 
     await refreshCustomFunctions();
@@ -180,15 +205,21 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function onDeploy(arg) {
-    console.log({ arg });
   }
 
   async function createNewFile(newFilename, parentFolder) {
+    // FIXME BUG: fileTree metadata schema differs from what you're getting back here.
+    // TODO: figure out a consistent translation from server rep to in-app rep and 
+    // stick to it.
 
+    // TODO: check filepath.
     const { path, project } = parentFolder;
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
     const payload = '';
+
+    // NOTE: to server, path is everything after '/components/project' in /components/project/path/to/file.js
+    // in IDE land, path is full, aka, 'components/project/path/to/file.js'.
 
     await setComponentFile({
       auth,
@@ -198,12 +229,18 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       payload
     });
 
+    console.log('inside manageIndex#createNewFile: ', {
+      content: payload,
+      path: [parentFolder.path, newFilename].join('/'),
+      project,
+    });
+
     await refreshCustomFunctions();
 
     return {
+      content: payload,
+      path: [parentFolder.path, newFilename].join('/'),
       project,
-      path: relativeFilepath,
-      content: payload
     };
 
   }

@@ -28,11 +28,11 @@ export function SaveButton({ disabled, onSave, saveButton }) {
 
 }
 
-function EditorMenu({ onSave, SaveButton }) {
+function EditorMenu({ SaveButton }) {
   return (
     <ul className="editor-menu">
       <li>
-        <SaveButton onSave={onSave} />
+        <SaveButton />
       </li>
     </ul>
   )

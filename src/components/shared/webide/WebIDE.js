@@ -7,16 +7,21 @@ import Editor from './Editor';
 import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameFolderWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
+// setSelectedFile: this is for matching against fileTree for ui highlighting
+// and it's for saving to server.
 
 function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
-  const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path, project }
+  const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
   const [ showDeployWindow, setShowDeployWindow ] = useState(false);
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
+
+  console.log('web ide re-render folder path check', selectedFolder?.path);
+  console.log('FILETREE: ', fileTree);
 
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
@@ -31,6 +36,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   async function addFile(newFilename) {
     const fileInfo = await onAddFile(newFilename, selectedFolder);
     // show file in editor window.
+
+    console.log('add file check: ', fileInfo)
+    // TODO: check filepath.
     setSelectedFile(fileInfo);
     updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
@@ -46,11 +54,15 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
 
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode) {
-
-    setSelectedFile({
+ 
+    // TODO: check filepath.
+    const update = {
       ...selectedFile,
       content: updatedCode
-    });
+    };
+
+    console.log('update in memory code file check : ', update); 
+    setSelectedFile(update);
 
   }
  
@@ -65,8 +77,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           <DeleteFolderButton
             disabled={ !canDeleteFolder }
             onDeleteFolder={
-              () => {
-                onDeleteFolder(selectedFolder);
+              async () => {
+                await onDeleteFolder(selectedFolder);
+                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
                 setSelectedFile(null);
                 setSelectedFolder(null);
               }
@@ -84,6 +97,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
+                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
               }
             } />
           <DeployProjectButton
@@ -104,7 +118,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           onFolderSelect={setSelectedFolder}
           onFileSelect={
             async (entry) => {
+              console.log('on file select: ', entry);
               const { content } = await onFileSelect(entry);
+              // TODO: check filepath.
               setSelectedFile({
                 ...entry,
                 content
@@ -115,17 +131,14 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
       </Col>
       <Col className="code-editor-container">
         <EditorMenu
-          onSave={
-            async () => {
-              await onSave(selectedFile)
-            }
-          }
           SaveButton={ 
-            () => ( 
+            () => (
               <SaveButton
                 disabled={ !selectedFile }
                 onSave={
-                  () => onSave(selectedFile)
+                  () => {
+                    onSave(selectedFile)
+                  }
                 } />
             )
           }
