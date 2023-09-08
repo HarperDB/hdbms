@@ -110,10 +110,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
           selectedFile={ selectedFile?.path }
           selectedFolder={ selectedFolder }
           onFolderRename={() => {
-            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
+            //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
           }}
           onFileRename={() => {
-            updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
+            //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
           onFolderSelect={setSelectedFolder}
           onFileSelect={
