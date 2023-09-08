@@ -20,9 +20,6 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
 
-  console.log('web ide re-render folder path check', selectedFolder?.path);
-  console.log('FILETREE: ', fileTree);
-
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
   const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
@@ -33,13 +30,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
-  async function deploy(packageUrl) {
-    const payload = {
-      //project,
-      packageUrl,
-      //payload,
-    }
-    //onDeploy(packageUrl);
+  async function deployPackage(projectName, packageUrl) {
+
+    await onDeploy(projectName, packageUrl);
+
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
@@ -47,8 +41,6 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
     const fileInfo = await onAddFile(newFilename, selectedFolder);
     // show file in editor window.
 
-    console.log('add file check: ', fileInfo)
-    // TODO: check filepath.
     setSelectedFile(fileInfo);
     updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
@@ -65,13 +57,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode) {
  
-    // TODO: check filepath.
     const update = {
       ...selectedFile,
       content: updatedCode
     };
 
-    console.log('update in memory code file check : ', update); 
     setSelectedFile(update);
 
   }
@@ -128,9 +118,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
           onFolderSelect={setSelectedFolder}
           onFileSelect={
             async (entry) => {
-              console.log('on file select: ', entry);
               const { content } = await onFileSelect(entry);
-              // TODO: check filepath.
               setSelectedFile({
                 ...entry,
                 content
@@ -165,7 +153,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, 
             onCancel={ backToPreviousWindow } />
           <DeployWindow
             active={ activeEditorWindow === 'DEPLOY_WINDOW' } 
-            onConfirm={ onDeploy }
+            onConfirm={ deployPackage }
             onCancel={ backToPreviousWindow } />
           <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
           <Editor active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' } file={ selectedFile } onChange={ updateInMemoryCodeFile } />

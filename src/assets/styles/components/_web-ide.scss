@@ -25,6 +25,14 @@
     }
   }
 
+  .deploy-form {
+    display: flex;
+    flex-direction: column;
+
+    & > label {
+      margin-bottom: 20px;
+    }
+  }
   .rename-file{
     margin-left: 8px;
     color: transparent;

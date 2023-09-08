@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 
@@ -53,12 +53,51 @@ export function NameFolderWindow({ active, onConfirm, onCancel }) {
 }
 
 export function DeployWindow({ active, onConfirm, onCancel }) {
+
+  const [ packageName, setPackageName ] = useState('');
+  const [ packageUrl, setPackageUrl ] = useState('');
+
+  function callOnConfirm() {
+
+    if (!(packageName.trim() && packageUrl.trim())) {
+      console.error('invalid package name and/or url');
+      return;
+    }
+
+    onConfirm(packageName, packageUrl); 
+
+  }
+
+  function updatePackageName(e) {
+    setPackageName(e.target.value)
+  }
+
+  function updatePackageUrl(e) {
+    setPackageUrl(e.target.value)
+  }
+
+
   return !active ? null : (
-    <NameInput
-      label="Deploy from an external location"
-      onConfirm={ onConfirm }
-      onCancel={ onCancel }
-    />
+    <div className="deploy-form">
+      <label className="instructins">Deploy a component from an external package location:</label>
+      <label>
+        <span>Package name</span>:
+        <input
+          autoFocus 
+          value={packageName}
+          onChange={ updatePackageName }
+          placeholder="name your external component" />
+      </label>
+      <label>
+        <span>External Package URL</span>:
+        <input
+          value={packageUrl}
+          onChange={ updatePackageUrl }
+          placeholder="url to external component" />
+      </label>
+      <button onClick={ onCancel }>Cancel</button>
+      <button onClick={ callOnConfirm }>Deploy</button>
+    </div>
   )
 }
 
