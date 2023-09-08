@@ -1,12 +1,13 @@
 import queryInstance from '../queryInstance';
 
-export default async ({ auth, url, project }) => 
+export default async ({ auth, url, project, packageUrl, payload }) => 
   queryInstance({
+    auth,
+    url,
     operation: {
       operation: 'deploy_component',
       project,
-      file
-    },
-    auth,
-    url,
+      package: packageUrl,
+      payload
+    }
   });

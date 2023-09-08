@@ -14,10 +14,6 @@ export const EDITOR_WINDOWS = {
   DEPLOY_WINDOW: 'DEPLOY_WINDOW'
 };
 
-export function DeployWindow({ active, onDeploy }) {
-  return !active ? null : <div onClick={ onDeploy }>deploy window</div>
-}
-
 export function BlankWindow({ active }) {
   return !active ? null : (
     <div className="blank-editor-window">
@@ -54,6 +50,16 @@ export function NameFolderWindow({ active, onConfirm, onCancel }) {
       onCancel={ onCancel }
     />
   );
+}
+
+export function DeployWindow({ active, onConfirm, onCancel }) {
+  return !active ? null : (
+    <NameInput
+      label="Deploy from an external location"
+      onConfirm={ onConfirm }
+      onCancel={ onCancel }
+    />
+  )
 }
 
 function EditorWindow({ children }) {

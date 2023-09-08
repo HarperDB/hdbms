@@ -6,6 +6,7 @@ import getComponentFile from '../../../../functions/api/instance/getComponentFil
 import setComponentFile from '../../../../functions/api/instance/setComponentFile';
 import addComponent from '../../../../functions/api/instance/addComponent';
 import dropComponent from '../../../../functions/api/instance/dropComponent';
+import deployComponent from '../../../../functions/api/instance/deployComponent';
 
 import {default as ApplicationsIDE} from '../../../shared/webide/WebIDE';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
@@ -204,7 +205,16 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function onDeploy(arg) {
+  async function onDeploy({ project, packageUrl, payload }) {
+    try {
+      await deployComponent({
+        project,
+        packageUrl,
+        payload
+      });
+    } catch(e) {
+      console.log('deploy failed: ', { project, packageUrl, payload });
+    }
   }
 
   async function createNewFile(newFilename, parentFolder) {

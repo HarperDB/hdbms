@@ -10,7 +10,7 @@ import NameInput from './NameInput';
 // setSelectedFile: this is for matching against fileTree for ui highlighting
 // and it's for saving to server.
 
-function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddFolder, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
@@ -30,6 +30,16 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
   async function addFolder(newFolderName) {
     onAddFolder(newFolderName, selectedFolder)
     // go back to prev window
+    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+  }
+
+  async function deploy(packageUrl) {
+    const payload = {
+      //project,
+      packageUrl,
+      //payload,
+    }
+    //onDeploy(packageUrl);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
@@ -153,7 +163,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onAddFile, onAddFolder, onFileSele
             active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 
             onConfirm={ addFile }
             onCancel={ backToPreviousWindow } />
-          <DeployWindow active={ activeEditorWindow === 'DEPLOY_WINDOW' } />
+          <DeployWindow
+            active={ activeEditorWindow === 'DEPLOY_WINDOW' } 
+            onConfirm={ onDeploy }
+            onCancel={ backToPreviousWindow } />
           <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
           <Editor active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' } file={ selectedFile } onChange={ updateInMemoryCodeFile } />
         </EditorWindow>
