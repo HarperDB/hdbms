@@ -39,7 +39,7 @@
 
     .editor {
       &.current-file-path::before {
-        content: 'file: ';
+        content: '> ';
       }
       &.current-file-path {
         align-self: flex-start;

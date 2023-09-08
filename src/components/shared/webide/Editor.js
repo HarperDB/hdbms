@@ -9,10 +9,11 @@ function Editor({ active, file, onChange }) {
     return null;
   }
 
-  const filePathRelativeToComponentsDir = file.path.split('/').slice(1).join('/');
+  const filepathRelativeToComponentsDir = file.path.split('/').slice(1).join('/');
   // eslint-disable-next-line no-unused-vars
+  console.log('editor path indicator check: ', file?.path);
   return <>
-      <div className="editor current-file-path">?</div>
+      <div className="editor current-file-path">{filepathRelativeToComponentsDir}</div>
       <ReactMonacoEditor
         height="100%"
         defaultLanguage="javascript"
