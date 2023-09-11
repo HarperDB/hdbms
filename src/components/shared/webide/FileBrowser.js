@@ -42,7 +42,10 @@ function PackageIcon() {
 function Package({ name, url, onPackageSelect }) {
   return (
     <button
-      onClick={ (e) => onPackageSelect({ name, url, event: e }) }
+      onClick={ (e) => {
+        console.log('package select', name, url);
+        onPackageSelect({ name, url, event: e }) 
+      }}
       className={
         cn('package')
       }

@@ -7,13 +7,10 @@ import Editor from './Editor';
 import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
-// setSelectedFile: this is for matching against fileTree for ui highlighting
-// and it's for saving to server.
-
 function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
-  const [ selectedFile, setSelectedFile ] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
+  const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
@@ -41,7 +38,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
 
     await onDeploy(projectName, packageUrl);
 
-    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+    setSelectedPackage(null);
+    updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+
   }
 
   async function addFile(newFilename) {
@@ -53,17 +52,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
   }
 
   function updateActiveEditorWindow(to, from) {
-    if (to === from) {
-      setPreviousActiveEditorWindow(to);
-      setActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW);
-    } else {
-      setActiveEditorWindow(to);
-      setPreviousActiveEditorWindow(from);
-    }
+    setActiveEditorWindow(to);
+    setPreviousActiveEditorWindow(from);
   }
 
   function backToPreviousWindow() {
-    console.log(previousActiveEditorWindow);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
@@ -121,7 +114,12 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
               }
             } />
           <DeployProjectButton
-            onClick={ () => updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow) }
+            onClick={
+              () => {
+                setSelectedPackage(null);
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow)
+              }
+            }
             />
         </FileMenu>
         <FileBrowser
@@ -138,8 +136,8 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
           onFolderSelect={setSelectedFolder}
           onPackageSelect={
             ({ name, url }) => {
-              setSelectedPackage({ name, url});
-              updateActiveEditorWindow(EDITOR_WINDOWS.PACKAGE_DETAILS_WINDOW, activeEditorWindow)
+              setSelectedPackage({ name, url });
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow)
             }
           }
           onFileSelect={
@@ -188,15 +186,13 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
             onCancel={ backToPreviousWindow } />
           <DeployWindow
             active={ activeEditorWindow === 'DEPLOY_WINDOW' } 
+            selectedPackage={ selectedPackage }
             onConfirm={ deployPackage }
             onCancel={ backToPreviousWindow } />
           <Editor
             active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
             file={ selectedFile }
             onChange={ updateInMemoryCodeFile } />
-          <PackageDetailsWindow
-            packageDetails={ selectedPackage }
-            active={ activeEditorWindow === 'PACKAGE_DETAILS_WINDOW' } />
         </EditorWindow>
       </Col>
     </Row>

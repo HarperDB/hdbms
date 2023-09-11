@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 
@@ -87,10 +87,22 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 }
 
-export function DeployWindow({ active, onConfirm, onCancel }) {
+export function DeployWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
 
-  const [ packageName, setPackageName ] = useState('');
-  const [ packageUrl, setPackageUrl ] = useState('');
+  const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
+  const [ packageUrl, setPackageUrl ] = useState(selectedPackage?.url || '');
+
+  // FIXME: is this the right way to use useEffect here?
+  // keeps controlled inputs in sync with selectedPackage changes from 
+  // parent component.
+  useEffect(() => {
+    setPackageName(selectedPackage?.name);
+    setPackageUrl(selectedPackage?.url);
+  }, [selectedPackage])
+
+  if (!active) {
+    return null;
+  }
 
   function callOnConfirm() {
 
@@ -111,26 +123,26 @@ export function DeployWindow({ active, onConfirm, onCancel }) {
     setPackageUrl(e.target.value)
   }
 
-  return !active ? null : (
+  return (
     <div className="deploy-form">
-      <label className="instructins">Deploy a component from an external package location:</label>
+      <label className="instructions">Deploy a component from an external package location:</label>
       <label>
         <span>Package name</span>:
         <input
           autoFocus 
-          value={packageName}
+          value={ packageName }
           onChange={ updatePackageName }
           placeholder="name your external component" />
       </label>
       <label>
         <span>External Package URL</span>:
         <input
-          value={packageUrl}
+          value={ packageUrl }
           onChange={ updatePackageUrl }
           placeholder="url to external component" />
       </label>
       <button onClick={ onCancel }>Cancel</button>
-      <button onClick={ callOnConfirm }>Deploy</button>
+      <button disabled={ !(packageName && packageUrl) } onClick={ callOnConfirm }>Deploy</button>
     </div>
   )
 }
