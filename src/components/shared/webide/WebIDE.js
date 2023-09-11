@@ -52,6 +52,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
   }
 
   function updateActiveEditorWindow(to, from) {
+    // TODO: figure out correct logic here. 
     setActiveEditorWindow(to);
     setPreviousActiveEditorWindow(from);
   }
