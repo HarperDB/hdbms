@@ -26,12 +26,6 @@
     z-index: -2;
   }
 
-  #app-bg-dots {
-    background: radial-gradient($color-black 1px, transparent 0);
-    background-size: 3px 3px;
-    z-index: -1;
-  }
-
   a {
     color: $color-lightergrey !important;
 

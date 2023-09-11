@@ -176,7 +176,6 @@ function App() {
         )}
       </div>
       <div id="app-bg-color" />
-      <div id="app-bg-dots" />
       <div className="version">
         HarperDB Studio v{config.studio_version}
         {version.maintenance && ' - MAINTENANCE MODE'}
