@@ -59,7 +59,6 @@ function Package({ name, url, onPackageSelect }) {
   return (
     <button
       onClick={ (e) => {
-        console.log('package select', name, url);
         onPackageSelect({ name, url, event: e }) 
       }}
       className={
@@ -78,6 +77,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
   const isDir = isFolder(directoryEntry);
   const isProject = directoryEntry.path.split('/').length === 2; // 'components/<proj name>'
   const renameFileIconClass = 'rename-file';
+  const deployFileIconClass = 'deploy-project';
   const isFileSelected = directoryEntry.path === selectedFile;
   const isFolderSelected = directoryEntry.path === selectedFolder?.path;
 
@@ -95,25 +95,32 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
 
   function handleToggleSelected(e) {
 
-      // set the folder/file as currently selected folder/file
-      // visually highlight directory name
-      // note: if directory already highlighted, make sure if we've clicked on the pencil/edit icon
-      // that we don't untoggle directory selection; leave selected if icon clicked. 
-      const iconWasClicked = e.target.classList.contains(renameFileIconClass); 
 
-      if (isDir) {
-        // one click on dir name toggles selected / highlighted state / ui
-        const alreadySelected = directoryEntry?.path === selectedFolder?.path;
-        if (alreadySelected && iconWasClicked) {
-          return;
-        } else {
-          onFolderSelect(alreadySelected ? null : directoryEntry);
-        }
+    // TODO FIX HANDLING SO WE CAN HAVE NUANCED CLICK BEHAVIOR
+    console.log('classes: ', e.target.classList);
+
+
+    // set the folder/file as currently selected folder/file
+    // visually highlight directory name
+    // note: if directory already highlighted, make sure if we've clicked on the pencil/edit icon
+    // that we don't untoggle directory selection; leave selected if icon clicked. 
+    const iconWasClicked = e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass); 
+    
+    if (iconWasClicked) return;
+
+    if (isDir) {
+      // one click on dir name toggles selected / highlighted state / ui
+      const alreadySelected = directoryEntry?.path === selectedFolder?.path;
+      if (alreadySelected && iconWasClicked) {
+        // TODO: don't 
       } else {
-        // one click on file name sets it to selected / highlighted
-        // AND retrieves file content
-        onFileSelect(directoryEntry);
+        onFolderSelect(alreadySelected ? null : directoryEntry);
       }
+    } else {
+      // one click on file name sets it to selected / highlighted
+      // AND retrieves file content
+      onFileSelect(directoryEntry);
+    }
 
   }
 
@@ -128,16 +135,21 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
       }
       onKeyDown={noOp} >
         <Icon className="filename-icon" />
-        <span
-          className="filename-text">{directoryEntry.name}
-        </span>
-        { isProject && <i onClick={
-          (e) => {
-            e.preventDefault();
-            console.log('deploy! from file');
-            onDeployProject(e);
-          }
-        } className='deploy-project fas fa-rocket' /> }
+        <span className="filename-text">{directoryEntry.name}</span>
+
+        {/* deploy project to another server button */ }
+        {
+
+          !isProject ?
+          null :
+          <i onClick={
+            (e) => {
+              onDeployProject(e);
+            }
+          } className='deploy-project fas fa-share' /> 
+
+        }
+
         <i onClick={
             (e) => {
               onFileRename(e);

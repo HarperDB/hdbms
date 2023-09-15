@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
+import { useParams } from 'react-router';
 
 import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
@@ -9,6 +10,8 @@ import addComponent from '../../../../functions/api/instance/addComponent';
 import dropComponent from '../../../../functions/api/instance/dropComponent';
 import deployComponent from '../../../../functions/api/instance/deployComponent';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
+
+import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
 import {default as ApplicationsIDE} from '../../../shared/webide/WebIDE';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
@@ -32,13 +35,41 @@ function getRelativeFilepath(absolutePath) {
 
 }
 
+
 function ManageIndex({ refreshCustomFunctions, loading }) {
+  const { compute_stack_id } = useParams();
   const registration = useStoreState(instanceState, (s) => s.registration);
   const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
   const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
-  console.log(instances);
+  const [instanceAuths] = useInstanceAuth({});
+
+  function getDeployTargets(instanceList, instanceAuthList, thisCsId) {
+
+    return instanceList.filter(i => {
+
+      // TODO: restore to exclude myself
+      if (i['compute_stack_id'] === thisCsId) {
+        return false;
+      }
+
+      const csId = i['compute_stack_id'];
+      const deployTarget = instanceAuthList[csId];
+
+      if (!deployTarget) {
+        return false;
+      }
+
+      const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
+
+      // exclude < 4.2
+      return parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2; 
+
+    });
+
+  }
+
 
     // save file to instance
   async function saveCodeToInstance(selectedFile) {
@@ -234,14 +265,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function deployProject() {
-    console.log('deploy project! from manage/index.js');
   }
 
   return supportsApplicationsAPI ?
 
     <ApplicationsIDE
       fileTree={fileTree} 
-      instances={instances}
+      deployTargets={getDeployTargets}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}

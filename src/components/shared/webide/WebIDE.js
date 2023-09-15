@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
-import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton, InstallPackageButton } from './FileMenu';
+import FileMenu, {
+  AddFileButton,
+  AddProjectFolderButton,
+  AddProjectButton,
+  DeleteFolderButton,
+  DeleteFileButton,
+  InstallPackageButton
+} from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
-import EditorWindow, { EDITOR_WINDOWS, InstallPackageWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
+import EditorWindow, {
+  EDITOR_WINDOWS,
+  InstallPackageWindow,
+  BlankWindow,
+  DeployComponentWindow,
+  NoFileSelectedWindow,
+  NameFileWindow,
+  NameProjectFolderWindow,
+  NameProjectWindow,
+  PackageDetailsWindow
+} from './EditorWindow';
+
 import NameInput from './NameInput';
 
-function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onDeployProject, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+import useInstanceAuth from '../../../functions/state/instanceAuths';
+
+function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, onDeployProject, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
@@ -130,12 +150,17 @@ function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onDeployProject,
           selectedFile={ selectedFile?.path }
           selectedFolder={ selectedFolder }
           onFolderRename={() => {
-            //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
+            // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
           }}
           onFileRename={() => {
-            //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
+            // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
-          onDeployProject={onDeployProject}
+          onDeployProject={
+            (e) => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW, activeEditorWindow);
+              onDeployProject(e)
+            }
+          }
           onFolderSelect={setSelectedFolder}
           onPackageSelect={
             ({ name, url }) => {
@@ -192,6 +217,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onDeployProject,
             selectedPackage={ selectedPackage }
             onConfirm={ installPackage }
             onCancel={ backToPreviousWindow } />
+          <DeployComponentWindow
+            project={ selectedFolder }
+            active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }
+            deployTargets={ deployTargets }
+          />
           <Editor
             active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
             file={ selectedFile }

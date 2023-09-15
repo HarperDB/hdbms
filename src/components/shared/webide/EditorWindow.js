@@ -88,16 +88,18 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 }
 
-export function DeployComponentWindow({ instances= [{url: 'fake1'},{url: 'fake2'},{url: 'fake3'}] }) {
+export function DeployComponentWindow({ active, project, instances=[] }) {
 
-  return <div>
-    <h1>deploy component to external server</h1>
-      <ul>
-      {
-        instances.map(instance => <li>instance.url</li>)
-      }
-      </ul>
-  </div>
+  return !active ? null :
+  (<div>
+    <select>
+    {
+      instances.map(instance => (
+        <option value={instance.url}>{instance.url}</option>
+      ))
+    }
+    </select>
+  </div>)
 }
 
 export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
