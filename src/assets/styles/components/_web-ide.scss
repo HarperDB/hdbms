@@ -73,6 +73,21 @@
       padding: 0px 5px 0px 0px;
     }
 
+    .add-project:hover {
+      color: rgb(25, 168, 148);
+    }
+    .deploy-project:hover {
+      color: #f24242;
+    }
+
+    .add-folder:hover,
+    .delete-folder:hover {
+      color: rgb(143, 141, 255);
+    }
+    .delete-file:hover {
+      color: yellow;
+    }
+
     .save-code,
     .deploy-code,
     .add-folder,
@@ -174,8 +189,15 @@
           padding-left: 5px;
         }
 
-        .file-icon.fa-js {
+        .file-icon.filetype-js {
           color: #f7df1e;
+        }
+
+        .file-icon.filetype-yaml {
+          color: #c4c4ff;
+        }
+        .file-icon.filetype-unknown {
+          color: lightgray;
         }
 
         .folder-icon {

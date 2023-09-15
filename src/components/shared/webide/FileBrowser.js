@@ -11,6 +11,11 @@ function NoProjects() {
   );
 }
 
+function parseFileExtension(name) {
+  return name && [...name].includes('.') ?
+    name.split('.').slice(-1)[0]
+    : null;
+}
 function directorySortComparator(a, b) {
 
   // TODO: refactor.
@@ -35,8 +40,15 @@ function FolderIcon({ isOpen, toggleClosed }) {
   return <i onClick={toggleClosed} className={cn(`folder-icon fas ${folderClassName}`)} />;
 }
 
-function FiletypeIcon() {
-  return <i className={ cn('file-icon fab fa-js') } />;
+function FiletypeIcon({ extension }) {
+  switch (extension) {
+    case 'js':
+      return <i className={ cn('file-icon filetype-js fab fa-js') } />;
+    case 'yaml':
+      return <i className={ cn('file-icon filetype-yaml fas fa-cog') } />;
+    default:
+      return <i className={ cn('file-icon filetype-unknown far fa-file-alt') } />;
+  }
 }
 
 function PackageIcon() {
@@ -129,6 +141,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
   const [ open, setOpen ] = useState(true);
 
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
+  const fileExtension = parseFileExtension(directoryEntry.name);
 
   let Icon;
   // top-level dir === package
@@ -142,9 +155,8 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
   } else if (directoryEntry.entries) {
     Icon = () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) });
   } else {
-    Icon = FiletypeIcon;
+    Icon = () => FiletypeIcon({ extension: fileExtension });
   }
-  console.log('directoryEntry', directoryEntry);
 
   return (
     <>
