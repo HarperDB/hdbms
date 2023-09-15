@@ -13,15 +13,26 @@
     list-style-type: none;
   }
 
+  .rename-file {
+     color: rgb(120,120,120);
+  }
   .rename-file:hover {
      color: white !important;
-  }
+   }
   .file {
     &:hover {
+      color: rgb(100,100,100);
       .rename-file {
-        color: rgb(120,120,120);
+        color: rgb(100,100,100);
       }
 
+    }
+
+    .deploy-project {
+      color: rgb(100,100,100);
+      &:hover {
+        color:white;
+      }
     }
   }
 
@@ -33,8 +44,11 @@
       margin-bottom: 20px;
     }
   }
-  .rename-file{
+  .rename-file,
+  .deploy-project {
     margin-left: 8px;
+  }
+  .rename-file {
     color: transparent;
   }
 

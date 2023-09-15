@@ -73,9 +73,10 @@ function Package({ name, url, onPackageSelect }) {
 
 }
 
-function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDeployProject, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
 
   const isDir = isFolder(directoryEntry);
+  const isProject = directoryEntry.path.split('/').length === 2; // 'components/<proj name>'
   const renameFileIconClass = 'rename-file';
   const isFileSelected = directoryEntry.path === selectedFile;
   const isFolderSelected = directoryEntry.path === selectedFolder?.path;
@@ -130,13 +131,25 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFi
         <span
           className="filename-text">{directoryEntry.name}
         </span>
-        <i onClick={onFileRename} className={`${renameFileIconClass} fas fa-pencil-alt`} />
+        { isProject && <i onClick={
+          (e) => {
+            e.preventDefault();
+            console.log('deploy! from file');
+            onDeployProject(e);
+          }
+        } className='deploy-project fas fa-rocket' /> }
+        <i onClick={
+            (e) => {
+              onFileRename(e);
+              e.preventDefault();
+            }
+        } className={`${renameFileIconClass} fas fa-pencil-alt`} />
     </button>
   )
 
 }
 
-function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, onPackageSelect, onFileRename, selectedFile, selectedFolder }) {
+function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject, onFileSelect, onPackageSelect, onFileRename, selectedFile, selectedFolder }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -175,6 +188,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
                   selectedFile={selectedFile}
                   selectedFolder={selectedFolder}
                   directoryEntry={directoryEntry}
+                  onDeployProject={onDeployProject}
                   onFileRename={
                     () => {
                       onFileRename(directoryEntry)
@@ -200,6 +214,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
                 selectedFolder={selectedFolder}
                 directoryEntry={entry}
                 onFileSelect={onFileSelect}
+                onDeployProject={onDeployProject}
                 onFileRename={onFileRename}
                 onFolderSelect={onFolderSelect}
                 onPackageSelect={onPackageSelect}
@@ -215,7 +230,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
 }
 
 // A recursive directory tree representation
-function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
+function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onDeployProject, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
   return !files?.entries?.length ?
     <NoProjects /> : 
     <ul className="file-browser">
@@ -225,6 +240,7 @@ function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onFil
         onFileSelect={onFileSelect}
         onFileRename={onFileRename}
         onFolderSelect={onFolderSelect}
+        onDeployProject={onDeployProject}
         onPackageSelect={onPackageSelect}
         userOnSelect={userOnSelect}
         directoryEntry={files} />

@@ -7,7 +7,7 @@ import Editor from './Editor';
 import EditorWindow, { EDITOR_WINDOWS, InstallPackageWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
-function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onDeployProject, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
@@ -135,6 +135,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onAddFile, onAdd
           onFileRename={() => {
             //updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
+          onDeployProject={onDeployProject}
           onFolderSelect={setSelectedFolder}
           onPackageSelect={
             ({ name, url }) => {

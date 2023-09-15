@@ -12,6 +12,7 @@ export const EDITOR_WINDOWS = {
   RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
   NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
+  DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
   INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
 };
@@ -85,6 +86,18 @@ export function PackageDetailsWindow({ active, packageDetails }) {
     </div>
   );
 
+}
+
+export function DeployComponentWindow({ instances= [{url: 'fake1'},{url: 'fake2'},{url: 'fake3'}] }) {
+
+  return <div>
+    <h1>deploy component to external server</h1>
+      <ul>
+      {
+        instances.map(instance => <li>instance.url</li>)
+      }
+      </ul>
+  </div>
 }
 
 export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {

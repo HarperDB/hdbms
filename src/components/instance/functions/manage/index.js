@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStoreState } from 'pullstate';
 
+import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
 import getComponentFile from '../../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../../functions/api/instance/setComponentFile';
@@ -36,6 +37,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
   const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
+  const instances = useStoreState(appState, (s) => s.instances);
+  console.log(instances);
 
     // save file to instance
   async function saveCodeToInstance(selectedFile) {
@@ -230,16 +233,22 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function deployProject() {
+    console.log('deploy project! from manage/index.js');
+  }
+
   return supportsApplicationsAPI ?
 
     <ApplicationsIDE
       fileTree={fileTree} 
+      instances={instances}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
       onAddProject={createNewProject}
       onAddProjectFolder={createNewProjectFolder}
       onInstallPackage={onInstallPackage}
+      onDeployProject={deployProject}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}
       onFileSelect={selectNewFile}
