@@ -78,6 +78,10 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
     setPreviousActiveEditorWindow(from);
   }
 
+  function toDefaultWindow() {
+    updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+  }
+
   function backToPreviousWindow() {
     // TODO: this needs some thought.  unexpected 'no action' behavior.
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
@@ -204,28 +208,28 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
           <NameProjectWindow
             active={ activeEditorWindow === 'NAME_PROJECT_WINDOW' } 
             onConfirm={ addProject }
-            onCancel={ backToPreviousWindow } />
+            onCancel={ toDefaultWindow } />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
             active={ activeEditorWindow === 'NAME_PROJECT_FOLDER_WINDOW' } 
             onConfirm={ addProjectFolder }
-            onCancel={ backToPreviousWindow } />
+            onCancel={ toDefaultWindow } />
           <NameFileWindow 
             active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 
             onConfirm={ addFile }
-            onCancel={ backToPreviousWindow } />
+            onCancel={ toDefaultWindow } />
           <InstallPackageWindow
             active={ activeEditorWindow === 'INSTALL_PACKAGE_WINDOW' } 
             selectedPackage={ selectedPackage }
             onConfirm={ installPackage }
-            onCancel={ backToPreviousWindow } />
+            onCancel={ toDefaultWindow } />
           <DeployComponentWindow
             onConfirm={
               (project, deployTarget) => {
                 onDeployProject({ project, deployTarget });
               }
             }
-            onCancel={ backToPreviousWindow }
+            onCancel={ toDefaultWindow }
             project={ selectedFolder }
             active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }
             deployTargets={ deployTargets }
