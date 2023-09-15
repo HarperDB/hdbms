@@ -53,14 +53,14 @@ export function DeleteFileButton({ onDeleteFile, disabled }) {
   )
 }
 
-export function DeployProjectButton({ onClick }) {
+export function InstallPackageButton({ onClick }) {
   return (
       <button
         onClick={ onClick }
         className={
-          cn("deploy-project fas fa-arrow-alt-circle-up")
+          cn("install-package fas fa-cloud-download-alt")
         }
-        title="deploy project" />
+        title="install external package from url or NPM package spec" />
   )
 }
 

@@ -184,7 +184,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function onDeploy(projectName, packageUrl) {
+  async function onInstallPackage(projectName, packageUrl) {
 
     await deployComponent({
       auth,
@@ -239,7 +239,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onAddFile={createNewFile}
       onAddProject={createNewProject}
       onAddProjectFolder={createNewProjectFolder}
-      onDeploy={onDeploy}
+      onInstallPackage={onInstallPackage}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}
       onFileSelect={selectNewFile}

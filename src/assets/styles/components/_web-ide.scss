@@ -25,7 +25,7 @@
     }
   }
 
-  .deploy-form {
+  .install-package-form {
     display: flex;
     flex-direction: column;
 
@@ -76,7 +76,7 @@
     .add-project:hover {
       color: rgb(25, 168, 148);
     }
-    .deploy-project:hover {
+    .install-package:hover {
       color: #f24242;
     }
 
@@ -89,13 +89,13 @@
     }
 
     .save-code,
-    .deploy-code,
+    .install-package,
     .add-folder,
     .add-project,
     .upload-file,
     .delete-folder,
     .delete-file,
-    .deploy-project,
+    .install-package-project,
     .add-file {
       border: none;
       outline: none !important;
@@ -109,7 +109,7 @@
       color: #ee81ee;
     }
 
-    .deploy-code {
+    .install-package {
     }
 
     button[disabled] {

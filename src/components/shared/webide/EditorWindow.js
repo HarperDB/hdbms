@@ -12,7 +12,7 @@ export const EDITOR_WINDOWS = {
   RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
   NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
-  DEPLOY_WINDOW: 'DEPLOY_WINDOW',
+  INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
 };
 
@@ -87,7 +87,7 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 }
 
-export function DeployWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
+export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
 
   const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
   const [ packageUrl, setPackageUrl ] = useState(selectedPackage?.url || '');
@@ -124,8 +124,8 @@ export function DeployWindow({ active, selectedPackage, onConfirm, onCancel, onP
   }
 
   return (
-    <div className="deploy-form">
-      <label className="instructions">Deploy a component from an external package location:</label>
+    <div className="install-package-form">
+      <label className="instructions">Install a package component into '~/hdb/node_modules' from an external location:</label>
       <label>
         <span>Package name</span>:
         <input
@@ -141,8 +141,8 @@ export function DeployWindow({ active, selectedPackage, onConfirm, onCancel, onP
           onChange={ updatePackageUrl }
           placeholder="url to external component" />
       </label>
+      <button disabled={ !(packageName && packageUrl) } onClick={ callOnConfirm }>Install External Package</button>
       <button onClick={ onCancel }>Cancel</button>
-      <button disabled={ !(packageName && packageUrl) } onClick={ callOnConfirm }>Deploy</button>
     </div>
   )
 }

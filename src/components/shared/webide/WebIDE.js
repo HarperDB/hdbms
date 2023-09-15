@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
-import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton, DeployProjectButton } from './FileMenu';
+import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton, InstallPackageButton } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor'; 
-import EditorWindow, { EDITOR_WINDOWS, DeployWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
+import EditorWindow, { EDITOR_WINDOWS, InstallPackageWindow, BlankWindow, NoFileSelectedWindow, NameFileWindow, NameProjectFolderWindow, NameProjectWindow, PackageDetailsWindow } from './EditorWindow';
 import NameInput from './NameInput';
 
-function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+function WebIDE({ fileTree, onSave, onUpdate, onInstallPackage, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
   const [ editingFileName, setEditingFileName ] = useState(false); 
   const [ editingFolderName, setEditingFolderName ] = useState(false); 
-  const [ showDeployWindow, setShowDeployWindow ] = useState(false);
+  const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
 
@@ -34,9 +34,9 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
-  async function deployPackage(projectName, packageUrl) {
+  async function installPackage(projectName, packageUrl) {
 
-    await onDeploy(projectName, packageUrl);
+    await onInstallPackage(projectName, packageUrl);
 
     setSelectedPackage(null);
     updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
@@ -58,6 +58,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
   }
 
   function backToPreviousWindow() {
+    // TODO: this needs some thought.  unexpected 'no action' behavior.
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
@@ -114,11 +115,11 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
                 updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
               }
             } />
-          <DeployProjectButton
+          <InstallPackageButton
             onClick={
               () => {
                 setSelectedPackage(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow)
+                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
               }
             }
             />
@@ -138,7 +139,7 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
           onPackageSelect={
             ({ name, url }) => {
               setSelectedPackage({ name, url });
-              updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_WINDOW, activeEditorWindow)
+              updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
             }
           }
           onFileSelect={
@@ -185,10 +186,10 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
             active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 
             onConfirm={ addFile }
             onCancel={ backToPreviousWindow } />
-          <DeployWindow
-            active={ activeEditorWindow === 'DEPLOY_WINDOW' } 
+          <InstallPackageWindow
+            active={ activeEditorWindow === 'INSTALL_PACKAGE_WINDOW' } 
             selectedPackage={ selectedPackage }
-            onConfirm={ deployPackage }
+            onConfirm={ installPackage }
             onCancel={ backToPreviousWindow } />
           <Editor
             active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
