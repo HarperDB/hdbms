@@ -285,12 +285,10 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project: project.name
     });
 
-    console.log(payload);
-
     await deployComponent({
       auth: otherInstanceAuth,
       url: otherInstance.url,
-      project: project.name,
+      project: project.name + '2',
       payload
     })
 

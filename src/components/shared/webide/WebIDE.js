@@ -199,7 +199,7 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
           }
         />
         <EditorWindow>
-          <BlankWindow active={ activeEditorWindow === 'BLANK_WINDOW' } />
+          <BlankWindow fileTree={fileTree} active={ activeEditorWindow === 'BLANK_WINDOW' } />
           <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
           <NameProjectWindow
             active={ activeEditorWindow === 'NAME_PROJECT_WINDOW' } 

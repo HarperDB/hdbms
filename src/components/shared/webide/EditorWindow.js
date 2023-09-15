@@ -17,10 +17,12 @@ export const EDITOR_WINDOWS = {
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
 };
 
-export function BlankWindow({ active }) {
+export function BlankWindow({ active, fileTree }) {
   return !active ? null : (
     <div className="blank-editor-window">
-    Select a File on the left.
+    {
+      fileTree.entries?.length ? 'Please create or select a file on the left' : 'Please create a project on the left'
+    }
     </div>
   )
 }
