@@ -43,6 +43,7 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
   const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
 
+  console.log(activeEditorWindow);
   async function addProject(newProjectName) {
     onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
@@ -157,8 +158,9 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
           }}
           onDeployProject={
             (e) => {
+              // opens deploy window
+              console.log('go to deploy window');
               updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW, activeEditorWindow);
-              onDeployProject(e)
             }
           }
           onFolderSelect={setSelectedFolder}
@@ -218,7 +220,11 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             onConfirm={ installPackage }
             onCancel={ backToPreviousWindow } />
           <DeployComponentWindow
-            onConfirm={ onDeployProject }
+            onConfirm={
+              (project, deployTarget) => {
+                onDeployProject({ project, deployTarget });
+              }
+            }
             onCancel={ backToPreviousWindow }
             project={ selectedFolder }
             active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }

@@ -105,7 +105,8 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
     // that we don't untoggle directory selection; leave selected if icon clicked. 
     const iconWasClicked = e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass); 
     
-    if (iconWasClicked) return;
+    // if icon's clicked, select, but don't unselect.
+    //if (iconWasClicked) return;
 
     if (isDir) {
       // one click on dir name toggles selected / highlighted state / ui

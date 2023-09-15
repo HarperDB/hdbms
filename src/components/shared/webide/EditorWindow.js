@@ -89,17 +89,60 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 }
 
 export function DeployComponentWindow({ active, project, onConfirm, onCancel, deployTargets=[] }) {
-  console.log(deployTargets);
 
-  return !active ? null : (<div>
+  const [ selectedTarget, setSelectedTarget ] = useState(null);
+
+  if (!active || !project)
+    return null;
+
+  function updateSelectedTarget(e) {
+    setSelectedTarget(e.target.value);
+  }
+
+  console.log({deployTargets: deployTargets.map(t => t.instance.url) });
+
+  return (<div>
       <span>Deploy project { project.name.toUpperCase() } to another server</span>
-      <select name="deploy-targets" id="deploy-targets">
-      {
-        deployTargets.map(target => <option value={target.url}>{target.instance_name} -- {target.url}</option>)
-      }
+      <br />
+      <br />
+      <select
+        autoFocus
+        onChange={ updateSelectedTarget }
+        name="deploy-targets"
+        id="deploy-targets">
+        {
+          <option
+            defaultValue=""
+            disable
+            selected>
+            select a target deployment destination
+          </option>
+        }
+        {
+          deployTargets.map(target => (
+              <option defaultValue={target.instance.url}>
+                {target.instance.instance_name} - {target.instance.url}
+              </option>
+            )
+          )
+        }
       </select>
-      <button onClick={onConfirm}>Deploy</button>
-      <button onClick={onCancel}>Cancel</button>
+      <br />
+      <br />
+      <div>
+        <button
+        disabled={ !selectedTarget }
+        onClick={
+          () => {
+            const instance_name = selectedTarget.split(' - ')[0];
+            const correctTarget = deployTargets.find(t => t.instance.instance_name === instance_name); 
+            onConfirm(project, correctTarget);
+          }
+        }>Deploy</button>
+      </div>
+      <div>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
     </div>)
 }
 

@@ -7,6 +7,7 @@ import instanceState from '../../../../functions/state/instanceState';
 import getComponentFile from '../../../../functions/api/instance/getComponentFile';
 import setComponentFile from '../../../../functions/api/instance/setComponentFile';
 import addComponent from '../../../../functions/api/instance/addComponent';
+import packageComponent from '../../../../functions/api/instance/packageComponent';
 import dropComponent from '../../../../functions/api/instance/dropComponent';
 import deployComponent from '../../../../functions/api/instance/deployComponent';
 import restartInstance from '../../../../functions/api/instance/restartInstance';
@@ -47,12 +48,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   function getDeployTargets(instanceList, instanceAuthList, thisCsId) {
 
-    return instanceList.filter(i => {
+    return instanceList.reduce((memo, i) => {
 
       // TODO: restore to exclude myself
       /*
       if (i['compute_stack_id'] === thisCsId) {
-        return false;
+        return memo;
       }
       */
 
@@ -60,22 +61,27 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       const deployTarget = instanceAuthList[csId];
 
       if (!deployTarget) {
-        return false;
+        return memo;
       }
 
       const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
 
       // exclude < 4.2
-      return parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2; 
+      if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
 
-    });
+        memo.push({ 
+          auth,
+          instance: i
+        });
+      } 
+
+      return memo;
+
+    }, []);
 
   }
 
-  console.log(getDeployTargets(instances, instanceAuths, compute_stack_id));
-
-
-    // save file to instance
+  // save file to instance
   async function saveCodeToInstance(selectedFile) {
 
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
@@ -268,8 +274,38 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function deployProject() {
-    console.log('deploy project!');
+  async function deployProject({ project, deployTarget }) {
+    console.log('deploy project to :', project.name, deployTarget);
+
+    const { auth: otherInstanceAuth, instance: otherInstance } = deployTarget;
+
+    const { payload } = await packageComponent({
+      auth,
+      url: applicationsAPIUrl,
+      project: project.name
+    });
+
+    console.log(payload);
+
+    await deployComponent({
+      auth: otherInstanceAuth,
+      url: otherInstance.url,
+      project: project.name,
+      payload
+    })
+
+    await restartInstance({
+      auth: otherInstanceAuth,
+      url: otherInstance.url
+    });
+
+    await restartInstance({
+      auth,
+      url: applicationsAPIUrl
+    });
+
+    await refreshCustomFunctions();
+
   }
 
   return supportsApplicationsAPI ?
