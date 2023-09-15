@@ -23,6 +23,8 @@ function WebIDE({ fileTree, onSave, onUpdate, onDeploy, onAddFile, onAddProjectF
   const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
 
+  console.log('debug: ', selectedPackage, activeEditorWindow);
+
   async function addProject(newProjectName) {
     onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);

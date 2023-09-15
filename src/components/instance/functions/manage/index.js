@@ -162,7 +162,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project: newProjectName
     });
 
-    await refreshCustomFunctions();
+    await restartInstance({ auth, url: applicationsAPIUrl });
+    //await refreshCustomFunctions();
 
   }
 

@@ -26,6 +26,10 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
+function ProjectIcon({ isOpen, toggleClosed }) {
+  const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
+  return <i onClick={toggleClosed} className={cn(`project-icon fas fa-project-diagram`)} />;
+}
 function FolderIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
   return <i onClick={toggleClosed} className={cn(`folder-icon fas ${folderClassName}`)} />;
@@ -126,10 +130,21 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
 
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 
-  // FolderIcon is a func so we can give it open args now, but instantiate it later.
-  const FileIcon = directoryEntry.entries ?
-     () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) })
-       : FiletypeIcon;
+  let Icon;
+  // top-level dir === package
+  // FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
+  if (directoryEntry.path.split('/').length === 2) {
+    if (directoryEntry.package) {
+      Icon = () => PackageIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+    } else {
+      Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+    }
+  } else if (directoryEntry.entries) {
+    Icon = () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) });
+  } else {
+    Icon = FiletypeIcon;
+  }
+  console.log('directoryEntry', directoryEntry);
 
   return (
     <>
@@ -144,7 +159,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onFileSelect, on
                   name={directoryEntry.name}
                   url={directoryEntry.package} /> :
                 <File
-                  Icon={FileIcon}
+                  Icon={Icon}
                   selectedFile={selectedFile}
                   selectedFolder={selectedFolder}
                   directoryEntry={directoryEntry}
