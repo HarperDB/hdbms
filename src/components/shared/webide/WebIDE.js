@@ -218,6 +218,8 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             onConfirm={ installPackage }
             onCancel={ backToPreviousWindow } />
           <DeployComponentWindow
+            onConfirm={ onDeployProject }
+            onCancel={ backToPreviousWindow }
             project={ selectedFolder }
             active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }
             deployTargets={ deployTargets }

@@ -269,6 +269,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function deployProject() {
+    console.log('deploy project!');
   }
 
   return supportsApplicationsAPI ?
