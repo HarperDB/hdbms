@@ -97,7 +97,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
 
 
     // TODO FIX HANDLING SO WE CAN HAVE NUANCED CLICK BEHAVIOR
-    console.log('classes: ', e.target.classList);
 
 
     // set the folder/file as currently selected folder/file

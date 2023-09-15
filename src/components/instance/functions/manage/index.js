@@ -50,9 +50,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     return instanceList.filter(i => {
 
       // TODO: restore to exclude myself
+      /*
       if (i['compute_stack_id'] === thisCsId) {
         return false;
       }
+      */
 
       const csId = i['compute_stack_id'];
       const deployTarget = instanceAuthList[csId];
@@ -69,6 +71,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     });
 
   }
+
+  console.log(getDeployTargets(instances, instanceAuths, compute_stack_id));
 
 
     // save file to instance
@@ -271,7 +275,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     <ApplicationsIDE
       fileTree={fileTree} 
-      deployTargets={getDeployTargets}
+      deployTargets={getDeployTargets(instances, instanceAuths, compute_stack_id)}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}

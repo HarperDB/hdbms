@@ -88,18 +88,17 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 }
 
-export function DeployComponentWindow({ active, project, instances=[] }) {
+export function DeployComponentWindow({ active, project, deployTargets=[] }) {
+  console.log(deployTargets);
 
-  return !active ? null :
-  (<div>
-    <select>
-    {
-      instances.map(instance => (
-        <option value={instance.url}>{instance.url}</option>
-      ))
-    }
-    </select>
-  </div>)
+  return !active ? null : (<div>
+      <span>Deploy to another server</span>
+      <select name="deploy-targets" id="deploy-targets">
+      {
+        deployTargets.map(target => <option value={target.url}>{target.url}</option>)
+      }
+      </select>
+    </div>)
 }
 
 export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
