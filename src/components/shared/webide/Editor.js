@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMonacoEditor from '@monaco-editor/react';
 
 function parseFileExtension(filename) {
@@ -14,7 +14,6 @@ const extensionToLanguageMap = {
   md: 'markdown',
   html: 'html',
   css: 'css',
-  '': 'plaintext',
   graphql: 'graphql'
 };
 
@@ -23,13 +22,10 @@ const extensionToLanguageMap = {
 function Editor({ active, file, onChange }) {
 
   const [ language, setLanguage ] = useState('javascript');
-  const editorRef = useRef(null);
-
-  console.log('language: ', language);
 
   useEffect(() => {
     const extension = parseFileExtension(file?.name);
-    const language = extensionToLanguageMap[extension];
+    const language = extensionToLanguageMap[extension] || 'plaintext';
     setLanguage(language);
   }, [file]);
 
@@ -47,12 +43,6 @@ function Editor({ active, file, onChange }) {
         language={language}
         value={file?.content || ''}
         theme="vs-dark" 
-        onMount={
-          (editor, monaco) => {
-            editorRef.current = editor
-            console.info('on mount: ', { currentRef: editorRef.current, editor });
-          }
-        }
         onChange={ onChange }
         options={{
           automaticLayout: true,

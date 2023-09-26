@@ -17,9 +17,6 @@ import useInstanceAuth from '../../../../functions/state/instanceAuths';
 import {default as ApplicationsIDE} from '../../../shared/webide/WebIDE';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
 
-const auth = { user: 'alex', pass: 'alex' };
-const applicationsAPIUrl = 'http://localhost:9925';
-
 /*
  * Parse the relative path, which is what the components api expects.
  *
@@ -36,48 +33,51 @@ function getRelativeFilepath(absolutePath) {
 
 }
 
+function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
+
+  return instanceList.reduce((memo, i) => {
+
+    if (i['compute_stack_id'] === thisCsId) {
+      return memo;
+    }
+
+    const csId = i['compute_stack_id'];
+    const deployTarget = instanceAuthList[csId];
+
+    if (!deployTarget) {
+      return memo;
+    }
+
+    const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
+
+    // exclude < 4.2
+
+    if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
+
+      memo.push({ 
+        auth,
+        instance: i
+      });
+
+    } 
+
+    return memo;
+
+  }, []);
+
+}
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
+
   const { compute_stack_id } = useParams();
   const registration = useStoreState(instanceState, (s) => s.registration);
   const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
   const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
-
-  function getDeployTargets(instanceList, instanceAuthList, thisCsId) {
-
-    return instanceList.reduce((memo, i) => {
-
-      if (i['compute_stack_id'] === thisCsId) {
-        return memo;
-      }
-
-      const csId = i['compute_stack_id'];
-      const deployTarget = instanceAuthList[csId];
-
-      if (!deployTarget) {
-        return memo;
-      }
-
-      const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
-
-      // exclude < 4.2
-
-      if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
-
-        memo.push({ 
-          auth,
-          instance: i
-        });
-      } 
-
-      return memo;
-
-    }, []);
-
-  }
 
   // save file to instance
   async function saveCodeToInstance(selectedFile) {
@@ -85,7 +85,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
     const payload = {
       auth,
-      url: applicationsAPIUrl,
+      url,
       project: selectedFile.project,
       file: filepathRelativeToProjectDir,
       payload: selectedFile.content
@@ -103,7 +103,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     /*
     const fileContent = await getComponentFile({
-      url: applicationsAPIUrl,
+      url,
       auth,
       project: info.project,
       file: getRelativeFilepath(info.path)
@@ -120,14 +120,14 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await dropComponent({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project,
       file: getRelativeFilepath(path)
     });
 
     await setComponentFile({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project,
       file: newFilenameRelativePath,
       payload: content
@@ -143,7 +143,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const newFile = getRelativeFilepath(path);
     const { message: fileContent } = await getComponentFile({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project,
       file: newFile
     });
@@ -161,7 +161,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await dropComponent({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project: f.project,
       file: getRelativeFilepath(f.path)
     });
@@ -172,24 +172,24 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function deleteFolder({ path, project }) {
 
-    console.log({path, project});
+    console.log('deleteFolder: ', {path, project});
 
     const targetDirpath = getRelativeFilepath(path);
 
-    // if we're deleting as top-level directory, that's a project,
+    // if we're deleting a top-level directory, that's a project,
     // so don't pass a file. otherwise pass project name and file/dir
     // relative to project name as 'file'.
     if (targetDirpath.length > 0) {
       await dropComponent({
         auth,
-        url: applicationsAPIUrl,
+        url,
         project,
         file: targetDirpath
       });
     } else {
       await dropComponent({
         auth,
-        url: applicationsAPIUrl,
+        url,
         project
       });
     }
@@ -202,11 +202,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await addComponent({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project: newProjectName
     });
 
-    //await restartInstance({ auth, url: applicationsAPIUrl });
+    //await restartInstance({ auth, url });
     await refreshCustomFunctions();
 
   }
@@ -219,7 +219,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await setComponentFile({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project,
       file: relativeFilepath
     })
@@ -228,18 +228,18 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function onInstallPackage(projectName, packageUrl) {
+  async function installPackage(projectName, packageUrl) {
 
     await deployComponent({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project: projectName,
       packageUrl
     });
 
     await restartInstance({
       auth,
-      url: applicationsAPIUrl
+      url,
     });
 
     await refreshCustomFunctions();
@@ -258,7 +258,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await setComponentFile({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project,
       file: relativeFilepath,
       payload
@@ -276,29 +276,35 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function deployProject({ project, deployTarget }) {
 
-    const { auth: otherInstanceAuth, instance: otherInstance } = deployTarget;
+    const {
+      auth: otherInstanceAuth,
+      instance: otherInstance
+    } = deployTarget;
 
     const { payload } = await packageComponent({
       auth,
-      url: applicationsAPIUrl,
+      url,
       project: project.name
     });
 
+    // deploy to targetInstance
     await deployComponent({
       auth: otherInstanceAuth,
       url: otherInstance.url,
-      project: project.name + '2',
+      project: project.name,
       payload
     })
 
+    // restart targetInstance
     await restartInstance({
       auth: otherInstanceAuth,
       url: otherInstance.url
     });
 
+    // restart this instance
     await restartInstance({
       auth,
-      url: applicationsAPIUrl
+      url
     });
 
     await refreshCustomFunctions();
@@ -309,14 +315,14 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     <ApplicationsIDE
       fileTree={fileTree} 
       deployTargets={
-        getDeployTargets(instances, instanceAuths, compute_stack_id)
+        getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
       onAddProject={createNewProject}
       onAddProjectFolder={createNewProjectFolder}
-      onInstallPackage={onInstallPackage}
+      onInstallPackage={installPackage}
       onDeployProject={deployProject}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}

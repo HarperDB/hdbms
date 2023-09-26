@@ -92,32 +92,35 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 export function DeployComponentWindow({ active, project, onConfirm, onCancel, deployTargets=[] }) {
 
-  const [ selectedTarget, setSelectedTarget ] = useState(null);
+  const [ selectedTarget, setSelectedTarget ] = useState(deployTargets[0] || null);
+
+  console.log({ selectedTarget });
 
   if (!active || !project)
     return null;
 
   function updateSelectedTarget(e) {
-    setSelectedTarget(e.target.value);
+
+    const match = deployTargets.find(t => t.instance.instance_name === e.target.value);
+    setSelectedTarget(match);
+
   }
 
   return (
     <div className="deploy-component-window">
-      Deploy <span className="deploy-component-project-name">{ project.name }</span> to another HarperDB instance
+      <h3>Deploy to a cloud instance</h3>
+      Select a deploy target below to deploy <span className="deploy-component-project-name">{ project.name }</span> to another HarperDB instance
       <br />
       <br />
       <select
+        defaultValue="select a deploy target"
         autoFocus
         onChange={ updateSelectedTarget }
         name="deploy-targets"
         id="deploy-targets">
         {
-          <option defaultValue="-" disabled>select a target deployment destination
-          </option>
-        }
-        {
           deployTargets.map(target => (
-              <option key={target.instance.url} defaultValue={target.instance.url}>
+              <option key={target.instance.url} value={target.instance.instance_name}>
                 {target.instance.instance_name} - {target.instance.url}
               </option>
             )
@@ -131,9 +134,7 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
         disabled={ !selectedTarget }
         onClick={
           () => {
-            const instance_name = selectedTarget.split(' - ')[0];
-            const correctTarget = deployTargets.find(t => t.instance.instance_name === instance_name); 
-            onConfirm(project, correctTarget);
+            onConfirm(project, selectedTarget);
           }
         }>Deploy</button>
       </div>

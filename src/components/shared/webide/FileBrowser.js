@@ -4,7 +4,7 @@ import cn from 'classnames';
 function NoProjects() {
   return (
     <div className="no-projects">
-      <p>You have no HarperDB applications yet. Click the <i className="fas fa-project-diagram" /> button in the menu above to create your first application!</p>
+      <p>You have no HarperDB applications yet. Click the <i className="fas fa-file-code" /> button in the menu above to create your first application!</p>
       <p>See the <a href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.
       </p>
     </div>
@@ -33,7 +33,7 @@ const isFolder = (entry) => Boolean(entry.entries);
 
 function ProjectIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
-  return <i onClick={toggleClosed} className={cn(`project-icon fas fa-project-diagram`)} />;
+  return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';

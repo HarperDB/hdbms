@@ -28,7 +28,7 @@ export function AddProjectButton({ disabled, onAddProject }) {
     <button
       disabled={ disabled }
       onClick={ onAddProject }
-      className="add-project fas fa-project-diagram"
+      className="add-project fas fa-file-code"
       title="add a new project" />
   );
 }
