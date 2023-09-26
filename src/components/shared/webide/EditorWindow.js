@@ -145,10 +145,14 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
   )
 }
 
-export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
+export function InstallPackageWindow({ active, selectedPackage, reinstallable, onConfirm, onCancel, onPackageChange }) {
 
+  const [ url, tag ] = selectedPackage?.url?.split('#') || [];
   const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
-  const [ packageUrl, setPackageUrl ] = useState(selectedPackage?.url || '');
+  const [ packageUrl, setPackageUrl ] = useState(url || '');
+  const [ releaseTag, setReleaseTag ] = useState(tag || ''); 
+
+  console.log({ packageUrl, packageName, releaseTag });
 
   // FIXME: is this the right way to use useEffect here?
   // keeps controlled inputs in sync with selectedPackage changes from 
@@ -165,11 +169,18 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
   function callOnConfirm() {
 
     if (!(packageName.trim() && packageUrl.trim())) {
+      // this should be a ui warning in the remote install window.
       console.error('invalid package name and/or url');
       return;
     }
 
-    onConfirm(packageName, packageUrl); 
+    const validCharsRE = /^[a-zA-Z0-9-_]+$/; 
+    if (!(validCharsRE).test(packageName)) {
+      console.error(' Project name can only contain alphanumeric, dash and underscores characters');
+      return;
+    }
+
+    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`); 
 
   }
 
@@ -181,9 +192,17 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
     setPackageUrl(e.target.value)
   }
 
+  function updateReleaseTag(e) {
+    setReleaseTag(e.target.value);
+  }
+
   return (
     <div className="install-package-form">
-      <label className="instructions">Install a package component into '~/hdb/node_modules' from an external location:</label>
+      {
+        reinstallable ?
+          <label className="instructions">Reinstall {selectedPackage.name} into '~/hdb/node_modules' from npm or an external URL:</label> :
+          <label className="instructions">Install a package component into '~/hdb/node_modules' from an external location:</label>
+      }
       <label>
         <span>Package name</span>:
         <input
@@ -199,7 +218,16 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
           onChange={ updatePackageUrl }
           placeholder="url to external component" />
       </label>
-      <button disabled={ !(packageName && packageUrl) } onClick={ callOnConfirm }>Install External Package</button>
+      <label>
+        <span>Tag</span>:
+        <input
+          value={ releaseTag }
+          onChange={ updateReleaseTag }
+          placeholder="0.0.1" />
+      </label>
+      <button
+        onClick={ callOnConfirm }
+        disabled={ !(packageName && packageUrl) }>Install External Package</button>
       <button onClick={ onCancel }>Cancel</button>
     </div>
   )
