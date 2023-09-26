@@ -28,8 +28,6 @@ function CustomFunctionsEditor({ refreshCustomFunctions, loading }) {
   const cf_server_url = useStoreState(instanceState, (s) => s.custom_functions_url || `${s.url.split(':').slice(0, -1).join(':')}:${s.custom_functions?.port}`);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/functions/${action}`;
 
-  console.log('action: ', action);
-
   useEffect(() => {
     const hasProjects = custom_functions?.endpoints && Object.keys(custom_functions?.endpoints).length;
     const projectIsInEndpoints = custom_functions?.endpoints && Object.keys(custom_functions?.endpoints).includes(project);

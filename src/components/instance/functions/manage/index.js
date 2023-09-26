@@ -172,6 +172,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function deleteFolder({ path, project }) {
 
+    console.log({path, project});
+
     const targetDirpath = getRelativeFilepath(path);
 
     // if we're deleting as top-level directory, that's a project,
@@ -273,7 +275,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function deployProject({ project, deployTarget }) {
-    console.log('deploy project to :', project.name, deployTarget);
 
     const { auth: otherInstanceAuth, instance: otherInstance } = deployTarget;
 
