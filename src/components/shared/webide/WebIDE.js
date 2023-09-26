@@ -43,7 +43,6 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
   const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
 
-  console.log(activeEditorWindow);
   async function addProject(newProjectName) {
     onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
@@ -163,7 +162,6 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
           onDeployProject={
             (e) => {
               // opens deploy window
-              console.log('go to deploy window');
               updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW, activeEditorWindow);
             }
           }
@@ -234,6 +232,7 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }
             deployTargets={ deployTargets }
           />
+          { /* supposedly this works with monaco-editor/react: https://github.com/remcohaszing/monaco-yaml */ }
           <Editor
             active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
             file={ selectedFile }

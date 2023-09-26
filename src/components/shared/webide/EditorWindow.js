@@ -112,15 +112,12 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
         name="deploy-targets"
         id="deploy-targets">
         {
-          <option
-            defaultValue=""
-            disable
-            selected>select a target deployment destination
+          <option defaultValue="-" disabled>select a target deployment destination
           </option>
         }
         {
           deployTargets.map(target => (
-              <option defaultValue={target.instance.url}>
+              <option key={target.instance.url} defaultValue={target.instance.url}>
                 {target.instance.instance_name} - {target.instance.url}
               </option>
             )
