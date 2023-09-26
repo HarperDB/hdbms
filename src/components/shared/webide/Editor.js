@@ -2,16 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactMonacoEditor from '@monaco-editor/react';
 
 function parseFileExtension(filename) {
-  return filename?.split('.').slice(-1)[0]; 
+  const parts = (filename || '')?.split('.'); 
+  return parts.length > 1 ? parts.slice(-1)[0] : '';
 }
 
 const extensionToLanguageMap = {
   js: 'javascript',
-  yaml: 'null',
+  yaml: 'yaml',
   ts: 'typescript',
   json: 'json',
-  null: 'javascript',
-  undefined: 'javascript'
+  md: 'markdown',
+  html: 'html',
+  css: 'css',
+  '': 'plaintext',
+  graphql: 'graphql'
 };
 
 // TODO: update code using whatever monaco hook is available. onupdate.
@@ -20,6 +24,8 @@ function Editor({ active, file, onChange }) {
 
   const [ language, setLanguage ] = useState('javascript');
   const editorRef = useRef(null);
+
+  console.log('language: ', language);
 
   useEffect(() => {
     const extension = parseFileExtension(file?.name);

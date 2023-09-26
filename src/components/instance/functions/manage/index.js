@@ -306,7 +306,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   return supportsApplicationsAPI ?
-
     <ApplicationsIDE
       fileTree={fileTree} 
       deployTargets={
@@ -323,8 +322,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onDeleteFolder={deleteFolder}
       onFileSelect={selectNewFile}
       onFileRename={renameFile}
-      onFolderRename={renameFolder} /> :
-
+      onFolderRename={renameFolder} />
+    :
     <CustomFunctionsEditor
       refreshCustomFunctions={refreshCustomFunctions}
       loading={loading} />
