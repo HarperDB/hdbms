@@ -50,12 +50,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     return instanceList.reduce((memo, i) => {
 
-      // TODO: restore to exclude myself
-      /*
       if (i['compute_stack_id'] === thisCsId) {
         return memo;
       }
-      */
 
       const csId = i['compute_stack_id'];
       const deployTarget = instanceAuthList[csId];
@@ -67,6 +64,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
 
       // exclude < 4.2
+
       if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
 
         memo.push({ 
@@ -310,7 +308,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     <ApplicationsIDE
       fileTree={fileTree} 
-      deployTargets={getDeployTargets(instances, instanceAuths, compute_stack_id)}
+      deployTargets={
+        getDeployTargets(instances, instanceAuths, compute_stack_id)
+      }
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}

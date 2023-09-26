@@ -101,10 +101,9 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
     setSelectedTarget(e.target.value);
   }
 
-  console.log({deployTargets: deployTargets.map(t => t.instance.url) });
-
-  return (<div>
-      <span>Deploy project { project.name.toUpperCase() } to another server</span>
+  return (
+    <div className="deploy-component-window">
+      Deploy <span className="deploy-component-project-name">{ project.name }</span> to another HarperDB instance
       <br />
       <br />
       <select
@@ -116,8 +115,7 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
           <option
             defaultValue=""
             disable
-            selected>
-            select a target deployment destination
+            selected>select a target deployment destination
           </option>
         }
         {
@@ -145,7 +143,8 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
       <div>
         <button onClick={onCancel}>Cancel</button>
       </div>
-    </div>)
+    </div>
+  )
 }
 
 export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {

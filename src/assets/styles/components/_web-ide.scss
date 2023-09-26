@@ -13,6 +13,13 @@
     list-style-type: none;
   }
 
+  .deploy-component-window {
+    & > .deploy-component-project-name {
+      color: rgb(25, 168, 148);
+      font-weight: bold;
+    }
+  }
+
   .rename-file {
      color: rgb(120,120,120);
   }
