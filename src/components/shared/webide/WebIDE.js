@@ -218,7 +218,7 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             onConfirm={ addFile }
             onCancel={ toDefaultWindow } />
           <InstallPackageWindow
-            reinstallable={ fileTree.entries.filter(e => e.name === selectedPackage?.name) }
+            reinstallable={ fileTree.entries.find(e => e.name === selectedPackage?.name) }
             active={ activeEditorWindow === 'INSTALL_PACKAGE_WINDOW' } 
             selectedPackage={ selectedPackage }
             onConfirm={ installPackage }
