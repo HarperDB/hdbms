@@ -55,14 +55,24 @@ function PackageIcon() {
   return <i className={ cn('package-icon fas fa-cube') } />;
 }
 
-function Package({ name, url, onPackageSelect }) {
+function Package({ name, url, onPackageSelect, selectedPackage }) {
+
+  const [ selected, setSelected ] = useState(false);
+
   return (
     <button
       onClick={ (e) => {
-        onPackageSelect({ name, url, event: e }) 
+        if (selected) {
+          onPackageSelect(null) 
+        } else {
+          onPackageSelect({ name, url, event: e }) 
+        }
+        setSelected(!selected);
       }}
       className={
-        cn('package')
+        cn('package', {
+          'package-selected': selected
+        })
       }
       onKeyDown={() => {}} >
         <PackageIcon />
@@ -72,7 +82,7 @@ function Package({ name, url, onPackageSelect }) {
 
 }
 
-function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDeployProject, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, onFileSelect, onDeployProject, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
 
   const isDir = isFolder(directoryEntry);
   const isProject = directoryEntry.path.split('/').length === 2; // 'components/<proj name>'
@@ -80,6 +90,8 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
   const deployFileIconClass = 'deploy-project';
   const isFileSelected = directoryEntry.path === selectedFile;
   const isFolderSelected = directoryEntry.path === selectedFolder?.path;
+
+  console.log('selectedFile', selectedFile)
 
 
   // file receives open/close toggle func from
@@ -161,7 +173,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onDe
 
 }
 
-function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject, onFileSelect, onPackageSelect, onFileRename, selectedFile, selectedFolder }) {
+function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject, onFileSelect, onPackageSelect, onFileRename, selectedFile, selectedFolder, selectedPackage }) {
 
   const [ open, setOpen ] = useState(true);
 
@@ -192,6 +204,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
             {
               directoryEntry.package ?
                 <Package
+                  selectedPackage={ selectedPackage }
                   onPackageSelect={ onPackageSelect }
                   name={directoryEntry.name}
                   url={directoryEntry.package} /> :
@@ -199,6 +212,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
                   Icon={Icon}
                   selectedFile={selectedFile}
                   selectedFolder={selectedFolder}
+                  selectedPackage={selectedPackage}
                   directoryEntry={directoryEntry}
                   onDeployProject={onDeployProject}
                   onFileRename={
@@ -224,6 +238,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
               <Folder
                 selectedFile={selectedFile}
                 selectedFolder={selectedFolder}
+                selectedPackage={selectedPackage}
                 directoryEntry={entry}
                 onFileSelect={onFileSelect}
                 onDeployProject={onDeployProject}
@@ -242,13 +257,14 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
 }
 
 // A recursive directory tree representation
-function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onDeployProject, onFileRename, onFolderSelect, selectedFile, selectedFolder }) {
+function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onDeployProject, onFileRename, onFolderSelect, selectedFile, selectedFolder, selectedPackage }) {
   return !files?.entries?.length ?
     <NoProjects /> : 
     <ul className="file-browser">
       <Folder
         selectedFile={selectedFile}
         selectedFolder={selectedFolder}
+        selectedPackage={selectedPackage}
         onFileSelect={onFileSelect}
         onFileRename={onFileRename}
         onFolderSelect={onFolderSelect}

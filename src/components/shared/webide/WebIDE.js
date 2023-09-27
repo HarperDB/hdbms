@@ -27,7 +27,23 @@ import NameInput from './NameInput';
 
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 
-function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, onDeployProject, onAddFile, onAddProjectFolder, onAddProject, onFileSelect, onFileRename, onFolderRename, onDeleteFile, onDeleteFolder }) {
+function WebIDE({ 
+  deployTargets, // FIXME: does this belong here?
+  fileTree,
+  onSave,
+  onAddFile,
+  onAddProjectFolder,
+  onAddProject,
+  onDeleteFolder,
+  onDeleteFile,
+  onDeletePackage,
+  onDeployProject,
+  onFileSelect,
+  onFileRename,
+  onFolderRename,
+  onInstallPackage,
+  onUpdate,
+}) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
@@ -38,10 +54,9 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
 
-
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
-  const canDeleteFolder = Boolean(hasProjects && selectedFolder);  // can only delete a folder if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
 
   async function addProject(newProjectName) {
@@ -118,10 +133,15 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             disabled={ !canDeleteFolder }
             onDeleteFolder={
               async () => {
-                await onDeleteFolder(selectedFolder);
+                if (selectedPackage) {
+                  await onDeletePackage(selectedPackage);
+                } else if (selectedFolder) {
+                  await onDeleteFolder(selectedFolder);
+                }
                 updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
                 setSelectedFile(null);
                 setSelectedFolder(null);
+                setSelectedPackage(null);
               }
             } />
           <AddFileButton
@@ -133,7 +153,6 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
             disabled={ !selectedFile?.path }
             onDeleteFile={
               (e) => {
-                // bug here? is selectedFile reset when i think it is? 
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
@@ -166,11 +185,21 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
               updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW, activeEditorWindow);
             }
           }
-          onFolderSelect={setSelectedFolder}
+          onFolderSelect={
+            (folder) => {
+              setSelectedFolder(folder);
+              //setSelectedFile(null);
+              setSelectedPackage(null);
+            }
+          }
           onPackageSelect={
-            ({ name, url }) => {
-              setSelectedPackage({ name, url });
-              updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
+            (selectedPackage) => {
+              setSelectedPackage(selectedPackage);
+              if (!selectedPackage) {
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)
+              } else {
+                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
+              }
             }
           }
           onFileSelect={
@@ -180,6 +209,8 @@ function WebIDE({ fileTree, deployTargets, onSave, onUpdate, onInstallPackage, o
                 ...entry,
                 content
               });
+              setSelectedFolder(null);
+              setSelectedPackage(null);
               updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
             } 
           } />

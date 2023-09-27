@@ -170,9 +170,20 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function deletePackage({ name: project }) {
+
+    await dropComponent({
+      auth,
+      url,
+      project
+    });
+
+    await refreshCustomFunctions();
+
+  }
+
   async function deleteFolder({ path, project }) {
 
-    console.log('deleteFolder: ', {path, project});
 
     const targetDirpath = getRelativeFilepath(path);
 
@@ -326,6 +337,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onDeployProject={deployProject}
       onDeleteFile={deleteFile}
       onDeleteFolder={deleteFolder}
+      onDeletePackage={deletePackage}
       onFileSelect={selectNewFile}
       onFileRename={renameFile}
       onFolderRename={renameFolder} />

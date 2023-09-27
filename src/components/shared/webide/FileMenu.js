@@ -9,7 +9,7 @@ export function DeleteFolderButton({ onDeleteFolder, disabled }) {
       onClick={ onDeleteFolder }
       disabled={ disabled }
       className="delete-folder fas fa-folder-minus"
-      title="delete selected folder" />
+      title="Delete selected project, folder or package" />
   )
 }
 
@@ -19,7 +19,7 @@ export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
       disabled={ disabled }
       onClick={ onAddProjectFolder }
       className="add-folder fas fa-folder-plus"
-      title={`add a new subdirectory to your project`} />
+      title={`Add a new subdirectory to your project`} />
   )
 }
 
@@ -29,7 +29,7 @@ export function AddProjectButton({ disabled, onAddProject }) {
       disabled={ disabled }
       onClick={ onAddProject }
       className="add-project fas fa-file-code"
-      title="add a new project" />
+      title="Add a new project" />
   );
 }
 
@@ -39,7 +39,7 @@ export function AddFileButton({ disabled, onAddFile }) {
       disabled={ disabled }
       onClick={ onAddFile }
       className="add-file fas fa-plus"
-      title="add a new file" />
+      title="Add a new file" />
   )
 }
 
@@ -49,7 +49,7 @@ export function DeleteFileButton({ onDeleteFile, disabled }) {
         onClick={ onDeleteFile }
         disabled={ disabled }
         className="delete-file fas fa-minus"
-        title="delete selected file" />
+        title="Delete selected file" />
   )
 }
 
@@ -60,7 +60,7 @@ export function InstallPackageButton({ onClick }) {
         className={
           cn("install-package fas fa-cloud-download-alt")
         }
-        title="install external package from url or NPM package spec" />
+        title="Install external package from url or NPM package spec" />
   )
 }
 

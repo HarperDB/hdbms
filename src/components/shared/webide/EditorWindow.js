@@ -94,8 +94,6 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
 
   const [ selectedTarget, setSelectedTarget ] = useState(deployTargets[0] || null);
 
-  console.log({ selectedTarget });
-
   if (!active || !project)
     return null;
 
@@ -152,7 +150,13 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
   const [ packageUrl, setPackageUrl ] = useState(url || '');
   const [ releaseTag, setReleaseTag ] = useState(tag || ''); 
 
-  console.log({ packageUrl, packageName, releaseTag });
+  console.log({packageName, packageUrl})
+
+  useEffect(() => {
+     let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
+      setPackageUrl(urlPart);
+      setReleaseTag(tagPart);
+  }, [selectedPackage?.url]);
 
   // FIXME: is this the right way to use useEffect here?
   // keeps controlled inputs in sync with selectedPackage changes from 
@@ -200,8 +204,8 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
     <div className="install-package-form">
       {
         reinstallable ?
-          <label className="instructions">Reinstall {selectedPackage.name} into '~/hdb/node_modules' from npm or an external URL:</label> :
-          <label className="instructions">Install a package component into '~/hdb/node_modules' from an external location:</label>
+          <label className="instructions">Reinstall {selectedPackage?.name} from npm or an external URL:</label> :
+          <label className="instructions">Install a package component from an external URL:</label>
       }
       <label>
         <span>Package name</span>:
@@ -227,7 +231,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
       </label>
       <button
         onClick={ callOnConfirm }
-        disabled={ !(packageName && packageUrl) }>Install External Package</button>
+        disabled={ !(packageName && packageUrl) }>{reinstallable ? 'Re-Install' : 'Install' } External Package</button>
       <button onClick={ onCancel }>Cancel</button>
     </div>
   )
