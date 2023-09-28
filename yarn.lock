@@ -1800,7 +1800,6 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.2.tgz#cba1cf0a04bc04cb66027c51fa600e9cbc388bc8"
   integrity sha512-7Lcn7IqGMV+vizMPoEl5F0XDshcdDYtMI6uJLQdQz5CfZAwy3vvGKYSUk789qndt5dEC4HfSjviSYlSoHGL2+A==
 
-
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -2540,6 +2539,11 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@yr/monotone-cubic-spline@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@yr/monotone-cubic-spline/-/monotone-cubic-spline-1.0.3.tgz#7272d89f8e4f6fb7a1600c28c378cc18d3b577b9"
+  integrity sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==
+
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -2699,11 +2703,12 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apexcharts@^3.27.1:
-  version "3.41.0"
-  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.41.0.tgz#7aef77275c19dfb925552d6fc8e027443a6d1337"
-  integrity sha512-FJXA7NVjxs1q+ptR3b1I+pN8K/gWuXn+qLZjFz8EHvJOokdgcuwa/HSe5aC465HW/LWnrjWLSTsOQejQbQ42hQ==
+apexcharts@^3.42.0:
+  version "3.42.0"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.42.0.tgz#143eb4a12d93c59a37dd88efcf0c7ed0d9ab8735"
+  integrity sha512-hYhzZqh2Efny9uiutkGU2M/EarJ4Nn8s6dxZ0C7E7N+SV4d1xjTioXi2NLn4UKVJabZkb3HnpXDoumXgtAymwg==
   dependencies:
+    "@yr/monotone-cubic-spline" "^1.0.3"
     svg.draggable.js "^2.2.2"
     svg.easing.js "^2.0.0"
     svg.filter.js "^2.0.2"
@@ -7957,7 +7962,6 @@ react-refresh@^0.11.0:
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
 react-router-dom@^6.13.0:
-
   version "6.14.2"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.14.2.tgz#88f520118b91aa60233bd08dbd3fdcaea3a68488"
   integrity sha512-5pWX0jdKR48XFZBuJqHosX3AAHjRAzygouMTyimnBPOLdY3WjzUSKhus2FVMihUFWzeLebDgr4r8UeQFAct7Bg==
@@ -7965,12 +7969,10 @@ react-router-dom@^6.13.0:
     "@remix-run/router" "1.7.2"
     react-router "6.14.2"
 
-
 react-router-ga@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/react-router-ga/-/react-router-ga-1.2.3.tgz#3011b63554e65f50dd16df3dbcdf4ed286b74e73"
   integrity sha512-0rNBGGI6Q1hkznbLB+bAmDTS+8w3duaJYYIbCrCwof/p7RbZuv+Lsv9enumRZXxb4oTZrY95vOvFxnsRQ4cFCg==
-
 
 react-router@6.14.2, react-router@^6.13.0:
   version "6.14.2"
@@ -7978,7 +7980,6 @@ react-router@6.14.2, react-router@^6.13.0:
   integrity sha512-09Zss2dE2z+T1D03IheqAFtK4UzQyX8nFPWx6jkwdYzGLXd5ie06A6ezS2fO6zJfEb/SpG6UocN2O1hfD+2urQ==
   dependencies:
     "@remix-run/router" "1.7.2"
-
 
 react-scripts@^5.0.0:
   version "5.0.1"
@@ -8464,7 +8465,6 @@ selfsigned@^2.1.1:
   integrity sha512-GSL3aowiF7wa/WtSFwnUrludWFoNhftq8bUkH9pkzjpN2XSPOAYEgg6e0sS9s0rZwgJzJiQRPU18A6clnoW5wQ==
   dependencies:
     node-forge "^1"
-
 
 semver@^6.0.0, semver@^6.1.1, semver@^6.1.2, semver@^6.3.0:
   version "6.3.1"
