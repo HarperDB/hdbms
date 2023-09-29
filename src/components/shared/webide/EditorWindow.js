@@ -210,15 +210,13 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
 export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
-  const versionTypes = ['release', 'branch'];
-  const [ versionType, setVersionType ] = useState(versionTypes[0]);
   const [ user, setUser ] = useState('');
+  const [ debouncedUser ] = useDebounce(user, 1000);
   const [ repo, setRepo ] = useState('');
   const [ debouncedRepo ] = useDebounce(repo, 1000);
   const [ tags, setTags ] = useState(null);
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api  
-  //
   useEffect(() => {
 
     async function getTags() {
@@ -238,13 +236,15 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
     }
 
-    // if we have all the info and haven't gotten tags for that yet
-    if (user && debouncedRepo && !tags) {
+    console.log({user, debouncedUser });
+
+    // if we have all the info needed to fetch a repo but don't have tags for that yet
+    if (debouncedUser && debouncedRepo && !tags) {
 
       getTags().then(repoTags => {
         setTags(repoTags);
       }).catch(e => {
-        console.log('e:', e);
+        console.error('e:', e);
         throw e;
       });
 
@@ -252,7 +252,8 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
       setTags(null);
     }
 
-  }, [debouncedRepo]);
+  }, [debouncedUser, debouncedRepo]);
+
 
   return (
     <div className="install-window install-npm">
