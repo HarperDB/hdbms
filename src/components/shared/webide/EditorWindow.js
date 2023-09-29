@@ -198,9 +198,15 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
   const [ packageName, setPackageName ] = useState('');
   const [ debouncedPackageName ] = useDebounce(packageName, 1000); 
   const [ distTags, setDistTags ] = useState('');
+  const [ selectedDistTag, setSelectedDistTag ] = useState('');
 
   function updatePackageName(e) {
     setPackageName(e.target.value);
+  }
+
+  function updateSelectedDistTag(e) {
+
+    setSelectedDistTag(e.target.value);
   }
 
   useEffect(() => {
@@ -229,12 +235,14 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
       getDistTags().then(tags => {
         setDistTags(tags);
+        setSelectedDistTag(null);
       }).catch(e => {
         throw e;
       });
 
     } else {
       setDistTags(null);
+      setSelectedDistTag(null);
     }
 
   }, [debouncedPackageName]);
@@ -242,17 +250,21 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
   return (
     <div className="install-window install-npm">
       <input value={packageName} placeholder="[@scope]/package" onChange={ updatePackageName } />
-      <select className="npm-dist-tag-list" disabled={!distTags}>
+      <select 
+        onChange={ updateSelectedDistTag }
+        className="npm-dist-tag-list" disabled={!distTags}>
         <option>
           choose a tag
         </option>
         {
-          Object.entries(distTags || []).map(([name,value]) => (
-            <option value={{[name]:value}}>{`${name} (${value})`}</option>
+          Object.entries(distTags || []).map(([tagName,tagValue]) => (
+            <option 
+            value={tagName}>{`${tagName} (${tagValue})`}</option>
           ))
 
         }
       </select>
+    npm install: {`${debouncedPackageName}${selectedDistTag ? `@${selectedDistTag}`  : '' }`}
     </div>
   );
 
