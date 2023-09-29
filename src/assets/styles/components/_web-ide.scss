@@ -1,9 +1,23 @@
 .web-ide {
 
+  .install-window {
+    display: flex;
+    flex-direction: inline-flex;
+    input {
+      margin-right: 5px;
+      padding-right: 5px;
+    }
+  }
+
   color: white;
   height: 75vh;
   overflow: hidden;
   background: black;
+
+
+  .github-tag-list {
+    min-width: 100px;
+  }
 
   hr {
     border: 0.6px solid white;
@@ -13,12 +27,10 @@
     list-style-type: none;
   }
 
-  .deploy-component-window {
-    & > .deploy-component-project-name {
+   .deploy-component-project-name {
       color: rgb(25, 168, 148);
       font-weight: bold;
     }
-  }
 
   .rename-file {
      color: rgb(120,120,120);

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
 function NoProjects() {
   return (
     <div className="no-projects">
       <p>You have no HarperDB applications yet. Click the <i className="fas fa-file-code" /> button in the menu above to create your first application!</p>
-      <p>See the <a href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.
-      </p>
+      <p>See the <a href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.</p>
     </div>
   );
 }
@@ -57,8 +56,13 @@ function PackageIcon() {
 
 function Package({ name, url, onPackageSelect, selectedPackage }) {
 
-  const [ selected, setSelected ] = useState(false);
+  const [ selected, setSelected ] = useState(Boolean(selectedPackage));
 
+  useEffect(() => {
+    if (!selectedPackage) {
+      setSelected(false);
+    }
+  }, [selectedPackage]);
   return (
     <button
       onClick={ (e) => {

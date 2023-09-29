@@ -35,21 +35,22 @@ function Editor({ active, file, onChange }) {
   }
 
   const filepathRelativeToComponentsDir = file.path.split('/').slice(1).join('/');
+
   // eslint-disable-next-line no-unused-vars
   return <>
-      <div className="editor current-file-path">{filepathRelativeToComponentsDir}</div>
-      <ReactMonacoEditor
-        height="100%"
-        language={language}
-        value={file?.content || ''}
-        theme="vs-dark" 
-        onChange={ onChange }
-        options={{
-          automaticLayout: true,
-          minimap: {
-            enabled: false
-          }
-        }} />
+    <div className="editor current-file-path">{filepathRelativeToComponentsDir}</div>
+    <ReactMonacoEditor
+      height="100%"
+      language={language}
+      value={file?.content || ''}
+      theme="vs-dark" 
+      onChange={ onChange }
+      options={{
+        automaticLayout: true,
+        minimap: {
+          enabled: false
+        }
+      }} />
   </>
 }
 

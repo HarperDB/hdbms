@@ -173,6 +173,7 @@ function WebIDE({
           root={ fileTree.path }
           selectedFile={ selectedFile?.path }
           selectedFolder={ selectedFolder }
+          selectedPackage={ selectedPackage }
           onFolderRename={() => {
             // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
           }}
@@ -187,14 +188,16 @@ function WebIDE({
           }
           onFolderSelect={
             (folder) => {
+              // shouldnt deselect anything
               setSelectedFolder(folder);
-              //setSelectedFile(null);
-              setSelectedPackage(null);
             }
           }
           onPackageSelect={
             (selectedPackage) => {
+              // set selected package,
+              // unset selectedFile
               setSelectedPackage(selectedPackage);
+              setSelectedFile(null);
               if (!selectedPackage) {
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)
               } else {
@@ -205,12 +208,11 @@ function WebIDE({
           onFileSelect={
             async (entry) => {
               const { content } = await onFileSelect(entry);
+              setSelectedPackage(null);
               setSelectedFile({
                 ...entry,
                 content
               });
-              setSelectedFolder(null);
-              setSelectedPackage(null);
               updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
             } 
           } />
