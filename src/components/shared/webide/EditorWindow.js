@@ -195,14 +195,64 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
 
 export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
-  const versionTypes = ['tag', 'version'];
-  const [ versionType, setVersionType ] = useState(versionTypes[0]);
+  const [ packageName, setPackageName ] = useState('');
+  const [ debouncedPackageName ] = useDebounce(packageName, 1000); 
+  const [ distTags, setDistTags ] = useState('');
+
+  function updatePackageName(e) {
+    setPackageName(e.target.value);
+  }
+
+  useEffect(() => {
+
+    async function getDistTags() {
+
+      try {
+        // NOTE: i get a cors error for 404 registry calls, i.e. if the packageName doesnt exist
+        // so below, I am swallowing error in the catch block below.
+        const response = await fetch(`https://registry.npmjs.org/${packageName}`); 
+         
+        if (response.status === 404) {
+          return null;
+        }
+
+        const data = await response.json();
+
+        return data['dist-tags'];
+      } catch(e) {
+        console.log(e);
+      }
+      
+    }
+
+    if (debouncedPackageName) {
+
+      getDistTags().then(tags => {
+        setDistTags(tags);
+      }).catch(e => {
+        throw e;
+      });
+
+    } else {
+      setDistTags(null);
+    }
+
+  }, [debouncedPackageName]);
 
   return (
     <div className="install-window install-npm">
-      <input placeholder="org" />
-      <input placeholder="package" required />
-      <input placeholder="version / version range" />
+      <input value={packageName} placeholder="[@scope]/package" onChange={ updatePackageName } />
+      <select className="npm-dist-tag-list" disabled={!distTags}>
+        <option>
+          choose a tag
+        </option>
+        {
+          Object.entries(distTags || []).map(([name,value]) => (
+            <option value={{[name]:value}}>{`${name} (${value})`}</option>
+          ))
+
+        }
+      </select>
     </div>
   );
 
@@ -261,7 +311,7 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
       <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
       <label>
         <select
-          disabled={tags?.length === 0}
+          disabled={!tags}
           className="github-tag-list"
           onChange={ (e) => console.log(e) }>
           <option value="tag">choose a tag</option>

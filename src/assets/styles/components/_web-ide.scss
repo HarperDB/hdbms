@@ -15,8 +15,13 @@
   background: black;
 
 
-  .github-tag-list {
+  .github-tag-list,
+  .npm-dist-tag-list {
     min-width: 100px;
+
+    &[disabled] {
+      color: gray !important;
+    }
   }
 
   hr {
