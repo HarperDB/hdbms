@@ -1,0 +1,80 @@
+---------------------------------------
+notes on compatibility:
+
+- webide expects a recursive file tree.
+  4.1 has a fixed structure
+  4.2 has a flexible structure.
+
+add folder:
+  top-level folder:
+    4.1: add_custom_function_project
+    4.2: set_component_file with no payload
+  nested folder:
+    4.1: n/a
+    4.2: set_component_file with no payload
+remove folder:
+    top-level folder:
+      4.1: drop_custom_function_project 
+      4.2: drop_component_file
+rename folder:
+
+add file:
+remove file:
+rename file:
+
+---------------------------------------
+
+
+
+edge cases:
+- no components dir?
+- no projects yet.
+
+next steps:
+  - add file
+  - delete file
+  - copy file
+  - name/rename
+
+
+
+REVISIT:
+- directoryEntry path. should it include root components dir?
+- how about path relative to project dir, i.e. project/src/index.js, where full root path is components/project/src/index.js 
+- set_component_file: TODO: send payload 'file' as relative to project dir.
+
+editor:
+
+  labels:
+    - file explorer 
+    - editor window (current file's full path)
+  
+  defaults:
+  - build a page for no file loaded.
+  - save last file path accessed in local storage, try that.
+  - if no components dir, or it's empty and no flat file selected? 
+    - direct them to docs and to create a project.
+
+  saving state:
+  - last file opened
+  - directory open/close config?
+
+file management:
+ui:
+  - add directory *
+  - add file
+  ways to add new file:
+    1. hover on directory (+) will add a new child file.
+      that is an input that shows up.
+    2. top-level menu.
+
+  active file should be highlighted.
+  way to delete file.
+  rename file.
+  save file content. 
+    - CTRL S should save
+    - button for saving.
+    - disable saving if file didn't change?
+
+write function to set default file for editor
+- or should there be a default?

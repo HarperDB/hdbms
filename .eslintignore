@@ -1,1 +1,2 @@
-src/components/shared/react-json-editor-ajrm
+src/components/shared/webide/**/*.js
+src/components/instance/functions/manage/**/*.js
