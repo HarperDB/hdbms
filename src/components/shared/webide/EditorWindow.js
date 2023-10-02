@@ -264,7 +264,6 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
         }
       </select>
-    npm install: {`${debouncedPackageName}${selectedDistTag ? `@${selectedDistTag}`  : '' }`}
     </div>
   );
 

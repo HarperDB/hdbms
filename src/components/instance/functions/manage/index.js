@@ -44,11 +44,11 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
     const csId = i['compute_stack_id'];
     const deployTarget = instanceAuthList[csId];
 
-    if (!deployTarget) {
+    if (!deployTarget?.version) {
       return memo;
     }
 
-    const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
+    const [ major, minor, ...patchEtc ] = deployTarget?.version.split('.'); 
 
     // exclude < 4.2
 
