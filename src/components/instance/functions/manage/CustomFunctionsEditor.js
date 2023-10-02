@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
-import { ErrorBoundary } from 'react-error-boundary';
+// import { ErrorBoundary } from 'react-error-boundary';
 import { useStoreState } from 'pullstate';
 import { useParams, useNavigate } from 'react-router-dom';
 import useInterval from 'use-interval';
@@ -11,8 +11,8 @@ import EntityManager from './EntityManager';
 import CodeEditor from './CodeEditor';
 import Deploy from './Deploy';
 import EmptyPrompt from '../../../shared/EmptyPrompt';
-import ErrorFallback from '../../../shared/ErrorFallback';
-import addError from '../../../../functions/api/lms/addError';
+// import ErrorFallback from '../../../shared/ErrorFallback';
+// import addError from '../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
 import CopyableText from '../../../shared/CopyableText';

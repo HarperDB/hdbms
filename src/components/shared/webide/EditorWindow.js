@@ -198,7 +198,6 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
   const [ packageName, setPackageName ] = useState('');
   const [ debouncedPackageName ] = useDebounce(packageName, 1000); 
   const [ distTags, setDistTags ] = useState('');
-  const [ selectedDistTag, setSelectedDistTag ] = useState('');
 
   function updatePackageName(e) {
     setPackageName(e.target.value);
@@ -245,7 +244,7 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
       setSelectedDistTag(null);
     }
 
-  }, [debouncedPackageName]);
+  }, [debouncedPackageName, packageName]);
 
   return (
     <div className="install-window install-npm">
@@ -313,7 +312,7 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
       setTags(null);
     }
 
-  }, [debouncedUser, debouncedRepo]);
+  }, [debouncedUser, debouncedRepo, tags, user]);
 
 
   return (
@@ -370,6 +369,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
     return null;
   }
 
+  /*
   function callOnConfirm() {
 
     if (!(packageName.trim() && packageUrl.trim())) {
@@ -387,10 +387,13 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
     onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`); 
 
   }
+  */
 
+  /*
   function updatePackageName(e) {
     setPackageName(e.target.value)
   }
+  */
 
   function updatePackageUrl(e) {
     setPackageUrl(e.target.value)
