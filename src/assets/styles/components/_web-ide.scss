@@ -1,18 +1,18 @@
 .web-ide {
-
   .install-window {
     display: flex;
     flex-direction: inline-flex;
+
     input {
       margin-right: 5px;
       padding-right: 5px;
     }
   }
+  background: black;
 
   color: white;
   height: 75vh;
   overflow: hidden;
-  background: black;
 
 
   .github-tag-list,
@@ -40,12 +40,15 @@
   .rename-file {
      color: rgb(120,120,120);
   }
+
   .rename-file:hover {
      color: white !important;
    }
+
   .file {
     &:hover {
       color: rgb(100,100,100);
+
       .rename-file {
         color: rgb(100,100,100);
       }
@@ -54,6 +57,7 @@
 
     .deploy-project {
       color: rgb(100,100,100);
+
       &:hover {
         color:white;
       }
@@ -68,25 +72,28 @@
       margin-bottom: 20px;
     }
   }
+
   .rename-file,
   .deploy-project {
     margin-left: 8px;
   }
+
   .rename-file {
     color: transparent;
   }
 
   .editor-window {
-    height: 100%;
-    width: 100%;
-    display: flex;
     align-items: center;
+    display: flex;
+    height: 100%;
     justify-content: center;
+    width: 100%;
 
     .editor {
       &.current-file-path::before {
         content: '> ';
       }
+
       &.current-file-path {
         align-self: flex-start;
       }
@@ -96,24 +103,25 @@
 
   .file-menu,
   .editor-menu {
+    border-bottom: 1px solid #2e2e2e;
+    color: white;
     display: flex;
     flex-direction: row;
-    color: white;
-    margin-top: 0;
     margin-bottom: 20px;
-    padding-top: 0;
+    margin-top: 0;
     padding-bottom: 0;
-    border-bottom: 1px solid #2e2e2e;
+    padding-top: 0;
 
 
     & > li {
-      margin: 0px 5px 5px 0px;
-      padding: 0px 5px 0px 0px;
+      margin: 0 5px 5px 0;
+      padding: 0 5px 0 0;
     }
 
     .add-project:hover {
       color: rgb(25, 168, 148);
     }
+
     .install-package:hover {
       color: #f24242;
     }
@@ -122,6 +130,7 @@
     .delete-folder:hover {
       color: rgb(143, 141, 255);
     }
+
     .delete-file:hover {
       color: yellow;
     }
@@ -135,12 +144,12 @@
     .delete-file,
     .install-package-project,
     .add-file {
-      border: none;
-      outline: none !important;
       background: transparent;
+      border: none;
       color: white;
-      padding: 0px;
-      margin: 0px;
+      margin: 0;
+      outline: none !important;
+      padding: 0;
     }
 
     .save-code {
@@ -162,23 +171,24 @@
 
 
   .filename-dialog {
-      height: 100%;
-      width: 100%;
-      display: flex;
       align-items: center;
+      display: flex;
+      height: 100%;
       justify-content: center;
+      width: 100%;
   }
 
   .code-editor-container {
-    padding: 20px;
-    height: 100%;
     display: flex;
     flex-direction: column;
-  }
-  .file-browser-container {
+    height: 100%;
     padding: 20px;
+  }
+
+  .file-browser-container {
     height: 100%;
     overflow-y: scroll;
+    padding: 20px;
 
     .file-browser {
 
@@ -186,19 +196,22 @@
       padding-left: 0;
 
       .folder-container {
-        padding-left: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        padding-left: 0;
       }
+
       .file.file-selected {
-        color: #ee81ee;
         background: #191919 !important;
+        color: #ee81ee;
           // background: #4a4a4a !important;
           //border: 1px solid rgb(120,120,120);;
       }
+
       .file.folder-selected {
           background: #191919 !important;
       }
+
       .package.package-selected {
           color: #f24242; 
       }
@@ -206,6 +219,7 @@
       .project-icon {
         color: rgb(25,168,148);
       }
+
       .package-icon {
         color: #f24242;
       }
@@ -213,17 +227,18 @@
       .file,
       .package {
 
-        white-space: nowrap;
+        background: transparent;
         border: 1px solid transparent;
+        color: white ;
+        list-style-type: none;
+        margin: 0;
+        outline: none !important; // TODO: fix this because it is not accessible; style differently
+        padding: 3px 2px;
+
+        white-space: nowrap;
+
         &.selected {
         }
-
-        background: transparent;
-        list-style-type: none;
-        color: white ;
-        outline: none !important; // TODO: fix this because it is not accessible; style differently
-        margin: 0;
-        padding: 3px 2px;
 
         .package-text,
         .filename-text {
@@ -237,6 +252,7 @@
         .file-icon.filetype-yaml {
           color: #c4c4ff;
         }
+
         .file-icon.filetype-unknown {
           color: lightgray;
         }
@@ -245,12 +261,15 @@
           color: rgb(143 141 255);
         }
       }
+
       .folder {
         padding-left: 15px;
       }
+
       .folder.folder-contents-closed {
         display: none;
       }
+
       .folder.folder-contents-open {
         display: block;
       }

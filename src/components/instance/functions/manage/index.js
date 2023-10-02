@@ -48,7 +48,7 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       return memo;
     }
 
-    const [ major, minor, ...patchEtc ] = deployTarget?.version.split('.'); 
+    const [ major, minor, ...patchEtc ] = deployTarget.version.split('.'); 
 
     // exclude < 4.2
 

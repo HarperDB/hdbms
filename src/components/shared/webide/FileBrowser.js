@@ -30,6 +30,10 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
+function PackageIcon() {
+  return <i className={ cn('package-icon fas fa-cube') } />;
+}
+
 function ProjectIcon({ isOpen, toggleClosed }) {
   const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
   return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
@@ -48,10 +52,6 @@ function FiletypeIcon({ extension }) {
     default:
       return <i className={ cn('file-icon filetype-unknown far fa-file-alt') } />;
   }
-}
-
-function PackageIcon() {
-  return <i className={ cn('package-icon fas fa-cube') } />;
 }
 
 function Package({ name, url, onPackageSelect, selectedPackage }) {
@@ -189,7 +189,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
   // FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
   if (directoryEntry.path.split('/').length === 2) {
     if (directoryEntry.package) {
-      Icon = () => PackageIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+      Icon = () => PackageIcon();
     } else {
       Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
     }
