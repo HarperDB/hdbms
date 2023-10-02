@@ -28,11 +28,32 @@ function SystemInfo() {
   const [lastUpdate, setLastUpdate] = useState(null);
 
   async function fetchSystemInfo(useCache=false) {
+
     if (useCache) {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
+
+      await updateSystemInfo({
+        auth,
+        url,
+        is_local,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        cachedSystemInfo: systemInfo,
+        skip: ['disk', 'network', 'system']
+      });
+
     } else {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
+
+      await updateSystemInfo({
+        auth,
+        url,
+        is_local,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        cachedSystemInfo: systemInfo
+      });
+
     }
+
   }
 
   useEffect(() => {
@@ -41,7 +62,7 @@ function SystemInfo() {
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
-      await fetchSystemInfo(lastUpdate);
+      await fetchSystemInfo(!!lastUpdate);
       if (isMounted) setLoading(false);
     };
 
@@ -75,7 +96,7 @@ function SystemInfo() {
             onClick={
               async () => {
                 setLoading(true);
-                await fetchSystemInfo(true)
+                await fetchSystemInfo(false)
                 setLoading(false);
               }
             }> 
@@ -132,12 +153,12 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="CPU Load" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo.cpuLoad || '...'}%</div>
+                  <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo?.cpuLoad || '...'}%</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Network Volume Up" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.networkTransfered || '...'}GB</div>
+                  <div className="nowrap-scroll">{systemInfo?.networkTransferred || '...'}GB</div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
