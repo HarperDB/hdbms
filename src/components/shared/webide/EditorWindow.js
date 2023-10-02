@@ -198,6 +198,8 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
   const [ packageName, setPackageName ] = useState('');
   const [ debouncedPackageName ] = useDebounce(packageName, 1000); 
   const [ distTags, setDistTags ] = useState('');
+  const [ selectedDistTag, setSelectedDistTag ] = useState('');
+
 
   function updatePackageName(e) {
     setPackageName(e.target.value);
