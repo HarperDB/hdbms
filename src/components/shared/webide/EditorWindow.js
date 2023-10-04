@@ -271,6 +271,8 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
 export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
+  // TODO: use semver notation when fetching 
+
   const [ user, setUser ] = useState('');
   const [ debouncedUser ] = useDebounce(user, 1000);
   const [ repo, setRepo ] = useState('');
@@ -402,32 +404,39 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
     setSelectedPackageType(e.target.value);
   }
 
+
   return (
     <div className="install-package-form">
-      <div className="install-type">
+      <Card className="install-type">
+        <div>
+          {
+            packageTypes.map((packageType, index) => (
+              <label key={packageType}>
+              { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
+              { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
+              { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
+                <input
+                  onChange={ updateSelectedPackageType }
+                  checked={packageType === selectedPackageType}
+                  value={packageTypes[index]}
+                  type="radio"
+                  name="package-type" />
+              </label>
+            ))
+          }
+        </div>
+      </Card>
+      <Card className="install-fields">
         {
-          packageTypes.map((packageType, index) => (
-            <label key={packageType}>
-              {packageType}
-              <input
-                onChange={ updateSelectedPackageType }
-                checked={packageType === selectedPackageType}
-                value={packageTypes[index]}
-                type="radio"
-                name="package-type" />
-            </label>
-          ))
+          selectedPackageType === 'npm' && <NPMInstallWindow />
         }
-      </div>
-      {
-        selectedPackageType === 'npm' && <NPMInstallWindow />
-      }
-      {
-        selectedPackageType === 'github' && <GithubInstallWindow />
-      }
-      {
-        selectedPackageType === 'url' && <URLInstallWindow />
-      }
+        {
+          selectedPackageType === 'github' && <GithubInstallWindow />
+        }
+        {
+          selectedPackageType === 'url' && <URLInstallWindow />
+        }
+      </Card>
     </div>
   );
 }

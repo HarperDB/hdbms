@@ -92,6 +92,37 @@
       }
     }
 
+    .install-package-form {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .install-package-icon {
+        font-size: 2em;
+        &.fab.fa-npm {
+          font-size: 3em;
+          color: red;
+        }
+      }
+
+      & > .install-type {
+        border: 0px solid transparent !important; 
+        margin-bottom: 30px;
+
+        label {
+          min-width: 80px;
+          text-align: center;
+        }
+
+        input {
+          margin-top: 10px;
+        }
+      }
+    }
+
   }
 
   .file-menu,
