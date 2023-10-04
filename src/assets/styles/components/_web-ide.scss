@@ -106,19 +106,32 @@
           font-size: 3em;
           color: red;
         }
+        &.fa-github,
+        &.fa-link {
+          padding: 5px;
+        }
       }
 
       & > .install-type {
         border: 0px solid transparent !important; 
         margin-bottom: 30px;
 
+        & > .radio-group-container {
+          display: inline-flex;
+        }
         label {
           min-width: 80px;
           text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
         }
 
         input {
           margin-top: 10px;
+        }
+
+        .install-package-icon {
         }
       }
     }

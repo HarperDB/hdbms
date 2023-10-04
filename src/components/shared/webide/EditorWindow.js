@@ -408,7 +408,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
   return (
     <div className="install-package-form">
       <Card className="install-type">
-        <div>
+        <div className="radio-group-container">
           {
             packageTypes.map((packageType, index) => (
               <label key={packageType}>

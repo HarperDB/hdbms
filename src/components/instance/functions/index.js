@@ -22,11 +22,14 @@ export const metadata = {
 function CustomFunctionsIndex() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const [majorVersion, minorVersion] = (registration?.version || '').split('.');
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const restarting = useStoreState(instanceState, (s) => s.restarting);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [configuring, setConfiguring] = useState(false);
+  console.log('version: ', {majorVersion, minorVersion})
 
   const refreshCustomFunctions = useCallback(async () => {
     if (auth && url && !restarting) {
