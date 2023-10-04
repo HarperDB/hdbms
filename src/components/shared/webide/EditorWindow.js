@@ -297,8 +297,6 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
     }
 
-    console.log({user, debouncedUser });
-
     // if we have all the info needed to fetch a repo but don't have tags for that yet
     if (debouncedUser && debouncedRepo && !tags) {
 

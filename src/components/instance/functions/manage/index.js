@@ -98,18 +98,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function renameFolder(newFolderName, info) {
-
-    // not supported by instance api yet.
-
-    /*
-    const fileContent = await getComponentFile({
-      url,
-      auth,
-      project: info.project,
-      file: getRelativeFilepath(info.path)
-    })
-    */
-
   }
 
   async function renameFile(newFileName, info) {

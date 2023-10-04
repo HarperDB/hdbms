@@ -49,7 +49,6 @@ function WebIDE({
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
   const [ editingFileName, setEditingFileName ] = useState(false); 
-  const [ editingFolderName, setEditingFolderName ] = useState(false); 
   const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
@@ -57,7 +56,7 @@ function WebIDE({
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
   const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
-  const canAddProjectFolder = Boolean(selectedFolder); // can only add a file if a target folder is selected
+  const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
 
   async function addProject(newProjectName) {
     onAddProject(newProjectName);
@@ -81,7 +80,6 @@ function WebIDE({
 
   async function addFile(newFilename) {
     const fileInfo = await onAddFile(newFilename, selectedFolder);
-    // show file in editor window.
 
     setSelectedFile(fileInfo);
     updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
