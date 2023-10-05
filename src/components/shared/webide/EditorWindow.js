@@ -233,13 +233,14 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
 
 export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
-  const [ packageName, setPackageName ] = useState('');
-  const [ debouncedPackageName ] = useDebounce(packageName, 300);
+  const [ packageQuery, setPackageQuery ] = useState('');
+  const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
+  const [ matchingPackage, setMatchingPackage ] = useState(''); 
 
-  function updatePackageName(e) {
-    setPackageName(e.target.value);
+  function updatePackageQuery(e) {
+    setPackageQuery(e.target.value);
   }
 
   function updateSelectedDistTag(e) {
@@ -249,53 +250,65 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
   useEffect(() => {
 
-    async function getDistTags() {
+    async function findPackageName(query) {
+
+      const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
+      const packages = await response.json();
+      const pkg = packages.objects.find(p => p.package.name === query); 
+
+      setMatchingPackage(pkg?.package?.name);
+
+      return pkg?.package?.name;
+
+    }
+
+    async function getDistTags(packageName) {
 
       // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
       // so instead, we search for repo using api /search endpoint, compare desired package name
-      // against the returned results and if one exactly matches, that package exists.
-      // because it exists, we can then look it up against the registry by its package name (avoiding cors error)
+      // against the returned results array. If one exactly matches, that package exists.
+      // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
       // and grab the resulting 'dist-tags' property from the returned payload.
-      const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${packageName}`);
-      const packages = await response.json();
-      const matchingPackage = packages.objects.find(p => p.package.name === packageName); 
 
-      if (matchingPackage) {
+      if (packageName) {
 
-        const packageResponse = await fetch(`https://registry.npmjs.org/${matchingPackage.package.name}`);
+        const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
         const packageResponseData = await packageResponse.json();
-        const distTags = packageResponseData['dist-tags'];
-        return distTags;
+
+        return packageResponseData['dist-tags'];
+
       }
 
       return null;
 
-
     }
 
-    if (debouncedPackageName) {
+    if (debouncedPackageQuery) {
 
-      getDistTags().then(tags => {
-        setDistTags(tags);
-        setSelectedDistTag(null);
-      }).catch(e => {
-        throw e;
-      });
+      findPackageName(debouncedPackageQuery).then(packageName => {
+        getDistTags(packageName).then(tags => {
+          setDistTags(tags);
+          setSelectedDistTag(null);
+        }).catch(e => {
+          throw e;
+        });
+      })
 
     } else {
+      setMatchingPackage(null);
       setDistTags(null);
       setSelectedDistTag(null);
     }
 
-  }, [debouncedPackageName]);
+  }, [debouncedPackageQuery]);
 
   return (
     <div className="install-window install-npm">
       <input
         className="elegant-input"
-        value={packageName}
+        value={packageQuery}
         placeholder="[@scope]/package"
-        onChange={ updatePackageName } />
+        onChange={ updatePackageQuery } />
       <select
         onChange={ updateSelectedDistTag }
         className="npm-dist-tag-list"
@@ -311,10 +324,10 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
         }
       </select>
       <div>
-        <button disabled={ !debouncedPackageName } onClick={
+        <button disabled={ !matchingPackage } onClick={
           () => {
-            const url = selectedDistTag ? `${packageName}@${selectedDistTag}` : packageName;
-            onConfirm(url);
+            const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
+            onConfirm(npmPackageSpecifier);
           }
         }>Get Package</button>
       </div>
