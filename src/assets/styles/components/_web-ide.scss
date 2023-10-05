@@ -23,7 +23,9 @@
   input.install-package-type:focus {
     outline: none !important;
   }
-  .install-npm > input {
+  .install-npm > input,
+  .get-package-button
+  {
     white-space: nowrap;
   }
 

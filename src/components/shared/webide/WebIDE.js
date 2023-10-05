@@ -69,9 +69,9 @@ function WebIDE({
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
-  async function installPackage(projectName, packageUrl) {
+  async function installPackage(packageUrl, projectName) {
 
-    await onInstallPackage(projectName, packageUrl);
+    await onInstallPackage(packageUrl, projectName);
 
     setSelectedPackage(null);
     updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);

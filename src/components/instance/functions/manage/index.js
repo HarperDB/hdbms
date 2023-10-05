@@ -228,6 +228,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function installPackage(projectName, packageUrl) {
+    console.log('install package: ', { projectName, packageUrl })
 
     await deployComponent({
       auth,

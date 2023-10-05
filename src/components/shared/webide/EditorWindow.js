@@ -143,6 +143,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
   const [ releaseTag, setReleaseTag ] = useState(tag || '');
   const [ selectedPackageType, setSelectedPackageType ] = useState(packageTypes[0]);
   const [ packageSpec, setPackageSpec ] = useState('');
+  const [ projectName, setProjectName ] = useState('');
 
   useEffect(() => {
      let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
@@ -214,16 +215,19 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
         </div>
       </Card>
       <Card className="no-border install-fields">
+        <input
+          value={ projectName }
+          placeholder="project name"
+          onChange={ e => setProjectName(e.target.value) }/>
         {
-          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={setPackageSpec} />
+          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={onConfirm} projectName={projectName} />
         }
         {
-          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={setPackageSpec} />
+          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={onConfirm} projectName={projectName}  />
         }
         {
-          selectedPackageType === 'url' && <URLInstallWindow onConfirm={setPackageSpec} />
+          selectedPackageType === 'url' && <URLInstallWindow onConfirm={onConfirm} projectName={projectName} />
         }
-        <div>{ packageSpec }</div>
       </Card>
     </div>
   );
@@ -231,7 +235,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
 
 
 
-export function NpmInstallWindow({ selectedPackage, onConfirm }) {
+export function NpmInstallWindow({ projectName, onConfirm }) {
 
   const [ packageQuery, setPackageQuery ] = useState('');
   const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
@@ -323,26 +327,30 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
         }
       </select>
-      <div>
-        <button disabled={ !matchingPackage } onClick={
+      <button
+        className="get-package-button"
+        disabled={ !(matchingPackage && projectName) }
+        onClick={
           () => {
             const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
-            onConfirm(npmPackageSpecifier);
+            onConfirm(projectName, npmPackageSpecifier);
           }
         }>Get Package</button>
-      </div>
     </div>
   );
 
 }
 
-export function GithubInstallWindow({ selectedPackage, onConfirm }) {
+export function GithubInstallWindow({ onConfirm, projectName }) {
 
   const [ user, setUser ] = useState('');
   const [ debouncedUser ] = useDebounce(user, 300);
+
   const [ repo, setRepo ] = useState('');
   const [ debouncedRepo ] = useDebounce(repo, 300);
+
   const [ tags, setTags ] = useState([]);
+
   const [ selectedTag, setSelectedTag ] = useState('');
   const [ targetRepo, setTargetRepo ] = useState('');
 
@@ -370,12 +378,13 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
         const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
         
-        if (response.status === 404) {
+        if (response.status < 400) {
+          const tagData = await response.json();
+          return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
         }
-        console.log(response.status);
-        const tagData = await response.json();
 
-        return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
+        return null;
+
 
       } catch(e) {
         throw e;
@@ -443,20 +452,31 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
           () => {
             // when we have a selected tag, use the semver notation.
             const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            onConfirm(targetRepoSpec)
+            console.log('target repo spec: ', targetRepoSpec);
+            onConfirm(projectName, targetRepoSpec)
           }
         }
-        disabled={!targetRepo}>Get Package</button>
+        className="get-package-button"
+        disabled={!(targetRepo && projectName)}>Get Package</button>
     </div>
   );
 
 }
 
-export function URLInstallWindow() {
+export function URLInstallWindow({ onConfirm, projectName }) {
+
+  const [ packageUrl, setPackageUrl ] = useState('');
 
   return (
     <div className="install-window install-npm">
-      <input placeholder="url to gzipped tarball" />
+      <input
+        value={ packageUrl }
+        onChange={ (e) => setPackageUrl(e.target.value) }
+        placeholder="url to gzipped tarball" />
+      <button
+        className="get-package-button"
+        disabled={!(packageUrl && projectName)}
+        onClick={ (e) => onConfirm(projectName, packageUrl) }>Get Package</button>
     </div>
   );
 

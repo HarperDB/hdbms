@@ -95,9 +95,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
   const isFileSelected = directoryEntry.path === selectedFile;
   const isFolderSelected = directoryEntry.path === selectedFolder?.path;
 
-  console.log('selectedFile', selectedFile)
-
-
   // file receives open/close toggle func from
   // parent. if it's a dir, calls toggle func on click
   // if it's a flat file, calls onFileSelect so
