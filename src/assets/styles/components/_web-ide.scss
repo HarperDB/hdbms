@@ -1,12 +1,17 @@
 .web-ide {
 
   .install-window {
-    display: flex;
-    flex-direction: inline-flex;
-    input {
-      margin-right: 5px;
-      padding-right: 5px;
+    display: inline-flex;
+    & > .elegant-input {
+      border-top: 0px solid transparent !important;
+      border-left: 0px solid transparent !important;
+      border-right: 0px solid transparent !important;
     }
+  }
+
+
+  .no-border {
+    border: none !important;
   }
 
   color: white;
@@ -14,6 +19,13 @@
   overflow: hidden;
   background: black;
 
+
+  input.install-package-type:focus {
+    outline: none !important;
+  }
+  .install-npm > input {
+    white-space: nowrap;
+  }
 
   .github-tag-list,
   .npm-dist-tag-list {
@@ -67,6 +79,11 @@
     & > label {
       margin-bottom: 20px;
     }
+
+    .install-fields {
+      border: none !important;
+    }
+
   }
   .rename-file,
   .deploy-project {
@@ -104,11 +121,18 @@
         font-size: 2em;
         &.fab.fa-npm {
           font-size: 3em;
-          color: red;
+          color: rgb(145,50,120);
         }
         &.fa-github,
         &.fa-link {
           padding: 5px;
+        }
+
+        &.fa-link {
+          color: lightgray;
+        }
+        &.fa-github {
+          color: rgb(28,182, 149);
         }
       }
 

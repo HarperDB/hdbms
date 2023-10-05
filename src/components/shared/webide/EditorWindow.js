@@ -82,18 +82,6 @@ export function PackageDetailsWindow({ active, packageDetails }) {
 
 }
 
-export function DeployComponentWindowGithub() {
-  return <div>github</div>
-}
-
-export function DeployComponentWindowNpm() {
-  return <div>npm</div>
-}
-
-export function DeployComponentWindowURL() {
-  return <div>url</div>
-}
-
 export function DeployComponentWindow({ active, project, onConfirm, onCancel, deployTargets=[] }) {
 
   const [ selectedTarget, setSelectedTarget ] = useState(deployTargets[0] || null);
@@ -147,42 +135,100 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
   )
 }
 
-/*
-      {
-        reinstallable ?
-          <label className="instructions">Reinstall {package?.name} from npm or an external URL:</label> :
-          <label className="instructions">Install a package component from an external URL:</label>
-      }
+export function InstallPackageWindow({ active, selectedPackage, reinstallable, onConfirm, onCancel, onPackageChange }) {
 
-      <label>
-        <span>Package name</span>:
-        <input
-          autoFocus
-          value={ packageName }
-          onChange={ updatePackageName }
-          placeholder="name your external component" />
-      </label>
-      <label>
-        <span>External Package URL</span>:
-        <input
-          value={ packageUrl }
-          onChange={ updatePackageUrl }
-          placeholder="url to external component" />
-      </label>
-      <label>
-        <span>Tag</span>:
-        <input
-          value={ releaseTag }
-          onChange={ updateReleaseTag }
-          placeholder="enter a tag if one exists (e.g. '0.0.1')" />
-      </label>
-      <button
-        onClick={ callOnConfirm }
-        disabled={ !(packageName && packageUrl) }>{reinstallable ? 'Re-Install' : 'Install' } External Package</button>
-      <button onClick={ onCancel }>Cancel</button>
+  const packageTypes = ['npm', 'github', 'url' ];
+  const [ url, tag ] = selectedPackage?.url?.split('#') || [];
+  const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
+  const [ packageUrl, setPackageUrl ] = useState(url || '');
+  const [ releaseTag, setReleaseTag ] = useState(tag || '');
+  const [ selectedPackageType, setSelectedPackageType ] = useState(packageTypes[0]);
+  const [ packageSpec, setPackageSpec ] = useState('');
+
+  useEffect(() => {
+     let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
+      setPackageUrl(urlPart);
+      setPackageName(selectedPackage?.name);
+      setReleaseTag(tagPart);
+  }, [selectedPackage]);
+
+  if (!active) {
+    return null;
+  }
+
+  function callOnConfirm() {
+
+    if (!(packageName.trim() && packageUrl.trim())) {
+      // this should be a ui warning in the remote install window.
+      console.error('invalid package name and/or url');
+      return;
+    }
+
+    const validCharsRE = /^[a-zA-Z0-9-_]+$/;
+    if (!(validCharsRE).test(packageName)) {
+      console.error(' Project name can only contain alphanumeric, dash and underscores characters');
+      return;
+    }
+
+    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`);
+
+  }
+
+  function updatePackageName(e) {
+    setPackageName(e.target.value)
+  }
+
+  function updatePackageUrl(e) {
+    setPackageUrl(e.target.value)
+  }
+
+  function updateReleaseTag(e) {
+    setReleaseTag(e.target.value);
+  }
+
+  function updateSelectedPackageType(e) {
+    setSelectedPackageType(e.target.value);
+  }
+
+
+  return (
+    <div className="install-package-form">
+      <Card className="no-border install-type">
+        <div className="radio-group-container">
+          {
+            packageTypes.map((packageType, index) => (
+              <label key={ packageType }>
+                { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
+                { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
+                { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
+                <input
+                  className="install-package-type"
+                  onChange={ updateSelectedPackageType }
+                  checked={ packageType === selectedPackageType }
+                  value={ packageTypes[index] }
+                  type="radio"
+                  name="package-type" />
+              </label>
+            ))
+          }
+        </div>
+      </Card>
+      <Card className="no-border install-fields">
+        {
+          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={console.log} />
+        }
+        {
+          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={console.log} />
+        }
+        {
+          selectedPackageType === 'url' && <URLInstallWindow onConfirm={console.log} />
+        }
+      </Card>
     </div>
+  );
+}
 
-  */
+
 
 export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
@@ -275,8 +321,6 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
 export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
-  // TODO: use semver notation when fetching
-
   const [ user, setUser ] = useState('');
   const [ debouncedUser ] = useDebounce(user, 300);
   const [ repo, setRepo ] = useState('');
@@ -345,6 +389,7 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
       <button
         onClick={
           () => {
+            // when we have a selected tag, use the semver notation.
             const url = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
             onConfirm(url)
           }
@@ -363,100 +408,6 @@ export function URLInstallWindow() {
     </div>
   );
 
-}
-
-
-export function InstallPackageWindow({ active, selectedPackage, reinstallable, onConfirm, onCancel, onPackageChange }) {
-
-  // TODO: link to npm install docs for user ref. https://docs.npmjs.com/cli/v10/commands/npm-install
-  const packageTypes = ['npm', 'github', 'url' ];
-  const [ url, tag ] = selectedPackage?.url?.split('#') || [];
-  const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
-  const [ packageUrl, setPackageUrl ] = useState(url || '');
-  const [ releaseTag, setReleaseTag ] = useState(tag || '');
-  const [ selectedPackageType, setSelectedPackageType ] = useState(packageTypes[0]);
-  const [ packageSpec, setPackageSpec ] = useState('');
-
-  useEffect(() => {
-     let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
-      setPackageUrl(urlPart);
-      setPackageName(selectedPackage?.name);
-      setReleaseTag(tagPart);
-  }, [selectedPackage]);
-
-  if (!active) {
-    return null;
-  }
-
-  function callOnConfirm() {
-
-    if (!(packageName.trim() && packageUrl.trim())) {
-      // this should be a ui warning in the remote install window.
-      console.error('invalid package name and/or url');
-      return;
-    }
-
-    const validCharsRE = /^[a-zA-Z0-9-_]+$/;
-    if (!(validCharsRE).test(packageName)) {
-      console.error(' Project name can only contain alphanumeric, dash and underscores characters');
-      return;
-    }
-
-    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`);
-
-  }
-
-  function updatePackageName(e) {
-    setPackageName(e.target.value)
-  }
-
-  function updatePackageUrl(e) {
-    setPackageUrl(e.target.value)
-  }
-
-  function updateReleaseTag(e) {
-    setReleaseTag(e.target.value);
-  }
-
-  function updateSelectedPackageType(e) {
-    setSelectedPackageType(e.target.value);
-  }
-
-
-  return (
-    <div className="install-package-form">
-      <Card className="no-border install-type">
-        <div className="radio-group-container">
-          {
-            packageTypes.map((packageType, index) => (
-              <label key={ packageType }>
-                { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
-                { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
-                { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
-                <input
-                  onChange={ updateSelectedPackageType }
-                  checked={ packageType === selectedPackageType }
-                  value={ packageTypes[index] }
-                  type="radio"
-                  name="package-type" />
-              </label>
-            ))
-          }
-        </div>
-      </Card>
-      <Card className="no-border install-fields">
-        {
-          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={console.log} />
-        }
-        {
-          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={console.log} />
-        }
-        {
-          selectedPackageType === 'url' && <URLInstallWindow onConfirm={console.log} />
-        }
-      </Card>
-    </div>
-  );
 }
 
 export default function EditorWindow({ children }) {
