@@ -49,7 +49,6 @@ export function NameProjectFolderWindow({ active, onConfirm, onCancel, projectNa
   );
 }
 
-
 export function NameFileWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
     <NameInput
@@ -187,6 +186,7 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
   }
 
   function updateSelectedPackageType(e) {
+    setPackageSpec('');
     setSelectedPackageType(e.target.value);
   }
 
@@ -215,14 +215,15 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
       </Card>
       <Card className="no-border install-fields">
         {
-          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={console.log} />
+          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={setPackageSpec} />
         }
         {
-          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={console.log} />
+          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={setPackageSpec} />
         }
         {
-          selectedPackageType === 'url' && <URLInstallWindow onConfirm={console.log} />
+          selectedPackageType === 'url' && <URLInstallWindow onConfirm={setPackageSpec} />
         }
+        <div>{ packageSpec }</div>
       </Card>
     </div>
   );
@@ -250,21 +251,25 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
     async function getDistTags() {
 
-      try {
-        // NOTE: i get a cors error for 404 registry calls, i.e. if the packageName doesnt exist
-        // so below, I am swallowing error in the catch block below.
-        const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+      // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
+      // so instead, we search for repo using api /search endpoint, compare desired package name
+      // against the returned results and if one exactly matches, that package exists.
+      // because it exists, we can then look it up against the registry by its package name (avoiding cors error)
+      // and grab the resulting 'dist-tags' property from the returned payload.
+      const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${packageName}`);
+      const packages = await response.json();
+      const matchingPackage = packages.objects.find(p => p.package.name === packageName); 
 
-        if (response.status === 404) {
-          return null;
-        }
+      if (matchingPackage) {
 
-        const data = await response.json();
-
-        return data['dist-tags'];
-      } catch(e) {
-        console.log(e);
+        const packageResponse = await fetch(`https://registry.npmjs.org/${matchingPackage.package.name}`);
+        const packageResponseData = await packageResponse.json();
+        const distTags = packageResponseData['dist-tags'];
+        return distTags;
       }
+
+      return null;
+
 
     }
 
@@ -300,8 +305,7 @@ export function NpmInstallWindow({ selectedPackage, onConfirm }) {
         </option>
         {
           Object.entries(distTags || []).map(([tagName,tagValue]) => (
-            <option
-            value={tagName}>{`${tagName} (${tagValue})`}</option>
+            <option key={tagName} value={tagName}>{`${tagName} (${tagValue})`}</option>
           ))
 
         }
@@ -331,17 +335,27 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
 
-    async function getTags() {
+    async function ensureRepoExists(user, repo) {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`, { mode: 'no-cors' });
+      } catch(e) {
+        throw e;
+      }
+    }
+
+    async function getTags(user, repo) {
 
       try {
-        const response = await fetch(`https://api.github.com/repos/${user}/${debouncedRepo}/git/refs/tags`);
 
+        const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
+        
         if (response.status === 404) {
-          return null;
         }
-
+        console.log(response.status);
         const tagData = await response.json();
+
         return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
+
       } catch(e) {
         throw e;
       }
@@ -349,13 +363,18 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
     }
 
     // if we have all the info needed to fetch a repo but don't have tags for that yet
+    // TODO: ensure user and repo exist as well, before looking for tags.
+    // if they don't exist, don't allow package fetch.
+
     if (debouncedUser && debouncedRepo && !tags) {
 
-      getTags().then(repoTags => {
-        setTags(repoTags);
-      }).catch(e => {
-        console.error('e:', e);
-        throw e;
+      ensureRepoExists(user, debouncedRepo).then(() => {
+        getTags(user, debouncedRepo).then(repoTags => {
+          setTags(repoTags);
+        }).catch(e => {
+          console.error('e:', e);
+          throw e;
+        })
       });
 
     } else {
