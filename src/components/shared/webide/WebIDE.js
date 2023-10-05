@@ -233,24 +233,23 @@ function WebIDE({
           }
         />
         <EditorWindow>
-          <BlankWindow fileTree={fileTree} active={ activeEditorWindow === 'BLANK_WINDOW' } />
-          <NoFileSelectedWindow active={ activeEditorWindow === 'NO_FILE_SELECTED_WINDOW' } />
+          <BlankWindow fileTree={fileTree} active={ activeEditorWindow === EDITOR_WINDOWS.BLANK_WINDOW } />
           <NameProjectWindow
-            active={ activeEditorWindow === 'NAME_PROJECT_WINDOW' } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW } 
             onConfirm={ addProject }
             onCancel={ toDefaultWindow } />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
-            active={ activeEditorWindow === 'NAME_PROJECT_FOLDER_WINDOW' } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW } 
             onConfirm={ addProjectFolder }
             onCancel={ toDefaultWindow } />
           <NameFileWindow 
-            active={ activeEditorWindow === 'NAME_FILE_WINDOW' } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW } 
             onConfirm={ addFile }
             onCancel={ toDefaultWindow } />
           <InstallPackageWindow
             reinstallable={ fileTree.entries.find(e => e.name === selectedPackage?.name) }
-            active={ activeEditorWindow === 'INSTALL_PACKAGE_WINDOW' } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW } 
             selectedPackage={ selectedPackage }
             onConfirm={ installPackage }
             onCancel={ toDefaultWindow } />
@@ -262,11 +261,11 @@ function WebIDE({
             }
             onCancel={ toDefaultWindow }
             project={ selectedFolder }
-            active={ activeEditorWindow === 'DEPLOY_COMPONENT_WINDOW' }
+            active={ activeEditorWindow === EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW }
             deployTargets={ deployTargets }
           />
           <Editor
-            active={ activeEditorWindow === 'CODE_EDITOR_WINDOW' }
+            active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
             onChange={ updateInMemoryCodeFile } />
         </EditorWindow>

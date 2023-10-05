@@ -12,7 +12,6 @@ export const EDITOR_WINDOWS = {
   NAME_PROJECT_FOLDER_WINDOW: 'NAME_PROJECT_FOLDER_WINDOW',
   RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
-  NO_FILE_SELECTED_WINDOW: 'NO_FILE_SELECTED_WINDOW',
   DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
   INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
@@ -24,14 +23,6 @@ export function BlankWindow({ active, fileTree }) {
     {
       fileTree.entries?.length ? 'Please create or select a file on the left' : 'Please create a project on the left'
     }
-    </div>
-  )
-}
-
-export function NoFileSelectedWindow({ active }) {
-  return !active ? null : (
-    <div>
-      No file selected. Please select or create ( <i className="fas fa-plus" /> ) a file using the menu on the left. 
     </div>
   )
 }
@@ -71,7 +62,7 @@ export function NameFileWindow({ active, onConfirm, onCancel }) {
 }
 
 export function PackageDetailsWindow({ active, packageDetails }) {
-  
+
   if (!active) {
     return null;
   }
@@ -166,7 +157,7 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
       <label>
         <span>Package name</span>:
         <input
-          autoFocus 
+          autoFocus
           value={ packageName }
           onChange={ updatePackageName }
           placeholder="name your external component" />
@@ -193,10 +184,10 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
 
   */
 
-export function NPMInstallWindow({ selectedPackage, onConfirm }) {
+export function NpmInstallWindow({ selectedPackage, onConfirm }) {
 
   const [ packageName, setPackageName ] = useState('');
-  const [ debouncedPackageName ] = useDebounce(packageName, 1000); 
+  const [ debouncedPackageName ] = useDebounce(packageName, 300);
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
 
@@ -216,8 +207,8 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
       try {
         // NOTE: i get a cors error for 404 registry calls, i.e. if the packageName doesnt exist
         // so below, I am swallowing error in the catch block below.
-        const response = await fetch(`https://registry.npmjs.org/${packageName}`); 
-         
+        const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+
         if (response.status === 404) {
           return null;
         }
@@ -228,7 +219,7 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
       } catch(e) {
         console.log(e);
       }
-      
+
     }
 
     if (debouncedPackageName) {
@@ -249,21 +240,34 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
   return (
     <div className="install-window install-npm">
-      <input value={packageName} placeholder="[@scope]/package" onChange={ updatePackageName } />
-      <select 
+      <input
+        className="elegant-input"
+        value={packageName}
+        placeholder="[@scope]/package"
+        onChange={ updatePackageName } />
+      <select
         onChange={ updateSelectedDistTag }
-        className="npm-dist-tag-list" disabled={!distTags}>
-        <option>
+        className="npm-dist-tag-list"
+        disabled={!distTags}>
+        <option value='' >
           choose a tag
         </option>
         {
           Object.entries(distTags || []).map(([tagName,tagValue]) => (
-            <option 
+            <option
             value={tagName}>{`${tagName} (${tagValue})`}</option>
           ))
 
         }
       </select>
+      <div>
+        <button disabled={ !debouncedPackageName } onClick={
+          () => {
+            const url = selectedDistTag ? `${packageName}@${selectedDistTag}` : packageName;
+            onConfirm(url);
+          }
+        }>Get Package</button>
+      </div>
     </div>
   );
 
@@ -271,15 +275,16 @@ export function NPMInstallWindow({ selectedPackage, onConfirm }) {
 
 export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
-  // TODO: use semver notation when fetching 
+  // TODO: use semver notation when fetching
 
   const [ user, setUser ] = useState('');
-  const [ debouncedUser ] = useDebounce(user, 1000);
+  const [ debouncedUser ] = useDebounce(user, 300);
   const [ repo, setRepo ] = useState('');
-  const [ debouncedRepo ] = useDebounce(repo, 1000);
-  const [ tags, setTags ] = useState(null);
+  const [ debouncedRepo ] = useDebounce(repo, 300);
+  const [ tags, setTags ] = useState([]);
+  const [ selectedTag, setSelectedTag ] = useState('');
 
-  // if we have a repo or a user/org + repo, fetch branches and release tags from api  
+  // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
 
     async function getTags() {
@@ -324,15 +329,27 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
         <select
           disabled={!tags}
           className="github-tag-list"
-          onChange={ (e) => console.log(e) }>
-          <option value="tag">choose a tag</option>
+          onChange={
+            (e) => {
+              setSelectedTag(e.target.value);
+            }
+          }>
+          <option value=''>choose a tag</option>
           {
             tags?.map(tag => (
-              <option key={tag} value={tag} >{tag}</option>
+              <option key={tag} value={tag}>{tag}</option>
             ))
           }
         </select>
       </label>
+      <button
+        onClick={
+          () => {
+            const url = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
+            onConfirm(url)
+          }
+        }
+        disabled={!(user && repo)}>Get Package</button>
     </div>
   );
 
@@ -351,13 +368,14 @@ export function URLInstallWindow() {
 
 export function InstallPackageWindow({ active, selectedPackage, reinstallable, onConfirm, onCancel, onPackageChange }) {
 
-  // TODO: link to npm install docs for user ref. https://docs.npmjs.com/cli/v10/commands/npm-install 
+  // TODO: link to npm install docs for user ref. https://docs.npmjs.com/cli/v10/commands/npm-install
   const packageTypes = ['npm', 'github', 'url' ];
   const [ url, tag ] = selectedPackage?.url?.split('#') || [];
   const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
   const [ packageUrl, setPackageUrl ] = useState(url || '');
-  const [ releaseTag, setReleaseTag ] = useState(tag || ''); 
+  const [ releaseTag, setReleaseTag ] = useState(tag || '');
   const [ selectedPackageType, setSelectedPackageType ] = useState(packageTypes[0]);
+  const [ packageSpec, setPackageSpec ] = useState('');
 
   useEffect(() => {
      let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
@@ -378,13 +396,13 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
       return;
     }
 
-    const validCharsRE = /^[a-zA-Z0-9-_]+$/; 
+    const validCharsRE = /^[a-zA-Z0-9-_]+$/;
     if (!(validCharsRE).test(packageName)) {
       console.error(' Project name can only contain alphanumeric, dash and underscores characters');
       return;
     }
 
-    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`); 
+    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`);
 
   }
 
@@ -407,18 +425,18 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
 
   return (
     <div className="install-package-form">
-      <Card className="install-type">
+      <Card className="no-border install-type">
         <div className="radio-group-container">
           {
             packageTypes.map((packageType, index) => (
-              <label key={packageType}>
-              { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
-              { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
-              { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
+              <label key={ packageType }>
+                { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
+                { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
+                { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
                 <input
                   onChange={ updateSelectedPackageType }
-                  checked={packageType === selectedPackageType}
-                  value={packageTypes[index]}
+                  checked={ packageType === selectedPackageType }
+                  value={ packageTypes[index] }
                   type="radio"
                   name="package-type" />
               </label>
@@ -426,15 +444,15 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
           }
         </div>
       </Card>
-      <Card className="install-fields">
+      <Card className="no-border install-fields">
         {
-          selectedPackageType === 'npm' && <NPMInstallWindow />
+          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={console.log} />
         }
         {
-          selectedPackageType === 'github' && <GithubInstallWindow />
+          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={console.log} />
         }
         {
-          selectedPackageType === 'url' && <URLInstallWindow />
+          selectedPackageType === 'url' && <URLInstallWindow onConfirm={console.log} />
         }
       </Card>
     </div>
@@ -443,6 +461,6 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
 
 export default function EditorWindow({ children }) {
   return <Card className="editor-window">
-  { children } 
+  { children }
   </Card>
 }
