@@ -344,16 +344,24 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
   const [ debouncedRepo ] = useDebounce(repo, 300);
   const [ tags, setTags ] = useState([]);
   const [ selectedTag, setSelectedTag ] = useState('');
+  const [ targetRepo, setTargetRepo ] = useState('');
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
 
     async function ensureRepoExists(user, repo) {
+
       try {
-        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`, { mode: 'no-cors' });
+
+        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
+        const data = await response.json();
+
+        return response.status < 400 ? data.name : false;
+
       } catch(e) {
-        throw e;
+        return false;
       }
+
     }
 
     async function getTags(user, repo) {
@@ -381,13 +389,25 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
     if (debouncedUser && debouncedRepo && !tags) {
 
-      ensureRepoExists(user, debouncedRepo).then(() => {
-        getTags(user, debouncedRepo).then(repoTags => {
-          setTags(repoTags);
-        }).catch(e => {
-          console.error('e:', e);
-          throw e;
-        })
+      ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
+
+        if (targetRepoName) {
+
+          setTargetRepo(targetRepoName);
+
+          getTags(user, debouncedRepo).then(repoTags => {
+
+            setTags(repoTags);
+
+          })
+
+        } else {
+
+          setTargetRepo('');
+          setTags(null);
+
+        }
+
       });
 
     } else {
@@ -399,7 +419,7 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
 
   return (
     <div className="install-window install-npm">
-      <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user}/>
+      <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user} />
       <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
       <label>
         <select
@@ -422,11 +442,11 @@ export function GithubInstallWindow({ selectedPackage, onConfirm }) {
         onClick={
           () => {
             // when we have a selected tag, use the semver notation.
-            const url = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            onConfirm(url)
+            const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
+            onConfirm(targetRepoSpec)
           }
         }
-        disabled={!(user && repo)}>Get Package</button>
+        disabled={!targetRepo}>Get Package</button>
     </div>
   );
 
