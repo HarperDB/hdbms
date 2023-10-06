@@ -3,19 +3,51 @@ import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 import { useDebounce } from 'use-debounce';
 
-export const EDITOR_WINDOWS = {
-  DEFAULT_WINDOW: 'BLANK_WINDOW',
-  BLANK_WINDOW: 'BLANK_WINDOW',
-  CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
-  NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',
-  NAME_PROJECT_WINDOW: 'NAME_PROJECT_WINDOW',
-  NAME_PROJECT_FOLDER_WINDOW: 'NAME_PROJECT_FOLDER_WINDOW',
-  RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
-  RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
-  DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
-  INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
-  PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
-};
+async function getGithubTags(user, repo) {
+
+  try {
+
+    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
+    
+    if (response.status < 400) {
+      const tagData = await response.json();
+      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
+    }
+
+    return null;
+
+
+  } catch(e) {
+    throw e;
+  }
+
+}
+
+
+async function findNpmPackageName(query) {
+
+  const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
+  const packages = await response.json();
+  const pkg = packages.objects.find(p => p.package.name === query); 
+
+  return pkg?.package?.name;
+
+}
+
+async function getNpmDistTags(packageName) {
+
+  // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
+  // so instead, we search for repo using api /search endpoint, compare desired package name
+  // against the returned results array. If one exactly matches, that package exists.
+  // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
+  // and grab the resulting 'dist-tags' property from the returned payload.
+
+  const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
+  const packageResponseData = await packageResponse.json();
+
+  return packageResponseData['dist-tags'];
+
+}
 
 export function BlankWindow({ active, fileTree }) {
   return !active ? null : (
@@ -134,63 +166,96 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
   )
 }
 
-export function InstallPackageWindow({ active, selectedPackage, reinstallable, onConfirm, onCancel, onPackageChange }) {
+function parsePackageType(pkg) {
 
-  const packageTypes = ['npm', 'github', 'url' ];
-  const [ url, tag ] = selectedPackage?.url?.split('#') || [];
-  const [ packageName, setPackageName ] = useState(selectedPackage?.name || '');
-  const [ packageUrl, setPackageUrl ] = useState(url || '');
-  const [ releaseTag, setReleaseTag ] = useState(tag || '');
-  const [ selectedPackageType, setSelectedPackageType ] = useState(packageTypes[0]);
-  const [ packageSpec, setPackageSpec ] = useState('');
-  const [ projectName, setProjectName ] = useState('');
+  if (!pkg) {
+    return null;
+  }
 
-  useEffect(() => {
-     let [ urlPart, tagPart ] = selectedPackage?.url?.split('#') || [];
-      setPackageUrl(urlPart);
-      setPackageName(selectedPackage?.name);
-      setReleaseTag(tagPart);
-  }, [selectedPackage]);
+  let meta = {
+    type: null,
+    user: null,
+    repo: null,
+    url: null,
+    package: null,
+    tag: null
+  };
+
+  if (pkg.url.match('://')) {
+
+    // it's a url
+    meta.url = pkg.url;
+    meta.type = 'url';
+
+  } else if (pkg.url.match('semver:')) {
+    // it's a github repo
+    const [ user, repo, semverTag ] = pkg.url.split(/[/#]/);  
+    meta.type = 'github';
+    meta.user = user;
+    meta.repo = repo;
+    meta.tag = semverTag;
+  } else {
+
+    meta.type = 'npm';
+    const parts = pkg.url.split('/');
+
+    // TODO: what should this format be?
+    // what does the form need?
+
+    if (parts.length === 1) {
+    // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2] 
+
+      const [ p, tag ] = parts.split('@');
+
+      meta.package = p;
+      meta.tag = tag;
+
+    } else if (parts.length == 2) {
+    // has @scope, e.g @harperdb/harperdb[@2]
+
+      const [ scope, pkgAndTag ] = parts; 
+      const [ p, tag ] = pkgAndTag.split('@');
+
+      meta.package = p;
+      meta.tag = tag;
+
+    }
+
+  }
+       
+    // it's an npm package
+    return meta;
+}
+
+export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
+
+
+  // manages:
+  // - which install form to use.
+  // - project name.
+  // - calls confirm, as parent of individual install type form.
+
+  const parsedPackageType = parsePackageType(selectedPackage);
+  const packageTypes = [ 'npm', 'github', 'url' ];
+  const [ selectedPackageType, setSelectedPackageType ] = useState(parsedPackageType?.type || packageTypes[0]);
+  const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
+  const [ projectNameError, setProjectNameError ] = useState(null);
+
+  const reinstallable = Boolean(selectedPackage);
 
   if (!active) {
     return null;
   }
 
-  function callOnConfirm() {
 
-    if (!(packageName.trim() && packageUrl.trim())) {
-      // this should be a ui warning in the remote install window.
-      console.error('invalid package name and/or url');
-      return;
-    }
-
-    const validCharsRE = /^[a-zA-Z0-9-_]+$/;
-    if (!(validCharsRE).test(packageName)) {
-      console.error(' Project name can only contain alphanumeric, dash and underscores characters');
-      return;
-    }
-
-    onConfirm(packageName, `${packageUrl}${releaseTag ? `#${releaseTag}` : ''}`);
-
+  function isValidProjectName(name) {
+    return /^[a-zA-Z0-9-_]+$/.test(name); 
   }
 
-  function updatePackageName(e) {
-    setPackageName(e.target.value)
-  }
-
-  function updatePackageUrl(e) {
-    setPackageUrl(e.target.value)
-  }
-
-  function updateReleaseTag(e) {
-    setReleaseTag(e.target.value);
-  }
 
   function updateSelectedPackageType(e) {
-    setPackageSpec('');
     setSelectedPackageType(e.target.value);
   }
-
 
   return (
     <div className="install-package-form">
@@ -203,9 +268,10 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
                 { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
                 { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
                 <input
+                  disabled={ selectedPackage && parsedPackageType.type !== packageType }
                   className="install-package-type"
                   onChange={ updateSelectedPackageType }
-                  checked={ packageType === selectedPackageType }
+                  checked={ packageType === selectedPackageType || packageType === parsedPackageType?.type }
                   value={ packageTypes[index] }
                   type="radio"
                   name="package-type" />
@@ -218,30 +284,52 @@ export function InstallPackageWindow({ active, selectedPackage, reinstallable, o
         <input
           value={ projectName }
           placeholder="project name"
-          onChange={ e => setProjectName(e.target.value) }/>
+          onChange={
+            (e) => {
+              if (isValidProjectName(e.target.value)) {
+                setProjectName(e.target.value); 
+              } else {
+                setProjectNameError(e.target.value);
+              }
+            }
+          }/>
         {
-          selectedPackageType === 'npm' && <NpmInstallWindow onConfirm={onConfirm} projectName={projectName} />
+          selectedPackageType === 'npm' &&
+          <NpmInstallWindow
+            onConfirm={ onConfirm }
+            projectName={ projectName }
+            reinstall={ reinstallable }
+            pkg={ parsedPackageType } />
         }
         {
-          selectedPackageType === 'github' && <GithubInstallWindow onConfirm={onConfirm} projectName={projectName}  />
+          selectedPackageType === 'github' &&
+          <GithubInstallWindow
+            onConfirm={ onConfirm }
+            projectName={ projectName }
+            reinstall={ reinstallable }
+            pkg={ parsedPackageType } />
         }
         {
-          selectedPackageType === 'url' && <URLInstallWindow onConfirm={onConfirm} projectName={projectName} />
+          selectedPackageType === 'url' &&
+          <URLInstallWindow
+            onConfirm={onConfirm}
+            projectName={projectName}
+            reinstall={reinstallable}
+            pkg={ parsedPackageType } />
         }
       </Card>
     </div>
   );
 }
 
-
-
-export function NpmInstallWindow({ projectName, onConfirm }) {
+export function NpmInstallWindow({ projectName, reinstallable, onConfirm }) {
 
   const [ packageQuery, setPackageQuery ] = useState('');
   const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
   const [ matchingPackage, setMatchingPackage ] = useState(''); 
+  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
 
   function updatePackageQuery(e) {
     setPackageQuery(e.target.value);
@@ -254,48 +342,23 @@ export function NpmInstallWindow({ projectName, onConfirm }) {
 
   useEffect(() => {
 
-    async function findPackageName(query) {
-
-      const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
-      const packages = await response.json();
-      const pkg = packages.objects.find(p => p.package.name === query); 
-
-      setMatchingPackage(pkg?.package?.name);
-
-      return pkg?.package?.name;
-
-    }
-
-    async function getDistTags(packageName) {
-
-      // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
-      // so instead, we search for repo using api /search endpoint, compare desired package name
-      // against the returned results array. If one exactly matches, that package exists.
-      // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
-      // and grab the resulting 'dist-tags' property from the returned payload.
-
-      if (packageName) {
-
-        const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
-        const packageResponseData = await packageResponse.json();
-
-        return packageResponseData['dist-tags'];
-
-      }
-
-      return null;
-
-    }
-
     if (debouncedPackageQuery) {
 
-      findPackageName(debouncedPackageQuery).then(packageName => {
-        getDistTags(packageName).then(tags => {
-          setDistTags(tags);
-          setSelectedDistTag(null);
-        }).catch(e => {
-          throw e;
-        });
+      findNpmPackageName(debouncedPackageQuery).then(packageName => {
+
+        setMatchingPackage(packageName);
+
+        if (packageName) {
+
+          getNpmDistTags(packageName).then(tags => {
+            setDistTags(tags);
+            setSelectedDistTag(null);
+          }).catch(e => {
+            throw e;
+          });
+
+        }
+
       })
 
     } else {
@@ -332,16 +395,17 @@ export function NpmInstallWindow({ projectName, onConfirm }) {
         disabled={ !(matchingPackage && projectName) }
         onClick={
           () => {
+            // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
             const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
             onConfirm(projectName, npmPackageSpecifier);
           }
-        }>Get Package</button>
+        }>{ buttonLanguage }</button>
     </div>
   );
 
 }
 
-export function GithubInstallWindow({ onConfirm, projectName }) {
+export function GithubInstallWindow({ onConfirm, reinstallable, projectName, pkg }) {
 
   const [ user, setUser ] = useState('');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -353,6 +417,8 @@ export function GithubInstallWindow({ onConfirm, projectName }) {
 
   const [ selectedTag, setSelectedTag ] = useState('');
   const [ targetRepo, setTargetRepo ] = useState('');
+
+  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
@@ -372,26 +438,6 @@ export function GithubInstallWindow({ onConfirm, projectName }) {
 
     }
 
-    async function getTags(user, repo) {
-
-      try {
-
-        const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-        
-        if (response.status < 400) {
-          const tagData = await response.json();
-          return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
-        }
-
-        return null;
-
-
-      } catch(e) {
-        throw e;
-      }
-
-    }
-
     // if we have all the info needed to fetch a repo but don't have tags for that yet
     // TODO: ensure user and repo exist as well, before looking for tags.
     // if they don't exist, don't allow package fetch.
@@ -404,7 +450,7 @@ export function GithubInstallWindow({ onConfirm, projectName }) {
 
           setTargetRepo(targetRepoName);
 
-          getTags(user, debouncedRepo).then(repoTags => {
+          getGithubTags(user, debouncedRepo).then(repoTags => {
 
             setTags(repoTags);
 
@@ -452,20 +498,21 @@ export function GithubInstallWindow({ onConfirm, projectName }) {
           () => {
             // when we have a selected tag, use the semver notation.
             const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            console.log('target repo spec: ', targetRepoSpec);
             onConfirm(projectName, targetRepoSpec)
           }
         }
         className="get-package-button"
-        disabled={!(targetRepo && projectName)}>Get Package</button>
+        disabled={!(targetRepo && projectName)}>{ buttonLanguage }</button>
     </div>
   );
 
 }
 
-export function URLInstallWindow({ onConfirm, projectName }) {
+export function URLInstallWindow({ onConfirm, reinstallable, projectName }) {
 
   const [ packageUrl, setPackageUrl ] = useState('');
+
+  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
 
   return (
     <div className="install-window install-npm">
@@ -476,7 +523,7 @@ export function URLInstallWindow({ onConfirm, projectName }) {
       <button
         className="get-package-button"
         disabled={!(packageUrl && projectName)}
-        onClick={ (e) => onConfirm(projectName, packageUrl) }>Get Package</button>
+        onClick={ (e) => onConfirm(projectName, packageUrl) }>{ buttonLanguage }</button>
     </div>
   );
 
@@ -487,3 +534,17 @@ export default function EditorWindow({ children }) {
   { children }
   </Card>
 }
+
+export const EDITOR_WINDOWS = {
+  DEFAULT_WINDOW: 'BLANK_WINDOW',
+  BLANK_WINDOW: 'BLANK_WINDOW',
+  CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
+  NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',
+  NAME_PROJECT_WINDOW: 'NAME_PROJECT_WINDOW',
+  NAME_PROJECT_FOLDER_WINDOW: 'NAME_PROJECT_FOLDER_WINDOW',
+  RENAME_FILE_WINDOW: 'RENAME_FILE_WINDOW',
+  RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
+  DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
+  INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
+  PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
+};

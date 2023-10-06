@@ -58,6 +58,8 @@ function WebIDE({
   const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
 
+  console.log(activeEditorWindow);
+
   async function addProject(newProjectName) {
     onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
@@ -194,13 +196,18 @@ function WebIDE({
             (selectedPackage) => {
               // set selected package,
               // unset selectedFile
+              // TODO: make sure 'remote fetch package' window has correct data.
+
+              console.log('web ide on packageSelect: ', selectedPackage);
               setSelectedPackage(selectedPackage);
               setSelectedFile(null);
+
               if (!selectedPackage) {
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)
               } else {
                 updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
               }
+
             }
           }
           onFileSelect={
@@ -248,7 +255,6 @@ function WebIDE({
             onConfirm={ addFile }
             onCancel={ toDefaultWindow } />
           <InstallPackageWindow
-            reinstallable={ fileTree.entries.find(e => e.name === selectedPackage?.name) }
             active={ activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW } 
             selectedPackage={ selectedPackage }
             onConfirm={ installPackage }
