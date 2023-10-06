@@ -3,6 +3,10 @@ import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 import { useDebounce } from 'use-debounce';
 
+function isValidProjectName(name) {
+  return /^[a-zA-Z0-9-_]+$/.test(name); 
+}
+
 async function getGithubTags(user, repo) {
 
   try {
@@ -92,27 +96,6 @@ export function NameFileWindow({ active, onConfirm, onCancel }) {
   );
 }
 
-export function PackageDetailsWindow({ active, packageDetails }) {
-
-  if (!active) {
-    return null;
-  }
-
-  return (
-    <div>
-      <ul>
-        <li>
-          name: { packageDetails.name }
-        </li>
-        <li>
-          url: { packageDetails.url }
-        </li>
-      </ul>
-    </div>
-  );
-
-}
-
 export function DeployComponentWindow({ active, project, onConfirm, onCancel, deployTargets=[] }) {
 
   const [ selectedTarget, setSelectedTarget ] = useState(deployTargets[0] || null);
@@ -128,11 +111,9 @@ export function DeployComponentWindow({ active, project, onConfirm, onCancel, de
   }
 
   return (
-    <div className="deploy-component-window">
 
+    <div className="deploy-component-window">
       <div>Deploy <span className="deploy-component-project-name">{ project.name }</span> to another cloud instance</div>
-      <br />
-      <br />
       <select
         defaultValue="select a deploy target"
         autoFocus
@@ -193,7 +174,7 @@ function parsePackageType(pkg) {
     meta.type = 'github';
     meta.user = user;
     meta.repo = repo;
-    meta.tag = semverTag;
+    meta.tag = semverTag.replace('semver:','');
   } else {
 
     meta.type = 'npm';
@@ -223,38 +204,39 @@ function parsePackageType(pkg) {
 
   }
        
-    // it's an npm package
-    return meta;
+  // it's an npm package
+  return meta;
+
 }
 
 export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
-
 
   // manages:
   // - which install form to use.
   // - project name.
   // - calls confirm, as parent of individual install type form.
 
-  const parsedPackageType = parsePackageType(selectedPackage);
   const packageTypes = [ 'npm', 'github', 'url' ];
-  const [ selectedPackageType, setSelectedPackageType ] = useState(parsedPackageType?.type || packageTypes[0]);
-  const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
-  const [ projectNameError, setProjectNameError ] = useState(null);
+  const [ packageType, setPackageType ] = useState(packageTypes[0]);
+  const [ packageInfo, setPackageInfo ] = useState(null);
+  const [ projectName, setProjectName ] = useState('');
+  const [ projectNameValid, setProjectNameValid ] = useState(true);
 
-  const reinstallable = Boolean(selectedPackage);
+  const installed = Boolean(selectedPackage);
+
+  useEffect(() => {
+    const newPackage = parsePackageType(selectedPackage);
+    setPackageInfo(newPackage);
+    setProjectName(selectedPackage?.name);
+    setPackageType(newPackage?.type);
+  }, [selectedPackage]);
 
   if (!active) {
     return null;
   }
 
-
-  function isValidProjectName(name) {
-    return /^[a-zA-Z0-9-_]+$/.test(name); 
-  }
-
-
   function updateSelectedPackageType(e) {
-    setSelectedPackageType(e.target.value);
+    setPackageType(e.target.value);
   }
 
   return (
@@ -262,16 +244,16 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
       <Card className="no-border install-type">
         <div className="radio-group-container">
           {
-            packageTypes.map((packageType, index) => (
-              <label key={ packageType }>
-                { packageType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
-                { packageType === 'github' && <i className="install-package-icon fab fa-github" /> }
-                { packageType === 'url' && <i className="install-package-icon fas fa-link" /> }
+            packageTypes.map((pkgType, index) => (
+              <label key={ pkgType }>
+                { pkgType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
+                { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
+                { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
                 <input
-                  disabled={ selectedPackage && parsedPackageType.type !== packageType }
+                  disabled={ selectedPackage && selectedPackage?.type !== pkgType }
                   className="install-package-type"
                   onChange={ updateSelectedPackageType }
-                  checked={ packageType === selectedPackageType || packageType === parsedPackageType?.type }
+                  checked={ pkgType === packageType || pkgType === packageType?.type }
                   value={ packageTypes[index] }
                   type="radio"
                   name="package-type" />
@@ -289,47 +271,158 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
               if (isValidProjectName(e.target.value)) {
                 setProjectName(e.target.value); 
               } else {
-                setProjectNameError(e.target.value);
+                setProjectNameValid(false);
               }
             }
           }/>
         {
-          selectedPackageType === 'npm' &&
+          packageType === 'npm' &&
           <NpmInstallWindow
             onConfirm={ onConfirm }
             projectName={ projectName }
-            reinstall={ reinstallable }
-            pkg={ parsedPackageType } />
+            installed={ installed }
+            pkg={ packageInfo } />
         }
         {
-          selectedPackageType === 'github' &&
+          packageType === 'github' &&
           <GithubInstallWindow
             onConfirm={ onConfirm }
             projectName={ projectName }
-            reinstall={ reinstallable }
-            pkg={ parsedPackageType } />
+            installed={ installed }
+            pkg={ packageInfo } />
         }
         {
-          selectedPackageType === 'url' &&
+          packageType === 'url' &&
           <URLInstallWindow
             onConfirm={onConfirm}
             projectName={projectName}
-            reinstall={reinstallable}
-            pkg={ parsedPackageType } />
+            installed={installed}
+            pkg={ packageInfo } />
         }
       </Card>
     </div>
   );
 }
 
-export function NpmInstallWindow({ projectName, reinstallable, onConfirm }) {
+export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) {
+
+  const [ user, setUser ] = useState('');
+  const [ debouncedUser ] = useDebounce(user, 300);
+
+  const [ repo, setRepo ] = useState('');
+  const [ debouncedRepo ] = useDebounce(repo, 300);
+
+  const [ tags, setTags ] = useState([]);
+
+  const [ selectedTag, setSelectedTag ] = useState('');
+  const [ targetRepo, setTargetRepo ] = useState('');
+
+  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
+
+  useEffect(() => {
+    setUser(pkg?.user);
+    setRepo(pkg?.repo);
+    setSelectedTag(pkg?.tag);
+  }, [pkg]);
+
+  console.log('pkg', pkg);
+
+  // if we have a repo or a user/org + repo, fetch branches and release tags from api
+  useEffect(() => {
+
+    async function ensureRepoExists(user, repo) {
+
+      try {
+
+        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
+        const data = await response.json();
+
+        return response.status < 400 ? data.name : false;
+
+      } catch(e) {
+        return false;
+      }
+
+    }
+
+    // if we have all the info needed to fetch a repo but don't have tags for that yet
+    // TODO: ensure user and repo exist as well, before looking for tags.
+    // if they don't exist, don't allow package fetch.
+
+    if (debouncedUser && debouncedRepo && !tags) {
+
+      ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
+
+        if (targetRepoName) {
+
+          setTargetRepo(targetRepoName);
+
+          getGithubTags(user, debouncedRepo).then(repoTags => {
+
+            setTags(repoTags);
+
+          })
+
+        } else {
+
+          setTargetRepo('');
+          setTags(null);
+
+        }
+
+      });
+
+    } else {
+      setTags(null);
+    }
+
+  }, [debouncedUser, debouncedRepo]);
+
+
+  return (
+    <div className="install-window install-npm">
+      <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user} />
+      <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
+      <label>
+        <select
+          value={selectedTag}
+          disabled={!tags}
+          className="github-tag-list"
+          onChange={
+            (e) => {
+              setSelectedTag(e.target.value);
+            }
+          }>
+          <option value=''>choose a tag</option>
+          {
+            tags?.map(tag => (
+              <option key={tag} value={tag}>{tag}</option>
+            ))
+          }
+        </select>
+      </label>
+      <button
+        onClick={
+          () => {
+            // when we have a selected tag, use the semver notation.
+            const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
+            onConfirm(projectName, targetRepoSpec)
+          }
+        }
+        className="get-package-button"
+        disabled={!(targetRepo && projectName)}>{ buttonLanguage }</button>
+    </div>
+  );
+
+}
+export function NpmInstallWindow({ projectName, installed, onConfirm }) {
 
   const [ packageQuery, setPackageQuery ] = useState('');
   const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
   const [ matchingPackage, setMatchingPackage ] = useState(''); 
-  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
+  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   function updatePackageQuery(e) {
     setPackageQuery(e.target.value);
@@ -405,114 +498,13 @@ export function NpmInstallWindow({ projectName, reinstallable, onConfirm }) {
 
 }
 
-export function GithubInstallWindow({ onConfirm, reinstallable, projectName, pkg }) {
-
-  const [ user, setUser ] = useState('');
-  const [ debouncedUser ] = useDebounce(user, 300);
-
-  const [ repo, setRepo ] = useState('');
-  const [ debouncedRepo ] = useDebounce(repo, 300);
-
-  const [ tags, setTags ] = useState([]);
-
-  const [ selectedTag, setSelectedTag ] = useState('');
-  const [ targetRepo, setTargetRepo ] = useState('');
-
-  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
-
-  // if we have a repo or a user/org + repo, fetch branches and release tags from api
-  useEffect(() => {
-
-    async function ensureRepoExists(user, repo) {
-
-      try {
-
-        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-        const data = await response.json();
-
-        return response.status < 400 ? data.name : false;
-
-      } catch(e) {
-        return false;
-      }
-
-    }
-
-    // if we have all the info needed to fetch a repo but don't have tags for that yet
-    // TODO: ensure user and repo exist as well, before looking for tags.
-    // if they don't exist, don't allow package fetch.
-
-    if (debouncedUser && debouncedRepo && !tags) {
-
-      ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
-
-        if (targetRepoName) {
-
-          setTargetRepo(targetRepoName);
-
-          getGithubTags(user, debouncedRepo).then(repoTags => {
-
-            setTags(repoTags);
-
-          })
-
-        } else {
-
-          setTargetRepo('');
-          setTags(null);
-
-        }
-
-      });
-
-    } else {
-      setTags(null);
-    }
-
-  }, [debouncedUser, debouncedRepo]);
 
 
-  return (
-    <div className="install-window install-npm">
-      <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user} />
-      <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
-      <label>
-        <select
-          disabled={!tags}
-          className="github-tag-list"
-          onChange={
-            (e) => {
-              setSelectedTag(e.target.value);
-            }
-          }>
-          <option value=''>choose a tag</option>
-          {
-            tags?.map(tag => (
-              <option key={tag} value={tag}>{tag}</option>
-            ))
-          }
-        </select>
-      </label>
-      <button
-        onClick={
-          () => {
-            // when we have a selected tag, use the semver notation.
-            const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            onConfirm(projectName, targetRepoSpec)
-          }
-        }
-        className="get-package-button"
-        disabled={!(targetRepo && projectName)}>{ buttonLanguage }</button>
-    </div>
-  );
-
-}
-
-export function URLInstallWindow({ onConfirm, reinstallable, projectName }) {
+export function URLInstallWindow({ onConfirm, installed, projectName }) {
 
   const [ packageUrl, setPackageUrl ] = useState('');
 
-  const buttonLanguage = reinstallable ? 'Reinstall Package' : 'Get Package';
+  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   return (
     <div className="install-window install-npm">
