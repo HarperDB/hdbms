@@ -56,13 +56,13 @@ function PackageIcon() {
 
 function Package({ name, url, onPackageSelect, selectedPackage }) {
 
-  const [ selected, setSelected ] = useState(Boolean(selectedPackage));
+  // FIXME: when we click another package, they both get selected.
+  const [ selected, setSelected ] = useState(Boolean(selectedPackage) && name === selectedPackage?.name);
 
   useEffect(() => {
-    if (!selectedPackage) {
-      setSelected(false);
-    }
+    setSelected(selectedPackage && selectedPackage.name === name);
   }, [selectedPackage]);
+
   return (
     <button
       onClick={ (e) => {

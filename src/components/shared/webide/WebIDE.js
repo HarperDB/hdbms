@@ -196,6 +196,7 @@ function WebIDE({
               // unset selectedFile
               // TODO: make sure 'remote fetch package' window has correct data.
 
+              setSelectedPackage(null);
               setSelectedPackage(selectedPackage);
               setSelectedFile(null);
 
