@@ -222,14 +222,23 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
    * diff between selectedPackage and parsedPackageType?
    * selectedPackageType => parsedPackageType and that's used for rest.
    */
-  const packageInfo = parsePackageType(selectedPackage);
+
   const packageTypes = [ 'npm', 'github', 'url' ];
+  const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
+
+  const [ packageInfo, setPackageInfo ] = useState(parsePackageType(selectedPackage));
   const [ packageType, setPackageType ] = useState(packageInfo?.type || packageTypes[0]);
 
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
   const [ projectNameValid, setProjectNameIsValid ] = useState(true);
 
-  const installed = Boolean(selectedPackage);
+
+  useEffect(() => {
+    setProjectName(selectedPackage?.name || '');
+    setPackageInfo(parsePackageType(selectedPackage));
+    setPackageType(packageInfo?.type || packageTypes[0]);
+    setInstalled(Boolean(selectedPackage));
+  }, [selectedPackage]);
 
   function updateSelectedPackageType(e) {
     setPackageType(e.target.value);
@@ -319,13 +328,12 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
-  /*
   useEffect(() => {
     setUser(pkg?.user);
     setRepo(pkg?.repo);
+    setTags(pkg?.tag ? [ pkg?.tag ] : []);
     setSelectedTag(pkg?.tag);
   }, [pkg]);
-  */
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
@@ -337,10 +345,10 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
         const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
         const data = await response.json();
 
-        return response.status < 400 ? data.name : false;
+        return response.status < 400 ? data.name : null;
 
       } catch(e) {
-        return false;
+        return null;
       }
 
     }
