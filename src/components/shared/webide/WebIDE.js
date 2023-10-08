@@ -251,11 +251,14 @@ function WebIDE({
             active={ activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW } 
             onConfirm={ addFile }
             onCancel={ toDefaultWindow } />
-          <InstallPackageWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW } 
-            selectedPackage={ selectedPackage }
-            onConfirm={ installPackage }
-            onCancel={ toDefaultWindow } />
+          { 
+            /* NOTE: rework how components are rendered, editor needs to 
+                     have a longer lifespan than other windows */ 
+            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW
+            && <InstallPackageWindow
+              selectedPackage={ selectedPackage }
+              onConfirm={ installPackage }
+              onCancel={ toDefaultWindow } /> }
           <DeployComponentWindow
             onConfirm={
               (project, deployTarget) => {

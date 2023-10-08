@@ -204,36 +204,32 @@ function parsePackageType(pkg) {
 
   }
        
-  // it's an npm package
   return meta;
 
 }
 
-export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCancel, onPackageChange }) {
+export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onPackageChange }) {
 
   // manages:
   // - which install form to use.
-  // - project name.
-  // - calls confirm, as parent of individual install type form.
+  // - theh package's project name
+  // - calls onConfirm callback
 
+  /*
+   * existing package? selectedPackage
+   * parse it for the info.
+   *
+   * diff between selectedPackage and parsedPackageType?
+   * selectedPackageType => parsedPackageType and that's used for rest.
+   */
+  const packageInfo = parsePackageType(selectedPackage);
   const packageTypes = [ 'npm', 'github', 'url' ];
-  const [ packageType, setPackageType ] = useState(packageTypes[0]);
-  const [ packageInfo, setPackageInfo ] = useState(null);
-  const [ projectName, setProjectName ] = useState('');
-  const [ projectNameValid, setProjectNameValid ] = useState(true);
+  const [ packageType, setPackageType ] = useState(packageInfo?.type || packageTypes[0]);
+
+  const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
+  const [ projectNameValid, setProjectNameIsValid ] = useState(true);
 
   const installed = Boolean(selectedPackage);
-
-  useEffect(() => {
-    const newPackage = parsePackageType(selectedPackage);
-    setPackageInfo(newPackage);
-    setProjectName(selectedPackage?.name);
-    setPackageType(newPackage?.type);
-  }, [selectedPackage]);
-
-  if (!active) {
-    return null;
-  }
 
   function updateSelectedPackageType(e) {
     setPackageType(e.target.value);
@@ -250,10 +246,13 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
                 { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
                 { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
                 <input
-                  disabled={ selectedPackage && selectedPackage?.type !== pkgType }
+                  disabled={
+                    /* when we have an existing selected package, the selection is pre-defined */
+                    selectedPackage && packageInfo?.type !== pkgType
+                  }
                   className="install-package-type"
                   onChange={ updateSelectedPackageType }
-                  checked={ pkgType === packageType || pkgType === packageType?.type }
+                  checked={ pkgType === packageType }
                   value={ packageTypes[index] }
                   type="radio"
                   name="package-type" />
@@ -268,11 +267,8 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
           placeholder="project name"
           onChange={
             (e) => {
-              if (isValidProjectName(e.target.value)) {
-                setProjectName(e.target.value); 
-              } else {
-                setProjectNameValid(false);
-              }
+              setProjectName(e.target.value); 
+              setProjectNameIsValid(isValidProjectName(e.target.value));
             }
           }/>
         {
@@ -306,26 +302,30 @@ export function InstallPackageWindow({ active, selectedPackage, onConfirm, onCan
 
 export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) {
 
-  const [ user, setUser ] = useState('');
+  const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
 
-  const [ repo, setRepo ] = useState('');
+  const [ repo, setRepo ] = useState(pkg?.repo || '');
   const [ debouncedRepo ] = useDebounce(repo, 300);
 
-  const [ tags, setTags ] = useState([]);
+  // you want existing tag to show
+  // but you also need to know if you should fetch tags, so they can choose a
+  // different one.
+  const [ tags, setTags ] = useState(pkg?.tag ? [ pkg?.tag ] : []);
+  const [ tagsFetched, setTagsFetched ] = useState(false);
 
-  const [ selectedTag, setSelectedTag ] = useState('');
+  const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
   const [ targetRepo, setTargetRepo ] = useState('');
 
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
+  /*
   useEffect(() => {
     setUser(pkg?.user);
     setRepo(pkg?.repo);
     setSelectedTag(pkg?.tag);
   }, [pkg]);
-
-  console.log('pkg', pkg);
+  */
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
@@ -349,7 +349,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
     // TODO: ensure user and repo exist as well, before looking for tags.
     // if they don't exist, don't allow package fetch.
 
-    if (debouncedUser && debouncedRepo && !tags) {
+    if (debouncedUser && debouncedRepo && !tagsFetched) {
 
       ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
 
@@ -359,6 +359,8 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
           getGithubTags(user, debouncedRepo).then(repoTags => {
 
+            setTagsFetched(true);
+
             setTags(repoTags);
 
           })
@@ -366,21 +368,21 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
         } else {
 
           setTargetRepo('');
-          setTags(null);
+          setTags(pkg?.tag ? [ pkg.tag ] : []);
 
         }
 
       });
 
     } else {
-      setTags(null);
+      setTags(pkg?.tag ? [ pkg?.tag ] : []);
     }
 
   }, [debouncedUser, debouncedRepo]);
 
 
   return (
-    <div className="install-window install-npm">
+    <div className="install-window github-install">
       <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user} />
       <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
       <label>
@@ -463,7 +465,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm }) {
   }, [debouncedPackageQuery]);
 
   return (
-    <div className="install-window install-npm">
+    <div className="install-window npm-install">
       <input
         className="elegant-input"
         value={packageQuery}
@@ -507,7 +509,7 @@ export function URLInstallWindow({ onConfirm, installed, projectName }) {
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   return (
-    <div className="install-window install-npm">
+    <div className="install-window url-install">
       <input
         value={ packageUrl }
         onChange={ (e) => setPackageUrl(e.target.value) }
