@@ -235,14 +235,18 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   async function installPackage(projectName, packageUrl) {
-    console.log('install package: ', { projectName, packageUrl })
 
-    await deployComponent({
+    const { error, message } = await deployComponent({
       auth,
       url,
       project: projectName,
       packageUrl
     });
+
+    if (error) {
+      // TODO: what do we actually want to do about an invalid package?
+      console.error(message);
+    }
 
     await restartInstance({
       auth,

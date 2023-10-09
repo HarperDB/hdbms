@@ -272,7 +272,7 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
         }
         {
           packageType === 'url' &&
-          <URLInstallWindow
+          <UrlInstallWindow
             onConfirm={onConfirm}
             projectName={projectName}
             installed={installed}
@@ -483,17 +483,33 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
 
 
 
-export function URLInstallWindow({ onConfirm, installed, projectName }) {
+export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
 
-  const [ packageUrl, setPackageUrl ] = useState('');
+  console.log(pkg);
+  const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
+  const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
 
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
+
+  useEffect(() => {
+    
+  }, [pkg]);
 
   return (
     <div className="install-window url-install">
       <input
+        className={
+          cn("package-url-input", {
+            invalid: !isValidPackageUrl
+          })
+        }
         value={ packageUrl }
-        onChange={ (e) => setPackageUrl(e.target.value) }
+        onChange={
+          (e) => {
+            setIsValidPackageUrl(e.target.value.length === 0 || isValidTarballUrl(e.target.value));
+            setPackageUrl(e.target.value);
+          }
+        }
         placeholder="url to gzipped tarball" />
       <button
         className="get-package-button"
@@ -590,4 +606,15 @@ async function getNpmDistTags(packageName) {
 
 }
 
+function isValidTarballUrl(url) {
+  // npm restrictions on tarball url install here: https://docs.npmjs.com/cli/v9/commands/npm-install
+  return isValidUrl(url) && (url.endsWith('.tar') || url.endsWith('.tar.gz') || url.endsWith('.tgz'));
+}
 
+function isValidUrl(url) {
+  try {
+    return Boolean(new URL(url));
+  } catch (e) {
+    return false;
+  }
+}
