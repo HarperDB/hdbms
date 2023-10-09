@@ -172,7 +172,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth,
       url
     });
-    console.log('done');
 
     await refreshCustomFunctions();
 

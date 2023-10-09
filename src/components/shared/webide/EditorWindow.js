@@ -353,7 +353,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
       <label>
         <select
           value={selectedTag}
-          disabled={!tags}
+          disabled={tags.length === 0}
           className="github-tag-list"
           onChange={
             (e) => {
