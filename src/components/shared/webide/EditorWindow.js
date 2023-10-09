@@ -4,15 +4,31 @@ import NameInput from './NameInput';
 import { useDebounce } from 'use-debounce';
 
 function isValidProjectName(name) {
-  return /^[a-zA-Z0-9-_]+$/.test(name); 
+  return /^[a-zA-Z0-9-_]+$/.test(name);
 }
+
+async function ensureRepoExists(user, repo) {
+
+  try {
+
+    const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
+    const data = await response.json();
+
+    return response.status < 400 ? data.name : null;
+
+  } catch(e) {
+    return null;
+  }
+
+}
+
 
 async function getGithubTags(user, repo) {
 
   try {
 
     const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-    
+
     if (response.status < 400) {
       const tagData = await response.json();
       return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
@@ -32,7 +48,7 @@ async function findNpmPackageName(query) {
 
   const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
   const packages = await response.json();
-  const pkg = packages.objects.find(p => p.package.name === query); 
+  const pkg = packages.objects.find(p => p.package.name === query);
 
   return pkg?.package?.name;
 
@@ -170,7 +186,7 @@ function parsePackageType(pkg) {
 
   } else if (pkg.url.match('semver:')) {
     // it's a github repo
-    const [ user, repo, semverTag ] = pkg.url.split(/[/#]/);  
+    const [ user, repo, semverTag ] = pkg.url.split(/[/#]/);
     meta.type = 'github';
     meta.user = user;
     meta.repo = repo;
@@ -184,7 +200,7 @@ function parsePackageType(pkg) {
     // what does the form need?
 
     if (parts.length === 1) {
-    // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2] 
+    // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2]
 
       const [ p, tag ] = parts.split('@');
 
@@ -194,7 +210,7 @@ function parsePackageType(pkg) {
     } else if (parts.length == 2) {
     // has @scope, e.g @harperdb/harperdb[@2]
 
-      const [ scope, pkgAndTag ] = parts; 
+      const [ scope, pkgAndTag ] = parts;
       const [ p, tag ] = pkgAndTag.split('@');
 
       meta.package = p;
@@ -203,7 +219,7 @@ function parsePackageType(pkg) {
     }
 
   }
-       
+
   return meta;
 
 }
@@ -276,7 +292,7 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
           placeholder="project name"
           onChange={
             (e) => {
-              setProjectName(e.target.value); 
+              setProjectName(e.target.value);
               setProjectNameIsValid(isValidProjectName(e.target.value));
             }
           }/>
@@ -337,22 +353,6 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
-
-    async function ensureRepoExists(user, repo) {
-
-      try {
-
-        const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-        const data = await response.json();
-
-        return response.status < 400 ? data.name : null;
-
-      } catch(e) {
-        return null;
-      }
-
-    }
-
     // if we have all the info needed to fetch a repo but don't have tags for that yet
     // TODO: ensure user and repo exist as well, before looking for tags.
     // if they don't exist, don't allow package fetch.
@@ -368,7 +368,6 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
           getGithubTags(user, debouncedRepo).then(repoTags => {
 
             setTagsFetched(true);
-
             setTags(repoTags);
 
           })
@@ -416,7 +415,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
           () => {
             // when we have a selected tag, use the semver notation.
             const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            onConfirm(projectName, targetRepoSpec)
+            onConfirm(projectName, targetRepoSpec);
           }
         }
         className="get-package-button"
@@ -425,13 +424,18 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   );
 
 }
-export function NpmInstallWindow({ projectName, installed, onConfirm }) {
+export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
+
+  /*
+   * packageQuery is what's in the input field (@scope/package)
+   * matchingPackage is the name of the package that matches the search exactly
+   */
 
   const [ packageQuery, setPackageQuery ] = useState('');
   const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
-  const [ matchingPackage, setMatchingPackage ] = useState(''); 
+  const [ matchingPackage, setMatchingPackage ] = useState('');
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   function updatePackageQuery(e) {
@@ -444,6 +448,15 @@ export function NpmInstallWindow({ projectName, installed, onConfirm }) {
   }
 
   useEffect(() => {
+    setPackageQuery(pkg?.package);
+  }, [pkg]);
+
+
+  // searches npm using current, debounced query
+  // returns an exactly matching package name if it exists
+  // loads available tags if package name exists
+
+  function updatePackageAndTags() {
 
     if (debouncedPackageQuery) {
 
@@ -470,7 +483,9 @@ export function NpmInstallWindow({ projectName, installed, onConfirm }) {
       setSelectedDistTag(null);
     }
 
-  }, [debouncedPackageQuery]);
+  }
+
+  useEffect(updatePackageAndTags, [debouncedPackageQuery]);
 
   return (
     <div className="install-window npm-install">

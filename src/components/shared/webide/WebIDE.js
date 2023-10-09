@@ -10,7 +10,7 @@ import FileMenu, {
   InstallPackageButton
 } from './FileMenu';
 import EditorMenu, { SaveButton } from './EditorMenu';
-import Editor from './Editor'; 
+import Editor from './Editor';
 import EditorWindow, {
   EDITOR_WINDOWS,
   InstallPackageWindow,
@@ -23,11 +23,7 @@ import EditorWindow, {
   PackageDetailsWindow
 } from './EditorWindow';
 
-import NameInput from './NameInput';
-
-import useInstanceAuth from '../../../functions/state/instanceAuths';
-
-function WebIDE({ 
+function WebIDE({
   deployTargets, // FIXME: does this belong here?
   fileTree,
   onSave,
@@ -48,9 +44,9 @@ function WebIDE({
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
-  const [ editingFileName, setEditingFileName ] = useState(false); 
+  const [ editingFileName, setEditingFileName ] = useState(false);
   const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
-  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW); 
+  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW);
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
 
   const hasProjects = fileTree?.entries?.length > 0;
@@ -86,7 +82,7 @@ function WebIDE({
   }
 
   function updateActiveEditorWindow(to, from) {
-    // TODO: figure out correct logic here. 
+    // TODO: figure out correct logic here.
     setActiveEditorWindow(to);
     setPreviousActiveEditorWindow(from);
   }
@@ -102,7 +98,7 @@ function WebIDE({
 
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode) {
- 
+
     const update = {
       ...selectedFile,
       content: updatedCode
@@ -111,7 +107,7 @@ function WebIDE({
     setSelectedFile(update);
 
   }
- 
+
   return (
     <Row className="web-ide">
       <Col md="3" className="file-browser-container">
@@ -146,7 +142,7 @@ function WebIDE({
             onAddFile={() => {
               updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
             }}
-            disabled={ !canAddFile } /> 
+            disabled={ !canAddFile } />
           <DeleteFileButton
             disabled={ !selectedFile?.path }
             onDeleteFile={
@@ -216,12 +212,12 @@ function WebIDE({
                 content
               });
               updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
-            } 
+            }
           } />
       </Col>
       <Col className="code-editor-container">
         <EditorMenu
-          SaveButton={ 
+          SaveButton={
             () => (
               <SaveButton
                 disabled={ !selectedFile }
@@ -239,21 +235,21 @@ function WebIDE({
         <EditorWindow>
           <BlankWindow fileTree={fileTree} active={ activeEditorWindow === EDITOR_WINDOWS.BLANK_WINDOW } />
           <NameProjectWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW }
             onConfirm={ addProject }
             onCancel={ toDefaultWindow } />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW }
             onConfirm={ addProjectFolder }
             onCancel={ toDefaultWindow } />
-          <NameFileWindow 
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW } 
+          <NameFileWindow
+            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW }
             onConfirm={ addFile }
             onCancel={ toDefaultWindow } />
-          { 
-            /* NOTE: rework how components are rendered, editor needs to 
-                     have a longer lifespan than other windows */ 
+          {
+            /* NOTE: rework how components are rendered, editor needs to
+                     have a longer lifespan than other windows */
             activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW
             && <InstallPackageWindow
               selectedPackage={ selectedPackage }
