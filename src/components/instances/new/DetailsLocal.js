@@ -14,6 +14,7 @@ function DetailsLocal() {
   const navigate = useNavigate();
   const { customer_id } = useParams();
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
+  const unlimited_local_install = useStoreState(appState, (s) => s.customer.unlimited_local_install);
   const [newInstance, setNewInstance] = useNewInstance({});
   const unusedCompute = useStoreState(
     appState,
@@ -26,7 +27,7 @@ function DetailsLocal() {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ ...products[0]?.value, ...newInstance });
   const isFree = !formData.compute_price || !!formData.compute_subscription_id;
-  const needsCard = products && !hasCard && !isFree && !is_unpaid;
+  const needsCard = products && !hasCard && !isFree && !is_unpaid && !unlimited_local_install;
 
   useAsyncEffect(() => {
     const { submitted } = formState;
