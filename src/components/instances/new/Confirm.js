@@ -21,6 +21,7 @@ function Confirm() {
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({ tc_version: newInstance.tc_version || false });
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
+  const unlimited_local_install = useStoreState(appState, (s) => s.customer.unlimited_local_install);
   const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
   const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
@@ -172,7 +173,7 @@ function Confirm() {
         </CardBody>
       </Card>
       <hr className="my-3" />
-      {is_unpaid ? (
+      {(is_unpaid || unlimited_local_install) ? (
         <Unpaid />
       ) : stripeCoupons?.length ? (
         <div className="px-2 text-center text-success">
