@@ -120,9 +120,7 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
     result.network.latency.ms;
   const networkLatencyStatus = skip.includes('network') ?
     parseFloat(cachedSystemInfo.networkLatencyStatus) :
-    networkLatency > 1000 ?
-      'danger' : networkLatency > 500 ?
-        'warning' : 'success';
+    networkLatency > 1000 ? 'danger' : networkLatency > 500 ? 'warning' : 'success';
 
   const systemInfo = {
     totalMemory: totalMemory?.toFixed(2),
