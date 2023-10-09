@@ -1,73 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import cn from 'classnames';
 import { Card } from 'reactstrap';
 import NameInput from './NameInput';
 import { useDebounce } from 'use-debounce';
-
-function isValidProjectName(name) {
-  return /^[a-zA-Z0-9-_]+$/.test(name);
-}
-
-async function ensureRepoExists(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-    const data = await response.json();
-
-    return response.status < 400 ? data.name : null;
-
-  } catch(e) {
-    return null;
-  }
-
-}
-
-
-async function getGithubTags(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-
-    if (response.status < 400) {
-      const tagData = await response.json();
-      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
-    }
-
-    return null;
-
-
-  } catch(e) {
-    throw e;
-  }
-
-}
-
-
-async function findNpmPackageName(query) {
-
-  const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
-  const packages = await response.json();
-  const pkg = packages.objects.find(p => p.package.name === query);
-
-  return pkg?.package?.name;
-
-}
-
-async function getNpmDistTags(packageName) {
-
-  // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
-  // so instead, we search for repo using api /search endpoint, compare desired package name
-  // against the returned results array. If one exactly matches, that package exists.
-  // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
-  // and grab the resulting 'dist-tags' property from the returned payload.
-
-  const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
-  const packageResponseData = await packageResponse.json();
-
-  return packageResponseData['dist-tags'];
-
-}
 
 export function BlankWindow({ active, fileTree }) {
   return !active ? null : (
@@ -246,24 +181,30 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
   const [ packageType, setPackageType ] = useState(packageInfo?.type || packageTypes[0]);
 
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
-  const [ projectNameValid, setProjectNameIsValid ] = useState(true);
-
+  const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
   useEffect(() => {
+
     setProjectName(selectedPackage?.name || '');
     setPackageInfo(parsePackageType(selectedPackage));
     setPackageType(packageInfo?.type || packageTypes[0]);
     setInstalled(Boolean(selectedPackage));
+
   }, [selectedPackage]);
 
   function updateSelectedPackageType(e) {
     setPackageType(e.target.value);
   }
 
+  function validateProjectName() {
+    setProjectNameIsValid(isValidProjectName(projectName));
+  }
+
+  useEffect(validateProjectName, [ projectName ]);
+
   return (
     <div className="install-package-form">
-      <Card className="no-border install-type">
-        <div className="radio-group-container">
+      <Card className="package-type">
           {
             packageTypes.map((pkgType, index) => (
               <label key={ pkgType }>
@@ -275,19 +216,22 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
                     /* when we have an existing selected package, the selection is pre-defined */
                     selectedPackage && packageInfo?.type !== pkgType
                   }
-                  className="install-package-type"
                   onChange={ updateSelectedPackageType }
                   checked={ pkgType === packageType }
                   value={ packageTypes[index] }
                   type="radio"
-                  name="package-type" />
+                  name="package-option" />
               </label>
             ))
           }
-        </div>
       </Card>
-      <Card className="no-border install-fields">
+      <Card className="install-fields">
         <input
+          className={
+            cn("project-name-input", {
+              invalid: !projectNameIsValid && projectName.length > 0
+            })
+          }
           value={ projectName }
           placeholder="project name"
           onChange={
@@ -565,3 +509,71 @@ export const EDITOR_WINDOWS = {
   INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
 };
+
+function isValidProjectName(name) {
+  return /^[a-zA-Z0-9-_]+$/.test(name);
+}
+
+async function ensureRepoExists(user, repo) {
+
+  try {
+
+    const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
+    const data = await response.json();
+
+    return response.status < 400 ? data.name : null;
+
+  } catch(e) {
+    return null;
+  }
+
+}
+
+
+async function getGithubTags(user, repo) {
+
+  try {
+
+    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
+
+    if (response.status < 400) {
+      const tagData = await response.json();
+      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
+    }
+
+    return null;
+
+
+  } catch(e) {
+    throw e;
+  }
+
+}
+
+
+async function findNpmPackageName(query) {
+
+  const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
+  const packages = await response.json();
+  const pkg = packages.objects.find(p => p.package.name === query);
+
+  return pkg?.package?.name;
+
+}
+
+async function getNpmDistTags(packageName) {
+
+  // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
+  // so instead, we search for repo using api /search endpoint, compare desired package name
+  // against the returned results array. If one exactly matches, that package exists.
+  // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
+  // and grab the resulting 'dist-tags' property from the returned payload.
+
+  const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
+  const packageResponseData = await packageResponse.json();
+
+  return packageResponseData['dist-tags'];
+
+}
+
+

@@ -10,19 +10,14 @@
   }
 
 
-  .no-border {
-    border: none !important;
-  }
-
   color: white;
   height: 75vh;
   overflow: hidden;
   background: black;
 
-
-  input.install-package-type:focus {
-    outline: none !important;
+  .package-type {
   }
+
   .install-npm > input,
   .get-package-button
   {
@@ -82,8 +77,12 @@
       margin-bottom: 20px;
     }
 
-    .install-fields {
+    & > .install-fields {
       border: none !important;
+      & .project-name-input.invalid:focus,
+      & .project-name-input.invalid {
+        border: 1px solid red !important;
+      }
     }
 
   }
@@ -138,12 +137,13 @@
         }
       }
 
-      & > .install-type {
+      & > .package-type {
         border: 0px solid transparent !important; 
         margin-bottom: 30px;
+        display: flex;
+        flex-direction: row;
 
         & > .radio-group-container {
-          display: inline-flex;
         }
         label {
           min-width: 80px;
