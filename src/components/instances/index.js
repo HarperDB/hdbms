@@ -27,6 +27,7 @@ function InstancesIndex() {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || s.theme === 'akamai');
+  const unlimited_local_install = useStoreState(appState, (s) => s.customer.unlimited_local_install);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
@@ -96,7 +97,7 @@ function InstancesIndex() {
       <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
-          {is_unpaid && <Unpaid />}
+          {(is_unpaid || unlimited_local_install) && <Unpaid />}
           <Row>
             {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
             <InstanceList />
