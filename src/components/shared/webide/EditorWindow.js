@@ -137,7 +137,7 @@ function parsePackageType(pkg) {
     if (parts.length === 1) {
     // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2]
 
-      const [ p, tag ] = parts.split('@');
+      const [ p, tag ] = parts[0].split('@');
 
       meta.package = p;
       meta.tag = tag;
