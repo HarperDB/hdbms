@@ -166,6 +166,14 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project
     });
 
+
+    console.log('restarting');
+    await restartInstance({
+      auth,
+      url
+    });
+    console.log('done');
+
     await refreshCustomFunctions();
 
   }

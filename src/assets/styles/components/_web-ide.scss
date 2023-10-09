@@ -82,6 +82,19 @@
       & .project-name-input.invalid:focus,
       & .project-name-input.invalid {
         border: 1px solid red !important;
+        outline-color: red !important;
+      }
+      .project-name-field {
+        display: flex;
+        flex-direction: row;
+        white-space: nowrap;
+        align-items: center;
+
+        .project-name-invalid {
+          padding-left: 20px;
+          color: red;
+        }
+
       }
     }
 
@@ -137,28 +150,29 @@
         }
       }
 
-      & > .package-type {
+      .package-type {
+
         border: 0px solid transparent !important; 
         margin-bottom: 30px;
         display: flex;
         flex-direction: row;
 
-        & > .radio-group-container {
-        }
         label {
           min-width: 80px;
           text-align: center;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+
         }
 
+        input:focus {
+          outline: none !important;
+        }
         input {
           margin-top: 10px;
         }
 
-        .install-package-icon {
-        }
       }
     }
 

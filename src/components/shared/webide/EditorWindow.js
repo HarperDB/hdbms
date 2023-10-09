@@ -174,6 +174,7 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
    * selectedPackageType => parsedPackageType and that's used for rest.
    */
 
+
   const packageTypes = [ 'npm', 'github', 'url' ];
   const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
 
@@ -183,11 +184,16 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
+  console.log('selected package: ', selectedPackage)
+  console.log('package info: ', packageInfo)
+
   useEffect(() => {
+
+    const newPackageInfo = parsePackageType(selectedPackage); 
 
     setProjectName(selectedPackage?.name || '');
     setPackageInfo(parsePackageType(selectedPackage));
-    setPackageType(packageInfo?.type || packageTypes[0]);
+    setPackageType(newPackageInfo?.type || packageTypes[0]);
     setInstalled(Boolean(selectedPackage));
 
   }, [selectedPackage]);
@@ -226,20 +232,28 @@ export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onP
           }
       </Card>
       <Card className="install-fields">
-        <input
-          className={
-            cn("project-name-input", {
-              invalid: !projectNameIsValid && projectName.length > 0
-            })
-          }
-          value={ projectName }
-          placeholder="project name"
-          onChange={
-            (e) => {
-              setProjectName(e.target.value);
-              setProjectNameIsValid(isValidProjectName(e.target.value));
+        <label className="project-name-field">
+          <input
+            className={
+              cn("project-name-input", {
+                invalid: !projectNameIsValid && projectName.length > 0
+              })
             }
-          }/>
+            title="enter a name for this package"
+            value={ projectName }
+            placeholder="project name"
+            onChange={
+              (e) => {
+                setProjectName(e.target.value);
+                setProjectNameIsValid(isValidProjectName(e.target.value));
+              }
+            }/>
+          {
+            (!projectNameIsValid && projectName.length > 0) && 
+            <i title="your project name must only contain alphanumerics, dashes or underscores."
+               className="project-name-invalid fa fa-warning" /> 
+          }
+        </label>
         {
           packageType === 'npm' &&
           <NpmInstallWindow
@@ -289,10 +303,10 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
-    setUser(pkg?.user);
-    setRepo(pkg?.repo);
+    setUser(pkg?.user || '');
+    setRepo(pkg?.repo || '');
     setTags(pkg?.tag ? [ pkg?.tag ] : []);
-    setSelectedTag(pkg?.tag);
+    setSelectedTag(pkg?.tag || '');
   }, [pkg]);
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
@@ -392,7 +406,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
   }
 
   useEffect(() => {
-    setPackageQuery(pkg?.package);
+    setPackageQuery(pkg?.package || '');
   }, [pkg]);
 
 
