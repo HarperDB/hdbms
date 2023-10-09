@@ -106,7 +106,7 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
     cachedSystemInfo.cpuStatus :
     cpuLoad > 90 ?
       'danger' : cpuLoad > 75 ?
-      'warning' : 'success';
+        'warning' : 'success';
 
   // NETWORK
   const networkTransferred = skip.includes('network') ?
