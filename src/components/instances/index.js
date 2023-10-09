@@ -19,6 +19,7 @@ import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 import Unpaid from '../shared/Unpaid';
+import UnlimitedEnterprise from '../shared/UnlimitedEnterprise';
 import useInstanceAuth from '../../functions/state/instanceAuths';
 
 function InstancesIndex() {
@@ -97,7 +98,8 @@ function InstancesIndex() {
       <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
-          {(is_unpaid || unlimited_local_install) && <Unpaid />}
+          { unlimited_local_install && <UnlimitedEnterprise /> }
+          { is_unpaid  && <Unpaid /> }
           <Row>
             {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
             <InstanceList />
