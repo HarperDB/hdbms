@@ -27,7 +27,7 @@
               color: green;
             }
             &.not-found {
-              color: red;
+              color: rgb(145, 50, 120);
             }
 
           }
@@ -114,8 +114,8 @@
       border: none !important;
       & .project-name-input.invalid:focus,
       & .project-name-input.invalid {
-        border: 1px solid red !important;
-        outline-color: red !important;
+        border: 1px solid rgb(145, 50, 120) !important;
+        outline-color: rgb(145, 50, 120) !important;
       }
       .project-name-field {
         display: flex;
@@ -125,7 +125,7 @@
 
         .project-name-invalid {
           padding-left: 20px;
-          color: red;
+          color: rgb(145, 50, 120);
         }
 
       }
