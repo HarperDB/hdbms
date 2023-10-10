@@ -218,6 +218,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
                 { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
                 { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
                 <input
+                  title={pkgType + ' package'}
                   disabled={
                     /* when we have an existing selected package, the selection is pre-defined */
                     selectedPackage && packageInfo?.type !== pkgType
@@ -302,6 +303,8 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
+  console.log('selected tag: ', selectedTag);
+
   useEffect(() => {
 
     setUser(pkg?.user || '');
@@ -311,13 +314,9 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
   }, [pkg]);
 
-  // if we have a repo or a user/org + repo, fetch branches and release tags from api
   useEffect(() => {
-    // if we have all the info needed to fetch a repo but don't have tags for that yet
-    // TODO: ensure user and repo exist as well, before looking for tags.
-    // if they don't exist, don't allow package fetch.
 
-    if (debouncedUser && debouncedRepo && !tagsFetched) {
+    if (debouncedUser && debouncedRepo) {
 
       ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
 
@@ -335,14 +334,15 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
         } else {
 
           setTargetRepo('');
-          setTags(pkg?.tag ? [ pkg.tag ] : []);
+          setTags([]);
 
         }
 
       });
 
     } else {
-      setTags(pkg?.tag ? [ pkg?.tag ] : []);
+      setTags([]);//pkg?.tag ? [ pkg?.tag ] : []);
+      setSelectedTag('');
     }
 
   }, [debouncedUser, debouncedRepo]);
@@ -350,10 +350,19 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
   return (
     <div className="install-window github-install">
-      <input placeholder="user" onChange={ (e) => setUser(e.target.value) } value={user} />
-      <input placeholder="repo" onChange={ (e) => setRepo(e.target.value) } value={repo} />
+      <input
+        title="github username"
+        placeholder="user"
+        onChange={ (e) => setUser(e.target.value) }
+        value={user} />
+      <input
+        title="github repo name"
+        placeholder="repo"
+        onChange={ (e) => setRepo(e.target.value) }
+        value={repo} />
       <label>
         <select
+          title="list of available github tags"
           value={selectedTag}
           disabled={tags.length === 0}
           className="github-tag-list"
@@ -464,6 +473,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
     <div className="install-window npm-install">
       <div className="npm-package-search-box">
         <input
+          title="npm package specifier"
           value={packageQuery}
           placeholder="[@scope]/package"
           onChange={ updatePackageQuery } />
@@ -523,6 +533,7 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
   return (
     <div className="install-window url-install">
       <input
+        title="url pointing to a tarball"
         className={
           cn("package-url-input", {
             invalid: !isValidPackageUrl
