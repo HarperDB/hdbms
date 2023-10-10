@@ -303,10 +303,12 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
+
     setUser(pkg?.user || '');
     setRepo(pkg?.repo || '');
     setTags(pkg?.tag ? [ pkg?.tag ] : []);
     setSelectedTag(pkg?.tag || '');
+
   }, [pkg]);
 
   // if we have a repo or a user/org + repo, fetch branches and release tags from api
@@ -377,7 +379,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
           }
         }
         className="get-package-button"
-        disabled={!(targetRepo && projectName)}>{ buttonLanguage }</button>
+        disabled={!(targetRepo && projectName && isValidProjectName(projectName))}>{ buttonLanguage }</button>
     </div>
   );
 
@@ -468,7 +470,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
       </select>
       <button
         className="get-package-button"
-        disabled={ !(matchingPackage && projectName) }
+        disabled={ !(matchingPackage && projectName && isValidProjectName(projectName) ) }
         onClick={
           () => {
             // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
@@ -513,7 +515,7 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
         placeholder="url to gzipped tarball" />
       <button
         className="get-package-button"
-        disabled={!(packageUrl && projectName)}
+        disabled={!(packageUrl && projectName && isValidProjectName(projectName) )}
         onClick={ (e) => onConfirm(projectName, packageUrl) }>{ buttonLanguage }</button>
     </div>
   );
