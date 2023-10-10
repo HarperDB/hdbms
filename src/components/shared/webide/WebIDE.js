@@ -13,7 +13,7 @@ import EditorMenu, { SaveButton } from './EditorMenu';
 import Editor from './Editor';
 import EditorWindow, {
   EDITOR_WINDOWS,
-  InstallPackageWindow,
+  PackageInstallWindow,
   BlankWindow,
   DeployComponentWindow,
   NoFileSelectedWindow,
@@ -251,7 +251,7 @@ function WebIDE({
             /* NOTE: rework how components are rendered, editor needs to
                      have a longer lifespan than other windows */
             activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW
-            && <InstallPackageWindow
+            && <PackageInstallWindow
               selectedPackage={ selectedPackage }
               onConfirm={ installPackage }
               onCancel={ toDefaultWindow } /> }

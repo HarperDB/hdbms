@@ -159,7 +159,7 @@ function parsePackageType(pkg) {
 
 }
 
-export function InstallPackageWindow({ selectedPackage, onConfirm, onCancel, onPackageChange }) {
+export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange }) {
 
   // manages:
   // - which install form to use.
@@ -398,6 +398,11 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
   const [ matchingPackage, setMatchingPackage ] = useState('');
   const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
+  // for package query status icons
+  const [ loading, setLoading ] = useState(false);
+  const [ found, setFound ] = useState(false);
+
+
   function updatePackageQuery(e) {
     setPackageQuery(e.target.value);
   }
@@ -418,13 +423,19 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
 
   function updatePackageAndTags() {
 
+
     if (debouncedPackageQuery) {
 
+      setLoading(true);
       findNpmPackageName(debouncedPackageQuery).then(packageName => {
 
+        setLoading(false);
+        setFound(!!packageName);
         setMatchingPackage(packageName);
 
+
         if (packageName) {
+
 
           getNpmDistTags(packageName).then(tags => {
             setDistTags(tags);
@@ -435,7 +446,9 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
 
         }
 
-      })
+      }).catch(e => {
+        setLoading(false);
+      });
 
     } else {
       setMatchingPackage(null);
@@ -449,11 +462,22 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
 
   return (
     <div className="install-window npm-install">
-      <input
-        className="elegant-input"
-        value={packageQuery}
-        placeholder="[@scope]/package"
-        onChange={ updatePackageQuery } />
+      <div className="npm-package-search-box">
+        <input
+          value={packageQuery}
+          placeholder="[@scope]/package"
+          onChange={ updatePackageQuery } />
+        <span className="search-status-icon-container">
+          <i className={
+              cn("search-status-icon fas", { 
+                "fa-spinner fa-spin loading": loading, 
+                "fa-check found": debouncedPackageQuery.length > 0 && found,
+                "fa-times not-found": debouncedPackageQuery.length > 0 && !found, 
+                "fa-check not-searching": debouncedPackageQuery.length === 0
+              })
+             } />
+        </span>
+      </div>
       <select
         onChange={ updateSelectedDistTag }
         className="npm-dist-tag-list"
@@ -482,7 +506,6 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
   );
 
 }
-
 
 
 export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
