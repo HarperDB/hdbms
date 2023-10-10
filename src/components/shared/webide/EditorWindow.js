@@ -294,13 +294,13 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   // you want existing tag to show
   // but you also need to know if you should fetch tags, so they can choose a
   // different one.
-  const [ tags, setTags ] = useState(pkg?.tag ? [ pkg?.tag ] : []);
+  const [ tags, setTags ] = useState([]);
   const [ tagsFetched, setTagsFetched ] = useState(false);
 
   const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
   const [ targetRepo, setTargetRepo ] = useState('');
 
-  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
+  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
 
@@ -362,7 +362,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
               setSelectedTag(e.target.value);
             }
           }>
-          <option value=''>choose a tag</option>
+          <option value=''>{tags.length > 0 ? 'choose a tag' : 'no tags available'}</option>
           {
             tags?.map(tag => (
               <option key={tag} value={tag}>{tag}</option>
@@ -379,7 +379,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
           }
         }
         className="get-package-button"
-        disabled={!(targetRepo && projectName && isValidProjectName(projectName))}>{ buttonLanguage }</button>
+        disabled={!(targetRepo && projectName && isValidProjectName(projectName))}>{ getPackageButtonLanguage }</button>
     </div>
   );
 
@@ -396,7 +396,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
   const [ matchingPackage, setMatchingPackage ] = useState('');
-  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
+  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   // for package query status icons
   const [ loading, setLoading ] = useState(false);
@@ -472,7 +472,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
               cn("search-status-icon fas", { 
                 "fa-spinner fa-spin loading": loading, 
                 "fa-check found": debouncedPackageQuery.length > 0 && found,
-                "fa-times not-found": debouncedPackageQuery.length > 0 && !found, 
+                "fa-times not-found": debouncedPackageQuery.length > 0 && !(loading || found), 
                 "fa-check not-searching": debouncedPackageQuery.length === 0
               })
              } />
@@ -501,7 +501,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
             const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
             onConfirm(projectName, npmPackageSpecifier);
           }
-        }>{ buttonLanguage }</button>
+        }>{ getPackageButtonLanguage }</button>
     </div>
   );
 
@@ -514,7 +514,7 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
   const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
   const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
 
-  const buttonLanguage = installed ? 'Reinstall Package' : 'Get Package';
+  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
     
@@ -539,7 +539,7 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
       <button
         className="get-package-button"
         disabled={!(packageUrl && projectName && isValidProjectName(projectName) )}
-        onClick={ (e) => onConfirm(projectName, packageUrl) }>{ buttonLanguage }</button>
+        onClick={ (e) => onConfirm(projectName, packageUrl) }>{ getPackageButtonLanguage }</button>
     </div>
   );
 
@@ -596,7 +596,7 @@ async function getGithubTags(user, repo) {
       return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
     }
 
-    return null;
+    return [];
 
 
   } catch(e) {
