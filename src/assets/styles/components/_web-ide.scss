@@ -1,39 +1,40 @@
 .web-ide {
 
   .install-window {
+
     display: inline-flex;
+
     & > .elegant-input {
       border-top: 0px solid transparent !important;
       border-left: 0px solid transparent !important;
       border-right: 0px solid transparent !important;
     }
 
-    &.npm-install {
-      .npm-package-search-box {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        width: 300px;
-        .search-status-icon-container {
-          width: 40px;
-          text-align: center;
-          i {
-            color: white;
-            &.not-searching {
-              color: rgba(0,255,0, 0.1);
-            }
-            &.found, &.loading {
-              color: green;
-            }
-            &.not-found {
-              color: rgb(145, 50, 120);
-            }
+    .npm-package-search-box, 
+    .github-package-search-box {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 300px;
 
+      .search-status-icon-container {
+        width: 40px;
+        text-align: center;
+        i {
+          color: white;
+          &.not-searching {
+            color: rgba(0,255,0, 0.1);
           }
+          &.found, &.loading {
+            color: green;
+          }
+          &.not-found {
+            color: rgb(145, 50, 120);
+          }
+
         }
       }
-
     }
   }
 

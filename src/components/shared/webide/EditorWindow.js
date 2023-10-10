@@ -292,18 +292,19 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   const [ repo, setRepo ] = useState(pkg?.repo || '');
   const [ debouncedRepo ] = useDebounce(repo, 300);
 
-  // you want existing tag to show
-  // but you also need to know if you should fetch tags, so they can choose a
-  // different one.
   const [ tags, setTags ] = useState([]);
   const [ tagsFetched, setTagsFetched ] = useState(false);
 
   const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
   const [ targetRepo, setTargetRepo ] = useState('');
 
+  const [ loading, setLoading ] = useState(false);
+  const [ found, setFound ] = useState(false);
+
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   console.log('selected tag: ', selectedTag);
+
 
   useEffect(() => {
 
@@ -318,14 +319,17 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
     if (debouncedUser && debouncedRepo) {
 
+      setLoading(true);
       ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
 
         if (targetRepoName) {
 
           setTargetRepo(targetRepoName);
+          setFound(true);
 
           getGithubTags(user, debouncedRepo).then(repoTags => {
 
+            setLoading(false);
             setTagsFetched(true);
             setTags(repoTags);
 
@@ -333,15 +337,23 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
 
         } else {
 
+          setLoading(false);
+          setFound(false);
           setTargetRepo('');
           setTags([]);
 
         }
 
+      }).catch(e => {
+        setLoading(false);
       });
 
     } else {
-      setTags([]);//pkg?.tag ? [ pkg?.tag ] : []);
+
+      setFound(false);
+      setLoading(false);
+
+      setTags([]);
       setSelectedTag('');
     }
 
@@ -355,11 +367,23 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
         placeholder="user"
         onChange={ (e) => setUser(e.target.value) }
         value={user} />
-      <input
-        title="github repo name"
-        placeholder="repo"
-        onChange={ (e) => setRepo(e.target.value) }
-        value={repo} />
+      <div className="github-package-search-box">
+        <input
+          title="github repo name"
+          placeholder="repo"
+          onChange={ (e) => setRepo(e.target.value) }
+          value={repo} />
+        <span className="search-status-icon-container github-repo-query">
+          <i className={
+            cn("search-status-icon fas", { 
+              "fa-spinner fa-spin loading": loading, 
+              "fa-check found": debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
+              "fa-times not-found": debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loading || found), 
+              "fa-check not-searching": debouncedUser.length === 0 || debouncedRepo.length === 0
+            })
+          } />
+        </span>
+      </div>
       <label>
         <select
           title="list of available github tags"
@@ -382,7 +406,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
       <button
         onClick={
           () => {
-            // when we have a selected tag, use the semver notation.
+            // NOTE: using semver notation for github repo package specifiers.
             const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
             onConfirm(projectName, targetRepoSpec);
           }
@@ -516,7 +540,6 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
   );
 
 }
-
 
 export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
 
