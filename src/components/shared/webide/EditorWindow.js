@@ -159,7 +159,7 @@ function parsePackageType(pkg) {
 
 }
 
-export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange }) {
+export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange, deployTargets: availableDeployTargets }) {
 
   // manages:
   // - which install form to use.
@@ -184,8 +184,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
-  console.log('selected package: ', selectedPackage)
-  console.log('package info: ', packageInfo)
+  const [ deployTargets, setDeployTargets ] = useState([availableDeployTargets.find(t => t.isCurrentInstance)]);
 
   useEffect(() => {
 
@@ -234,6 +233,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
       </Card>
       <Card className="install-fields">
         <label className="project-name-field">
+          Project Name:
           <input
             className={
               cn("project-name-input", {
@@ -255,13 +255,38 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
                className="project-name-invalid fa fa-warning" /> 
           }
         </label>
+        <label>Deploy Targets: 
+          <select
+            multiple={true}
+            onChange={
+              (e) => {
+
+                const selectedHostUrls = [...e.target.selectedOptions].map(o => o.value);
+                const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
+
+                setDeployTargets(updatedDeployTargets);
+
+              }
+            }
+            defaultValue={[ deployTargets[0].instance.url ]}>
+            {
+              availableDeployTargets.map(t => {
+                const label = t.isCurrentInstance ? `${t.instance.host} (this instance)` : t.instance.host;
+                return (
+                  <option key={ t.instance.url } value={t.instance.url}>{ label }</option>
+                )
+              })
+            }
+          </select>
+        </label>
         {
           packageType === 'npm' &&
           <NpmInstallWindow
             onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
-            pkg={ packageInfo } />
+            pkg={ packageInfo } 
+            deployTargets={ deployTargets } />
         }
         {
           packageType === 'github' &&
@@ -269,7 +294,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
-            pkg={ packageInfo } />
+            pkg={ packageInfo }
+            deployTargets={ deployTargets } />
         }
         {
           packageType === 'url' &&
@@ -277,14 +303,15 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             onConfirm={onConfirm}
             projectName={projectName}
             installed={installed}
-            pkg={ packageInfo } />
+            pkg={ packageInfo }
+            deployTargets={ deployTargets } />
         }
       </Card>
     </div>
   );
 }
 
-export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) {
+export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -302,9 +329,6 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   const [ found, setFound ] = useState(false);
 
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
-
-  console.log('selected tag: ', selectedTag);
-
 
   useEffect(() => {
 
@@ -408,7 +432,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
           () => {
             // NOTE: using semver notation for github repo package specifiers.
             const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            onConfirm(projectName, targetRepoSpec);
+            onConfirm(projectName, targetRepoSpec, deployTargets);
           }
         }
         className="get-package-button"
@@ -417,7 +441,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg }) 
   );
 
 }
-export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
+export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTarget }) {
 
   /*
    * packageQuery is what's in the input field (@scope/package)
@@ -533,7 +557,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
           () => {
             // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
             const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
-            onConfirm(projectName, npmPackageSpecifier);
+            onConfirm(projectName, npmPackageSpecifier, deployTarget);
           }
         }>{ getPackageButtonLanguage }</button>
     </div>
@@ -541,9 +565,8 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg }) {
 
 }
 
-export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
+export function UrlInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets }) {
 
-  console.log(pkg);
   const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
   const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
 
@@ -573,7 +596,7 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg }) {
       <button
         className="get-package-button"
         disabled={!(packageUrl && projectName && isValidProjectName(projectName) )}
-        onClick={ (e) => onConfirm(projectName, packageUrl) }>{ getPackageButtonLanguage }</button>
+        onClick={ (e) => onConfirm(projectName, packageUrl, deployTargets) }>{ getPackageButtonLanguage }</button>
     </div>
   );
 

@@ -65,9 +65,9 @@ function WebIDE({
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
-  async function installPackage(packageUrl, projectName) {
+  async function installPackage(packageUrl, projectName, deployTarget) {
 
-    await onInstallPackage(packageUrl, projectName);
+    await onInstallPackage(packageUrl, projectName, deployTarget);
 
     setSelectedPackage(null);
     updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
@@ -250,11 +250,14 @@ function WebIDE({
           {
             /* NOTE: rework how components are rendered, editor needs to
                      have a longer lifespan than other windows */
-            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW
-            && <PackageInstallWindow
+            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW &&
+            <PackageInstallWindow
               selectedPackage={ selectedPackage }
               onConfirm={ installPackage }
-              onCancel={ toDefaultWindow } /> }
+              onCancel={ toDefaultWindow } 
+              deployTargets={ deployTargets }
+            />
+          }
           <DeployComponentWindow
             onConfirm={
               (project, deployTarget) => {

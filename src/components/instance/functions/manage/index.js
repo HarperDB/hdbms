@@ -35,13 +35,9 @@ function getRelativeFilepath(absolutePath) {
 
 function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
 
-  return instanceList.reduce((memo, i) => {
+  return instanceList.reduce((memo, instance) => {
 
-    if (i['compute_stack_id'] === thisCsId) {
-      return memo;
-    }
-
-    const csId = i['compute_stack_id'];
+    const csId = instance['compute_stack_id'];
     const deployTarget = instanceAuthList[csId];
 
     if (!deployTarget?.version) {
@@ -55,8 +51,9 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
     if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
 
       memo.push({ 
+        isCurrentInstance: csId === thisCsId,
         auth,
-        instance: i
+        instance: instance
       });
 
     } 
@@ -233,25 +230,29 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function installPackage(projectName, packageUrl) {
+  async function installPackage(projectName, packageUrl, deployTargets) {
 
-    const { error, message } = await deployComponent({
-      auth,
-      url,
-      project: projectName,
-      packageUrl
-    });
+    for (let deployTarget of deployTargets) {
 
-    if (error) {
-      // TODO: what do we actually want to do about an invalid package?
-      console.error(message);
+      const auth = deployTarget.auth; 
+      const url = deployTarget.instance.url; 
+      const { error, message } = await deployComponent({
+        auth,
+        url,
+        project: projectName,
+        packageUrl
+      });
+
+      if (error) {
+        // TODO: what do we actually want to do about an invalid package?
+        console.error(message);
+      }
+
+      // change to restartService({ auth, url, service: 'http_worker' });
+      await restartInstance({ auth, url });
+
     }
-
-    await restartInstance({
-      auth,
-      url,
-    });
-
+    
     await refreshCustomFunctions();
 
   }
