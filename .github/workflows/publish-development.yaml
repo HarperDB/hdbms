@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 name: Publish Development
 jobs:
-  publishStageStudio:
+  publishDevStudio:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -73,7 +73,7 @@ jobs:
 
         yarn
         yarn lint
-        yarn build:stage
+        yarn build:dev
     - name: Clean Remote Directory
       env:
         CI_PRIVATE_KEY: ${{ secrets.CI_PRIVATE_KEY }}
