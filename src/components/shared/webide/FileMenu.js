@@ -58,7 +58,7 @@ export function InstallPackageButton({ onClick }) {
       <button
         onClick={ onClick }
         className={
-          cn("install-package fas fa-cloud-download-alt")
+          cn("install-package fas fa-share-alt")
         }
         title="Install external package from url or NPM package spec" />
   )

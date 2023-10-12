@@ -15,7 +15,6 @@ import EditorWindow, {
   EDITOR_WINDOWS,
   PackageInstallWindow,
   BlankWindow,
-  DeployComponentWindow,
   NoFileSelectedWindow,
   NameFileWindow,
   NameProjectFolderWindow,
@@ -176,8 +175,7 @@ function WebIDE({
           }}
           onDeployProject={
             (e) => {
-              // opens deploy window
-              updateActiveEditorWindow(EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW, activeEditorWindow);
+              // TODO: open deploy package window
             }
           }
           onFolderSelect={
@@ -258,17 +256,6 @@ function WebIDE({
               deployTargets={ deployTargets }
             />
           }
-          <DeployComponentWindow
-            onConfirm={
-              (project, deployTarget) => {
-                onDeployProject({ project, deployTarget });
-              }
-            }
-            onCancel={ toDefaultWindow }
-            project={ selectedFolder }
-            active={ activeEditorWindow === EDITOR_WINDOWS.DEPLOY_COMPONENT_WINDOW }
-            deployTargets={ deployTargets }
-          />
           <Editor
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
