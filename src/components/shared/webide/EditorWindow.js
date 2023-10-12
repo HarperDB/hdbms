@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
-import { Card, CardTitle, CardText, CardSubtitle } from 'reactstrap';
-import NameInput from './windows/NameInput';
-import { useDebounce } from 'use-debounce';
+import { Card } from 'reactstrap';
 
 export {
   BlankWindow,

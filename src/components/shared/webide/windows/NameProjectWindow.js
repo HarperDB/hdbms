@@ -6,13 +6,13 @@ export function NameProjectWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
     <Card>
       <CardTitle>Name Your Project</CardTitle> 
-      <CardText>
+      <div>
         <NameInput
           label="New Project Name"
           onEnter={ onConfirm }
           onConfirm={ onConfirm }
           onCancel={ onCancel } />
-      </CardText>
+      </div>
     </Card>
   );
 }
