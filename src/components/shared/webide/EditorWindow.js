@@ -174,7 +174,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
    * selectedPackageType => parsedPackageType and that's used for rest.
    */
 
-
   const packageTypes = [ 'npm', 'github', 'url' ];
   const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
 
@@ -441,7 +440,7 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, de
   );
 
 }
-export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTarget }) {
+export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTargets }) {
 
   /*
    * packageQuery is what's in the input field (@scope/package)
@@ -557,7 +556,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
           () => {
             // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
             const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
-            onConfirm(projectName, npmPackageSpecifier, deployTarget);
+            onConfirm(projectName, npmPackageSpecifier, deployTargets);
           }
         }>{ getPackageButtonLanguage }</button>
     </div>

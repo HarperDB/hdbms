@@ -232,6 +232,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function installPackage(projectName, packageUrl, deployTargets) {
 
+    // bug: deployTargets not iterable
     for (let deployTarget of deployTargets) {
 
       const auth = deployTarget.auth; 
