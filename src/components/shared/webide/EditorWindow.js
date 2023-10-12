@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
-import { Card } from 'reactstrap';
+import { Card, CardTitle, CardText, CardSubtitle } from 'reactstrap';
 import NameInput from './NameInput';
 import { useDebounce } from 'use-debounce';
 
 export {
-
   BlankWindow,
   GithubInstallWindow,
   NpmInstallWindow,
   PackageInstallWindow,
   UrlInstallWindow
-
 } from './windows';
 
 export const EDITOR_WINDOWS = {
@@ -30,12 +28,16 @@ export const EDITOR_WINDOWS = {
 
 export function NameProjectWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
-    <NameInput
-      label="New Project Name"
-      onEnter={ onConfirm }
-      onConfirm={ onConfirm }
-      onCancel={ onCancel }
-    />
+    <Card>
+      <CardTitle>Name Your Project</CardTitle> 
+      <CardText>
+        <NameInput
+          label="New Project Name"
+          onEnter={ onConfirm }
+          onConfirm={ onConfirm }
+          onCancel={ onCancel } />
+      </CardText>
+    </Card>
   );
 }
 
@@ -45,8 +47,7 @@ export function NameProjectFolderWindow({ active, onConfirm, onCancel, projectNa
       label={`New Subdirectory Name for project '${projectName}'`}
       onConfirm={ onConfirm }
       onEnter={ onConfirm }
-      onCancel={ onCancel }
-    />
+      onCancel={ onCancel } />
   );
 }
 
@@ -56,14 +57,10 @@ export function NameFileWindow({ active, onConfirm, onCancel }) {
       label="New File Name"
       onEnter={ onConfirm }
       onConfirm={ onConfirm }
-      onCancel={ onCancel }
-    />
+      onCancel={ onCancel } />
   );
 }
 
 export default function EditorWindow({ children }) {
-  return <Card className="editor-window">
-  { children }
-  </Card>
+  return <Card className="editor-window-container">{ children }</Card>
 }
-

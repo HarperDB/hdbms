@@ -3,20 +3,12 @@ import { useDebounce } from 'use-debounce';
 import { Card } from 'reactstrap';
 import cn from 'classnames';
 
+import { isValidProjectName } from './lib';
+import { GithubInstallWindow } from './GithubInstallWindow';
+import { NpmInstallWindow } from './NpmInstallWindow';
+import { UrlInstallWindow } from './UrlInstallWindow';
+
 export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange, deployTargets: availableDeployTargets }) {
-
-  // manages:
-  // - which install form to use.
-  // - theh package's project name
-  // - calls onConfirm callback
-
-  /*
-   * existing package? selectedPackage
-   * parse it for the info.
-   *
-   * diff between selectedPackage and parsedPackageType?
-   * selectedPackageType => parsedPackageType and that's used for rest.
-   */
 
   const packageTypes = [ 'npm', 'github', 'url' ];
   const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
@@ -27,9 +19,11 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
+  const [ packageSpec, setPackageSpec ] = useState('');
+
   const [ deployTargets, setDeployTargets ] = useState([availableDeployTargets.find(t => t.isCurrentInstance)]);
 
-  useEffect(() => {
+  function updatePackageInfo() {
 
     const newPackageInfo = parsePackageType(selectedPackage); 
 
@@ -37,8 +31,9 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
     setPackageInfo(parsePackageType(selectedPackage));
     setPackageType(newPackageInfo?.type || packageTypes[0]);
     setInstalled(Boolean(selectedPackage));
+  }
 
-  }, [selectedPackage]);
+  useEffect(updatePackageInfo, [selectedPackage]);
 
   function updateSelectedPackageType(e) {
     setPackageType(e.target.value);
@@ -98,6 +93,36 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
                className="project-name-invalid fa fa-warning" /> 
           }
         </label>
+        {
+          packageType === 'npm' &&
+          <NpmInstallWindow
+            onConfirm={ onConfirm }
+            projectName={ projectName }
+            installed={ installed }
+            pkg={ packageInfo } 
+            setPackageSpec = { setPackageSpec }
+            deployTargets={ deployTargets } />
+        }
+        {
+          packageType === 'github' &&
+          <GithubInstallWindow
+            onConfirm={ onConfirm }
+            projectName={ projectName }
+            installed={ installed }
+            pkg={ packageInfo }
+            setPackageSpec = { setPackageSpec }
+            deployTargets={ deployTargets } />
+        }
+        {
+          packageType === 'url' &&
+          <UrlInstallWindow
+            onConfirm={onConfirm}
+            projectName={projectName}
+            installed={installed}
+            pkg={ packageInfo }
+            setPackageSpec = { setPackageSpec }
+            deployTargets={ deployTargets } />
+        }
         <label>Deploy Targets: 
           <select
             multiple={true}
@@ -122,331 +147,24 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             }
           </select>
         </label>
-        {
-          packageType === 'npm' &&
-          <NpmInstallWindow
-            onConfirm={ onConfirm }
-            projectName={ projectName }
-            installed={ installed }
-            pkg={ packageInfo } 
-            deployTargets={ deployTargets } />
-        }
-        {
-          packageType === 'github' &&
-          <GithubInstallWindow
-            onConfirm={ onConfirm }
-            projectName={ projectName }
-            installed={ installed }
-            pkg={ packageInfo }
-            deployTargets={ deployTargets } />
-        }
-        {
-          packageType === 'url' &&
-          <UrlInstallWindow
-            onConfirm={onConfirm}
-            projectName={projectName}
-            installed={installed}
-            pkg={ packageInfo }
-            deployTargets={ deployTargets } />
-        }
+       <button
+         onClick={
+            async () => {
+              // NOTE: using semver notation for github repo package specifiers.
+              //const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
+              //await onConfirm(projectName, targetRepoSpec, deployTargets);
+            }
+          }
+          className={
+            cn("get-package-button", {
+              //'loading': loadingTags
+            })
+          }
+          disabled={ false /*!(targetRepo && projectName && isValidProjectName(projectName)) */}>Deploy Package</button>
+
       </Card>
     </div>
   );
-}
-
-export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets }) {
-
-  const [ user, setUser ] = useState(pkg?.user || '');
-  const [ debouncedUser ] = useDebounce(user, 300);
-
-  const [ repo, setRepo ] = useState(pkg?.repo || '');
-  const [ debouncedRepo ] = useDebounce(repo, 300);
-
-  const [ tags, setTags ] = useState([]);
-  const [ tagsFetched, setTagsFetched ] = useState(false);
-
-  const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
-  const [ targetRepo, setTargetRepo ] = useState('');
-
-  const [ loadingTags, setLoadingTags ] = useState(false);
-  const [ found, setFound ] = useState(false);
-
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
-
-  useEffect(() => {
-
-    setUser(pkg?.user || '');
-    setRepo(pkg?.repo || '');
-    setTags(pkg?.tag ? [ pkg?.tag ] : []);
-    setSelectedTag(pkg?.tag || '');
-
-  }, [pkg]);
-
-  useEffect(() => {
-
-    if (debouncedUser && debouncedRepo) {
-
-      setLoadingTags(true);
-      ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
-
-        if (targetRepoName) {
-
-          setTargetRepo(targetRepoName);
-          setFound(true);
-
-          getGithubTags(user, debouncedRepo).then(repoTags => {
-
-            setLoadingTags(false);
-            setTagsFetched(true);
-            setTags(repoTags);
-
-          })
-
-        } else {
-
-          setLoadingTags(false);
-          setFound(false);
-          setTargetRepo('');
-          setTags([]);
-
-        }
-
-      }).catch(e => {
-        setLoadingTags(false);
-      });
-
-    } else {
-
-      setFound(false);
-      setLoadingTags(false);
-
-      setTags([]);
-      setSelectedTag('');
-    }
-
-  }, [debouncedUser, debouncedRepo]);
-
-
-  return (
-    <div className="install-window github-install">
-      <input
-        title="github username"
-        placeholder="user"
-        onChange={ (e) => setUser(e.target.value) }
-        value={user} />
-      <div className="github-package-search-box">
-        <input
-          title="github repo name"
-          placeholder="repo"
-          onChange={ (e) => setRepo(e.target.value) }
-          value={repo} />
-        <span className="search-status-icon-container github-repo-query">
-          <i className={
-            cn("search-status-icon fas", { 
-              "fa-spinner fa-spin loading": loadingTags, 
-              "fa-check found": debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
-              "fa-times not-found": debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found), 
-              "fa-check not-searching": debouncedUser.length === 0 || debouncedRepo.length === 0
-            })
-          } />
-        </span>
-      </div>
-      <label>
-        <select
-          title="list of available github tags"
-          value={selectedTag}
-          disabled={tags.length === 0}
-          className="github-tag-list"
-          onChange={
-            (e) => {
-              setSelectedTag(e.target.value);
-            }
-          }>
-          <option value=''>{tags.length > 0 ? 'choose a tag' : 'no tags available'}</option>
-          {
-            tags?.map(tag => (
-              <option key={tag} value={tag}>{tag}</option>
-            ))
-          }
-        </select>
-      </label>
-      <button
-        onClick={
-          async () => {
-            // NOTE: using semver notation for github repo package specifiers.
-            const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-            await onConfirm(projectName, targetRepoSpec, deployTargets);
-          }
-        }
-        className={
-          cn("get-package-button", {
-            'loading': loadingTags
-          })
-        }
-        disabled={!(targetRepo && projectName && isValidProjectName(projectName))}>{ loadingTags ? '' : getPackageButtonLanguage }</button>
-    </div>
-  );
-
-}
-export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTargets }) {
-
-  /*
-   * packageQuery is what's in the input field (@scope/package)
-   * matchingPackage is the name of the package that matches the search exactly
-   */
-
-  const [ packageQuery, setPackageQuery ] = useState('');
-  const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
-  const [ distTags, setDistTags ] = useState('');
-  const [ selectedDistTag, setSelectedDistTag ] = useState('');
-  const [ matchingPackage, setMatchingPackage ] = useState('');
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
-
-  // for package query status icons
-  const [ loadingTags, setLoadingTags ] = useState(false);
-  const [ found, setFound ] = useState(false);
-
-
-  function updatePackageQuery(e) {
-    setPackageQuery(e.target.value);
-  }
-
-  function updateSelectedDistTag(e) {
-
-    setSelectedDistTag(e.target.value);
-  }
-
-  useEffect(() => {
-    setPackageQuery(pkg?.package || '');
-  }, [pkg]);
-
-
-  // searches npm using current, debounced query
-  // returns an exactly matching package name if it exists
-  // loads available tags if package name exists
-
-  function updatePackageAndTags() {
-
-
-    if (debouncedPackageQuery) {
-
-      setLoadingTags(true);
-      findNpmPackageName(debouncedPackageQuery).then(packageName => {
-
-        setLoadingTags(false);
-        setFound(!!packageName);
-        setMatchingPackage(packageName);
-
-
-        if (packageName) {
-
-
-          getNpmDistTags(packageName).then(tags => {
-            setDistTags(tags);
-            setSelectedDistTag(null);
-          }).catch(e => {
-            throw e;
-          });
-
-        }
-
-      }).catch(e => {
-        setLoadingTags(false);
-      });
-
-    } else {
-      setMatchingPackage(null);
-      setDistTags(null);
-      setSelectedDistTag(null);
-    }
-
-  }
-
-  useEffect(updatePackageAndTags, [debouncedPackageQuery]);
-
-  return (
-    <div className="install-window npm-install">
-      <div className="npm-package-search-box">
-        <input
-          title="npm package specifier"
-          value={packageQuery}
-          placeholder="[@scope]/package"
-          onChange={ updatePackageQuery } />
-        <span className="search-status-icon-container">
-          <i className={
-              cn("search-status-icon fas", { 
-                "fa-spinner fa-spin loading": loadingTags, 
-                "fa-check found": debouncedPackageQuery.length > 0 && found,
-                "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
-                "fa-check not-searching": debouncedPackageQuery.length === 0
-              })
-             } />
-        </span>
-      </div>
-      <select
-        onChange={ updateSelectedDistTag }
-        className="npm-dist-tag-list"
-        disabled={!distTags}>
-        <option value='' >
-          choose a tag
-        </option>
-        {
-          Object.entries(distTags || []).map(([tagName,tagValue]) => (
-            <option key={tagName} value={tagName}>{`${tagName} (${tagValue})`}</option>
-          ))
-
-        }
-      </select>
-      <button
-        className="get-package-button"
-        disabled={ !(matchingPackage && projectName && isValidProjectName(projectName) ) }
-        onClick={
-          () => {
-            // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
-            const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
-            onConfirm(projectName, npmPackageSpecifier, deployTargets);
-          }
-        }>{ getPackageButtonLanguage }</button>
-    </div>
-  );
-
-}
-
-export function UrlInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets }) {
-
-  const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
-  const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
-
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
-
-  useEffect(() => {
-    
-  }, [pkg]);
-
-  return (
-    <div className="install-window url-install">
-      <input
-        title="url pointing to a tarball"
-        className={
-          cn("package-url-input", {
-            invalid: !isValidPackageUrl
-          })
-        }
-        value={ packageUrl }
-        onChange={
-          (e) => {
-            setIsValidPackageUrl(e.target.value.length === 0 || isValidTarballUrl(e.target.value));
-            setPackageUrl(e.target.value);
-          }
-        }
-        placeholder="url to gzipped tarball" />
-      <button
-        className="get-package-button"
-        disabled={!(packageUrl && projectName && isValidProjectName(projectName) )}
-        onClick={ (e) => onConfirm(projectName, packageUrl, deployTargets) }>{ getPackageButtonLanguage }</button>
-    </div>
-  );
-
 }
 
 
@@ -509,83 +227,4 @@ function parsePackageType(pkg) {
 
   return meta;
 
-}
-
-function isValidProjectName(name) {
-  return /^[a-zA-Z0-9-_]+$/.test(name);
-}
-
-async function ensureRepoExists(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-    const data = await response.json();
-
-    return response.status < 400 ? data.name : null;
-
-  } catch(e) {
-    return null;
-  }
-
-}
-
-
-async function getGithubTags(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-
-    if (response.status < 400) {
-      const tagData = await response.json();
-      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
-    }
-
-    return [];
-
-
-  } catch(e) {
-    throw e;
-  }
-
-}
-
-
-async function findNpmPackageName(query) {
-
-  const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
-  const packages = await response.json();
-  const pkg = packages.objects.find(p => p.package.name === query);
-
-  return pkg?.package?.name;
-
-}
-
-async function getNpmDistTags(packageName) {
-
-  // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
-  // so instead, we search for repo using api /search endpoint, compare desired package name
-  // against the returned results array. If one exactly matches, that package exists.
-  // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
-  // and grab the resulting 'dist-tags' property from the returned payload.
-
-  const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
-  const packageResponseData = await packageResponse.json();
-
-  return packageResponseData['dist-tags'];
-
-}
-
-function isValidTarballUrl(url) {
-  // npm restrictions on tarball url install here: https://docs.npmjs.com/cli/v9/commands/npm-install
-  return isValidUrl(url) && (url.endsWith('.tar') || url.endsWith('.tar.gz') || url.endsWith('.tgz'));
-}
-
-function isValidUrl(url) {
-  try {
-    return Boolean(new URL(url));
-  } catch (e) {
-    return false;
-  }
 }

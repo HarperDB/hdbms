@@ -1,2 +1,5 @@
 export { BlankWindow } from './BlankWindow';
-export { PackageInstallWindow, GithubInstallWindow, NpmInstallWindow, UrlInstallWindow } from './PackageInstallWindow';
+export { PackageInstallWindow } from './PackageInstallWindow';
+export { GithubInstallWindow } from './GithubInstallWindow';
+export { NpmInstallWindow } from './NpmInstallWindow';
+export { UrlInstallWindow } from './UrlInstallWindow';
