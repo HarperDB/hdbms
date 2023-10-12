@@ -14,7 +14,7 @@ import restartInstance from '../../../../functions/api/instance/restartInstance'
 
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
-import {default as ApplicationsIDE} from '../../../shared/webide/WebIDE';
+import ApplicationsEditor from '../../../shared/webide';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
 
 /*
@@ -324,7 +324,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   return supportsApplicationsAPI ?
-    <ApplicationsIDE
+    <ApplicationsEditor
       fileTree={fileTree} 
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
