@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
 
-import { isValidProjectName } from './lib';
+import {
+
+  findNpmPackageName,
+  getNpmDistTags,
+  isValidProjectName
+
+} from './lib';
 
 export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTargets, setPackageSpec }) {
 
@@ -138,31 +144,6 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
      }
     </div>
   );
-
-}
-
-async function findNpmPackageName(query) {
-
-  const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
-  const packages = await response.json();
-  const pkg = packages.objects.find(p => p.package.name === query);
-
-  return pkg?.package?.name;
-
-}
-
-async function getNpmDistTags(packageName) {
-
-  // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
-  // so instead, we search for repo using api /search endpoint, compare desired package name
-  // against the returned results array. If one exactly matches, that package exists.
-  // When the package exists, we can then look it up against the registry by its package name (avoiding cors error)
-  // and grab the resulting 'dist-tags' property from the returned payload.
-
-  const packageResponse = await fetch(`https://registry.npmjs.org/${packageName}`);
-  const packageResponseData = await packageResponse.json();
-
-  return packageResponseData['dist-tags'];
 
 }
 

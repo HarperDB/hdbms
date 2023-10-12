@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
+import { ensureRepoExists, getGithubTags } from './lib';
+
 
 export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
 
@@ -128,43 +130,3 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, de
   );
 
 }
-
-
-async function ensureRepoExists(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-    const data = await response.json();
-
-    return response.status < 400 ? data.name : null;
-
-  } catch(e) {
-    return null;
-  }
-
-}
-
-
-async function getGithubTags(user, repo) {
-
-  try {
-
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-
-    if (response.status < 400) {
-      const tagData = await response.json();
-      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
-    }
-
-    return [];
-
-
-  } catch(e) {
-    throw e;
-  }
-
-}
-
-
-
