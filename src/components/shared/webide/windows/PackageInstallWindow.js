@@ -4,13 +4,14 @@ import { Card } from 'reactstrap';
 import cn from 'classnames';
 
 import { isValidProjectName } from './lib';
-import { GithubInstallWindow } from './GithubInstallWindow';
-import { NpmInstallWindow } from './NpmInstallWindow';
-import { UrlInstallWindow } from './UrlInstallWindow';
+import { GithubRepoSelector } from './GithubRepoSelector';
+import { NpmPackageSelector } from './NpmPackageSelector';
+import { UrlInstallField } from './UrlInstallField';
 
 export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange, deployTargets: availableDeployTargets }) {
 
   const packageTypes = [ 'npm', 'github', 'url' ];
+
   const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
 
   const [ packageInfo, setPackageInfo ] = useState(parsePackageType(selectedPackage));
@@ -20,6 +21,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
   const [ packageSpec, setPackageSpec ] = useState('');
+
+  // result: 'packageSpec' gets sent to harperdb and installed by npm
 
   const [ deployTargets, setDeployTargets ] = useState([availableDeployTargets.find(t => t.isCurrentInstance)]);
 
@@ -31,9 +34,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
     setPackageInfo(parsePackageType(selectedPackage));
     setPackageType(newPackageInfo?.type || packageTypes[0]);
     setInstalled(Boolean(selectedPackage));
-  }
 
-  useEffect(updatePackageInfo, [selectedPackage]);
+  }
 
   function updateSelectedPackageType(e) {
     setPackageType(e.target.value);
@@ -43,31 +45,33 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
     setProjectNameIsValid(isValidProjectName(projectName));
   }
 
+  useEffect(updatePackageInfo, [selectedPackage]);
   useEffect(validateProjectName, [ projectName ]);
 
   return (
     <div className="install-package-form">
       <Card className="package-type">
-          {
-            packageTypes.map((pkgType, index) => (
-              <label key={ pkgType }>
-                { pkgType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
-                { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
-                { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
-                <input
-                  title={pkgType + ' package'}
-                  disabled={
-                    /* when we have an existing selected package, the selection is pre-defined */
-                    selectedPackage && packageInfo?.type !== pkgType
-                  }
-                  onChange={ updateSelectedPackageType }
-                  checked={ pkgType === packageType }
-                  value={ packageTypes[index] }
-                  type="radio"
-                  name="package-option" />
-              </label>
-            ))
-          }
+    DEBUG: { packageSpec }
+      {
+        packageTypes.map((pkgType, index) => (
+          <label key={ pkgType }>
+            { pkgType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
+            { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
+            { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
+            <input
+              title={pkgType + ' package'}
+              disabled={
+                /* when we have an existing selected package, the selection is pre-defined */
+                selectedPackage && packageInfo?.type !== pkgType
+              }
+              onChange={ updateSelectedPackageType }
+              checked={ pkgType === packageType }
+              value={ packageTypes[index] }
+              type="radio"
+              name="package-option" />
+          </label>
+        ))
+      }
       </Card>
       <Card className="install-fields">
         <label className="project-name-field">
@@ -87,15 +91,15 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
                 setProjectNameIsValid(isValidProjectName(e.target.value));
               }
             }/>
-          {
-            (!projectNameIsValid && projectName.length > 0) && 
-            <i title="your project name must only contain alphanumerics, dashes or underscores."
-               className="project-name-invalid fa fa-warning" /> 
-          }
+            {
+              (!projectNameIsValid && projectName.length > 0) && 
+              <i title="your project name must only contain alphanumerics, dashes or underscores."
+                 className="project-name-invalid fa fa-warning" /> 
+            }
         </label>
         {
           packageType === 'npm' &&
-          <NpmInstallWindow
+          <NpmPackageSelector
             onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
@@ -105,7 +109,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
         }
         {
           packageType === 'github' &&
-          <GithubInstallWindow
+          <GithubRepoSelector
             onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
@@ -115,7 +119,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
         }
         {
           packageType === 'url' &&
-          <UrlInstallWindow
+          <UrlInstallField
             onConfirm={onConfirm}
             projectName={projectName}
             installed={installed}
@@ -150,6 +154,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
        <button
          onClick={
             async () => {
+
+              console.log({projectName, packageSpec, deployTargets});
               // NOTE: using semver notation for github repo package specifiers.
               //const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
               //await onConfirm(projectName, targetRepoSpec, deployTargets);
@@ -160,7 +166,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               //'loading': loadingTags
             })
           }
-          disabled={ false /*!(targetRepo && projectName && isValidProjectName(projectName)) */}>Deploy Package</button>
+          disabled={ !isValidProjectName(projectName) || !packageSpec }>Deploy Package</button>
 
       </Card>
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-export function UrlInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets }) {
+export function UrlInstallField({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
 
   const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
   const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
@@ -9,8 +9,10 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg, deplo
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
-    
-  }, [pkg]);
+    if (isValidPackageUrl) {
+      setPackageSpec(packageUrl);
+    }
+  }, [packageUrl, isValidPackageUrl]);
 
   return (
     <div className="install-window url-install">
@@ -29,19 +31,13 @@ export function UrlInstallWindow({ onConfirm, installed, projectName, pkg, deplo
           }
         }
         placeholder="url to gzipped tarball" />
-    {/*
-      <button
-        className="get-package-button"
-        disabled={!(packageUrl && projectName && isValidProjectName(projectName) )}
-        onClick={ (e) => onConfirm(projectName, packageUrl, deployTargets) }>{ getPackageButtonLanguage }</button>
-        */ }
     </div>
   );
 
 }
 
 function isValidTarballUrl(url) {
-  // npm restrictions on tarball url install here: https://docs.npmjs.com/cli/v9/commands/npm-install
+  // npm restrictions on the tarball url install here: https://docs.npmjs.com/cli/v9/commands/npm-install
   return isValidUrl(url) && (url.endsWith('.tar') || url.endsWith('.tar.gz') || url.endsWith('.tgz'));
 }
 

@@ -3,10 +3,10 @@ import { Card } from 'reactstrap';
 
 export {
   BlankWindow,
-  GithubInstallWindow,
-  NpmInstallWindow,
+  GithubRepoSelector,
+  NpmPackageSelector,
   PackageInstallWindow,
-  UrlInstallWindow,
+  UrlInstallField,
   NameProjectWindow,
   NameProjectFolderWindow,
   NameFileWindow

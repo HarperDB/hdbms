@@ -3,8 +3,7 @@ import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
 import { ensureRepoExists, getGithubTags } from './lib';
 
-
-export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
+export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -78,9 +77,11 @@ export function GithubInstallWindow({ onConfirm, installed, projectName, pkg, de
 
   useEffect(() => {
 
-    setPackageSpec(selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`);
+    console.log(selectedTag);
+    const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`; 
+    setPackageSpec(packageSpec);
 
-  }, [debouncedUser, debouncedRepo]);
+  }, [debouncedUser, debouncedRepo, selectedTag]);
 
   return (
     <div className="install-window github-install">

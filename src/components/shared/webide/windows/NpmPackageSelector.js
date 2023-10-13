@@ -10,7 +10,7 @@ import {
 
 } from './lib';
 
-export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deployTargets, setPackageSpec }) {
+export function NpmPackageSelector({ installed, onConfirm, pkg, deployTargets, setPackageSpec }) {
 
   /*
    * packageQuery is what's in the input field (@scope/package)
@@ -24,6 +24,8 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
   const [ matchingPackage, setMatchingPackage ] = useState('');
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
+
+  // result is a packageSepc
   // for package query status icons
   const [ loadingTags, setLoadingTags ] = useState(false);
   const [ found, setFound ] = useState(false);
@@ -34,11 +36,11 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
   }
 
   function updateSelectedDistTag(e) {
-
     setSelectedDistTag(e.target.value);
   }
 
   useEffect(() => {
+
     setPackageQuery(pkg?.package || '');
   }, [pkg]);
 
@@ -47,14 +49,16 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
   // returns an exactly matching package name if it exists
   // loads available tags if package name exists
 
-  useEffect(() => {
-
-    if (matchingPackage && projectName && isValidProjectName(projectName)) {
+  function updatePackageSpec() {
+    if (matchingPackage) {
       const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
       setPackageSpec(npmPackageSpecifier);
+    } else {
+      setPackageSpec('');
     }
+  }
 
-  }, [matchingPackage, projectName]);
+  useEffect(updatePackageSpec, [matchingPackage, selectedDistTag]);
 
   function updatePackageAndTags() {
 
@@ -128,22 +132,7 @@ export function NpmInstallWindow({ projectName, installed, onConfirm, pkg, deplo
 
         }
       </select>
-      { 
-        /*
-      <button
-        className="get-package-button"
-        disabled={ !(matchingPackage && projectName && isValidProjectName(projectName) ) }
-        onClick={
-          () => {
-            // note: i am not currently differentiating between '@org/pkg' and 'pkg' here.
-            const npmPackageSpecifier = selectedDistTag ? `${matchingPackage}@${selectedDistTag}` : matchingPackage;
-            onConfirm(projectName, npmPackageSpecifier, deployTargets);
-          }
-        }>{ getPackageButtonLanguage }</button>
-        */ 
-     }
     </div>
   );
 
 }
-
