@@ -10,7 +10,7 @@ import {
 
 } from './lib';
 
-export function NpmPackageSelector({ installed, onConfirm, pkg, deployTargets, setPackageSpec }) {
+export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }) {
 
   /*
    * packageQuery is what's in the input field (@scope/package)

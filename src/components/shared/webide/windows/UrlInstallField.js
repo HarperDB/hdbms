@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-export function UrlInstallField({ onConfirm, installed, pkg, deployTargets, setPackageSpec }) {
+export function UrlInstallField({ onConfirm, installed, pkg, setPackageSpec }) {
 
   const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
   const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(isValidTarballUrl(pkg?.url));

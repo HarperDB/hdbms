@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
+import Select from 'react-select';
 import { ensureRepoExists, getGithubTags } from './lib';
 
-export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
+export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, setPackageSpec }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -77,22 +78,28 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, dep
 
   useEffect(() => {
 
-    const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`; 
-    setPackageSpec(packageSpec);
+    if (!(user && repo && targetRepo)) {
+      setPackageSpec('');
+    } else {
+      const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`; 
+      setPackageSpec(packageSpec);
+    }
 
-  }, [debouncedUser, debouncedRepo, selectedTag]);
+  }, [targetRepo, selectedTag]);
 
   return (
     <div className="install-window github-install">
+      <label>Github User: </label>
       <input
-        title="github username"
-        placeholder="user"
+        title="Github User"
+        placeholder="Github User"
         onChange={ (e) => setUser(e.target.value) }
         value={user} />
+      <label>Github Repository Name: </label>
       <div className="github-package-search-box">
         <input
-          title="github repo name"
-          placeholder="repo"
+          title="Github Repo"
+          placeholder="Github Repo"
           onChange={ (e) => setRepo(e.target.value) }
           value={repo} />
         <span className="search-status-icon-container github-repo-query">
@@ -107,24 +114,41 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, dep
         </span>
       </div>
       <label>
-        <select
-          title="list of available github tags"
-          value={selectedTag}
-          disabled={tags.length === 0}
-          className="github-tag-list"
-          onChange={
-            (e) => {
-              setSelectedTag(e.target.value);
-            }
-          }>
-          <option value=''>{tags.length > 0 ? 'choose a tag' : 'no tags available'}</option>
-          {
-            tags?.map(tag => (
-              <option key={tag} value={tag}>{tag}</option>
-            ))
-          }
-        </select>
+        Github Tags:
       </label>
+      <Select 
+        isSearchable={true}
+        placeholder='choose a tag'
+        onChange={
+          (e) => {
+            setSelectedTag(e.target.value);
+          }
+        }
+        options={
+          tags.map(t => ({
+            label: t,
+            value: t
+          }))
+      } />
+    { /*
+      <select
+        title="list of available github tags"
+        value={selectedTag}
+        disabled={tags.length === 0}
+        className="github-tag-list"
+        onChange={
+          (e) => {
+            setSelectedTag(e.target.value);
+          }
+        }>
+        <option value=''>{tags.length > 0 ? 'choose a tag' : 'no tags available'}</option>
+        {
+          tags?.map(tag => (
+            <option key={tag} value={tag}>{tag}</option>
+          ))
+        }
+      </select>
+      */ }
 
     </div>
   );

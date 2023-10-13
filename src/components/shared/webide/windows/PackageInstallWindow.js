@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
-import { Card } from 'reactstrap';
+import { Button, Card } from 'reactstrap';
 import cn from 'classnames';
+import Select from 'react-select';
 
 import { isValidProjectName } from './lib';
 import { GithubRepoSelector } from './GithubRepoSelector';
@@ -75,6 +76,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
       <Card className="install-fields">
         <label className="project-name-field">
           Project Name:
+        </label>
           <input
             className={
               cn("project-name-input", {
@@ -95,7 +97,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               <i title="your project name must only contain alphanumerics, dashes or underscores."
                  className="project-name-invalid fa fa-warning" /> 
             }
-        </label>
         {
           packageType === 'npm' &&
           <NpmPackageSelector
@@ -103,8 +104,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             projectName={ projectName }
             installed={ installed }
             pkg={ packageInfo } 
-            setPackageSpec = { setPackageSpec }
-            deployTargets={ deployTargets } />
+            setPackageSpec = { setPackageSpec } />
         }
         {
           packageType === 'github' &&
@@ -113,8 +113,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             projectName={ projectName }
             installed={ installed }
             pkg={ packageInfo }
-            setPackageSpec = { setPackageSpec }
-            deployTargets={ deployTargets } />
+            setPackageSpec = { setPackageSpec } />
         }
         {
           packageType === 'url' &&
@@ -123,23 +122,13 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             projectName={projectName}
             installed={installed}
             pkg={ packageInfo }
-            setPackageSpec = { setPackageSpec }
-            deployTargets={ deployTargets } />
+            setPackageSpec = { setPackageSpec } />
         }
-        <label>Deploy Targets: 
+        <label>Deploy Targets:</label>
+          {/*
           <select
             multiple={true}
-            onChange={
-              (e) => {
-
-                const selectedHostUrls = [...e.target.selectedOptions].map(o => o.value);
-                const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
-
-                setDeployTargets(updatedDeployTargets);
-
-              }
-            }
-            defaultValue={[ deployTargets[0].instance.url ]}>
+                   defaultValue={[ deployTargets[0].instance.url ]}>
             {
               availableDeployTargets.map(t => {
                 const label = t.isCurrentInstance ? `${t.instance.host} (this instance)` : t.instance.host;
@@ -149,8 +138,27 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               })
             }
           </select>
-        </label>
-       <button
+          */ }
+          <Select
+            isSearchable={true}
+            isMulti={true}
+            onChange={
+              (selected) => {
+
+                const selectedHostUrls = selected.map(o => o.value);
+                const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
+
+                setDeployTargets(updatedDeployTargets);
+
+              }
+            }
+            options={
+              availableDeployTargets.map((t) => ({
+                label: t.instance.host,
+                value: t.instance.host
+              }))
+            } />
+       <Button
          onClick={
             async () => {
               await onConfirm(projectName, packageSpec, deployTargets);
@@ -161,7 +169,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               //'loading': loadingTags
             })
           }
-          disabled={ !isValidProjectName(projectName) || !packageSpec }>Deploy Package</button>
+          disabled={ !isValidProjectName(projectName) || !packageSpec }>Deploy Package</Button>
 
       </Card>
     </div>
