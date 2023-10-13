@@ -51,7 +51,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   return (
     <div className="install-package-form">
       <Card className="package-type">
-    DEBUG: { packageSpec }
       {
         packageTypes.map((pkgType, index) => (
           <label key={ pkgType }>
