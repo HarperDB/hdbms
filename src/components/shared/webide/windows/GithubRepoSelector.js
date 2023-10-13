@@ -77,7 +77,6 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, dep
 
   useEffect(() => {
 
-    console.log(selectedTag);
     const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`; 
     setPackageSpec(packageSpec);
 
@@ -129,5 +128,4 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, dep
 
     </div>
   );
-
 }

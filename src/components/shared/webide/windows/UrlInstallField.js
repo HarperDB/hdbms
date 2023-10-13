@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-export function UrlInstallField({ onConfirm, installed, projectName, pkg, deployTargets, setPackageSpec }) {
+export function UrlInstallField({ onConfirm, installed, pkg, deployTargets, setPackageSpec }) {
 
   const [ packageUrl, setPackageUrl ] = useState(pkg?.url || '');
-  const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(false);
+  const [ isValidPackageUrl, setIsValidPackageUrl ] = useState(isValidTarballUrl(pkg?.url));
 
   const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
-    if (isValidPackageUrl) {
-      setPackageSpec(packageUrl);
-    }
+    setPackageSpec(isValidPackageUrl ? packageUrl : '');
   }, [packageUrl, isValidPackageUrl]);
 
   return (

@@ -154,11 +154,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
        <button
          onClick={
             async () => {
-
-              console.log({projectName, packageSpec, deployTargets});
-              // NOTE: using semver notation for github repo package specifiers.
-              //const targetRepoSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
-              //await onConfirm(projectName, targetRepoSpec, deployTargets);
+              await onConfirm(projectName, packageSpec, deployTargets);
             }
           }
           className={
