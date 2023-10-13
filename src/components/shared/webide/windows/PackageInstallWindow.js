@@ -25,8 +25,9 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
 
   // result: 'packageSpec' gets sent to harperdb and installed by npm
 
-  const [ deployTargets, setDeployTargets ] = useState([availableDeployTargets.find(t => t.isCurrentInstance)]);
+  const [ deployTargets, setDeployTargets ] = useState([]);
 
+  console.log(deployTargets);
   function updatePackageInfo() {
 
     const newPackageInfo = parsePackageType(selectedPackage); 
@@ -125,20 +126,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             setPackageSpec = { setPackageSpec } />
         }
         <label>Deploy Targets:</label>
-          {/*
-          <select
-            multiple={true}
-                   defaultValue={[ deployTargets[0].instance.url ]}>
-            {
-              availableDeployTargets.map(t => {
-                const label = t.isCurrentInstance ? `${t.instance.host} (this instance)` : t.instance.host;
-                return (
-                  <option key={ t.instance.url } value={t.instance.url}>{ label }</option>
-                )
-              })
-            }
-          </select>
-          */ }
           <Select
             isSearchable={true}
             isMulti={true}
@@ -155,7 +142,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             options={
               availableDeployTargets.map((t) => ({
                 label: t.instance.host,
-                value: t.instance.host
+                value: t.instance.url
               }))
             } />
        <Button
@@ -169,7 +156,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               //'loading': loadingTags
             })
           }
-          disabled={ !isValidProjectName(projectName) || !packageSpec }>Deploy Package</Button>
+          disabled={ !isValidProjectName(projectName) || !packageSpec || !deployTargets.length }>Deploy Package</Button>
 
       </Card>
     </div>

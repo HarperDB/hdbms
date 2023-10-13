@@ -117,11 +117,12 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
         Github Tags:
       </label>
       <Select 
+        isDisabled={!targetRepo}
         isSearchable={true}
         placeholder='choose a tag'
         onChange={
-          (e) => {
-            setSelectedTag(e.target.value);
+          (selected) => {
+            setSelectedTag(selected.value);
           }
         }
         options={
@@ -130,26 +131,6 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
             value: t
           }))
       } />
-    { /*
-      <select
-        title="list of available github tags"
-        value={selectedTag}
-        disabled={tags.length === 0}
-        className="github-tag-list"
-        onChange={
-          (e) => {
-            setSelectedTag(e.target.value);
-          }
-        }>
-        <option value=''>{tags.length > 0 ? 'choose a tag' : 'no tags available'}</option>
-        {
-          tags?.map(tag => (
-            <option key={tag} value={tag}>{tag}</option>
-          ))
-        }
-      </select>
-      */ }
-
     </div>
   );
 }

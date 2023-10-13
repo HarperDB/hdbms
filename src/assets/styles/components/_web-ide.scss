@@ -14,9 +14,7 @@
     .npm-package-search-box, 
     .github-package-search-box {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
       width: 300px;
 
       .search-status-icon-container {

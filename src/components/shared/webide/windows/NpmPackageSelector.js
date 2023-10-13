@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
+import Select from 'react-select';
 
 import {
 
@@ -35,8 +36,8 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
     setPackageQuery(e.target.value);
   }
 
-  function updateSelectedDistTag(e) {
-    setSelectedDistTag(e.target.value);
+  function updateSelectedDistTag(value) {
+    setSelectedDistTag(value);
   }
 
   useEffect(() => {
@@ -100,10 +101,12 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
   useEffect(updatePackageAndTags, [debouncedPackageQuery]);
 
   return (
+
     <div className="install-window npm-install">
       <div className="npm-package-search-box">
+        <label>Npm Package:</label>
         <input
-          title="npm package specifier"
+          title="enter an npm package specifier"
           value={packageQuery}
           placeholder="[@scope]/package"
           onChange={ updatePackageQuery } />
@@ -118,20 +121,19 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
              } />
         </span>
       </div>
-      <select
-        onChange={ updateSelectedDistTag }
+    <label>Choose a Tag:</label>
+      <Select
+        isDisabled={!packageQuery}
+        placeholder="choose a tag"
         className="npm-dist-tag-list"
-        disabled={!distTags}>
-        <option value='' >
-          choose a tag
-        </option>
-        {
-          Object.entries(distTags || []).map(([tagName,tagValue]) => (
-            <option key={tagName} value={tagName}>{`${tagName} (${tagValue})`}</option>
-          ))
-
-        }
-      </select>
+        disabled={!distTags}
+        onChange={ updateSelectedDistTag }
+        options={
+          Object.entries(distTags || []).map(([tagName,tagValue]) => ({
+            label: `${tagName} (${tagValue})`,
+            value: tagName
+          }))
+        } />
     </div>
   );
 
