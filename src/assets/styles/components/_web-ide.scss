@@ -4,8 +4,7 @@
   height: 75vh;
   overflow: hidden;
 
-  ul,
-  li {
+  ul, li {
     list-style-type: none;
   }
 
@@ -15,9 +14,63 @@
 
   // top-level element (left-side)
   .file-browser-container {
+
     padding: 20px;
     height: 100%;
     overflow-y: scroll;
+
+    .file-menu {
+
+      display: flex;
+      flex-direction: row;
+      color: white;
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom: 1px solid #2e2e2e;
+
+      li {
+        margin: 0px 5px 5px 0px;
+        padding: 0px 5px 0px 0px;
+      }
+
+      button[disabled] {
+        color: #5e5e5e;
+      }
+
+      .add-project:hover {
+        color: rgb(25, 168, 148);
+      }
+      .install-package:hover {
+        color: #f24242;
+      }
+
+      .add-folder:hover,
+      .delete-folder:hover {
+        color: rgb(143, 141, 255);
+      }
+      .delete-file:hover {
+        color: yellow;
+      }
+
+      .install-package,
+      .add-folder,
+      .add-project,
+      .upload-file,
+      .delete-folder,
+      .delete-file,
+      .add-file {
+        border: none;
+        outline: none !important;
+        background: transparent;
+        color: white;
+        padding: 0px;
+        margin: 0px;
+      }
+
+
+    }
 
     .file-browser {
 
@@ -110,12 +163,14 @@
   // editor window (right side)
 
   .editor-window-container {
+
     padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
 
     .editor-window {
+
         height: 100%;
         width: 100%;
         display: flex;
@@ -135,7 +190,6 @@
           }
 
         }
-
         .editor {
           &.current-file-path::before {
             content: "> ";
@@ -144,7 +198,6 @@
             align-self: flex-start;
           }
         }
-
         .package-install-form {
           height: 100%;
           width: 100%;
@@ -194,80 +247,42 @@
             }
           }
         }
+        .name-input.disabled {
+        display: none;
       }
-  }
-  
+        .filename-dialog {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-  .file-menu,
-  .editor-menu {
-    display: flex;
-    flex-direction: row;
-    color: white;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-bottom: 1px solid #2e2e2e;
-
-    & > li {
-      margin: 0px 5px 5px 0px;
-      padding: 0px 5px 0px 0px;
     }
-
-    .add-project:hover {
-      color: rgb(25, 168, 148);
-    }
-    .install-package:hover {
-      color: #f24242;
-    }
-
-    .add-folder:hover,
-    .delete-folder:hover {
-      color: rgb(143, 141, 255);
-    }
-    .delete-file:hover {
-      color: yellow;
-    }
-
-    .save-code,
-    .install-package,
-    .add-folder,
-    .add-project,
-    .upload-file,
-    .delete-folder,
-    .delete-file,
-    .install-package-project,
-    .add-file {
-      border: none;
-      outline: none !important;
-      background: transparent;
+    .editor-menu {
+      display: flex;
+      flex-direction: row;
       color: white;
-      padding: 0px;
-      margin: 0px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom: 1px solid #2e2e2e;
+
+      & > li {
+        margin: 0px 5px 5px 0px;
+        padding: 0px 5px 0px 0px;
+      }
+
+      .save-code {
+        color: #ee81ee;
+        border: none;
+        outline: none !important;
+        background: transparent;
+        padding: 0px;
+        margin: 0px;
+      }
     }
 
-    .save-code {
-      color: #ee81ee;
-    }
-
-    .install-package {
-    }
-
-    button[disabled] {
-      color: #5e5e5e;
-    }
   }
-
-  .name-input.disabled {
-    display: none;
-  }
-
-  .filename-dialog {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
 }
