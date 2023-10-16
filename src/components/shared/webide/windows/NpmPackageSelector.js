@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
-import Select from 'react-select';
+import SelectDropdown from 'react-select';
 
 import {
 
@@ -102,17 +102,18 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
 
   return (
 
-    <div className="install-window npm-install">
-      <div className="npm-package-search-box">
-        <label>Npm Package:</label>
+    <div className="package-install-npm-lookup">
+      <label>Npm Package:</label>
+      <div className="package-install-query-container">
         <input
+          className="package-install-query-input"
           title="enter an npm package specifier"
           value={packageQuery}
           placeholder="[@scope]/package"
           onChange={ updatePackageQuery } />
         <span className="search-status-icon-container">
           <i className={
-              cn("search-status-icon fas", { 
+              cn("package-install-query-status fas", { 
                 "fa-spinner fa-spin loading": loadingTags, 
                 "fa-check found": debouncedPackageQuery.length > 0 && found,
                 "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
@@ -121,12 +122,14 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
              } />
         </span>
       </div>
-    <label>Choose a Tag:</label>
-      <Select
-        isDisabled={!packageQuery}
+
+      <label>Choose a Tag:</label>
+      <SelectDropdown
+        className="npm-tag-select"
+        classNamePrefix="react-select-container"
+        isDisabled={ !packageQuery }
         placeholder="choose a tag"
-        className="npm-dist-tag-list"
-        disabled={!distTags}
+        disabled={ !distTags }
         onChange={ updateSelectedDistTag }
         options={
           Object.entries(distTags || []).map(([tagName,tagValue]) => ({
@@ -134,6 +137,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
             value: tagName
           }))
         } />
+
     </div>
   );
 

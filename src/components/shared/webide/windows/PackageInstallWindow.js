@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
-import { Button, Card } from 'reactstrap';
+import { Label, Button, Card } from 'reactstrap';
 import cn from 'classnames';
 import Select from 'react-select';
 
-import { isValidProjectName } from './lib';
+import { isValidProjectName, parsePackageType } from './lib';
 import { GithubRepoSelector } from './GithubRepoSelector';
 import { NpmPackageSelector } from './NpmPackageSelector';
 import { UrlInstallField } from './UrlInstallField';
@@ -27,7 +27,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
 
   const [ deployTargets, setDeployTargets ] = useState([]);
 
-  console.log(deployTargets);
   function updatePackageInfo() {
 
     const newPackageInfo = parsePackageType(selectedPackage); 
@@ -47,18 +46,18 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
     setProjectNameIsValid(isValidProjectName(projectName));
   }
 
-  useEffect(updatePackageInfo, [selectedPackage]);
+  useEffect(updatePackageInfo, [ selectedPackage ]);
   useEffect(validateProjectName, [ projectName ]);
 
   return (
-    <div className="install-package-form">
-      <Card className="package-type">
+    <div className="package-install-window">
+      <Card className="package-install-source-form">
       {
         packageTypes.map((pkgType, index) => (
-          <label key={ pkgType }>
-            { pkgType === 'npm' && <i className="install-package-icon fab fa-npm" /> }
-            { pkgType === 'github' && <i className="install-package-icon fab fa-github" /> }
-            { pkgType === 'url' && <i className="install-package-icon fas fa-link" /> }
+          <Label key={ pkgType }>
+            { pkgType === 'npm' && <i className="package-install-source-icon fab fa-npm" /> }
+            { pkgType === 'github' && <i className="package-install-source-icon fab fa-github" /> }
+            { pkgType === 'url' && <i className="package-install-source-icon fas fa-link" /> }
             <input
               title={pkgType + ' package'}
               disabled={
@@ -70,34 +69,32 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               value={ packageTypes[index] }
               type="radio"
               name="package-option" />
-          </label>
+          </Label>
         ))
       }
       </Card>
-      <Card className="install-fields">
-        <label className="project-name-field">
-          Project Name:
-        </label>
-          <input
-            className={
-              cn("project-name-input", {
-                invalid: !projectNameIsValid && projectName.length > 0
-              })
+      <Card className="package-install-details-form">
+        <Label>Project Name:</Label>
+        <input
+          className={
+            cn("project-name-input", {
+              invalid: !projectNameIsValid && projectName.length > 0
+            })
+          }
+          title="enter a name for this package"
+          value={ projectName }
+          placeholder="project name"
+          onChange={
+            (e) => {
+              setProjectName(e.target.value);
+              setProjectNameIsValid(isValidProjectName(e.target.value));
             }
-            title="enter a name for this package"
-            value={ projectName }
-            placeholder="project name"
-            onChange={
-              (e) => {
-                setProjectName(e.target.value);
-                setProjectNameIsValid(isValidProjectName(e.target.value));
-              }
-            }/>
-            {
-              (!projectNameIsValid && projectName.length > 0) && 
-              <i title="your project name must only contain alphanumerics, dashes or underscores."
-                 className="project-name-invalid fa fa-warning" /> 
-            }
+          }/>
+        {
+          (!projectNameIsValid && projectName.length > 0) && 
+          <i title="your project name must only contain alphanumerics, dashes or underscores."
+             className="project-name-invalid fa fa-warning" /> 
+        }
         {
           packageType === 'npm' &&
           <NpmPackageSelector
@@ -125,26 +122,28 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             pkg={ packageInfo }
             setPackageSpec = { setPackageSpec } />
         }
-        <label>Deploy Targets:</label>
-          <Select
-            isSearchable={true}
-            isMulti={true}
-            onChange={
-              (selected) => {
+        <Label>Deploy Targets:</Label>
+        <Select
+          className="react-select-container package-install-deploy-targets-dropdown"
+          classNamePrefix="react-select"
+          isSearchable={true}
+          isMulti={true}
+          onChange={
+            (selected) => {
 
-                const selectedHostUrls = selected.map(o => o.value);
-                const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
+              const selectedHostUrls = selected.map(o => o.value);
+              const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
 
-                setDeployTargets(updatedDeployTargets);
+              setDeployTargets(updatedDeployTargets);
 
-              }
             }
-            options={
-              availableDeployTargets.map((t) => ({
-                label: t.instance.host,
-                value: t.instance.url
-              }))
-            } />
+          }
+          options={
+            availableDeployTargets.map((t) => ({
+              label: t.instance.host,
+              value: t.instance.url
+            }))
+          } />
        <Button
          onClick={
             async () => {
@@ -153,74 +152,17 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
           }
           className={
             cn("get-package-button", {
+              'btn-success': true
               //'loading': loadingTags
             })
           }
-          disabled={ !isValidProjectName(projectName) || !packageSpec || !deployTargets.length }>Deploy Package</Button>
+          disabled={
+            !isValidProjectName(projectName) || !packageSpec || !deployTargets.length 
+          }>
+          Deploy Package &nbsp;<i className="fa fa-rocket" />
+       </Button>
 
       </Card>
     </div>
   );
-}
-
-
-function parsePackageType(pkg) {
-
-  if (!pkg) {
-    return null;
-  }
-
-  let meta = {
-    type: null,
-    user: null,
-    repo: null,
-    url: null,
-    package: null,
-    tag: null
-  };
-
-  if (pkg.url.match('://')) {
-
-    // it's a url
-    meta.url = pkg.url;
-    meta.type = 'url';
-
-  } else if (pkg.url.match('semver:')) {
-    // it's a github repo
-    const [ user, repo, semverTag ] = pkg.url.split(/[/#]/);
-    meta.type = 'github';
-    meta.user = user;
-    meta.repo = repo;
-    meta.tag = semverTag.replace('semver:','');
-  } else {
-
-    meta.type = 'npm';
-    const parts = pkg.url.split('/');
-
-    // TODO: what should this format be?
-    // what does the form need?
-
-    if (parts.length === 1) {
-    // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2]
-
-      const [ p, tag ] = parts[0].split('@');
-
-      meta.package = p;
-      meta.tag = tag;
-
-    } else if (parts.length == 2) {
-    // has @scope, e.g @harperdb/harperdb[@2]
-
-      const [ scope, pkgAndTag ] = parts;
-      const [ p, tag ] = pkgAndTag.split('@');
-
-      meta.package = p;
-      meta.tag = tag;
-
-    }
-
-  }
-
-  return meta;
-
 }

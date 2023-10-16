@@ -1,228 +1,202 @@
 .web-ide {
 
-  .install-window {
-
-    display: flex;
-    flex-direction: column;
-
-    & > .elegant-input {
-      border-top: 0px solid transparent !important;
-      border-left: 0px solid transparent !important;
-      border-right: 0px solid transparent !important;
-    }
-
-    .npm-package-search-box, 
-    .github-package-search-box {
-      display: flex;
-      flex-direction: column;
-      width: 300px;
-
-      .search-status-icon-container {
-        width: 40px;
-        text-align: center;
-        i {
-          color: white;
-          &.not-searching {
-            color: rgba(0,255,0, 0.1);
-          }
-          &.found, &.loading {
-            color: green;
-          }
-          &.not-found {
-            color: rgb(145, 50, 120);
-          }
-
-        }
-      }
-    }
-  }
-
-
-  color: white;
+  // general stuff
   height: 75vh;
   overflow: hidden;
-  background: black;
 
-  .package-type {
-  }
-
-  .install-npm > input,
-  .get-package-button
-  {
-    white-space: nowrap;
-  }
-
-  .github-tag-list,
-  .npm-dist-tag-list {
-    min-width: 100px;
-
-    &[disabled] {
-      color: gray !important;
-    }
-  }
-
-  hr {
-    border: 0.6px solid white;
-  }
-
-  & ul, & li {
+  ul,
+  li {
     list-style-type: none;
   }
 
-   .deploy-component-project-name {
-      color: rgb(25, 168, 148);
-      font-weight: bold;
-    }
-
-  .rename-file {
-     color: rgb(120,120,120);
+  label, button {
+    white-space: nowrap !important;
   }
-  .rename-file:hover {
-     color: white !important;
-   }
-  .file {
-    &:hover {
-      color: rgb(100,100,100);
+
+  // top-level element (left-side)
+  .file-browser-container {
+    padding: 20px;
+    height: 100%;
+    overflow-y: scroll;
+
+    .file-browser {
+
+      margin-left: 0;
+      padding-left: 0;
+
+      .folder-container {
+        padding-left: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+
+      .rename-file,
+      .deploy-project {
+        margin-left: 8px;
+      }
       .rename-file {
-        color: rgb(100,100,100);
+        color: transparent;
       }
 
-    }
-
-    .deploy-project {
-      color: rgb(100,100,100);
-      &:hover {
-        color:white;
+      .file {
+        .file-selected {
+          color: #ee81ee;
+          background: #191919 !important;
+          // background: #4a4a4a !important;
+          //border: 1px solid rgb(120,120,120);;
+        }
+        .folder-selected {
+          background: #191919 !important;
+        }
       }
+      .package.package-selected {
+        color: #f24242;
+      }
+
+      .project-icon {
+        color: rgb(25, 168, 148);
+      }
+      .package-icon {
+        color: #f24242;
+      }
+
+      .file,
+      .package {
+        white-space: nowrap;
+        border: 1px solid transparent;
+        &.selected {
+        }
+
+        background: transparent;
+        list-style-type: none;
+        color: white;
+        outline: none !important; // TODO: fix this because it is not accessible; style differently
+        margin: 0;
+        padding: 3px 2px;
+
+        .package-text,
+        .filename-text {
+          padding-left: 5px;
+        }
+
+        .file-icon.filetype-js {
+          color: #f7df1e;
+        }
+
+        .file-icon.filetype-yaml {
+          color: #c4c4ff;
+        }
+        .file-icon.filetype-unknown {
+          color: lightgray;
+        }
+
+        .folder-icon {
+          color: rgb(143 141 255);
+        }
+      }
+      .folder {
+        padding-left: 15px;
+      }
+      .folder.folder-contents-closed {
+        display: none;
+      }
+      .folder.folder-contents-open {
+        display: block;
+      }
+      }
+
     }
   }
 
-  .install-package-form {
+  // editor window (right side)
 
-    input, select {
-      border: none !important;
-      background: lightpink;
-    }
-
+  .editor-window-container {
+    padding: 20px;
+    height: 100%;
     display: flex;
     flex-direction: column;
 
-    & > label {
-      margin-bottom: 20px;
-    }
-
-    & > .install-fields {
-
-      width: 70%;
-      height: 100%;
-      border: none !important;
-
-      & input {
-        background: white !important;
-        color: black !important;
-        padding: 10px;
-        margin: 10px;
-        margin-left: 0px;
-      }
-
-      & .project-name-input.invalid:focus,
-      & .project-name-input.invalid {
-        border: 1px solid rgb(145, 50, 120) !important;
-        outline-color: rgb(145, 50, 120) !important;
-      }
-      .project-name-field {
+    .editor-window {
+        height: 100%;
+        width: 100%;
         display: flex;
-        flex-direction: row;
-        white-space: nowrap;
         align-items: center;
+        justify-content: center;
 
-        .project-name-invalid {
-          padding-left: 20px;
-          color: rgb(145, 50, 120);
+        .package-install-window {
+
+          .package-install-source-form {
+          }
+
+          .package-install-details-form {
+            .package-install-deploy-targets-dropdown {
+            }
+            .package-install-npm-lookup {
+            }
+          }
+
         }
 
-      }
-    }
-
-  }
-  .rename-file,
-  .deploy-project {
-    margin-left: 8px;
-  }
-  .rename-file {
-    color: transparent;
-  }
-
-  .editor-window-container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .editor {
-      &.current-file-path::before {
-        content: '> ';
-      }
-      &.current-file-path {
-        align-self: flex-start;
-      }
-    }
-
-    .install-package-form {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      .install-package-icon {
-        font-size: 2em;
-        &.fab.fa-npm {
-          font-size: 3em;
-          color: rgb(145,50,120);
-        }
-        &.fa-github,
-        &.fa-link {
-          padding: 5px;
+        .editor {
+          &.current-file-path::before {
+            content: "> ";
+          }
+          &.current-file-path {
+            align-self: flex-start;
+          }
         }
 
-        &.fa-link {
-          color: lightgray;
-        }
-        &.fa-github {
-          color: rgb(28,182, 149);
-        }
-      }
-
-      .package-type {
-
-        border: 0px solid transparent !important; 
-        margin-bottom: 30px;
-        display: flex;
-        flex-direction: row;
-
-        label {
-          min-width: 80px;
-          text-align: center;
+        .package-install-form {
+          height: 100%;
+          width: 100%;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          align-items: center;
+          justify-content: center;
 
-        }
+          .install-package-icon {
+            font-size: 2em;
+            &.fab.fa-npm {
+              font-size: 3em;
+              color: rgb(145, 50, 120);
+            }
+            &.fa-github,
+            &.fa-link {
+              padding: 5px;
+            }
 
-        input:focus {
-          outline: none !important;
-        }
-        input {
-          margin-top: 10px;
-        }
+            &.fa-link {
+              color: lightgray;
+            }
+            &.fa-github {
+              color: rgb(28, 182, 149);
+            }
+          }
 
+          .package-type {
+            border: 0px solid transparent !important;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: row;
+
+            label {
+              min-width: 80px;
+              text-align: center;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            }
+
+            input:focus {
+              outline: none !important;
+            }
+            input {
+              margin-top: 10px;
+            }
+          }
+        }
       }
-    }
-
   }
+  
 
   .file-menu,
   .editor-menu {
@@ -234,7 +208,6 @@
     padding-top: 0;
     padding-bottom: 0;
     border-bottom: 1px solid #2e2e2e;
-
 
     & > li {
       margin: 0px 5px 5px 0px;
@@ -285,106 +258,16 @@
     }
   }
 
-
   .name-input.disabled {
     display: none;
   }
 
-
   .filename-dialog {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-
-  .code-editor-container {
-    padding: 20px;
     height: 100%;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-  }
-  .file-browser-container {
-    padding: 20px;
-    height: 100%;
-    overflow-y: scroll;
-
-    .file-browser {
-
-      margin-left: 0;
-      padding-left: 0;
-
-      .folder-container {
-        padding-left: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-      }
-      .file.file-selected {
-        color: #ee81ee;
-        background: #191919 !important;
-          // background: #4a4a4a !important;
-          //border: 1px solid rgb(120,120,120);;
-      }
-      .file.folder-selected {
-          background: #191919 !important;
-      }
-      .package.package-selected {
-          color: #f24242; 
-      }
-
-      .project-icon {
-        color: rgb(25,168,148);
-      }
-      .package-icon {
-        color: #f24242;
-      }
-
-      .file,
-      .package {
-
-        white-space: nowrap;
-        border: 1px solid transparent;
-        &.selected {
-        }
-
-        background: transparent;
-        list-style-type: none;
-        color: white ;
-        outline: none !important; // TODO: fix this because it is not accessible; style differently
-        margin: 0;
-        padding: 3px 2px;
-
-        .package-text,
-        .filename-text {
-          padding-left: 5px;
-        }
-
-        .file-icon.filetype-js {
-          color: #f7df1e;
-        }
-
-        .file-icon.filetype-yaml {
-          color: #c4c4ff;
-        }
-        .file-icon.filetype-unknown {
-          color: lightgray;
-        }
-
-        .folder-icon {
-          color: rgb(143 141 255);
-        }
-      }
-      .folder {
-        padding-left: 15px;
-      }
-      .folder.folder-contents-closed {
-        display: none;
-      }
-      .folder.folder-contents-open {
-        display: block;
-      }
-    }
+    align-items: center;
+    justify-content: center;
   }
 
 }

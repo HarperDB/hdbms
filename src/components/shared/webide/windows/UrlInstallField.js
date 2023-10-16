@@ -14,6 +14,7 @@ export function UrlInstallField({ onConfirm, installed, pkg, setPackageSpec }) {
 
   return (
     <div className="install-window url-install">
+      <label>URL:</label>
       <input
         title="url pointing to a tarball"
         className={
