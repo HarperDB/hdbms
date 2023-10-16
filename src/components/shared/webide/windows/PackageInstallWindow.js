@@ -54,11 +54,12 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
       <Card className="package-install-source-form">
       {
         packageTypes.map((pkgType, index) => (
-          <Label key={ pkgType }>
+          <div className="package-install-option-container" key={ pkgType }>
             { pkgType === 'npm' && <i className="package-install-source-icon fab fa-npm" /> }
             { pkgType === 'github' && <i className="package-install-source-icon fab fa-github" /> }
             { pkgType === 'url' && <i className="package-install-source-icon fas fa-link" /> }
             <input
+              className='package-install-source-option'
               title={pkgType + ' package'}
               disabled={
                 /* when we have an existing selected package, the selection is pre-defined */
@@ -69,32 +70,37 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
               value={ packageTypes[index] }
               type="radio"
               name="package-option" />
-          </Label>
+          </div>
         ))
       }
       </Card>
       <Card className="package-install-details-form">
-        <Label>Project Name:</Label>
-        <input
-          className={
-            cn("project-name-input", {
-              invalid: !projectNameIsValid && projectName.length > 0
-            })
-          }
-          title="enter a name for this package"
-          value={ projectName }
-          placeholder="project name"
-          onChange={
-            (e) => {
-              setProjectName(e.target.value);
-              setProjectNameIsValid(isValidProjectName(e.target.value));
+
+        <div className="package-install-input-container">
+          <Label>Project Name:</Label>
+          <input
+            className={
+              cn("project-name-input", {
+                invalid: !projectNameIsValid && projectName.length > 0
+              })
             }
-          }/>
+            title="enter a name for this package"
+            value={ projectName }
+            placeholder="project name"
+            onChange={
+              (e) => {
+                setProjectName(e.target.value);
+                setProjectNameIsValid(isValidProjectName(e.target.value));
+              }
+            }/>
+        </div>
+
         {
           (!projectNameIsValid && projectName.length > 0) && 
           <i title="your project name must only contain alphanumerics, dashes or underscores."
              className="project-name-invalid fa fa-warning" /> 
         }
+        <div className="package-install-input-container">
         {
           packageType === 'npm' &&
           <NpmPackageSelector
@@ -122,46 +128,48 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             pkg={ packageInfo }
             setPackageSpec = { setPackageSpec } />
         }
-        <Label>Deploy Targets:</Label>
-        <Select
-          className="react-select-container package-install-deploy-targets-dropdown"
-          classNamePrefix="react-select"
-          isSearchable={true}
-          isMulti={true}
-          onChange={
-            (selected) => {
+        </div>
+        <div className="package-install-input-container">
+          <Label>Deploy Targets:</Label>
+          <Select
+            className="react-select-container package-install-deploy-targets-dropdown"
+            classNamePrefix="react-select"
+            isSearchable={true}
+            isMulti={true}
+            onChange={
+              (selected) => {
 
-              const selectedHostUrls = selected.map(o => o.value);
-              const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
+                const selectedHostUrls = selected.map(o => o.value);
+                const updatedDeployTargets = availableDeployTargets.filter(t => selectedHostUrls.includes(t.instance.url));
 
-              setDeployTargets(updatedDeployTargets);
+                setDeployTargets(updatedDeployTargets);
 
+              }
             }
-          }
-          options={
-            availableDeployTargets.map((t) => ({
-              label: t.instance.host,
-              value: t.instance.url
-            }))
-          } />
-       <Button
-         onClick={
-            async () => {
-              await onConfirm(projectName, packageSpec, deployTargets);
-            }
-          }
-          className={
-            cn("get-package-button", {
-              'btn-success': true
-              //'loading': loadingTags
-            })
-          }
-          disabled={
-            !isValidProjectName(projectName) || !packageSpec || !deployTargets.length 
-          }>
-          Deploy Package &nbsp;<i className="fa fa-rocket" />
-       </Button>
-
+            options={
+              availableDeployTargets.map((t) => ({
+                label: t.instance.host,
+                value: t.instance.url
+              }))
+            } />
+        </div>
+        <Button
+          onClick={
+             async () => {
+               await onConfirm(projectName, packageSpec, deployTargets);
+             }
+           }
+           className={
+             cn("get-package-button", {
+               'btn-success': true
+               //'loading': loadingTags
+             })
+           }
+           disabled={
+             !isValidProjectName(projectName) || !packageSpec || !deployTargets.length 
+           }>
+           Deploy Package &nbsp;<i className="fa fa-rocket" />
+        </Button>
       </Card>
     </div>
   );

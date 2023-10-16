@@ -88,30 +88,36 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
   }, [targetRepo, selectedTag]);
 
   return (
-    <div className="install-window github-install">
-      <label>Github User: </label>
-      <input
-        title="Github User"
-        placeholder="Github User"
-        onChange={ (e) => setUser(e.target.value) }
-        value={user} />
-      <label>Github Repository Name: </label>
-      <div className="github-package-search-box">
-        <input
-          title="Github Repo"
-          placeholder="Github Repo"
-          onChange={ (e) => setRepo(e.target.value) }
-          value={repo} />
-        <span className="search-status-icon-container github-repo-query">
-          <i className={
-            cn("search-status-icon fas", { 
-              "fa-spinner fa-spin loading": loadingTags, 
-              "fa-check found": debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
-              "fa-times not-found": debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found), 
-              "fa-check not-searching": debouncedUser.length === 0 || debouncedRepo.length === 0
-            })
-          } />
-        </span>
+      <div className="package-install-github-query-container">
+        <div className="package-install-github-user">
+          <label className="form-label">Github User:</label>
+          <input
+            title="Github User"
+            placeholder="Github User"
+            onChange={ (e) => setUser(e.target.value) }
+            value={user} />
+        </div>
+        <div className="package-install-github-lookup">
+          <label className="form-label">Github Repository Name: </label>
+          <div className="github-package-search-box">
+            <input
+              title="Github Repo"
+              placeholder="Github Repo"
+              onChange={ (e) => setRepo(e.target.value) }
+              value={repo} />
+            <span className="search-status-icon-container github-repo-query">
+              <i className={
+                cn("search-status-icon fas", { 
+                  "fa-spinner fa-spin loading": loadingTags, 
+                  "fa-check found": debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
+                  "fa-times not-found": debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found), 
+                  "fa-check not-searching": debouncedUser.length === 0 || debouncedRepo.length === 0
+                })
+              } />
+            </span>
+        </div>
+    </div>
+    <div>
         <Select 
           className="github-tag-select"
           isDisabled={!targetRepo}

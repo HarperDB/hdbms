@@ -101,44 +101,46 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
   useEffect(updatePackageAndTags, [debouncedPackageQuery]);
 
   return (
-
-    <div className="package-install-npm-lookup">
-      <label>Npm Package:</label>
-      <div className="package-install-query-container">
-        <input
-          className="package-install-query-input"
-          title="enter an npm package specifier"
-          value={packageQuery}
-          placeholder="[@scope]/package"
-          onChange={ updatePackageQuery } />
-        <span className="search-status-icon-container">
-          <i className={
-              cn("package-install-query-status fas", { 
-                "fa-spinner fa-spin loading": loadingTags, 
-                "fa-check found": debouncedPackageQuery.length > 0 && found,
-                "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
-                "fa-check not-searching": debouncedPackageQuery.length === 0
-              })
-             } />
-        </span>
+    <>
+      <div className="package-install-npm-lookup">
+        <label className="form-label">Npm Package:</label>
+        <div className="package-install-query-container">
+          <input
+            className="package-install-query-input"
+            title="enter an npm package specifier"
+            value={packageQuery}
+            placeholder="[@scope]/package"
+            onChange={ updatePackageQuery } />
+          <span className="search-status-icon-container">
+            <i className={
+                cn("package-install-query-status fas", { 
+                  "fa-spinner fa-spin loading": loadingTags, 
+                  "fa-check found": debouncedPackageQuery.length > 0 && found,
+                  "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
+                  "fa-check not-searching": debouncedPackageQuery.length === 0
+                })
+               } />
+          </span>
+        </div>
       </div>
+      <div className="package-install-npm-tags-container">
+        <label className="form-label">Choose a Tag:</label>
+        <SelectDropdown
+          className="react-select-container npm-tag-select"
+          classNamePrefix="react-select-container"
+          isDisabled={ !packageQuery }
+          placeholder="choose a tag"
+          disabled={ !distTags }
+          onChange={ updateSelectedDistTag }
+          options={
+            Object.entries(distTags || []).map(([tagName,tagValue]) => ({
+              label: `${tagName} (${tagValue})`,
+              value: tagName
+            }))
+          } />
 
-      <label>Choose a Tag:</label>
-      <SelectDropdown
-        className="npm-tag-select"
-        classNamePrefix="react-select-container"
-        isDisabled={ !packageQuery }
-        placeholder="choose a tag"
-        disabled={ !distTags }
-        onChange={ updateSelectedDistTag }
-        options={
-          Object.entries(distTags || []).map(([tagName,tagValue]) => ({
-            label: `${tagName} (${tagValue})`,
-            value: tagName
-          }))
-        } />
-
-    </div>
+      </div>
+    </>
   );
 
 }
