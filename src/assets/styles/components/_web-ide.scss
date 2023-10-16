@@ -71,6 +71,9 @@
 
 
     }
+    .no-projects {
+      color: white;
+    }
 
     .file-browser {
 
@@ -160,14 +163,39 @@
     }
   }
 
-  // editor window (right side)
-
+  // top-level element: editor window (right side)
+  // contains code editor and project management windows
   .editor-window-container {
 
     padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    .editor-menu {
+      display: flex;
+      flex-direction: row;
+      color: white;
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom: 1px solid #2e2e2e;
+
+      & > li {
+        margin: 0px 5px 5px 0px;
+        padding: 0px 5px 0px 0px;
+      }
+
+      .save-code {
+        color: #ee81ee;
+        border: none;
+        outline: none !important;
+        background: transparent;
+        padding: 0px;
+        margin: 0px;
+      }
+    }
 
     .editor-window {
 
@@ -176,6 +204,28 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+
+        .name-input {
+          .name-input-buttons-container {
+             padding-top: 10px;
+          }
+        }
+  
+        .name-project-window,
+        .name-file-window {
+          height: 100%;
+          width: 100%;
+          padding: 20%;
+        }
+
+        .name-project-window-title,
+        .name-file-window-title {
+          text-align: center;
+        }
+
+        .card-body {
+        }
 
         .package-install-window {
 
@@ -247,41 +297,13 @@
             }
           }
         }
-        .name-input.disabled {
-        display: none;
-      }
         .filename-dialog {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-    }
-    .editor-menu {
-      display: flex;
-      flex-direction: row;
-      color: white;
-      margin-top: 0;
-      margin-bottom: 20px;
-      padding-top: 0;
-      padding-bottom: 0;
-      border-bottom: 1px solid #2e2e2e;
-
-      & > li {
-        margin: 0px 5px 5px 0px;
-        padding: 0px 5px 0px 0px;
-      }
-
-      .save-code {
-        color: #ee81ee;
-        border: none;
-        outline: none !important;
-        background: transparent;
-        padding: 0px;
-        margin: 0px;
-      }
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
     }
 
   }

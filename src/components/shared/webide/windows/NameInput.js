@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label='', value }) {
+export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label='', placeholder='',  value }) {
 
   const [ name, setName ] = useState(value || '');
 
@@ -28,8 +28,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
       onBlur={ () => {}  /*blurOnEsc*/ }
       tabIndex={0}
       className={ cn("name-input") }>
-      <label>
-        <span>{label}:</span>
+      { label && <label><span>{label}:</span></label> }
         <input
           autoFocus
           onChange={(e) => {
@@ -37,12 +36,15 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
           }}
           onKeyDown={ handleKeyDown }
           value={name}
+          placeholder={placeholder}
           title="choose name for your new file or folder" />
-        <button onClick={ onCancel }>cancel</button>
-        <button onClick={ () => {
-          onConfirm(name); 
-        }}>ok</button>
-      </label>
+
+          <div className="name-input-buttons-container">
+            <button className="name-input-cancel" onClick={ onCancel }>cancel</button>
+            <button className="name-input-confirm" onClick={ () => {
+              onConfirm(name); 
+          }}>ok</button>
+        </div>
     </div>
   );
 

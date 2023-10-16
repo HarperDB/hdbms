@@ -1,18 +1,18 @@
 import React from 'react';
-import { Card, CardText, CardTitle } from 'reactstrap';
+import { Card, CardText, CardTitle, CardBody } from 'reactstrap';
 import NameInput from './NameInput';
 
 export function NameProjectWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
-    <Card>
-      <CardTitle>Name Your Project</CardTitle> 
-      <div>
+    <Card className="name-project-window">
+      <CardTitle className="name-project-window-title">Name Your Project</CardTitle> 
+      <CardBody className="name-project-window-input">
         <NameInput
-          label="New Project Name"
+          placeholder="Your new project name"
           onEnter={ onConfirm }
           onConfirm={ onConfirm }
           onCancel={ onCancel } />
-      </div>
+      </CardBody>
     </Card>
   );
 }
