@@ -43,10 +43,10 @@ export function AddFileButton({ disabled, onAddFile }) {
   )
 }
 
-export function DeleteFileButton({ onDeleteFile, disabled }) {
+export function DeleteFileButton({ onClick, disabled }) {
   return (
       <button
-        onClick={ onDeleteFile }
+        onClick={ onClick }
         disabled={ disabled }
         className="delete-file fas fa-minus"
         title="Delete selected file" />

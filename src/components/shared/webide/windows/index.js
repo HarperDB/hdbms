@@ -6,3 +6,4 @@ export { UrlInstallField } from './UrlInstallField';
 export { NameProjectWindow } from './NameProjectWindow';
 export { NameProjectFolderWindow } from './NameProjectFolderWindow';
 export { NameFileWindow } from './NameFileWindow';
+export { DeleteFileWindow } from './DeleteFileWindow';

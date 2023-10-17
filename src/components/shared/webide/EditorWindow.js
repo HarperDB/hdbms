@@ -9,7 +9,8 @@ export {
   UrlInstallField,
   NameProjectWindow,
   NameProjectFolderWindow,
-  NameFileWindow
+  NameFileWindow,
+  DeleteFileWindow
 } from './windows';
 
 export const EDITOR_WINDOWS = {
@@ -23,7 +24,8 @@ export const EDITOR_WINDOWS = {
   RENAME_FOLDER_WINDOW: 'RENAME_FOLDER_WINDOW',
   DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
   INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
-  PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW'
+  PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW',
+  DELETE_FILE_WINDOW: 'DELETE_FILE_WINDOW'
 };
 
 export default function EditorWindow({ children }) {

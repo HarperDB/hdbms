@@ -17,6 +17,7 @@ import EditorWindow, {
   BlankWindow,
   NoFileSelectedWindow,
   NameFileWindow,
+  DeleteFileWindow,
   NameProjectFolderWindow,
   NameProjectWindow,
   PackageDetailsWindow
@@ -145,12 +146,10 @@ function WebIDE({
               disabled={ !canAddFile } />
             <DeleteFileButton
               disabled={ !selectedFile?.path }
-              onDeleteFile={
+              onClick={
                 (e) => {
-                  onDeleteFile(selectedFile);
-                  setSelectedFile(null);
-                  setSelectedFolder(null);
-                  updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+                  console.log(selectedFile);
+                  updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
                 }
               } />
             <InstallPackageButton
@@ -258,6 +257,23 @@ function WebIDE({
               deployTargets={ deployTargets }
             />
           }
+          <DeleteFileWindow
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW } 
+            selectedFile={ selectedFile }
+            onConfirm={
+              () => {
+                onDeleteFile(selectedFile);
+                setSelectedFile(null);
+                setSelectedFolder(null);
+                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+              }
+            }
+            onCancel={
+              () => {
+                backToPreviousWindow();
+              }
+            }
+          />
           <Editor
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }

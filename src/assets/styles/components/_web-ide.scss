@@ -228,8 +228,18 @@
           }
         }
   
+        .delete-file-window-controls {
+          .file-to-delete {
+            color: rgb(145, 50, 120);
+          }
+          .file-to-delete-parent-project {
+            color: rgb(25, 168, 148);
+          }
+        }
         .name-project-window,
-        .name-file-window {
+        .name-file-window,
+        .delete-file-window,
+        .delete-folder-window {
           height: 100%;
           width: 100%;
           padding: 20%;
