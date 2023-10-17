@@ -18,6 +18,8 @@ import EditorWindow, {
   NoFileSelectedWindow,
   NameFileWindow,
   DeleteFileWindow,
+  DeleteFolderWindow,
+  DeletePackageWindow,
   NameProjectFolderWindow,
   NameProjectWindow,
   PackageDetailsWindow
@@ -126,17 +128,13 @@ function WebIDE({
               }} />
             <DeleteFolderButton
               disabled={ !canDeleteFolder }
-              onDeleteFolder={
-                async () => {
+              onClick={
+                () => {
                   if (selectedPackage) {
-                    await onDeletePackage(selectedPackage);
+                    updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW, activeEditorWindow);
                   } else if (selectedFolder) {
-                    await onDeleteFolder(selectedFolder);
+                    updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FOLDER_WINDOW, activeEditorWindow);
                   }
-                  updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
-                  setSelectedFile(null);
-                  setSelectedFolder(null);
-                  setSelectedPackage(null);
                 }
               } />
             <AddFileButton
@@ -257,6 +255,51 @@ function WebIDE({
               deployTargets={ deployTargets }
             />
           }
+          <DeletePackageWindow
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW } 
+            selectedPackage={ selectedPackage }
+            onConfirm={
+              async () => {
+
+                await onDeletePackage(selectedPackage);
+
+                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+
+                setSelectedFile(null);
+                setSelectedFolder(null);
+                setSelectedPackage(null);
+
+              }
+            }
+            onCancel={
+              () => {
+                backToPreviousWindow();
+              }
+            }
+
+          />
+          <DeleteFolderWindow
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW } 
+            selectedFolder={ selectedFolder }
+            onConfirm={
+              async () => {
+
+                await onDeleteFolder(selectedFolder);
+
+                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+
+                setSelectedFile(null);
+                setSelectedFolder(null);
+                setSelectedPackage(null);
+
+              }
+            }
+            onCancel={
+              () => {
+                backToPreviousWindow();
+              }
+            }
+          />
           <DeleteFileWindow
             active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW } 
             selectedFile={ selectedFile }

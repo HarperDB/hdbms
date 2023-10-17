@@ -3,10 +3,10 @@ import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 
 
-export function DeleteFolderButton({ onDeleteFolder, disabled }) {
+export function DeleteFolderButton({ onClick, disabled }) {
   return (
     <button
-      onClick={ onDeleteFolder }
+      onClick={ onClick }
       disabled={ disabled }
       className="delete-folder fas fa-folder-minus"
       title="Delete selected project, folder or package" />

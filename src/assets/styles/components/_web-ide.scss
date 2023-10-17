@@ -228,6 +228,19 @@
           }
         }
   
+        .delete-package-window-controls {
+          .package-to-delete {
+            color: rgb(145, 50, 120);
+          }
+        }
+        .delete-folder-window-controls {
+          .folder-to-delete {
+            color: rgb(145, 50, 120);
+          }
+          .folder-to-delete-parent-project {
+            color: rgb(25, 168, 148);
+          }
+        }
         .delete-file-window-controls {
           .file-to-delete {
             color: rgb(145, 50, 120);
@@ -238,6 +251,7 @@
         }
         .name-project-window,
         .name-file-window,
+        .delete-package-window,
         .delete-file-window,
         .delete-folder-window {
           height: 100%;

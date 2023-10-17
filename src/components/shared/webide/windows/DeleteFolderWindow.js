@@ -1,19 +1,31 @@
 import { Card, CardTitle, CardBody } from 'reactstrap';
 
-export function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) {
+export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
 
-  const project = selectedFile.project;
-  const filepath = selectedFile.path.split(`/${project}/`)[1];
+  if (!active) {
+    return null;
+  }
 
-  return !active ? null : (
-    <Card className="delete-file-window">
-      <CardTitle className="delete-file-window-title">Confirmation</CardTitle>
-      <CardBody className="delete-file-window-controls">
-          <p>Are you sure you want to delete file <span className="file-to-delete">{filepath}</span> from project <span className="file-to-delete-parent-project">{ project }</span> ?</p> 
+  const project = selectedFolder.project;
+  const pathSegmentsFromRoot = selectedFolder.path.split('/');
+  const isProjectFolder = pathSegmentsFromRoot.length === 2;
+  const projectSubdir = isProjectFolder ? null : pathSegmentsFromRoot.slice(-1)[0];
+
+  return (
+    <Card className="delete-folder-window">
+      <CardTitle className="delete-folder-window-title">Confirmation</CardTitle>
+      <CardBody className="delete-folder-window-controls">
+          {
+            isProjectFolder ?
+              <p>Are you sure you want to delete project <span className="folder-to-delete-parent-project">{ project }</span> ?</p> :
+              <p>Are you sure you want to delete the folder
+                <span className="folder-to-delete"> {projectSubdir} </span> from project <span className="folder-to-delete-parent-project">{ project }</span> ?
+              </p> 
+          }
           <button onClick={ onConfirm }>Confirm</button>
           <button onClick={ onCancel }>Cancel</button>
       </CardBody>
     </Card>
-  )
+  );
 
 }

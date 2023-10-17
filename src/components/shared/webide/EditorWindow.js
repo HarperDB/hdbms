@@ -10,7 +10,9 @@ export {
   NameProjectWindow,
   NameProjectFolderWindow,
   NameFileWindow,
-  DeleteFileWindow
+  DeleteFileWindow,
+  DeleteFolderWindow,
+  DeletePackageWindow
 } from './windows';
 
 export const EDITOR_WINDOWS = {
@@ -25,7 +27,9 @@ export const EDITOR_WINDOWS = {
   DEPLOY_COMPONENT_WINDOW: 'DEPLOY_COMPONENT_WINDOW',
   INSTALL_PACKAGE_WINDOW: 'INSTALL_PACKAGE_WINDOW',
   PACKAGE_DETAILS_WINDOW: 'PACKAGE_DETAILS_WINDOW',
-  DELETE_FILE_WINDOW: 'DELETE_FILE_WINDOW'
+  DELETE_FILE_WINDOW: 'DELETE_FILE_WINDOW',
+  DELETE_FOLDER_WINDOW: 'DELETE_FOLDER_WINDOW',
+  DELETE_PACKAGE_WINDOW: 'DELETE_PACKAGE_WINDOW'
 };
 
 export default function EditorWindow({ children }) {

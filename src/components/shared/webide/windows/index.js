@@ -7,3 +7,5 @@ export { NameProjectWindow } from './NameProjectWindow';
 export { NameProjectFolderWindow } from './NameProjectFolderWindow';
 export { NameFileWindow } from './NameFileWindow';
 export { DeleteFileWindow } from './DeleteFileWindow';
+export { DeleteFolderWindow } from './DeleteFolderWindow';
+export { DeletePackageWindow } from './DeletePackageWindow';
