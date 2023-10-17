@@ -97,7 +97,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
             onChange={ (e) => setUser(e.target.value) }
             value={user} />
         </div>
-        <div className="package-install-github-lookup">
+        <div className="package-install-github-repo-lookup">
           <label className="form-label">Github Repository Name: </label>
           <div className="github-package-search-box">
             <input

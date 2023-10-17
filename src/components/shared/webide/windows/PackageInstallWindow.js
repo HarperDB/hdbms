@@ -86,7 +86,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             }
             title="enter a name for this package"
             value={ projectName }
-            placeholder="project name"
+            placeholder="Project name"
             onChange={
               (e) => {
                 setProjectName(e.target.value);

@@ -104,7 +104,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
     <>
       <div className="package-install-npm-lookup">
         <label className="form-label">Npm Package:</label>
-        <div className="package-install-query-container">
+        <div className="package-install-npm-query-container">
           <input
             className="package-install-query-input"
             title="enter an npm package specifier"

@@ -278,35 +278,47 @@
 
             .package-install-input-container {
 
+
+              .search-status-icon-container {
+                text-align: center;
+                i {
+                  color: white;
+                  &.not-searching {
+                    color: white; //rgba(0,255,0, 0.1);
+                  }
+                  &.found, &.loading {
+                    color: green;
+                  }
+                  &.not-found {
+                    color: rgb(145, 50, 120);
+                  }
+
+                }
+                width: 40px;
+              }
+
               margin-bottom: 20px;
 
               .package-install-deploy-targets-dropdown {
               }
 
+              .package-install-github-query-container {
+                .package-install-github-repo-lookup {
+                  .github-package-search-box {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                  }
+                }
+              }
+
               .package-install-npm-lookup {
-                .package-install-query-container {
+                .package-install-npm-query-container {
                   display: flex;
                   flex-direction: row;
                   align-items: center;
                   margin-bottom: 20px;
-
-                  .search-status-icon-container {
-                    text-align: center;
-                    i {
-                      color: white;
-                      &.not-searching {
-                        color: white; //rgba(0,255,0, 0.1);
-                      }
-                      &.found, &.loading {
-                        color: green;
-                      }
-                      &.not-found {
-                        color: rgb(145, 50, 120);
-                      }
-
-                    }
-                    width: 40px;
-                  }
                 }
               }
 
