@@ -13,11 +13,13 @@
   }
 
   // top-level element (left-side)
-  .file-browser-container {
+  .file-browser-outer-container {
+    overflow-y: auto;
+    height: 100%;
+  }
+  .file-browser-inner-container {
 
     padding: 20px;
-    height: 100%;
-    overflow-y: scroll;
 
     .file-menu {
 
@@ -209,8 +211,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow-y: scroll;
+        overflow-y: auto;
 
+        .card .card-body {
+          background: transparent !important;
+        }
 
         .name-input {
           .name-input-buttons-container {
@@ -303,7 +308,12 @@
               }
 
               .package-install-github-query-container {
+                .package-install-github-user {
+                  margin-bottom: 20px;
+                }
+
                 .package-install-github-repo-lookup {
+                  margin-bottom: 20px;
                   .github-package-search-box {
                     display: flex;
                     flex-direction: row;
