@@ -236,6 +236,7 @@ function WebIDE({
             AddProjectButton={
               () => (
                 <AddProjectButton
+                  text="create a new project"
                   onAddProject={
                     () => {
                       updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
@@ -246,6 +247,7 @@ function WebIDE({
             InstallPackageButton={
               () => (
                 <InstallPackageButton
+                  text="install or deploy a remote package" 
                   onClick={
                     () => {
                       setSelectedPackage(null);

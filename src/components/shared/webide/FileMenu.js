@@ -8,28 +8,47 @@ export function DeleteFolderButton({ onClick, disabled }) {
     <button
       onClick={ onClick }
       disabled={ disabled }
-      className="delete-folder fas fa-folder-minus"
+      className="delete-folder-icon fas fa-folder-minus"
       title="Delete selected project, folder or package" />
   )
 }
 
-export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
+export function AddProjectFolderButton({ onAddProjectFolder, disabled, text="" }) {
   return (
     <button
       disabled={ disabled }
       onClick={ onAddProjectFolder }
-      className="add-folder fas fa-folder-plus"
+      className="add-folder-icon fas fa-folder-plus"
       title={`Add a new subdirectory to your project`} />
   )
 }
 
-export function AddProjectButton({ disabled=false, onAddProject }) {
+
+export function InstallPackageButton({ onClick, text="" }) {
+  return (
+    <button
+      onClick={ onClick }
+      className={
+        cn("install-package-icon")
+      }
+      title="Install external package from url or NPM package spec">
+        <i className="fas fa-share-alt" />
+        { text && <span style={{color: 'white'}}> {text}</span> }
+    </button>
+  )
+}
+
+
+export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
   return (
     <button
       disabled={ disabled }
       onClick={ onAddProject }
-      className="add-project-icon fas fa-file-code"
-      title="Add a new project" />
+      className="add-project-icon"
+      title="Add a new project">
+        <i className="fas fa-folder-plus" />
+        { text && <span style={{color: 'white'}}> {text}</span> }
+    </button>
   );
 }
 
@@ -38,7 +57,7 @@ export function AddFileButton({ disabled, onAddFile }) {
     <button
       disabled={ disabled }
       onClick={ onAddFile }
-      className="add-file fas fa-plus"
+      className="add-file-icon fas fa-plus"
       title="Add a new file" />
   )
 }
@@ -48,22 +67,10 @@ export function DeleteFileButton({ onClick, disabled }) {
       <button
         onClick={ onClick }
         disabled={ disabled }
-        className="delete-file fas fa-minus"
+        className="delete-file-icon fas fa-minus"
         title="Delete selected file" />
   )
 }
-
-export function InstallPackageButton({ onClick }) {
-  return (
-      <button
-        onClick={ onClick }
-        className={
-          cn("install-package-icon fas fa-share-alt")
-        }
-        title="Install external package from url or NPM package spec" />
-  )
-}
-
 
 function FileMenu({ children }) {
   return (

@@ -41,21 +41,21 @@
     color: rgb(143, 141, 255);
   }
 
-  .add-folder:hover,
-  .delete-folder:hover {
+  .add-folder-icon:hover,
+  .delete-folder-icon:hover {
     color: rgb(143, 141, 255);
   }
-  .delete-file:hover {
+  .delete-file-icon:hover {
     color: yellow;
   }
 
   .install-package-icon,
-  .add-folder,
+  .add-folder-icon,
   .add-project-icon,
-  .upload-file,
-  .delete-folder,
-  .delete-file,
-  .add-file {
+  .upload-file-icon,
+  .delete-folder-icon,
+  .delete-file-icon,
+  .add-file-icon {
     border: none;
     outline: none !important;
     background: transparent;
@@ -63,8 +63,6 @@
     padding: 0px;
     margin: 0px;
   }
-
-  .default-window .add-project
 
 
   // top-level element (left-side)
