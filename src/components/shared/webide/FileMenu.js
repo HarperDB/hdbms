@@ -46,7 +46,7 @@ export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
       onClick={ onAddProject }
       className="add-project-icon"
       title="Add a new project">
-        <i className="fas fa-folder-plus" />
+        <i className="fas fa-file-code" />
         { text && <span style={{color: 'white'}}> {text}</span> }
     </button>
   );
