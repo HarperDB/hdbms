@@ -146,7 +146,6 @@ function WebIDE({
               disabled={ !selectedFile?.path }
               onClick={
                 (e) => {
-                  console.log(selectedFile);
                   updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
                 }
               } />
@@ -201,13 +200,25 @@ function WebIDE({
             }
             onFileSelect={
               async (entry) => {
-                const { content } = await onFileSelect(entry);
+
                 setSelectedPackage(null);
-                setSelectedFile({
-                  ...entry,
-                  content
-                });
-                updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
+
+                // file unselected
+                if (!entry) {
+
+                  setSelectedFile(null);
+                  updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+
+                } else {
+
+                  // file selected
+                  const { content } = await onFileSelect(entry);
+                  setSelectedFile({ ...entry, content });
+                  updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
+
+                }
+
+
               }
             } />
         </div>

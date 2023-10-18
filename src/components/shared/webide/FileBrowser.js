@@ -123,16 +123,20 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
 
     if (isDir) {
       // one click on dir name toggles selected / highlighted state / ui
-      const alreadySelected = directoryEntry?.path === selectedFolder?.path;
-      if (alreadySelected && iconWasClicked) {
+      if (isFolderSelected && iconWasClicked) {
         // TODO: don't 
       } else {
-        onFolderSelect(alreadySelected ? null : directoryEntry);
+        onFolderSelect(isFolderSelected ? null : directoryEntry);
       }
     } else {
-      // one click on file name sets it to selected / highlighted
-      // AND retrieves file content
-      onFileSelect(directoryEntry);
+
+      if (isFileSelected) {
+        onFileSelect(null);
+      } else {
+        // one click on file name sets it to selected / highlighted
+        // AND retrieves file content
+        onFileSelect(directoryEntry);
+      }
     }
 
   }
