@@ -228,7 +228,7 @@ function WebIDE({
           SaveButton={
             () => (
               <SaveButton
-                disabled={ !selectedFile }
+                disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
                 onSave={
                   () => {
                     // NOTE: timeout for ux reasons.
@@ -247,7 +247,7 @@ function WebIDE({
             AddProjectButton={
               () => (
                 <AddProjectButton
-                  text="create a new project"
+                  text="Create a new project"
                   onAddProject={
                     () => {
                       updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
@@ -258,7 +258,7 @@ function WebIDE({
             InstallPackageButton={
               () => (
                 <InstallPackageButton
-                  text="install or deploy a remote package" 
+                  text="Install or deploy a remote package" 
                   onClick={
                     () => {
                       setSelectedPackage(null);
