@@ -14,8 +14,8 @@ export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel
   return (
     <Card className="delete-folder-window">
       <CardBody className="delete-folder-window-container">
-        <CardTitle className="delete-folder-window-title">Delete Confirmation</CardTitle>
         <div className="delete-folder-window-controls">
+          <CardTitle className="delete-folder-window-title">Delete Confirmation</CardTitle>
             {
               isProjectFolder ?
                 <p>Are you sure you want to delete project <span className="folder-to-delete-parent-project">{ project }</span> ?</p> :
