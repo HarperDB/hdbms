@@ -36,7 +36,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
     setPackageQuery(e.target.value);
   }
 
-  function updateSelectedDistTag(value) {
+  function updateSelectedDistTag({value}) {
     setSelectedDistTag(value);
   }
 
@@ -76,7 +76,6 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
 
         if (packageName) {
 
-
           getNpmDistTags(packageName).then(tags => {
             setDistTags(tags);
             setSelectedDistTag(null);
@@ -113,13 +112,13 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
             onChange={ updatePackageQuery } />
           <span className="search-status-icon-container">
             <i className={
-                cn("package-install-query-status fas", { 
-                  "fa-spinner fa-spin loading": loadingTags, 
-                  "fa-check found": debouncedPackageQuery.length > 0 && found,
-                  "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
-                  "fa-check not-searching": debouncedPackageQuery.length === 0
-                })
-               } />
+              cn("package-install-query-status fas", { 
+                "fa-spinner fa-spin loading": loadingTags, 
+                "fa-check found": debouncedPackageQuery.length > 0 && found,
+                "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
+                "fa-check not-searching": debouncedPackageQuery.length === 0
+              })
+             } />
           </span>
         </div>
       </div>
@@ -133,7 +132,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
           disabled={ !distTags }
           onChange={ updateSelectedDistTag }
           options={
-            Object.entries(distTags || []).map(([tagName,tagValue]) => ({
+            Object.entries(distTags || []).map(([tagName, tagValue]) => ({
               label: `${tagName} (${tagValue})`,
               value: tagName
             }))

@@ -4,7 +4,6 @@ import NameInput from './NameInput';
 
 export function DefaultWindow({ active, fileTree, AddProjectButton, InstallPackageButton }) {
 
-  console.log('ft: ', fileTree);
   return !active ? null : (
     <Card className="default-window">
       <CardBody className="default-window-container">
