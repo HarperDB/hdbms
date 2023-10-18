@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from 'reactstrap';
 
 export {
-  BlankWindow,
+  DefaultWindow,
   GithubRepoSelector,
   NpmPackageSelector,
   PackageInstallWindow,
@@ -16,8 +16,7 @@ export {
 } from './windows';
 
 export const EDITOR_WINDOWS = {
-  DEFAULT_WINDOW: 'BLANK_WINDOW',
-  BLANK_WINDOW: 'BLANK_WINDOW',
+  DEFAULT_WINDOW: 'DEFAULT_WINDOW',
   CODE_EDITOR_WINDOW: 'CODE_EDITOR_WINDOW',
   NAME_FILE_WINDOW: 'NAME_FILE_WINDOW',
   NAME_PROJECT_WINDOW: 'NAME_PROJECT_WINDOW',

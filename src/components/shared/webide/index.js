@@ -14,7 +14,7 @@ import Editor from './Editor';
 import EditorWindow, {
   EDITOR_WINDOWS,
   PackageInstallWindow,
-  BlankWindow,
+  DefaultWindow,
   NoFileSelectedWindow,
   NameFileWindow,
   DeleteFileWindow,
@@ -48,7 +48,7 @@ function WebIDE({
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
   const [ editingFileName, setEditingFileName ] = useState(false);
   const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
-  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.BLANK_WINDOW);
+  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
 
   const hasProjects = fileTree?.entries?.length > 0;
@@ -90,12 +90,12 @@ function WebIDE({
   }
 
   function toDefaultWindow() {
-    updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+    updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
   }
 
   function backToPreviousWindow() {
     // TODO: this needs some thought.  unexpected 'no action' behavior.
-    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+    updateActiveEditorWindow(previousActiveEditorWindow || EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
   }
 
   // updates current in memory code
@@ -230,7 +230,7 @@ function WebIDE({
           }
         />
         <EditorWindow>
-          <BlankWindow fileTree={fileTree} active={ activeEditorWindow === EDITOR_WINDOWS.BLANK_WINDOW } />
+          <DefaultWindow fileTree={fileTree} active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW } />
           <NameProjectWindow
             active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW }
             onConfirm={ addProject }
@@ -263,7 +263,7 @@ function WebIDE({
 
                 await onDeletePackage(selectedPackage);
 
-                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
                 setSelectedFile(null);
                 setSelectedFolder(null);
@@ -286,7 +286,7 @@ function WebIDE({
 
                 await onDeleteFolder(selectedFolder);
 
-                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
                 setSelectedFile(null);
                 setSelectedFolder(null);
@@ -308,7 +308,7 @@ function WebIDE({
                 onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.BLANK_WINDOW, activeEditorWindow);
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
               }
             }
             onCancel={

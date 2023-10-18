@@ -1,4 +1,4 @@
-export { BlankWindow } from './BlankWindow';
+export { DefaultWindow } from './DefaultWindow';
 export { PackageInstallWindow } from './PackageInstallWindow';
 export { GithubRepoSelector } from './GithubRepoSelector';
 export { NpmPackageSelector } from './NpmPackageSelector';

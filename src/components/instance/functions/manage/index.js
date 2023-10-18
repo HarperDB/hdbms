@@ -103,6 +103,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName;
 
+    // TODO: error handling
     await dropComponent({
       auth,
       url,

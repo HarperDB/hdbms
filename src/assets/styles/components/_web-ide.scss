@@ -213,9 +213,9 @@
 
         height: 100%;
         width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
         overflow-y: auto;
 
         .card .card-body {
@@ -249,14 +249,33 @@
             color: rgb(25, 168, 148);
           }
         }
+
+        .default-window-container,
+        .name-project-window-container,
+        .name-project-folder-window-container,
+        .name-file-window-container,
+        .delete-file-window-container,
+        .delete-folder-window-container,
+        .delete-package-window-container {
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .default-window,
         .name-project-window,
+        .name-project-folder-window,
         .name-file-window,
         .delete-package-window,
         .delete-file-window,
         .delete-folder-window {
           height: 100%;
           width: 100%;
-          padding: 20%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
         }
 
         .name-project-window-title,
