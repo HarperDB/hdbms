@@ -151,7 +151,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
         <span className="filename-text">{directoryEntry.name}</span>
 
         {/* deploy project to another server button */ }
-        {
+        {/*
 
           !isProject ?
           null :
@@ -161,7 +161,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
             }
           } className='deploy-project fas fa-share' /> 
 
-        }
+
 
         <i onClick={
             (e) => {
@@ -169,6 +169,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
               e.preventDefault();
             }
         } className={`${renameFileIconClass} fas fa-pencil-alt`} />
+        */}
     </button>
   )
 

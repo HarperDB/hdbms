@@ -46,7 +46,7 @@
     color: rgb(143, 141, 255);
   }
   .delete-file-icon:hover {
-    color: yellow;
+    color: #ee81ee !important;
   }
 
   .install-package-icon,
@@ -109,14 +109,14 @@
       }
 
       .file {
-        .file-selected {
+        &.file-selected {
           color: #ee81ee;
           background: #191919 !important;
           // background: #4a4a4a !important;
           //border: 1px solid rgb(120,120,120);;
         }
-        .folder-selected {
-          background: #191919 !important;
+        &.folder-selected {
+          background: #2c2c2c !important;
         }
       }
       .package.package-selected {
@@ -142,7 +142,7 @@
         color: white;
         outline: none !important; // TODO: fix this because it is not accessible; style differently
         margin: 0;
-        padding: 3px 2px;
+        padding: 3px 3px;
 
         .package-text,
         .filename-text {
