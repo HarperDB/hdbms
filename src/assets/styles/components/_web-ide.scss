@@ -236,32 +236,65 @@
           }
         }
   
+        .delete-folder-window-title,
+        .delete-file-window-title,
+        .delete-package-window-title,
+        .folder-to-delete {
+          font-size: 1.3em;
+          font-weight: bold;
+          align-self: flex-start;
+        }
+
+        .folder-to-delete-parent-project {
+            font-weight: bold;
+            color: $color-danger;
+        }
+
         .delete-package-window-controls {
           .package-to-delete {
-            color: rgb(145, 50, 120);
+            font-weight: bold;
+            color: $color-danger;
           }
         }
         .delete-folder-window-controls {
           .folder-to-delete {
-            color: rgb(145, 50, 120);
           }
           .folder-to-delete-parent-project {
-            color: rgb(25, 168, 148);
           }
+        }
+        .delete-file-window-container {
+          display: flex;
+          flex-direction: column;
+
+          .delete-file-window-title {
+            align-self: flex-start;
+          }
+
         }
         .delete-file-window-controls {
           .file-to-delete {
-            color: rgb(145, 50, 120);
+            font-weight: bold;
+            color: $color-danger;
           }
           .file-to-delete-parent-project {
-            color: rgb(25, 168, 148);
+            font-weight: bold;
+            // color: rgb(25, 168, 148);
+            // color: $color-danger;
           }
         }
 
         .default-window {
           .default-window-container {
             h4 {
-              padding-bottom: 20px;
+              padding-bottom: 80px;
+            }
+
+            .default-window-option {
+              line-height: 2.5em;
+              span,
+              button > span { 
+                margin-left: 20px;
+              }
             }
           }
         }

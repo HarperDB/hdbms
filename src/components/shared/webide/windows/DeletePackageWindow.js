@@ -13,9 +13,9 @@ export function DeletePackageWindow({ active, selectedPackage, onConfirm, onCanc
       <CardBody className="delete-package-window-container">
         <CardTitle className="delete-package-window-title">Delete Confirmation</CardTitle>
         <div className="delete-package-window-controls">
-          <p>Are you sure you want to delete package <span className="package-to-delete">{ packageName }</span> ?</p>
-          <button onClick={ onConfirm }>Delete</button>
-          <button onClick={ onCancel }>Cancel</button>
+          <p>Are you sure you want to delete package '<span className="package-to-delete">'{ packageName }</span>' ?</p>
+          <button className="btn btn-secondary btn-danger" onClick={ onConfirm }>Delete</button>
+          <button className="btn btn-secondary" onClick={ onCancel }>Cancel</button>
         </div>
       </CardBody>
     </Card>
