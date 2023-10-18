@@ -17,6 +17,56 @@
     padding-right: 8px;
   }
 
+  .add-project-icon:hover,
+  .default-window .add-project-icon {
+    color: rgb(25, 168, 148);
+  }
+
+
+  li {
+    margin: 0px 5px 5px 0px;
+    padding: 0px 5px 0px 0px;
+  }
+
+  button[disabled] {
+    color: #5e5e5e;
+  }
+
+  .default-window .install-package-icon,
+  .install-package-icon:hover {
+    color: #f24242;
+  }
+
+  .menu-pointer-icon {
+    color: rgb(143, 141, 255);
+  }
+
+  .add-folder:hover,
+  .delete-folder:hover {
+    color: rgb(143, 141, 255);
+  }
+  .delete-file:hover {
+    color: yellow;
+  }
+
+  .install-package-icon,
+  .add-folder,
+  .add-project-icon,
+  .upload-file,
+  .delete-folder,
+  .delete-file,
+  .add-file {
+    border: none;
+    outline: none !important;
+    background: transparent;
+    color: white;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .default-window .add-project
+
+
   // top-level element (left-side)
   .file-browser-outer-container {
     overflow-y: auto;
@@ -36,46 +86,6 @@
       padding-top: 0;
       padding-bottom: 0;
       border-bottom: 1px solid #2e2e2e;
-
-      li {
-        margin: 0px 5px 5px 0px;
-        padding: 0px 5px 0px 0px;
-      }
-
-      button[disabled] {
-        color: #5e5e5e;
-      }
-
-      .add-project:hover {
-        color: rgb(25, 168, 148);
-      }
-      .install-package:hover {
-        color: #f24242;
-      }
-
-      .add-folder:hover,
-      .delete-folder:hover {
-        color: rgb(143, 141, 255);
-      }
-      .delete-file:hover {
-        color: yellow;
-      }
-
-      .install-package,
-      .add-folder,
-      .add-project,
-      .upload-file,
-      .delete-folder,
-      .delete-file,
-      .add-file {
-        border: none;
-        outline: none !important;
-        background: transparent;
-        color: white;
-        padding: 0px;
-        margin: 0px;
-      }
-
 
     }
     .no-projects {
@@ -249,6 +259,15 @@
             color: rgb(25, 168, 148);
           }
         }
+
+        .default-window {
+          .default-window-container {
+            h4 {
+              padding-bottom: 20px;
+            }
+          }
+        }
+
 
         .default-window-container,
         .name-project-window-container,

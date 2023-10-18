@@ -23,12 +23,12 @@ export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
   )
 }
 
-export function AddProjectButton({ disabled, onAddProject }) {
+export function AddProjectButton({ disabled=false, onAddProject }) {
   return (
     <button
       disabled={ disabled }
       onClick={ onAddProject }
-      className="add-project fas fa-file-code"
+      className="add-project-icon fas fa-file-code"
       title="Add a new project" />
   );
 }
@@ -58,7 +58,7 @@ export function InstallPackageButton({ onClick }) {
       <button
         onClick={ onClick }
         className={
-          cn("install-package fas fa-share-alt")
+          cn("install-package-icon fas fa-share-alt")
         }
         title="Install external package from url or NPM package spec" />
   )

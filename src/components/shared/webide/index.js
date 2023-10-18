@@ -230,7 +230,30 @@ function WebIDE({
           }
         />
         <EditorWindow>
-          <DefaultWindow fileTree={fileTree} active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW } />
+          <DefaultWindow
+            fileTree={fileTree}
+            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW } 
+            AddProjectButton={
+              () => (
+                <AddProjectButton
+                  onAddProject={
+                    () => {
+                      updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
+                    }
+                  } />
+              )
+            }
+            InstallPackageButton={
+              () => (
+                <InstallPackageButton
+                  onClick={
+                    () => {
+                      setSelectedPackage(null);
+                      updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
+                    }
+                  } />
+              )
+            } />
           <NameProjectWindow
             active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW }
             onConfirm={ addProject }
