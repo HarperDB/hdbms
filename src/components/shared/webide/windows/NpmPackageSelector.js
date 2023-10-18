@@ -127,7 +127,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
         <label className="form-label">Choose a Tag:</label>
         <SelectDropdown
           className="react-select-container npm-tag-select"
-          classNamePrefix="react-select-container"
+          classNamePrefix="react-select"
           isDisabled={ !packageQuery }
           placeholder="choose a tag"
           disabled={ !distTags }

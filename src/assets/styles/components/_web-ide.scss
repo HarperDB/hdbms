@@ -221,9 +221,9 @@
 
         height: 100%;
         width: 100%;
-        // display: flex;
-        // align-items: center;
-        // justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         overflow-y: auto;
 
         .card .card-body {
@@ -305,13 +305,12 @@
 
         .package-install-window {
 
-          width: 100%;
+          width: 50%;
+          max-width: 500px;
           height: 100%;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding-left: 25%;
-          padding-right: 25%;
 
           .card {
             border: 0px solid transparent !important;
@@ -347,7 +346,8 @@
           .package-install-details-form {
 
             .package-install-input-container {
-
+              display: flex;
+              flex-direction: column;
 
               .search-status-icon-container {
                 text-align: center;
