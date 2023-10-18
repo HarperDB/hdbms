@@ -40,10 +40,10 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
           title="choose name for your new file or folder" />
 
           <div className="name-input-buttons-container">
-            <button className="btn btn-secondary name-input-confirm" onClick={ () => {
-              onConfirm(name); 
-          }}>ok</button>
-            <button className="btn btn-secondary btn-success name-input-cancel" onClick={ onCancel }>cancel</button>
+            <button className="btn btn-secondary btn-success name-input-confirm" onClick={ () => {
+                onConfirm(name); 
+              }}>ok</button>
+            <button className="btn btn-secondary name-input-cancel" onClick={ onCancel }>cancel</button>
         </div>
     </div>
   );

@@ -231,6 +231,9 @@
         }
 
         .name-input {
+          display: flex;
+          flex-direction: column;
+          width: 50%;
           .name-input-buttons-container {
              padding-top: 10px;
           }
@@ -307,6 +310,8 @@
         .delete-file-window-container,
         .delete-folder-window-container,
         .delete-package-window-container {
+          width: 100%;
+          height: 100%;
           justify-content: center;
           align-items: center;
           display: flex;
@@ -334,6 +339,19 @@
         }
 
         .card-body {
+        }
+
+        .name-file-window {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+          .name-file-window-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+          }
         }
 
         .package-install-window {

@@ -7,16 +7,12 @@ export function NameProjectFolderWindow({ active, onConfirm, onCancel, projectNa
 
   return !active ? null : (
     <Card className="name-project-folder-window">
-      <CardBody className="name-project-folder-window-container">
-        <CardTitle className="name-project-folder-window-title">Name Your Project</CardTitle> 
-        <div className="name-project-folder-window-input">
-          <NameInput
-            placeholder="Your new project name"
-            onEnter={ onConfirm }
-            onConfirm={ onConfirm }
-            onCancel={ onCancel } />
-        </div>
-      </CardBody>
+      <CardTitle className="name-project-folder-window-title">Name Your Project</CardTitle> 
+      <NameInput
+        placeholder="Your new project name"
+        onEnter={ onConfirm }
+        onConfirm={ onConfirm }
+        onCancel={ onCancel } />
     </Card>
   );
 
