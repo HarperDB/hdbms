@@ -15,7 +15,7 @@ export function DefaultWindow({ active, fileTree, AddProjectButton, InstallPacka
           {
             fileTree?.entries.length > 0 &&
             <li className="default-window-option">
-              <i className="menu-pointer-icon fa fa-arrow-left" /> <span style={{ color: 'white' }}>or choose a file from the menu on the left</span>
+              <i className="menu-pointer-icon fa fa-arrow-left" /> <span style={{ color: 'white' }}>Choose a file from the menu on the left</span>
             </li>
           }
         </ul>
