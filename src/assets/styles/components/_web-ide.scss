@@ -345,6 +345,12 @@
           flex-direction: column;
           justify-content: center;
 
+          .package-install-window-title {
+            font-weight: bold;
+            font-size: 1.5em;
+            text-align: center;
+          }
+
           .card {
             border: 0px solid transparent !important;
           }
@@ -378,9 +384,23 @@
 
           .package-install-details-form {
 
+            .project-name-invalid-text {
+
+              color: $color-danger !important;
+              margin-bottom: 20px;
+            }
+
+
             .package-install-input-container {
               display: flex;
               flex-direction: column;
+
+              .project-name-input.invalid:focus,
+              .project-name-input.invalid {
+                border: 1px solid $color-danger !important;
+                outline-color: $color-danger !important;
+              }
+
 
               .search-status-icon-container {
                 text-align: center;

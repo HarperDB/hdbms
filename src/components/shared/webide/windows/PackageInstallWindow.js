@@ -51,6 +51,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
 
   return (
     <div className="package-install-window">
+      <div className="package-install-window-title">Package Install</div>
       <Card className="package-install-source-form">
       {
         packageTypes.map((pkgType, index) => (
@@ -97,8 +98,12 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
 
         {
           (!projectNameIsValid && projectName.length > 0) && 
-          <i title="your project name must only contain alphanumerics, dashes or underscores."
-             className="project-name-invalid fa fa-warning" /> 
+          <span className="project-name-invalid-text">
+            <i
+              title="Your project name must only contain alphanumerics, dashes or underscores."
+              className="project-name-invalid fa fa-warning" /> 
+              Your project name must only contain alphanumerics, dashes or underscores.
+          </span>
         }
         <div className="package-install-input-container">
         {
