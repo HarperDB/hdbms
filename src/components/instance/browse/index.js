@@ -38,6 +38,10 @@ function BrowseIndex() {
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const url = useStoreState(instanceState, (s) => s.url);
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const version = registration?.version;
+  const [major, minor] = version?.split('.') || [];
+  const versionAsFloat = `${major}.${minor}`;
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
@@ -107,7 +111,7 @@ function BrowseIndex() {
             activeItem={schema}
             items={entities.schemas}
             baseUrl={baseUrl}
-            itemType="schema"
+            itemType={versionAsFloat >= 4.2 ? 'database' : 'schema'}
             showForm={showForm} />
             {
               schema && <EntityManager
