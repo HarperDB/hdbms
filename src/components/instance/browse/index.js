@@ -122,7 +122,7 @@ function BrowseIndex() {
                 itemType="table"
                 showForm={showTableForm} />
             }
-          <StructureReloader centerText label="refresh schemas and tables" />
+          <StructureReloader centerText label={`refresh ${versionAsFloat >= 4.2 ? 'databases' : 'schemas'} and tables`} />
         </ErrorBoundary>
       </Col>
       <Col xs="12" className="d-block d-md-none">

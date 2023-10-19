@@ -22,6 +22,8 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const version = useStoreState(instanceState, (s) => s.registration?.version);
+  const [ major, minor ] = version?.split('.') || [];
+  const versionAsFloat = parseFloat(`${major}.${minor}`);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -38,7 +40,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const jsonHeight = hasStructureUser ? "calc(100vh - 440px)" : "calc(100vh - 340px)"
 
   const icons = {
-    checked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
+    checked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
     unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
   };
 
