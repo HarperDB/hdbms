@@ -88,8 +88,19 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       file: filepathRelativeToProjectDir,
       payload: selectedFile.content
     };
+    const restartRequired = [
+      'config.yaml',
+      'package.json',
+      'resources.js',
+      'schema.graphql'
+    ];
 
     await setComponentFile(payload);
+
+
+    if (restartRequired.includes(filepathRelativeToProjectDir)) {
+      await restartInstance({ auth, url });
+    }
 
     await refreshCustomFunctions();
 
