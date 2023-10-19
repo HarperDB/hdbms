@@ -100,9 +100,24 @@ function BrowseIndex() {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
-          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showTableForm} />}
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
+          FallbackComponent={ErrorFallback}>
+          <EntityManager
+            activeItem={schema}
+            items={entities.schemas}
+            baseUrl={baseUrl}
+            itemType="schema"
+            showForm={showForm} />
+            {
+              schema && <EntityManager
+                activeItem={table}
+                items={entities.tables}
+                activeSchema={schema}
+                baseUrl={`${baseUrl}/${schema}`}
+                itemType="table"
+                showForm={showTableForm} />
+            }
           <StructureReloader centerText label="refresh schemas and tables" />
         </ErrorBoundary>
       </Col>
@@ -110,7 +125,9 @@ function BrowseIndex() {
         <hr />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
+          FallbackComponent={ErrorFallback}>
           {schema && table && action === 'csv' && entities.activeTable ? (
             <CSVUpload />
           ) : schema && table && action && entities.activeTable ? (

@@ -77,6 +77,9 @@
     // #5e5e5e;
   }
 
+  .file-browser {
+    background: #f9f9f9;
+  }
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
     //background: lightgray !important; 
@@ -207,6 +210,7 @@
 
       margin-left: 0;
       padding-left: 0;
+      padding: 20px;
 
       .folder-container {
         padding-left: 0px;

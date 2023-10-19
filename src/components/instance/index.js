@@ -36,7 +36,8 @@ function InstanceIndex() {
   const thisInstance = useStoreState(appState, (s) => compute_stack_id && s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id), [compute_stack_id]);
   const url = useStoreState(instanceState, (s) => s.url);
   const restarting = useStoreState(instanceState, (s) => s.restarting);
-  const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super });
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const hydratedRoutes = routes({ customer_id, super_user: instanceAuth?.super, version: registration?.version });
   const [mounted, setMounted] = useState(false);
 
   useAsyncEffect(() => {
