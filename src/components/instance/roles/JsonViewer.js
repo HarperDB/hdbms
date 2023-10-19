@@ -114,7 +114,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
                   }}
                   type="text"
                   id="permitted_schemas"
-                  title="permitteed schemas"
+                  title={`permitted ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }`}
                   placeholder="comma-separated schemas, or blank for all"
                   value={newStructureUser === true ? '' : newStructureUser}
                   disabled={loading}
