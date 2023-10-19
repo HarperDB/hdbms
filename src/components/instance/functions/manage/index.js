@@ -78,7 +78,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const theme = useStoreState(appState, (s) => s.theme);
 
   // save file to instance
-  async function saveCodeToInstance(selectedFile) {
+  async function saveCodeToInstance(selectedFile, restartRequired) {
 
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
     const payload = {
@@ -88,17 +88,19 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       file: filepathRelativeToProjectDir,
       payload: selectedFile.content
     };
+    /*
     const restartRequired = [
       'config.yaml',
       'package.json',
       'resources.js',
       'schema.graphql'
     ];
+    */
 
     await setComponentFile(payload);
 
 
-    if (restartRequired.includes(filepathRelativeToProjectDir)) {
+    if (restartRequired) {
       await restartInstance({ auth, url });
     }
 

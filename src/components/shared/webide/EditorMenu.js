@@ -28,14 +28,33 @@ export function SaveButton({ disabled, onSave, saveButton }) {
 
 }
 
-function EditorMenu({ SaveButton }) {
+export function RestartSetting({ disabled, onClick }) {
+
+  const title = disabled ?
+    'do not restart instance after files are saved' :
+    'restart instance after files are saved';
+
+  return (
+    <div className="restart-instance-setting">
+      <i
+        onClick={ onClick }
+        title={title}
+        className={
+          cn("restart-instance-setting-icon fas fa-sync", { disabled })
+        } />
+    </div>
+  );
+}
+
+export default function EditorMenu({ SaveButton, RestartSetting }) {
   return (
     <ul className="editor-menu">
       <li>
         <SaveButton />
       </li>
+      <li>
+        <RestartSetting />
+      </li>
     </ul>
   )
 }
-
-export default EditorMenu;

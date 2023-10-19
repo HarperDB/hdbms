@@ -71,6 +71,9 @@
   color: rgb(105,105,105);
 
 
+  .restart-instance-on-save-text {
+    color: rgb(240,240,240) !important;
+  }
   .file-menu button[disabled],
   .editor-menu button[disabled] {
     color: rgb(240,240,240) !important;
@@ -306,6 +309,8 @@
     .editor-menu {
       display: flex;
       flex-direction: row;
+      align-items: baseline;
+      justify-content: left;
       color: white;
       margin-top: 0;
       margin-bottom: 20px;
@@ -321,6 +326,19 @@
       button[disabled],
       button[disabled]:hover {
         color: #5e5e5e;
+      }
+
+      .restart-instance-setting {
+        color: black;
+        display: flex;
+        flex-direction: row;
+        .restart-instance-setting-icon {
+          &.disabled {
+            color: lightgray;
+          }
+          cursor: pointer;
+          color: #ee81ee;
+        }
       }
       .save-code {
         cursor: pointer;

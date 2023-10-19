@@ -9,7 +9,7 @@ import FileMenu, {
   DeleteFileButton,
   InstallPackageButton
 } from './FileMenu';
-import EditorMenu, { SaveButton } from './EditorMenu';
+import EditorMenu, { SaveButton, RestartSetting } from './EditorMenu';
 import Editor from './Editor';
 import EditorWindow, {
   EDITOR_WINDOWS,
@@ -51,6 +51,7 @@ function WebIDE({
   const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
+  const [ restartAfterSave, setRestartAfterSave ] = useState(true);
 
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
@@ -234,8 +235,19 @@ function WebIDE({
                   () => {
                     // NOTE: timeout for ux reasons.
                     setTimeout(() => {
-                      onSave(selectedFile)
+                      onSave(selectedFile, restartAfterSave)
                     }, 200);
+                  }
+                } />
+            )
+          }
+          RestartSetting={
+            () => (
+              <RestartSetting
+                disabled={ !restartAfterSave }
+                onClick={
+                  () => {
+                    setRestartAfterSave(!restartAfterSave);
                   }
                 } />
             )
