@@ -33,7 +33,7 @@ export function InstallPackageButton({ onClick, text="" }) {
       }
       title="Install external package from url or NPM package spec">
         <i className="fas fa-share-alt" />
-        { text && <span style={{color: 'white'}}> {text}</span> }
+        { text && <span className="install-package-button-text">{text}</span> }
     </button>
   )
 }
@@ -47,7 +47,7 @@ export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
       className="add-project-icon"
       title="Add a new project">
         <i className="fas fa-file-code" />
-        { text && <span style={{color: 'white'}}> {text}</span> }
+        { text && <span className="add-project-button-text"> {text}</span> }
     </button>
   );
 }

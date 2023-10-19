@@ -1,3 +1,92 @@
+.dark {
+   color: white;
+
+  .default-window-option {
+    span {
+      color: white;
+    }
+  } 
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid rgb(60,60,60) !important;
+  }
+
+  .file-browser button {
+    color: white !important;
+  }
+
+
+  button[disabled] {
+    // color: #5e5e5e;
+  }
+
+}
+
+.purple {
+  color: rgb(105,105,105);
+  .default-window-option {
+    span {
+      color: rgb(105,105,105);
+    }
+  }
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid darkgray !important;
+  }
+
+
+  .file-browser button {
+    color: lightgray;
+  }
+
+  button[disabled] {
+    // color: #5e5e5e;
+  }
+
+}
+
+
+.light {
+  color: rgb(105,105,105);
+
+
+  button[disabled] {
+    // color: #5e5e5e;
+  }
+
+  .file.folder-selected {
+    background: lightgray !important; 
+  }
+
+  .file-menu button {
+    color: lightgray;
+  }
+
+  .editor-window button:hover {
+    color: white;
+    //rgb(105,105,105);
+  }
+  .editor-window button {
+    color: rgb(105,105,105);
+  }
+  .install-package-icon {
+    color: #f24242 !important;
+  }
+  .add-project-icon {
+    color: rgb(25, 168, 148) !important;
+  }
+  .file-menu {
+     color: rgb(105,105,105);
+  }
+  .default-window-option {
+    span {
+      color: rgb(105,105,105);
+    }
+  }
+}
+
 .web-ide {
 
   // general stuff
@@ -19,7 +108,7 @@
 
   .add-project-icon:hover,
   .default-window .add-project-icon {
-    color: rgb(25, 168, 148);
+    color: rgb(25, 168, 148); // always green
   }
 
 
@@ -29,7 +118,7 @@
   }
 
   button[disabled] {
-    color: #5e5e5e;
+    // color: #5e5e5e;
   }
 
   .default-window .install-package-icon,
@@ -83,7 +172,6 @@
       margin-bottom: 20px;
       padding-top: 0;
       padding-bottom: 0;
-      border-bottom: 1px solid #2e2e2e;
 
     }
     .no-projects {
@@ -116,7 +204,7 @@
           //border: 1px solid rgb(120,120,120);;
         }
         &.folder-selected {
-          background: #2c2c2c !important;
+          //background: #2c2c2c !important;
         }
       }
       .package.package-selected {
@@ -139,7 +227,6 @@
 
         background: transparent;
         list-style-type: none;
-        color: white;
         outline: none !important; // TODO: fix this because it is not accessible; style differently
         margin: 0;
         padding: 3px 3px;
@@ -297,6 +384,15 @@
               span,
               button > span { 
                 margin-left: 20px;
+              }
+
+              span {
+                // color: white;
+              }
+
+              .add-project-button-text,
+              .install-package-button-text {
+                // color: white;
               }
             }
           }
