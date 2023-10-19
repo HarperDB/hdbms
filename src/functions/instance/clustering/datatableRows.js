@@ -13,7 +13,7 @@ export default ({ auth, url, buildNetwork, setLoading }) => [
     }) => <div className={`${is_first_instance ? 'text-bold' : 'text-grey'}`}>{instance_name}</div>,
   },
   {
-    Header: 'schema',
+    Header: 'schema', // change to 'database' if instance version is 4.2+ and clustering available in studio cloud instances.
     Cell: ({
       row: {
         original: { is_first_schema, schema },
