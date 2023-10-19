@@ -6,20 +6,27 @@
       color: white;
     }
   } 
-
+  .file.folder-selected {
+    background: rgba(200,200,200,0.2) !important; 
+  }
   .file-menu,
   .editor-menu {
     border-bottom: 1px solid rgb(60,60,60) !important;
   }
 
-  .file-browser button {
+  .file-browser button > span {
     color: white !important;
   }
+  .file-browser .file.file-selected > span {
+    color: #ee81ee !important;
+  } 
 
 
+  button[disabled]:hover,
   button[disabled] {
-    // color: #5e5e5e;
+    color: #5e5e5e !important;
   }
+
 
 }
 
@@ -31,6 +38,13 @@
     }
   }
 
+  .file.folder-selected {
+    background: rgba(200,200,200,0.2) !important; 
+  }
+
+  .editor-window {
+    // background: transparent !important;
+  }
   .file-menu,
   .editor-menu {
     border-bottom: 1px solid darkgray !important;
@@ -41,8 +55,13 @@
     color: lightgray;
   }
 
+  .delete-file-icon[disabled] {
+    color: #5e5e5e !important;
+  }
+
+  button[disabled]:hover,
   button[disabled] {
-    // color: #5e5e5e;
+    color: #5e5e5e !important;
   }
 
 }
@@ -52,13 +71,22 @@
   color: rgb(105,105,105);
 
 
-  button[disabled] {
-    // color: #5e5e5e;
+  .file-menu button[disabled],
+  .editor-menu button[disabled] {
+    color: rgb(240,240,240) !important;
+    // #5e5e5e;
   }
 
   .file.folder-selected {
-    background: lightgray !important; 
+    background: rgba(200,200,200,0.2) !important; 
+    //background: lightgray !important; 
   }
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid lightgray !important;
+  }
+
 
   .file-menu button {
     color: lightgray;
@@ -117,10 +145,6 @@
     padding: 0px 5px 0px 0px;
   }
 
-  button[disabled] {
-    // color: #5e5e5e;
-  }
-
   .default-window .install-package-icon,
   .install-package-icon:hover {
     color: #f24242;
@@ -137,6 +161,7 @@
   .delete-file-icon:hover {
     color: #ee81ee !important;
   }
+
 
   .install-package-icon,
   .add-folder-icon,
@@ -199,7 +224,7 @@
       .file {
         &.file-selected {
           color: #ee81ee;
-          background: #191919 !important;
+          //background: #191919 !important;
           // background: #4a4a4a !important;
           //border: 1px solid rgb(120,120,120);;
         }
@@ -289,6 +314,10 @@
         padding: 0px 5px 0px 0px;
       }
 
+      button[disabled],
+      button[disabled]:hover {
+        color: #5e5e5e;
+      }
       .save-code {
         cursor: pointer;
         color: #ee81ee;
@@ -570,10 +599,13 @@
         }
         .editor {
           &.current-file-path::before {
-            content: "> ";
           }
           &.current-file-path {
             align-self: flex-start;
+            color: darkgray;
+            .current-file-path-icon {
+              padding: 5px;
+            }
           }
         }
         .package-install-source-form {

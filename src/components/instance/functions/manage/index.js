@@ -75,6 +75,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
+  const theme = useStoreState(appState, (s) => s.theme);
 
   // save file to instance
   async function saveCodeToInstance(selectedFile) {
@@ -326,6 +327,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   return supportsApplicationsAPI ?
     <ApplicationsEditor
+      theme={theme}
       fileTree={fileTree} 
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)

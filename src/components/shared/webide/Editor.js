@@ -19,15 +19,20 @@ const extensionToLanguageMap = {
 
 // TODO: update code using whatever monaco hook is available. onupdate.
 // don't allow save if there are errors.
-function Editor({ active, file, onChange }) {
+function Editor({ active, file, onChange, theme }) {
 
   const [ language, setLanguage ] = useState('javascript');
+  const [ editorTheme, setEditorTheme ] = useState('vs-dark');
 
   useEffect(() => {
     const extension = parseFileExtension(file?.name);
     const language = extensionToLanguageMap[extension] || 'plaintext';
     setLanguage(language);
   }, [file]);
+
+  useEffect(() => {
+    setEditorTheme(theme === 'light' || theme === 'purple' ? 'light' : 'vs-dark');
+  }, [theme]);
 
 
   if (!active) {
@@ -38,12 +43,15 @@ function Editor({ active, file, onChange }) {
 
   // eslint-disable-next-line no-unused-vars
   return <>
-    <div className="editor current-file-path">{filepathRelativeToComponentsDir}</div>
+    <div className="editor current-file-path">
+      <i className="current-file-path-icon fas fa-caret-right" />
+      {filepathRelativeToComponentsDir}
+    </div>
     <ReactMonacoEditor
       height="100%"
       language={language}
       value={file?.content || ''}
-      theme="vs-dark" 
+      theme={editorTheme}
       onChange={ onChange }
       options={{
         automaticLayout: true,

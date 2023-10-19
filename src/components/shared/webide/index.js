@@ -26,6 +26,7 @@ import EditorWindow, {
 } from './EditorWindow';
 
 function WebIDE({
+  theme,
   deployTargets, // FIXME: does this belong here?
   fileTree,
   onSave,
@@ -354,6 +355,7 @@ function WebIDE({
             }
           />
           <Editor
+            theme={theme}
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
             onChange={ updateInMemoryCodeFile } />
