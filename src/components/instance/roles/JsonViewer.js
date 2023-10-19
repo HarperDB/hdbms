@@ -35,7 +35,6 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const [loading, setLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [validJSON, setValidJSON] = useState(true);
-  const [major, minor] = version.split('.');
   const hasStructureUser = major >= 3 && (major > 3 || minor >= 3);
   const jsonHeight = hasStructureUser ? "calc(100vh - 440px)" : "calc(100vh - 340px)"
 

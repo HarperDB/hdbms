@@ -5,14 +5,15 @@ import { useStoreState } from 'pullstate';
 import EntityManagerForm from './EntityManagerForm';
 import EntityManagerRow from './EntityManagerRow';
 import EntityManagerHeader from './EntityManagerHeader';
-import appState from '../../../functions/state/appState';
+import instanceState from '../../../functions/state/instanceState';
 
 function EntityManager({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
-  const registration = useStoreState(appState, (s) => s.registration);
+  const registration = useStoreState(instanceState, (s) => s.registration);
   const [ major, minor ] = registration?.version.split('.') || []; 
   const versionAsFloat = parseFloat(`${major}.${minor}`);
+  console.log(versionAsFloat);
 
   useEffect(() => {
     toggleCreate();
