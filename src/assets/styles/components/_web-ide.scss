@@ -1,6 +1,9 @@
 .dark {
    color: white;
 
+  .editor.current-file-path {
+    border-bottom: 1px solid transparent;
+  }
   .default-window-option {
     span {
       color: white;
@@ -31,6 +34,10 @@
 }
 
 .purple {
+
+  .editor.current-file-path {
+    border-bottom: 1px solid lightgray;
+  }
   color: rgb(105,105,105);
   .default-window-option {
     span {
@@ -72,6 +79,9 @@
   color: rgb(105,105,105);
 
 
+  .editor.current-file-path {
+    border-bottom: 1px solid lightgray;
+  }
   .restart-instance-on-save-text {
     color: rgb(240,240,240) !important;
   }
