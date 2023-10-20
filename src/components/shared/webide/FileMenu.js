@@ -76,7 +76,7 @@ function FileMenu({ children }) {
   return (
     <ul className="file-menu">
       {
-        children.map(child => <li key={ uuid() }>{child}</li>)
+        children.map(child => <li className="file-menu-item" key={ uuid() }>{child}</li>)
       }
     </ul>
   )

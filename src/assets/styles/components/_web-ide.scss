@@ -37,7 +37,9 @@
       color: rgb(105,105,105);
     }
   }
-
+  .cancel-button {
+    color: #5c636a;
+  }
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
   }
@@ -50,19 +52,18 @@
     border-bottom: 1px solid darkgray !important;
   }
 
-
+  .save-code[disabled] {
+    color: #c2c2c2 !important;
+  }
   .file-browser button {
     color: lightgray;
   }
 
   .delete-file-icon[disabled] {
-    color: #5e5e5e !important;
+    // color: #5e5e5e !important;
+    color: #c2c2c2;
   }
 
-  button[disabled]:hover,
-  button[disabled] {
-    color: #5e5e5e !important;
-  }
 
 }
 
@@ -95,7 +96,11 @@
 
 
   .file-menu button {
-    color: lightgray;
+    color: #b1b1b1;
+  }
+
+  .file-icon.filetype-unknown {
+    color: #b1b1b1 !important;
   }
 
   .editor-window button:hover {
@@ -165,7 +170,7 @@
     color: rgb(143, 141, 255);
   }
   .delete-file-icon:hover {
-    color: #ee81ee !important;
+    // color: #ee81ee !important;
   }
 
 
@@ -204,6 +209,11 @@
       padding-top: 0;
       padding-bottom: 0;
 
+      .file-menu-item {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+      }
     }
     .no-projects {
       color: white;
@@ -630,6 +640,7 @@
               padding: 5px;
             }
           }
+          width: 100%;
         }
         .package-install-source-form {
           height: 100%;
