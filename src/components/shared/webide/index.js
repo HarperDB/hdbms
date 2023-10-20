@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
-import FileMenu, {
-  AddFileButton,
-  AddProjectFolderButton,
-  AddProjectButton,
-  DeleteFolderButton,
-  DeleteFileButton,
-  InstallPackageButton
-} from './FileMenu';
-import EditorMenu, { SaveButton, RestartSetting } from './EditorMenu';
 import Editor from './Editor';
 import EditorWindow, {
   EDITOR_WINDOWS,
@@ -24,6 +15,21 @@ import EditorWindow, {
   NameProjectWindow,
   PackageDetailsWindow
 } from './EditorWindow';
+
+import FileMenu, {
+  AddFileButton,
+  AddProjectFolderButton,
+  AddProjectButton,
+  DeleteFolderButton,
+  DeleteFileButton,
+  InstallPackageButton
+} from './FileMenu';
+
+import EditorMenu, {
+  SaveButton,
+  RestartInstanceButton,
+  RestartOnSaveToggle
+} from './EditorMenu';
 
 function WebIDE({
   theme,
@@ -42,6 +48,9 @@ function WebIDE({
   onFolderRename,
   onInstallPackage,
   onUpdate,
+  restartInstance,
+  restartingInstance,
+  refreshCustomFunctions
 }) {
 
   const [ selectedFolder, setSelectedFolder ] = useState(null);
@@ -233,18 +242,31 @@ function WebIDE({
                 disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
                 onSave={
                   () => {
-                    // NOTE: timeout for ux reasons.
-                    setTimeout(() => {
-                      onSave(selectedFile, restartAfterSave)
-                    }, 200);
+                    onSave(selectedFile, restartAfterSave)
                   }
                 } />
             )
           }
-          RestartSetting={
+          RestartInstanceButton={
             () => (
-              <RestartSetting
-                disabled={ !restartAfterSave }
+              <RestartInstanceButton
+                restarting={restartingInstance}
+                onClick={
+                  async () => {
+                    try {
+                    let x = await restartInstance();
+                      console.log('x', x);
+                    } catch(e) {
+                      throw e;
+                    }
+                  }
+                } />
+            )
+          }
+          RestartOnSaveToggle={
+            () => (
+              <RestartOnSaveToggle 
+                restartAfterSave={restartAfterSave}
                 onClick={
                   () => {
                     setRestartAfterSave(!restartAfterSave);

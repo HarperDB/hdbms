@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
 
@@ -76,6 +76,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
   const theme = useStoreState(appState, (s) => s.theme);
+  const [ restartingInstance, setRestartingInstance ] = useState(false);
 
   // save file to instance
   async function saveCodeToInstance(selectedFile, restartRequired) {
@@ -88,20 +89,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       file: filepathRelativeToProjectDir,
       payload: selectedFile.content
     };
-    /*
-    const restartRequired = [
-      'config.yaml',
-      'package.json',
-      'resources.js',
-      'schema.graphql'
-    ];
-    */
 
     await setComponentFile(payload);
 
 
     if (restartRequired) {
-      await restartInstance({ auth, url });
+      await restartWithLoadingState({ auth, url });
     }
 
     await refreshCustomFunctions();
@@ -338,6 +331,18 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function restartWithLoadingState({ auth, url }) {
+
+    setRestartingInstance(true);
+
+    setTimeout(async () => { 
+      await restartInstance({ auth, url });
+      setRestartingInstance(false);
+    }, 100);
+
+
+  }
+
   return supportsApplicationsAPI ?
     <ApplicationsEditor
       theme={theme}
@@ -357,7 +362,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onDeletePackage={deletePackage}
       onFileSelect={selectNewFile}
       onFileRename={renameFile}
-      onFolderRename={renameFolder} />
+      onFolderRename={renameFolder}
+      refreshingCustomFunctions={loading}
+      restartInstance={ async () => await restartWithLoadingState({auth, url}) }
+      restartingInstance={restartingInstance}
+      />
     :
     <CustomFunctionsEditor
       refreshCustomFunctions={refreshCustomFunctions}

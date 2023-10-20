@@ -328,15 +328,16 @@
         color: #5e5e5e;
       }
 
-      .restart-instance-setting {
-        color: black;
+      .restart-instance-after-save,
+      .restart-instance {
+        border: 1px solid transparent;
+        background: transparent;
+        outline: none !important;
+        margin: 0;
+        padding: 3px 3px;
         display: flex;
         flex-direction: row;
-        .restart-instance-setting-icon {
-          &.disabled {
-            color: lightgray;
-          }
-          cursor: pointer;
+        & > i {
           color: #ee81ee;
         }
       }
