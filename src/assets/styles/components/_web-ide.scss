@@ -217,6 +217,10 @@
     margin: 0px;
   }
 
+  .file-browser-scroll-container {
+    overflow-y: auto;
+    height: 100%;
+  } 
 
   // top-level element (left-side)
   .file-browser-outer-container {
@@ -738,6 +742,9 @@
     .file-browser-outer-container {
       overflow-y: auto;
       height: auto;
+    }
+    .file-browser-scroll-container {
+      max-height: 500px;
     }
   }
 }

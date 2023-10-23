@@ -266,19 +266,21 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
 function FileBrowser({ files, userOnSelect, onFileSelect, onPackageSelect, onDeployProject, onFileRename, onFolderSelect, selectedFile, selectedFolder, selectedPackage }) {
   return !files?.entries?.length ?
     <NoProjects /> : 
-    <ul className="file-browser">
-      <Folder
-        selectedFile={selectedFile}
-        selectedFolder={selectedFolder}
-        selectedPackage={selectedPackage}
-        onFileSelect={onFileSelect}
-        onFileRename={onFileRename}
-        onFolderSelect={onFolderSelect}
-        onDeployProject={onDeployProject}
-        onPackageSelect={onPackageSelect}
-        userOnSelect={userOnSelect}
-        directoryEntry={files} />
-    </ul>
+    <div className="file-browser-scroll-container">
+      <ul className="file-browser">
+        <Folder
+          selectedFile={selectedFile}
+          selectedFolder={selectedFolder}
+          selectedPackage={selectedPackage}
+          onFileSelect={onFileSelect}
+          onFileRename={onFileRename}
+          onFolderSelect={onFolderSelect}
+          onDeployProject={onDeployProject}
+          onPackageSelect={onPackageSelect}
+          userOnSelect={userOnSelect}
+          directoryEntry={files} />
+      </ul>
+    </div>
 }
 
 export default FileBrowser
