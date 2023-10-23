@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody } from 'reactstrap';
+import { useStoreState } from 'pullstate';
 
 import EntityManagerForm from './EntityManagerForm';
 import EntityManagerRow from './EntityManagerRow';
 import EntityManagerHeader from './EntityManagerHeader';
+import instanceState from '../../../functions/state/instanceState';
 
 function EntityManager({ items, activeItem, activeSchema = false, showForm, baseUrl, itemType }) {
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const [ major, minor ] = registration?.version.split('.') || []; 
+  const versionAsFloat = parseFloat(`${major}.${minor}`);
+  console.log(versionAsFloat);
 
   useEffect(() => {
     toggleCreate();
@@ -58,7 +64,7 @@ function EntityManager({ items, activeItem, activeSchema = false, showForm, base
           </CardBody>
         ) : items && !items.length && !showForm ? (
           <CardBody>
-            <div className="py-3 text-center no-content">no visible schemas or tables</div>
+            <div className="py-3 text-center no-content">no visible { versionAsFloat >= 4.2 ? 'databases' : 'schemas' } or tables</div>
           </CardBody>
         ) : null}
       </Card>

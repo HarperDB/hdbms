@@ -4,8 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { positions, Provider } from 'react-alert';
 import { Elements } from '@stripe/react-stripe-js';
 
-// incompatible with react-router-dom v6
-
 import stripePromise from './functions/stripe/stripePromise';
 import App from './components/App';
 import AlertTemplate from './components/shared/Alert';
