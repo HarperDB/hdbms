@@ -33,8 +33,8 @@ export const EDITOR_WINDOWS = {
 
 export default function EditorWindow({ children }) {
   return (
-    <Card className="editor-window">
+    <div className="editor-window">
       { children }
-    </Card>
+    </div>
   );
 }

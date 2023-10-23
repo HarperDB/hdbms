@@ -254,8 +254,7 @@ function WebIDE({
                 onClick={
                   async () => {
                     try {
-                    let x = await restartInstance();
-                      console.log('x', x);
+                      await restartInstance();
                     } catch(e) {
                       throw e;
                     }
