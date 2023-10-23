@@ -40,7 +40,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
 
   const icons = {
     checked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
-    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
+    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
   };
 
   useAsyncEffect(async () => {
@@ -115,7 +115,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
                   type="text"
                   id="permitted_schemas"
                   title={`permitted ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }`}
-                  placeholder="comma-separated schemas, or blank for all"
+                  placeholder=`comma-separated ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }, or blank for all`
                   value={newStructureUser === true ? '' : newStructureUser}
                   disabled={loading}
                 />
