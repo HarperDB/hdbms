@@ -59,6 +59,10 @@
   .editor-window {
     display: flex;
     flex-direction: column;
+
+    .current-file-path {
+      background: rgb(26,26,26);
+    }
     /*
     .root {
       display: grid;
@@ -395,6 +399,7 @@
         height: 100%;
         width: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         //overflow-y: auto;
@@ -724,5 +729,15 @@
         }
     }
 
+  }
+}
+
+@media(max-width: 714px) {
+  .web-ide {
+    overflow: initial;
+    .file-browser-outer-container {
+      overflow-y: auto;
+      height: auto;
+    }
   }
 }
