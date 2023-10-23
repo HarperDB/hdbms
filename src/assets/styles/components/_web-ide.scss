@@ -9,6 +9,9 @@
       color: white;
     }
   } 
+  .package-install-window {
+    background: rgb(17, 17, 17);
+  }
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
   }
@@ -36,6 +39,9 @@
 .purple {
 
 
+  .package-install-window {
+    background: white; 
+  }
   .name-input-cancel {
       color: rgb(105, 105, 105) !important;
   }
@@ -96,6 +102,9 @@
 .light {
   color: rgb(105,105,105);
 
+  .package-install-window {
+    background: white;
+  }
 
   .editor.current-file-path {
     border-bottom: 1px solid lightgray;
@@ -547,9 +556,10 @@
 
         .package-install-window {
 
-          width: 50%;
-          max-width: 500px;
+          width: 100%;
           height: 100%;
+          padding-left: 25%;
+          padding-right: 25%;
           display: flex;
           flex-direction: column;
           justify-content: center;

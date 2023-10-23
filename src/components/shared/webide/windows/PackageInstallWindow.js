@@ -50,7 +50,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   useEffect(validateProjectName, [ projectName ]);
 
   return (
-    <div className="package-install-window">
+    <Card className="package-install-window">
       <div className="package-install-window-title">Package Install</div>
       <Card className="package-install-source-form">
       {
@@ -176,6 +176,6 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
            Deploy Package &nbsp;<i className="fa fa-rocket" />
         </Button>
       </Card>
-    </div>
+    </Card>
   );
 }
