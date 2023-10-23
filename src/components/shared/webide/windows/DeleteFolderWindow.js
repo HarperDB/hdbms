@@ -23,7 +23,7 @@ export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel
                   <span className="folder-to-delete"> {projectSubdir} </span> from project <span className="folder-to-delete-parent-project">{ project }</span> ?
                 </p> 
             }
-            <button className="btn btn-secondary btn-danger delete-button" onClick={ onConfirm }>Delete</button>
+            <button className="btn btn-danger delete-button" onClick={ onConfirm }>Delete</button>
             <button className="btn btn-secondary cancel-button" onClick={ onCancel }>Cancel</button>
         </div>
       </CardBody>

@@ -52,7 +52,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
   return (
     <Card className="package-install-window">
       <div className="package-install-window-title">Package Install</div>
-      <Card className="package-install-source-form">
+      <div className="package-install-source-form">
       {
         packageTypes.map((pkgType, index) => (
           <div className="package-install-option-container" key={ pkgType }>
@@ -74,8 +74,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
           </div>
         ))
       }
-      </Card>
-      <Card className="package-install-details-form">
+      </div>
+      <div className="package-install-details-form">
 
         <div className="package-install-input-container">
           <Label>Project Name:</Label>
@@ -173,9 +173,13 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
            disabled={
              !isValidProjectName(projectName) || !packageSpec || !deployTargets.length 
            }>
-           Deploy Package &nbsp;<i className="fa fa-rocket" />
+           Deploy Package
         </Button>
-      </Card>
+        <Button
+          onClick={ onCancel }
+          className="btn btn-secondary btn-danger cancel-button">Cancel</Button>
+        
+      </div>
     </Card>
   );
 }
