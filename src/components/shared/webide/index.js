@@ -234,7 +234,7 @@ function WebIDE({
             } />
         </div>
       </Col>
-      <Col className="editor-window-container">
+      <Col className="editor-window-container col-md-8">
         <EditorMenu
           SaveButton={
             () => (
