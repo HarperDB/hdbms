@@ -23,6 +23,7 @@
     "no-unused-vars": 1,
     "react/button-has-type": 1,
     "no-underscore-dangle": ["warn", { "allow": ["_kmq", "_kmk"] }],
-    "jsx-a11y/label-has-associated-control": 0
+    "jsx-a11y/label-has-associated-control": 0,
+    "react/jsx-no-bind": 0
   }
 }

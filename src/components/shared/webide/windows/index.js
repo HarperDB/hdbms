@@ -1,5 +1,5 @@
 export { DefaultWindow } from './DefaultWindow';
-export { PackageInstallWindow } from './PackageInstallWindow';
+export { default as PackageInstallWindow } from './PackageInstallWindow';
 export { GithubRepoSelector } from './GithubRepoSelector';
 export { NpmPackageSelector } from './NpmPackageSelector';
 export { default as UrlInstallField } from './UrlInstallField';
