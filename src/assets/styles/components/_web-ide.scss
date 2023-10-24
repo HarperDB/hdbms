@@ -99,13 +99,12 @@
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
+  .editor-window .cancel-button:hover {
+    color: white;
+  }
 
   .package-install-window {
     background: white;
-  }
-
-  .name-input-cancel {
-    color: rgb(105, 105, 105) !important;
   }
 
   .editor.current-file-path {
@@ -246,6 +245,10 @@
 
 .web-ide {
 
+
+  .cancel-button {
+    margin-left: 10px;
+  }
   // general stuff
   height: 75vh;
   overflow: hidden;
