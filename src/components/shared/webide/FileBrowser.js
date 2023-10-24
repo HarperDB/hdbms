@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
@@ -33,7 +34,6 @@ function directorySortComparator(a, b) {
 const isFolder = (entry) => Boolean(entry.entries);
 
 function ProjectIcon({ isOpen, toggleClosed }) {
-  const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
   return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ isOpen, toggleClosed }) {
@@ -63,10 +63,11 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 
   useEffect(() => {
     setSelected(selectedPackage && selectedPackage.name === name);
-  }, [selectedPackage]);
+  }, [selectedPackage, name]);
 
   return (
     <button
+      type="button"
       onClick={ (e) => {
         if (selected) {
           onPackageSelect(null) 
