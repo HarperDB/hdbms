@@ -36,7 +36,7 @@ const isFolder = (entry) => Boolean(entry.entries);
 function ProjectIcon() {
   return <i className={cn(`project-icon fas fa-file-code`)} />;
 }
-function FolderIcon({ isOpen, toggleClosed }) {
+function FolderIcon({ toggleClosed }) {
   return <i onClick={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
 }
 
@@ -164,10 +164,6 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
   const fileExtension = parseFileExtension(directoryEntry.name);
 
-  if (directoryEntry.path.endsWith('asdf')) {
-    console.log('directoryEntry: ', directoryEntry.path);
-    console.log('open: ', open);
-  }
   let Icon;
   // top-level dir === package
   // FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
