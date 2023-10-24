@@ -1,4 +1,5 @@
-import { Card, CardTitle, CardBody } from 'reactstrap';
+import React from 'react';
+import { Card, CardTitle } from 'reactstrap';
 import NameInput from './NameInput';
 
 export default function NameFileWindow({ active, onConfirm, onCancel }) {

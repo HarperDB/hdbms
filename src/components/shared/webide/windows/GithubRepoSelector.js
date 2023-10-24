@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Select from 'react-select';
 import { ensureRepoExists, getGithubTags } from './lib';
 
-export default function GithubRepoSelector({ onConfirm, installed, projectName, pkg, setPackageSpec }) {
+export default function GithubRepoSelector({ pkg, setPackageSpec }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -13,6 +13,7 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
   const [ debouncedRepo ] = useDebounce(repo, 300);
 
   const [ tags, setTags ] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [ tagsFetched, setTagsFetched ] = useState(false);
 
   const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
@@ -20,8 +21,6 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
 
   const [ loadingTags, setLoadingTags ] = useState(false);
   const [ found, setFound ] = useState(false);
-
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
 
@@ -32,6 +31,7 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
 
   }, [pkg]);
 
+  // TODO: use named hook callbacks
   useEffect(() => {
 
     if (debouncedUser && debouncedRepo) {
@@ -61,7 +61,7 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
 
         }
 
-      }).catch(e => {
+      }).catch(() => {
         setLoadingTags(false);
       });
 
@@ -74,8 +74,9 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
       setSelectedTag('');
     }
 
-  }, [debouncedUser, debouncedRepo]);
+  }, [debouncedUser, debouncedRepo, user]);
 
+  // TODO: use named hook callbacks
   useEffect(() => {
 
     if (!(user && repo && targetRepo)) {
@@ -85,7 +86,7 @@ export default function GithubRepoSelector({ onConfirm, installed, projectName, 
       setPackageSpec(packageSpec);
     }
 
-  }, [targetRepo, selectedTag]);
+  }, [targetRepo, selectedTag, user, setPackageSpec, repo]);
 
   return (
       <div className="package-install-github-query-container">
