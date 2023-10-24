@@ -6,6 +6,8 @@ import cn from 'classnames';
 
 export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
 
+
+
   const [ name, setName ] = useState(value || '');
   const [ isValidName, setIsValidName ] = useState(false); 
 
@@ -58,11 +60,13 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
 
           <span className="invalid-text" />
           <div className="name-input-buttons-container">
+
             <button
               type="button"
               disabled={ !isValidName }
               className="btn btn-success name-input-confirm"
               onClick={ () => {
+
                 onConfirm(name); 
               }}>ok</button>
             <button type="button" className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>

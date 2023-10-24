@@ -15,6 +15,7 @@
     span {
       color: white;
     }
+
   }
 
   .name-input {
@@ -34,6 +35,7 @@
       }
     }
   }
+
 
   .package-install-window {
     background: rgb(17, 17, 17);
@@ -115,6 +117,7 @@
 
   .package-install-window {
     background: white;
+
   }
 
   .editor.current-file-path {
@@ -122,6 +125,7 @@
   }
 
   color: rgb(105, 105, 105);
+
 
   .default-window-option {
     span {
@@ -324,7 +328,10 @@
   .file-browser-scroll-container {
     height: 100%;
     overflow-y: auto;
+
   }
+
+
 
   // top-level element (left-side)
   .file-browser-outer-container {
@@ -353,6 +360,7 @@
       }
     }
 
+
     .file-browser {
 
       margin-left: 0;
@@ -363,6 +371,7 @@
         margin-bottom: 0;
         padding-bottom: 0;
         padding-left: 0;
+
 
         .rename-file,
         .deploy-project {
@@ -392,6 +401,7 @@
 
         .project-icon {
           color: rgb(25, 168, 148);
+
         }
 
         .package-icon {
@@ -438,14 +448,17 @@
           padding-left: 15px;
         }
 
+
         .folder.folder-contents-closed {
           display: none;
+
         }
 
         .folder.folder-contents-open {
           display: block;
         }
       }
+
 
     }
   }
@@ -527,12 +540,14 @@
         flex-direction: column;
         width: 50%;
 
+
         .validation-message {
           margin-top: 8px;
         }
 
         .name-input-container {
           display: flex;
+
           flex-direction: row;
           align-items: center;
 
@@ -567,9 +582,11 @@
       .delete-package-window-controls {
         .package-to-delete {
           color: $color-danger;
+
           font-weight: bold;
         }
       }
+
 
       .delete-folder-window-controls {
         .folder-to-delete {
@@ -587,6 +604,7 @@
           align-self: flex-start;
         }
 
+
       }
 
       .delete-file-window-controls {
@@ -595,10 +613,12 @@
           font-weight: bold;
         }
 
+
         .file-to-delete-parent-project {
           font-weight: bold;
           // color: rgb(25, 168, 148);
           // color: $color-danger;
+
         }
       }
 
@@ -627,6 +647,7 @@
           }
         }
       }
+
 
 
       .default-window-container,
@@ -677,6 +698,7 @@
           display: flex;
           flex-direction: column;
           height: 100%;
+
           width: 100%;
         }
       }
@@ -697,6 +719,7 @@
           text-align: center;
         }
 
+
         .card {
           border: 0 solid transparent !important;
         }
@@ -707,7 +730,13 @@
           display: flex;
           flex-direction: row;
           height: 100px;
+
           justify-content: center;
+          padding-left: 25%;
+          padding-right: 25%;
+
+          width: 100%;
+
 
           .package-install-option-container {
             align-items: center;
@@ -715,6 +744,7 @@
             flex-direction: column;
             justify-content: center;
             width: 100px;
+
 
             .package-install-source-icon {
               font-size: 2em;
@@ -728,6 +758,7 @@
           }
         }
 
+
         .package-install-details-form {
           .project-name-invalid-text {
 
@@ -737,11 +768,13 @@
           }
 
 
+
           .package-install-input-container {
             display: flex;
             flex-direction: column;
 
             margin-bottom: 20px;
+
 
             .project-name-input.invalid:focus,
             .project-name-input.invalid {
@@ -757,9 +790,11 @@
               i {
                 color: white;
 
+
                 &.not-searching {
                   color: white; //rgba(0,255,0, 0.1);
                 }
+
 
                 &.found, &.loading {
                   color: green;
@@ -769,11 +804,13 @@
                   color: rgb(145, 50, 120);
                 }
 
+
               }
             }
 
             .package-install-deploy-targets-dropdown {
             }
+
 
             .package-install-github-query-container {
               .package-install-github-user {
@@ -788,6 +825,7 @@
                   display: flex;
                   flex-direction: row;
                   justify-content: center;
+
                 }
               }
             }
@@ -810,14 +848,17 @@
         &.current-file-path::before {
         }
 
+
         &.current-file-path {
           align-self: flex-start;
           color: darkgray;
 
           .current-file-path-icon {
             padding: 5px;
+
           }
         }
+
 
         width: 100%;
       }
@@ -873,6 +914,7 @@
           input {
             margin-top: 10px;
           }
+
         }
       }
 
