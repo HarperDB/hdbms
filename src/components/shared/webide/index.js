@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */ // NOTE: disabling because there are callbacks here that haven't been implemented.
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
@@ -54,8 +55,6 @@ function WebIDE({
   const [ selectedFolder, setSelectedFolder ] = useState(null);
   const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
   const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
-  const [ editingFileName, setEditingFileName ] = useState(false);
-  const [ showInstallPackageWindow, setShowInstallPackageWindow ] = useState(false);
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
   const [ restartAfterSave, setRestartAfterSave ] = useState(true);
@@ -65,32 +64,6 @@ function WebIDE({
   const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
 
-  async function addProject(newProjectName) {
-    onAddProject(newProjectName);
-    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
-  }
-
-  async function addProjectFolder(newFolderName) {
-    onAddProjectFolder(newFolderName, selectedFolder)
-    // go back to prev window
-    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
-  }
-
-  async function installPackage(packageUrl, projectName, deployTargets) {
-
-    await onInstallPackage(packageUrl, projectName, deployTargets);
-
-    setSelectedPackage(null);
-    updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-
-  }
-
-  async function addFile(newFilename) {
-    const fileInfo = await onAddFile(newFilename, selectedFolder);
-
-    setSelectedFile(fileInfo);
-    updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
-  }
 
   function updateActiveEditorWindow(to, from) {
     // TODO: figure out correct logic here.
@@ -105,6 +78,33 @@ function WebIDE({
   function backToPreviousWindow() {
     // TODO: this needs some thought.  unexpected 'no action' behavior.
     updateActiveEditorWindow(previousActiveEditorWindow || EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+  }
+
+  async function addProject(newProjectName) {
+    onAddProject(newProjectName);
+    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+  }
+
+  async function addProjectFolder(newFolderName) {
+    onAddProjectFolder(newFolderName, selectedFolder)
+    // go back to prev window
+    updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
+  }
+
+  async function installPackage(packageUrl, projectName, packageDeployTargets) {
+
+    await onInstallPackage(packageUrl, projectName, packageDeployTargets);
+
+    setSelectedPackage(null);
+    updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+
+  }
+
+  async function addFile(newFilename) {
+    const fileInfo = await onAddFile(newFilename, selectedFolder);
+
+    setSelectedFile(fileInfo);
+    updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
 
   // updates current in memory code
@@ -154,7 +154,7 @@ function WebIDE({
             <DeleteFileButton
               disabled={ !selectedFile?.path }
               onClick={
-                (e) => {
+                () => {
                   updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
                 }
               } />
@@ -192,15 +192,15 @@ function WebIDE({
               }
             }
             onPackageSelect={
-              (selectedPackage) => {
+              (pkg) => {
                 // set selected package,
                 // unset selectedFile
                 // TODO: make sure 'remote fetch package' window has correct data.
 
-                setSelectedPackage(selectedPackage);
+                setSelectedPackage(pkg);
                 setSelectedFile(null);
 
-                if (!selectedPackage) {
+                if (!pkg) {
                   updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)
                 } else {
                   updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)

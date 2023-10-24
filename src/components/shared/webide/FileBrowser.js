@@ -33,7 +33,7 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
-function ProjectIcon({ isOpen, toggleClosed }) {
+function ProjectIcon({ toggleClosed }) {
   return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ isOpen, toggleClosed }) {
