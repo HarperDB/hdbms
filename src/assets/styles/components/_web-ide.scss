@@ -15,7 +15,21 @@
       color: white;
     }
   } 
+  .name-input {
 
+    .validation-message {
+      color: $color-danger;
+    }
+    .name-input-container {
+      input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+  }
   .package-install-window {
     background: rgb(17, 17, 17);
   }
@@ -56,11 +70,18 @@
   }
    color: white;
   .name-input {
-    .invalid {
+    .validation-message {
+      margin-top: 8px;
+    }
+    & > input.invalid {
       border: 1px solid red !important;
+      outline-color: 1px solid red !important;
     }
     .invalid-text {
       color: red !important;
+    }
+    .invalid-project-name {
+      color: purple;
     }
   }
   .editor-window .cancel-button {
@@ -482,6 +503,22 @@
           flex-direction: column;
           width: 50%;
 
+          .validation-message {
+            margin-top: 8px;
+          }
+          .name-input-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .invalid-project-name {
+              margin-left: 15px;
+            }
+
+            .hidden {
+              visibility: hidden;
+            }
+          }
           .name-input-buttons-container {
              padding-top: 10px;
           }

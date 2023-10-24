@@ -35,20 +35,32 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
       tabIndex={0}
       className={ cn("name-input") }>
       { label && <label><span>{label}:</span></label> }
-        <input
-          className={ cn({ invalid: !isValidName }) }
-          autoFocus
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          onKeyDown={ handleKeyDown }
-          value={name}
-          placeholder={placeholder}
-          title="choose name for your new file or folder" />
-            <span className="invalid-text" />
+        <div className="name-input-container">
+          <input
+            className={ cn({ invalid: name.length > 0 && !isValidName }) }
+            autoFocus
+            onChange={(e) => {
+              setName(e.target.value);
+              setIsValidName(validate(e.target.value));
+            }}
+            onKeyDown={ handleKeyDown }
+            value={name}
+            placeholder={placeholder}
+            title="choose name for your new file or folder" />
+            <i title="error: project name must contain only alphanumeric characters, dashes and underscores." className={ cn("invalid-project-name fa fa-warning", {
+              hidden: isValidName || name.length === 0 
+            }) }
+            />
+        </div>
+        { name.length > 0 && !isValidName && <span className="validation-message">error: project name must contain only alphanumeric characters, dashes and underscores.</span> }
 
+          <span className="invalid-text" />
           <div className="name-input-buttons-container">
-            <button type="button" className="btn btn-success name-input-confirm" onClick={ () => {
+            <button
+              type="button"
+              disabled={ !isValidName }
+              className="btn btn-success name-input-confirm"
+              onClick={ () => {
                 onConfirm(name); 
               }}>ok</button>
             <button type="button" className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>
