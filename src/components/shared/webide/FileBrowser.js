@@ -33,8 +33,10 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
+
 function ProjectIcon() {
   return <i className={cn(`project-icon fas fa-file-code`)} />;
+
 }
 function FolderIcon({ toggleClosed }) {
   return <i onClick={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
@@ -171,7 +173,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
     if (directoryEntry.package) {
       Icon = () => PackageIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
     } else {
-      Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+      Icon = () => ProjectIcon({ toggleClosed: () => setOpen(!open) });
     }
   } else if (directoryEntry.entries) {
     Icon = () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) });
