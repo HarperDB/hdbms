@@ -1,5 +1,11 @@
 .dark {
-   color: white;
+  .no-projects {
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
+
+  color: white;
 
   .editor.current-file-path {
     border-bottom: 1px solid transparent;
@@ -9,19 +15,39 @@
     span {
       color: white;
     }
-  } 
+
+  }
+
+  .name-input {
+
+    .validation-message {
+      color: $color-danger;
+    }
+
+    .name-input-container {
+      input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+  }
+
 
   .package-install-window {
     background: rgb(17, 17, 17);
   }
 
   .file.folder-selected {
-    background: rgba(200,200,200,0.2) !important; 
+    background: rgba(200, 200, 200, 0.2) !important;
   }
 
   .file-menu,
   .editor-menu {
-    border-bottom: 1px solid rgb(60,60,60) !important;
+    border-bottom: 1px solid rgb(60, 60, 60) !important;
   }
 
   .file-browser button > span {
@@ -30,7 +56,7 @@
 
   .file-browser .file.file-selected > span {
     color: #ee81ee !important;
-  } 
+  }
 
 
   button[disabled]:hover,
@@ -42,26 +68,68 @@
 }
 
 .purple {
+
+
+  .default-window-option span {
+      color: white !important;
+  }
+
+  .editor-window .default-window .default-window-container {
+    background: $color-pureblack !important;
+    color: white;
+  }
+
+  .no-projects {
+    color: white;
+
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
+
+  color: white;
+
+  .name-input {
+    .validation-message {
+      margin-top: 8px;
+    }
+
+    & > input.invalid {
+      border: 1px solid red !important;
+      outline-color: 1px solid red !important;
+    }
+
+    .invalid-text {
+      color: red !important;
+    }
+
+    .invalid-project-name {
+      color: purple;
+    }
+  }
+
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
-
-  .package-install-window {
-    background: white; 
+  .editor-window .cancel-button:hover {
+    color: white;
   }
 
-  .name-input-cancel {
-      color: rgb(105, 105, 105) !important;
+  .package-install-window {
+    background: white;
+
   }
 
   .editor.current-file-path {
     border-bottom: 1px solid lightgray;
   }
-  color: rgb(105,105,105);
+
+  color: rgb(105, 105, 105);
+
 
   .default-window-option {
     span {
-      color: rgb(105,105,105);
+      color: rgb(105, 105, 105);
     }
   }
 
@@ -70,7 +138,7 @@
   }
 
   .file.folder-selected {
-    background: rgba(200,200,200,0.2) !important; 
+    background: rgba(200, 200, 200, 0.2) !important;
   }
 
   .editor-window {
@@ -78,8 +146,9 @@
     flex-direction: column;
 
     .current-file-path {
-      background: rgb(26,26,26);
+      background: rgb(26, 26, 26);
     }
+
     /*
     .root {
       display: grid;
@@ -113,7 +182,11 @@
 
 
 .light {
-  color: rgb(105,105,105);
+  .no-projects {
+    color: rgb(105, 105, 105);
+  }
+
+  color: rgb(105, 105, 105);
 
   .package-install-window {
     background: white;
@@ -124,12 +197,12 @@
   }
 
   .restart-instance-on-save-text {
-    color: rgb(240,240,240) !important;
+    color: rgb(240, 240, 240) !important;
   }
 
   .file-menu button[disabled],
   .editor-menu button[disabled] {
-    color: rgb(240,240,240) !important;
+    color: rgb(240, 240, 240) !important;
     // #5e5e5e;
   }
 
@@ -138,7 +211,7 @@
   }
 
   .file.folder-selected {
-    background: rgba(200,200,200,0.2) !important; 
+    background: rgba(200, 200, 200, 0.2) !important;
     //background: lightgray !important; 
   }
 
@@ -162,7 +235,7 @@
   }
 
   .editor-window button {
-    color: rgb(105,105,105);
+    color: rgb(105, 105, 105);
   }
 
   .install-package-icon {
@@ -174,18 +247,22 @@
   }
 
   .file-menu {
-     color: rgb(105,105,105);
+    color: rgb(105, 105, 105);
   }
 
   .default-window-option {
     span {
-      color: rgb(105,105,105);
+      color: rgb(105, 105, 105);
     }
   }
 }
 
 .web-ide {
 
+
+  .cancel-button {
+    margin-left: 10px;
+  }
   // general stuff
   height: 75vh;
   overflow: hidden;
@@ -251,7 +328,10 @@
   .file-browser-scroll-container {
     height: 100%;
     overflow-y: auto;
-  } 
+
+  }
+
+
 
   // top-level element (left-side)
   .file-browser-outer-container {
@@ -280,9 +360,6 @@
       }
     }
 
-    .no-projects {
-      color: white;
-    }
 
     .file-browser {
 
@@ -295,88 +372,93 @@
         padding-bottom: 0;
         padding-left: 0;
 
-      .rename-file,
-      .deploy-project {
-        margin-left: 8px;
-      }
 
-      .rename-file {
-        color: transparent;
-      }
-
-      .file {
-        &.file-selected {
-          color: #ee81ee;
-          //background: #191919 !important;
-          // background: #4a4a4a !important;
-          //border: 1px solid rgb(120,120,120);;
+        .rename-file,
+        .deploy-project {
+          margin-left: 8px;
         }
 
-        &.folder-selected {
-          //background: #2c2c2c !important;
+        .rename-file {
+          color: transparent;
+        }
+
+        .file {
+          &.file-selected {
+            color: #ee81ee;
+            //background: #191919 !important;
+            // background: #4a4a4a !important;
+            //border: 1px solid rgb(120,120,120);;
+          }
+
+          &.folder-selected {
+            //background: #2c2c2c !important;
+          }
+        }
+
+        .package.package-selected {
+          color: #f24242;
+        }
+
+        .project-icon {
+          color: rgb(25, 168, 148);
+
+        }
+
+        .package-icon {
+          color: #f24242;
+        }
+
+        .file,
+        .package {
+
+          background: transparent;
+          border: 1px solid transparent;
+          list-style-type: none;
+          margin: 0;
+          outline: none !important; // TODO: fix this because it is not accessible; style differently
+          padding: 3px;
+          white-space: nowrap;
+
+          &.selected {
+          }
+
+          .package-text,
+          .filename-text {
+            padding-left: 5px;
+          }
+
+          .file-icon.filetype-js {
+            color: #f7df1e;
+          }
+
+          .file-icon.filetype-yaml {
+            color: #c4c4ff;
+          }
+
+          .file-icon.filetype-unknown {
+            color: lightgray;
+          }
+
+          .folder-icon {
+            color: rgb(143 141 255);
+          }
+        }
+
+        .folder {
+          padding-left: 15px;
+        }
+
+
+        .folder.folder-contents-closed {
+          display: none;
+
+        }
+
+        .folder.folder-contents-open {
+          display: block;
         }
       }
 
-      .package.package-selected {
-        color: #f24242;
-      }
-
-      .project-icon {
-        color: rgb(25, 168, 148);
-      }
-
-      .package-icon {
-        color: #f24242;
-      }
-
-      .file,
-      .package {
-
-        background: transparent;
-        border: 1px solid transparent;
-        list-style-type: none;
-        margin: 0;
-        outline: none !important; // TODO: fix this because it is not accessible; style differently
-        padding: 3px;
-        white-space: nowrap;
-
-        &.selected {
-        }
-
-        .package-text,
-        .filename-text {
-          padding-left: 5px;
-        }
-
-        .file-icon.filetype-js {
-          color: #f7df1e;
-        }
-
-        .file-icon.filetype-yaml {
-          color: #c4c4ff;
-        }
-
-        .file-icon.filetype-unknown {
-          color: lightgray;
-        }
-
-        .folder-icon {
-          color: rgb(143 141 255);
-        }
-      }
-
-      .folder {
-        padding-left: 15px;
-      }
-
-      .folder.folder-contents-closed {
-        display: none;
-      }
-
-      .folder.folder-contents-open {
-        display: block;
-      }
-      }
 
     }
   }
@@ -444,360 +526,405 @@
     }
 
     .editor-window {
-        align-items: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+
+
+      .name-input {
         display: flex;
         flex-direction: column;
+        width: 50%;
 
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-        //overflow-y: auto;
 
-        .card .card-body {
-          background: transparent !important;
+        .validation-message {
+          margin-top: 8px;
         }
 
-        .name-input {
+        .name-input-container {
           display: flex;
-          flex-direction: column;
-          width: 50%;
 
-          .name-input-buttons-container {
-             padding-top: 10px;
+          flex-direction: row;
+          align-items: center;
+
+          .invalid-project-name {
+            margin-left: 15px;
+          }
+
+          .hidden {
+            visibility: hidden;
           }
         }
-  
-        .delete-folder-window-title,
-        .delete-file-window-title,
-        .delete-package-window-title,
-        .folder-to-delete {
-          align-self: flex-start;
-          font-size: 1.3em;
+
+        .name-input-buttons-container {
+          padding-top: 10px;
+        }
+      }
+
+      .delete-folder-window-title,
+      .delete-file-window-title,
+      .delete-package-window-title,
+      .folder-to-delete {
+        align-self: flex-start;
+        font-size: 1.3em;
+        font-weight: bold;
+      }
+
+      .folder-to-delete-parent-project {
+        color: $color-danger;
+        font-weight: bold;
+      }
+
+      .delete-package-window-controls {
+        .package-to-delete {
+          color: $color-danger;
+
           font-weight: bold;
+        }
+      }
+
+
+      .delete-folder-window-controls {
+        .folder-to-delete {
         }
 
         .folder-to-delete-parent-project {
-            color: $color-danger;
-            font-weight: bold;
+        }
+      }
+
+      .delete-file-window-container {
+        display: flex;
+        flex-direction: column;
+
+        .delete-file-window-title {
+          align-self: flex-start;
         }
 
-        .delete-package-window-controls {
-          .package-to-delete {
-            color: $color-danger;
-            font-weight: bold;
-          }
+
+      }
+
+      .delete-file-window-controls {
+        .file-to-delete {
+          color: $color-danger;
+          font-weight: bold;
         }
 
-        .delete-folder-window-controls {
-          .folder-to-delete {
-          }
 
-          .folder-to-delete-parent-project {
-          }
-        }
-
-        .delete-file-window-container {
-          display: flex;
-          flex-direction: column;
-
-          .delete-file-window-title {
-            align-self: flex-start;
-          }
+        .file-to-delete-parent-project {
+          font-weight: bold;
+          // color: rgb(25, 168, 148);
+          // color: $color-danger;
 
         }
+      }
 
-        .delete-file-window-controls {
-          .file-to-delete {
-            color: $color-danger;
-            font-weight: bold;
+      .default-window {
+        .default-window-container {
+          h4 {
+            padding-bottom: 80px;
           }
 
-          .file-to-delete-parent-project {
-            font-weight: bold;
-            // color: rgb(25, 168, 148);
-            // color: $color-danger;
-          }
-        }
+          .default-window-option {
+            line-height: 2.5em;
 
-        .default-window {
-          .default-window-container {
-            h4 {
-              padding-bottom: 80px;
+            span,
+            button > span {
+              margin-left: 20px;
             }
 
-            .default-window-option {
-              line-height: 2.5em;
+            span {
+              // color: white;
+            }
 
-              span,
-              button > span { 
-                margin-left: 20px;
-              }
-
-              span {
-                // color: white;
-              }
-
-              .add-project-button-text,
-              .install-package-button-text {
-                // color: white;
-              }
+            .add-project-button-text,
+            .install-package-button-text {
+              // color: white;
             }
           }
         }
+      }
 
 
-        .default-window-container,
-        .name-project-window-container,
-        .name-project-folder-window-container,
-        .name-file-window-container,
-        .delete-file-window-container,
-        .delete-folder-window-container,
-        .delete-package-window-container {
-          align-items: center;
+
+      .default-window-container,
+      .name-project-window-container,
+      .name-project-folder-window-container,
+      .name-file-window-container,
+      .delete-file-window-container,
+      .delete-folder-window-container,
+      .delete-package-window-container {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .default-window,
+      .name-project-window,
+      .name-project-folder-window,
+      .name-file-window,
+      .delete-package-window,
+      .delete-file-window,
+      .delete-folder-window {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .name-project-window-title,
+      .name-file-window-title {
+        text-align: center;
+      }
+
+      .card-body {
+      }
+
+      .name-file-window {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+
+        .name-file-window-container {
           display: flex;
           flex-direction: column;
           height: 100%;
-          justify-content: center;
+
           width: 100%;
         }
+      }
 
-        .default-window,
-        .name-project-window,
-        .name-project-folder-window,
-        .name-file-window,
-        .delete-package-window,
-        .delete-file-window,
-        .delete-folder-window {
-          align-items: center;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          justify-content: center;
-          width: 100%;
-        }
+      .package-install-window {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        padding-left: 25%;
+        padding-right: 25%;
 
-        .name-project-window-title,
-        .name-file-window-title {
+        width: 100%;
+
+        .package-install-window-title {
+          font-size: 1.5em;
+          font-weight: bold;
           text-align: center;
         }
 
-        .card-body {
+
+        .card {
+          border: 0 solid transparent !important;
         }
 
-        .name-file-window {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
+        .package-install-source-form {
+          align-items: center;
 
-          .name-file-window-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-          }
-        }
-
-        .package-install-window {
           display: flex;
-          flex-direction: column;
-          height: 100%;
+          flex-direction: row;
+          height: 100px;
+
           justify-content: center;
           padding-left: 25%;
           padding-right: 25%;
 
           width: 100%;
 
-          .package-install-window-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            text-align: center;
-          }
 
-          .card {
-            border: 0 solid transparent !important;
-          }
-
-          .package-install-source-form {
+          .package-install-option-container {
             align-items: center;
-
             display: flex;
-            flex-direction: row;
-            height:100px;
+            flex-direction: column;
             justify-content: center;
+            width: 100px;
 
-            .package-install-option-container {
-              align-items:center;
-              display: flex;
-              flex-direction:column;
-              justify-content:center;
-              width: 100px;
 
-              .package-install-source-icon {
-                font-size: 2em;
-                margin-bottom: 5px;
-              }
+            .package-install-source-icon {
+              font-size: 2em;
+              margin-bottom: 5px;
+            }
 
-              .package-install-source-option {
-                height: 25px;
-                width: 25px;
-              }
+            .package-install-source-option {
+              height: 25px;
+              width: 25px;
             }
           }
+        }
 
-          .package-install-details-form {
-            .project-name-invalid-text {
 
-              color: $color-danger !important;
-              margin-bottom: 20px;
+        .package-install-details-form {
+          .project-name-invalid-text {
+
+            color: $color-danger !important;
+            margin-bottom: 20px;
+            display: block;
+          }
+
+
+
+          .package-install-input-container {
+            display: flex;
+            flex-direction: column;
+
+            margin-bottom: 20px;
+
+
+            .project-name-input.invalid:focus,
+            .project-name-input.invalid {
+              border: 1px solid $color-danger !important;
+              outline-color: $color-danger !important;
             }
 
 
-            .package-install-input-container {
-              display: flex;
-              flex-direction: column;
+            .search-status-icon-container {
+              text-align: center;
+              width: 40px;
 
-              margin-bottom: 20px;
-
-              .project-name-input.invalid:focus,
-              .project-name-input.invalid {
-                border: 1px solid $color-danger !important;
-                outline-color: $color-danger !important;
-              }
+              i {
+                color: white;
 
 
-              .search-status-icon-container {
-                text-align: center;
-                width: 40px;
-
-                i {
-                  color: white;
-
-                  &.not-searching {
-                    color: white; //rgba(0,255,0, 0.1);
-                  }
-
-                  &.found, &.loading {
-                    color: green;
-                  }
-
-                  &.not-found {
-                    color: rgb(145, 50, 120);
-                  }
-
-                }
-              }
-
-              .package-install-deploy-targets-dropdown {
-              }
-
-              .package-install-github-query-container {
-                .package-install-github-user {
-                  margin-bottom: 20px;
+                &.not-searching {
+                  color: white; //rgba(0,255,0, 0.1);
                 }
 
-                .package-install-github-repo-lookup {
-                  margin-bottom: 20px;
 
-                  .github-package-search-box {
-                    align-items: center;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                  }
+                &.found, &.loading {
+                  color: green;
                 }
+
+                &.not-found {
+                  color: rgb(145, 50, 120);
+                }
+
+
+              }
+            }
+
+            .package-install-deploy-targets-dropdown {
+            }
+
+
+            .package-install-github-query-container {
+              .package-install-github-user {
+                margin-bottom: 20px;
               }
 
-              .package-install-npm-lookup {
-                .package-install-npm-query-container {
+              .package-install-github-repo-lookup {
+                margin-bottom: 20px;
+
+                .github-package-search-box {
                   align-items: center;
                   display: flex;
                   flex-direction: row;
-                  margin-bottom: 20px;
+                  justify-content: center;
+
                 }
               }
-
             }
-          }
 
+            .package-install-npm-lookup {
+              .package-install-npm-query-container {
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 20px;
+              }
+            }
+
+          }
         }
 
-        .editor {
-          &.current-file-path::before {
-          }
+      }
 
-          &.current-file-path {
-            align-self: flex-start;
-            color: darkgray;
-
-            .current-file-path-icon {
-              padding: 5px;
-            }
-          }
-          width: 100%;
+      .editor {
+        &.current-file-path::before {
         }
 
-        .package-install-source-form {
-          align-items: center;
+
+        &.current-file-path {
+          align-self: flex-start;
+          color: darkgray;
+
+          .current-file-path-icon {
+            padding: 5px;
+
+          }
+        }
+
+
+        width: 100%;
+      }
+
+      .package-install-source-form {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+
+        .package-install-source-icon {
+          font-size: 2em;
+
+          &.fab.fa-npm {
+            color: rgb(145, 50, 120);
+            font-size: 3em;
+          }
+
+          &.fa-github,
+          &.fa-link {
+            padding: 5px;
+          }
+
+          &.fa-link {
+            color: lightgray;
+          }
+
+          &.fa-github {
+            color: rgb(28, 182, 149);
+          }
+        }
+
+        .package-type {
+          border: 0 solid transparent !important;
           display: flex;
-          flex-direction: column;
-          height: 100%;
-          justify-content: center;
-          width: 100%;
+          flex-direction: row;
+          margin-bottom: 30px;
 
-          .package-install-source-icon {
-            font-size: 2em;
-
-            &.fab.fa-npm {
-              color: rgb(145, 50, 120);
-              font-size: 3em;
-            }
-
-            &.fa-github,
-            &.fa-link {
-              padding: 5px;
-            }
-
-            &.fa-link {
-              color: lightgray;
-            }
-
-            &.fa-github {
-              color: rgb(28, 182, 149);
-            }
-          }
-
-          .package-type {
-            border: 0 solid transparent !important;
+          label {
             display: flex;
-            flex-direction: row;
-            margin-bottom: 30px;
-
-            label {
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              min-width: 80px;
-              text-align: center;
-            }
-
-            input:focus {
-              outline: none !important;
-            }
-
-            input {
-              margin-top: 10px;
-            }
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 80px;
+            text-align: center;
           }
-        }
 
-        .filename-dialog {
-          align-items: center;
-          display: flex;
-          height: 100%;
-          justify-content: center;
-          width: 100%;
+          input:focus {
+            outline: none !important;
+          }
+
+          input {
+            margin-top: 10px;
+          }
+
         }
+      }
+
+      .filename-dialog {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
     }
 
   }

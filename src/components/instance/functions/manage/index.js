@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router';
+import { useAlert } from 'react-alert';
 
 import appState from '../../../../functions/state/appState';
 import instanceState from '../../../../functions/state/instanceState';
@@ -77,6 +78,19 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const [instanceAuths] = useInstanceAuth({});
   const theme = useStoreState(appState, (s) => s.theme);
   const [ restartingInstance, setRestartingInstance ] = useState(false);
+  const alert = useAlert();
+
+  async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
+
+    setRestartingInstance(true);
+
+    setTimeout(async () => { 
+      await restartInstance({ auth: instanceAuth, url: instanceUrl });
+      setRestartingInstance(false);
+    }, 100);
+
+  }
+
 
   async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
 
@@ -103,7 +117,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       payload: selectedFile.content
     };
 
-    await setComponentFile(payload);
+    const { error, message } = await setComponentFile(payload);
+
+    if (error) {
+      alert.error(message);
+    }
 
 
     if (restartRequired) {
@@ -148,15 +166,28 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     const { path, project, name } = selectedFile;
     const newFile = getRelativeFilepath(path);
-    const { message: fileContent } = await getComponentFile({
+    const { error, message } = await getComponentFile({
       auth,
       url,
       project,
       file: newFile
     });
 
+    if (error) {
+
+      alert.error(message);
+
+      return {
+        content: '',
+        path,
+        project,
+        name
+      };
+
+    }
+
     return {
-      content: fileContent,
+      content: message,
       path,
       project,
       name
@@ -166,12 +197,16 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function deleteFile(f) {
 
-    await dropComponent({
+    const { error, message } = await dropComponent({
       auth,
       url,
       project: f.project,
       file: getRelativeFilepath(f.path)
     });
+
+    if (error) {
+      alert.error(message);
+    }
 
     await refreshCustomFunctions();
 
@@ -179,18 +214,18 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function deletePackage({ name: project }) {
 
-    await dropComponent({
+    const { error, message } = await dropComponent({
       auth,
       url,
       project
     });
 
+    if (error) {
+      alert.error(message);
+      return;
+    }
 
-    await restartInstance({
-      auth,
-      url
-    });
-
+    await restartInstance({ auth, url });
     await refreshCustomFunctions();
 
   }
@@ -203,19 +238,32 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     // if we're deleting a top-level directory, that's a project,
     // so don't pass a file. otherwise pass project name and file/dir
     // relative to project name as 'file'.
+
     if (targetDirpath.length > 0) {
-      await dropComponent({
+
+      const { error, message } = await dropComponent({
         auth,
         url,
         project,
         file: targetDirpath
       });
+
+      if (error) {
+        alert.error(message);
+      }
+
     } else {
-      await dropComponent({
+
+      const { error, message } = await dropComponent({
         auth,
         url,
         project
       });
+
+      if (error) {
+        alert.error(message);
+      }
+
     }
 
     await refreshCustomFunctions();
@@ -224,13 +272,19 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function createNewProject(newProjectName) {
 
-    await addComponent({
+    const { error, message } = await addComponent({
       auth,
       url,
       project: newProjectName
     });
 
-    // await restartInstance({ auth, url });
+
+    if (error) {
+      alert.error(message);
+    }
+
+    await restartInstance({ auth, url });
+
     await refreshCustomFunctions();
 
   }
@@ -241,12 +295,16 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
 
-    await setComponentFile({
+    const { error, message } = await setComponentFile({
       auth,
       url,
       project,
       file: relativeFilepath
     })
+
+    if (error) {
+      alert.error(message);
+    }
 
     await refreshCustomFunctions();
 
@@ -257,17 +315,26 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const deployPromises = deployTargets.map(async (t) => {
 
       // TODO: check error here.
-      await deployComponent({
+
+      const { error, message } = await deployComponent({
+
         auth: t.auth,
         url: t.instance.url,
         project: projectName,
         packageUrl
       });
 
+      if (error) {
+        alert.error(message);
+      }
+
+
+     // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_worker' });
       await restartInstance({ auth: t.auth, url: t.instance.url });
 
     });
+
 
     await Promise.all(deployPromises);
     await refreshCustomFunctions();
@@ -285,11 +352,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
      // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_worker' });
+
       await restartInstance({ auth: deployTarget.auth, url: deployTarget.instance.url });
 
     }
     */
-    
+
     await refreshCustomFunctions();
 
 
