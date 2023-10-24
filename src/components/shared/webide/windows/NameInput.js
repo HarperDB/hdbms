@@ -4,9 +4,10 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='',  value }) {
+export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate }) {
 
   const [ name, setName ] = useState(value || '');
+  const [ isValidName, setIsValidName ] = useState(false); 
 
   function handleKeyDown(e) {
 
@@ -35,14 +36,16 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
       className={ cn("name-input") }>
       { label && <label><span>{label}:</span></label> }
         <input
+          className={ cn({ invalid: !isValidName }) }
           autoFocus
           onChange={(e) => {
-            setName(e.target.value)
+            setName(e.target.value);
           }}
           onKeyDown={ handleKeyDown }
           value={name}
           placeholder={placeholder}
           title="choose name for your new file or folder" />
+            <span className="invalid-text" />
 
           <div className="name-input-buttons-container">
             <button type="button" className="btn btn-success name-input-confirm" onClick={ () => {

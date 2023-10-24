@@ -1,4 +1,9 @@
 .dark {
+  .no-projects {
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
    color: white;
 
   .editor.current-file-path {
@@ -42,6 +47,22 @@
 }
 
 .purple {
+
+  .no-projects {
+    color: white;
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
+   color: white;
+  .name-input {
+    .invalid {
+      border: 1px solid red !important;
+    }
+    .invalid-text {
+      color: red !important;
+    }
+  }
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
@@ -113,6 +134,9 @@
 
 
 .light {
+  .no-projects {
+    color: rgb(105,105,105);
+  }
   color: rgb(105,105,105);
 
   .package-install-window {
@@ -278,10 +302,6 @@
         display: flex;
         flex-direction: row;
       }
-    }
-
-    .no-projects {
-      color: white;
     }
 
     .file-browser {

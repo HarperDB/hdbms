@@ -338,7 +338,7 @@ function WebIDE({
             }
             onCancel={
               () => {
-                backToPreviousWindow();
+                toDefaultWindow();
               }
             }
 
@@ -361,7 +361,7 @@ function WebIDE({
             }
             onCancel={
               () => {
-                backToPreviousWindow();
+                toDefaultWindow();
               }
             }
           />
@@ -378,7 +378,7 @@ function WebIDE({
             }
             onCancel={
               () => {
-                backToPreviousWindow();
+                toDefaultWindow();
               }
             }
           />

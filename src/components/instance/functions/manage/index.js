@@ -224,7 +224,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function createNewProject(newProjectName) {
 
-    await addComponent({
+    const { error, message } = await addComponent({
       auth,
       url,
       project: newProjectName

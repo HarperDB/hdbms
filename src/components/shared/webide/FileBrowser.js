@@ -8,7 +8,7 @@ function NoProjects() {
   return (
     <div className="no-projects">
       <p>You have no HarperDB applications yet. Click the <i className="fas fa-file-code" /> button in the menu above to create your first application!</p>
-      <p>See the <a href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.</p>
+      <p>See the <a className="docs-link" href="https://docs.harperdb.io" target="_blank" rel="noreferrer"> documentation </a> for more info on HarperDB Applications.</p>
     </div>
   );
 }
