@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Select from 'react-select';
 import { ensureRepoExists, getGithubTags } from './lib';
 
-export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, setPackageSpec }) {
+export default function GithubRepoSelector({ onConfirm, installed, projectName, pkg, setPackageSpec }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);

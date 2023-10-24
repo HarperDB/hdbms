@@ -4,8 +4,8 @@ import cn from 'classnames';
 import Select from 'react-select';
 
 import { isValidProjectName, parsePackageType } from './lib';
-import { GithubRepoSelector } from './GithubRepoSelector';
-import { NpmPackageSelector } from './NpmPackageSelector';
+import GithubRepoSelector from './GithubRepoSelector';
+import NpmPackageSelector from './NpmPackageSelector';
 import UrlInstallField from './UrlInstallField';
 
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets }) {
