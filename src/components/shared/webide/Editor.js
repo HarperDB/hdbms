@@ -26,8 +26,8 @@ function Editor({ active, file, onChange, theme }) {
 
   useEffect(() => {
     const extension = parseFileExtension(file?.name);
-    const language = extensionToLanguageMap[extension] || 'plaintext';
-    setLanguage(language);
+    const updatedLanguage = extensionToLanguageMap[extension] || 'plaintext';
+    setLanguage(updatedLanguage);
   }, [file]);
 
   useEffect(() => {

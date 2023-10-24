@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
@@ -30,8 +33,7 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
-function ProjectIcon({ isOpen, toggleClosed }) {
-  const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
+function ProjectIcon({ toggleClosed }) {
   return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ isOpen, toggleClosed }) {
@@ -61,10 +63,11 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 
   useEffect(() => {
     setSelected(selectedPackage && selectedPackage.name === name);
-  }, [selectedPackage]);
+  }, [selectedPackage, name]);
 
   return (
     <button
+      type="button"
       onClick={ (e) => {
         if (selected) {
           onPackageSelect(null) 
@@ -86,10 +89,9 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 
 }
 
-function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, onFileSelect, onDeployProject, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFolderSelect, Icon }) {
 
   const isDir = isFolder(directoryEntry);
-  const isProject = directoryEntry.path.split('/').length === 2; // 'components/<proj name>'
   const renameFileIconClass = 'rename-file';
   const deployFileIconClass = 'deploy-project';
   const isFileSelected = directoryEntry.path === selectedFile;
@@ -119,7 +121,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
     const iconWasClicked = e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass); 
     
     // if icon's clicked, select, but don't unselect.
-    //if (iconWasClicked) return;
+    // if (iconWasClicked) return;
 
     if (isDir) {
       // one click on dir name toggles selected / highlighted state / ui
@@ -128,21 +130,19 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
       } else {
         onFolderSelect(isFolderSelected ? null : directoryEntry);
       }
-    } else {
-
-      if (isFileSelected) {
+    } else if (isFileSelected) {
         onFileSelect(null);
       } else {
         // one click on file name sets it to selected / highlighted
         // AND retrieves file content
         onFileSelect(directoryEntry);
       }
-    }
 
   }
 
   return (
     <button
+      type="button"
       onClick={handleToggleSelected}
       className={
         cn('file', {
@@ -153,27 +153,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
       onKeyDown={noOp} >
         <Icon className="filename-icon" />
         <span className="filename-text">{directoryEntry.name}</span>
-
-        {/* deploy project to another server button */ }
-        {/*
-
-          !isProject ?
-          null :
-          <i onClick={
-            (e) => {
-              onDeployProject(e);
-            }
-          } className='deploy-project fas fa-share' /> 
-
-
-
-        <i onClick={
-            (e) => {
-              onFileRename(e);
-              e.preventDefault();
-            }
-        } className={`${renameFileIconClass} fas fa-pencil-alt`} />
-        */}
     </button>
   )
 

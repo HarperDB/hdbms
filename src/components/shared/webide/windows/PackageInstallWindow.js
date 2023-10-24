@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useDebounce } from 'use-debounce';
 import { Label, Button, Card } from 'reactstrap';
 import cn from 'classnames';
 import Select from 'react-select';
 
 import { isValidProjectName, parsePackageType } from './lib';
-import { GithubRepoSelector } from './GithubRepoSelector';
-import { NpmPackageSelector } from './NpmPackageSelector';
-import { UrlInstallField } from './UrlInstallField';
+import GithubRepoSelector from './GithubRepoSelector';
+import NpmPackageSelector from './NpmPackageSelector';
+import UrlInstallField from './UrlInstallField';
 
-export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onPackageChange, deployTargets: availableDeployTargets }) {
+export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets }) {
 
   const packageTypes = [ 'npm', 'github', 'url' ];
+  const defaultPackageType = packageTypes[0];
 
   const [ installed, setInstalled ] = useState(Boolean(selectedPackage));
 
   const [ packageInfo, setPackageInfo ] = useState(parsePackageType(selectedPackage));
-  const [ packageType, setPackageType ] = useState(packageInfo?.type || packageTypes[0]);
+  const [ packageType, setPackageType ] = useState(packageInfo?.type || defaultPackageType);
 
   const [ projectName, setProjectName ] = useState(selectedPackage?.name || '');
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
@@ -33,7 +33,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
 
     setProjectName(selectedPackage?.name || '');
     setPackageInfo(parsePackageType(selectedPackage));
-    setPackageType(newPackageInfo?.type || packageTypes[0]);
+    setPackageType(newPackageInfo?.type || defaultPackageType);
     setInstalled(Boolean(selectedPackage));
 
   }
@@ -46,7 +46,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
     setProjectNameIsValid(isValidProjectName(projectName));
   }
 
-  useEffect(updatePackageInfo, [ selectedPackage ]);
+  useEffect(updatePackageInfo, [ selectedPackage, defaultPackageType ]);
   useEffect(validateProjectName, [ projectName ]);
 
   return (
@@ -61,7 +61,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             { pkgType === 'url' && <i className="package-install-source-icon fas fa-link" /> }
             <input
               className='package-install-source-option'
-              title={pkgType + ' package'}
+              title={`${pkgType  } package`}
               disabled={
                 /* when we have an existing selected package, the selection is pre-defined */
                 selectedPackage && packageInfo?.type !== pkgType
@@ -139,8 +139,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
           <Select
             className="react-select-container package-install-deploy-targets-dropdown"
             classNamePrefix="react-select"
-            isSearchable={true}
-            isMulti={true}
+            isSearchable
+            isMulti
             onChange={
               (selected) => {
 
@@ -167,7 +167,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
            className={
              cn("get-package-button", {
                'btn-success': true
-               //'loading': loadingTags
+               // 'loading': loadingTags
              })
            }
            disabled={

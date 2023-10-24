@@ -4,17 +4,21 @@
   .editor.current-file-path {
     border-bottom: 1px solid transparent;
   }
+
   .default-window-option {
     span {
       color: white;
     }
   } 
+
   .package-install-window {
     background: rgb(17, 17, 17);
   }
+
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
   }
+
   .file-menu,
   .editor-menu {
     border-bottom: 1px solid rgb(60,60,60) !important;
@@ -23,6 +27,7 @@
   .file-browser button > span {
     color: white !important;
   }
+
   .file-browser .file.file-selected > span {
     color: #ee81ee !important;
   } 
@@ -37,14 +42,14 @@
 }
 
 .purple {
-
-
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
+
   .package-install-window {
     background: white; 
   }
+
   .name-input-cancel {
       color: rgb(105, 105, 105) !important;
   }
@@ -53,14 +58,17 @@
     border-bottom: 1px solid lightgray;
   }
   color: rgb(105,105,105);
+
   .default-window-option {
     span {
       color: rgb(105,105,105);
     }
   }
+
   .cancel-button {
     color: #5c636a;
   }
+
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
   }
@@ -81,6 +89,7 @@
     */
     // background: transparent !important;
   }
+
   .file-menu,
   .editor-menu {
     border-bottom: 1px solid darkgray !important;
@@ -89,6 +98,7 @@
   .save-code[disabled] {
     color: #c2c2c2 !important;
   }
+
   .file-browser button {
     color: lightgray;
   }
@@ -112,9 +122,11 @@
   .editor.current-file-path {
     border-bottom: 1px solid lightgray;
   }
+
   .restart-instance-on-save-text {
     color: rgb(240,240,240) !important;
   }
+
   .file-menu button[disabled],
   .editor-menu button[disabled] {
     color: rgb(240,240,240) !important;
@@ -124,6 +136,7 @@
   .file-browser {
     background: #f9f9f9;
   }
+
   .file.folder-selected {
     background: rgba(200,200,200,0.2) !important; 
     //background: lightgray !important; 
@@ -147,18 +160,23 @@
     color: white;
     //rgb(105,105,105);
   }
+
   .editor-window button {
     color: rgb(105,105,105);
   }
+
   .install-package-icon {
     color: #f24242 !important;
   }
+
   .add-project-icon {
     color: rgb(25, 168, 148) !important;
   }
+
   .file-menu {
      color: rgb(105,105,105);
   }
+
   .default-window-option {
     span {
       color: rgb(105,105,105);
@@ -192,8 +210,8 @@
 
 
   li {
-    margin: 0px 5px 5px 0px;
-    padding: 0px 5px 0px 0px;
+    margin: 0 5px 5px 0;
+    padding: 0 5px 0 0;
   }
 
   .default-window .install-package-icon,
@@ -209,6 +227,7 @@
   .delete-folder-icon:hover {
     color: rgb(143, 141, 255);
   }
+
   .delete-file-icon:hover {
     // color: #ee81ee !important;
   }
@@ -221,44 +240,46 @@
   .delete-folder-icon,
   .delete-file-icon,
   .add-file-icon {
-    border: none;
-    outline: none !important;
     background: transparent;
+    border: none;
     color: white;
-    padding: 0px;
-    margin: 0px;
+    margin: 0;
+    outline: none !important;
+    padding: 0;
   }
 
   .file-browser-scroll-container {
-    overflow-y: auto;
     height: 100%;
+    overflow-y: auto;
   } 
 
   // top-level element (left-side)
   .file-browser-outer-container {
-    overflow-y: auto;
     height: 100%;
+    overflow-y: auto;
   }
+
   .file-browser-inner-container {
 
     padding: 20px;
 
     .file-menu {
+      color: white;
 
       display: flex;
       flex-direction: row;
-      color: white;
-      margin-top: 0;
       margin-bottom: 20px;
-      padding-top: 0;
+      margin-top: 0;
       padding-bottom: 0;
+      padding-top: 0;
 
       .file-menu-item {
+        align-items: flex-end;
         display: flex;
         flex-direction: row;
-        align-items: flex-end;
       }
     }
+
     .no-projects {
       color: white;
     }
@@ -266,18 +287,19 @@
     .file-browser {
 
       margin-left: 0;
-      padding-left: 0;
       padding: 20px;
+      padding-left: 0;
 
       .folder-container {
-        padding-left: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        padding-left: 0;
 
       .rename-file,
       .deploy-project {
         margin-left: 8px;
       }
+
       .rename-file {
         color: transparent;
       }
@@ -289,10 +311,12 @@
           // background: #4a4a4a !important;
           //border: 1px solid rgb(120,120,120);;
         }
+
         &.folder-selected {
           //background: #2c2c2c !important;
         }
       }
+
       .package.package-selected {
         color: #f24242;
       }
@@ -300,22 +324,24 @@
       .project-icon {
         color: rgb(25, 168, 148);
       }
+
       .package-icon {
         color: #f24242;
       }
 
       .file,
       .package {
-        white-space: nowrap;
-        border: 1px solid transparent;
-        &.selected {
-        }
 
         background: transparent;
+        border: 1px solid transparent;
         list-style-type: none;
-        outline: none !important; // TODO: fix this because it is not accessible; style differently
         margin: 0;
-        padding: 3px 3px;
+        outline: none !important; // TODO: fix this because it is not accessible; style differently
+        padding: 3px;
+        white-space: nowrap;
+
+        &.selected {
+        }
 
         .package-text,
         .filename-text {
@@ -329,6 +355,7 @@
         .file-icon.filetype-yaml {
           color: #c4c4ff;
         }
+
         .file-icon.filetype-unknown {
           color: lightgray;
         }
@@ -337,12 +364,15 @@
           color: rgb(143 141 255);
         }
       }
+
       .folder {
         padding-left: 15px;
       }
+
       .folder.folder-contents-closed {
         display: none;
       }
+
       .folder.folder-contents-open {
         display: block;
       }
@@ -354,27 +384,27 @@
   // top-level element: editor window (right side)
   // contains code editor and project management windows
   .editor-window-container {
-
-    padding: 20px;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    height: 100%;
+
+    padding: 20px;
 
     .editor-menu {
+      align-items: baseline;
+      border-bottom: 1px solid #2e2e2e;
+      color: white;
       display: flex;
       flex-direction: row;
-      align-items: baseline;
       justify-content: left;
-      color: white;
-      margin-top: 0;
       margin-bottom: 20px;
-      padding-top: 0;
+      margin-top: 0;
       padding-bottom: 0;
-      border-bottom: 1px solid #2e2e2e;
+      padding-top: 0;
 
       & > li {
-        margin: 0px 5px 5px 0px;
-        padding: 0px 5px 0px 0px;
+        margin: 0 5px 5px 0;
+        padding: 0 5px 0 0;
       }
 
       button[disabled],
@@ -384,40 +414,43 @@
 
       .restart-instance-after-save,
       .restart-instance {
-        border: 1px solid transparent;
         background: transparent;
-        outline: none !important;
-        margin: 0;
-        padding: 3px 3px;
+        border: 1px solid transparent;
         display: flex;
         flex-direction: row;
+        margin: 0;
+        outline: none !important;
+        padding: 3px;
+
         & > i {
           color: #ee81ee;
         }
       }
+
       .save-code {
-        cursor: pointer;
-        color: #ee81ee;
-        border: none;
-        outline: none !important;
         background: transparent;
-        padding: 0px;
-        margin: 0px;
+        border: none;
+        color: #ee81ee;
+        cursor: pointer;
+        margin: 0;
+        outline: none !important;
+        padding: 0;
       }
+
       .save-code[disabled] {
-        cursor: default;
         color: #5e5e5e;
+        cursor: default;
       }
     }
 
     .editor-window {
-
-        height: 100%;
-        width: 100%;
+        align-items: center;
         display: flex;
         flex-direction: column;
-        align-items: center;
+
+        height: 100%;
         justify-content: center;
+        width: 100%;
         //overflow-y: auto;
 
         .card .card-body {
@@ -428,6 +461,7 @@
           display: flex;
           flex-direction: column;
           width: 50%;
+
           .name-input-buttons-container {
              padding-top: 10px;
           }
@@ -437,28 +471,31 @@
         .delete-file-window-title,
         .delete-package-window-title,
         .folder-to-delete {
+          align-self: flex-start;
           font-size: 1.3em;
           font-weight: bold;
-          align-self: flex-start;
         }
 
         .folder-to-delete-parent-project {
-            font-weight: bold;
             color: $color-danger;
+            font-weight: bold;
         }
 
         .delete-package-window-controls {
           .package-to-delete {
-            font-weight: bold;
             color: $color-danger;
+            font-weight: bold;
           }
         }
+
         .delete-folder-window-controls {
           .folder-to-delete {
           }
+
           .folder-to-delete-parent-project {
           }
         }
+
         .delete-file-window-container {
           display: flex;
           flex-direction: column;
@@ -468,11 +505,13 @@
           }
 
         }
+
         .delete-file-window-controls {
           .file-to-delete {
-            font-weight: bold;
             color: $color-danger;
+            font-weight: bold;
           }
+
           .file-to-delete-parent-project {
             font-weight: bold;
             // color: rgb(25, 168, 148);
@@ -488,6 +527,7 @@
 
             .default-window-option {
               line-height: 2.5em;
+
               span,
               button > span { 
                 margin-left: 20px;
@@ -513,12 +553,12 @@
         .delete-file-window-container,
         .delete-folder-window-container,
         .delete-package-window-container {
-          width: 100%;
-          height: 100%;
-          justify-content: center;
           align-items: center;
           display: flex;
           flex-direction: column;
+          height: 100%;
+          justify-content: center;
+          width: 100%;
         }
 
         .default-window,
@@ -528,12 +568,12 @@
         .delete-package-window,
         .delete-file-window,
         .delete-folder-window {
-          height: 100%;
-          width: 100%;
+          align-items: center;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          height: 100%;
           justify-content: center;
+          width: 100%;
         }
 
         .name-project-window-title,
@@ -545,50 +585,51 @@
         }
 
         .name-file-window {
-            width: 100%;
-            height: 100%;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            width: 100%;
+
           .name-file-window-container {
-            width: 100%;
-            height: 100%;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            width: 100%;
           }
         }
 
         .package-install-window {
-
-          width: 100%;
-          height: 100%;
-          padding-left: 25%;
-          padding-right: 25%;
           display: flex;
           flex-direction: column;
+          height: 100%;
           justify-content: center;
+          padding-left: 25%;
+          padding-right: 25%;
+
+          width: 100%;
 
           .package-install-window-title {
-            font-weight: bold;
             font-size: 1.5em;
+            font-weight: bold;
             text-align: center;
           }
 
           .card {
-            border: 0px solid transparent !important;
+            border: 0 solid transparent !important;
           }
 
           .package-install-source-form {
+            align-items: center;
 
             display: flex;
             flex-direction: row;
-            align-items: center;
-            justify-content: center;
             height:100px;
+            justify-content: center;
 
             .package-install-option-container {
+              align-items:center;
               display: flex;
               flex-direction:column;
-              align-items:center;
               justify-content:center;
               width: 100px;
 
@@ -605,7 +646,6 @@
           }
 
           .package-install-details-form {
-
             .project-name-invalid-text {
 
               color: $color-danger !important;
@@ -617,6 +657,8 @@
               display: flex;
               flex-direction: column;
 
+              margin-bottom: 20px;
+
               .project-name-input.invalid:focus,
               .project-name-input.invalid {
                 border: 1px solid $color-danger !important;
@@ -626,23 +668,25 @@
 
               .search-status-icon-container {
                 text-align: center;
+                width: 40px;
+
                 i {
                   color: white;
+
                   &.not-searching {
                     color: white; //rgba(0,255,0, 0.1);
                   }
+
                   &.found, &.loading {
                     color: green;
                   }
+
                   &.not-found {
                     color: rgb(145, 50, 120);
                   }
 
                 }
-                width: 40px;
               }
-
-              margin-bottom: 20px;
 
               .package-install-deploy-targets-dropdown {
               }
@@ -654,10 +698,11 @@
 
                 .package-install-github-repo-lookup {
                   margin-bottom: 20px;
+
                   .github-package-search-box {
+                    align-items: center;
                     display: flex;
                     flex-direction: row;
-                    align-items: center;
                     justify-content: center;
                   }
                 }
@@ -665,9 +710,9 @@
 
               .package-install-npm-lookup {
                 .package-install-npm-query-container {
+                  align-items: center;
                   display: flex;
                   flex-direction: row;
-                  align-items: center;
                   margin-bottom: 20px;
                 }
               }
@@ -676,32 +721,38 @@
           }
 
         }
+
         .editor {
           &.current-file-path::before {
           }
+
           &.current-file-path {
             align-self: flex-start;
             color: darkgray;
+
             .current-file-path-icon {
               padding: 5px;
             }
           }
           width: 100%;
         }
+
         .package-install-source-form {
-          height: 100%;
-          width: 100%;
+          align-items: center;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          height: 100%;
           justify-content: center;
+          width: 100%;
 
           .package-install-source-icon {
             font-size: 2em;
+
             &.fab.fa-npm {
-              font-size: 3em;
               color: rgb(145, 50, 120);
+              font-size: 3em;
             }
+
             &.fa-github,
             &.fa-link {
               padding: 5px;
@@ -710,39 +761,42 @@
             &.fa-link {
               color: lightgray;
             }
+
             &.fa-github {
               color: rgb(28, 182, 149);
             }
           }
 
           .package-type {
-            border: 0px solid transparent !important;
-            margin-bottom: 30px;
+            border: 0 solid transparent !important;
             display: flex;
             flex-direction: row;
+            margin-bottom: 30px;
 
             label {
-              min-width: 80px;
-              text-align: center;
               display: flex;
               flex-direction: column;
               justify-content: space-between;
+              min-width: 80px;
+              text-align: center;
             }
 
             input:focus {
               outline: none !important;
             }
+
             input {
               margin-top: 10px;
             }
           }
         }
+
         .filename-dialog {
-          height: 100%;
-          width: 100%;
-          display: flex;
           align-items: center;
+          display: flex;
+          height: 100%;
           justify-content: center;
+          width: 100%;
         }
     }
 
@@ -752,10 +806,12 @@
 @media(max-width: 814px) {
   .web-ide {
     overflow: initial;
+
     .file-browser-outer-container {
-      overflow-y: auto;
       height: auto;
+      overflow-y: auto;
     }
+
     .file-browser-scroll-container {
       max-height: 500px;
     }

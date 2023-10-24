@@ -1,12 +1,13 @@
+import React from 'react';
 import { Card, CardTitle, CardBody } from 'reactstrap';
 
-export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
+export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
 
   if (!active) {
     return null;
   }
 
-  const project = selectedFolder.project;
+  const {project} = selectedFolder;
   const pathSegmentsFromRoot = selectedFolder.path.split('/');
   const isProjectFolder = pathSegmentsFromRoot.length === 2;
   const projectSubdir = isProjectFolder ? null : pathSegmentsFromRoot.slice(-1)[0];
@@ -23,8 +24,8 @@ export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel
                   <span className="folder-to-delete"> {projectSubdir} </span> from project <span className="folder-to-delete-parent-project">{ project }</span> ?
                 </p> 
             }
-            <button className="btn btn-danger delete-button" onClick={ onConfirm }>Delete</button>
-            <button className="btn btn-secondary cancel-button" onClick={ onCancel }>Cancel</button>
+            <button type="button" className="btn btn-danger delete-button" onClick={ onConfirm }>Delete</button>
+            <button type="button" className="btn btn-secondary cancel-button" onClick={ onCancel }>Cancel</button>
         </div>
       </CardBody>
     </Card>

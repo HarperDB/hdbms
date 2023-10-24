@@ -37,14 +37,14 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
 
   return instanceList.reduce((memo, instance) => {
 
-    const csId = instance['compute_stack_id'];
+    const csId = instance.compute_stack_id;
     const deployTarget = instanceAuthList[csId];
 
     if (!deployTarget?.version) {
       return memo;
     }
 
-    const [ major, minor, ...patchEtc ] = deployTarget?.version.split('.'); 
+    const [ major, minor ] = deployTarget?.version.split('.') || []; 
 
     // exclude < 4.2
 
@@ -53,7 +53,7 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       memo.push({ 
         isCurrentInstance: csId === thisCsId,
         auth,
-        instance: instance
+        instance
       });
 
     } 
@@ -71,13 +71,25 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
-  const [majorVersion, minorVersion] = (registration?.version || '').split('.');
-
+  const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
   const theme = useStoreState(appState, (s) => s.theme);
   const [ restartingInstance, setRestartingInstance ] = useState(false);
+
+  async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
+
+    setRestartingInstance(true);
+
+    setTimeout(async () => { 
+      await restartInstance({ auth: instanceAuth, url: instanceUrl });
+      setRestartingInstance(false);
+    }, 100);
+
+
+  }
+
 
   // save file to instance
   async function saveCodeToInstance(selectedFile, restartRequired) {
@@ -102,7 +114,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function renameFolder(newFolderName, info) {
+  // eslint-disable-next-line no-empty-function
+  async function renameFolder() {
   }
 
   async function renameFile(newFileName, info) {
@@ -217,7 +230,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project: newProjectName
     });
 
-    //await restartInstance({ auth, url });
+    // await restartInstance({ auth, url });
     await refreshCustomFunctions();
 
   }
@@ -241,29 +254,41 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function installPackage(projectName, packageUrl, deployTargets) {
 
-    // bug: deployTargets not iterable
-    for (let deployTarget of deployTargets) {
+    const deployPromises = deployTargets.map(async (t) => {
 
-      const auth = deployTarget.auth; 
-      const url = deployTarget.instance.url; 
-      const { error, message } = await deployComponent({
-        auth,
-        url,
+      // TODO: check error here.
+      await deployComponent({
+        auth: t.auth,
+        url: t.instance.url,
         project: projectName,
         packageUrl
       });
 
-      if (error) {
-        // TODO: what do we actually want to do about an invalid package?
-        console.error(message);
-
-      }
-
       // change to restartService({ auth, url, service: 'http_worker' });
-      await restartInstance({ auth, url });
+      await restartInstance({ auth: t.auth, url: t.instance.url });
+
+    });
+
+    await Promise.all(deployPromises);
+    await refreshCustomFunctions();
+
+    /*
+    for (const deployTarget of deployTargets) {
+
+      // TODO: check error here.
+      await deployComponent({
+        auth: deployTarget.auth,
+        url: deployTarget.instance.url,
+        project: projectName,
+        packageUrl
+      });
+
+     // TODO: what do we actually want to do about an invalid package?
+      // change to restartService({ auth, url, service: 'http_worker' });
+      await restartInstance({ auth: deployTarget.auth, url: deployTarget.instance.url });
 
     }
-
+    */
     
     await refreshCustomFunctions();
 
@@ -335,18 +360,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function restartWithLoadingState({ auth, url }) {
-
-    setRestartingInstance(true);
-
-    setTimeout(async () => { 
-      await restartInstance({ auth, url });
-      setRestartingInstance(false);
-    }, 100);
-
-
-  }
-
   return supportsApplicationsAPI ?
     <ApplicationsEditor
       theme={theme}
@@ -368,7 +381,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onFileRename={renameFile}
       onFolderRename={renameFolder}
       refreshingCustomFunctions={loading}
-      restartInstance={ async () => await restartWithLoadingState({auth, url}) }
+      restartInstance={ async () =>restartWithLoadingState({auth, url}) }
       restartingInstance={restartingInstance}
       />
     :

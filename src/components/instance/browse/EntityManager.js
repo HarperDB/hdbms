@@ -13,7 +13,6 @@ function EntityManager({ items, activeItem, activeSchema = false, showForm, base
   const registration = useStoreState(instanceState, (s) => s.registration);
   const [ major, minor ] = registration?.version.split('.') || []; 
   const versionAsFloat = parseFloat(`${major}.${minor}`);
-  console.log(versionAsFloat);
 
   useEffect(() => {
     toggleCreate();

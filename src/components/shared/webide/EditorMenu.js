@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useState } from 'react';
 import cn from 'classnames';
 
-export function SaveButton({ disabled, onSave, saveButton }) {
+export function SaveButton({ disabled, onSave }) {
 
   const [ loading, setLoading ] = useState(false);
   return (
     <button
+      type="button"
       disabled={ disabled }
       title="save file to instance"
       className={ cn("save-code fas", {
@@ -15,7 +18,7 @@ export function SaveButton({ disabled, onSave, saveButton }) {
         'fa-spin': loading
       }) }
       onClick={ 
-        async (e) => {
+        async () => {
 
           setLoading(true);
           await onSave();
@@ -31,7 +34,7 @@ export function SaveButton({ disabled, onSave, saveButton }) {
 export function RestartInstanceButton({ onClick, restarting }) {
 
   return (
-    <button className="restart-instance">
+    <button type="button" className="restart-instance">
       <i
         onClick={ onClick }
         title='click to restart your instance'
@@ -55,6 +58,7 @@ export function RestartOnSaveToggle({ restartAfterSave, onClick }) {
 
   return (
     <button
+      type="button"
       className="restart-instance-after-save"
       title={title}
       onClick={ onClick }>
@@ -70,17 +74,17 @@ export function RestartOnSaveToggle({ restartAfterSave, onClick }) {
   );
 }
 
-export default function EditorMenu({ SaveButton, RestartInstanceButton, RestartOnSaveToggle }) {
+export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton: RestartInstanceBtn, RestartOnSaveToggle: RestartOnSaveTgl }) {
   return (
     <ul className="editor-menu">
       <li>
-        <SaveButton />
+        <SaveBtn />
       </li>
       <li>
-        <RestartInstanceButton />
+        <RestartInstanceBtn />
       </li>
       <li>
-        <RestartOnSaveToggle />
+        <RestartOnSaveTgl />
       </li>
     </ul>
   )

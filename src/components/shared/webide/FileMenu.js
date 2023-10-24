@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 export function DeleteFolderButton({ onClick, disabled }) {
   return (
     <button
+      type="button"
       onClick={ onClick }
       disabled={ disabled }
       className="delete-folder-icon fas fa-folder-minus"
@@ -13,13 +14,14 @@ export function DeleteFolderButton({ onClick, disabled }) {
   )
 }
 
-export function AddProjectFolderButton({ onAddProjectFolder, disabled, text="" }) {
+export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
   return (
     <button
+      type="button"
       disabled={ disabled }
       onClick={ onAddProjectFolder }
       className="add-folder-icon fas fa-folder-plus"
-      title={`Add a new subdirectory to your project`} />
+      title="Add a new subdirectory to your project" />
   )
 }
 
@@ -27,6 +29,7 @@ export function AddProjectFolderButton({ onAddProjectFolder, disabled, text="" }
 export function InstallPackageButton({ onClick, text="" }) {
   return (
     <button
+      type="button"
       onClick={ onClick }
       className={
         cn("install-package-icon")
@@ -42,6 +45,7 @@ export function InstallPackageButton({ onClick, text="" }) {
 export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
   return (
     <button
+      type="button"
       disabled={ disabled }
       onClick={ onAddProject }
       className="add-project-icon"
@@ -55,6 +59,7 @@ export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
 export function AddFileButton({ disabled, onAddFile }) {
   return (
     <button
+      type="button"
       disabled={ disabled }
       onClick={ onAddFile }
       className="add-file-icon fas fa-plus"
@@ -65,6 +70,7 @@ export function AddFileButton({ disabled, onAddFile }) {
 export function DeleteFileButton({ onClick, disabled }) {
   return (
       <button
+      type="button"
         onClick={ onClick }
         disabled={ disabled }
         className="delete-file-icon fas fa-minus"

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, CardText, CardTitle, CardBody } from 'reactstrap';
+import { Card, CardTitle } from 'reactstrap';
 import NameInput from './NameInput';
 
 
-export function NameProjectFolderWindow({ active, onConfirm, onCancel, projectName }) {
+export default function NameProjectFolderWindow({ active, onConfirm, onCancel }) {
 
   return !active ? null : (
     <Card className="name-project-folder-window">

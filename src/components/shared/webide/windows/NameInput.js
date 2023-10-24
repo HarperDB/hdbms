@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/no-autofocus */
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label='', placeholder='',  value }) {
+export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='',  value }) {
 
   const [ name, setName ] = useState(value || '');
 
@@ -15,6 +18,8 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
 
   }
 
+  /*
+   * TODO: do we need this? if not, remove.
   function blurOnEsc(e) {
     // related target is button when 'ok' is clicked,
     // null if esc.
@@ -22,10 +27,10 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
       onCancel();
     }
   }
+  */
 
   return (
     <div
-      onBlur={ () => {}  /*blurOnEsc*/ }
       tabIndex={0}
       className={ cn("name-input") }>
       { label && <label><span>{label}:</span></label> }
@@ -40,10 +45,10 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
           title="choose name for your new file or folder" />
 
           <div className="name-input-buttons-container">
-            <button className="btn btn-success name-input-confirm" onClick={ () => {
+            <button type="button" className="btn btn-success name-input-confirm" onClick={ () => {
                 onConfirm(name); 
               }}>ok</button>
-            <button className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>
+            <button type="button" className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>
         </div>
     </div>
   );

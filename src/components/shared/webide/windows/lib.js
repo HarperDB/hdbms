@@ -19,21 +19,14 @@ export async function ensureRepoExists(user, repo) {
 
 export async function getGithubTags(user, repo) {
 
-  try {
+  const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
 
-    const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
-
-    if (response.status < 400) {
-      const tagData = await response.json();
-      return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
-    }
-
-    return [];
-
-
-  } catch(e) {
-    throw e;
+  if (response.status < 400) {
+    const tagData = await response.json();
+    return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
   }
+
+  return [];
 
 }
 
@@ -68,7 +61,7 @@ export function parsePackageType(pkg) {
     return null;
   }
 
-  let meta = {
+  const meta = {
     type: null,
     user: null,
     repo: null,
@@ -106,10 +99,10 @@ export function parsePackageType(pkg) {
       meta.package = p;
       meta.tag = tag;
 
-    } else if (parts.length == 2) {
+    } else if (parts.length === 2) {
     // has @scope, e.g @harperdb/harperdb[@2]
 
-      const [ scope, pkgAndTag ] = parts;
+      const [ ,pkgAndTag ] = parts;
       const [ p, tag ] = pkgAndTag.split('@');
 
       meta.package = p;

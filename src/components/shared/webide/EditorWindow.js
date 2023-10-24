@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from 'reactstrap';
+import React from 'react';
 
 export {
   DefaultWindow,

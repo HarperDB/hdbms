@@ -6,12 +6,11 @@ import SelectDropdown from 'react-select';
 import {
 
   findNpmPackageName,
-  getNpmDistTags,
-  isValidProjectName
+  getNpmDistTags
 
 } from './lib';
 
-export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }) {
+export default function NpmPackageSelector({ pkg, setPackageSpec }) {
 
   /*
    * packageQuery is what's in the input field (@scope/package)
@@ -23,8 +22,6 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
   const [ distTags, setDistTags ] = useState('');
   const [ selectedDistTag, setSelectedDistTag ] = useState('');
   const [ matchingPackage, setMatchingPackage ] = useState('');
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
-
 
   // result is a packageSepc
   // for package query status icons
@@ -59,7 +56,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
     }
   }
 
-  useEffect(updatePackageSpec, [matchingPackage, selectedDistTag]);
+  useEffect(updatePackageSpec, [matchingPackage, selectedDistTag, setPackageSpec]);
 
   function updatePackageAndTags() {
 
@@ -85,7 +82,7 @@ export function NpmPackageSelector({ installed, onConfirm, pkg, setPackageSpec }
 
         }
 
-      }).catch(e => {
+      }).catch(() => {
         setLoadingTags(false);
       });
 

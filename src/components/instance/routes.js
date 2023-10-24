@@ -117,10 +117,10 @@ const routes = ({ super_user, version=null }) => {
 
   if (version) {
 
-    const [ a, b ] = version?.split('.');
+    const [ a, b ] = version?.split('.') || [];
 
-    const major = parseInt(a);
-    const minor = parseInt(b);
+    const major = parseInt(a, 10);
+    const minor = parseInt(b, 10);
     const versionAsFloat = parseFloat(`${major}.${minor}`);
 
     supportsApplications = versionAsFloat >= 4.2;
@@ -129,8 +129,8 @@ const routes = ({ super_user, version=null }) => {
 
   if (super_user) { 
     return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config, examples];
-  } else {
+  } 
     return [browse, query, charts, examples];
-  }
+  
 }
 export default routes;

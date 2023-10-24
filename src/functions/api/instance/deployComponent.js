@@ -15,7 +15,7 @@ export default async ({ auth, url, project, packageUrl, payload }) => {
       }
     });
 
-  } else {
+  } 
 
     return queryInstance({
       auth,
@@ -27,6 +27,6 @@ export default async ({ auth, url, project, packageUrl, payload }) => {
       }
     });
 
-  }
+  
 
 }

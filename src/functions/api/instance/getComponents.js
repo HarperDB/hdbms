@@ -1,5 +1,5 @@
-import queryInstance from '../queryInstance';
 import { v4 as uuid } from 'uuid';
+import queryInstance from '../queryInstance';
 
 // this 'addMetadata' logic probably belongs in src/functions/instance
 // by convention
@@ -24,7 +24,8 @@ function addMetadata(fileTree, path, rootDir) {
      */
 
     const newPath = `${path}/${entry.name}`; 
-    entry.project = newPath.split('/')[1];
+    const [ , project ] = newPath.split('/');
+    entry.project = project;
     entry.path = newPath;
     entry.key = uuid();
 

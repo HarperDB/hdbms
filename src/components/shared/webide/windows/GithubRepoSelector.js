@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Select from 'react-select';
 import { ensureRepoExists, getGithubTags } from './lib';
 
-export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, setPackageSpec }) {
+export default function GithubRepoSelector({ pkg, setPackageSpec }) {
 
   const [ user, setUser ] = useState(pkg?.user || '');
   const [ debouncedUser ] = useDebounce(user, 300);
@@ -13,6 +13,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
   const [ debouncedRepo ] = useDebounce(repo, 300);
 
   const [ tags, setTags ] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [ tagsFetched, setTagsFetched ] = useState(false);
 
   const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
@@ -20,8 +21,6 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
 
   const [ loadingTags, setLoadingTags ] = useState(false);
   const [ found, setFound ] = useState(false);
-
-  const getPackageButtonLanguage = installed ? 'Reinstall Package' : 'Get Package';
 
   useEffect(() => {
 
@@ -32,6 +31,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
 
   }, [pkg]);
 
+  // TODO: use named hook callbacks
   useEffect(() => {
 
     if (debouncedUser && debouncedRepo) {
@@ -61,7 +61,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
 
         }
 
-      }).catch(e => {
+      }).catch(() => {
         setLoadingTags(false);
       });
 
@@ -74,8 +74,9 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
       setSelectedTag('');
     }
 
-  }, [debouncedUser, debouncedRepo]);
+  }, [debouncedUser, debouncedRepo, user]);
 
+  // TODO: use named hook callbacks
   useEffect(() => {
 
     if (!(user && repo && targetRepo)) {
@@ -85,7 +86,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
       setPackageSpec(packageSpec);
     }
 
-  }, [targetRepo, selectedTag]);
+  }, [targetRepo, selectedTag, user, setPackageSpec, repo]);
 
   return (
       <div className="package-install-github-query-container">
@@ -121,7 +122,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
       className="react-select-container github-tag-select"
       classNamePrefix="react-select"
       isDisabled={!targetRepo}
-      isSearchable={true}
+      isSearchable
       placeholder='choose a tag'
       onChange={
         (selected) => {
