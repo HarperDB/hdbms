@@ -172,7 +172,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
     if (directoryEntry.package) {
       Icon = () => PackageIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
     } else {
-      Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+      Icon = () => ProjectIcon({ toggleClosed: () => setOpen(!open) });
     }
   } else if (directoryEntry.entries) {
     Icon = () => FolderIcon({ isOpen: open,  toggleClosed: () => setOpen(!open) });
