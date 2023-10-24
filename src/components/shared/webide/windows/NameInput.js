@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate }) {
+export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
 
   const [ name, setName ] = useState(value || '');
   const [ isValidName, setIsValidName ] = useState(false); 
@@ -47,9 +47,11 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
             value={name}
             placeholder={placeholder}
             title="choose name for your new file or folder" />
-            <i title="error: project name must contain only alphanumeric characters, dashes and underscores." className={ cn("invalid-project-name fa fa-warning", {
-              hidden: isValidName || name.length === 0 
-            }) }
+            <i title="error: project name must contain only alphanumeric characters, dashes and underscores." className={
+              cn("invalid-project-name fa fa-warning", {
+                hidden: isValidName || name.length === 0 
+              })
+            }
             />
         </div>
         { name.length > 0 && !isValidName && <span className="validation-message">error: project name must contain only alphanumeric characters, dashes and underscores.</span> }
