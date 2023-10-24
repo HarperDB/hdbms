@@ -67,6 +67,19 @@
 
 .purple {
 
+
+  .default-window-option {
+    .add-project-icon .add-project-button-text,
+    .install-package-icon .install-package-button-text {
+      color: white;
+    }
+  }
+
+  .editor-window .default-window .default-window-container {
+    background: $color-pureblack !important;
+    color: white;
+  }
+
   .no-projects {
     color: white;
 
@@ -510,11 +523,7 @@
       height: 100%;
       justify-content: center;
       width: 100%;
-      //overflow-y: auto;
 
-      .card .card-body {
-        background: transparent !important;
-      }
 
       .name-input {
         display: flex;
