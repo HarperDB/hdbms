@@ -33,12 +33,11 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
-function ProjectIcon({ toggleClosed }) {
-  return <i onClick={toggleClosed} className={cn(`project-icon fas fa-file-code`)} />;
+function ProjectIcon() {
+  return <i className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ isOpen, toggleClosed }) {
-  const folderClassName = isOpen ? 'fa-folder-open' : 'fa-folder';
-  return <i onClick={toggleClosed} className={cn(`folder-icon fas ${folderClassName}`)} />;
+  return <i onClick={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
 }
 
 function FiletypeIcon({ extension }) {
@@ -165,6 +164,10 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
   const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
   const fileExtension = parseFileExtension(directoryEntry.name);
 
+  if (directoryEntry.path.endsWith('asdf')) {
+    console.log('directoryEntry: ', directoryEntry.path);
+    console.log('open: ', open);
+  }
   let Icon;
   // top-level dir === package
   // FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
@@ -216,10 +219,13 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
       {
         entries.map((entry) => (
           <li key={entry.key}>
-            <ul className={cn(`folder`, {
-              'folder-contents-open': open,
-              'folder-contents-closed': !open
-            })}>
+            <ul className={
+              cn('folder', {
+                // TODO: fix this logic, folders aren't closing.
+                'folder-contents-open': true,
+                'folder-contents-closed': false
+              })
+            }>
               <Folder
                 selectedFile={selectedFile}
                 selectedFolder={selectedFolder}
