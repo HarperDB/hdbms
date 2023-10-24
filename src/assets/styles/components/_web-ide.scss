@@ -68,11 +68,8 @@
 .purple {
 
 
-  .default-window-option {
-    .add-project-icon .add-project-button-text,
-    .install-package-icon .install-package-button-text {
-      color: white;
-    }
+  .default-window-option span {
+      color: white !important;
   }
 
   .editor-window .default-window .default-window-container {
