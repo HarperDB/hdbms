@@ -37,7 +37,7 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
 
   return instanceList.reduce((memo, instance) => {
 
-    const csId = instance['compute_stack_id'];
+    const csId = instance.compute_stack_id;
     const deployTarget = instanceAuthList[csId];
 
     if (!deployTarget?.version) {
@@ -53,7 +53,7 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       memo.push({ 
         isCurrentInstance: csId === thisCsId,
         auth,
-        instance: instance
+        instance
       });
 
     } 
@@ -216,7 +216,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       project: newProjectName
     });
 
-    //await restartInstance({ auth, url });
+    // await restartInstance({ auth, url });
     await refreshCustomFunctions();
 
   }
@@ -241,10 +241,10 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   async function installPackage(projectName, packageUrl, deployTargets) {
 
     // bug: deployTargets not iterable
-    for (let deployTarget of deployTargets) {
+    for (const deployTarget of deployTargets) {
 
-      const auth = deployTarget.auth; 
-      const url = deployTarget.instance.url; 
+      const {auth} = deployTarget; 
+      const {url} = deployTarget.instance; 
       const { error, message } = await deployComponent({
         auth,
         url,

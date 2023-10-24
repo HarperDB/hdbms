@@ -6,7 +6,7 @@ export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel
     return null;
   }
 
-  const project = selectedFolder.project;
+  const {project} = selectedFolder;
   const pathSegmentsFromRoot = selectedFolder.path.split('/');
   const isProjectFolder = pathSegmentsFromRoot.length === 2;
   const projectSubdir = isProjectFolder ? null : pathSegmentsFromRoot.slice(-1)[0];

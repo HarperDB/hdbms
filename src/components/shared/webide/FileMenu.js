@@ -19,7 +19,7 @@ export function AddProjectFolderButton({ onAddProjectFolder, disabled, text="" }
       disabled={ disabled }
       onClick={ onAddProjectFolder }
       className="add-folder-icon fas fa-folder-plus"
-      title={`Add a new subdirectory to your project`} />
+      title="Add a new subdirectory to your project" />
   )
 }
 

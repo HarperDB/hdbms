@@ -129,8 +129,8 @@ const routes = ({ super_user, version=null }) => {
 
   if (super_user) { 
     return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config, examples];
-  } else {
+  } 
     return [browse, query, charts, examples];
-  }
+  
 }
 export default routes;

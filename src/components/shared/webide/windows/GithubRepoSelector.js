@@ -121,7 +121,7 @@ export function GithubRepoSelector({ onConfirm, installed, projectName, pkg, set
       className="react-select-container github-tag-select"
       classNamePrefix="react-select"
       isDisabled={!targetRepo}
-      isSearchable={true}
+      isSearchable
       placeholder='choose a tag'
       onChange={
         (selected) => {

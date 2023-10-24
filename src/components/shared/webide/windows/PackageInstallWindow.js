@@ -61,7 +61,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
             { pkgType === 'url' && <i className="package-install-source-icon fas fa-link" /> }
             <input
               className='package-install-source-option'
-              title={pkgType + ' package'}
+              title={`${pkgType  } package`}
               disabled={
                 /* when we have an existing selected package, the selection is pre-defined */
                 selectedPackage && packageInfo?.type !== pkgType
@@ -139,8 +139,8 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
           <Select
             className="react-select-container package-install-deploy-targets-dropdown"
             classNamePrefix="react-select"
-            isSearchable={true}
-            isMulti={true}
+            isSearchable
+            isMulti
             onChange={
               (selected) => {
 
@@ -167,7 +167,7 @@ export function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, onP
            className={
              cn("get-package-button", {
                'btn-success': true
-               //'loading': loadingTags
+               // 'loading': loadingTags
              })
            }
            disabled={

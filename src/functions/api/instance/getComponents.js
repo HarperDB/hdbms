@@ -1,5 +1,5 @@
-import queryInstance from '../queryInstance';
 import { v4 as uuid } from 'uuid';
+import queryInstance from '../queryInstance';
 
 // this 'addMetadata' logic probably belongs in src/functions/instance
 // by convention

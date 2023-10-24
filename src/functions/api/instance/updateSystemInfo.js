@@ -1,4 +1,3 @@
-import { useStoreState } from 'pullstate';
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
@@ -47,20 +46,6 @@ export default async ({ auth, url, signal, refresh, is_local, previousSystemInfo
     });
   }
 
-
-  function getTotalDisk(systemInfoResults, previousTotalDisk, local) { 
-
-    if (systemInfoResults.system.platform === 'darwin') {
-      return systemInfoResults.disk.size[0].size / B2GB1000;
-    }
-
-    if (!local) {
-      return systemInfoResults.disk.size.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024;
-    }
-
-    return systemInfoResults.disk.size[0].size / B2GB1024;
-
-  }
 
   // MEMORY
   const totalMemory = result.memory.total / B2GB1024;

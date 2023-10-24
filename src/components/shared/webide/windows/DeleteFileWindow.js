@@ -6,7 +6,7 @@ export function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) 
     return null;
   }
 
-  const project = selectedFile.project;
+  const {project} = selectedFile;
   const filepath = selectedFile.path.split(`/${project}/`)[1];
 
   return (

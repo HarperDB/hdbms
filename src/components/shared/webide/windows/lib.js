@@ -68,7 +68,7 @@ export function parsePackageType(pkg) {
     return null;
   }
 
-  let meta = {
+  const meta = {
     type: null,
     user: null,
     repo: null,

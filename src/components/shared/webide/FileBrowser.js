@@ -120,7 +120,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
     const iconWasClicked = e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass); 
     
     // if icon's clicked, select, but don't unselect.
-    //if (iconWasClicked) return;
+    // if (iconWasClicked) return;
 
     if (isDir) {
       // one click on dir name toggles selected / highlighted state / ui
@@ -129,16 +129,13 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
       } else {
         onFolderSelect(isFolderSelected ? null : directoryEntry);
       }
-    } else {
-
-      if (isFileSelected) {
+    } else if (isFileSelected) {
         onFileSelect(null);
       } else {
         // one click on file name sets it to selected / highlighted
         // AND retrieves file content
         onFileSelect(directoryEntry);
       }
-    }
 
   }
 

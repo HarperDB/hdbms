@@ -25,7 +25,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, onBlur, label=
 
   return (
     <div
-      onBlur={ () => {}  /*blurOnEsc*/ }
+      onBlur={ () => {}  /* blurOnEsc */ }
       tabIndex={0}
       className={ cn("name-input") }>
       { label && <label><span>{label}:</span></label> }
