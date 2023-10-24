@@ -24,7 +24,8 @@ function addMetadata(fileTree, path, rootDir) {
      */
 
     const newPath = `${path}/${entry.name}`; 
-    entry.project = newPath.split('/')[1];
+    const [ , project ] = newPath.split('/');
+    entry.project = project;
     entry.path = newPath;
     entry.key = uuid();
 
