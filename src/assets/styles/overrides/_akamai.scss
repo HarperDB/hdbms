@@ -177,8 +177,8 @@ $partner-brand-color: #017ac6;
   .fake-input,
   .form-control {
     background: $lightest-grey-overlay !important;
-    color: $color-darkgrey !important;
     border: 1px solid $color-lightgrey !important;
+    color: $color-darkgrey !important;
 
     &.is-invalid,
     &.error {

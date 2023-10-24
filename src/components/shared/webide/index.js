@@ -252,11 +252,7 @@ function WebIDE({
                 restarting={restartingInstance}
                 onClick={
                   async () => {
-                    try {
-                      await restartInstance();
-                    } catch(e) {
-                      throw e;
-                    }
+                    await restartInstance();
                   }
                 } />
             )

@@ -24,6 +24,10 @@
     "react/button-has-type": 1,
     "no-underscore-dangle": ["warn", { "allow": ["_kmq", "_kmk"] }],
     "jsx-a11y/label-has-associated-control": 0,
-    "react/jsx-no-bind": 0
+    "react/jsx-no-bind": 0,
+    "react/no-unstable-nested-components": [
+      "warn",
+      {"allowAsProps": true }
+    ]
   }
 }
