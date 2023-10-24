@@ -1,6 +1,6 @@
 import { Card, CardTitle, CardBody } from 'reactstrap';
 
-export function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
+export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
 
   if (!active) {
     return null;

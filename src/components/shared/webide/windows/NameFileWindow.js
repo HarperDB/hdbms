@@ -1,7 +1,7 @@
 import { Card, CardTitle, CardBody } from 'reactstrap';
 import NameInput from './NameInput';
 
-export function NameFileWindow({ active, onConfirm, onCancel }) {
+export default function NameFileWindow({ active, onConfirm, onCancel }) {
   return !active ? null : (
     <Card className="name-file-window">
         <CardTitle className="name-file-window-title">Name Your File</CardTitle>

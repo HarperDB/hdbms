@@ -2,7 +2,7 @@ import { Card, CardTitle, CardBody } from 'reactstrap';
 import NameInput from './NameInput';
 
 
-export function DefaultWindow({ active, fileTree, AddProjectButton, InstallPackageButton }) {
+export default function DefaultWindow({ active, fileTree, AddProjectButton, InstallPackageButton }) {
 
   return !active ? null : (
     <Card className="default-window">

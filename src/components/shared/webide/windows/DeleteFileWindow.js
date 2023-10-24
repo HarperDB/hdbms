@@ -1,6 +1,6 @@
 import { Card, CardTitle, CardBody } from 'reactstrap';
 
-export function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) {
+export default function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) {
 
   if (!active) {
     return null;

@@ -1,6 +1,6 @@
 import { Card, CardTitle, CardBody } from 'reactstrap';
 
-export function DeletePackageWindow({ active, selectedPackage, onConfirm, onCancel }) {
+export default function DeletePackageWindow({ active, selectedPackage, onConfirm, onCancel }) {
 
   if (!active) {
     return null;
