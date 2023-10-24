@@ -1,6 +1,5 @@
-import { Card, CardTitle, CardBody } from 'reactstrap';
-import NameInput from './NameInput';
-
+import React from 'react';
+import { Card, CardBody } from 'reactstrap';
 
 export default function DefaultWindow({ active, fileTree, AddProjectButton, InstallPackageButton }) {
 

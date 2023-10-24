@@ -6,14 +6,12 @@ import EditorWindow, {
   EDITOR_WINDOWS,
   PackageInstallWindow,
   DefaultWindow,
-  NoFileSelectedWindow,
   NameFileWindow,
   DeleteFileWindow,
   DeleteFolderWindow,
   DeletePackageWindow,
   NameProjectFolderWindow,
   NameProjectWindow,
-  PackageDetailsWindow
 } from './EditorWindow';
 
 import FileMenu, {
@@ -183,6 +181,7 @@ function WebIDE({
             }}
             onDeployProject={
               (e) => {
+                onDeployProject(e);
                 // TODO: open deploy package window
               }
             }
