@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
@@ -86,10 +88,9 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 
 }
 
-function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, onFileSelect, onDeployProject, onFileRename, onFolderSelect, userOnSelect, toggleClosed, Icon }) {
+function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFolderSelect, Icon }) {
 
   const isDir = isFolder(directoryEntry);
-  const isProject = directoryEntry.path.split('/').length === 2; // 'components/<proj name>'
   const renameFileIconClass = 'rename-file';
   const deployFileIconClass = 'deploy-project';
   const isFileSelected = directoryEntry.path === selectedFile;
@@ -143,6 +144,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
 
   return (
     <button
+      type="button"
       onClick={handleToggleSelected}
       className={
         cn('file', {
@@ -153,27 +155,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, selectedPackage, o
       onKeyDown={noOp} >
         <Icon className="filename-icon" />
         <span className="filename-text">{directoryEntry.name}</span>
-
-        {/* deploy project to another server button */ }
-        {/*
-
-          !isProject ?
-          null :
-          <i onClick={
-            (e) => {
-              onDeployProject(e);
-            }
-          } className='deploy-project fas fa-share' /> 
-
-
-
-        <i onClick={
-            (e) => {
-              onFileRename(e);
-              e.preventDefault();
-            }
-        } className={`${renameFileIconClass} fas fa-pencil-alt`} />
-        */}
     </button>
   )
 

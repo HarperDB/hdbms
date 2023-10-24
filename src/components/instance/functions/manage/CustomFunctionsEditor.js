@@ -65,50 +65,52 @@ function CustomFunctionsEditor({ refreshCustomFunctions, loading }) {
   return (
     <Row id="functions">
       <Col xl="3" lg="4" md="6" xs="12">
-        <EntityManager
-          itemType="projects"
-          items={Object.keys(custom_functions?.endpoints) || []}
-          activeItem={project}
-          baseUrl={baseUrl}
-          restarting={restarting}
-          showForm={action === 'edit'}
-        />
-        {project && action === 'edit' && (
-          <>
-            <EntityManager
-              itemType="routes"
-              items={(project && custom_functions?.endpoints[project]?.routes) || []}
-              project={project}
-              activeItem={file}
-              baseUrl={`${baseUrl}/${project}/routes`}
-              restarting={restarting}
-              showForm={action === 'edit'}
-            />
-            <EntityManager
-              itemType="helpers"
-              items={(project && custom_functions?.endpoints[project]?.helpers) || []}
-              project={project}
-              activeItem={file}
-              baseUrl={`${baseUrl}/${project}/helpers`}
-              restarting={restarting}
-              showForm={action === 'edit'}
-            />
-            { supportsStaticRoutes && <StaticEntityStatus
-              url={cf_server_url}
-              project={project}
-              fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} /> }
+        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+          <EntityManager
+            itemType="projects"
+            items={Object.keys(custom_functions?.endpoints) || []}
+            activeItem={project}
+            baseUrl={baseUrl}
+            restarting={restarting}
+            showForm={action === 'edit'}
+          />
+          {project && action === 'edit' && (
+            <>
+              <EntityManager
+                itemType="routes"
+                items={(project && custom_functions?.endpoints[project]?.routes) || []}
+                project={project}
+                activeItem={file}
+                baseUrl={`${baseUrl}/${project}/routes`}
+                restarting={restarting}
+                showForm={action === 'edit'}
+              />
+              <EntityManager
+                itemType="helpers"
+                items={(project && custom_functions?.endpoints[project]?.helpers) || []}
+                project={project}
+                activeItem={file}
+                baseUrl={`${baseUrl}/${project}/helpers`}
+                restarting={restarting}
+                showForm={action === 'edit'}
+              />
+              { supportsStaticRoutes && <StaticEntityStatus
+                url={cf_server_url}
+                project={project}
+                fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} /> }
 
-          </>
-        )}
-        <hr className="mt-0" />
-        <div className="entity-manager-footer">
-          <div className="text-bold mb-1">Root File Directory</div>
-          <CopyableText text={custom_functions.directory} />
-          <div className="text-bold mb-1 mt-3">Custom Functions Server URL</div>
-          <CopyableText text={cf_server_url} />
-        </div>
-        <hr />
-        <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
+            </>
+          )}
+          <hr className="mt-0" />
+          <div className="entity-manager-footer">
+            <div className="text-bold mb-1">Root File Directory</div>
+            <CopyableText text={custom_functions.directory} />
+            <div className="text-bold mb-1 mt-3">Custom Functions Server URL</div>
+            <CopyableText text={cf_server_url} />
+          </div>
+          <hr />
+          <EntityReloader refreshCustomFunctions={refreshCustomFunctions} loading={loading} restarting={restarting} />
+        </ErrorBoundary>
       </Col>
       <Col xl="9" lg="8" md="6" xs="12">
         {action === 'deploy' ? (
