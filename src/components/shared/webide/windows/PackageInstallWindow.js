@@ -50,7 +50,11 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
   useEffect(validateProjectName, [ projectName ]);
 
   return (
-    <Card className="package-install-window">
+    <Card className={ cn("package-install-window", {
+      'github': packageType === 'github',
+      'npm': packageType === 'npm',
+      'url': packageType === 'url'
+    }) }>
       <div className="package-install-window-title">Package Install</div>
       <div className="package-install-source-form">
       {
