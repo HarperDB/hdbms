@@ -732,6 +732,16 @@
       }
 
       .package-install-window {
+
+        .install-package-button {
+          width: 105px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          .install-package-status-icon {
+          }
+        }
         &.github {
           line-height:0.5em;
         }

@@ -314,7 +314,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         alert.error(message);
       }
 
-
      // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_worker' });
       await restartInstance({ auth: t.auth, url: t.instance.url });
