@@ -3,7 +3,7 @@ import queryInstance from '../queryInstance';
 
 // this 'addMetadata' logic probably belongs in src/functions/instance
 // by convention
-function addMetadata(fileTree, path, rootDir) {
+function addMetadata(fileTree, path, rootDir, readOnly=false) {
 
   if (!fileTree || !fileTree.entries) {
     return;
@@ -28,8 +28,10 @@ function addMetadata(fileTree, path, rootDir) {
     entry.project = project;
     entry.path = newPath;
     entry.key = uuid();
+    entry.readOnly = readOnly || !!entry.package;
 
-    addMetadata(entry, newPath, rootDir);
+    const isPackage = Boolean(entry.package);
+    addMetadata(entry, newPath, rootDir, entry.readOnly);
 
   };
 
@@ -43,7 +45,8 @@ export default async ({ auth, url }) => {
     url,
   });
 
-  addMetadata(fileTree, fileTree.name, fileTree.name);
+  addMetadata(fileTree, fileTree.name, fileTree.name, false);
+  console.log('filetree: ', fileTree)
 
   return fileTree;
 
