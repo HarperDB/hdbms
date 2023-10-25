@@ -91,20 +91,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-
-  async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
-
-    setRestartingInstance(true);
-
-    setTimeout(async () => { 
-      await restartInstance({ auth: instanceAuth, url: instanceUrl });
-      setRestartingInstance(false);
-    }, 100);
-
-
-  }
-
-
   // save file to instance
   async function saveCodeToInstance(selectedFile, restartRequired) {
 
@@ -327,7 +313,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       if (error) {
         alert.error(message);
       }
-
 
      // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_worker' });

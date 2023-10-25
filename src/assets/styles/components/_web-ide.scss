@@ -90,21 +90,30 @@
   color: white;
 
   .name-input {
+    .name-input-container {
+      input.invalid:focus {
+        border: 1px solid #ea4c89 !important;
+      outline-color: #ea4c89 !important;
+      }
+    }
     .validation-message {
       margin-top: 8px;
+      color: $color-danger;
     }
 
     & > input.invalid {
-      border: 1px solid red !important;
-      outline-color: 1px solid red !important;
+      border: 1px solid $color-danger !important;
+      outline-color: $color-danger !important;
     }
+
+
 
     .invalid-text {
       color: red !important;
     }
 
     .invalid-project-name {
-      color: purple;
+      color: $color-danger;
     }
   }
 
@@ -117,7 +126,6 @@
 
   .package-install-window {
     background: white;
-
   }
 
   .editor.current-file-path {
@@ -182,6 +190,26 @@
 
 
 .light {
+
+  .name-input {
+
+    .validation-message {
+      color: $color-danger;
+    }
+
+    .name-input-container {
+      input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+  }
+
+
   .no-projects {
     color: rgb(105, 105, 105);
   }
@@ -704,6 +732,19 @@
       }
 
       .package-install-window {
+
+        .install-package-button {
+          width: 105px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          .install-package-status-icon {
+          }
+        }
+        &.github {
+          line-height:0.5em;
+        }
         display: flex;
         flex-direction: column;
         height: 100%;

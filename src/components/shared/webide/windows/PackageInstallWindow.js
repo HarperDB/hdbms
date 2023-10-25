@@ -22,6 +22,7 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
   const [ projectNameIsValid, setProjectNameIsValid ] = useState(true);
 
   const [ packageSpec, setPackageSpec ] = useState('');
+  const [ loading, setLoading ] = useState(false);
 
   // result: 'packageSpec' gets sent to harperdb and installed by npm
 
@@ -50,7 +51,11 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
   useEffect(validateProjectName, [ projectName ]);
 
   return (
-    <Card className="package-install-window">
+    <Card className={ cn("package-install-window", {
+      'github': packageType === 'github',
+      'npm': packageType === 'npm',
+      'url': packageType === 'url'
+    }) }>
       <div className="package-install-window-title">Package Install</div>
       <div className="package-install-source-form">
       {
@@ -109,7 +114,6 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         {
           packageType === 'npm' &&
           <NpmPackageSelector
-            onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
             pkg={ packageInfo } 
@@ -118,7 +122,6 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         {
           packageType === 'github' &&
           <GithubRepoSelector
-            onConfirm={ onConfirm }
             projectName={ projectName }
             installed={ installed }
             pkg={ packageInfo }
@@ -127,7 +130,6 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         {
           packageType === 'url' &&
           <UrlInstallField
-            onConfirm={onConfirm}
             projectName={projectName}
             installed={installed}
             pkg={ packageInfo }
@@ -161,19 +163,30 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         <Button
           onClick={
              async () => {
-               await onConfirm(projectName, packageSpec, deployTargets);
+               setLoading(true);
+
+               try {
+                 await onConfirm(projectName, packageSpec, deployTargets);
+               } catch(e) {
+                 setLoading(false);
+               }
+
+               setLoading(false);
+
              }
            }
            className={
-             cn("get-package-button", {
-               'btn-success': true
-               // 'loading': loadingTags
+             cn("install-package-button", {
+               'btn-success': true,
+               'loading': loading
              })
            }
            disabled={
              !isValidProjectName(projectName) || !packageSpec || !deployTargets.length 
            }>
-           Deploy Package
+           {
+             loading ? <i className="install-package-status-icon fa fa-spinner fa-spin" /> : 'Install Package'
+           }
         </Button>
         <Button
           onClick={ onCancel }
