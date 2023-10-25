@@ -181,6 +181,9 @@
     color: #c2c2c2 !important;
   }
 
+  .file-browser-scroll-container {
+  } 
+
   .file-browser button {
     color: lightgray;
   }
@@ -355,13 +358,12 @@
   }
 
   .file-browser-scroll-container {
-    background: #f9f9f9;
+
+    background: transparent;
     height: 100%;
     overflow-y: auto;
-
   }
 
-  // top-level element (left-side)
   .file-browser-outer-container {
 
     height: 100%;
