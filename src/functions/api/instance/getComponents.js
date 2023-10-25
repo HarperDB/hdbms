@@ -30,7 +30,6 @@ function addMetadata(fileTree, path, rootDir, readOnly=false) {
     entry.key = uuid();
     entry.readOnly = readOnly || !!entry.package;
 
-    const isPackage = Boolean(entry.package);
     addMetadata(entry, newPath, rootDir, entry.readOnly);
 
   };
@@ -46,7 +45,6 @@ export default async ({ auth, url }) => {
   });
 
   addMetadata(fileTree, fileTree.name, fileTree.name, false);
-  console.log('filetree: ', fileTree)
 
   return fileTree;
 
