@@ -69,6 +69,11 @@
 
 .purple {
 
+  button[disabled]:hover,
+  button[disabled] {
+    color: #5e5e5e !important;
+  }
+
 
   .default-window-option span {
       color: white !important;
