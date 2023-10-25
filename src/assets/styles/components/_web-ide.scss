@@ -239,10 +239,6 @@
     // #5e5e5e;
   }
 
-  .file-browser {
-    background: #f9f9f9;
-  }
-
   .file.folder-selected {
     background: rgba(200, 200, 200, 0.2) !important;
     //background: lightgray !important; 
@@ -359,6 +355,7 @@
   }
 
   .file-browser-scroll-container {
+    background: #f9f9f9;
     height: 100%;
     overflow-y: auto;
 
