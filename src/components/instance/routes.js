@@ -75,6 +75,15 @@ const functions = {
   iconCode: 'f542',
 };
 
+const applications = {
+  element: <Functions />,
+  path: 'applications',
+  link: 'applications',
+  label: 'applications',
+  icon: 'project-diagram',
+  iconCode: 'f542',
+};
+
 const metrics = {
   element: <Metrics />,
   path: `status`,
@@ -102,6 +111,26 @@ const examples = {
   iconCode: 'f121',
 };
 
-const routes = ({ super_user }) => (super_user ? [browse, query, users, roles, charts, cluster, functions, metrics, config, examples] : [browse, query, charts, examples]);
+const routes = ({ super_user, version=null }) => {
 
+  let supportsApplications = false;
+
+  if (version) {
+
+    const [ a, b ] = version?.split('.') || [];
+
+    const major = parseInt(a, 10);
+    const minor = parseInt(b, 10);
+    const versionAsFloat = parseFloat(`${major}.${minor}`);
+
+    supportsApplications = versionAsFloat >= 4.2;
+
+  }
+
+  if (super_user) { 
+    return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config, examples];
+  } 
+    return [browse, query, charts, examples];
+  
+}
 export default routes;

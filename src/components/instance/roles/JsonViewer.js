@@ -22,6 +22,8 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const version = useStoreState(instanceState, (s) => s.registration?.version);
+  const [ major, minor ] = version?.split('.') || [];
+  const versionAsFloat = parseFloat(`${major}.${minor}`);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
@@ -33,13 +35,12 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const [loading, setLoading] = useState(false);
   const [changed, setChanged] = useState(false);
   const [validJSON, setValidJSON] = useState(true);
-  const [major, minor] = version.split('.');
   const hasStructureUser = major >= 3 && (major > 3 || minor >= 3);
   const jsonHeight = hasStructureUser ? "calc(100vh - 440px)" : "calc(100vh - 340px)"
 
   const icons = {
-    checked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
-    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage schemas/tables</div>,
+    checked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
+    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
   };
 
   useAsyncEffect(async () => {
@@ -113,8 +114,8 @@ function JsonViewer({ showAttributes, fetchRoles }) {
                   }}
                   type="text"
                   id="permitted_schemas"
-                  title="permitteed schemas"
-                  placeholder="comma-separated schemas, or blank for all"
+                  title={`permitted ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }`}
+                  placeholder={`comma-separated ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }, or blank for all`}
                   value={newStructureUser === true ? '' : newStructureUser}
                   disabled={loading}
                 />

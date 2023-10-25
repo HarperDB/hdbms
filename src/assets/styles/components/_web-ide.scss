@@ -1,0 +1,987 @@
+.dark {
+  .no-projects {
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
+
+  color: white;
+
+  .editor.current-file-path {
+    border-bottom: 1px solid transparent;
+  }
+
+  .default-window-option {
+    span {
+      color: white;
+    }
+
+  }
+
+  .name-input {
+
+    .validation-message {
+      color: $color-danger;
+    }
+
+    .name-input-container {
+      input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+  }
+
+
+  .package-install-window {
+    background: rgb(17, 17, 17);
+  }
+
+  .file.folder-selected {
+    background: rgba(200, 200, 200, 0.2) !important;
+  }
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid rgb(60, 60, 60) !important;
+  }
+
+  .file-browser button > span {
+    color: white !important;
+  }
+
+  .file-browser .file.file-selected > span {
+    color: #ee81ee !important;
+  }
+
+
+  button[disabled]:hover,
+  button[disabled] {
+    color: #5e5e5e !important;
+  }
+
+
+}
+
+.purple {
+
+
+  .default-window-option span {
+      color: white !important;
+  }
+
+  .editor-window .default-window .default-window-container {
+    background: $color-pureblack !important;
+    color: white;
+  }
+
+  .no-projects {
+    color: white;
+
+    .docs-link {
+      color: #ee81ee !important;
+    }
+  }
+
+  color: white;
+
+  .name-input {
+    .name-input-container {
+      input.invalid:focus {
+        border: 1px solid #ea4c89 !important;
+      outline-color: #ea4c89 !important;
+      }
+    }
+    .validation-message {
+      margin-top: 8px;
+      color: $color-danger;
+    }
+
+    & > input.invalid {
+      border: 1px solid $color-danger !important;
+      outline-color: $color-danger !important;
+    }
+
+
+
+    .invalid-text {
+      color: red !important;
+    }
+
+    .invalid-project-name {
+      color: $color-danger;
+    }
+  }
+
+  .editor-window .cancel-button {
+    color: rgb(105, 105, 105);;
+  }
+  .editor-window .cancel-button:hover {
+    color: white;
+  }
+
+  .package-install-window {
+    background: white;
+  }
+
+  .editor.current-file-path {
+    border-bottom: 1px solid lightgray;
+  }
+
+  color: rgb(105, 105, 105);
+
+
+  .default-window-option {
+    span {
+      color: rgb(105, 105, 105);
+    }
+  }
+
+  .cancel-button {
+    color: #5c636a;
+  }
+
+  .file.folder-selected {
+    background: rgba(200, 200, 200, 0.2) !important;
+  }
+
+  .editor-window {
+    display: flex;
+    flex-direction: column;
+
+    .current-file-path {
+      background: rgb(26, 26, 26);
+    }
+
+    /*
+    .root {
+      display: grid;
+      grid-template-columns: 150px minmax(0px, auto);
+      height: 100%;
+    }
+    */
+    // background: transparent !important;
+  }
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid darkgray !important;
+  }
+
+  .save-code[disabled] {
+    color: #c2c2c2 !important;
+  }
+
+  .file-browser button {
+    color: lightgray;
+  }
+
+  .delete-file-icon[disabled] {
+    // color: #5e5e5e !important;
+    color: #c2c2c2;
+  }
+
+
+}
+
+
+.light {
+
+  .name-input {
+
+    .validation-message {
+      color: $color-danger;
+    }
+
+    .name-input-container {
+      input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+  }
+
+
+  .no-projects {
+    color: rgb(105, 105, 105);
+  }
+
+  color: rgb(105, 105, 105);
+
+  .package-install-window {
+    background: white;
+  }
+
+  .editor.current-file-path {
+    border-bottom: 1px solid lightgray;
+  }
+
+  .restart-instance-on-save-text {
+    color: rgb(240, 240, 240) !important;
+  }
+
+  .file-menu button[disabled],
+  .editor-menu button[disabled] {
+    color: rgb(240, 240, 240) !important;
+    // #5e5e5e;
+  }
+
+  .file-browser {
+    background: #f9f9f9;
+  }
+
+  .file.folder-selected {
+    background: rgba(200, 200, 200, 0.2) !important;
+    //background: lightgray !important; 
+  }
+
+  .file-menu,
+  .editor-menu {
+    border-bottom: 1px solid lightgray !important;
+  }
+
+
+  .file-menu button {
+    color: #b1b1b1;
+  }
+
+  .file-icon.filetype-unknown {
+    color: #b1b1b1 !important;
+  }
+
+  .editor-window button:hover {
+    color: white;
+    //rgb(105,105,105);
+  }
+
+  .editor-window button {
+    color: rgb(105, 105, 105);
+  }
+
+  .install-package-icon {
+    color: #f24242 !important;
+  }
+
+  .add-project-icon {
+    color: rgb(25, 168, 148) !important;
+  }
+
+  .file-menu {
+    color: rgb(105, 105, 105);
+  }
+
+  .default-window-option {
+    span {
+      color: rgb(105, 105, 105);
+    }
+  }
+}
+
+.web-ide {
+
+
+  .cancel-button {
+    margin-left: 10px;
+  }
+  // general stuff
+  height: 75vh;
+  overflow: hidden;
+
+  ul, li {
+    list-style-type: none;
+  }
+
+  label, button {
+    white-space: nowrap !important;
+  }
+
+  input {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .add-project-icon:hover,
+  .default-window .add-project-icon {
+    color: rgb(25, 168, 148); // always green
+  }
+
+
+  li {
+    margin: 0 5px 5px 0;
+    padding: 0 5px 0 0;
+  }
+
+  .default-window .install-package-icon,
+  .install-package-icon:hover {
+    color: #f24242;
+  }
+
+  .menu-pointer-icon {
+    color: rgb(143, 141, 255);
+  }
+
+  .add-folder-icon:hover,
+  .delete-folder-icon:hover {
+    color: rgb(143, 141, 255);
+  }
+
+  .delete-file-icon:hover {
+    // color: #ee81ee !important;
+  }
+
+
+  .install-package-icon,
+  .add-folder-icon,
+  .add-project-icon,
+  .upload-file-icon,
+  .delete-folder-icon,
+  .delete-file-icon,
+  .add-file-icon {
+    background: transparent;
+    border: none;
+    color: white;
+    margin: 0;
+    outline: none !important;
+    padding: 0;
+  }
+
+  .file-browser-scroll-container {
+    height: 100%;
+    overflow-y: auto;
+
+  }
+
+
+
+  // top-level element (left-side)
+  .file-browser-outer-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .file-browser-inner-container {
+
+    padding: 20px;
+
+    .file-menu {
+      color: white;
+
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 20px;
+      margin-top: 0;
+      padding-bottom: 0;
+      padding-top: 0;
+
+      .file-menu-item {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+
+    .file-browser {
+
+      margin-left: 0;
+      padding: 20px;
+      padding-left: 0;
+
+      .folder-container {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+
+
+        .rename-file,
+        .deploy-project {
+          margin-left: 8px;
+        }
+
+        .rename-file {
+          color: transparent;
+        }
+
+        .file {
+          &.file-selected {
+            color: #ee81ee;
+            //background: #191919 !important;
+            // background: #4a4a4a !important;
+            //border: 1px solid rgb(120,120,120);;
+          }
+
+          &.folder-selected {
+            //background: #2c2c2c !important;
+          }
+        }
+
+        .package.package-selected {
+          color: #f24242;
+        }
+
+        .project-icon {
+          color: rgb(25, 168, 148);
+
+        }
+
+        .package-icon {
+          color: #f24242;
+        }
+
+        .file,
+        .package {
+
+          background: transparent;
+          border: 1px solid transparent;
+          list-style-type: none;
+          margin: 0;
+          outline: none !important; // TODO: fix this because it is not accessible; style differently
+          padding: 3px;
+          white-space: nowrap;
+
+          &.selected {
+          }
+
+          .package-text,
+          .filename-text {
+            padding-left: 5px;
+          }
+
+          .file-icon.filetype-js {
+            color: #f7df1e;
+          }
+
+          .file-icon.filetype-yaml {
+            color: #c4c4ff;
+          }
+
+          .file-icon.filetype-unknown {
+            color: lightgray;
+          }
+
+          .folder-icon {
+            color: rgb(143 141 255);
+          }
+        }
+
+        .folder {
+          padding-left: 15px;
+        }
+
+
+        .folder.folder-contents-closed {
+          display: none;
+
+        }
+
+        .folder.folder-contents-open {
+          display: block;
+        }
+      }
+
+
+    }
+  }
+
+  // top-level element: editor window (right side)
+  // contains code editor and project management windows
+  .editor-window-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    padding: 20px;
+
+    .editor-menu {
+      align-items: baseline;
+      border-bottom: 1px solid #2e2e2e;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      justify-content: left;
+      margin-bottom: 20px;
+      margin-top: 0;
+      padding-bottom: 0;
+      padding-top: 0;
+
+      & > li {
+        margin: 0 5px 5px 0;
+        padding: 0 5px 0 0;
+      }
+
+      button[disabled],
+      button[disabled]:hover {
+        color: #5e5e5e;
+      }
+
+      .restart-instance-after-save,
+      .restart-instance {
+        background: transparent;
+        border: 1px solid transparent;
+        display: flex;
+        flex-direction: row;
+        margin: 0;
+        outline: none !important;
+        padding: 3px;
+
+        & > i {
+          color: #ee81ee;
+        }
+      }
+
+      .save-code {
+        background: transparent;
+        border: none;
+        color: #ee81ee;
+        cursor: pointer;
+        margin: 0;
+        outline: none !important;
+        padding: 0;
+      }
+
+      .save-code[disabled] {
+        color: #5e5e5e;
+        cursor: default;
+      }
+    }
+
+    .editor-window {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+
+
+      .name-input {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+
+
+        .validation-message {
+          margin-top: 8px;
+        }
+
+        .name-input-container {
+          display: flex;
+
+          flex-direction: row;
+          align-items: center;
+
+          .invalid-project-name {
+            margin-left: 15px;
+          }
+
+          .hidden {
+            visibility: hidden;
+          }
+        }
+
+        .name-input-buttons-container {
+          padding-top: 10px;
+        }
+      }
+
+      .delete-folder-window-title,
+      .delete-file-window-title,
+      .delete-package-window-title,
+      .folder-to-delete {
+        align-self: flex-start;
+        font-size: 1.3em;
+        font-weight: bold;
+      }
+
+      .folder-to-delete-parent-project {
+        color: $color-danger;
+        font-weight: bold;
+      }
+
+      .delete-package-window-controls {
+        .package-to-delete {
+          color: $color-danger;
+
+          font-weight: bold;
+        }
+      }
+
+
+      .delete-folder-window-controls {
+        .folder-to-delete {
+        }
+
+        .folder-to-delete-parent-project {
+        }
+      }
+
+      .delete-file-window-container {
+        display: flex;
+        flex-direction: column;
+
+        .delete-file-window-title {
+          align-self: flex-start;
+        }
+
+
+      }
+
+      .delete-file-window-controls {
+        .file-to-delete {
+          color: $color-danger;
+          font-weight: bold;
+        }
+
+
+        .file-to-delete-parent-project {
+          font-weight: bold;
+          // color: rgb(25, 168, 148);
+          // color: $color-danger;
+
+        }
+      }
+
+      .default-window {
+        .default-window-container {
+          h4 {
+            padding-bottom: 80px;
+          }
+
+          .default-window-option {
+            line-height: 2.5em;
+
+            span,
+            button > span {
+              margin-left: 20px;
+            }
+
+            span {
+              // color: white;
+            }
+
+            .add-project-button-text,
+            .install-package-button-text {
+              // color: white;
+            }
+          }
+        }
+      }
+
+
+
+      .default-window-container,
+      .name-project-window-container,
+      .name-project-folder-window-container,
+      .name-file-window-container,
+      .delete-file-window-container,
+      .delete-folder-window-container,
+      .delete-package-window-container {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .default-window,
+      .name-project-window,
+      .name-project-folder-window,
+      .name-file-window,
+      .delete-package-window,
+      .delete-file-window,
+      .delete-folder-window {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .name-project-window-title,
+      .name-file-window-title {
+        text-align: center;
+      }
+
+      .card-body {
+      }
+
+      .name-file-window {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+
+        .name-file-window-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+
+          width: 100%;
+        }
+      }
+
+      .package-install-window {
+
+        .install-package-button {
+          width: 105px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          .install-package-status-icon {
+          }
+        }
+        &.github {
+          line-height:0.5em;
+        }
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        padding-left: 25%;
+        padding-right: 25%;
+
+        width: 100%;
+
+        .package-install-window-title {
+          font-size: 1.5em;
+          font-weight: bold;
+          text-align: center;
+        }
+
+
+        .card {
+          border: 0 solid transparent !important;
+        }
+
+        .package-install-source-form {
+          align-items: center;
+
+          display: flex;
+          flex-direction: row;
+          height: 100px;
+
+          justify-content: center;
+          padding-left: 25%;
+          padding-right: 25%;
+
+          width: 100%;
+
+
+          .package-install-option-container {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100px;
+
+
+            .package-install-source-icon {
+              font-size: 2em;
+              margin-bottom: 5px;
+            }
+
+            .package-install-source-option {
+              height: 25px;
+              width: 25px;
+            }
+          }
+        }
+
+
+        .package-install-details-form {
+          .project-name-invalid-text {
+
+            color: $color-danger !important;
+            margin-bottom: 20px;
+            display: block;
+          }
+
+
+
+          .package-install-input-container {
+            display: flex;
+            flex-direction: column;
+
+            margin-bottom: 20px;
+
+
+            .project-name-input.invalid:focus,
+            .project-name-input.invalid {
+              border: 1px solid $color-danger !important;
+              outline-color: $color-danger !important;
+            }
+
+
+            .search-status-icon-container {
+              text-align: center;
+              width: 40px;
+
+              i {
+                color: white;
+
+
+                &.not-searching {
+                  color: white; //rgba(0,255,0, 0.1);
+                }
+
+
+                &.found, &.loading {
+                  color: green;
+                }
+
+                &.not-found {
+                  color: rgb(145, 50, 120);
+                }
+
+
+              }
+            }
+
+            .package-install-deploy-targets-dropdown {
+            }
+
+
+            .package-install-github-query-container {
+              .package-install-github-user {
+                margin-bottom: 20px;
+              }
+
+              .package-install-github-repo-lookup {
+                margin-bottom: 20px;
+
+                .github-package-search-box {
+                  align-items: center;
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: center;
+
+                }
+              }
+            }
+
+            .package-install-npm-lookup {
+              .package-install-npm-query-container {
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 20px;
+              }
+            }
+
+          }
+        }
+
+      }
+
+      .editor {
+        &.current-file-path::before {
+        }
+
+
+        &.current-file-path {
+          align-self: flex-start;
+          color: darkgray;
+
+          .current-file-path-icon {
+            padding: 5px;
+
+          }
+        }
+
+
+        width: 100%;
+      }
+
+      .package-install-source-form {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+
+        .package-install-source-icon {
+          font-size: 2em;
+
+          &.fab.fa-npm {
+            color: rgb(145, 50, 120);
+            font-size: 3em;
+          }
+
+          &.fa-github,
+          &.fa-link {
+            padding: 5px;
+          }
+
+          &.fa-link {
+            color: lightgray;
+          }
+
+          &.fa-github {
+            color: rgb(28, 182, 149);
+          }
+        }
+
+        .package-type {
+          border: 0 solid transparent !important;
+          display: flex;
+          flex-direction: row;
+          margin-bottom: 30px;
+
+          label {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 80px;
+            text-align: center;
+          }
+
+          input:focus {
+            outline: none !important;
+          }
+
+          input {
+            margin-top: 10px;
+          }
+
+        }
+      }
+
+      .filename-dialog {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+  }
+}
+
+@media(max-width: 814px) {
+  .web-ide {
+    overflow: initial;
+
+    .file-browser-outer-container {
+      height: auto;
+      overflow-y: auto;
+    }
+
+    .file-browser-scroll-container {
+      max-height: 500px;
+    }
+  }
+}

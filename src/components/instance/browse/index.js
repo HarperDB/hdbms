@@ -38,6 +38,10 @@ function BrowseIndex() {
   const [instanceAuths] = useInstanceAuth({});
   const auth = instanceAuths && instanceAuths[compute_stack_id];
   const url = useStoreState(instanceState, (s) => s.url);
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const version = registration?.version;
+  const [major, minor] = version?.split('.') || [];
+  const versionAsFloat = `${major}.${minor}`;
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
@@ -45,7 +49,7 @@ function BrowseIndex() {
   const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
   const showTableForm = showForm || (instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
   const emptyPromptMessage = showForm
-    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : 'schema'}`
+    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}` }`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
 
   const syncInstanceStructure = () => {
@@ -100,17 +104,34 @@ function BrowseIndex() {
   return (
     <Row>
       <Col xl="3" lg="4" md="5" xs="12">
-        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <EntityManager activeItem={schema} items={entities.schemas} baseUrl={baseUrl} itemType="schema" showForm={showForm} />
-          {schema && <EntityManager activeItem={table} items={entities.tables} activeSchema={schema} baseUrl={`${baseUrl}/${schema}`} itemType="table" showForm={showTableForm} />}
-          <StructureReloader centerText label="refresh schemas and tables" />
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
+          FallbackComponent={ErrorFallback}>
+          <EntityManager
+            activeItem={schema}
+            items={entities.schemas}
+            baseUrl={baseUrl}
+            itemType={versionAsFloat >= 4.2 ? 'database' : 'schema'}
+            showForm={showForm} />
+            {
+              schema && <EntityManager
+                activeItem={table}
+                items={entities.tables}
+                activeSchema={schema}
+                baseUrl={`${baseUrl}/${schema}`}
+                itemType="table"
+                showForm={showTableForm} />
+            }
+          <StructureReloader centerText label={`refresh ${versionAsFloat >= 4.2 ? 'databases' : 'schemas'} and tables`} />
         </ErrorBoundary>
       </Col>
       <Col xs="12" className="d-block d-md-none">
         <hr />
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
-        <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+        <ErrorBoundary
+          onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
+          FallbackComponent={ErrorFallback}>
           {schema && table && action === 'csv' && entities.activeTable ? (
             <CSVUpload />
           ) : schema && table && action && entities.activeTable ? (

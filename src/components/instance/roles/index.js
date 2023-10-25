@@ -38,6 +38,9 @@ function RolesIndex() {
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
+  const version = useStoreState(instanceState, (s) => s.registration?.version);
+  const [ major, minor ] = version?.split('.') || [];
+  const versionAsFloat = parseFloat(`${major}.${minor}`);
 
   const fetchRoles = useCallback(async () => {
     setLoading(true);
@@ -109,7 +112,7 @@ function RolesIndex() {
           <Card className="my-3">
             <CardBody>
               {role_id ? (
-                <div className="empty-prompt">Super Users and Cluster Users have full access to all schemas, tables, and attributes.</div>
+                <div className="empty-prompt">Super Users and Cluster Users have full access to all { versionAsFloat >= 4.2 ? 'databases' : 'schemas'}, tables, and attributes.</div>
               ) : (
                 <div className="empty-prompt">Please choose or add a role to manage it.</div>
               )}
