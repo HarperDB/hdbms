@@ -181,6 +181,9 @@
     color: #c2c2c2 !important;
   }
 
+  .file-browser-scroll-container {
+  } 
+
   .file-browser button {
     color: lightgray;
   }
@@ -237,10 +240,6 @@
   .editor-menu button[disabled] {
     color: rgb(240, 240, 240) !important;
     // #5e5e5e;
-  }
-
-  .file-browser {
-    background: #f9f9f9;
   }
 
   .file.folder-selected {
@@ -359,21 +358,15 @@
   }
 
   .file-browser-scroll-container {
+
+    background: transparent;
     height: 100%;
     overflow-y: auto;
-
   }
 
-
-
-  // top-level element (left-side)
   .file-browser-outer-container {
+
     height: 100%;
-    overflow-y: auto;
-  }
-
-  .file-browser-inner-container {
-
     padding: 20px;
 
     .file-menu {
