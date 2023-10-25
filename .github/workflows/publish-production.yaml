@@ -72,7 +72,7 @@ jobs:
         #!/bin/bash
 
         yarn
-        yarn lint
+        yarn lint-prod
         yarn build:prod
     - name: Clean Remote Directory
       env:
