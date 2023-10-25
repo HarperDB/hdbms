@@ -64,7 +64,6 @@ function WebIDE({
   const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
 
-
   function updateActiveEditorWindow(to, from) {
     // TODO: figure out correct logic here.
     setActiveEditorWindow(to);

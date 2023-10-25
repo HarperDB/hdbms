@@ -54,6 +54,7 @@ function Editor({ active, file, onChange, theme }) {
       theme={editorTheme}
       onChange={ onChange }
       options={{
+        readOnly: file.readOnly,
         automaticLayout: true,
         minimap: {
           enabled: false
