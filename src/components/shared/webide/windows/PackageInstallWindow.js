@@ -10,6 +10,7 @@ import UrlInstallField from './UrlInstallField';
 
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets }) {
 
+  console.log(availableDeployTargets);
   const packageTypes = [ 'npm', 'github', 'url' ];
   const defaultPackageType = packageTypes[0];
 
@@ -155,7 +156,7 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
             }
             options={
               availableDeployTargets.map((t) => ({
-                label: t.instance.host,
+                label: t.instance.instance_name,
                 value: t.instance.url
               }))
             } />
