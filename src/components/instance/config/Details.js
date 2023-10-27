@@ -8,7 +8,6 @@ import CopyableText from '../../shared/CopyableText';
 
 function Details({ clusterNodeName }) {
   const url = useStoreState(instanceState, (s) => s.url);
-  const all = useStoreState(instanceState, (s) => s);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
   const compute = useStoreState(instanceState, (s) => s.compute);

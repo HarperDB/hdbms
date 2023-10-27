@@ -10,7 +10,6 @@ import UrlInstallField from './UrlInstallField';
 
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets }) {
 
-  console.log(availableDeployTargets);
   const packageTypes = [ 'npm', 'github', 'url' ];
   const defaultPackageType = packageTypes[0];
 
