@@ -8,6 +8,7 @@ import CopyableText from '../../shared/CopyableText';
 
 function Details({ clusterNodeName }) {
   const url = useStoreState(instanceState, (s) => s.url);
+  const all = useStoreState(instanceState, (s) => s);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const totalPriceStringWithInterval = useStoreState(instanceState, (s) => s.totalPriceStringWithInterval);
   const compute = useStoreState(instanceState, (s) => s.compute);
@@ -21,6 +22,10 @@ function Details({ clusterNodeName }) {
   const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
   const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
 
+  const version = useStoreState(instanceState, (s) => s.registration?.version);
+  const [ major, minor ] = version?.split('.') || [];
+  const versionAsFloat = parseFloat(`${major}.${minor}`);
+
   return (
     <>
       <span className="floating-card-header">instance overview</span>
@@ -29,6 +34,13 @@ function Details({ clusterNodeName }) {
           <Row>
             <Col md="4" xs="12">
               <ContentContainer header="Instance URL" className="mb-3">
+                <div className="nowrap-scroll">
+                  <CopyableText text={url} />
+                </div>
+              </ContentContainer>
+            </Col>
+            <Col md="4" xs="12">
+              <ContentContainer header={`${versionAsFloat >= 4.2 ? 'Applications' : 'Custom Functions'} URL`} className="mb-3">
                 <div className="nowrap-scroll">
                   <CopyableText text={url} />
                 </div>
