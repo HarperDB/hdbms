@@ -10,7 +10,6 @@ const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './s
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ './functions'));
-const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 const browse = {
   element: <Browse />,
@@ -102,14 +101,6 @@ const config = {
   iconCode: 'f0ad',
 };
 
-const examples = {
-  element: <Examples />,
-  path: `examples/:folder?/:method?`,
-  link: 'examples',
-  label: 'example code',
-  icon: 'code',
-  iconCode: 'f121',
-};
 
 const routes = ({ super_user, version=null }) => {
 
@@ -128,9 +119,10 @@ const routes = ({ super_user, version=null }) => {
   }
 
   if (super_user) { 
-    return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config, examples];
+    return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config];
   } 
-    return [browse, query, charts, examples];
+
+  return [browse, query, charts];
   
 }
 export default routes;

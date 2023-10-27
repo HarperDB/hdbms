@@ -197,7 +197,12 @@
 }
 
 
+.akamai,
 .light {
+
+  .editor-window {
+    border: 1px solid $color-lightergrey;
+  }
 
   .name-input {
 
