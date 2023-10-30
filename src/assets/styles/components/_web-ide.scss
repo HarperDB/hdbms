@@ -5,7 +5,7 @@
     }
   }
 
-  color: white;
+  color: $color-white;
 
   .editor.current-file-path {
     border-bottom: 1px solid transparent;
@@ -13,13 +13,12 @@
 
   .default-window-option {
     span {
-      color: white;
+      color: $color-white;
     }
 
   }
 
   .name-input {
-
     .validation-message {
       color: $color-danger;
     }
@@ -51,7 +50,7 @@
   }
 
   .file-browser button > span {
-    color: white !important;
+    color: $color-white !important;
   }
 
   .file-browser .file.file-selected > span {
@@ -68,7 +67,6 @@
 }
 
 .purple {
-
   button[disabled]:hover,
   button[disabled] {
     color: #5e5e5e !important;
@@ -76,23 +74,25 @@
 
 
   .default-window-option span {
-      color: white !important;
+      color: $color-white !important;
   }
 
   .editor-window .default-window .default-window-container {
     background: $color-pureblack !important;
-    color: white;
+    color: $color-white;
   }
 
   .no-projects {
-    color: white;
+    color: $color-white;
 
     .docs-link {
       color: #ee81ee !important;
     }
   }
 
-  color: white;
+  color: $color-white;
+
+  color: rgb(105, 105, 105);
 
   .name-input {
     .name-input-container {
@@ -101,9 +101,10 @@
       outline-color: #ea4c89 !important;
       }
     }
+
     .validation-message {
-      margin-top: 8px;
       color: $color-danger;
+      margin-top: 8px;
     }
 
     & > input.invalid {
@@ -125,19 +126,18 @@
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
+
   .editor-window .cancel-button:hover {
-    color: white;
+    color: $color-white;
   }
 
   .package-install-window {
-    background: white;
+    background: $color-white;
   }
 
   .editor.current-file-path {
     border-bottom: 1px solid lightgray;
   }
-
-  color: rgb(105, 105, 105);
 
 
   .default-window-option {
@@ -199,13 +199,11 @@
 
 .akamai,
 .light {
-
   .editor-window {
     border: 1px solid $color-lightergrey;
   }
 
   .name-input {
-
     .validation-message {
       color: $color-danger;
     }
@@ -230,7 +228,7 @@
   color: rgb(105, 105, 105);
 
   .package-install-window {
-    background: white;
+    background: $color-white;
   }
 
   .editor.current-file-path {
@@ -267,7 +265,7 @@
   }
 
   .editor-window button:hover {
-    color: white;
+    color: $color-white;
     //rgb(105,105,105);
   }
 
@@ -295,8 +293,6 @@
 }
 
 .web-ide {
-
-
   .cancel-button {
     margin-left: 10px;
   }
@@ -356,7 +352,7 @@
   .add-file-icon {
     background: transparent;
     border: none;
-    color: white;
+    color: $color-white;
     margin: 0;
     outline: none !important;
     padding: 0;
@@ -375,7 +371,7 @@
     padding: 20px;
 
     .file-menu {
-      color: white;
+      color: $color-white;
 
       display: flex;
       flex-direction: row;
@@ -506,7 +502,7 @@
     .editor-menu {
       align-items: baseline;
       border-bottom: 1px solid #2e2e2e;
-      color: white;
+      color: $color-white;
       display: flex;
       flex-direction: row;
       justify-content: left;
@@ -577,10 +573,10 @@
         }
 
         .name-input-container {
+          align-items: center;
           display: flex;
 
           flex-direction: row;
-          align-items: center;
 
           .invalid-project-name {
             margin-left: 15px;
@@ -735,16 +731,16 @@
       }
 
       .package-install-window {
-
         .install-package-button {
-          width: 105px;
-          display: inline-flex;
           align-items: center;
+          display: inline-flex;
           justify-content: center;
+          width: 105px;
 
           .install-package-status-icon {
           }
         }
+
         &.github {
           line-height:0.5em;
         }
@@ -807,8 +803,8 @@
           .project-name-invalid-text {
 
             color: $color-danger !important;
-            margin-bottom: 20px;
             display: block;
+            margin-bottom: 20px;
           }
 
 
@@ -832,11 +828,11 @@
               width: 40px;
 
               i {
-                color: white;
+                color: $color-white;
 
 
                 &.not-searching {
-                  color: white; //rgba(0,255,0, 0.1);
+                  color: $color-white; //rgba(0,255,0, 0.1);
                 }
 
 
