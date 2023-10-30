@@ -31,7 +31,7 @@ function Editor({ active, file, onChange, theme }) {
   }, [file]);
 
   useEffect(() => {
-    setEditorTheme(theme === 'light' ? 'light' : 'vs-dark');
+    setEditorTheme(theme === 'light' || theme === 'akamai' ? 'light' : 'vs-dark');
   }, [theme]);
 
 
