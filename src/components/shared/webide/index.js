@@ -44,7 +44,7 @@ function WebIDE({
   onDeleteFile,
   onDeletePackage,
   onDeployProject,
-  onRevertChanges,
+  onRevertFile,
   onFileSelect,
   onFileRename,
   onFolderRename,
@@ -215,7 +215,7 @@ function WebIDE({
 
               setSelectedPackage(null);
 
-              // file unselected
+              // action = unselect file
               if (!entry) {
 
                 setSelectedFile(null);
@@ -223,8 +223,10 @@ function WebIDE({
 
               } else {
 
-                // file selected
-                const { content } = await onFileSelect(entry);
+                // action = select file
+                const fileMeta = await onFileSelect(entry);
+                const { content } = fileMeta;
+                console.log('file meta on select: ', fileMeta);
                 setSelectedFile({ ...entry, content });
                 updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
 
@@ -271,7 +273,11 @@ function WebIDE({
           }
           RevertFileButton={
             () => (
-              <RevertFileButton onClick={onRevertChanges}  />
+              <RevertFileButton onRevertFile={
+                () => {
+                  onRevertFile(selectedFile);
+                }
+              }  />
             )
           }
         />

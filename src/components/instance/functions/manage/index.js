@@ -88,9 +88,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const fileKey = `${compute_stack_id}_${path}`;
 
     if (fileKey in updatedCache) {
-      console.log('key exists. deleting from: ', updatedCache);
       delete updatedCache[fileKey];
-      console.log('updatedCache after delete:', updatedCache);
     }
 
     setEditorCache({
@@ -100,7 +98,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   function saveFileToLocalStorage({ path, content }) {
 
-    const fileKey = `${compute_stack_id}-${path}`;
+    const fileKey = `${compute_stack_id}_${path}`;
 
     setEditorCache({
       ...editorCache,
@@ -182,6 +180,24 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     const { path, project, name } = selectedFile;
     const newFile = getRelativeFilepath(path);
+    const fileCacheKey = `${compute_stack_id}_${path}`;
+    const cachedFile = editorCache[fileCacheKey];
+
+    console.log('selected file: ', selectedFile);
+
+    if (cachedFile) {
+
+      return {
+        cached: true,
+        content: cachedFile,
+        path,
+        project,
+        name
+      };
+
+    }
+    // TODO: set file content to local storage copy if it exists.
+    //
     const { error, message } = await getComponentFile({
       auth,
       url,
@@ -203,6 +219,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     }
 
     return {
+      cached: false,
       content: message,
       path,
       project,
@@ -443,6 +460,58 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function revertChanges(selectedFile) {
+
+    removeFileFromLocalStorage({ path: selectedFile.path });
+    await refreshCustomFunctions();
+
+    /*
+    const filepathRelativeToProjectDir = getRelativeFilepath(path);
+    const { error: getComponentError, message: getComponentMessage } = await getComponentFile({
+      file: filepathRelativeToProjectDir,
+      project,
+      auth,
+      url
+    });
+
+    if (getComponentError) {
+      return alert.error(getComponentMessage);
+    }
+
+    const fileContentOnInstance = getComponentMessage;
+
+    // save it as the new 
+    const { error: setComponentError, message: setComponentMessage } = await setComponentFile({
+      auth,
+      url,
+      project,
+      file: filepathRelativeToProjectDir,
+      payload: fileContentOnInstance 
+    });
+
+    if (setComponentError) {
+      return alert.error(setComponentMessage);
+    }
+    */
+
+    // refreshCustomFunctions();
+
+    // return null;
+    // console.log('revert. fetch original file: ', message);
+
+
+
+    // oldFile = getComponentFile
+    // await getComponentFile({
+    //  project,
+    //  path,
+    //  auth,
+    //  url
+    // });
+    // setComponentFile
+    // fileKey = compute_stack_id + selectedFile.path
+  }
+
   return supportsApplicationsAPI ?
     <ApplicationsEditor
       theme={theme}
@@ -450,9 +519,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
-      onRevertChanges={(e) => {
-        console.log('on revert!', e);
-      }}
+      onRevertFile={revertChanges}
       onChange={saveFileToLocalStorage}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
