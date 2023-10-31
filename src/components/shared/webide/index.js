@@ -44,6 +44,7 @@ function WebIDE({
   onDeleteFile,
   onDeletePackage,
   onDeployProject,
+  onRevertChanges,
   onFileSelect,
   onFileRename,
   onFolderRename,
@@ -270,7 +271,7 @@ function WebIDE({
           }
           RevertFileButton={
             () => (
-              <RevertFileButton  />
+              <RevertFileButton onClick={onRevertChanges}  />
             )
           }
         />

@@ -85,7 +85,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   function removeFileFromLocalStorage({ path }) {
 
     const updatedCache = {...editorCache};
-    const fileKey = `${compute_stack_id}-${path}`;
+    const fileKey = `${compute_stack_id}_${path}`;
 
     if (fileKey in updatedCache) {
       console.log('key exists. deleting from: ', updatedCache);
@@ -450,6 +450,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
+      onRevertChanges={(e) => {
+        console.log('on revert!', e);
+      }}
       onChange={saveFileToLocalStorage}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}

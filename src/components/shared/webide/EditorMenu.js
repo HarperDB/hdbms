@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export function RevertFileButton({ disabled }) {
+export function RevertFileButton({ disabled, onClick }) {
   return (
     <button
       type="button"
@@ -12,11 +12,7 @@ export function RevertFileButton({ disabled }) {
       className={
         cn('revert-file fas fa-history', { disabled })
       }
-      onClick={
-        () => {
-          console.log('revert file button clicked');
-        }
-      } />
+      onClick={ onClick } />
 
   )
 }
