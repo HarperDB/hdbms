@@ -26,7 +26,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
   const [loading, setLoading] = useState(false);
   const [loadingFilter, setLoadingFilter] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(true);
-  const [hashAttributeExists,setHashAttributeExists] = useState(false);
 
   useEffect(() => {
     controller?.abort();
