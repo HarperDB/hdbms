@@ -1,10 +1,11 @@
 import React, { useState, useEffect, lazy } from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardTitle } from 'reactstrap';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
+import describeTable from '../../../functions/api/instance/describeTable';
 
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
@@ -31,6 +32,20 @@ const defaultTableState = {
   hashAttribute: false,
 };
 
+function NoPrimaryKeyMessage({ table }) {
+  return (
+    <Card className="my-3 missing-primary-key">
+      <CardBody>
+        <CardTitle>No Primary Key</CardTitle>
+        <i className="fa fa-warning mt-3" />
+        <span className="mt-3">
+          The table { `'${table}'` } does not have a primary key. The HarperDB Studio does not currently support tables wihtout a primary key defined. Please see the <a href="https://docs.harperdb.io/docs" target="_blank" rel="noreferrer">HarperDB documention</a> to see the standard HarperDB querying options.
+        </span>
+      </CardBody>
+    </Card>
+  );
+}
+
 function BrowseIndex() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,16 +66,30 @@ function BrowseIndex() {
   const emptyPromptMessage = showForm
     ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}` }`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
+  const [hasHashAttr, setHasHashAttr] = useState(true);
 
   const syncInstanceStructure = () => {
     buildInstanceStructure({ auth, url });
   }
 
+  const checkForHashAttribute = () => {
+    async function check() {
+      if (table) {
+        const result = await describeTable({ auth, url, schema, table });
+        setHasHashAttr(Boolean(result.hash_attribute));
+      }
+    }
+
+    check();
+  };
+
+  useEffect(checkForHashAttribute, [auth, url, schema, table]);
+
   const validate = () => {
     if (structure) {
 
       /*
-       * FIXME: There is a fair amount of logic scattered throughout this 
+       * FIXME: There is a fair amount of logic scattered throughout this
        * page that could be put in a router-level validation function.
        *
        * Splitting the browse endpoint into /schema/ and /schema/table heirarchy
@@ -102,7 +131,7 @@ function BrowseIndex() {
   useEffect(syncInstanceStructure, [auth, url, schema, table]);
 
   return (
-    <Row>
+    <Row id="browse">
       <Col xl="3" lg="4" md="5" xs="12">
         <ErrorBoundary
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
@@ -132,15 +161,20 @@ function BrowseIndex() {
         <ErrorBoundary
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
           FallbackComponent={ErrorFallback}>
-          {schema && table && action === 'csv' && entities.activeTable ? (
-            <CSVUpload />
-          ) : schema && table && action && entities.activeTable ? (
-            <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
-          ) : schema && table && entities.activeTable ? (
-            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
-          ) : (
-            <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
-          )}
+          {
+            hasHashAttr ? (
+              schema && table && action === 'csv' && entities.activeTable ? (
+                <CSVUpload />
+              ) : schema && table && action && entities.activeTable ? (
+                <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
+              ) : schema && table && entities.activeTable ? (
+                <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
+              ) : (
+                <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
+              )
+            ) :
+            <NoPrimaryKeyMessage table={table} />
+          }
         </ErrorBoundary>
       </Col>
     </Row>

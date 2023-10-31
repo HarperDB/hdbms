@@ -86,7 +86,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
   if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
   if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
-  const dataTableColumns = [ hashAttribute, ...orderedColumns ].map((k) => ({
+  const dataTableColumns = (hashAttribute ? [ hashAttribute, ...orderedColumns ] : [ ...orderedColumns ]).map((k) => ({
     Header: k.toString(),
     accessor: (row) => row[k.toString()],
   }));

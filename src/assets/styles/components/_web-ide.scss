@@ -19,7 +19,6 @@
   }
 
   .name-input {
-
     .validation-message {
       color: $color-danger;
     }
@@ -68,7 +67,6 @@
 }
 
 .purple {
-
   button[disabled]:hover,
   button[disabled] {
     color: #5e5e5e !important;
@@ -94,6 +92,8 @@
 
   color: white;
 
+  color: rgb(105, 105, 105);
+
   .name-input {
     .name-input-container {
       input.invalid:focus {
@@ -101,9 +101,10 @@
       outline-color: #ea4c89 !important;
       }
     }
+
     .validation-message {
-      margin-top: 8px;
       color: $color-danger;
+      margin-top: 8px;
     }
 
     & > input.invalid {
@@ -125,6 +126,7 @@
   .editor-window .cancel-button {
     color: rgb(105, 105, 105);;
   }
+
   .editor-window .cancel-button:hover {
     color: white;
   }
@@ -136,8 +138,6 @@
   .editor.current-file-path {
     border-bottom: 1px solid lightgray;
   }
-
-  color: rgb(105, 105, 105);
 
 
   .default-window-option {
@@ -199,13 +199,11 @@
 
 .akamai,
 .light {
-
   .editor-window {
     border: 1px solid $color-lightergrey;
   }
 
   .name-input {
-
     .validation-message {
       color: $color-danger;
     }
@@ -295,8 +293,6 @@
 }
 
 .web-ide {
-
-
   .cancel-button {
     margin-left: 10px;
   }
@@ -577,10 +573,10 @@
         }
 
         .name-input-container {
+          align-items: center;
           display: flex;
 
           flex-direction: row;
-          align-items: center;
 
           .invalid-project-name {
             margin-left: 15px;
@@ -735,16 +731,16 @@
       }
 
       .package-install-window {
-
         .install-package-button {
-          width: 105px;
-          display: inline-flex;
           align-items: center;
+          display: inline-flex;
           justify-content: center;
+          width: 105px;
 
           .install-package-status-icon {
           }
         }
+
         &.github {
           line-height:0.5em;
         }
@@ -807,8 +803,8 @@
           .project-name-invalid-text {
 
             color: $color-danger !important;
-            margin-bottom: 20px;
             display: block;
+            margin-bottom: 20px;
           }
 
 
