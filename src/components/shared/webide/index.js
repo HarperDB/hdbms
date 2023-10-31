@@ -38,6 +38,7 @@ function WebIDE({
   onAddFile,
   onAddProjectFolder,
   onAddProject,
+  onChange,
   onDeleteFolder,
   onDeleteFile,
   onDeletePackage,
@@ -109,6 +110,7 @@ function WebIDE({
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode) {
 
+    console.log('update from top level ide file.');
     const update = {
       ...selectedFile,
       content: updatedCode
@@ -256,7 +258,7 @@ function WebIDE({
           }
           RestartOnSaveToggle={
             () => (
-              <RestartOnSaveToggle 
+              <RestartOnSaveToggle
                 restartAfterSave={restartAfterSave}
                 onClick={
                   () => {
@@ -269,7 +271,7 @@ function WebIDE({
         <EditorWindow>
           <DefaultWindow
             fileTree={fileTree}
-            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW }
             AddProjectButton={
               () => (
                 <AddProjectButton
@@ -284,7 +286,7 @@ function WebIDE({
             InstallPackageButton={
               () => (
                 <InstallPackageButton
-                  text="Install or deploy a remote package" 
+                  text="Install or deploy a remote package"
                   onClick={
                     () => {
                       setSelectedPackage(null);
@@ -313,12 +315,12 @@ function WebIDE({
             <PackageInstallWindow
               selectedPackage={ selectedPackage }
               onConfirm={ installPackage }
-              onCancel={ toDefaultWindow } 
+              onCancel={ toDefaultWindow }
               deployTargets={ deployTargets }
             />
           }
           <DeletePackageWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW }
             selectedPackage={ selectedPackage }
             onConfirm={
               async () => {
@@ -341,7 +343,7 @@ function WebIDE({
 
           />
           <DeleteFolderWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW }
             selectedFolder={ selectedFolder }
             onConfirm={
               async () => {
@@ -363,7 +365,7 @@ function WebIDE({
             }
           />
           <DeleteFileWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW }
             selectedFile={ selectedFile }
             onConfirm={
               () => {
@@ -383,7 +385,15 @@ function WebIDE({
             theme={theme}
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
-            onChange={ updateInMemoryCodeFile } />
+            onChange={
+              (fileContent) => {
+                updateInMemoryCodeFile(fileContent);
+                onChange({
+                  path: selectedFile.path,
+                  content: fileContent
+                });
+              }
+            } />
         </EditorWindow>
       </Col>
     </Row>

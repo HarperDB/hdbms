@@ -52,7 +52,7 @@ function Editor({ active, file, onChange, theme }) {
       language={language}
       value={file?.content || ''}
       theme={editorTheme}
-      onChange={ onChange }
+      onChange={onChange}
       options={{
         readOnly: file.readOnly,
         automaticLayout: true,

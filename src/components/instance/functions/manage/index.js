@@ -14,6 +14,7 @@ import deployComponent from '../../../../functions/api/instance/deployComponent'
 import restartInstance from '../../../../functions/api/instance/restartInstance';
 
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
+import useEditorCache from '../../../../functions/state/editorCache';
 
 import ApplicationsEditor from '../../../shared/webide';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
@@ -45,19 +46,19 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       return memo;
     }
 
-    const [ major, minor ] = deployTarget?.version.split('.') || []; 
+    const [ major, minor ] = deployTarget?.version.split('.') || [];
 
     // exclude < 4.2
 
     if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
 
-      memo.push({ 
+      memo.push({
         isCurrentInstance: csId === thisCsId,
         auth,
         instance
       });
 
-    } 
+    }
 
     return memo;
 
@@ -69,22 +70,50 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   const { compute_stack_id } = useParams();
   const registration = useStoreState(instanceState, (s) => s.registration);
-  const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
+  const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
-  const [instanceAuths] = useInstanceAuth({});
+  const [ instanceAuths ] = useInstanceAuth({});
+  const [ editorCache, setEditorCache ] = useEditorCache({});
   const theme = useStoreState(appState, (s) => s.theme);
   const [ restartingInstance, setRestartingInstance ] = useState(false);
   const alert = useAlert();
+
+  function removeFileFromLocalStorage({ path }) {
+
+    const updatedCache = {...editorCache};
+    const fileKey = `${compute_stack_id}-${path}`;
+
+    if (fileKey in updatedCache) {
+      console.log('key exists. deleting from: ', updatedCache);
+      delete updatedCache[fileKey];
+      console.log('updatedCache after delete:', updatedCache);
+    }
+
+    setEditorCache({
+      ...updatedCache
+    });
+  }
+
+  function saveFileToLocalStorage({ path, content }) {
+
+    const fileKey = `${compute_stack_id}-${path}`;
+
+    setEditorCache({
+      ...editorCache,
+      [fileKey]: content
+    });
+
+  }
 
   async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
 
     setRestartingInstance(true);
 
-    setTimeout(async () => { 
+    setTimeout(async () => {
       await restartInstance({ auth: instanceAuth, url: instanceUrl });
       setRestartingInstance(false);
     }, 100);
@@ -94,7 +123,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   // save file to instance
   async function saveCodeToInstance(selectedFile, restartRequired) {
 
-    const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
+    const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/');
     const payload = {
       auth,
       url,
@@ -109,10 +138,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       alert.error(message);
     }
 
-
     if (restartRequired) {
       await restartWithLoadingState({ auth, url });
     }
+
+    removeFileFromLocalStorage({ path: selectedFile.path });
 
     await refreshCustomFunctions();
 
@@ -416,10 +446,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   return supportsApplicationsAPI ?
     <ApplicationsEditor
       theme={theme}
-      fileTree={fileTree} 
+      fileTree={fileTree}
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
+      onChange={saveFileToLocalStorage}
       onSave={saveCodeToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
