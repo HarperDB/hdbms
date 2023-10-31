@@ -3,6 +3,24 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
+export function RevertFileButton({ disabled }) {
+  return (
+    <button
+      type="button"
+      disabled={ disabled }
+      title="revert file to previously saved state"
+      className={
+        cn('revert-file fas fa-history', { disabled })
+      }
+      onClick={
+        () => {
+          console.log('revert file button clicked');
+        }
+      } />
+
+  )
+}
+
 export function SaveButton({ disabled, onSave }) {
 
   const [ loading, setLoading ] = useState(false);
@@ -74,7 +92,7 @@ export function RestartOnSaveToggle({ restartAfterSave, onClick }) {
   );
 }
 
-export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton: RestartInstanceBtn, RestartOnSaveToggle: RestartOnSaveTgl }) {
+export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton: RestartInstanceBtn, RestartOnSaveToggle: RestartOnSaveTgl, RevertFileButton: RevertFileBtn }) {
   return (
     <ul className="editor-menu">
       <li>
@@ -85,6 +103,9 @@ export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton:
       </li>
       <li>
         <RestartOnSaveTgl />
+      </li>
+      <li>
+        <RevertFileBtn />
       </li>
     </ul>
   )

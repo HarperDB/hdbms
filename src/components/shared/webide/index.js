@@ -27,7 +27,8 @@ import FileMenu, {
 import EditorMenu, {
   SaveButton,
   RestartInstanceButton,
-  RestartOnSaveToggle
+  RestartOnSaveToggle,
+  RevertFileButton
 } from './EditorMenu';
 
 function WebIDE({
@@ -265,6 +266,11 @@ function WebIDE({
                     setRestartAfterSave(!restartAfterSave);
                   }
                 } />
+            )
+          }
+          RevertFileButton={
+            () => (
+              <RevertFileButton  />
             )
           }
         />
