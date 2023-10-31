@@ -72,10 +72,6 @@ function BrowseIndex() {
     buildInstanceStructure({ auth, url });
   }
 
-  const missingPrimaryKey = false;
-
-  console.log('hash attr: ', hasHashAttr);
-
   const checkForHashAttribute = () => {
     async function check() {
       if (table) {
