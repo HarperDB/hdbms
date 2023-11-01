@@ -19,7 +19,7 @@ const extensionToLanguageMap = {
 
 // TODO: update code using whatever monaco hook is available. onupdate.
 // don't allow save if there are errors.
-function Editor({ active, file, onChange, theme }) {
+function Editor({ active, file, onFileChange, theme }) {
 
   const [ language, setLanguage ] = useState('javascript');
   const [ editorTheme, setEditorTheme ] = useState('vs-dark');
@@ -44,15 +44,16 @@ function Editor({ active, file, onChange, theme }) {
   // eslint-disable-next-line no-unused-vars
   return <>
     <div className="editor current-file-path">
-      <i className="current-file-path-icon fas fa-caret-right" />
-      {filepathRelativeToComponentsDir}
+      path: <span>{filepathRelativeToComponentsDir} </span>
+      size: <span> {file.size} bytes </span>
+      last saved: <span> {file.mtime} </span>
     </div>
     <ReactMonacoEditor
       height="100%"
       language={language}
       value={file?.content || ''}
       theme={editorTheme}
-      onChange={ onChange }
+      onChange={onFileChange}
       options={{
         readOnly: file.readOnly,
         automaticLayout: true,
