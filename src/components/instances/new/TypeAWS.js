@@ -1,14 +1,17 @@
 import React from 'react';
 import { Row, Col, Card, CardBody, Button } from 'reactstrap';
+import { useStoreState } from 'pullstate';
 import AWSLogo from '../../shared/logos/AWSLogo';
+import appState from '../../../functions/state/appState';
 
 function TypeAWS({ setFormData }) {
+  const theme = useStoreState(appState, (s) => s.theme);
   return (
     <Card className="mb-3">
       <CardBody className="instance-form-card-body">
         <Row>
           <Col xs="8" className="logo-header">
-            <AWSLogo />
+            <AWSLogo theme={theme} />
           </Col>
           <Col xs="4">
             <Button
