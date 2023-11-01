@@ -112,7 +112,6 @@ function WebIDE({
   // updates current in memory code
   function updateInMemoryCodeFile(updatedCode) {
 
-    console.log('update from top level ide file.');
     const update = {
       ...selectedFile,
       content: updatedCode
@@ -226,7 +225,6 @@ function WebIDE({
                 // action = select file
                 const fileMeta = await onFileSelect(entry);
                 const { content } = fileMeta;
-                console.log('file meta on select: ', fileMeta);
                 setSelectedFile({ ...entry, content });
                 updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
 
