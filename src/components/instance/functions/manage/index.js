@@ -96,7 +96,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     });
   }
 
-  function saveFileToLocalStorage({ path, content }) {
+  async function saveFileToLocalStorage(selectedFile) {
+    const { path, content } = selectedFile;
 
     const fileKey = `${compute_stack_id}_${path}`;
 
@@ -123,8 +124,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   // save file to instance
-  async function saveCodeToInstance(selectedFile, restartRequired) {
+  async function saveFileToInstance(selectedFile, restartRequired) {
 
+    // handle cached situation
+    // - NOTE: this 'selectedFile' is not reactive.
+    // - remove cache entry for this file
+    // - update selectedFile with new content
+    // - set selectedFile.cached = false.
     const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/');
     const payload = {
       auth,
@@ -145,6 +151,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     }
 
     removeFileFromLocalStorage({ path: selectedFile.path });
+    selectedFile.cached = false;
 
     await refreshCustomFunctions();
 
@@ -186,11 +193,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const newFile = getRelativeFilepath(path);
     const fileCacheKey = `${compute_stack_id}_${path}`;
     const cachedFile = editorCache[fileCacheKey];
+    const isCached = fileCacheKey in editorCache;
 
-    if (cachedFile) {
+    if (isCached) {
 
       return {
-        cached: true,
+        cached: isCached,
         content: cachedFile,
         path,
         project,
@@ -201,7 +209,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     // TODO: set file content to local storage copy if it exists.
     //
-    const { error, message } = await getComponentFile({
+    const { error, message: content } = await getComponentFile({
       auth,
       url,
       project,
@@ -210,20 +218,21 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     if (error) {
 
-      alert.error(message);
+      alert.error(content);
 
       return {
         content: '',
         path,
         project,
-        name
+        name,
+        cached: false
       };
 
     }
 
     return {
-      cached: false,
-      content: message,
+      cached: isCached,
+      content,
       path,
       project,
       name
@@ -469,56 +478,30 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
-  async function revertChanges(selectedFile) {
+  async function revertFileChanges(selectedFile) {
 
+    // ditch local storage version
     removeFileFromLocalStorage({ path: selectedFile.path });
-    await refreshCustomFunctions();
 
-    /*
-    const filepathRelativeToProjectDir = getRelativeFilepath(path);
-    const { error: getComponentError, message: getComponentMessage } = await getComponentFile({
-      file: filepathRelativeToProjectDir,
-      project,
-      auth,
-      url
-    });
-
-    if (getComponentError) {
-      return alert.error(getComponentMessage);
-    }
-
-    const fileContentOnInstance = getComponentMessage;
-
-    // save it as the new 
-    const { error: setComponentError, message: setComponentMessage } = await setComponentFile({
+    // get file
+    //
+    const { error, message} = await getComponentFile({
       auth,
       url,
-      project,
-      file: filepathRelativeToProjectDir,
-      payload: fileContentOnInstance 
+      project: selectedFile.project,
+      file: getRelativeFilepath(selectedFile.path)
     });
 
-    if (setComponentError) {
-      return alert.error(setComponentMessage);
+    removeFileFromLocalStorage({ path: selectedFile.path });
+
+    if (error) {
+      return alert.error(message);
     }
-    */
 
-    // refreshCustomFunctions();
+    await refreshCustomFunctions();
 
-    // return null;
-    // console.log('revert. fetch original file: ', message);
+    return message;
 
-
-
-    // oldFile = getComponentFile
-    // await getComponentFile({
-    //  project,
-    //  path,
-    //  auth,
-    //  url
-    // });
-    // setComponentFile
-    // fileKey = compute_stack_id + selectedFile.path
   }
 
   return supportsApplicationsAPI ?
@@ -528,9 +511,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
-      onRevertFile={revertChanges}
-      onChange={saveFileToLocalStorage}
-      onSave={saveCodeToInstance}
+      onRevertFile={revertFileChanges}
+      onFileChange={saveFileToLocalStorage}
+      onFileSave={saveFileToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
       onAddProject={createNewProject}

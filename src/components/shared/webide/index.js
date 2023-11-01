@@ -35,16 +35,16 @@ function WebIDE({
   theme,
   deployTargets, // FIXME: does this belong here?
   fileTree,
-  onSave,
+  onFileSave,
   onAddFile,
+  onRevertFile,
   onAddProjectFolder,
   onAddProject,
-  onChange,
+  onFileChange,
   onDeleteFolder,
   onDeleteFile,
   onDeletePackage,
   onDeployProject,
-  onRevertFile,
   onFileSelect,
   onFileRename,
   onFolderRename,
@@ -109,12 +109,12 @@ function WebIDE({
     updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
 
-  // updates current in memory code
-  function updateInMemoryCodeFile(updatedCode) {
+  // updates current in-memory code
+  function updateFileInMemory(updatedCode) {
 
     const update = {
       ...selectedFile,
-      content: updatedCode
+      content: updatedCode,
     };
 
     setSelectedFile(update);
@@ -126,14 +126,14 @@ function WebIDE({
       <Col md="3" className="file-browser-outer-container">
         <FileMenu>
           <AddProjectButton
-            onAddProject={
+            onClick={
               () => {
                 updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
               }
             } />
           <AddProjectFolderButton
             disabled={ !canAddProjectFolder }
-            onAddProjectFolder={() => {
+            onClick={() => {
               updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
             }} />
           <DeleteFolderButton
@@ -148,7 +148,7 @@ function WebIDE({
               }
             } />
           <AddFileButton
-            onAddFile={() => {
+            onClick={() => {
               updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
             }}
             disabled={ !canAddFile } />
@@ -212,20 +212,19 @@ function WebIDE({
           onFileSelect={
             async (entry) => {
 
+              const unselectAction = !entry;
               setSelectedPackage(null);
 
-              // action = unselect file
-              if (!entry) {
+              if (unselectAction) {
 
                 setSelectedFile(null);
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
               } else {
 
-                // action = select file
                 const fileMeta = await onFileSelect(entry);
-                const { content } = fileMeta;
-                setSelectedFile({ ...entry, content });
+                const { content, cached } = fileMeta;
+                setSelectedFile({ ...entry, content, cached });
                 updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
 
               }
@@ -239,9 +238,9 @@ function WebIDE({
             () => (
               <SaveButton
                 disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
-                onSave={
-                  () => {
-                    onSave(selectedFile, restartAfterSave)
+                onClick={
+                  async () => {
+                    await onFileSave(selectedFile, restartAfterSave)
                   }
                 } />
             )
@@ -270,11 +269,18 @@ function WebIDE({
           }
           RevertFileButton={
             () => (
-              <RevertFileButton onRevertFile={
-                () => {
-                  onRevertFile(selectedFile);
-                }
-              }  />
+              <RevertFileButton
+                disabled={!selectedFile?.cached}
+                onClick={
+                  async () => {
+                    const updatedContent = await onRevertFile(selectedFile);
+                    setSelectedFile({
+                      ...selectedFile,
+                      content: updatedContent,
+                      cached: false
+                    });
+                  }
+                }  />
             )
           }
         />
@@ -286,7 +292,7 @@ function WebIDE({
               () => (
                 <AddProjectButton
                   text="Create a new project"
-                  onAddProject={
+                  onClick={
                     () => {
                       updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
                     }
@@ -395,12 +401,19 @@ function WebIDE({
             theme={theme}
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
-            onChange={
-              (fileContent) => {
-                updateInMemoryCodeFile(fileContent);
-                onChange({
+            onFileChange={
+              async (fileContent) => {
+                updateFileInMemory(fileContent);
+
+                await onFileChange({
                   path: selectedFile.path,
                   content: fileContent
+                });
+
+                setSelectedFile({
+                  ...selectedFile,
+                  content: fileContent,
+                  cached: true
                 });
               }
             } />

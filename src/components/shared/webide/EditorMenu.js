@@ -3,21 +3,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export function RevertFileButton({ disabled, onRevertFile }) {
-  return (
-    <button
-      type="button"
-      disabled={ disabled }
-      title="revert file to previously saved state"
-      className={
-        cn('revert-file fas fa-history', { disabled })
-      }
-      onClick={ onRevertFile } />
-
-  )
-}
-
-export function SaveButton({ disabled, onSave }) {
+export function SaveButton({ onClick, disabled }) {
 
   const [ loading, setLoading ] = useState(false);
   return (
@@ -35,7 +21,7 @@ export function SaveButton({ disabled, onSave }) {
         async () => {
 
           setLoading(true);
-          await onSave();
+          await onClick();
           setTimeout(() => {
             setLoading(false);
           }, 500);
@@ -64,10 +50,10 @@ export function RestartInstanceButton({ onClick, restarting }) {
   );
 }
 
-export function RestartOnSaveToggle({ restartAfterSave, onClick }) {
+export function RestartOnSaveToggle({ onClick, restartAfterSave }) {
 
   const title = restartAfterSave ?
-    'your instance will restart after saving application files' :
+    'restart instance after saving application files' :
     'your instance will not restart after saving application files';
 
   return (
@@ -88,6 +74,21 @@ export function RestartOnSaveToggle({ restartAfterSave, onClick }) {
   );
 }
 
+export function RevertFileButton({ onClick, disabled }) {
+  return (
+    <button
+      type="button"
+      disabled={ disabled }
+      title="revert file to previously saved state"
+      className={
+        cn('revert-file fas fa-history', { disabled })
+      }
+      onClick={ onClick } />
+
+  )
+}
+
+// TODO: convert to mapping children to a list instead of explicitly doing all of this
 export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton: RestartInstanceBtn, RestartOnSaveToggle: RestartOnSaveTgl, RevertFileButton: RevertFileBtn }) {
   return (
     <ul className="editor-menu">
