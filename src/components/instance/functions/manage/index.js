@@ -183,8 +183,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const fileCacheKey = `${compute_stack_id}_${path}`;
     const cachedFile = editorCache[fileCacheKey];
 
-    console.log('selected file: ', selectedFile);
-
     if (cachedFile) {
 
       return {
@@ -196,6 +194,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       };
 
     }
+
     // TODO: set file content to local storage copy if it exists.
     //
     const { error, message } = await getComponentFile({
