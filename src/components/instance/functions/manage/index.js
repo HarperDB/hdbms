@@ -11,7 +11,7 @@ import addComponent from '../../../../functions/api/instance/addComponent';
 import packageComponent from '../../../../functions/api/instance/packageComponent';
 import dropComponent from '../../../../functions/api/instance/dropComponent';
 import deployComponent from '../../../../functions/api/instance/deployComponent';
-import restartInstance from '../../../../functions/api/instance/restartInstance';
+import restartService from '../../../../functions/api/instance/restartService';
 
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 
@@ -85,7 +85,11 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     setRestartingInstance(true);
 
     setTimeout(async () => { 
-      await restartInstance({ auth: instanceAuth, url: instanceUrl });
+      await restartService({
+        auth: instanceAuth,
+        url: instanceUrl,
+        service: 'http_workers'
+      });
       setRestartingInstance(false);
     }, 100);
 
@@ -211,7 +215,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       return;
     }
 
-    await restartInstance({ auth, url });
+    await restartService({ auth, url, service: 'http_workers' });
     await refreshCustomFunctions();
 
   }
@@ -269,7 +273,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       alert.error(message);
     }
 
-    await restartInstance({ auth, url });
+    await restartService({ auth, url, service: 'http_workers' });
 
     await refreshCustomFunctions();
 
@@ -315,8 +319,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       }
 
      // TODO: what do we actually want to do about an invalid package?
-      // change to restartService({ auth, url, service: 'http_worker' });
-      await restartInstance({ auth: t.auth, url: t.instance.url });
+      // change to restartService({ auth, url, service: 'http_workers' });
+      await restartService({
+        auth: t.auth,
+        url: t.instance.url,
+        service: 'http_workers'
+      });
 
     });
 
@@ -338,7 +346,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
      // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_worker' });
 
-      await restartInstance({ auth: deployTarget.auth, url: deployTarget.instance.url });
+      await restartService({ auth: deployTarget.auth, url: deployTarget.instance.url, service: 'http_workers' });
 
     }
     */
@@ -398,15 +406,17 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     })
 
     // restart targetInstance
-    await restartInstance({
+    await restartService({
       auth: otherInstanceAuth,
-      url: otherInstance.url
+      url: otherInstance.url,
+      service: 'http_workers'
     });
 
     // restart this instance
-    await restartInstance({
+    await restartService({
       auth,
-      url
+      url,
+      service: 'http_workers'
     });
 
     await refreshCustomFunctions();
