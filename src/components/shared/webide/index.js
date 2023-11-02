@@ -88,7 +88,7 @@ function WebIDE({
   }
 
   async function addProjectFolder(newFolderName) {
-    onAddProjectFolder(newFolderName, selectedFolder)
+    await onAddProjectFolder(newFolderName, selectedFolder)
     // go back to prev window
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
@@ -384,8 +384,8 @@ function WebIDE({
             active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW }
             selectedFile={ selectedFile }
             onConfirm={
-              () => {
-                onDeleteFile(selectedFile);
+              async () => {
+                await onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);

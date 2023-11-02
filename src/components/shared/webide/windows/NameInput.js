@@ -3,10 +3,9 @@
 
 import React, { useState } from 'react';
 import cn from 'classnames';
+import ButtonWithLoader from '../../ButtonWithLoader';
 
 export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
-
-
 
   const [ name, setName ] = useState(value || '');
   const [ isValidName, setIsValidName ] = useState(false); 
@@ -36,7 +35,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
     <div
       tabIndex={0}
       className={ cn("name-input") }>
-      { label && <label><span>{label}:</span></label> }
+        { label && <label><span>{label}:</span></label> }
         <div className="name-input-container">
           <input
             className={ cn({ invalid: name.length > 0 && !isValidName }) }
@@ -61,15 +60,17 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
           <span className="invalid-text" />
           <div className="name-input-buttons-container">
 
-            <button
-              type="button"
+            <ButtonWithLoader
               disabled={ !isValidName }
               className="btn btn-success name-input-confirm"
-              onClick={ () => {
-
-                onConfirm(name); 
-              }}>ok</button>
-            <button type="button" className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>
+              onClick={ () => onConfirm(name) } 
+              >OK</ButtonWithLoader>
+            <button
+              type="button"
+              className="btn btn-secondary name-input-cancel cancel-button"
+              onClick={ onCancel }>
+              Cancel
+            </button>
         </div>
     </div>
   );

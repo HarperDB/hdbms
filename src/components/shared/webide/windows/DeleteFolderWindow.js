@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardTitle, CardBody } from 'reactstrap';
+import ButtonWithLoader from '../../ButtonWithLoader'; 
 
 export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
 
@@ -24,7 +25,11 @@ export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, 
                   <span className="folder-to-delete"> {projectSubdir} </span> from project <span className="folder-to-delete-parent-project">{ project }</span> ?
                 </p> 
             }
-            <button type="button" className="btn btn-danger delete-button" onClick={ onConfirm }>Delete</button>
+            <ButtonWithLoader
+              className="btn btn-danger delete-button"
+              onClick={ onConfirm }>
+              Delete
+            </ButtonWithLoader>
             <button type="button" className="btn btn-secondary cancel-button" onClick={ onCancel }>Cancel</button>
         </div>
       </CardBody>
