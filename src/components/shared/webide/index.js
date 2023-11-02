@@ -83,7 +83,7 @@ function WebIDE({
   }
 
   async function addProject(newProjectName) {
-    onAddProject(newProjectName);
+    await onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
