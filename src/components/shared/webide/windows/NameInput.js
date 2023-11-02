@@ -35,7 +35,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
     <div
       tabIndex={0}
       className={ cn("name-input") }>
-      { label && <label><span>{label}:</span></label> }
+        { label && <label><span>{label}:</span></label> }
         <div className="name-input-container">
           <input
             className={ cn({ invalid: name.length > 0 && !isValidName }) }
@@ -63,11 +63,8 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
             <ButtonWithLoader
               disabled={ !isValidName }
               className="btn btn-success name-input-confirm"
-              onClick={
-                async () => {
-                  await onConfirm(name); 
-                }
-              }>OK</ButtonWithLoader>
+              onClick={ () => onConfirm(name) } 
+              >OK</ButtonWithLoader>
             <button
               type="button"
               className="btn btn-secondary name-input-cancel cancel-button"

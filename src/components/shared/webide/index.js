@@ -88,7 +88,7 @@ function WebIDE({
   }
 
   async function addProjectFolder(newFolderName) {
-    onAddProjectFolder(newFolderName, selectedFolder)
+    await onAddProjectFolder(newFolderName, selectedFolder)
     // go back to prev window
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
