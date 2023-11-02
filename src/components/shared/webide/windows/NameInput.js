@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import cn from 'classnames';
+import ButtonWithLoader from '../../ButtonWithLoader';
 
 export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
 
@@ -59,15 +60,20 @@ export default function NameInput({ onCancel, onConfirm, onEnter, label='', plac
           <span className="invalid-text" />
           <div className="name-input-buttons-container">
 
-            <button
-              type="button"
+            <ButtonWithLoader
               disabled={ !isValidName }
               className="btn btn-success name-input-confirm"
-              onClick={ () => {
-
-                onConfirm(name); 
-              }}>ok</button>
-            <button type="button" className="btn btn-secondary name-input-cancel cancel-button" onClick={ onCancel }>cancel</button>
+              onClick={
+                async () => {
+                  await onConfirm(name); 
+                }
+              }>OK</ButtonWithLoader>
+            <button
+              type="button"
+              className="btn btn-secondary name-input-cancel cancel-button"
+              onClick={ onCancel }>
+              Cancel
+            </button>
         </div>
     </div>
   );

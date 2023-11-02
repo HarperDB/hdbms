@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export default function ButtonWithLoader({ text, className, onClick, children }) {
+export default function ButtonWithLoader({ className, onClick, disabled, children }) {
 
   const [ loading, setLoading ] = useState(false);
 
   return (
     <button
+      disabled={disabled}
       type="button"
       onClick={ 
         async (event) => {
