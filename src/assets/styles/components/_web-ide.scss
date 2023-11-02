@@ -162,14 +162,6 @@
       background: rgb(26, 26, 26);
     }
 
-    /*
-    .root {
-      display: grid;
-      grid-template-columns: 150px minmax(0px, auto);
-      height: 100%;
-    }
-    */
-    // background: transparent !important;
   }
 
   .file-menu,
@@ -294,6 +286,22 @@
 }
 
 .web-ide {
+  .button-with-loader {
+    min-width: 105px;
+
+    &.loading {
+      color: transparent;
+    }
+
+    .button-with-loader-icon {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+  }
   .cancel-button {
     margin-left: 10px;
   }

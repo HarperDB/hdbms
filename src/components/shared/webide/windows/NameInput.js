@@ -6,8 +6,6 @@ import cn from 'classnames';
 
 export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
 
-
-
   const [ name, setName ] = useState(value || '');
   const [ isValidName, setIsValidName ] = useState(false); 
 
