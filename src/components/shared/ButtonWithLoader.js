@@ -10,7 +10,7 @@ export default function ButtonWithLoader({ className, onClick, disabled, childre
       disabled={disabled}
       type="button"
       onClick={ 
-        async (event) => {
+        async () => {
 
           setLoading(true);
 

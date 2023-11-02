@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import cn from 'classnames';
 import { Card, CardTitle, CardBody } from 'reactstrap';
-import { useAlert } from 'react-alert';
 import ButtonWithLoader from '../../ButtonWithLoader'; 
 
 export default function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) {
-
-  const [ loading, setLoading ] = useState(false);
 
   if (!active) {
     return null;

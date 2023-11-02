@@ -52,7 +52,6 @@ function CustomFunctionsIndex() {
     if (configuring) refreshCustomFunctions();
   }, 2000);
 
-  console.log('cf error: ', custom_functions?.error);
   return !custom_functions ? (
     <Loader header="loading custom functions" spinner />
   ) : custom_functions.error ? (
