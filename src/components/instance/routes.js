@@ -10,7 +10,6 @@ const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './s
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ './functions'));
-const Examples = lazy(() => import(/* webpackChunkName: "instance-examples" */ './examples'));
 
 const browse = {
   element: <Browse />,
@@ -75,6 +74,15 @@ const functions = {
   iconCode: 'f542',
 };
 
+const applications = {
+  element: <Functions />,
+  path: 'applications',
+  link: 'applications',
+  label: 'applications',
+  icon: 'project-diagram',
+  iconCode: 'f542',
+};
+
 const metrics = {
   element: <Metrics />,
   path: `status`,
@@ -93,15 +101,28 @@ const config = {
   iconCode: 'f0ad',
 };
 
-const examples = {
-  element: <Examples />,
-  path: `examples/:folder?/:method?`,
-  link: 'examples',
-  label: 'example code',
-  icon: 'code',
-  iconCode: 'f121',
-};
 
-const routes = ({ super_user }) => (super_user ? [browse, query, users, roles, charts, cluster, functions, metrics, config, examples] : [browse, query, charts, examples]);
+const routes = ({ super_user, version=null }) => {
 
+  let supportsApplications = false;
+
+  if (version) {
+
+    const [ a, b ] = version?.split('.') || [];
+
+    const major = parseInt(a, 10);
+    const minor = parseInt(b, 10);
+    const versionAsFloat = parseFloat(`${major}.${minor}`);
+
+    supportsApplications = versionAsFloat >= 4.2;
+
+  }
+
+  if (super_user) { 
+    return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, config];
+  } 
+
+  return [browse, query, charts];
+  
+}
 export default routes;

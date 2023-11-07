@@ -19,6 +19,7 @@ import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 import Unpaid from '../shared/Unpaid';
+import UnlimitedEnterprise from '../shared/UnlimitedEnterprise';
 import useInstanceAuth from '../../functions/state/instanceAuths';
 
 function InstancesIndex() {
@@ -27,6 +28,7 @@ function InstancesIndex() {
   const alert = useAlert();
   const auth = useStoreState(appState, (s) => s.auth);
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || s.theme === 'akamai');
+  const unlimited_local_install = useStoreState(appState, (s) => s.customer.unlimited_local_install);
   const products = useStoreState(appState, (s) => s.products);
   const regions = useStoreState(appState, (s) => s.regions);
   const subscriptions = useStoreState(appState, (s) => s.subscriptions);
@@ -96,7 +98,8 @@ function InstancesIndex() {
       <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
-          {is_unpaid && <Unpaid />}
+          { unlimited_local_install && <UnlimitedEnterprise /> }
+          { is_unpaid  && <Unpaid /> }
           <Row>
             {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
             <InstanceList />

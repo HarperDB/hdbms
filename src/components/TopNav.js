@@ -108,12 +108,16 @@ function TopNav({ isMaintenance }) {
               </NavItem>
             </>
           )}
-          <NavItem>
-            <NavLink id="viewResources" title="View Install Instructions, Tutorials, the HarperDB Marketplace, and Example Code" to="/resources">
+          <li className="nav-item">
+            <a target="_blank"
+              rel="noreferrer"
+              href="https://harperdb.io/docs"
+              id="viewResources"
+              title="HarperDB Documentation">
               <i className="fas fa-tools" />
-              <span className="d-none d-lg-inline-block">&nbsp;resources</span>
-            </NavLink>
-          </NavItem>
+              <span className="d-none d-lg-inline-block">&nbsp;docs</span>
+            </a>
+          </li>
           {themes.length > 1 && (
             <NavItem>
               <Button

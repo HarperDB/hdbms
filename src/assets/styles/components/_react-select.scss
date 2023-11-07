@@ -26,6 +26,15 @@
       max-height: 36px;
       padding-bottom: 0 !important;
       padding-top: 0 !important;
+
+      .react-select__input-container {
+        .react-select__input {
+          background: transparent !important;
+          border: transparent !important;
+          outline-color: transparent !important;
+        }
+      }
+
     }
   }
 

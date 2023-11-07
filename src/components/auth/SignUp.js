@@ -44,7 +44,7 @@ function SignUp() {
               <div className="sign-up-content">
                 <ul>
                   <li>Provision HarperDB Cloud and user-installed instances</li>
-                  <li>Configure instance schemas, tables, users, roles, and clustering</li>
+                  <li>Configure instance databases, tables, users, roles, and clustering</li>
                   <li>Create and monitor real-time charts based on custom queries</li>
                   <li>Bulk data import via CSV upload or URL</li>
                 </ul>
