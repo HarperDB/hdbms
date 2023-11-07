@@ -5,7 +5,7 @@
     }
   }
 
-  color: white;
+  color: $color-white;
 
   .editor.current-file-path {
     border-bottom: 1px solid transparent;
@@ -13,7 +13,7 @@
 
   .default-window-option {
     span {
-      color: white;
+      color: $color-white;
     }
 
   }
@@ -50,7 +50,7 @@
   }
 
   .file-browser button > span {
-    color: white !important;
+    color: $color-white !important;
   }
 
   .file-browser .file.file-selected > span {
@@ -74,23 +74,25 @@
 
 
   .default-window-option span {
-      color: white !important;
+      color: $color-white !important;
   }
 
   .editor-window .default-window .default-window-container {
     background: $color-pureblack !important;
-    color: white;
+    color: $color-white;
   }
 
   .no-projects {
-    color: white;
+    color: $color-white;
 
     .docs-link {
       color: #ee81ee !important;
     }
   }
 
-  color: white;
+  color: $color-white;
+
+  color: rgb(105, 105, 105);
 
   color: rgb(105, 105, 105);
 
@@ -128,11 +130,11 @@
   }
 
   .editor-window .cancel-button:hover {
-    color: white;
+    color: $color-white;
   }
 
   .package-install-window {
-    background: white;
+    background: $color-white;
   }
 
   .editor.current-file-path {
@@ -162,14 +164,6 @@
       background: rgb(26, 26, 26);
     }
 
-    /*
-    .root {
-      display: grid;
-      grid-template-columns: 150px minmax(0px, auto);
-      height: 100%;
-    }
-    */
-    // background: transparent !important;
   }
 
   .file-menu,
@@ -177,6 +171,7 @@
     border-bottom: 1px solid darkgray !important;
   }
 
+  .revert-file[disabled],
   .save-code[disabled] {
     color: #c2c2c2 !important;
   }
@@ -228,7 +223,7 @@
   color: rgb(105, 105, 105);
 
   .package-install-window {
-    background: white;
+    background: $color-white;
   }
 
   .editor.current-file-path {
@@ -265,7 +260,7 @@
   }
 
   .editor-window button:hover {
-    color: white;
+    color: $color-white;
     //rgb(105,105,105);
   }
 
@@ -293,6 +288,22 @@
 }
 
 .web-ide {
+  .button-with-loader {
+    min-width: 105px;
+
+    &.loading {
+      color: transparent;
+    }
+
+    .button-with-loader-icon {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+  }
   .cancel-button {
     margin-left: 10px;
   }
@@ -352,7 +363,7 @@
   .add-file-icon {
     background: transparent;
     border: none;
-    color: white;
+    color: $color-white;
     margin: 0;
     outline: none !important;
     padding: 0;
@@ -371,7 +382,7 @@
     padding: 20px;
 
     .file-menu {
-      color: white;
+      color: $color-white;
 
       display: flex;
       flex-direction: row;
@@ -502,7 +513,7 @@
     .editor-menu {
       align-items: baseline;
       border-bottom: 1px solid #2e2e2e;
-      color: white;
+      color: $color-white;
       display: flex;
       flex-direction: row;
       justify-content: left;
@@ -536,6 +547,7 @@
         }
       }
 
+      .revert-file,
       .save-code {
         background: transparent;
         border: none;
@@ -546,6 +558,7 @@
         padding: 0;
       }
 
+      .revert-file[disabled],
       .save-code[disabled] {
         color: #5e5e5e;
         cursor: default;
@@ -828,11 +841,11 @@
               width: 40px;
 
               i {
-                color: white;
+                color: $color-white;
 
 
                 &.not-searching {
-                  color: white; //rgba(0,255,0, 0.1);
+                  color: $color-white; //rgba(0,255,0, 0.1);
                 }
 
 
