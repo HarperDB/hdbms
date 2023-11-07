@@ -1,33 +1,34 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
 export function SaveButton({ onClick, disabled }) {
 
   const [ loading, setLoading ] = useState(false);
+
   return (
     <button
       type="button"
       disabled={ disabled }
       title="save file to instance"
-      className={ cn("save-code fas", {
-        disabled, 
-        'fa-save': !loading,
-        'fa-spinner': loading,
-        'fa-spin': loading
-      }) }
+      className={
+        cn("save-code fas", {
+          disabled, 
+          'fa-save': !loading,
+          'fa-spinner': loading,
+          'fa-spin': loading
+        })
+      }
       onClick={ 
         async () => {
 
-          setLoading(true);
+          setLoading(() => true);
           await onClick();
-          setTimeout(() => {
-            setLoading(false);
-          }, 500);
+          setLoading(() => false);
         }
       } />
-  )
+  );
 
 }
 
@@ -74,36 +75,37 @@ export function RestartOnSaveToggle({ onClick, restartAfterSave }) {
   );
 }
 
-export function RevertFileButton({ onClick, disabled }) {
+export function RevertFileButton({ onClick, disabled, loading }) {
+
   return (
     <button
       type="button"
       disabled={ disabled }
       title="revert file to previously saved state"
-      className={
-        cn('revert-file fas fa-history', { disabled })
+      onClick={
+        async () => {
+          await onClick();
+        }
       }
-      onClick={ onClick } />
+      className={
+        cn("revert-file fas", {
+          disabled,
+          'fa-history': !loading,
+          'fa-spinner': loading,
+          'fa-spin': loading,
+        })
+      } /> 
+  );
 
-  )
 }
 
-// TODO: convert to mapping children to a list instead of explicitly doing all of this
-export default function EditorMenu({ SaveButton: SaveBtn, RestartInstanceButton: RestartInstanceBtn, RestartOnSaveToggle: RestartOnSaveTgl, RevertFileButton: RevertFileBtn }) {
-  return (
+export default function EditorMenu({ children }) {
+
+  const keys = children?.map(k => crypto.randomUUID());
+
+  return children ? (
     <ul className="editor-menu">
-      <li>
-        <SaveBtn />
-      </li>
-      <li>
-        <RestartInstanceBtn />
-      </li>
-      <li>
-        <RestartOnSaveTgl />
-      </li>
-      <li>
-        <RevertFileBtn />
-      </li>
+      { children.map((child, index) => <li key={keys[index]}>{child}</li>) }
     </ul>
-  )
+  ) : null;
 }

@@ -61,6 +61,7 @@ function WebIDE({
   const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
   const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
   const [ restartAfterSave, setRestartAfterSave ] = useState(true);
+  const [ revertingFile, setRevertingFile ] = useState(false);
 
   const hasProjects = fileTree?.entries?.length > 0;
   const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
@@ -233,57 +234,50 @@ function WebIDE({
           } />
       </Col>
       <Col className="editor-window-container col-md-8">
-        <EditorMenu
-          SaveButton={
-            () => (
-              <SaveButton
-                disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
-                onClick={
-                  async () => {
-                    await onFileSave(selectedFile, restartAfterSave)
-                  }
-                } />
-            )
-          }
-          RestartInstanceButton={
-            () => (
-              <RestartInstanceButton
-                restarting={restartingInstance}
-                onClick={
-                  async () => {
-                    await restartInstance();
-                  }
-                } />
-            )
-          }
-          RestartOnSaveToggle={
-            () => (
-              <RestartOnSaveToggle
-                restartAfterSave={restartAfterSave}
-                onClick={
-                  () => {
-                    setRestartAfterSave(!restartAfterSave);
-                  }
-                } />
-            )
-          }
-          RevertFileButton={
-            () => (
-              <RevertFileButton
-                disabled={!selectedFile?.cached}
-                onClick={
-                  async () => {
-                    const updatedContent = await onRevertFile(selectedFile);
-                    setSelectedFile({
-                      ...selectedFile,
-                      content: updatedContent,
-                      cached: false
-                    });
-                  }
-                }  />
-            )
-          }
-        />
+        <EditorMenu>
+          <SaveButton
+            disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
+            onClick={
+              async () => {
+                await onFileSave(selectedFile, restartAfterSave)
+              }
+            } />
+          <RestartInstanceButton
+            restarting={restartingInstance}
+            onClick={
+              async () => {
+                await restartInstance();
+              }
+            } />
+          <RestartOnSaveToggle
+            restartAfterSave={restartAfterSave}
+            onClick={
+              () => {
+                setRestartAfterSave(!restartAfterSave);
+              }
+            } />
+          <RevertFileButton
+            loading={ revertingFile }
+            disabled={!(selectedFile?.cached && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
+            onClick={
+              async () => {
+
+                setRevertingFile(true);
+                try { 
+                  const updatedContent = await onRevertFile(selectedFile);
+                  const updatedSelectedFile = {
+                    ...selectedFile,
+                    content: updatedContent,
+                    cached: false
+                  };
+                  setSelectedFile(updatedSelectedFile);
+                } finally {
+                  setRevertingFile(false);
+                }
+
+              }
+            } />
+        </EditorMenu>
         <EditorWindow>
           <DefaultWindow
             fileTree={fileTree}
