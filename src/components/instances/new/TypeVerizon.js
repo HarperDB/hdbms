@@ -1,14 +1,17 @@
 import React from 'react';
 import { Row, Col, Card, CardBody, Button } from 'reactstrap';
+import { useStoreState } from 'pullstate';
 import VerizonLogo from '../../shared/logos/VerizonLogo';
+import appState from '../../../functions/state/appState';
 
 function TypeVerizon({ setFormData }) {
+  const theme = useStoreState(appState, (s) => s.theme);
   return (
     <Card className="mb-3">
       <CardBody className="instance-form-card-body">
         <Row>
           <Col xs="8" className="logo-header">
-            <VerizonLogo />
+            <VerizonLogo theme={theme} />
           </Col>
           <Col xs="4">
             <Button
