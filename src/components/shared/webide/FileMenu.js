@@ -14,12 +14,12 @@ export function DeleteFolderButton({ onClick, disabled }) {
   )
 }
 
-export function AddProjectFolderButton({ onAddProjectFolder, disabled }) {
+export function AddProjectFolderButton({ onClick, disabled }) {
   return (
     <button
       type="button"
       disabled={ disabled }
-      onClick={ onAddProjectFolder }
+      onClick={ onClick }
       className="add-folder-icon fas fa-folder-plus"
       title="Add a new subdirectory to your project" />
   )
@@ -42,12 +42,12 @@ export function InstallPackageButton({ onClick, text="" }) {
 }
 
 
-export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
+export function AddProjectButton({ onClick, disabled=false, text="" }) {
   return (
     <button
       type="button"
       disabled={ disabled }
-      onClick={ onAddProject }
+      onClick={ onClick }
       className="add-project-icon"
       title="Add a new project">
         <i className="fas fa-file-code" />
@@ -56,12 +56,12 @@ export function AddProjectButton({ disabled=false, onAddProject, text="" }) {
   );
 }
 
-export function AddFileButton({ disabled, onAddFile }) {
+export function AddFileButton({ onClick, disabled }) {
   return (
     <button
       type="button"
       disabled={ disabled }
-      onClick={ onAddFile }
+      onClick={ onClick }
       className="add-file-icon fas fa-plus"
       title="Add a new file" />
   )

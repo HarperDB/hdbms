@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardTitle, CardBody } from 'reactstrap';
+import ButtonWithLoader from '../../ButtonWithLoader'; 
 
 export default function DeletePackageWindow({ active, selectedPackage, onConfirm, onCancel }) {
 
@@ -15,7 +16,11 @@ export default function DeletePackageWindow({ active, selectedPackage, onConfirm
         <div className="delete-package-window-controls">
           <CardTitle className="delete-package-window-title">Delete Confirmation</CardTitle>
           <p>Are you sure you want to delete package <span className="package-to-delete">{ packageName }</span> ?</p>
-          <button type="button" className="btn btn-danger delete-button" onClick={ onConfirm }>Delete</button>
+          <ButtonWithLoader
+            className="btn btn-danger delete-button"
+            onClick={ onConfirm }>
+            Delete
+          </ButtonWithLoader>
           <button type="button" className="btn btn-secondary cancel-button" onClick={ onCancel }>Cancel</button>
         </div>
       </CardBody>

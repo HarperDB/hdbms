@@ -27,17 +27,20 @@ import FileMenu, {
 import EditorMenu, {
   SaveButton,
   RestartInstanceButton,
-  RestartOnSaveToggle
+  RestartOnSaveToggle,
+  RevertFileButton
 } from './EditorMenu';
 
 function WebIDE({
   theme,
   deployTargets, // FIXME: does this belong here?
   fileTree,
-  onSave,
+  onFileSave,
   onAddFile,
+  onRevertFile,
   onAddProjectFolder,
   onAddProject,
+  onFileChange,
   onDeleteFolder,
   onDeleteFile,
   onDeletePackage,
@@ -80,12 +83,12 @@ function WebIDE({
   }
 
   async function addProject(newProjectName) {
-    onAddProject(newProjectName);
+    await onAddProject(newProjectName);
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
   async function addProjectFolder(newFolderName) {
-    onAddProjectFolder(newFolderName, selectedFolder)
+    await onAddProjectFolder(newFolderName, selectedFolder)
     // go back to prev window
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
@@ -106,12 +109,12 @@ function WebIDE({
     updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
   }
 
-  // updates current in memory code
-  function updateInMemoryCodeFile(updatedCode) {
+  // updates current in-memory code
+  function updateFileInMemory(updatedCode) {
 
     const update = {
       ...selectedFile,
-      content: updatedCode
+      content: updatedCode,
     };
 
     setSelectedFile(update);
@@ -123,14 +126,14 @@ function WebIDE({
       <Col md="3" className="file-browser-outer-container">
         <FileMenu>
           <AddProjectButton
-            onAddProject={
+            onClick={
               () => {
                 updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
               }
             } />
           <AddProjectFolderButton
             disabled={ !canAddProjectFolder }
-            onAddProjectFolder={() => {
+            onClick={() => {
               updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
             }} />
           <DeleteFolderButton
@@ -145,7 +148,7 @@ function WebIDE({
               }
             } />
           <AddFileButton
-            onAddFile={() => {
+            onClick={() => {
               updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
             }}
             disabled={ !canAddFile } />
@@ -209,19 +212,19 @@ function WebIDE({
           onFileSelect={
             async (entry) => {
 
+              const unselectAction = !entry;
               setSelectedPackage(null);
 
-              // file unselected
-              if (!entry) {
+              if (unselectAction) {
 
                 setSelectedFile(null);
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
               } else {
 
-                // file selected
-                const { content } = await onFileSelect(entry);
-                setSelectedFile({ ...entry, content });
+                const fileMeta = await onFileSelect(entry);
+                const { content, cached } = fileMeta;
+                setSelectedFile({ ...entry, content, cached });
                 updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
 
               }
@@ -235,9 +238,9 @@ function WebIDE({
             () => (
               <SaveButton
                 disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
-                onSave={
-                  () => {
-                    onSave(selectedFile, restartAfterSave)
+                onClick={
+                  async () => {
+                    await onFileSave(selectedFile, restartAfterSave)
                   }
                 } />
             )
@@ -255,7 +258,7 @@ function WebIDE({
           }
           RestartOnSaveToggle={
             () => (
-              <RestartOnSaveToggle 
+              <RestartOnSaveToggle
                 restartAfterSave={restartAfterSave}
                 onClick={
                   () => {
@@ -264,16 +267,32 @@ function WebIDE({
                 } />
             )
           }
+          RevertFileButton={
+            () => (
+              <RevertFileButton
+                disabled={!selectedFile?.cached}
+                onClick={
+                  async () => {
+                    const updatedContent = await onRevertFile(selectedFile);
+                    setSelectedFile({
+                      ...selectedFile,
+                      content: updatedContent,
+                      cached: false
+                    });
+                  }
+                }  />
+            )
+          }
         />
         <EditorWindow>
           <DefaultWindow
             fileTree={fileTree}
-            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW }
             AddProjectButton={
               () => (
                 <AddProjectButton
                   text="Create a new project"
-                  onAddProject={
+                  onClick={
                     () => {
                       updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
                     }
@@ -283,7 +302,7 @@ function WebIDE({
             InstallPackageButton={
               () => (
                 <InstallPackageButton
-                  text="Install or deploy a remote package" 
+                  text="Install or deploy a remote package"
                   onClick={
                     () => {
                       setSelectedPackage(null);
@@ -312,12 +331,12 @@ function WebIDE({
             <PackageInstallWindow
               selectedPackage={ selectedPackage }
               onConfirm={ installPackage }
-              onCancel={ toDefaultWindow } 
+              onCancel={ toDefaultWindow }
               deployTargets={ deployTargets }
             />
           }
           <DeletePackageWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW }
             selectedPackage={ selectedPackage }
             onConfirm={
               async () => {
@@ -340,7 +359,7 @@ function WebIDE({
 
           />
           <DeleteFolderWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW }
             selectedFolder={ selectedFolder }
             onConfirm={
               async () => {
@@ -362,11 +381,11 @@ function WebIDE({
             }
           />
           <DeleteFileWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW } 
+            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW }
             selectedFile={ selectedFile }
             onConfirm={
-              () => {
-                onDeleteFile(selectedFile);
+              async () => {
+                await onDeleteFile(selectedFile);
                 setSelectedFile(null);
                 setSelectedFolder(null);
                 updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
@@ -382,7 +401,22 @@ function WebIDE({
             theme={theme}
             active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
             file={ selectedFile }
-            onChange={ updateInMemoryCodeFile } />
+            onFileChange={
+              async (fileContent) => {
+                updateFileInMemory(fileContent);
+
+                await onFileChange({
+                  path: selectedFile.path,
+                  content: fileContent
+                });
+
+                setSelectedFile({
+                  ...selectedFile,
+                  content: fileContent,
+                  cached: true
+                });
+              }
+            } />
         </EditorWindow>
       </Col>
     </Row>

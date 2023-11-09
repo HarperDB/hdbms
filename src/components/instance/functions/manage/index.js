@@ -14,6 +14,7 @@ import deployComponent from '../../../../functions/api/instance/deployComponent'
 import restartService from '../../../../functions/api/instance/restartService';
 
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
+import useEditorCache from '../../../../functions/state/editorCache';
 
 import ApplicationsEditor from '../../../shared/webide';
 import CustomFunctionsEditor from './CustomFunctionsEditor';
@@ -45,19 +46,19 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       return memo;
     }
 
-    const [ major, minor ] = deployTarget?.version.split('.') || []; 
+    const [ major, minor ] = deployTarget?.version.split('.') || [];
 
     // exclude < 4.2
 
     if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
 
-      memo.push({ 
+      memo.push({
         isCurrentInstance: csId === thisCsId,
         auth,
         instance
       });
 
-    } 
+    }
 
     return memo;
 
@@ -69,16 +70,43 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   const { compute_stack_id } = useParams();
   const registration = useStoreState(instanceState, (s) => s.registration);
-  const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions); 
+  const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions);
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
-  const [instanceAuths] = useInstanceAuth({});
+  const [ instanceAuths ] = useInstanceAuth({});
+  const [ editorCache, setEditorCache ] = useEditorCache({});
   const theme = useStoreState(appState, (s) => s.theme);
   const [ restartingInstance, setRestartingInstance ] = useState(false);
   const alert = useAlert();
+
+  function removeFileFromLocalStorage({ path }) {
+
+    const updatedCache = {...editorCache};
+    const fileKey = `${compute_stack_id}_${path}`;
+
+    if (fileKey in updatedCache) {
+      delete updatedCache[fileKey];
+    }
+
+    setEditorCache({
+      ...updatedCache
+    });
+  }
+
+  async function saveFileToLocalStorage(selectedFile) {
+    const { path, content } = selectedFile;
+
+    const fileKey = `${compute_stack_id}_${path}`;
+
+    setEditorCache({
+      ...editorCache,
+      [fileKey]: content
+    });
+
+  }
 
   async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
 
@@ -96,9 +124,14 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   }
 
   // save file to instance
-  async function saveCodeToInstance(selectedFile, restartRequired) {
+  async function saveFileToInstance(selectedFile, restartRequired) {
 
-    const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/'); 
+    // handle cached situation
+    // - NOTE: this 'selectedFile' is not reactive.
+    // - remove cache entry for this file
+    // - update selectedFile with new content
+    // - set selectedFile.cached = false.
+    const filepathRelativeToProjectDir = selectedFile.path.split('/').slice(2).join('/');
     const payload = {
       auth,
       url,
@@ -113,10 +146,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       alert.error(message);
     }
 
-
     if (restartRequired) {
       await restartWithLoadingState({ auth, url });
     }
+
+    removeFileFromLocalStorage({ path: selectedFile.path });
+    selectedFile.cached = false;
 
     await refreshCustomFunctions();
 
@@ -156,7 +191,25 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     const { path, project, name } = selectedFile;
     const newFile = getRelativeFilepath(path);
-    const { error, message } = await getComponentFile({
+    const fileCacheKey = `${compute_stack_id}_${path}`;
+    const cachedFile = editorCache[fileCacheKey];
+    const isCached = fileCacheKey in editorCache;
+
+    if (isCached) {
+
+      return {
+        cached: isCached,
+        content: cachedFile,
+        path,
+        project,
+        name
+      };
+
+    }
+
+    // TODO: set file content to local storage copy if it exists.
+    //
+    const { error, message: content } = await getComponentFile({
       auth,
       url,
       project,
@@ -165,19 +218,21 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     if (error) {
 
-      alert.error(message);
+      alert.error(content);
 
       return {
         content: '',
         path,
         project,
-        name
+        name,
+        cached: false
       };
 
     }
 
     return {
-      content: message,
+      cached: isCached,
+      content,
       path,
       project,
       name
@@ -423,14 +478,42 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   }
 
+  async function revertFileChanges(selectedFile) {
+
+    // ditch local storage version
+    removeFileFromLocalStorage({ path: selectedFile.path });
+
+    // get file
+    //
+    const { error, message} = await getComponentFile({
+      auth,
+      url,
+      project: selectedFile.project,
+      file: getRelativeFilepath(selectedFile.path)
+    });
+
+    removeFileFromLocalStorage({ path: selectedFile.path });
+
+    if (error) {
+      return alert.error(message);
+    }
+
+    await refreshCustomFunctions();
+
+    return message;
+
+  }
+
   return supportsApplicationsAPI ?
     <ApplicationsEditor
       theme={theme}
-      fileTree={fileTree} 
+      fileTree={fileTree}
       deployTargets={
         getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
       }
-      onSave={saveCodeToInstance}
+      onRevertFile={revertFileChanges}
+      onFileChange={saveFileToLocalStorage}
+      onFileSave={saveFileToInstance}
       onUpdate={refreshCustomFunctions}
       onAddFile={createNewFile}
       onAddProject={createNewProject}
