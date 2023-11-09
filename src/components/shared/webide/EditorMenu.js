@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 
 export function SaveButton({ onClick, disabled }) {
@@ -101,7 +101,7 @@ export function RevertFileButton({ onClick, disabled, loading }) {
 
 export default function EditorMenu({ children }) {
 
-  const keys = children?.map(k => crypto.randomUUID());
+  const keys = children?.map(() => crypto.randomUUID());
 
   return children ? (
     <ul className="editor-menu">
