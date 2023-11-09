@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'classnames';
-import { v4 as uuid } from 'uuid';
 
 
 export function DeleteFolderButton({ onClick, disabled }) {
@@ -82,7 +81,7 @@ function FileMenu({ children }) {
   return (
     <ul className="file-menu">
       {
-        children.map(child => <li className="file-menu-item" key={ uuid() }>{child}</li>)
+        children.map(child => <li className="file-menu-item" key={ crypto.randomUUID() }>{child}</li>)
       }
     </ul>
   )

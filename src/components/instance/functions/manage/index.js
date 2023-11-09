@@ -480,19 +480,16 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   async function revertFileChanges(selectedFile) {
 
-    // ditch local storage version
+    // unset local storage version
     removeFileFromLocalStorage({ path: selectedFile.path });
 
-    // get file
-    //
-    const { error, message} = await getComponentFile({
+    // get canonical file version
+    const { error, message } = await getComponentFile({
       auth,
       url,
       project: selectedFile.project,
       file: getRelativeFilepath(selectedFile.path)
     });
-
-    removeFileFromLocalStorage({ path: selectedFile.path });
 
     if (error) {
       return alert.error(message);
@@ -500,6 +497,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await refreshCustomFunctions();
 
+    // return canonical file content to caller
     return message;
 
   }

@@ -39,7 +39,7 @@ function Editor({ active, file, onFileChange, theme }) {
     return null;
   }
 
-  const filepathRelativeToComponentsDir = file.path.split('/').slice(1).join('/');
+  const filepathRelativeToComponentsDir = file?.path.split('/').slice(1).join('/');
 
   // eslint-disable-next-line no-unused-vars
   return <>

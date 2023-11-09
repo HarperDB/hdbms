@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import queryInstance from '../queryInstance';
 
 // this 'addMetadata' logic probably belongs in src/functions/instance
@@ -11,7 +10,7 @@ function addMetadata(fileTree, path, rootDir, readOnly=false) {
 
   if (path === rootDir) {
     fileTree.path = rootDir;
-    fileTree.key = uuid();
+    fileTree.key = crypto.randomUUID();
   }
 
   for (const entry of fileTree.entries) {
@@ -27,7 +26,7 @@ function addMetadata(fileTree, path, rootDir, readOnly=false) {
     const [ , project ] = newPath.split('/');
     entry.project = project;
     entry.path = newPath;
-    entry.key = uuid();
+    entry.key = crypto.randomUUID();
     entry.readOnly = readOnly || !!entry.package;
 
     addMetadata(entry, newPath, rootDir, entry.readOnly);

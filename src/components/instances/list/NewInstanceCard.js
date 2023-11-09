@@ -22,7 +22,7 @@ function NewInstanceCard() {
           <div className="my-4">
             <i className="fa fa-2x fa-plus-circle new-instance-plus" />
           </div>
-          <span>Register User-Installed Instance</span>
+          <span>Register Enterprise Instance</span>
         </CardBody>
       </Card>
     </Col>
