@@ -39,7 +39,7 @@ function NoPrimaryKeyMessage({ table }) {
         <CardTitle>No Primary Key</CardTitle>
         <i className="fa fa-warning mt-3" />
         <span className="mt-3">
-          The table { `'${table}'` } does not have a primary key. The HarperDB Studio does not currently support tables wihtout a primary key defined. Please see the <a href="https://docs.harperdb.io/docs" target="_blank" rel="noreferrer">HarperDB documention</a> to see the standard HarperDB querying options.
+          The table { `'${table}'` } does not have a primary key. The HarperDB Studio does not currently support tables without a primary key defined. Please see the <a href="https://docs.harperdb.io/docs" target="_blank" rel="noreferrer">HarperDB documention</a> to see the standard HarperDB querying options.
         </span>
       </CardBody>
     </Card>
