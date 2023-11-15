@@ -27,24 +27,20 @@ function InstanceManager({ items, itemType, setShowModal, loading, setLoading, r
   const handleAddNode = useCallback(
     async (payload) => {
       setLoading(payload.compute_stack_id);
-      if (payload.instance_host === 'localhost') {
-        alert.error("External instances cannot reach that instance's URL");
-      } else {
-        const result =
-          clusterEngine === 'nats'
-            ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
-            : await addNode({ ...payload, auth, url, is_local, customer_id });
+      const result =
+        clusterEngine === 'nats'
+          ? await clusterSetRoutes({ auth, url, routes: [{ host: payload.instance_host, port: payload.clusterPort }] })
+          : await addNode({ ...payload, auth, url, is_local, customer_id });
 
-        if (result.error) {
-          // TODO: review our policy about connecting to localhost instances.
-          alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
-          setLoading(false);
-        } else {
-          if (clusterEngine === 'nats') {
-            await restartService({ auth, url, service: 'clustering config' });
-          }
-          await refreshNetwork();
+      if (result.error) {
+        // TODO: review our policy about connecting to localhost instances.
+        alert.error(payload.instance_host === 'localhost' ? "External instances cannot reach that instance's URL" : result.message);
+        setLoading(false);
+      } else {
+        if (clusterEngine === 'nats') {
+          await restartService({ auth, url, service: 'clustering config' });
         }
+        await refreshNetwork();
       }
       setLoading(false);
     },
