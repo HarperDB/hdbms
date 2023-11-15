@@ -92,7 +92,7 @@ function BrowseIndex() {
        * FIXME: There is a fair amount of logic scattered throughout this
        * page that could be put in a router-level validation function.
        *
-       * Splitting the browse endpoint into /schema/ and /schema/table heirarchy
+       * Splitting the browse endpoint into /schema/ and /schema/table hierarchy
        * might ease this.
        *
        */
@@ -162,18 +162,16 @@ function BrowseIndex() {
           onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })}
           FallbackComponent={ErrorFallback}>
           {
-            hasHashAttr ? (
-              schema && table && action === 'csv' && entities.activeTable ? (
-                <CSVUpload />
-              ) : schema && table && action && entities.activeTable ? (
-                <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
-              ) : schema && table && entities.activeTable ? (
-                <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
-              ) : (
-                <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
-              )
+            schema && table && action === 'csv' && entities.activeTable ? (
+              <CSVUpload />
+            ) : schema && table && action && entities.activeTable ? (
+              <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
+            ) : schema && table && entities.activeTable ? (
+              <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
+            ) : schema && table && !hasHashAttr ? (
+              <NoPrimaryKeyMessage />
             ) :
-            <NoPrimaryKeyMessage table={table} />
+            <EmptyPrompt headline={emptyPromptMessage} icon={<i className="fa fa-exclamation-triangle text-warning" />} />
           }
         </ErrorBoundary>
       </Col>
