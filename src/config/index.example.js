@@ -17,5 +17,6 @@ export default {
   user_guide_id: 16032,
   alarm_badge_threshold: 86400,
   maintenance: 0,
-  is_local_studio: process.env.REACT_APP_LOCALSTUDIO,
+  is_local_studio: process.env.REACT_APP_LOCALSTUDIO, // this is injected at build-time and loads LocalApp.js instead of App.js
+  local_studio_dev_url: 'http://localhost:9925', // this lets you dev the UI on port 3000 and talk to your local instance on 9925
 };
