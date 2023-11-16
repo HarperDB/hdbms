@@ -19,6 +19,12 @@ import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, Dele
 
 import EditorMenu, { SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
 
+// TODO:
+//
+// - tie editor state into urls to enable deep-linking and navigation
+// - revisit the nuances of windowing behavior
+ 
+
 function WebIDE({
   theme,
   deployTargets, // FIXME: does this belong here?
@@ -51,9 +57,9 @@ function WebIDE({
   const [revertingFile, setRevertingFile] = useState(false);
 
   const hasProjects = fileTree?.entries?.length > 0;
-  const canAddFile = Boolean(hasProjects && selectedFolder); // can only add a file if a target folder is selected
-  const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage)); // can only delete a folder if a target folder is selected
-  const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
+  const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
+  const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder to a project if a target folder is selected
 
   function updateActiveEditorWindow(to, from) {
     // TODO: figure out correct logic here.
@@ -156,18 +162,22 @@ function WebIDE({
           onFileRename={() => {
             // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
-          onDeployProject={(e) => {
-            onDeployProject(e);
-            // TODO: open deploy package window
-          }}
-          onFolderSelect={(folder) => {
-            // shouldnt deselect anything
-            setSelectedFolder(folder);
-          }}
-          onPackageSelect={(pkg) => {
-            // set selected package,
-            // unset selectedFile
-            // TODO: make sure 'remote fetch package' window has correct data.
+          onDeployProject={
+            (e) => {
+              onDeployProject(e);
+            }
+          }
+          onFolderSelect={
+            (folder) => {
+              console.log('folder: ', folder);
+              setSelectedFolder(folder);
+              if (!folder) {
+                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+              }
+            }
+          }
+          onPackageSelect={
+            (pkg) => {
 
             setSelectedPackage(pkg);
             setSelectedFile(null);
