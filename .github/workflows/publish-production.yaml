@@ -34,7 +34,8 @@ jobs:
           user_guide_id: 16032,
           alarm_badge_threshold: 86400,
           maintenance: 0,
-          errortest: 0
+          errortest: 0,
+          is_local_studio: false,
         };
         EOF
     - name: Write manifest file

@@ -81,7 +81,7 @@ function ConfigIndex() {
     <Row id="config">
       <Col xs="12">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <Details clusterNodeName={clusterNodeName} />
+          <Details clusterNodeName={clusterNodeName} instanceConfig={instanceConfig} />
         </ErrorBoundary>
       </Col>
       {isOrgOwner && theme !== 'akamai' && (

@@ -41,7 +41,7 @@ function Datatable({ refreshNetwork, loading, setLoading }) {
         <Col className="text-end">
           <Button color="link" onClick={handleRefresh} className="me-2">
             <span className="me-2">refresh network</span>
-            <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
         </Col>
       </Row>

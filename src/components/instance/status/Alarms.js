@@ -54,7 +54,7 @@ function Alarms() {
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-end">
           <Button color="link" title="Update Jobs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
-            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="me-2">auto</span>

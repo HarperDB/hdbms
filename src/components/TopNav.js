@@ -7,17 +7,19 @@ import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../functions/state/appState';
 import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/ErrorFallback';
+import useInstanceAuth from '../functions/state/instanceAuths';
+import config from '../config';
 
-function TopNav({ isMaintenance }) {
+function TopNav({ isMaintenance, loggedIn = false }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const customer = useStoreState(appState, (s) => s.customer);
   const theme = useStoreState(appState, (s) => s.theme);
   const themes = useStoreState(appState, (s) => s.themes);
+  const [, setInstanceAuths] = useInstanceAuth({});
   const themeIndex = themes?.findIndex((t) => t === theme);
   const nextTheme = !theme || themeIndex === themes.length - 1 ? themes[0] : themes[themeIndex + 1];
-  const loggedIn = auth?.user_id;
 
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
@@ -37,9 +39,13 @@ function TopNav({ isMaintenance }) {
     });
 
   const logOut = () => {
-    appState.update((s) => {
-      s.auth = false;
-    });
+    if (config.is_local_studio) {
+      setInstanceAuths({ local: false });
+    } else {
+      appState.update((s) => {
+        s.auth = false;
+      });
+    }
     navigate('/');
   };
 
@@ -56,17 +62,17 @@ function TopNav({ isMaintenance }) {
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
         <div className="navbar-brand">
-          <NavLink to="/organizations">
+          <NavLink to={config.is_local_studio ? `o/local/i/local/browse` : '/organizations'}>
             <div id="logo" title="Go to Organizations Home" />
           </NavLink>
         </div>
 
         <Nav className="ms-auto" navbar>
-          {loggedIn && !isMaintenance && (
+          {loggedIn && !isMaintenance && !config.is_local_studio && (
             <>
               <NavItem className="ms-0">
                 <NavLink id="viewOrganizations" title="View or Switch Organizations" to="/organizations">
-                  <i className="fa fa-building-o d-inline-block" />
+                  <i className="fa fa-building d-inline-block" />
                   <span className="d-none d-lg-inline-block">&nbsp;all organizations</span>
                   {showInviteBadge ? <span className="badge">{showInviteBadge}</span> : null}
                 </NavLink>
@@ -90,7 +96,7 @@ function TopNav({ isMaintenance }) {
                       </NavItem>
                       <NavItem>
                         <NavLink id="manageOrganizationBilling" title="Manage Organization Billing" to={`/o/${customer.customer_id}/billing`}>
-                          <i className="fa fa-credit-card-alt d-inline-block" />
+                          <i className="fa fa-credit-card d-inline-block" />
                           <span className="d-none d-lg-inline-block">&nbsp;billing</span>
                           {customer?.current_payment_status?.status === 'invoice.payment_failed' ? <span className="badge">!</span> : null}
                         </NavLink>
@@ -108,16 +114,14 @@ function TopNav({ isMaintenance }) {
               </NavItem>
             </>
           )}
-          <li className="nav-item">
-            <a target="_blank"
-              rel="noreferrer"
-              href="https://harperdb.io/docs"
-              id="viewResources"
-              title="HarperDB Documentation">
-              <i className="fas fa-tools" />
-              <span className="d-none d-lg-inline-block">&nbsp;docs</span>
-            </a>
-          </li>
+          {!config.is_local_studio && (
+            <li className="nav-item">
+              <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
+                <i className="fas fa-tools" />
+                <span className="d-none d-lg-inline-block">&nbsp;docs</span>
+              </a>
+            </li>
+          )}
           {themes.length > 1 && (
             <NavItem>
               <Button
@@ -136,12 +140,12 @@ function TopNav({ isMaintenance }) {
           <NavItem>
             {loggedIn ? (
               <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
-                <i className="fa fa-sign-out" />
+                <i className="fa fa-sign-out-alt" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign out</span>
               </Button>
             ) : (
               <NavLink id="goToLogin" title="Log In" to="/">
-                <i className="fa fa-sign-in" />
+                <i className="fa fa-sign-in-alt" />
                 <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign in</span>
               </NavLink>
             )}

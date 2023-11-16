@@ -41,16 +41,16 @@ function InstanceIndex() {
   const [mounted, setMounted] = useState(false);
 
   useAsyncEffect(() => {
-    if (auth && customer_id) {
+    if (!config.is_local_studio && auth && customer_id) {
       getCustomer({ auth, customer_id });
     }
-  }, [auth, customer_id]);
+  }, [auth, customer_id, config.is_local_studio]);
 
   useAsyncEffect(() => {
-    if (auth && customer_id) {
+    if (!config.is_local_studio && auth && customer_id) {
       getAlarms({ auth, customer_id });
     }
-  }, [auth, customer_id, instances]);
+  }, [auth, customer_id, instances, config.is_local_studio]);
 
   useAsyncEffect(() => {
     if (auth && products && regions && subscriptions && customer_id && !instances?.length) {
@@ -103,17 +103,13 @@ function InstanceIndex() {
   return (
     <>
       <SubNav routes={hydratedRoutes} />
-      {isOrgUser && instances && !loadingInstance ? (
+      {(config.is_local_studio || (isOrgUser && instances)) && !loadingInstance ? (
         <Suspense fallback={<Loader header=" " spinner />}>
           <Routes>
-          {
-            hydratedRoutes.map(route => (
-              <Route path={route.path} key={route.path} element={ route.element }/>
-            ))
-          }
-          <Route path="*" element={
-            <Navigate to={hydratedRoutes[0].path} replace />
-          } />
+            {hydratedRoutes.map((route) => (
+              <Route path={route.path} key={route.path} element={route.element} />
+            ))}
+            <Route path="*" element={<Navigate to={hydratedRoutes[0].path} replace />} />
           </Routes>
         </Suspense>
       ) : (

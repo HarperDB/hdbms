@@ -4,7 +4,7 @@ export default ({ theme }) => ({
       iconColor: '#403b8a',
       color: theme === 'dark' ? '#ffffff' : '#212121',
       fontWeight: 100,
-      fontFamily: 'Raleway, Open Sans, Segoe UI, sans-serif',
+      fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans", Arial, Helvetica, Verdana, Sans-Serif',
       fontSize: '14px',
       fontSmoothing: 'antialiased',
       '::placeholder': {

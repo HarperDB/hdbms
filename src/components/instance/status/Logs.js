@@ -53,7 +53,7 @@ function Logs() {
         <Col xs="12" className="d-inline-flex d-md-none mb-2" />
         <Col className="text-md-end">
           <Button color="link" title="Update Logs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
-            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="me-2">auto</span>
@@ -63,28 +63,15 @@ function Logs() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-              <Row xs="5">
-                <Col className="text-bold">
-                  status
-                </Col>
-                <Col className="text-bold">
-                  date
-                </Col>
-                <Col className="text-left text-bold">
-                  {!loading && logsError ? 
-                      <span className="text-danger">
-                        log fetch error: {new Date().toLocaleTimeString().toLowerCase()}
-                      </span> :
-                      <span>time</span>
-                  }
-                </Col>
-                <Col className="text-bold">
-                  thread
-                </Col>
-                <Col className="text-bold">
-                  tags
-                </Col>
-              </Row>
+          <Row xs="5">
+            <Col className="text-bold">status</Col>
+            <Col className="text-bold">date</Col>
+            <Col className="text-left text-bold">
+              {!loading && logsError ? <span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
+            </Col>
+            <Col className="text-bold">thread</Col>
+            <Col className="text-bold">tags</Col>
+          </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
             {loading && !logs && !autoRefresh ? (

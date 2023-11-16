@@ -99,7 +99,7 @@ function Datatable({ lastUpdate, setLastUpdate }) {
         <Col>existing users</Col>
         <Col className="text-end">
           <Button color="link" onClick={() => setLastUpdate(Date.now())} className="me-2">
-            <i title="Refresh Structure" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            <i title="Refresh Structure" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <span className="mx-3 text">|</span>
           <Button

@@ -14,6 +14,7 @@ import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from '../shared/ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 import useInstanceAuth from '../../functions/state/instanceAuths';
+import config from '../../config';
 
 function Subnav({ routes = [] }) {
   const { compute_stack_id, customer_id } = useParams();
@@ -49,7 +50,10 @@ function Subnav({ routes = [] }) {
     [compute_stack_id]
   );
 
-  const currentRoute = routes?.find((r) => r.link === location.pathname.split(compute_stack_id)[1].split('/')[1]);
+  const linkPrefix = `/o/${customer_id}/i/${compute_stack_id}`;
+  const linkRoute = location.pathname.split(compute_stack_id)[1].split('/')[1];
+
+  const currentRoute = routes?.find((r) => r.link === linkRoute);
   const activeRoute = {
     label: currentRoute?.label,
     value: currentRoute?.link,
@@ -69,31 +73,33 @@ function Subnav({ routes = [] }) {
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Navbar className="app-subnav">
-        <Nav navbar className="instance-select">
-          <SelectDropdown
-            className="react-select-container"
-            classNamePrefix="react-select"
-            onChange={navigateFn}
-            options={options || []}
-            value={activeOption}
-            defaultValue={activeOption.value}
-            isSearchable={false}
-            isClearable={false}
-            isLoading={!options}
-            noOptionsMessage={() => 'No other instances available'}
-            styles={{
-              option: (styles, { data }) => ({ ...styles, opacity: data.is_unavailable ? 0.5 : 1, ...icon(data.is_local, data.is_unavailable) }),
-              singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local, data.is_unavailable) }),
-            }}
-          />
-        </Nav>
+        {!config.is_local_studio && (
+          <Nav navbar className="instance-select">
+            <SelectDropdown
+              className="react-select-container"
+              classNamePrefix="react-select"
+              onChange={navigateFn}
+              options={options || []}
+              value={activeOption}
+              defaultValue={activeOption.value}
+              isSearchable={false}
+              isClearable={false}
+              isLoading={!options}
+              noOptionsMessage={() => 'No other instances available'}
+              styles={{
+                option: (styles, { data }) => ({ ...styles, opacity: data.is_unavailable ? 0.5 : 1, ...icon(data.is_local, data.is_unavailable) }),
+                singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local, data.is_unavailable) }),
+              }}
+            />
+          </Nav>
+        )}
         <Nav navbar className="instance-nav d-none d-lg-flex">
           {routes.map((route) => (
             <NavItem key={route.path}>
               <NavLink
                 title={route.link}
                 className="nav-link"
-                to={`/o/${customer_id}/i/${compute_stack_id}/${route.link === 'browse' && defaultBrowseURL ? `${route.link}/${defaultBrowseURL}` : route.link}`}
+                to={`${linkPrefix}/${route.link === 'browse' && defaultBrowseURL ? `${route.link}/${defaultBrowseURL}` : route.link}`}
               >
                 <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
                 {route.label || route.link}
@@ -107,7 +113,7 @@ function Subnav({ routes = [] }) {
             className="react-select-container"
             classNamePrefix="react-select"
             width="200px"
-            onChange={({ value }) => navigate(`/o/${customer_id}/i/${compute_stack_id}/${value}`)}
+            onChange={({ value }) => navigate(`${linkPrefix}/${value}`)}
             options={
               activeRoute.value ? routes.filter((r) => r.link !== activeRoute.value).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode })) : null
             }

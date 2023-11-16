@@ -15,5 +15,7 @@ export default {
   free_local_instance_limit: false,
   max_file_upload_size: 10380902,
   user_guide_id: 16032,
+  alarm_badge_threshold: 86400,
   maintenance: 0,
+  is_local_studio: process.env.REACT_APP_LOCALSTUDIO,
 };

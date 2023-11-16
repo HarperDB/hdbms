@@ -6,14 +6,15 @@ import getAkamaiRegions from '../api/lms/getAkamaiRegions';
 import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
+import config from '../../config';
 
 export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, controller }) => {
-  if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
+  if (!config.is_local_studio && ['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
     setFetchingUser(false);
     return setPersistedUser({});
   }
 
-  if (['/sign-in'].includes(location.pathname)) {
+  if (!config.is_local_studio && ['/sign-in'].includes(location.pathname)) {
     navigate('/');
   }
 
@@ -23,12 +24,14 @@ export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, c
     refreshUser({ auth, controller, setFetchingUser, loggingIn: true });
   }
 
-  getCurrentVersion();
-  getProducts();
-  getRegions();
-  getWavelengthRegions();
-  getAkamaiRegions();
-  getPostManCollection();
+  if (!config.is_local_studio) {
+    getCurrentVersion();
+    getProducts();
+    getRegions();
+    getWavelengthRegions();
+    getAkamaiRegions();
+    getPostManCollection();
+  }
 
   // TODO: when is this called? this is when the theme is set.
   const unsubscribeAuth = appState.subscribe(

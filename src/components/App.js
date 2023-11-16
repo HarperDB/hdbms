@@ -139,7 +139,7 @@ function App() {
     <div className={`${theme} ${config.maintenance ? 'maintenance' : ''}`}>
       <div id="app-container">
         <Suspense fallback={<Loader header=" " spinner />}>
-          <TopNav isMaintenance={isMaintenance} />
+          <TopNav isMaintenance={isMaintenance} loggedIn />
         </Suspense>
         {fetchingUser ? (
           <Loader header="signing in" spinner />
