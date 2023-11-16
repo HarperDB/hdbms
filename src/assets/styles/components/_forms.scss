@@ -24,6 +24,15 @@ textarea,
   &.error {
     border: 1px solid $color-danger !important;
   }
+
+  &[readOnly],
+  &[readOnly]:active,
+  &[readOnly]:focus {
+    border: 1px solid transparent !important;
+    cursor: not-allowed !important;
+    outline-color: transparent !important;
+    user-select: none !important;
+  }
 }
 
 .form-validation-error {
@@ -75,8 +84,6 @@ textarea {
   overflow-x: hidden;
   white-space: nowrap;
 }
-
-
 
 .subdomain-form {
   padding-right: 0;

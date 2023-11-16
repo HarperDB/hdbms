@@ -13,7 +13,7 @@ export function InstallPackageButton({ onClick, text = '', extraClasses = '' }) 
   return (
     <button type="button" onClick={onClick} className={cn(`install-package-icon ${extraClasses}`)} title="Install external package from url or NPM package spec">
       <i className="fas fa-share-alt" />
-      {text && <span className="ms-3 install-package-button-text">{text}</span>}
+      {text && <span className="ms-1">{text}</span>}
     </button>
   );
 }
@@ -21,8 +21,8 @@ export function InstallPackageButton({ onClick, text = '', extraClasses = '' }) 
 export function AddProjectButton({ onClick, disabled = false, text = '', extraClasses = '' }) {
   return (
     <button type="button" disabled={disabled} onClick={onClick} className={cn(`add-package-icon ${extraClasses}`)} title="Add a new project">
-      <i className="fas fa-file-code" />
-      {text && <span className="ms-3 add-project-button-text"> {text}</span>}
+      <i className="fas fa-plus" />
+      {text && <span className="ms-1"> {text}</span>}
     </button>
   );
 }

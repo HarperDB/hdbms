@@ -27,7 +27,6 @@ import checkVersion from '../functions/app/checkVersion';
 import init from '../functions/app/init';
 import refreshUser from '../functions/app/refreshUser';
 import changeFavIcon from '../functions/app/changeFavIcon';
-import getThemes from '../functions/app/getThemes';
 import getAkamaiRegions from '../functions/api/lms/getAkamaiRegions';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './TopNav'));
@@ -73,7 +72,6 @@ function App() {
   const [fetchingUser, setFetchingUser] = useState(true);
   const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const currentTheme = persistedUser?.theme;
   const loggedIn = auth?.user_id;
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
   const isMaintenance = version?.maintenance && isNotEmployee;
@@ -85,8 +83,8 @@ function App() {
   }, [location.pathname]);
 
   useEffect(() => {
-    changeFavIcon(currentTheme);
-  }, [currentTheme]);
+    changeFavIcon(persistedUser?.theme);
+  }, [persistedUser?.theme]);
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));
@@ -117,8 +115,7 @@ function App() {
   }, [location, canonicalUrl]);
 
   useEffect(() => {
-    init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
-    getThemes(currentTheme);
+    init({ currentPath: location.pathname, navigate, persistedUser, setPersistedUser, setFetchingUser, controller });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

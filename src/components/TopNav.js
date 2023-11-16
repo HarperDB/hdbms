@@ -9,6 +9,7 @@ import addError from '../functions/api/lms/addError';
 import ErrorFallback from './shared/ErrorFallback';
 import useInstanceAuth from '../functions/state/instanceAuths';
 import config from '../config';
+import usePersistedUser from '../functions/state/persistedUser';
 
 function TopNav({ isMaintenance, loggedIn = false }) {
   const { pathname } = useLocation();
@@ -18,25 +19,28 @@ function TopNav({ isMaintenance, loggedIn = false }) {
   const theme = useStoreState(appState, (s) => s.theme);
   const themes = useStoreState(appState, (s) => s.themes);
   const [, setInstanceAuths] = useInstanceAuth({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const themeIndex = themes?.findIndex((t) => t === theme);
   const nextTheme = !theme || themeIndex === themes.length - 1 ? themes[0] : themes[themeIndex + 1];
 
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [auth.orgs]
+    [auth.orgs],
   );
 
   const showManageIcon = useMemo(
     () => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner',
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [auth.orgs, customer.customer_id]
+    [auth.orgs, customer.customer_id],
   );
 
-  const toggleTheme = (newValue) =>
+  const toggleTheme = (newValue) => {
+    setPersistedUser({ ...persistedUser, theme: newValue });
     appState.update((s) => {
       s.theme = newValue;
     });
+  };
 
   const logOut = () => {
     if (config.is_local_studio) {

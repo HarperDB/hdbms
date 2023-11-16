@@ -7,44 +7,46 @@ import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 import config from '../../config';
+import getThemes from './getThemes';
 
-export default ({ auth, location, navigate, setFetchingUser, setPersistedUser, controller }) => {
-  if (!config.is_local_studio && ['/sign-up', '/reset-password', '/resend-registration-email'].includes(location.pathname)) {
-    setFetchingUser(false);
-    return setPersistedUser({});
-  }
-
-  if (!config.is_local_studio && ['/sign-in'].includes(location.pathname)) {
-    navigate('/');
-  }
-
-  if (!auth?.email) {
-    setFetchingUser(false);
-  } else {
-    refreshUser({ auth, controller, setFetchingUser, loggingIn: true });
-  }
+export default ({ currentPath, navigate, setFetchingUser, persistedUser, setPersistedUser, instanceAuths, controller }) => {
+  getThemes(persistedUser.theme);
 
   if (!config.is_local_studio) {
+    if (['/sign-up', '/reset-password', '/resend-registration-email'].includes(currentPath)) {
+      setFetchingUser(false);
+      return setPersistedUser({});
+    }
+
+    if (['/sign-in'].includes(currentPath)) {
+      return navigate('/');
+    }
+
+    if (!persistedUser?.email) {
+      setFetchingUser(false);
+    } else {
+      refreshUser({ auth: persistedUser, controller, setFetchingUser, loggingIn: true });
+    }
+
     getCurrentVersion();
     getProducts();
     getRegions();
     getWavelengthRegions();
     getAkamaiRegions();
     getPostManCollection();
+
+    return appState.update((s) => {
+      s.auth = { email: persistedUser?.email, pass: persistedUser?.pass };
+    });
   }
-
-  // TODO: when is this called? this is when the theme is set.
-  const unsubscribeAuth = appState.subscribe(
-    (s) => ({ newAuth: s.auth, newTheme: s.theme }),
-    ({ newAuth: { email, pass }, newTheme }) => {
-      setPersistedUser({ email, pass, theme: newTheme });
-      if (!email && controller) controller.abort();
-    }
-  );
-
   appState.update((s) => {
-    s.auth = { email: auth?.email, pass: auth?.pass };
+    s.instances = [{ compute_stack_id: 'local', url: config.local_studio_dev_url || '/', instance_name: 'local' }];
   });
+  setFetchingUser(false);
 
-  return unsubscribeAuth;
+  if (instanceAuths?.local?.valid) {
+    setFetchingUser(false);
+    return setTimeout(navigate('/o/local/i/local/browse'), 10);
+  }
+  return navigate('/');
 };

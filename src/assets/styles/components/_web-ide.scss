@@ -2,9 +2,63 @@
   height: 80vh;
   overflow: hidden;
 
+  .editor-menu-holder,
+  .file-menu-holder {
+    border-bottom: 1px solid $color-darkgrey !important;
+    color: $color-white;
+    height: 30px;
+    margin-bottom: 20px;
+  }
+
+  .file-menu,
+  .editor-menu {
+    align-items: baseline;
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-inline-start: 0 !important;
+    padding-top: 0;
+
+    .file-menu-item,
+    .editor-menu-item {
+      list-style-type: none;
+      margin: 0 4px 8px !important;
+
+      button,
+      button::before,
+      i::before {
+        background: transparent !important;
+        border: 0;
+        color: $color-white;
+        margin: 0;
+        outline: none !important;
+        padding: 0;
+      }
+
+      button:disabled,
+      button[disabled],
+      button:disabled::before,
+      button[disabled]::before{
+        color: $color-darkgrey !important;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .editor-menu,
+  .file-menu-right {
+    justify-content: right !important;
+  }
+
   .file-browser-outer-container {
     height: 100%;
     padding: 20px;
+
+    @media(max-width: 814px) {
+      height: auto;
+      overflow-y: auto;
+    }
 
     .file-browser-scroll-container {
       background: $faintest-white-overlay;
@@ -14,10 +68,13 @@
       overflow-x: hidden;
       overflow-y: auto;
 
+      @media(max-width: 814px) {
+        max-height: 500px;
+      }
+
       .file-browser {
         margin-left: 0;
         padding: 0 !important;
-        padding-left: 0;
         position: relative;
 
         > li {
@@ -31,6 +88,7 @@
         }
 
         .folder {
+          list-style-type: none;
           padding: 0 !important;
           padding-inline-start: 8px !important;
 
@@ -55,11 +113,11 @@
             .file,
             .package {
               background: transparent;
-              border: 1px solid transparent;
-              list-style-type: none;
-              margin: 0;
+              border: 0;
+              margin: 1px 0;
               outline: none !important; // TODO: fix this because it is not accessible; style differently
               padding: 3px;
+              text-align: left;
               white-space: nowrap;
 
               .project-icon {
@@ -108,53 +166,6 @@
     }
   }
 
-  .editor-menu-holder,
-  .file-menu-holder {
-    border-bottom: 1px solid $color-darkgrey !important;
-    color: $color-white;
-    height: 30px;
-    margin-bottom: 20px;
-  }
-
-  .file-menu,
-  .editor-menu {
-    display: flex;
-    flex-direction: row;
-    margin-top: 0;
-    padding-bottom: 0;
-    padding-inline-start: 8px !important;
-    padding-top: 0;
-
-    .file-menu-item,
-    .editor-menu-item {
-      margin: 0 8px 8px !important;
-
-      button,
-      button::before,
-      i::before {
-        background: transparent !important;
-        border: 0;
-        color: $color-white;
-        font-size: 16px !important;
-        margin: 0;
-        outline: none !important;
-        padding: 0;
-      }
-
-      button:disabled,
-      button[disabled],
-      button:disabled::before,
-      button[disabled]::before{
-        color: $color-darkgrey !important;
-        cursor: not-allowed;
-      }
-    }
-  }
-
-  .editor-menu {
-    justify-content: right !important;
-  }
-
   .editor-window-container {
     padding: 20px;
 
@@ -186,383 +197,4 @@
     max-width: 400px;
     width: 100%;
   }
-
-
-  .button-with-loader {
-    min-width: 105px;
-
-    &.loading {
-      color: transparent;
-    }
-
-    .button-with-loader-icon {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      width: 100%;
-    }
-
-  }
-
-  ul, li {
-    list-style-type: none;
-  }
-
-  label, button {
-    white-space: nowrap !important;
-  }
-
-  input {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-
-
-
-
-  // top-level element: editor window (right side)
-  // contains code editor and project management windows
-  .editor-window-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    padding: 20px;
-
-    .editor-menu {
-      align-items: baseline;
-      border-bottom: 1px solid $color-black;
-      color: $color-white;
-      display: flex;
-      flex-direction: row;
-      justify-content: left;
-      margin-bottom: 20px;
-      margin-top: 0;
-      padding-bottom: 0;
-      padding-top: 0;
-
-      > li {
-        margin: 0 5px 5px 0;
-        padding: 0 5px 0 0;
-      }
-
-      button[disabled],
-      button[disabled]:hover {
-        color: $color-white;
-        cursor: not-allowed;
-      }
-
-      .restart-instance-after-save,
-      .restart-instance {
-        background: transparent;
-        border: 1px solid transparent;
-        display: flex;
-        flex-direction: row;
-        margin: 0;
-        outline: none !important;
-        padding: 3px;
-
-        > i {
-          color: $color-danger;
-        }
-      }
-
-      .revert-file,
-      .save-code {
-        background: transparent;
-        border: 0;
-        color: $color-danger;
-        cursor: pointer;
-        margin: 0;
-        outline: none !important;
-        padding: 0;
-      }
-
-      .revert-file[disabled],
-      .save-code[disabled] {
-        color: $color-darkgrey;
-        cursor: default;
-      }
-    }
-
-    .editor-window {
-      .input-group-text {
-        background: none;
-        border: 1px solid $color-darkergrey;
-        border-radius: 0 4px 4px 0;
-        height: 38px;
-      }
-
-      .name-input {
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-
-        .validation-message {
-          margin-top: 8px;
-        }
-
-        .name-input-container {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-
-          .invalid-project-name {
-            margin-left: 15px;
-          }
-
-          .hidden {
-            visibility: hidden;
-          }
-        }
-      }
-    }
-
-  }
-
-  @media(max-width: 814px) {
-      overflow: initial;
-
-      .file-browser-outer-container {
-        height: auto;
-        overflow-y: auto;
-      }
-
-      .file-browser-scroll-container {
-        max-height: 500px;
-      }
-  }
-
-  .dark {
-    .no-projects {
-      .docs-link {
-        color: $color-danger !important;
-      }
-    }
-
-    color: $color-white !important;
-
-    .editor.current-file-path {
-      border-bottom: 1px solid transparent;
-    }
-
-    .default-window-option {
-      span {
-        color: $color-white;
-      }
-
-    }
-
-    .name-input {
-      .validation-message {
-        color: $color-danger;
-      }
-
-      .name-input-container {
-        input.invalid {
-          border: 1px solid $color-danger !important;
-          outline-color: $color-danger !important;
-        }
-
-        .invalid-project-name {
-          color: $color-danger;
-        }
-      }
-    }
-
-    .package-install-window {
-      background: $color-black;
-    }
-
-    .file.folder-selected {
-      background: $faint-white-overlay !important;
-    }
-
-
-    .file-browser button > span {
-      color: $color-white !important;
-    }
-
-    .file-browser .file.file-selected > span {
-      color: $color-danger !important;
-    }
-
-    button[disabled]:hover,
-    button[disabled] {
-      cursor: not-allowed !important;
-    }
-
-  }
-
-  .purple {
-    color: $color-darkgrey;
-
-    button[disabled]:hover,
-    button[disabled] {
-      color: $color-darkgrey !important;
-    }
-
-    .default-window-option span {
-      color: $color-white !important;
-    }
-
-    .no-projects {
-      color: $color-white;
-
-      .docs-link {
-        color: $color-danger !important;
-      }
-    }
-
-
-
-    .name-input {
-      .name-input-container {
-        input.invalid:focus {
-          border: 1px solid $color-danger !important;
-          outline-color: $color-danger !important;
-        }
-      }
-
-      .validation-message {
-        color: $color-danger;
-        margin-top: 8px;
-      }
-
-      > input.invalid {
-        border: 1px solid $color-danger !important;
-        outline-color: $color-danger !important;
-      }
-
-      .invalid-text {
-        color: $color-danger !important;
-      }
-
-      .invalid-project-name {
-        color: $color-danger;
-      }
-    }
-
-    .package-install-window {
-      background: $color-white;
-    }
-
-    .editor.current-file-path {
-      border-bottom: 1px solid $color-lightgrey;
-    }
-
-    .default-window-option {
-      span {
-        color: $color-darkgrey;
-      }
-    }
-
-    .file.folder-selected {
-      background: $white-overlay !important;
-    }
-
-    .editor-window {
-      display: flex;
-      flex-direction: column;
-
-      .current-file-path {
-        background: $color-black;
-      }
-    }
-
-    .revert-file[disabled],
-    .save-code[disabled] {
-      color: $color-lightgrey !important;
-    }
-
-    .file-browser button {
-      color: $color-lightgrey;
-    }
-
-    .delete-file-icon[disabled] {
-      color: $color-lightgrey;
-    }
-
-  }
-
-  .akamai,
-  .light {
-    .editor-window {
-      border: 1px solid $color-lightergrey;
-    }
-
-    .name-input {
-      .validation-message {
-        color: $color-danger;
-      }
-
-      .name-input-container {
-        input.invalid {
-          border: 1px solid $color-danger !important;
-          outline-color: $color-danger !important;
-        }
-
-        .invalid-project-name {
-          color: $color-danger;
-        }
-      }
-    }
-
-    .no-projects {
-      color: $color-darkgrey;
-    }
-
-    color: $color-darkgrey;
-
-    .package-install-window {
-      background: $color-white;
-    }
-
-    .editor.current-file-path {
-      border-bottom: 1px solid $color-lightgrey;
-    }
-
-    .restart-instance-on-save-text {
-      color: $color-white !important;
-    }
-
-    .file-menu button[disabled],
-    .editor-menu button[disabled] {
-      color: $color-white !important;
-    }
-
-    .file.folder-selected {
-      background: rgba(200, 200, 200, 0.2) !important;
-    }
-
-    .file-icon.filetype-unknown {
-      color: $color-lightgrey !important;
-    }
-
-    .editor-window button:hover {
-      color: $color-white;
-    }
-
-    .editor-window button {
-      color: $color-darkgrey;
-    }
-
-    .install-package-icon {
-      color: $color-danger !important;
-    }
-
-    .add-project-icon {
-      color: $color-success !important;
-    }
-
-    .default-window-option {
-      span {
-        color: $color-darkgrey;
-      }
-    }
-  }
-
-
 }

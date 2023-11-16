@@ -108,49 +108,42 @@ function WebIDE({
   return (
     <Row id="webide">
       <Col md="3" className="file-browser-outer-container">
-        <div className="file-menu-holder">
-          <FileMenu>
-            <AddProjectButton
-              onClick={() => {
-                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
-              }}
-            />
-            <AddProjectFolderButton
-              disabled={!canAddProjectFolder}
-              onClick={() => {
-                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
-              }}
-            />
-            <DeleteFolderButton
-              disabled={!canDeleteFolder}
-              onClick={() => {
-                if (selectedPackage) {
-                  updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW, activeEditorWindow);
-                } else if (selectedFolder) {
-                  updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FOLDER_WINDOW, activeEditorWindow);
-                }
-              }}
-            />
-            <AddFileButton
-              onClick={() => {
-                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
-              }}
-              disabled={!canAddFile}
-            />
-            <DeleteFileButton
-              disabled={!selectedFile?.path}
-              onClick={() => {
-                updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
-              }}
-            />
-            <InstallPackageButton
-              onClick={() => {
-                setSelectedPackage(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
-              }}
-            />
-          </FileMenu>
-        </div>
+        <FileMenu>
+          <AddProjectButton
+            onClick={() => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
+            }}
+            text="app"
+          />
+          <AddProjectFolderButton
+            disabled={!canAddProjectFolder}
+            onClick={() => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
+            }}
+          />
+          <DeleteFolderButton
+            disabled={!canDeleteFolder}
+            onClick={() => {
+              if (selectedPackage) {
+                updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW, activeEditorWindow);
+              } else if (selectedFolder) {
+                updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FOLDER_WINDOW, activeEditorWindow);
+              }
+            }}
+          />
+          <AddFileButton
+            onClick={() => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
+            }}
+            disabled={!canAddFile}
+          />
+          <DeleteFileButton
+            disabled={!selectedFile?.path}
+            onClick={() => {
+              updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
+            }}
+          />
+        </FileMenu>
         <FileBrowser
           files={fileTree}
           root={fileTree.path}
@@ -201,38 +194,35 @@ function WebIDE({
           }}
         />
       </Col>
-      <Col className="editor-window-container col-md-9">
+      <Col md="9" className="editor-window-container">
         <Row className="editor-menu-holder g-0">
           <Col className="text-nowrap">
             {selectedFile && (
               <>
                 {selectedFile?.path?.split('/')?.slice(1)?.join(' > ')}{' '}
-                <span className="text-grey">
+                <span className="text-grey d-none d-md-inline-block">
                   | {selectedFile?.size || '...'} bytes | {selectedFile?.mtime ? new Date(selectedFile.mtime).toLocaleTimeString() : '...'}
                 </span>
               </>
             )}
           </Col>
-          <Col>
+          <Col className="text-nowrap">
             <EditorMenu>
+              <InstallPackageButton
+                onClick={() => {
+                  setSelectedPackage(null);
+                  updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+                }}
+              />
+              <span className="d-none d-lg-inline-block">add pkg</span>
+              <span className="px-1">|</span>
               <SaveButton
                 disabled={!(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
                 onClick={async () => {
                   await onFileSave(selectedFile, restartAfterSave);
                 }}
               />
-              <RestartInstanceButton
-                restarting={restartingInstance}
-                onClick={async () => {
-                  await restartInstance();
-                }}
-              />
-              <RestartOnSaveToggle
-                restartAfterSave={restartAfterSave}
-                onClick={() => {
-                  setRestartAfterSave(!restartAfterSave);
-                }}
-              />
+              <span className="d-none d-lg-inline-block">save</span>
               <RevertFileButton
                 loading={revertingFile}
                 disabled={!(selectedFile?.cached && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
@@ -251,6 +241,22 @@ function WebIDE({
                   }
                 }}
               />
+              <span className="d-none d-lg-inline-block">revert</span>
+              <span className="px-1">|</span>
+              <RestartInstanceButton
+                restarting={restartingInstance}
+                onClick={async () => {
+                  await restartInstance();
+                }}
+              />
+              <span className="d-none d-lg-inline-block">restart</span>
+              <RestartOnSaveToggle
+                restartAfterSave={restartAfterSave}
+                onClick={() => {
+                  setRestartAfterSave(!restartAfterSave);
+                }}
+              />
+              <span className="d-none d-lg-inline-block">auto</span>
             </EditorMenu>
           </Col>
         </Row>
