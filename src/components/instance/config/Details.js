@@ -23,10 +23,12 @@ function Details({ clusterNodeName, instanceConfig }) {
   const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
   const { hostname } = window.location;
   const operationsApiURL = config.is_local_studio
-    ? `${instanceConfig.operationsApi?.network?.https ? 'https://' : 'http://'}${hostname}:${instanceConfig.operationsApi?.network?.port}`
+    ? `${instanceConfig.operationsApi?.network?.securePort ? 'https://' : 'http://'}${hostname}:${
+        instanceConfig.operationsApi?.network?.securePort || instanceConfig.operationsApi?.network?.port
+      }`
     : url;
   const applicationsApiURL = config.is_local_studio
-    ? `${instanceConfig.customFunctions?.network?.https ? 'https://' : 'http://'}${hostname}:${instanceConfig.customFunctions?.network?.port}`
+    ? `${instanceConfig.http?.securePort ? 'https://' : 'http://'}${hostname}:${instanceConfig.http?.securePort || instanceConfig.http?.port}`
     : url;
 
   const version = useStoreState(instanceState, (s) => s.registration?.version);
