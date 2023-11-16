@@ -5,136 +5,105 @@ import Select from 'react-select';
 import { ensureRepoExists, getGithubTags } from './lib';
 
 export default function GithubRepoSelector({ pkg, setPackageSpec }) {
+  const [user, setUser] = useState(pkg?.user || '');
+  const [debouncedUser] = useDebounce(user, 300);
 
-  const [ user, setUser ] = useState(pkg?.user || '');
-  const [ debouncedUser ] = useDebounce(user, 300);
+  const [repo, setRepo] = useState(pkg?.repo || '');
+  const [debouncedRepo] = useDebounce(repo, 300);
 
-  const [ repo, setRepo ] = useState(pkg?.repo || '');
-  const [ debouncedRepo ] = useDebounce(repo, 300);
-
-  const [ tags, setTags ] = useState([]);
+  const [tags, setTags] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [ tagsFetched, setTagsFetched ] = useState(false);
+  const [tagsFetched, setTagsFetched] = useState(false);
 
-  const [ selectedTag, setSelectedTag ] = useState(pkg?.tag || '');
-  const [ targetRepo, setTargetRepo ] = useState('');
+  const [selectedTag, setSelectedTag] = useState(pkg?.tag || '');
+  const [targetRepo, setTargetRepo] = useState('');
 
-  const [ loadingTags, setLoadingTags ] = useState(false);
-  const [ found, setFound ] = useState(false);
+  const [loadingTags, setLoadingTags] = useState(false);
+  const [found, setFound] = useState(false);
 
   useEffect(() => {
-
     setUser(pkg?.user || '');
     setRepo(pkg?.repo || '');
-    setTags(pkg?.tag ? [ pkg?.tag ] : []);
+    setTags(pkg?.tag ? [pkg?.tag] : []);
     setSelectedTag(pkg?.tag || '');
-
   }, [pkg]);
 
   // TODO: use named hook callbacks
   useEffect(() => {
-
     if (debouncedUser && debouncedRepo) {
-
       setLoadingTags(true);
-      ensureRepoExists(user, debouncedRepo).then((targetRepoName) => {
+      ensureRepoExists(user, debouncedRepo)
+        .then((targetRepoName) => {
+          if (targetRepoName) {
+            setTargetRepo(targetRepoName);
+            setFound(true);
 
-        if (targetRepoName) {
-
-          setTargetRepo(targetRepoName);
-          setFound(true);
-
-          getGithubTags(user, debouncedRepo).then(repoTags => {
-
+            getGithubTags(user, debouncedRepo).then((repoTags) => {
+              setLoadingTags(false);
+              setTagsFetched(true);
+              setTags(repoTags);
+            });
+          } else {
             setLoadingTags(false);
-            setTagsFetched(true);
-            setTags(repoTags);
-
-          })
-
-        } else {
-
+            setFound(false);
+            setTargetRepo('');
+            setTags([]);
+          }
+        })
+        .catch(() => {
           setLoadingTags(false);
-          setFound(false);
-          setTargetRepo('');
-          setTags([]);
-
-        }
-
-      }).catch(() => {
-        setLoadingTags(false);
-      });
-
+        });
     } else {
-
       setFound(false);
       setLoadingTags(false);
 
       setTags([]);
       setSelectedTag('');
     }
-
   }, [debouncedUser, debouncedRepo, user]);
 
   // TODO: use named hook callbacks
   useEffect(() => {
-
     if (!(user && repo && targetRepo)) {
       setPackageSpec('');
     } else {
-      const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`; 
+      const packageSpec = selectedTag ? `${user}/${repo}#semver:${selectedTag}` : `${user}/${repo}`;
       setPackageSpec(packageSpec);
     }
-
   }, [targetRepo, selectedTag, user, setPackageSpec, repo]);
 
   return (
-      <div className="package-install-github-query-container">
-        <div className="package-install-github-user">
-          <label className="form-label">Github User:</label>
-          <input
-            title="Github User"
-            placeholder="Github User"
-            onChange={ (e) => setUser(e.target.value) }
-            value={user} />
+    <>
+      <div className="input-group">
+        <input title="Github User" className="mt-2 form-control" placeholder="Github User" onChange={(e) => setUser(e.target.value)} value={user} />
+        <div className="input-group-append">
+          <i
+            className={cn('input-group-text fa mt-2', {
+              'text-danger fa-spinner fa-spin loading': loadingTags,
+              'text-success fa-check found': debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
+              'text-danger fa-times not-found': debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found),
+              'text-danger fa-check not-searching': debouncedUser.length === 0 || debouncedRepo.length === 0,
+            })}
+          />
         </div>
-        <div className="package-install-github-repo-lookup">
-          <label className="form-label">Github Repository Name: </label>
-          <div className="github-package-search-box">
-            <input
-              title="Github Repo"
-              placeholder="Github Repo"
-              onChange={ (e) => setRepo(e.target.value) }
-              value={repo} />
-            <span className="search-status-icon-container github-repo-query">
-              <i className={
-                cn("search-status-icon fas", { 
-                  "fa-spinner fa-spin loading": loadingTags, 
-                  "fa-check found": debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
-                  "fa-times not-found": debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found), 
-                  "fa-check not-searching": debouncedUser.length === 0 || debouncedRepo.length === 0
-                })
-              } />
-            </span>
-        </div>
-    </div>
-    <Select 
-      className="react-select-container github-tag-select"
-      classNamePrefix="react-select"
-      isDisabled={!targetRepo}
-      isSearchable
-      placeholder='choose a tag'
-      onChange={
-        (selected) => {
+      </div>
+
+      <input title="Github Repo" className="mt-2" placeholder="Github Repo" onChange={(e) => setRepo(e.target.value)} value={repo} />
+
+      <Select
+        className="react-select-container github-tag-select mt-2"
+        classNamePrefix="react-select"
+        isDisabled={!targetRepo}
+        isSearchable
+        placeholder="Choose a tag"
+        onChange={(selected) => {
           setSelectedTag(selected.value);
-        }
-      }
-      options={
-        tags.map(t => ({
+        }}
+        options={tags.map((t) => ({
           label: t,
-          value: t
-        }))
-    } />
-    </div>
+          value: t,
+        }))}
+      />
+    </>
   );
 }

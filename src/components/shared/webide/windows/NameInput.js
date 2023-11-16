@@ -5,74 +5,48 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import ButtonWithLoader from '../../ButtonWithLoader';
 
-export default function NameInput({ onCancel, onConfirm, onEnter, label='', placeholder='', value, validate=() => true }) {
-
-  const [ name, setName ] = useState(value || '');
-  const [ isValidName, setIsValidName ] = useState(false); 
+export default function NameInput({ onCancel, onConfirm, onEnter, value, type, validate = () => true }) {
+  const [name, setName] = useState(value || '');
+  const [isValidName, setIsValidName] = useState(false);
 
   function handleKeyDown(e) {
-
     if (e.key === 'Enter') {
       onEnter(e.target.value);
     } else if (e.key === 'Esc') {
-      onCancel()
-    }
-
-  }
-
-  /*
-   * TODO: do we need this? if not, remove.
-  function blurOnEsc(e) {
-    // related target is button when 'ok' is clicked,
-    // null if esc.
-    if (!e.relatedTarget) {
       onCancel();
     }
   }
-  */
 
   return (
-    <div
-      tabIndex={0}
-      className={ cn("name-input") }>
-        { label && <label><span>{label}:</span></label> }
-        <div className="name-input-container">
-          <input
-            className={ cn({ invalid: name.length > 0 && !isValidName }) }
-            autoFocus
-            onChange={(e) => {
-              setName(e.target.value);
-              setIsValidName(validate(e.target.value));
-            }}
-            onKeyDown={ handleKeyDown }
-            value={name}
-            placeholder={placeholder}
-            title="choose name for your new file or folder" />
-            <i title="error: project name must contain only alphanumeric characters, dashes and underscores." className={
-              cn("invalid-project-name fa fa-warning", {
-                hidden: isValidName || name.length === 0 
-              })
-            }
-            />
-        </div>
-        { name.length > 0 && !isValidName && <span className="validation-message">error: project name must contain only alphanumeric characters, dashes and underscores.</span> }
+    <>
+      <input
+        className={cn('w-100 text-center mb-3', { invalid: name.length > 0 && !isValidName })}
+        autoFocus
+        onChange={(e) => {
+          setName(e.target.value);
+          setIsValidName(validate(e.target.value));
+        }}
+        onKeyDown={handleKeyDown}
+        value={name}
+        placeholder={`name for your new ${type}`}
+        title={`name for your new ${type}`}
+      />
+      <i
+        title="error: name must contain only alphanumeric characters, dashes and underscores."
+        className={cn('text-danger fa fa-warning', { hidden: isValidName || name.length === 0 })}
+      />
+      <ButtonWithLoader disabled={!isValidName} className="btn btn-success btn-block mt-2" onClick={() => onConfirm(name)}>
+        OK
+      </ButtonWithLoader>
+      <button type="button" className="btn btn-outline-success btn-block mt-2" onClick={onCancel}>
+        Cancel
+      </button>
 
-          <span className="invalid-text" />
-          <div className="name-input-buttons-container">
-
-            <ButtonWithLoader
-              disabled={ !isValidName }
-              className="btn btn-success name-input-confirm"
-              onClick={ () => onConfirm(name) } 
-              >OK</ButtonWithLoader>
-            <button
-              type="button"
-              className="btn btn-secondary name-input-cancel cancel-button"
-              onClick={ onCancel }>
-              Cancel
-            </button>
-        </div>
-    </div>
+      {name.length > 0 && !isValidName ? (
+        <div className="validation-message mt-5">error: name must contain only alphanumeric characters, dashes and underscores.</div>
+      ) : (
+        <div className="mt-5">Please enter the {type} name and click OK.</div>
+      )}
+    </>
   );
-
 }

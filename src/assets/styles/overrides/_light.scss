@@ -373,4 +373,11 @@
       outline-color: $color-lightpurple !important;
     }
   }
+
+  #webide {
+    .package-text,
+    .filename-text {
+      color: $color-black !important;
+    }
+  }
 }

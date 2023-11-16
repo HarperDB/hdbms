@@ -1,293 +1,193 @@
-.dark {
-  .no-projects {
-    .docs-link {
-      color: #ee81ee !important;
-    }
-  }
+#webide{
+  height: 80vh;
+  overflow: hidden;
 
-  color: $color-white;
+  .file-browser-outer-container {
+    height: 100%;
+    padding: 20px;
 
-  .editor.current-file-path {
-    border-bottom: 1px solid transparent;
-  }
+    .file-browser-scroll-container {
+      background: $faintest-white-overlay;
+      border: 1px solid $color-darkgrey;
+      border-radius: $border-radius;
+      height: 72vh !important;
+      overflow-x: hidden;
+      overflow-y: auto;
 
-  .default-window-option {
-    span {
-      color: $color-white;
-    }
+      .file-browser {
+        padding: 0 !important;
+        position: relative;
+        margin-left: 0;
+        padding-left: 0;
 
-  }
+        > li {
+          width: 100%;
+          border-bottom: 1px solid $color-darkgrey;
+          padding: 10px 5px;
 
-  .name-input {
-    .validation-message {
-      color: $color-danger;
-    }
+          &:last-child {
+            border-bottom: 0 !important;
+          }
+        }
 
-    .name-input-container {
-      input.invalid {
-        border: 1px solid $color-danger !important;
-        outline-color: $color-danger !important;
+        .folder {
+          padding: 0 !important;
+          padding-inline-start: 8px !important;
+
+          .folder-container {
+            button:before,
+            i:before {
+              font-size: 16px !important;
+              background: transparent !important;
+              border: 0;
+              margin: 0;
+              outline: none !important;
+              padding: 0;
+            }
+
+            .package-text,
+            .filename-text {
+              font-size: 14px !important;
+              padding-left: 8px;
+              color: $color-grey !important;
+            }
+
+            .file,
+            .package {
+              background: transparent;
+              border: 1px solid transparent;
+              list-style-type: none;
+              margin: 0;
+              outline: none !important; // TODO: fix this because it is not accessible; style differently
+              padding: 3px;
+              white-space: nowrap;
+
+              .project-icon {
+                color: $color-success;
+              }
+
+              .folder-icon {
+                color: $color-info;
+              }
+
+              .filetype-js {
+                color: $color-warning;
+              }
+
+              .filetype-yaml {
+                color: $color-primary;
+              }
+
+              .filetype-unknown {
+                color: $color-lightgrey;
+              }
+
+              &.folder-selected {
+                .filename-text {
+                  color: $color-white !important;
+                }
+              }
+
+              &.file-selected {
+                .filename-text {
+                  color: $color-white !important;
+
+                  &::after {
+                    content: '\f35a' !important;
+                    position: absolute;
+                    right: 8px;
+                    font-size: 16px;
+                    font-family: 'Font Awesome 5 Free' !important;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
-
-      .invalid-project-name {
-        color: $color-danger;
-      }
     }
   }
 
-
-  .package-install-window {
-    background: rgb(17, 17, 17);
-  }
-
-  .file.folder-selected {
-    background: rgba(200, 200, 200, 0.2) !important;
+  .editor-menu-holder,
+  .file-menu-holder {
+    height: 30px;
+    border-bottom: 1px solid $color-darkgrey !important;
+    color: $color-white;
+    margin-bottom: 20px;
   }
 
   .file-menu,
   .editor-menu {
-    border-bottom: 1px solid rgb(60, 60, 60) !important;
-  }
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-inline-start: 8px !important;
 
-  .file-browser button > span {
-    color: $color-white !important;
-  }
+    .file-menu-item,
+    .editor-menu-item {
+      margin: 0 8px 8px 8px !important;
 
-  .file-browser .file.file-selected > span {
-    color: #ee81ee !important;
-  }
+      button,
+      button:before,
+      i::before {
+        font-size: 16px !important;
+        background: transparent !important;
+        border: 0;
+        color: $color-white;
+        margin: 0;
+        outline: none !important;
+        padding: 0;
+      }
 
-
-  button[disabled]:hover,
-  button[disabled] {
-    color: #5e5e5e !important;
-  }
-
-
-}
-
-.purple {
-  button[disabled]:hover,
-  button[disabled] {
-    color: #5e5e5e !important;
-  }
-
-
-  .default-window-option span {
-      color: $color-white !important;
-  }
-
-  .editor-window .default-window .default-window-container {
-    background: $color-pureblack !important;
-    color: $color-white;
-  }
-
-  .no-projects {
-    color: $color-white;
-
-    .docs-link {
-      color: #ee81ee !important;
-    }
-  }
-
-  color: $color-white;
-
-  color: rgb(105, 105, 105);
-
-  color: rgb(105, 105, 105);
-
-  .name-input {
-    .name-input-container {
-      input.invalid:focus {
-        border: 1px solid #ea4c89 !important;
-      outline-color: #ea4c89 !important;
+      button:disabled,
+      button[disabled],
+      button:disabled:before,
+      button[disabled]:before{
+        color: $color-darkgrey !important;
+        cursor: not-allowed;
       }
     }
+  }
 
-    .validation-message {
-      color: $color-danger;
-      margin-top: 8px;
-    }
+  .editor-menu {
+    justify-content: right !important;
+  }
 
-    & > input.invalid {
-      border: 1px solid $color-danger !important;
-      outline-color: $color-danger !important;
-    }
+  .editor-window-container {
+    padding: 20px;
 
+    .editor-window {
+      padding: 0;
+      background: $faintest-white-overlay;
+      border: 1px solid $color-darkgrey;
+      border-radius: $border-radius;
+      height: 72vh !important;
 
-
-    .invalid-text {
-      color: red !important;
-    }
-
-    .invalid-project-name {
-      color: $color-danger;
+      > section,
+      > section > div,
+      .monaco-editor,
+      .overflow-guard,
+      .card {
+        height: 71.8vh !important;
+      }
     }
   }
 
-  .editor-window .cancel-button {
-    color: rgb(105, 105, 105);;
-  }
-
-  .editor-window .cancel-button:hover {
+  .content-window {
     color: $color-white;
-  }
-
-  .package-install-window {
-    background: $color-white;
-  }
-
-  .editor.current-file-path {
-    border-bottom: 1px solid lightgray;
-  }
-
-
-  .default-window-option {
-    span {
-      color: rgb(105, 105, 105);
-    }
-  }
-
-  .cancel-button {
-    color: #5c636a;
-  }
-
-  .file.folder-selected {
-    background: rgba(200, 200, 200, 0.2) !important;
-  }
-
-  .editor-window {
+    max-width: 400px;
+    margin: 0 auto;
+    align-items: center;
     display: flex;
     flex-direction: column;
-
-    .current-file-path {
-      background: rgb(26, 26, 26);
-    }
-
-  }
-
-  .file-menu,
-  .editor-menu {
-    border-bottom: 1px solid darkgray !important;
-  }
-
-  .revert-file[disabled],
-  .save-code[disabled] {
-    color: #c2c2c2 !important;
-  }
-
-  .file-browser-scroll-container {
-  } 
-
-  .file-browser button {
-    color: lightgray;
-  }
-
-  .delete-file-icon[disabled] {
-    // color: #5e5e5e !important;
-    color: #c2c2c2;
+    height: 72vh;
+    justify-content: center;
+    width: 100%;
   }
 
 
-}
-
-
-.akamai,
-.light {
-  .editor-window {
-    border: 1px solid $color-lightergrey;
-  }
-
-  .name-input {
-    .validation-message {
-      color: $color-danger;
-    }
-
-    .name-input-container {
-      input.invalid {
-        border: 1px solid $color-danger !important;
-        outline-color: $color-danger !important;
-      }
-
-      .invalid-project-name {
-        color: $color-danger;
-      }
-    }
-  }
-
-
-  .no-projects {
-    color: rgb(105, 105, 105);
-  }
-
-  color: rgb(105, 105, 105);
-
-  .package-install-window {
-    background: $color-white;
-  }
-
-  .editor.current-file-path {
-    border-bottom: 1px solid lightgray;
-  }
-
-  .restart-instance-on-save-text {
-    color: rgb(240, 240, 240) !important;
-  }
-
-  .file-menu button[disabled],
-  .editor-menu button[disabled] {
-    color: rgb(240, 240, 240) !important;
-    // #5e5e5e;
-  }
-
-  .file.folder-selected {
-    background: rgba(200, 200, 200, 0.2) !important;
-    //background: lightgray !important; 
-  }
-
-  .file-menu,
-  .editor-menu {
-    border-bottom: 1px solid lightgray !important;
-  }
-
-
-  .file-menu button {
-    color: #b1b1b1;
-  }
-
-  .file-icon.filetype-unknown {
-    color: #b1b1b1 !important;
-  }
-
-  .editor-window button:hover {
-    color: $color-white;
-    //rgb(105,105,105);
-  }
-
-  .editor-window button {
-    color: rgb(105, 105, 105);
-  }
-
-  .install-package-icon {
-    color: #f24242 !important;
-  }
-
-  .add-project-icon {
-    color: rgb(25, 168, 148) !important;
-  }
-
-  .file-menu {
-    color: rgb(105, 105, 105);
-  }
-
-  .default-window-option {
-    span {
-      color: rgb(105, 105, 105);
-    }
-  }
-}
-
-.web-ide {
   .button-with-loader {
     min-width: 105px;
 
@@ -305,13 +205,6 @@
 
   }
 
-  .cancel-button {
-    margin-left: 10px;
-  }
-  // general stuff
-  height: 75vh;
-  overflow: hidden;
-
   ul, li {
     list-style-type: none;
   }
@@ -325,182 +218,9 @@
     padding-right: 8px;
   }
 
-  .add-project-icon:hover,
-  .default-window .add-project-icon {
-    color: rgb(25, 168, 148); // always green
-  }
 
 
-  li {
-    margin: 0 5px 5px 0;
-    padding: 0 5px 0 0;
-  }
 
-  .default-window .install-package-icon,
-  .install-package-icon:hover {
-    color: #f24242;
-  }
-
-  .menu-pointer-icon {
-    color: rgb(143, 141, 255);
-  }
-
-  .add-folder-icon:hover,
-  .delete-folder-icon:hover {
-    color: rgb(143, 141, 255);
-  }
-
-  .delete-file-icon:hover {
-    // color: #ee81ee !important;
-  }
-
-
-  .install-package-icon,
-  .add-folder-icon,
-  .add-project-icon,
-  .upload-file-icon,
-  .delete-folder-icon,
-  .delete-file-icon,
-  .add-file-icon {
-    background: transparent;
-    border: none;
-    color: $color-white;
-    margin: 0;
-    outline: none !important;
-    padding: 0;
-  }
-
-  .file-browser-scroll-container {
-
-    background: transparent;
-    height: 100%;
-    overflow-y: auto;
-  }
-
-  .file-browser-outer-container {
-
-    height: 100%;
-    padding: 20px;
-
-    .file-menu {
-      color: $color-white;
-
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 20px;
-      margin-top: 0;
-      padding-bottom: 0;
-      padding-top: 0;
-
-      .file-menu-item {
-        align-items: flex-end;
-        display: flex;
-        flex-direction: row;
-      }
-    }
-
-
-    .file-browser {
-
-      margin-left: 0;
-      padding: 20px;
-      padding-left: 0;
-
-      .folder-container {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        padding-left: 0;
-
-
-        .rename-file,
-        .deploy-project {
-          margin-left: 8px;
-        }
-
-        .rename-file {
-          color: transparent;
-        }
-
-        .file {
-          &.file-selected {
-            color: #ee81ee;
-            //background: #191919 !important;
-            // background: #4a4a4a !important;
-            //border: 1px solid rgb(120,120,120);;
-          }
-
-          &.folder-selected {
-            //background: #2c2c2c !important;
-          }
-        }
-
-        .package.package-selected {
-          color: #f24242;
-        }
-
-        .project-icon {
-          color: rgb(25, 168, 148);
-
-        }
-
-        .package-icon {
-          color: #f24242;
-        }
-
-        .file,
-        .package {
-
-          background: transparent;
-          border: 1px solid transparent;
-          list-style-type: none;
-          margin: 0;
-          outline: none !important; // TODO: fix this because it is not accessible; style differently
-          padding: 3px;
-          white-space: nowrap;
-
-          &.selected {
-          }
-
-          .package-text,
-          .filename-text {
-            padding-left: 5px;
-          }
-
-          .file-icon.filetype-js {
-            color: #f7df1e;
-          }
-
-          .file-icon.filetype-yaml {
-            color: #c4c4ff;
-          }
-
-          .file-icon.filetype-unknown {
-            color: lightgray;
-          }
-
-          .folder-icon {
-            color: rgb(143 141 255);
-          }
-        }
-
-        .folder {
-          padding-left: 15px;
-        }
-
-
-        .folder.folder-contents-closed {
-          display: none;
-
-        }
-
-        .folder.folder-contents-open {
-          display: block;
-        }
-      }
-
-
-    }
-  }
 
   // top-level element: editor window (right side)
   // contains code editor and project management windows
@@ -513,7 +233,7 @@
 
     .editor-menu {
       align-items: baseline;
-      border-bottom: 1px solid #2e2e2e;
+      border-bottom: 1px solid $color-black;
       color: $color-white;
       display: flex;
       flex-direction: row;
@@ -523,14 +243,15 @@
       padding-bottom: 0;
       padding-top: 0;
 
-      & > li {
+      > li {
         margin: 0 5px 5px 0;
         padding: 0 5px 0 0;
       }
 
       button[disabled],
       button[disabled]:hover {
-        color: #5e5e5e;
+        color: $color-white;
+        cursor: not-allowed;
       }
 
       .restart-instance-after-save,
@@ -543,16 +264,16 @@
         outline: none !important;
         padding: 3px;
 
-        & > i {
-          color: #ee81ee;
+        > i {
+          color: $color-danger;
         }
       }
 
       .revert-file,
       .save-code {
         background: transparent;
-        border: none;
-        color: #ee81ee;
+        border: 0;
+        color: $color-danger;
         cursor: pointer;
         margin: 0;
         outline: none !important;
@@ -561,26 +282,22 @@
 
       .revert-file[disabled],
       .save-code[disabled] {
-        color: #5e5e5e;
+        color: $color-darkgrey;
         cursor: default;
       }
     }
 
     .editor-window {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-
-      height: 100%;
-      justify-content: center;
-      width: 100%;
-
-
+      .input-group-text {
+        background: none;
+        border: 1px solid $color-darkergrey;
+        border-radius: 0 4px 4px 0;
+        height: 38px;
+      }
       .name-input {
         display: flex;
         flex-direction: column;
         width: 50%;
-
 
         .validation-message {
           margin-top: 8px;
@@ -589,7 +306,6 @@
         .name-input-container {
           align-items: center;
           display: flex;
-
           flex-direction: row;
 
           .invalid-project-name {
@@ -600,401 +316,252 @@
             visibility: hidden;
           }
         }
+      }
+    }
 
-        .name-input-buttons-container {
-          padding-top: 10px;
-        }
+  }
+
+  @media(max-width: 814px) {
+      overflow: initial;
+
+      .file-browser-outer-container {
+        height: auto;
+        overflow-y: auto;
       }
 
-      .delete-folder-window-title,
-      .delete-file-window-title,
-      .delete-package-window-title,
-      .folder-to-delete {
-        align-self: flex-start;
-        font-size: 1.3em;
-        font-weight: bold;
+      .file-browser-scroll-container {
+        max-height: 500px;
+      }
+  }
+
+  .dark {
+    .no-projects {
+      .docs-link {
+        color: $color-danger !important;
+      }
+    }
+
+    color: $color-white !important;
+
+    .editor.current-file-path {
+      border-bottom: 1px solid transparent;
+    }
+
+    .default-window-option {
+      span {
+        color: $color-white;
       }
 
-      .folder-to-delete-parent-project {
+    }
+
+    .name-input {
+      .validation-message {
         color: $color-danger;
-        font-weight: bold;
       }
 
-      .delete-package-window-controls {
-        .package-to-delete {
+      .name-input-container {
+        input.invalid {
+          border: 1px solid $color-danger !important;
+          outline-color: $color-danger !important;
+        }
+
+        .invalid-project-name {
           color: $color-danger;
-
-          font-weight: bold;
         }
       }
+    }
 
+    .package-install-window {
+      background: $color-black;
+    }
 
-      .delete-folder-window-controls {
-        .folder-to-delete {
-        }
+    .file.folder-selected {
+      background: $faint-white-overlay !important;
+    }
 
-        .folder-to-delete-parent-project {
-        }
-      }
 
-      .delete-file-window-container {
-        display: flex;
-        flex-direction: column;
+    .file-browser button > span {
+      color: $color-white !important;
+    }
 
-        .delete-file-window-title {
-          align-self: flex-start;
-        }
+    .file-browser .file.file-selected > span {
+      color: $color-danger !important;
+    }
 
-
-      }
-
-      .delete-file-window-controls {
-        .file-to-delete {
-          color: $color-danger;
-          font-weight: bold;
-        }
-
-
-        .file-to-delete-parent-project {
-          font-weight: bold;
-          // color: rgb(25, 168, 148);
-          // color: $color-danger;
-
-        }
-      }
-
-      .default-window {
-        .default-window-container {
-          h4 {
-            padding-bottom: 80px;
-          }
-
-          .default-window-option {
-            line-height: 2.5em;
-
-            span,
-            button > span {
-              margin-left: 20px;
-            }
-
-            span {
-              // color: white;
-            }
-
-            .add-project-button-text,
-            .install-package-button-text {
-              // color: white;
-            }
-          }
-        }
-      }
-
-
-
-      .default-window-container,
-      .name-project-window-container,
-      .name-project-folder-window-container,
-      .name-file-window-container,
-      .delete-file-window-container,
-      .delete-folder-window-container,
-      .delete-package-window-container {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-      }
-
-      .default-window,
-      .name-project-window,
-      .name-project-folder-window,
-      .name-file-window,
-      .delete-package-window,
-      .delete-file-window,
-      .delete-folder-window {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-      }
-
-      .name-project-window-title,
-      .name-file-window-title {
-        text-align: center;
-      }
-
-      .card-body {
-      }
-
-      .name-file-window {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-
-        .name-file-window-container {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-
-          width: 100%;
-        }
-      }
-
-      .package-install-window {
-        .install-package-button {
-          align-items: center;
-          display: inline-flex;
-          justify-content: center;
-          width: 105px;
-
-          .install-package-status-icon {
-          }
-        }
-
-        &.github {
-          line-height:0.5em;
-        }
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        padding-left: 25%;
-        padding-right: 25%;
-
-        width: 100%;
-
-        .package-install-window-title {
-          font-size: 1.5em;
-          font-weight: bold;
-          text-align: center;
-        }
-
-
-        .card {
-          border: 0 solid transparent !important;
-        }
-
-        .package-install-source-form {
-          align-items: center;
-
-          display: flex;
-          flex-direction: row;
-          height: 100px;
-
-          justify-content: center;
-          padding-left: 25%;
-          padding-right: 25%;
-
-          width: 100%;
-
-
-          .package-install-option-container {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100px;
-
-
-            .package-install-source-icon {
-              font-size: 2em;
-              margin-bottom: 5px;
-            }
-
-            .package-install-source-option {
-              height: 25px;
-              width: 25px;
-            }
-          }
-        }
-
-
-        .package-install-details-form {
-          .project-name-invalid-text {
-
-            color: $color-danger !important;
-            display: block;
-            margin-bottom: 20px;
-          }
-
-
-
-          .package-install-input-container {
-            display: flex;
-            flex-direction: column;
-
-            margin-bottom: 20px;
-
-
-            .project-name-input.invalid:focus,
-            .project-name-input.invalid {
-              border: 1px solid $color-danger !important;
-              outline-color: $color-danger !important;
-            }
-
-
-            .search-status-icon-container {
-              text-align: center;
-              width: 40px;
-
-              i {
-                color: $color-white;
-
-
-                &.not-searching {
-                  color: $color-white; //rgba(0,255,0, 0.1);
-                }
-
-
-                &.found, &.loading {
-                  color: green;
-                }
-
-                &.not-found {
-                  color: rgb(145, 50, 120);
-                }
-
-
-              }
-            }
-
-            .package-install-deploy-targets-dropdown {
-            }
-
-
-            .package-install-github-query-container {
-              .package-install-github-user {
-                margin-bottom: 20px;
-              }
-
-              .package-install-github-repo-lookup {
-                margin-bottom: 20px;
-
-                .github-package-search-box {
-                  align-items: center;
-                  display: flex;
-                  flex-direction: row;
-                  justify-content: center;
-
-                }
-              }
-            }
-
-            .package-install-npm-lookup {
-              .package-install-npm-query-container {
-                align-items: center;
-                display: flex;
-                flex-direction: row;
-                margin-bottom: 20px;
-              }
-            }
-
-          }
-        }
-
-      }
-
-      .editor {
-        &.current-file-path::before {
-        }
-
-
-        &.current-file-path {
-          align-self: flex-start;
-          color: darkgray;
-
-          .current-file-path-icon {
-            padding: 5px;
-
-          }
-        }
-
-
-        width: 100%;
-      }
-
-      .package-install-source-form {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-
-        .package-install-source-icon {
-          font-size: 2em;
-
-          &.fab.fa-npm {
-            color: rgb(145, 50, 120);
-            font-size: 3em;
-          }
-
-          &.fa-github,
-          &.fa-link {
-            padding: 5px;
-          }
-
-          &.fa-link {
-            color: lightgray;
-          }
-
-          &.fa-github {
-            color: rgb(28, 182, 149);
-          }
-        }
-
-        .package-type {
-          border: 0 solid transparent !important;
-          display: flex;
-          flex-direction: row;
-          margin-bottom: 30px;
-
-          label {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-width: 80px;
-            text-align: center;
-          }
-
-          input:focus {
-            outline: none !important;
-          }
-
-          input {
-            margin-top: 10px;
-          }
-
-        }
-      }
-
-      .filename-dialog {
-        align-items: center;
-        display: flex;
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-      }
+    button[disabled]:hover,
+    button[disabled] {
+      cursor: not-allowed !important;
     }
 
   }
-}
 
-@media(max-width: 814px) {
-  .web-ide {
-    overflow: initial;
+  .purple {
+    color: $color-darkgrey;
 
-    .file-browser-outer-container {
-      height: auto;
-      overflow-y: auto;
+    button[disabled]:hover,
+    button[disabled] {
+      color: $color-darkgrey !important;
     }
 
-    .file-browser-scroll-container {
-      max-height: 500px;
+    .default-window-option span {
+      color: $color-white !important;
+    }
+
+    .no-projects {
+      color: $color-white;
+
+      .docs-link {
+        color: $color-danger !important;
+      }
+    }
+
+
+
+    .name-input {
+      .name-input-container {
+        input.invalid:focus {
+          border: 1px solid $color-danger !important;
+          outline-color: $color-danger !important;
+        }
+      }
+
+      .validation-message {
+        color: $color-danger;
+        margin-top: 8px;
+      }
+
+      > input.invalid {
+        border: 1px solid $color-danger !important;
+        outline-color: $color-danger !important;
+      }
+
+      .invalid-text {
+        color: $color-danger !important;
+      }
+
+      .invalid-project-name {
+        color: $color-danger;
+      }
+    }
+
+    .package-install-window {
+      background: $color-white;
+    }
+
+    .editor.current-file-path {
+      border-bottom: 1px solid $color-lightgrey;
+    }
+
+    .default-window-option {
+      span {
+        color: $color-darkgrey;
+      }
+    }
+
+    .file.folder-selected {
+      background: $white-overlay !important;
+    }
+
+    .editor-window {
+      display: flex;
+      flex-direction: column;
+
+      .current-file-path {
+        background: $color-black;
+      }
+    }
+
+    .revert-file[disabled],
+    .save-code[disabled] {
+      color: $color-lightgrey !important;
+    }
+
+    .file-browser button {
+      color: $color-lightgrey;
+    }
+
+    .delete-file-icon[disabled] {
+      color: $color-lightgrey;
+    }
+
+  }
+
+  .akamai,
+  .light {
+    .editor-window {
+      border: 1px solid $color-lightergrey;
+    }
+
+    .name-input {
+      .validation-message {
+        color: $color-danger;
+      }
+
+      .name-input-container {
+        input.invalid {
+          border: 1px solid $color-danger !important;
+          outline-color: $color-danger !important;
+        }
+
+        .invalid-project-name {
+          color: $color-danger;
+        }
+      }
+    }
+
+    .no-projects {
+      color: $color-darkgrey;
+    }
+
+    color: $color-darkgrey;
+
+    .package-install-window {
+      background: $color-white;
+    }
+
+    .editor.current-file-path {
+      border-bottom: 1px solid $color-lightgrey;
+    }
+
+    .restart-instance-on-save-text {
+      color: $color-white !important;
+    }
+
+    .file-menu button[disabled],
+    .editor-menu button[disabled] {
+      color: $color-white !important;
+    }
+
+    .file.folder-selected {
+      background: rgba(200, 200, 200, 0.2) !important;
+    }
+
+    .file-icon.filetype-unknown {
+      color: $color-lightgrey !important;
+    }
+
+    .editor-window button:hover {
+      color: $color-white;
+    }
+
+    .editor-window button {
+      color: $color-darkgrey;
+    }
+
+    .install-package-icon {
+      color: $color-danger !important;
+    }
+
+    .add-project-icon {
+      color: $color-success !important;
+    }
+
+    .default-window-option {
+      span {
+        color: $color-darkgrey;
+      }
     }
   }
+
+
 }

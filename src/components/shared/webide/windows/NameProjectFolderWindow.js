@@ -1,19 +1,14 @@
 import React from 'react';
-import { Card, CardTitle } from 'reactstrap';
+
 import NameInput from './NameInput';
 
-
-export default function NameProjectFolderWindow({ active, onConfirm, onCancel }) {
-
+export default function NameProjectFolderWindow({ active, onConfirm, onCancel, selectedFolder }) {
   return !active ? null : (
-    <Card className="name-project-folder-window">
-      <CardTitle className="name-project-folder-window-title">Name Your Folder</CardTitle> 
-      <NameInput
-        placeholder="Your new folder name"
-        onEnter={ onConfirm }
-        onConfirm={ onConfirm }
-        onCancel={ onCancel } />
-    </Card>
+    <div className="content-window">
+      <h4 className="mb-5">
+        Add Folder To <span className="text-success">{selectedFolder.path.replace('components', '')}</span>
+      </h4>
+      <NameInput type="folder" selectedFolder={selectedFolder} onEnter={onConfirm} onConfirm={onConfirm} onCancel={onCancel} />
+    </div>
   );
-
 }

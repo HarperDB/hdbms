@@ -43,7 +43,7 @@ function LocalApp() {
     init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
     getThemes(currentTheme);
     appState.update((s) => {
-      s.instances = [{ compute_stack_id: 'local', url: '/', instance_name: 'local' }];
+      s.instances = [{ compute_stack_id: 'local', url: 'http://localhost:9925', instance_name: 'local' }];
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

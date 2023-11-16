@@ -15,21 +15,9 @@ import EditorWindow, {
   NameProjectWindow,
 } from './EditorWindow';
 
-import FileMenu, {
-  AddFileButton,
-  AddProjectFolderButton,
-  AddProjectButton,
-  DeleteFolderButton,
-  DeleteFileButton,
-  InstallPackageButton
-} from './FileMenu';
+import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton, InstallPackageButton } from './FileMenu';
 
-import EditorMenu, {
-  SaveButton,
-  RestartInstanceButton,
-  RestartOnSaveToggle,
-  RevertFileButton
-} from './EditorMenu';
+import EditorMenu, { SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
 
 function WebIDE({
   theme,
@@ -52,20 +40,19 @@ function WebIDE({
   onUpdate,
   restartInstance,
   restartingInstance,
-  refreshCustomFunctions
+  refreshCustomFunctions,
 }) {
-
-  const [ selectedFolder, setSelectedFolder ] = useState(null);
-  const [ selectedFile, setSelectedFile ] = useState(null);       // selectedFile = { content, path: /components/project/rest/of/path.js, project }
-  const [ selectedPackage, setSelectedPackage ] = useState(null); // selectedPackage = { name, url }
-  const [ activeEditorWindow, setActiveEditorWindow ] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
-  const [ previousActiveEditorWindow, setPreviousActiveEditorWindow ] = useState(null);
-  const [ restartAfterSave, setRestartAfterSave ] = useState(true);
-  const [ revertingFile, setRevertingFile ] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }
+  const [selectedPackage, setSelectedPackage] = useState(null); // selectedPackage = { name, url }
+  const [activeEditorWindow, setActiveEditorWindow] = useState(EDITOR_WINDOWS.DEFAULT_WINDOW);
+  const [previousActiveEditorWindow, setPreviousActiveEditorWindow] = useState(null);
+  const [restartAfterSave, setRestartAfterSave] = useState(true);
+  const [revertingFile, setRevertingFile] = useState(false);
 
   const hasProjects = fileTree?.entries?.length > 0;
-  const canAddFile = Boolean(hasProjects && selectedFolder);  // can only add a file if a target folder is selected
-  const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage));  // can only delete a folder if a target folder is selected
+  const canAddFile = Boolean(hasProjects && selectedFolder); // can only add a file if a target folder is selected
+  const canDeleteFolder = Boolean(hasProjects && (selectedFolder || selectedPackage)); // can only delete a folder if a target folder is selected
   const canAddProjectFolder = Boolean(selectedFolder); // can only add a folder toa project if a target folder is selected
 
   function updateActiveEditorWindow(to, from) {
@@ -89,18 +76,16 @@ function WebIDE({
   }
 
   async function addProjectFolder(newFolderName) {
-    await onAddProjectFolder(newFolderName, selectedFolder)
+    await onAddProjectFolder(newFolderName, selectedFolder);
     // go back to prev window
     updateActiveEditorWindow(previousActiveEditorWindow, activeEditorWindow);
   }
 
   async function installPackage(packageUrl, projectName, packageDeployTargets) {
-
     await onInstallPackage(packageUrl, projectName, packageDeployTargets);
 
     setSelectedPackage(null);
     updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-
   }
 
   async function addFile(newFilename) {
@@ -112,305 +97,267 @@ function WebIDE({
 
   // updates current in-memory code
   function updateFileInMemory(updatedCode) {
-
     const update = {
       ...selectedFile,
       content: updatedCode,
     };
 
     setSelectedFile(update);
-
   }
 
   return (
-    <Row className="web-ide">
+    <Row id="webide">
       <Col md="3" className="file-browser-outer-container">
-        <FileMenu>
-          <AddProjectButton
-            onClick={
-              () => {
+        <div className="file-menu-holder">
+          <FileMenu>
+            <AddProjectButton
+              onClick={() => {
                 updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
-              }
-            } />
-          <AddProjectFolderButton
-            disabled={ !canAddProjectFolder }
-            onClick={() => {
-              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
-            }} />
-          <DeleteFolderButton
-            disabled={ !canDeleteFolder }
-            onClick={
-              () => {
+              }}
+            />
+            <AddProjectFolderButton
+              disabled={!canAddProjectFolder}
+              onClick={() => {
+                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW, activeEditorWindow);
+              }}
+            />
+            <DeleteFolderButton
+              disabled={!canDeleteFolder}
+              onClick={() => {
                 if (selectedPackage) {
                   updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW, activeEditorWindow);
                 } else if (selectedFolder) {
                   updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FOLDER_WINDOW, activeEditorWindow);
                 }
-              }
-            } />
-          <AddFileButton
-            onClick={() => {
-              updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
-            }}
-            disabled={ !canAddFile } />
-          <DeleteFileButton
-            disabled={ !selectedFile?.path }
-            onClick={
-              () => {
-                updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
-              }
-            } />
-          <InstallPackageButton
-            onClick={
-              () => {
-                setSelectedPackage(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
-              }
-            }
+              }}
             />
-        </FileMenu>
+            <AddFileButton
+              onClick={() => {
+                updateActiveEditorWindow(EDITOR_WINDOWS.NAME_FILE_WINDOW, activeEditorWindow);
+              }}
+              disabled={!canAddFile}
+            />
+            <DeleteFileButton
+              disabled={!selectedFile?.path}
+              onClick={() => {
+                updateActiveEditorWindow(EDITOR_WINDOWS.DELETE_FILE_WINDOW, activeEditorWindow);
+              }}
+            />
+            <InstallPackageButton
+              onClick={() => {
+                setSelectedPackage(null);
+                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+              }}
+            />
+          </FileMenu>
+        </div>
         <FileBrowser
-          files={ fileTree }
-          root={ fileTree.path }
-          selectedFile={ selectedFile?.path }
-          selectedFolder={ selectedFolder }
-          selectedPackage={ selectedPackage }
+          files={fileTree}
+          root={fileTree.path}
+          selectedFile={selectedFile?.path}
+          selectedFolder={selectedFolder}
+          selectedPackage={selectedPackage}
           onFolderRename={() => {
             // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FOLDER_WINDOW, activeEditorWindow);
           }}
           onFileRename={() => {
             // updateActiveEditorWindow(EDITOR_WINDOWS.RENAME_FILE_WINDOW, activeEditorWindow);
           }}
-          onDeployProject={
-            (e) => {
-              onDeployProject(e);
-              // TODO: open deploy package window
-            }
-          }
-          onFolderSelect={
-            (folder) => {
-              // shouldnt deselect anything
-              setSelectedFolder(folder);
-            }
-          }
-          onPackageSelect={
-            (pkg) => {
-              // set selected package,
-              // unset selectedFile
-              // TODO: make sure 'remote fetch package' window has correct data.
+          onDeployProject={(e) => {
+            onDeployProject(e);
+            // TODO: open deploy package window
+          }}
+          onFolderSelect={(folder) => {
+            // shouldnt deselect anything
+            setSelectedFolder(folder);
+          }}
+          onPackageSelect={(pkg) => {
+            // set selected package,
+            // unset selectedFile
+            // TODO: make sure 'remote fetch package' window has correct data.
 
-              setSelectedPackage(pkg);
+            setSelectedPackage(pkg);
+            setSelectedFile(null);
+
+            if (!pkg) {
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+            } else {
+              updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+            }
+          }}
+          onFileSelect={async (entry) => {
+            const unselectAction = !entry;
+            setSelectedPackage(null);
+
+            if (unselectAction) {
               setSelectedFile(null);
-
-              if (!pkg) {
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)
-              } else {
-                updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
-              }
-
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+            } else {
+              const fileMeta = await onFileSelect(entry);
+              const { content, cached } = fileMeta;
+              setSelectedFile({ ...entry, content, cached });
+              updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
             }
-          }
-          onFileSelect={
-            async (entry) => {
-
-              const unselectAction = !entry;
-              setSelectedPackage(null);
-
-              if (unselectAction) {
-
-                setSelectedFile(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-
-              } else {
-
-                const fileMeta = await onFileSelect(entry);
-                const { content, cached } = fileMeta;
-                setSelectedFile({ ...entry, content, cached });
-                updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
-
-              }
-
-            }
-          } />
+          }}
+        />
       </Col>
-      <Col className="editor-window-container col-md-8">
-        <EditorMenu>
-          <SaveButton
-            disabled={ !(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW) }
-            onClick={
-              async () => {
-                await onFileSave(selectedFile, restartAfterSave)
-              }
-            } />
-          <RestartInstanceButton
-            restarting={restartingInstance}
-            onClick={
-              async () => {
-                await restartInstance();
-              }
-            } />
-          <RestartOnSaveToggle
-            restartAfterSave={restartAfterSave}
-            onClick={
-              () => {
-                setRestartAfterSave(!restartAfterSave);
-              }
-            } />
-          <RevertFileButton
-            loading={ revertingFile }
-            disabled={!(selectedFile?.cached && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
-            onClick={
-              async () => {
-
-                setRevertingFile(true);
-                try { 
-                  const updatedContent = await onRevertFile(selectedFile);
-                  const updatedSelectedFile = {
-                    ...selectedFile,
-                    content: updatedContent,
-                    cached: false
-                  };
-                  setSelectedFile(updatedSelectedFile);
-                } finally {
-                  setRevertingFile(false);
-                }
-
-              }
-            } />
-        </EditorMenu>
+      <Col className="editor-window-container col-md-9">
+        <Row className="editor-menu-holder g-0">
+          <Col className="text-nowrap">
+            {selectedFile && (
+              <>
+                {selectedFile?.path?.split('/')?.slice(1)?.join(' > ')}{' '}
+                <span className="text-grey">
+                  | {selectedFile?.size || '...'} bytes | {selectedFile?.mtime ? new Date(selectedFile.mtime).toLocaleTimeString() : '...'}
+                </span>
+              </>
+            )}
+          </Col>
+          <Col>
+            <EditorMenu>
+              <SaveButton
+                disabled={!(selectedFile && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
+                onClick={async () => {
+                  await onFileSave(selectedFile, restartAfterSave);
+                }}
+              />
+              <RestartInstanceButton
+                restarting={restartingInstance}
+                onClick={async () => {
+                  await restartInstance();
+                }}
+              />
+              <RestartOnSaveToggle
+                restartAfterSave={restartAfterSave}
+                onClick={() => {
+                  setRestartAfterSave(!restartAfterSave);
+                }}
+              />
+              <RevertFileButton
+                loading={revertingFile}
+                disabled={!(selectedFile?.cached && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
+                onClick={async () => {
+                  setRevertingFile(true);
+                  try {
+                    const updatedContent = await onRevertFile(selectedFile);
+                    const updatedSelectedFile = {
+                      ...selectedFile,
+                      content: updatedContent,
+                      cached: false,
+                    };
+                    setSelectedFile(updatedSelectedFile);
+                  } finally {
+                    setRevertingFile(false);
+                  }
+                }}
+              />
+            </EditorMenu>
+          </Col>
+        </Row>
         <EditorWindow>
           <DefaultWindow
             fileTree={fileTree}
-            active={ activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW }
-            AddProjectButton={
-              () => (
-                <AddProjectButton
-                  text="Create a new project"
-                  onClick={
-                    () => {
-                      updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
-                    }
-                  } />
-              )
-            }
-            InstallPackageButton={
-              () => (
-                <InstallPackageButton
-                  text="Install or deploy a remote package"
-                  onClick={
-                    () => {
-                      setSelectedPackage(null);
-                      updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow)
-                    }
-                  } />
-              )
-            } />
-          <NameProjectWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW }
-            onConfirm={ addProject }
-            onCancel={ toDefaultWindow } />
+            active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW}
+            AddProjectButton={() => (
+              <AddProjectButton
+                text="Create a new project"
+                extraClasses="btn btn-block btn-success mt-2"
+                onClick={() => {
+                  updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow);
+                }}
+              />
+            )}
+            InstallPackageButton={() => (
+              <InstallPackageButton
+                text="Install or deploy a remote package"
+                extraClasses="btn btn-block btn-outline-success mt-2"
+                onClick={() => {
+                  setSelectedPackage(null);
+                  updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+                }}
+              />
+            )}
+          />
+          <NameProjectWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW} onConfirm={addProject} onCancel={toDefaultWindow} />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW }
-            onConfirm={ addProjectFolder }
-            onCancel={ toDefaultWindow } />
-          <NameFileWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW }
-            onConfirm={ addFile }
-            onCancel={ toDefaultWindow } />
+            active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW}
+            selectedFolder={selectedFolder}
+            onConfirm={addProjectFolder}
+            onCancel={toDefaultWindow}
+          />
+          <NameFileWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW} onConfirm={addFile} onCancel={toDefaultWindow} />
           {
             /* NOTE: rework how components are rendered, editor needs to
                      have a longer lifespan than other windows */
-            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW &&
-            <PackageInstallWindow
-              selectedPackage={ selectedPackage }
-              onConfirm={ installPackage }
-              onCancel={ toDefaultWindow }
-              deployTargets={ deployTargets }
-            />
+            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW && (
+              <PackageInstallWindow selectedPackage={selectedPackage} onConfirm={installPackage} onCancel={toDefaultWindow} deployTargets={deployTargets} />
+            )
           }
           <DeletePackageWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW }
-            selectedPackage={ selectedPackage }
-            onConfirm={
-              async () => {
+            active={activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW}
+            selectedPackage={selectedPackage}
+            onConfirm={async () => {
+              await onDeletePackage(selectedPackage);
 
-                await onDeletePackage(selectedPackage);
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-
-                setSelectedFile(null);
-                setSelectedFolder(null);
-                setSelectedPackage(null);
-
-              }
-            }
-            onCancel={
-              () => {
-                toDefaultWindow();
-              }
-            }
-
+              setSelectedFile(null);
+              setSelectedFolder(null);
+              setSelectedPackage(null);
+            }}
+            onCancel={() => {
+              toDefaultWindow();
+            }}
           />
           <DeleteFolderWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW }
-            selectedFolder={ selectedFolder }
-            onConfirm={
-              async () => {
+            active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW}
+            selectedFolder={selectedFolder}
+            onConfirm={async () => {
+              await onDeleteFolder(selectedFolder);
 
-                await onDeleteFolder(selectedFolder);
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
 
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-
-                setSelectedFile(null);
-                setSelectedFolder(null);
-                setSelectedPackage(null);
-
-              }
-            }
-            onCancel={
-              () => {
-                toDefaultWindow();
-              }
-            }
+              setSelectedFile(null);
+              setSelectedFolder(null);
+              setSelectedPackage(null);
+            }}
+            onCancel={() => {
+              toDefaultWindow();
+            }}
           />
           <DeleteFileWindow
-            active={ activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW }
-            selectedFile={ selectedFile }
-            onConfirm={
-              async () => {
-                await onDeleteFile(selectedFile);
-                setSelectedFile(null);
-                setSelectedFolder(null);
-                updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-              }
-            }
-            onCancel={
-              () => {
-                toDefaultWindow();
-              }
-            }
+            active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW}
+            selectedFile={selectedFile}
+            onConfirm={async () => {
+              await onDeleteFile(selectedFile);
+              setSelectedFile(null);
+              setSelectedFolder(null);
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+            }}
+            onCancel={() => {
+              toDefaultWindow();
+            }}
           />
           <Editor
             theme={theme}
-            active={ activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW }
-            file={ selectedFile }
-            onFileChange={
-              async (fileContent) => {
-                updateFileInMemory(fileContent);
+            active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
+            file={selectedFile}
+            onFileChange={async (fileContent) => {
+              updateFileInMemory(fileContent);
 
-                await onFileChange({
-                  path: selectedFile.path,
-                  content: fileContent
-                });
+              await onFileChange({
+                path: selectedFile?.path,
+                content: fileContent,
+              });
 
-                setSelectedFile({
-                  ...selectedFile,
-                  content: fileContent,
-                  cached: true
-                });
-              }
-            } />
+              setSelectedFile({
+                ...selectedFile,
+                content: fileContent,
+                cached: true,
+              });
+            }}
+          />
         </EditorWindow>
       </Col>
     </Row>

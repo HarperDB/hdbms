@@ -14,7 +14,11 @@ textarea,
   height: 38px;
   transition: none;
   width: 100%;
+  outline: 0;
 
+  &:checked {
+    outline: 0 !important;
+  }
   &.is-invalid,
   &.error {
     border: 1px solid $color-danger !important;
