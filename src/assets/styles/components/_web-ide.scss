@@ -15,15 +15,15 @@
       overflow-y: auto;
 
       .file-browser {
-        padding: 0 !important;
-        position: relative;
         margin-left: 0;
+        padding: 0 !important;
         padding-left: 0;
+        position: relative;
 
         > li {
-          width: 100%;
           border-bottom: 1px solid $color-darkgrey;
           padding: 10px 5px;
+          width: 100%;
 
           &:last-child {
             border-bottom: 0 !important;
@@ -35,11 +35,11 @@
           padding-inline-start: 8px !important;
 
           .folder-container {
-            button:before,
-            i:before {
-              font-size: 16px !important;
+            button::before,
+            i::before {
               background: transparent !important;
               border: 0;
+              font-size: 16px !important;
               margin: 0;
               outline: none !important;
               padding: 0;
@@ -47,9 +47,9 @@
 
             .package-text,
             .filename-text {
+              color: $color-grey !important;
               font-size: 14px !important;
               padding-left: 8px;
-              color: $color-grey !important;
             }
 
             .file,
@@ -94,10 +94,10 @@
 
                   &::after {
                     content: '\f35a' !important;
+                    font-family: 'Font Awesome 5 Free' !important;
+                    font-size: 16px;
                     position: absolute;
                     right: 8px;
-                    font-size: 16px;
-                    font-family: 'Font Awesome 5 Free' !important;
                   }
                 }
               }
@@ -110,9 +110,9 @@
 
   .editor-menu-holder,
   .file-menu-holder {
-    height: 30px;
     border-bottom: 1px solid $color-darkgrey !important;
     color: $color-white;
+    height: 30px;
     margin-bottom: 20px;
   }
 
@@ -122,20 +122,20 @@
     flex-direction: row;
     margin-top: 0;
     padding-bottom: 0;
-    padding-top: 0;
     padding-inline-start: 8px !important;
+    padding-top: 0;
 
     .file-menu-item,
     .editor-menu-item {
-      margin: 0 8px 8px 8px !important;
+      margin: 0 8px 8px !important;
 
       button,
-      button:before,
+      button::before,
       i::before {
-        font-size: 16px !important;
         background: transparent !important;
         border: 0;
         color: $color-white;
+        font-size: 16px !important;
         margin: 0;
         outline: none !important;
         padding: 0;
@@ -143,8 +143,8 @@
 
       button:disabled,
       button[disabled],
-      button:disabled:before,
-      button[disabled]:before{
+      button:disabled::before,
+      button[disabled]::before{
         color: $color-darkgrey !important;
         cursor: not-allowed;
       }
@@ -159,11 +159,11 @@
     padding: 20px;
 
     .editor-window {
-      padding: 0;
       background: $faintest-white-overlay;
       border: 1px solid $color-darkgrey;
       border-radius: $border-radius;
       height: 72vh !important;
+      padding: 0;
 
       > section,
       > section > div,
@@ -176,14 +176,14 @@
   }
 
   .content-window {
-    color: $color-white;
-    max-width: 400px;
-    margin: 0 auto;
     align-items: center;
+    color: $color-white;
     display: flex;
     flex-direction: column;
     height: 72vh;
     justify-content: center;
+    margin: 0 auto;
+    max-width: 400px;
     width: 100%;
   }
 
@@ -294,6 +294,7 @@
         border-radius: 0 4px 4px 0;
         height: 38px;
       }
+
       .name-input {
         display: flex;
         flex-direction: column;

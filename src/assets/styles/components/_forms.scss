@@ -12,13 +12,14 @@ textarea,
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
+  outline: 0;
   transition: none;
   width: 100%;
-  outline: 0;
 
   &:checked {
     outline: 0 !important;
   }
+
   &.is-invalid,
   &.error {
     border: 1px solid $color-danger !important;
