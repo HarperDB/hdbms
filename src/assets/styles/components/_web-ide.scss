@@ -25,12 +25,10 @@
       list-style-type: none;
       margin: 0 4px 8px !important;
 
-      button,
-      button::before,
-      i::before {
+      button {
+        color: $color-white !important;
         background: transparent !important;
         border: 0;
-        color: $color-white;
         margin: 0;
         outline: none !important;
         padding: 0;

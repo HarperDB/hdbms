@@ -6,13 +6,12 @@ export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, 
     return null;
   }
 
-  // the currently selectedFolder can be unselected from the file menu while this 
+  // the currently selectedFolder can be unselected from the file menu while this
   // window is open
   if (!selectedFolder) {
     return null;
   }
 
-  const { project } = selectedFolder;
   const pathSegmentsFromRoot = selectedFolder.path.split('/');
   const isProjectFolder = pathSegmentsFromRoot.length === 2;
   const projectSubdir = isProjectFolder ? null : pathSegmentsFromRoot.slice(-1)[0];
