@@ -20,7 +20,7 @@
   background: $color-white !important;
   border: 1px solid $color-lightgrey;
   border-radius: $border-radius !important;
-  box-shadow: 2px 2px 8px 2px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 0 8px $lighter-grey-overlay !important;
   color: $color-darkgrey !important;
 
   .card-body {

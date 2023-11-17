@@ -7,6 +7,7 @@ import EditorWindow, {
   EDITOR_WINDOWS,
   PackageInstallWindow,
   DefaultWindow,
+  DefaultFolderWindow,
   NameFileWindow,
   DeleteFileWindow,
   DeleteFolderWindow,
@@ -25,7 +26,6 @@ import EditorMenu, { InstallPackageButton, SaveButton, RestartInstanceButton, Re
 // - revisit the nuances of windowing behavior
 
 function WebIDE({
-  theme,
   deployTargets, // FIXME: does this belong here?
   fileTree,
   onFileSave,
@@ -108,10 +108,12 @@ function WebIDE({
     setSelectedFile(update);
   }
 
+  console.log(activeEditorWindow);
+
   return (
     <Row id="webide">
-      <Col md="4" className="file-browser-outer-container">
-        <div className="file-menu-holder">
+      <Col md="4" xl="3" className="file-browser-outer-container">
+        <div className="floating-card-header-row">
           <FileMenu>
             <AddProjectButton onClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow)} text="app" />
             {(canAddProjectFolder || canDeleteFolder) && <span className="px-1">|</span>}
@@ -164,16 +166,18 @@ function WebIDE({
             setSelectedFolder(folder);
             if (!folder) {
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+            } else {
+              console.log('hi');
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
             }
           }}
           onPackageSelect={(pkg) => {
             resetSelections();
             setSelectedPackage(pkg);
-
             if (!pkg) {
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
             } else {
-              updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+              updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
             }
           }}
           onFileSelect={async (entry) => {
@@ -192,8 +196,8 @@ function WebIDE({
           }}
         />
       </Col>
-      <Col md="8" className="editor-window-container">
-        <Row className="editor-menu-holder g-0">
+      <Col md="8" xl="9" className="editor-window-container">
+        <Row className="floating-card-header-row g-0">
           <Col className="text-nowrap">
             {selectedFile && (
               <>
@@ -271,6 +275,7 @@ function WebIDE({
               />
             )}
           />
+          <DefaultFolderWindow active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW} />
           <NameProjectWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW} onConfirm={addProject} onCancel={toDefaultWindow} />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
@@ -280,13 +285,15 @@ function WebIDE({
             onCancel={toDefaultWindow}
           />
           <NameFileWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW} onConfirm={addFile} onCancel={toDefaultWindow} />
-          {
-            /* NOTE: rework how components are rendered, editor needs to
-                     have a longer lifespan than other windows */
-            activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW && (
-              <PackageInstallWindow selectedPackage={selectedPackage} onConfirm={installPackage} onCancel={toDefaultWindow} deployTargets={deployTargets} />
-            )
-          }
+
+          <PackageInstallWindow
+            active={activeEditorWindow === EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW}
+            onConfirm={installPackage}
+            onCancel={toDefaultWindow}
+            deployTargets={deployTargets}
+            selectedPackage={selectedPackage}
+          />
+
           <DeletePackageWindow
             active={activeEditorWindow === EDITOR_WINDOWS.DELETE_PACKAGE_WINDOW}
             selectedPackage={selectedPackage}
@@ -295,7 +302,7 @@ function WebIDE({
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
               resetSelections();
             }}
-            onCancel={() => toDefaultWindow()}
+            onCancel={toDefaultWindow}
           />
           <DeleteFolderWindow
             active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW}
@@ -305,9 +312,7 @@ function WebIDE({
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
               resetSelections();
             }}
-            onCancel={() => {
-              toDefaultWindow();
-            }}
+            onCancel={toDefaultWindow}
           />
           <DeleteFileWindow
             active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW}
@@ -317,10 +322,9 @@ function WebIDE({
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
               resetSelections();
             }}
-            onCancel={() => toDefaultWindow()}
+            onCancel={toDefaultWindow}
           />
           <Editor
-            theme={theme}
             active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
             file={selectedFile}
             onFileChange={async (fileContent) => {

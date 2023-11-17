@@ -449,7 +449,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
   return supportsApplicationsAPI ? (
     <ApplicationsEditor
-      theme={theme}
       fileTree={fileTree}
       deployTargets={getDeployTargets(instances, instanceAuths, compute_stack_id, auth)}
       onRevertFile={revertFileChanges}

@@ -36,7 +36,7 @@ function LocalApp() {
   }, []);
 
   return (
-    <div className={`${persistedUser.theme}`}>
+    <div id="local-studio" className={`${persistedUser.theme}`}>
       <div id="app-container">
         <Suspense fallback={<Loader header=" " spinner />}>
           <TopNav loggedIn={instanceAuths?.local?.valid} />

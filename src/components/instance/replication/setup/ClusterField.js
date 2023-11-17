@@ -13,6 +13,7 @@ function ClusterField({
   validator = () => true,
   errorMessage = 'is required',
   addSpace = true,
+  valid = false,
 }) {
   const [error, setError] = useState(null);
 
@@ -25,10 +26,11 @@ function ClusterField({
       <Input
         id={`cluster-field-${label}`}
         type={type}
-        className={cn('cluster-field', { error })}
+        className={cn('cluster-field form-control', { error })}
         max={max}
         min={min}
         defaultValue={value}
+        valid={valid}
         onChange={(e) => handleChange(e.target.value)}
         onBlur={(e) => {
           const isValid = validator(e.target.value);
@@ -40,7 +42,7 @@ function ClusterField({
     <>
       {addSpace && <br />}
       <div className="text-nowrap mt-2 mb-1">{label}</div>
-      <Input readOnly type={type} value={value} />
+      <Input readOnly valid type={type} value={value} />
     </>
   );
 }

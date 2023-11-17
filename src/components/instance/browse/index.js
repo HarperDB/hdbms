@@ -170,7 +170,6 @@ export const metadata = {
   link: 'browse',
   label: 'browse',
   icon: 'list',
-  iconCode: 'f03a',
 };
 
 export default BrowseIndex;

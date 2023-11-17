@@ -16,7 +16,6 @@ export const metadata = {
   link: 'functions',
   label: 'functions',
   icon: 'project-diagram',
-  iconCode: 'f542',
 };
 
 function CustomFunctionsIndex() {
@@ -37,7 +36,7 @@ function CustomFunctionsIndex() {
   }, [auth, url, restarting]);
 
   useEffect(() => {
-    refreshCustomFunctions(); 
+    refreshCustomFunctions();
   }, [refreshCustomFunctions]);
 
   useEffect(() => {

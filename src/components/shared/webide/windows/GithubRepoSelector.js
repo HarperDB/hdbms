@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
-import cn from 'classnames';
 import Select from 'react-select';
+import { Input } from 'reactstrap';
 import { ensureRepoExists, getGithubTags } from './lib';
 
 export default function GithubRepoSelector({ pkg, setPackageSpec }) {
@@ -74,36 +74,28 @@ export default function GithubRepoSelector({ pkg, setPackageSpec }) {
 
   return (
     <>
-      <div className="input-group">
-        <input title="Github User" className="mt-2 form-control" placeholder="Github User" onChange={(e) => setUser(e.target.value)} value={user} />
-        <div className="input-group-append">
-          <i
-            className={cn('input-group-text fa mt-2', {
-              'text-danger fa-spinner fa-spin loading': loadingTags,
-              'text-success fa-check found': debouncedUser.length > 0 && debouncedRepo.length > 0 && found,
-              'text-danger fa-times not-found': debouncedRepo.length > 0 && debouncedUser.length > 0 && !(loadingTags || found),
-              'text-danger fa-check not-searching': debouncedUser.length === 0 || debouncedRepo.length === 0,
-            })}
-          />
-        </div>
-      </div>
-
-      <input title="Github Repo" className="mt-2" placeholder="Github Repo" onChange={(e) => setRepo(e.target.value)} value={repo} />
-
-      <Select
-        className="react-select-container github-tag-select mt-2"
-        classNamePrefix="react-select"
-        isDisabled={!targetRepo}
-        isSearchable
-        placeholder="Choose a tag"
-        onChange={(selected) => {
-          setSelectedTag(selected.value);
-        }}
-        options={tags.map((t) => ({
-          label: t,
-          value: t,
-        }))}
+      <Input
+        title="Github Organization"
+        className="mt-2 form-control"
+        valid={debouncedUser.length > 0 && debouncedRepo.length > 0 && found}
+        placeholder="Github Organization"
+        onChange={(e) => setUser(e.target.value)}
+        value={user}
       />
+
+      <Input title="Github Repo" className="mt-2" placeholder="Github Repo" onChange={(e) => setRepo(e.target.value)} value={repo} />
+
+      {tags?.length > 0 && (
+        <Select
+          className="react-select-container github-tag-select mt-2"
+          classNamePrefix="react-select"
+          isDisabled={!targetRepo}
+          isSearchable
+          placeholder="Choose a tag"
+          onChange={(selected) => setSelectedTag(selected.value)}
+          options={tags.map((t) => ({ label: t, value: t }))}
+        />
+      )}
     </>
   );
 }

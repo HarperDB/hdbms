@@ -10,7 +10,6 @@ export const metadata = {
   link: 'query',
   label: 'query',
   icon: 'search',
-  iconCode: 'f002',
 };
 
 function QueryIndex() {

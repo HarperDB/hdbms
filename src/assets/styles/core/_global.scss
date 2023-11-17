@@ -68,16 +68,17 @@ hr {
 }
 
 ::-webkit-scrollbar {
-  height: 10px;
-  width: 10px;
+  height: 3px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: $color-white;
+  background: transparent;
+  border: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: $light-grey-overlay;
-  border: 2px solid $color-white;
-  border-radius: $border-radius;
+  background-color: $color-grey;
+  border: 0;
+  border-radius: 0;
 }

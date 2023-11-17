@@ -50,8 +50,7 @@ function Logs() {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>logs</Col>
-        <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-end">
+        <Col className="text-end">
           <Button color="link" title="Update Logs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
             <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
@@ -63,14 +62,14 @@ function Logs() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-          <Row xs="5">
-            <Col className="text-bold">status</Col>
-            <Col className="text-bold">date</Col>
-            <Col className="text-left text-bold">
+          <Row xs="5" className="header">
+            <Col className="text-bold text-nowrap">status</Col>
+            <Col className="text-bold text-nowrap">date</Col>
+            <Col className="text-left text-bold text-nowrap">
               {!loading && logsError ? <span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span> : <span>time</span>}
             </Col>
-            <Col className="text-bold">thread</Col>
-            <Col className="text-bold">tags</Col>
+            <Col className="text-bold text-nowrap">thread</Col>
+            <Col className="text-bold text-nowrap">tags</Col>
           </Row>
           <hr className="mt-1 mb-0" />
           <div className="item-scroller">
@@ -91,6 +90,7 @@ function Logs() {
           </div>
         </CardBody>
       </Card>
+      <br />
     </ErrorBoundary>
   );
 }

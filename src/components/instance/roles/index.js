@@ -15,7 +15,6 @@ export const metadata = {
   link: 'roles',
   label: 'roles',
   icon: 'check-square',
-  iconCode: 'f14a',
 };
 
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));

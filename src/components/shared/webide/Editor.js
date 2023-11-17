@@ -19,19 +19,14 @@ const extensionToLanguageMap = {
 
 // TODO: update code using whatever monaco hook is available. onupdate.
 // don't allow save if there are errors.
-function Editor({ active, file, onFileChange, theme }) {
+function Editor({ active, file, onFileChange }) {
   const [language, setLanguage] = useState('javascript');
-  const [editorTheme, setEditorTheme] = useState('vs-dark');
 
   useEffect(() => {
     const extension = parseFileExtension(file?.name);
     const updatedLanguage = extensionToLanguageMap[extension] || 'plaintext';
     setLanguage(updatedLanguage);
   }, [file]);
-
-  useEffect(() => {
-    setEditorTheme(theme === 'light' || theme === 'akamai' ? 'light' : 'vs-dark');
-  }, [theme]);
 
   if (!active) {
     return null;
@@ -43,7 +38,7 @@ function Editor({ active, file, onFileChange, theme }) {
       height="100%"
       language={language}
       value={file?.content || ''}
-      theme={editorTheme}
+      theme="vs-dark"
       onChange={onFileChange}
       options={{
         readOnly: file?.readOnly,

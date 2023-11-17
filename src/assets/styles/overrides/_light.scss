@@ -375,9 +375,20 @@
   }
 
   #webide {
-    .package-text,
-    .filename-text {
+    color: $color-black !important;
+    .file-menu-item,
+    .editor-menu-item {
       color: $color-black !important;
+      button {
+        color: $color-black !important;
+      }
+
+      button:disabled,
+      button[disabled],
+      button:disabled::before,
+      button[disabled]::before{
+        color: $grey-overlay !important;
+      }
     }
   }
 }

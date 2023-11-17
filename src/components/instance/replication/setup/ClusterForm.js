@@ -33,7 +33,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
     return (
       clusterRole?.length > 0 &&
       clusterUsername.length > 0 &&
-      clusterPassword.length > 0 &&
+      (clusterStatus?.cluster_user?.username || clusterPassword.length > 0) &&
       clusterNodeName.length > 0 &&
       clusterPort >= clusterPortMin &&
       clusterPort <= clusterPortMax
@@ -121,6 +121,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         label="Cluster Role"
         handleChange={(clusterRole) => updateForm({ clusterRole })}
         value={formData.clusterRole}
+        valid={formData.clusterRole.trim().length > 0}
         validator={(value) => value.trim().length > 0}
         editable={!clusterStatus?.cluster_role?.role}
         addSpace={false}
@@ -130,17 +131,19 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         label="Cluster User"
         handleChange={(clusterUsername) => updateForm({ clusterUsername })}
         value={formData.clusterUsername}
+        valid={formData.clusterUsername.trim().length > 0}
         validator={(value) => value.trim().length > 0}
-        editable
+        editable={!clusterStatus?.cluster_user?.username}
       />
 
       <ClusterField
         label="Cluster Password"
         type="password"
         handleChange={(clusterPassword) => updateForm({ clusterPassword })}
-        value={formData.clusterPassword}
+        value={clusterStatus?.cluster_user?.username ? '********' : formData.clusterPassword}
+        valid={clusterStatus?.cluster_user?.username || formData.clusterPassword.trim().length > 0}
         validator={(value) => value.trim().length > 0}
-        editable
+        editable={!clusterStatus?.cluster_user?.username}
         showDivider={false}
       />
 
@@ -151,21 +154,23 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         min={clusterPortMin}
         handleChange={(newClusterPort) => updateForm({ clusterPort: newClusterPort })}
         value={formData.clusterPort}
+        valid={formData.clusterPort >= clusterPortMin && formData.clusterPort <= clusterPortMax}
         validator={(value) => value >= clusterPortMin && value <= clusterPortMax}
         errorMessage={`must be between ${clusterPortMin} and ${clusterPortMax}`}
-        editable
+        editable={!clusterStatus?.config_cluster_port}
       />
 
       <ClusterField
         label="Cluster Node Name"
         handleChange={(newClusterNodeName) => updateForm({ clusterNodeName: newClusterNodeName })}
         value={formData.clusterNodeName}
+        valid={formData.clusterNodeName.length > 0}
         validator={(value) => value.length > 0}
-        editable
+        editable={!clusterStatus?.node_name}
       />
 
       <hr className="my-3" />
-      <Button block color="success" disabled={!formIsValid(formData)} onClick={() => enableClustering()}>
+      <Button block color="success" disabled={!formIsValid(formData)} onClick={enableClustering}>
         Enable Clustering
       </Button>
       <br />

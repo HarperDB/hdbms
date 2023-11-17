@@ -1,5 +1,15 @@
+#local-studio {
+  #config {
+    .instance-details {
+      min-height: auto !important;
+    }
+  }
+}
+
 #config {
   .instance-details {
+    min-height: 152px;
+
     .card-body {
       padding-bottom: 0;
     }
@@ -13,19 +23,24 @@
 
   .item-list {
     font-size: 0.65rem;
+    padding: 0;
+
+    .header {
+      padding: 16px 16px 8px 16px;
+    }
+
+    hr {
+      background-color: $color-grey !important;
+    }
 
     .item-scroller {
-      height: calc(100vh - 500px);
+      height: calc(100vh - 494px);
       overflow-x: hidden;
       overflow-y: auto;
 
-      @media only screen and (max-width: 991px) {
-        height: auto;
-      }
-
       .item-row {
         border-bottom: 1px solid $lightest-grey-overlay;
-        padding: 8px 0;
+        padding: 16px;
 
         .text-nowrap {
           overflow: hidden;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
+import { Input } from 'reactstrap';
 
 function isValidUrl(url) {
   try {
@@ -23,7 +24,7 @@ export default function UrlInstallField({ pkg, setPackageSpec }) {
   }, [packageUrl, isValidPackageUrl, setPackageSpec]);
 
   return (
-    <input
+    <Input
       type="text"
       id="tarball-url"
       title="URL to gzipped tarball"

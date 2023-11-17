@@ -64,8 +64,7 @@ function SystemInfo() {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>host system</Col>
-        <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-end">
+        <Col className="text-end">
           <Button
             color="link"
             title="Update Metrics"

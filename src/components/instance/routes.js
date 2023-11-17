@@ -19,7 +19,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'browse',
     label: 'browse',
     icon: 'list',
-    iconCode: 'f03a',
   };
 
   const query = {
@@ -28,7 +27,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'query',
     label: 'query',
     icon: 'search',
-    iconCode: 'f002',
   };
 
   const users = {
@@ -37,7 +35,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'users',
     label: 'users',
     icon: 'users',
-    iconCode: 'f0c0',
   };
 
   const roles = {
@@ -46,7 +43,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'roles',
     label: 'roles',
     icon: 'check-square',
-    iconCode: 'f14a',
   };
 
   const charts = {
@@ -55,7 +51,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'charts',
     label: 'charts',
     icon: 'chart-line',
-    iconCode: 'f201',
   };
 
   const cluster = {
@@ -64,7 +59,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'replication',
     label: 'replication',
     icon: 'cubes',
-    iconCode: 'f1e0',
   };
 
   const functions = {
@@ -73,7 +67,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'functions',
     label: 'functions',
     icon: 'project-diagram',
-    iconCode: 'f542',
   };
 
   const applications = {
@@ -82,7 +75,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'applications',
     label: 'applications',
     icon: 'project-diagram',
-    iconCode: 'f542',
   };
 
   const metrics = {
@@ -91,7 +83,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'status',
     label: 'status',
     icon: 'tachometer-alt',
-    iconCode: 'f3fd',
   };
 
   const configure = {
@@ -100,7 +91,6 @@ const routes = ({ super_user, version = null }) => {
     link: 'config',
     label: 'config',
     icon: 'wrench',
-    iconCode: 'f0ad',
   };
 
   let supportsApplications = false;

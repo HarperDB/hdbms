@@ -9,8 +9,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import appState from '../../functions/state/appState';
 import instanceState from '../../functions/state/instanceState';
 
-import icon from '../../functions/select/icon';
-import routeIcon from '../../functions/select/routeIcon';
 import ErrorFallback from '../shared/ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 import useInstanceAuth from '../../functions/state/instanceAuths';
@@ -28,44 +26,49 @@ function Subnav({ routes = [] }) {
     (s) => {
       const selectedInstance = s.instances && s.instances.find((i) => i.compute_stack_id === compute_stack_id);
       const otherInstances = s.instances && s.instances.filter((i) => i.compute_stack_id !== compute_stack_id);
+
       return {
         options:
           otherInstances &&
           otherInstances.map((i) => ({
-            label: `${i.instance_name} ${
-              ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) ? `(${i.status.replace(/_/g, ' ').toLowerCase()})` : ''
-            }`,
+            label: (
+              <span>
+                <i
+                  className={`d-none d-sm-inline-block fa me-2 fa-${
+                    i.is_local ? 'server' : ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) ? 'circle-exclamation' : 'cloud'
+                  } ${['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) && 'opacity-25'}`}
+                />
+                {i.instance_name} {['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) && `(${i.status.replace(/_/g, ' ').toLowerCase()})`}
+              </span>
+            ),
             value: i.compute_stack_id,
-            is_local: i.is_local,
             has_auth: instanceAuths[i.compute_stack_id],
             is_unavailable: ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status),
           })),
         activeOption: {
-          label: selectedInstance?.instance_name,
+          label: (
+            <span>
+              <i className={`d-none d-sm-inline-block fa me-2 fa-${!selectedInstance ? '' : selectedInstance?.is_local ? 'server' : 'cloud'}`} />
+              {selectedInstance?.instance_name}
+            </span>
+          ),
           value: compute_stack_id,
-          is_local: selectedInstance?.is_local,
         },
       };
     },
-    [compute_stack_id]
+    [compute_stack_id],
   );
 
   const linkPrefix = `/o/${customer_id}/i/${compute_stack_id}`;
   const linkRoute = location.pathname.split(compute_stack_id)[1].split('/')[1];
-
   const currentRoute = routes?.find((r) => r.link === linkRoute);
-  const activeRoute = {
-    label: currentRoute?.label,
-    value: currentRoute?.link,
-    iconCode: currentRoute?.iconCode,
-  };
 
   const navigateFn = ({ value, has_auth, is_unavailable }) => {
     if (is_unavailable) {
       return false;
     }
     if (has_auth) {
-      return navigate(`/o/${customer_id}/i/${value}/${activeRoute.value}`);
+      return navigate(`/o/${customer_id}/i/${value}/${currentRoute?.link}`);
     }
     return navigate(`/o/${customer_id}/instances/login`);
   };
@@ -86,10 +89,6 @@ function Subnav({ routes = [] }) {
               isClearable={false}
               isLoading={!options}
               noOptionsMessage={() => 'No other instances available'}
-              styles={{
-                option: (styles, { data }) => ({ ...styles, opacity: data.is_unavailable ? 0.5 : 1, ...icon(data.is_local, data.is_unavailable) }),
-                singleValue: (styles, { data }) => ({ ...styles, ...icon(data.is_local, data.is_unavailable) }),
-              }}
             />
           </Nav>
         )}
@@ -101,7 +100,7 @@ function Subnav({ routes = [] }) {
                 className="nav-link"
                 to={`${linkPrefix}/${route.link === 'browse' && defaultBrowseURL ? `${route.link}/${defaultBrowseURL}` : route.link}`}
               >
-                <i className={`d-none d-sm-inline-block fa me-1 fa-${route.icon}`} />
+                <i className={`d-none d-sm-inline-block fa me-2 fa-${route.icon}`} />
                 {route.label || route.link}
                 {!!alarms && route.link === 'status' && <span className="badge">{alarms}</span>}
               </NavLink>
@@ -115,17 +114,33 @@ function Subnav({ routes = [] }) {
             width="200px"
             onChange={({ value }) => navigate(`${linkPrefix}/${value}`)}
             options={
-              activeRoute.value ? routes.filter((r) => r.link !== activeRoute.value).map((route) => ({ label: route.label, value: route.link, iconCode: route.iconCode })) : null
+              currentRoute?.link
+                ? routes
+                    .filter((r) => r.link !== currentRoute?.link)
+                    .map((route) => ({
+                      label: (
+                        <span>
+                          <i className={`d-none d-sm-inline-block fa me-2 fa-${route.icon}`} />
+                          {route.label}
+                        </span>
+                      ),
+                      value: route.link,
+                    }))
+                : null
             }
-            isLoading={!activeRoute.value}
-            value={activeRoute}
-            defaultValue={activeRoute.value}
+            isLoading={!currentRoute?.link}
+            value={{
+              label: (
+                <span>
+                  <i className={`d-none d-sm-inline-block fa me-2 fa-${currentRoute?.icon}`} />
+                  {currentRoute?.label}
+                </span>
+              ),
+              value: currentRoute?.link,
+            }}
+            defaultValue={currentRoute?.link}
             isSearchable={false}
             isClearable={false}
-            styles={{
-              option: (styles, { data }) => ({ ...styles, ...routeIcon(data.iconCode) }),
-              singleValue: (styles, { data }) => ({ ...styles, ...routeIcon(data.iconCode) }),
-            }}
           />
         </Nav>
       </Navbar>
