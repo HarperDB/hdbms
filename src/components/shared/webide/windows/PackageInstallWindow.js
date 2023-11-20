@@ -3,10 +3,19 @@ import { Button, Input } from 'reactstrap';
 import cn from 'classnames';
 import Select from 'react-select';
 
+import { useStoreState } from 'pullstate';
 import { isValidProjectName, parsePackageType } from './lib';
 import GithubRepoSelector from './GithubRepoSelector';
 import NpmPackageSelector from './NpmPackageSelector';
 import UrlInstallField from './UrlInstallField';
+import config from '../../../../config';
+import instanceState from '../../../../functions/state/instanceState';
+
+/*
+ [
+ ,
+ ]
+ */
 
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets, active }) {
   const defaultPackageType = false;
@@ -17,7 +26,15 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
   const [projectNameIsValid, setProjectNameIsValid] = useState(true);
   const [packageSpec, setPackageSpec] = useState('');
   const [loading, setLoading] = useState(false);
-  const [deployTargets, setDeployTargets] = useState([]);
+  const auth = useStoreState(instanceState, (s) => s.auth);
+  const url = useStoreState(instanceState, (s) => s.url);
+  const [deployTargets, setDeployTargets] = useState([
+    {
+      isCurrentInstance: true,
+      auth,
+      instance: { url, instance_name: 'This Instance' },
+    },
+  ]);
 
   function updatePackageInfo() {
     const newPackageInfo = parsePackageType(selectedPackage);
@@ -54,22 +71,24 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         }}
       />
 
-      <Select
-        className="react-select-container package-install-deploy-targets-dropdown mt-2"
-        classNamePrefix="react-select"
-        isSearchable
-        isMulti
-        placeholder="Choose your deploy targets"
-        onChange={(selected) => {
-          const selectedHostUrls = selected.map((o) => o.value);
-          const updatedDeployTargets = availableDeployTargets.filter((t) => selectedHostUrls.includes(t.instance.url));
-          setDeployTargets(updatedDeployTargets);
-        }}
-        options={availableDeployTargets.map((t) => ({
-          label: t.instance.instance_name,
-          value: t.instance.url,
-        }))}
-      />
+      {!config.is_local_studio && (
+        <Select
+          className="react-select-container package-install-deploy-targets-dropdown mt-2"
+          classNamePrefix="react-select"
+          isSearchable
+          isMulti
+          placeholder="Choose your deploy targets"
+          onChange={(selected) => {
+            const selectedHostUrls = selected.map((o) => o.value);
+            const updatedDeployTargets = availableDeployTargets.filter((t) => selectedHostUrls.includes(t.instance.url));
+            setDeployTargets(updatedDeployTargets);
+          }}
+          options={availableDeployTargets.map((t) => ({
+            label: t.instance.instance_name,
+            value: t.instance.url,
+          }))}
+        />
+      )}
 
       <Select
         className="react-select-container mt-2"
