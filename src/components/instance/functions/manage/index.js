@@ -70,7 +70,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const instances = useStoreState(appState, (s) => s.instances);
   const [instanceAuths] = useInstanceAuth({});
   const [editorCache, setEditorCache] = useEditorCache({});
-  const theme = useStoreState(appState, (s) => s.theme);
   const [restartingInstance, setRestartingInstance] = useState(false);
   const alert = useAlert();
 

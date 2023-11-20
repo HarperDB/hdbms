@@ -60,7 +60,7 @@ function Subnav({ routes = [] }) {
   );
 
   const linkPrefix = `/o/${customer_id}/i/${compute_stack_id}`;
-  const linkRoute = location.pathname.split(compute_stack_id)[1].split('/')[1];
+  const linkRoute = location.pathname.split(`/i/${compute_stack_id}`)[1].split('/')[1];
   const currentRoute = routes?.find((r) => r.link === linkRoute);
 
   const navigateFn = ({ value, has_auth, is_unavailable }) => {
@@ -93,7 +93,7 @@ function Subnav({ routes = [] }) {
           </Nav>
         )}
         <Nav navbar className="instance-nav d-none d-lg-flex">
-          {routes.map((route) => (
+          {routes?.map((route) => (
             <NavItem key={route.path}>
               <NavLink
                 title={route.link}
@@ -113,21 +113,15 @@ function Subnav({ routes = [] }) {
             classNamePrefix="react-select"
             width="200px"
             onChange={({ value }) => navigate(`${linkPrefix}/${value}`)}
-            options={
-              currentRoute?.link
-                ? routes
-                    .filter((r) => r.link !== currentRoute?.link)
-                    .map((route) => ({
-                      label: (
-                        <span>
-                          <i className={`d-none d-sm-inline-block fa me-2 fa-${route.icon}`} />
-                          {route.label}
-                        </span>
-                      ),
-                      value: route.link,
-                    }))
-                : null
-            }
+            options={routes?.map((route) => ({
+              label: (
+                <span>
+                  <i className={`d-none d-sm-inline-block fa me-2 fa-${route.icon}`} />
+                  {route.label}
+                </span>
+              ),
+              value: route.link,
+            }))}
             isLoading={!currentRoute?.link}
             value={{
               label: (

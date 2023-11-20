@@ -18,7 +18,7 @@ export default function GithubRepoSelector({ pkg, setPackageSpec }) {
   const [selectedTag, setSelectedTag] = useState(pkg?.tag || '');
   const [targetRepo, setTargetRepo] = useState('');
 
-  const [loadingTags, setLoadingTags] = useState(false);
+  const [, setLoadingTags] = useState(false);
   const [found, setFound] = useState(false);
 
   useEffect(() => {

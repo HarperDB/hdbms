@@ -108,11 +108,9 @@ function WebIDE({
     setSelectedFile(update);
   }
 
-  console.log(activeEditorWindow);
-
   return (
     <Row id="webide">
-      <Col md="4" xl="3" className="file-browser-outer-container">
+      <Col md="4" xl="3" className="file-browser-outer-container mb-3">
         <div className="floating-card-header-row">
           <FileMenu>
             <AddProjectButton onClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow)} text="app" />
@@ -167,7 +165,6 @@ function WebIDE({
             if (!folder) {
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
             } else {
-              console.log('hi');
               updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
             }
           }}
@@ -275,7 +272,7 @@ function WebIDE({
               />
             )}
           />
-          <DefaultFolderWindow active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW} />
+          <DefaultFolderWindow active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW} type={selectedPackage ? 'package' : selectedFolder ? 'folder' : 'nothing'} />
           <NameProjectWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW} onConfirm={addProject} onCancel={toDefaultWindow} />
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
