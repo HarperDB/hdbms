@@ -9,17 +9,19 @@ function NoProjects() {
   return (
     <Card className="file-browser-scroll-container">
       <CardBody>
-        You have no HarperDB applications yet. <br />
-        <br />
-        Click &quot;
-        <i className="fas fa-plus" /> app&quot; above to create one!
-        <br />
-        <br />
-        See the{' '}
-        <a className="docs-link" href="https://docs.harperdb.io" target="_blank" rel="noreferrer">
-          documentation
-        </a>
-        for more info on HarperDB Applications.
+        <div className="p-4">
+          You have no HarperDB applications yet. <br />
+          <br />
+          Click &quot;
+          <i className="fas fa-plus" /> app&quot; above to create one!
+          <br />
+          <br />
+          See the{' '}
+          <a className="docs-link" href="https://docs.harperdb.io" target="_blank" rel="noreferrer">
+            documentation
+          </a>{' '}
+          for more info on HarperDB Applications.
+        </div>
       </CardBody>
     </Card>
   );
