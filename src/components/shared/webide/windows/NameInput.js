@@ -20,7 +20,7 @@ export default function NameInput({ onCancel, onConfirm, onEnter, value, type, v
   return (
     <>
       <input
-        className={cn('w-100 text-center mb-3', { invalid: name.length > 0 && !isValidName })}
+        className={cn('w-100 text-center', { invalid: name.length > 0 && !isValidName })}
         autoFocus
         onChange={(e) => {
           setName(e.target.value);
@@ -35,18 +35,14 @@ export default function NameInput({ onCancel, onConfirm, onEnter, value, type, v
         title="error: name must contain only alphanumeric characters, dashes and underscores."
         className={cn('text-danger fa fa-warning', { hidden: isValidName || name.length === 0 })}
       />
-      <ButtonWithLoader disabled={!isValidName} className="btn btn-success btn-block mt-2" onClick={() => onConfirm(name)}>
+      <ButtonWithLoader disabled={!isValidName} className="btn btn-success btn-block mt-3" onClick={() => onConfirm(name)}>
         OK
       </ButtonWithLoader>
       <button type="button" className="btn btn-outline-success btn-block mt-2" onClick={onCancel}>
         Cancel
       </button>
 
-      {name.length > 0 && !isValidName ? (
-        <div className="validation-message mt-5">error: name must contain only alphanumeric characters, dashes and underscores.</div>
-      ) : (
-        <div className="mt-5">Please enter the {type} name and click OK.</div>
-      )}
+      {name.length > 0 && !isValidName && <div className="validation-message mt-5">error: name must contain only alphanumeric characters, dashes and underscores.</div>}
     </>
   );
 }

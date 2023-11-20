@@ -6,26 +6,26 @@
     align-items: baseline;
     display: flex;
     flex-direction: row;
-    margin-top: 0;
     margin-bottom: 16px;
+    margin-top: 0;
     padding-bottom: 0;
     padding-inline-start: 0 !important;
     padding-top: 0;
 
     .file-menu-item,
     .editor-menu-item {
+      color: $color-white !important;
       list-style-type: none;
       margin: 0 4px !important;
-      color: $color-white !important;
 
       button {
-        color: $color-white !important;
         background: transparent !important;
         border: 0;
+        color: $color-white !important;
+        font-weight: bold;
         margin: 0;
         outline: none !important;
         padding: 0;
-        font-weight: bold;
       }
 
       button:disabled,
@@ -45,27 +45,27 @@
 
   .file-browser-outer-container {
     .card-body {
-      padding: 0 !important;
       background: transparent !important;
+      padding: 0 !important;
     }
 
     .file-browser-scroll-container {
+      background: $color-black !important;
       border: 1px solid $color-darkestgrey !important;
       border-radius: $border-radius;
       height: calc(100vh - 237px) !important;
       overflow-x: hidden;
       overflow-y: auto;
-      background: $color-black !important;
 
       @media(max-width: 767px) {
         max-height: 250px;
       }
 
       .file-browser {
+        list-style-type: none !important;
         margin-left: 0;
         padding: 0 !important;
         position: relative;
-        list-style-type: none !important;
 
         > li {
           border-bottom: 1px solid $white-overlay;
@@ -164,15 +164,14 @@
   }
 
   .editor-window-container {
-
     .editor-window {
       background: $color-black !important;
       border: 1px solid $color-darkestgrey !important;
       border-radius: $border-radius;
       height: calc(100vh - 237px) !important;
-      padding: 1vh 0;
       min-height: 281px;
       overflow:hidden;
+      padding: 1vh 0;
 
       @media(max-width: 767px) {
         max-height: calc(100vh - 515px)
@@ -216,15 +215,15 @@
     }
 
     hr {
-      color: $color-white !important;
       background-color: $color-white !important;
+      color: $color-white !important;
     }
 
     .form-control {
       background: transparent !important;
       border: 1px solid $color-white !important;
-      color: $color-white !important;
       border-radius: 0 !important;
+      color: $color-white !important;
 
       &:active,
       &:focus {

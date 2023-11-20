@@ -11,12 +11,6 @@ import UrlInstallField from './UrlInstallField';
 import config from '../../../../config';
 import instanceState from '../../../../functions/state/instanceState';
 
-/*
- [
- ,
- ]
- */
-
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets, active }) {
   const defaultPackageType = false;
   const [installed, setInstalled] = useState(Boolean(selectedPackage));
@@ -53,18 +47,26 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
     setProjectNameIsValid(isValidProjectName(projectName));
   }
 
+  function cancelImport() {
+    setProjectName('');
+    setProjectNameIsValid(false);
+    setPackageType(false);
+    setDeployTargets([]);
+    onCancel();
+  }
+
   useEffect(updatePackageInfo, [selectedPackage, defaultPackageType]);
   useEffect(validateProjectName, [projectName]);
 
   return !active ? null : (
     <div className="content-window">
-      <h4 className="mb-5">Install A Package</h4>
+      <h4 className="mb-5">Import Remote App Package</h4>
 
       <Input
         valid={projectNameIsValid && projectName.length > 0}
         title="enter a name for this package"
         value={projectName}
-        placeholder="Project Name"
+        placeholder="Application Name"
         onChange={(e) => {
           setProjectName(e.target.value);
           setProjectNameIsValid(isValidProjectName(e.target.value));
@@ -117,7 +119,7 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
 
       {projectNameIsValid && deployTargets.length > 0 && (
         <>
-          <hr className="my-3" />
+          <div className="mt-2" />
 
           {packageType === 'npm' && <NpmPackageSelector projectName={projectName} installed={installed} pkg={packageInfo} setPackageSpec={setPackageSpec} />}
           {packageType === 'github' && <GithubRepoSelector projectName={projectName} installed={installed} pkg={packageInfo} setPackageSpec={setPackageSpec} />}
@@ -125,10 +127,8 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
         </>
       )}
 
-      {projectNameIsValid && deployTargets.length > 0 && packageType && (
+      {projectNameIsValid && deployTargets.length > 0 && packageType ? (
         <>
-          <hr className="my-3" />
-
           <Button
             onClick={async () => {
               setLoading(true);
@@ -144,10 +144,14 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
           >
             {loading ? <i className="install-package-status-icon fa fa-spinner fa-spin" /> : 'Install Package'}
           </Button>
-          <Button onClick={onCancel} className="btn btn-block btn-outline-success mt-2">
+          <Button onClick={cancelImport} className="btn btn-block btn-outline-success mt-2">
             Cancel
           </Button>
         </>
+      ) : (
+        <Button onClick={cancelImport} className="btn btn-block btn-outline-success mt-3">
+          Cancel
+        </Button>
       )}
     </div>
   );

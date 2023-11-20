@@ -1,16 +1,13 @@
 import React from 'react';
+import { AddProjectButton } from '../FileMenu';
+import { InstallPackageButton } from '../EditorMenu';
 
-export default function DefaultWindow({ active, fileTree, AddProjectButton, InstallPackageButton }) {
+export default function DefaultWindow({ active, AddProjectButtonClick, InstallPackageButtonClick }) {
   return !active ? null : (
     <div className="content-window">
-      <h4 className="mb-5">HarperDB Applications Editor</h4>
-      <AddProjectButton />
-      <InstallPackageButton />
-      {fileTree?.entries.length > 0 && (
-        <div className="mt-5">
-          <i className="menu-pointer-icon fa fa-arrow-left" /> <span>Choose a file from the menu on the left</span>
-        </div>
-      )}
+      <h4 className="mb-5">Add A New Application</h4>
+      <AddProjectButton text="Create A New Application Using The Default Template" extraClasses="btn btn-block btn-success" onClick={AddProjectButtonClick} />
+      <InstallPackageButton text="Import Or Deploy A Remote Application Package" extraClasses="btn btn-block btn-outline-success mt-2" onClick={InstallPackageButtonClick} />
     </div>
   );
 }

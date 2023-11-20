@@ -18,7 +18,7 @@ import EditorWindow, {
 
 import FileMenu, { AddFileButton, AddProjectFolderButton, AddProjectButton, DeleteFolderButton, DeleteFileButton } from './FileMenu';
 
-import EditorMenu, { InstallPackageButton, SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
+import EditorMenu, { SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
 
 // TODO:
 //
@@ -113,7 +113,7 @@ function WebIDE({
       <Col md="4" xl="3" className="file-browser-outer-container mb-3">
         <div className="floating-card-header-row">
           <FileMenu>
-            <AddProjectButton onClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow)} text="app" />
+            <AddProjectButton onClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow)} text="app" />
             {(canAddProjectFolder || canDeleteFolder) && <span className="px-1">|</span>}
             {canAddProjectFolder && (
               <AddProjectFolderButton
@@ -207,14 +207,6 @@ function WebIDE({
           </Col>
           <Col className="text-nowrap">
             <EditorMenu>
-              <InstallPackageButton
-                onClick={() => {
-                  setSelectedPackage(null);
-                  updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
-                }}
-                text="add pkg"
-              />
-              <span className="px-1">|</span>
               <SaveButton
                 savingFile={savingFile}
                 disabled={!(selectedFile?.cached && activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW)}
@@ -254,26 +246,17 @@ function WebIDE({
           <DefaultWindow
             fileTree={fileTree}
             active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_WINDOW}
-            AddProjectButton={() => (
-              <AddProjectButton
-                text="Create a new project"
-                extraClasses="btn btn-block btn-success mt-2"
-                onClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow)}
-              />
-            )}
-            InstallPackageButton={() => (
-              <InstallPackageButton
-                text="Install or deploy a remote package"
-                extraClasses="btn btn-block btn-outline-success mt-2"
-                onClick={() => {
-                  setSelectedPackage(null);
-                  updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
-                }}
-              />
-            )}
+            AddProjectButtonClick={() => updateActiveEditorWindow(EDITOR_WINDOWS.NAME_PROJECT_WINDOW, activeEditorWindow)}
+            InstallPackageButtonClick={() => {
+              setSelectedPackage(null);
+              updateActiveEditorWindow(EDITOR_WINDOWS.INSTALL_PACKAGE_WINDOW, activeEditorWindow);
+            }}
           />
+
           <DefaultFolderWindow active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW} type={selectedPackage ? 'package' : selectedFolder ? 'folder' : 'nothing'} />
+
           <NameProjectWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW} onConfirm={addProject} onCancel={toDefaultWindow} />
+
           <NameProjectFolderWindow
             projectName={selectedFolder?.project}
             active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_FOLDER_WINDOW}
@@ -281,6 +264,7 @@ function WebIDE({
             onConfirm={addProjectFolder}
             onCancel={toDefaultWindow}
           />
+
           <NameFileWindow active={activeEditorWindow === EDITOR_WINDOWS.NAME_FILE_WINDOW} onConfirm={addFile} onCancel={toDefaultWindow} />
 
           <PackageInstallWindow
@@ -301,6 +285,7 @@ function WebIDE({
             }}
             onCancel={toDefaultWindow}
           />
+
           <DeleteFolderWindow
             active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FOLDER_WINDOW}
             selectedFolder={selectedFolder}
@@ -311,6 +296,7 @@ function WebIDE({
             }}
             onCancel={toDefaultWindow}
           />
+
           <DeleteFileWindow
             active={activeEditorWindow === EDITOR_WINDOWS.DELETE_FILE_WINDOW}
             selectedFile={selectedFile}
@@ -321,6 +307,7 @@ function WebIDE({
             }}
             onCancel={toDefaultWindow}
           />
+
           <Editor
             active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
             file={selectedFile}
