@@ -22,14 +22,19 @@ function Details({ clusterNodeName, instanceConfig }) {
   const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
   const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
   const { hostname } = window.location;
-  const operationsApiURL = config.is_local_studio
-    ? `${instanceConfig.operationsApi?.network?.securePort ? 'https://' : 'http://'}${hostname}:${
+
+  const urlObject = new URL(url);
+
+  const operationsApiURL = !config.is_local_studio
+    ? `${instanceConfig.operationsApi?.network?.securePort ? 'https://' : 'http://'}${urlObject.hostname}:${
         instanceConfig.operationsApi?.network?.securePort || instanceConfig.operationsApi?.network?.port
       }`
-    : url;
-  const applicationsApiURL = config.is_local_studio
-    ? `${instanceConfig.http?.securePort ? 'https://' : 'http://'}${hostname}:${instanceConfig.http?.securePort || instanceConfig.http?.port}`
-    : url;
+    : `${instanceConfig.operationsApi?.network?.securePort ? 'https://' : 'http://'}${hostname}:${
+        instanceConfig.operationsApi?.network?.securePort || instanceConfig.operationsApi?.network?.port
+      }`;
+  const applicationsApiURL = !config.is_local_studio
+    ? `${instanceConfig.http?.securePort ? 'https://' : 'http://'}${urlObject.hostname}:${instanceConfig.http?.securePort || instanceConfig.http?.port}`
+    : `${instanceConfig.http?.securePort ? 'https://' : 'http://'}${hostname}:${instanceConfig.http?.securePort || instanceConfig.http?.port}`;
 
   const version = useStoreState(instanceState, (s) => s.registration?.version);
   const [major, minor] = version?.split('.') || [];
