@@ -22,7 +22,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const { role_id } = useParams();
   const roles = useStoreState(instanceState, (s) => s.roles);
   const version = useStoreState(instanceState, (s) => s.registration?.version);
-  const [ major, minor ] = version?.split('.') || [];
+  const [major, minor] = version?.split('.') || [];
   const versionAsFloat = parseFloat(`${major}.${minor}`);
   const lastUpdate = useStoreState(instanceState, (s) => s.lastUpdate);
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -36,17 +36,19 @@ function JsonViewer({ showAttributes, fetchRoles }) {
   const [changed, setChanged] = useState(false);
   const [validJSON, setValidJSON] = useState(true);
   const hasStructureUser = major >= 3 && (major > 3 || minor >= 3);
-  const jsonHeight = hasStructureUser ? "calc(100vh - 440px)" : "calc(100vh - 340px)"
+  const jsonHeight = hasStructureUser ? 'calc(100vh - 440px)' : 'calc(100vh - 340px)';
 
   const icons = {
-    checked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
-    unchecked: <div style={{width: '100%', textAlign: 'center'}}>manage { versionAsFloat >= 4.2 ? 'databases' : 'schemas' }/tables</div>,
+    checked: <div style={{ width: '100%', textAlign: 'center' }}>manage {versionAsFloat >= 4.2 ? 'databases' : 'schemas'}/tables</div>,
+    unchecked: <div style={{ width: '100%', textAlign: 'center' }}>manage {versionAsFloat >= 4.2 ? 'databases' : 'schemas'}/tables</div>,
   };
 
   useAsyncEffect(async () => {
-    if (role_id && roles) {
-      const currentRolePermissions = roles.find((r) => r.id === role_id).permission;
-      const defaultStructurePermissions = Array.isArray(currentRolePermissions.structure_user) ? currentRolePermissions.structure_user.join(', ') : currentRolePermissions.structure_user || false;
+    if (role_id && roles && roles.find((r) => r.id === role_id)?.permission) {
+      const currentRolePermissions = roles.find((r) => r.id === role_id)?.permission;
+      const defaultStructurePermissions = Array.isArray(currentRolePermissions.structure_user)
+        ? currentRolePermissions.structure_user.join(', ')
+        : currentRolePermissions.structure_user || false;
       const defaultActivePermissions = await buildPermissionStructure({ auth, url, version, currentRolePermissions, showAttributes });
       setActivePermissions(defaultActivePermissions);
       setNewPermissions(defaultActivePermissions);
@@ -69,7 +71,7 @@ function JsonViewer({ showAttributes, fetchRoles }) {
     const permission = { super_user: false, ...newPermissions };
 
     if (hasStructureUser) {
-      permission.structure_user = newStructureUser === true ? true : newStructureUser ? newStructureUser.split(/[ ,]+/).filter((v) => v!=='') : false;
+      permission.structure_user = newStructureUser === true ? true : newStructureUser ? newStructureUser.split(/[ ,]+/).filter((v) => v !== '') : false;
     }
 
     const response = await alterRole({ permission, id: role_id, auth, url });
@@ -114,8 +116,8 @@ function JsonViewer({ showAttributes, fetchRoles }) {
                   }}
                   type="text"
                   id="permitted_schemas"
-                  title={`permitted ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }`}
-                  placeholder={`comma-separated ${ versionAsFloat >= 4.2 ? 'databases' : 'schemas' }, or blank for all`}
+                  title={`permitted ${versionAsFloat >= 4.2 ? 'databases' : 'schemas'}`}
+                  placeholder={`comma-separated ${versionAsFloat >= 4.2 ? 'databases' : 'schemas'}, or blank for all`}
                   value={newStructureUser === true ? '' : newStructureUser}
                   disabled={loading}
                 />

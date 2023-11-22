@@ -21,7 +21,6 @@ export const metadata = {
   link: 'charts',
   label: 'charts',
   icon: 'chart-line',
-  iconCode: 'f201',
 };
 
 function DashboardIndex() {
@@ -44,7 +43,7 @@ function DashboardIndex() {
         setLastUpdate(Date.now());
       }
     },
-    [alert, auth, compute_stack_id, customer_id]
+    [alert, auth, compute_stack_id, customer_id],
   );
 
   useEffect(() => {

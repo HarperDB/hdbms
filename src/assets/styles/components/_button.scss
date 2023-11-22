@@ -65,9 +65,21 @@
     color: $color-white !important;
   }
 
+  &.btn-outline-success {
+    background-color: $color-white !important;
+    border-color: $color-success !important;
+    color: $color-success !important;
+  }
+
   &.btn-danger {
     background-color: $color-danger !important;
     color: $color-white !important;
+  }
+
+  &.btn-outline-danger {
+    background-color: $color-white !important;
+    border-color: $color-danger !important;
+    color: $color-danger !important;
   }
 
   &.btn-grey {

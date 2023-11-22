@@ -7,7 +7,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import config from '../../../config';
 import instanceState from '../../../functions/state/instanceState';
 
-import DataTableHeader from './DatatableHeader';
+import DatatableHeader from './DatatableHeader';
 import ChartModal from './ChartModal';
 import getQueryData from '../../../functions/instance/getQueryData';
 import EmptyPrompt from './EmptyPrompt';
@@ -97,7 +97,7 @@ function Datatable({ query }) {
     <EmptyPrompt error={tableState.error} accessErrors={tableState.access_errors} loading={loading} message={loading ? false : tableState.message} cancel={cancel} />
   ) : tableState.tableData?.length ? (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-      <DataTableHeader
+      <DatatableHeader
         totalRecords={tableState.totalRecords}
         loading={loading}
         showFilter={tableState.showFilter}

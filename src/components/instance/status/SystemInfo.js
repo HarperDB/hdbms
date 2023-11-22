@@ -27,7 +27,7 @@ function SystemInfo() {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  async function fetchSystemInfo(useCache=false) {
+  async function fetchSystemInfo(useCache = false) {
     if (useCache) {
       await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
     } else {
@@ -55,31 +55,27 @@ function SystemInfo() {
   }, [auth, lastUpdate]);
 
   useInterval(() => {
-
     if (auth && autoRefresh) {
       setLastUpdate(Date.now());
     }
-
   }, config.refresh_content_interval);
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>host system</Col>
-        <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-end">
+        <Col className="text-end">
           <Button
             color="link"
             title="Update Metrics"
             className="me-2"
-            onClick={
-              async () => {
-                setLoading(true);
-                await fetchSystemInfo(false)
-                setLoading(false);
-              }
-            }> 
-              <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            onClick={async () => {
+              setLoading(true);
+              await fetchSystemInfo(false);
+              setLoading(false);
+            }}
+          >
+            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="me-2">auto</span>
@@ -147,7 +143,9 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Network Latency" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>{systemInfo?.networkLatency ? `${systemInfo?.networkLatency} ms` : 'N/A'}</div>
+                  <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>
+                    {systemInfo?.networkLatency ? `${systemInfo?.networkLatency} ms` : 'N/A'}
+                  </div>
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">

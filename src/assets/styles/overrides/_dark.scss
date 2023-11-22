@@ -27,7 +27,7 @@
   }
 
   a {
-    color: $color-lightergrey !important;
+    color: $color-lightgrey !important;
 
     &:hover {
       color: $color-white !important;
@@ -35,14 +35,10 @@
   }
 
   .card {
-    background: $color-pureblack !important;
+    background: $color-black !important;
     border: 1px solid $color-darkestgrey !important;
     box-shadow: 0 0 5px $color-pureblack !important;
     color: $color-lightgrey !important;
-
-    .card-body {
-      background: $gradient-white-lightgrey !important;
-    }
   }
 
   hr,
@@ -82,10 +78,10 @@
       border: 1px solid $color-black;
 
       .item-row {
-        background-color: transparent !important;
+        background-color: $color-black !important;
 
         &.active {
-          background-color: transparent !important;
+          background-color: $color-black !important;
         }
       }
     }
@@ -229,16 +225,6 @@
     }
   }
 
-  ::-webkit-scrollbar-track {
-    background: $color-pureblack;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: $faint-white-overlay;
-    border: 2px solid $color-pureblack;
-    border-radius: $border-radius;
-  }
-
   a,
   button,
   input,
@@ -259,4 +245,29 @@
     border: 1px solid $faint-white-overlay !important;
     color: $color-white !important;
   }
+
+  #webide {
+    .file-browser-outer-container {
+      .file-browser-scroll-container {
+        .file-browser {
+          > li {
+            border-bottom-color: $faint-white-overlay !important;
+          }
+
+          .folder {
+            .folder-container {
+              .file {
+                &.file-selected {
+                  .filename-text {
+                    color: $color-white !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

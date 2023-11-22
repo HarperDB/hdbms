@@ -16,7 +16,6 @@ export const metadata = {
   link: 'replication',
   label: 'replication',
   icon: 'cubes',
-  iconCode: 'f1e0',
 };
 
 function ClusteringIndex() {
