@@ -10,6 +10,7 @@ import addUser from '../../../../functions/api/instance/addUser';
 
 import FormValidationError from '../../../shared/FormValidationError';
 import ClusterField from './ClusterField';
+import addRole from '../../../../functions/api/instance/addRole';
 
 function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_stack_id }) {
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -19,7 +20,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
   const clusterPortMax = 65535;
 
   const [formData, setFormData] = useState({
-    clusterRole: clusterStatus?.cluster_role?.role || '', // implies that it might not exist, but it should.
+    clusterRole: clusterStatus?.cluster_role?.role,
     clusterUsername: clusterStatus?.cluster_user?.username || 'cluster_user',
     clusterPassword: clusterStatus?.cluster_user?.password || '',
     clusterPort: clusterStatus?.config_cluster_port || '',
@@ -32,7 +33,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
     return (
       clusterRole?.length > 0 &&
       clusterUsername.length > 0 &&
-      clusterPassword.length > 0 &&
+      (clusterStatus?.cluster_user?.username || clusterPassword.length > 0) &&
       clusterNodeName.length > 0 &&
       clusterPort >= clusterPortMin &&
       clusterPort <= clusterPortMax
@@ -46,6 +47,22 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
   async function enableClustering() {
     setServerResponseError(null);
 
+    // creates cluster role
+    if (!clusterStatus.cluster_role?.role) {
+      const response = await addRole({
+        auth,
+        url,
+        role: formData.clusterRole,
+        permission: {
+          cluster_user: true,
+        },
+      });
+
+      if (response.error) {
+        return setServerResponseError(response.message);
+      }
+    }
+
     // creates cluster user
     if (!clusterStatus.cluster_user) {
       const response = await addUser({
@@ -57,8 +74,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
       });
 
       if (response.error) {
-        setServerResponseError(response.message);
-        return;
+        return setServerResponseError(response.message);
       }
     }
 
@@ -86,8 +102,7 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
           });
 
     if (result.error) {
-      setServerResponseError(result.message);
-      return;
+      return setServerResponseError(result.message);
     }
 
     if (window._kmq) {
@@ -97,30 +112,38 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
     await restartInstance({ auth, url });
     setTimeout(() => setConfiguring(true), 0);
 
-    refreshStatus();
+    return refreshStatus();
   }
 
   return (
     <>
-      <ClusterField label="Cluster Role" value={formData.clusterRole} />
+      <ClusterField
+        label="Cluster Role"
+        handleChange={(clusterRole) => updateForm({ clusterRole })}
+        value={formData.clusterRole}
+        valid={formData.clusterRole.trim().length > 0}
+        validator={(value) => value.trim().length > 0}
+        editable={!clusterStatus?.cluster_role?.role}
+        addSpace={false}
+      />
 
       <ClusterField
         label="Cluster User"
         handleChange={(clusterUsername) => updateForm({ clusterUsername })}
         value={formData.clusterUsername}
+        valid={formData.clusterUsername.trim().length > 0}
         validator={(value) => value.trim().length > 0}
-        errorMessage="Please enter a cluster username"
-        editable
+        editable={!clusterStatus?.cluster_user?.username}
       />
 
       <ClusterField
         label="Cluster Password"
         type="password"
         handleChange={(clusterPassword) => updateForm({ clusterPassword })}
-        value={formData.clusterPassword}
+        value={clusterStatus?.cluster_user?.username ? '********' : formData.clusterPassword}
+        valid={clusterStatus?.cluster_user?.username || formData.clusterPassword.trim().length > 0}
         validator={(value) => value.trim().length > 0}
-        errorMessage="Please enter a password"
-        editable
+        editable={!clusterStatus?.cluster_user?.username}
         showDivider={false}
       />
 
@@ -131,25 +154,27 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         min={clusterPortMin}
         handleChange={(newClusterPort) => updateForm({ clusterPort: newClusterPort })}
         value={formData.clusterPort}
+        valid={formData.clusterPort >= clusterPortMin && formData.clusterPort <= clusterPortMax}
         validator={(value) => value >= clusterPortMin && value <= clusterPortMax}
-        errorMessage={`Please enter a port number between ${clusterPortMin} and ${clusterPortMax}`}
-        editable
+        errorMessage={`must be between ${clusterPortMin} and ${clusterPortMax}`}
+        editable={!clusterStatus?.config_cluster_port}
       />
 
       <ClusterField
         label="Cluster Node Name"
         handleChange={(newClusterNodeName) => updateForm({ clusterNodeName: newClusterNodeName })}
         value={formData.clusterNodeName}
+        valid={formData.clusterNodeName.length > 0}
         validator={(value) => value.length > 0}
-        errorMessage="Please enter a cluster node name"
-        editable
+        editable={!clusterStatus?.node_name}
       />
 
       <hr className="my-3" />
-      {serverResponseError && <FormValidationError error={serverResponseError} />}
-      <Button block color="success" disabled={!formIsValid(formData)} onClick={() => enableClustering()}>
+      <Button block color="success" disabled={!formIsValid(formData)} onClick={enableClustering}>
         Enable Clustering
       </Button>
+      <br />
+      {serverResponseError && <FormValidationError error={serverResponseError} />}
     </>
   );
 }

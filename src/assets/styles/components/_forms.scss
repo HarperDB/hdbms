@@ -3,7 +3,7 @@ select,
 textarea,
 .fake-input,
 .form-control {
-  background: $color-white !important;
+
   border: 1px solid $lighter-grey-overlay !important;
   border-radius: $border-radius;
   box-shadow: none !important;
@@ -12,12 +12,30 @@ textarea,
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
+  outline: 0;
   transition: none;
   width: 100%;
+
+  &:checked {
+    outline: 0 !important;
+  }
 
   &.is-invalid,
   &.error {
     border: 1px solid $color-danger !important;
+  }
+
+  &[readOnly],
+  &[readOnly]:active,
+  &[readOnly]:focus {
+    border: 1px solid $lightest-grey-overlay !important;
+    cursor: not-allowed !important;
+    outline-color: transparent !important;
+    user-select: none !important;
+  }
+
+  &.is-valid {
+    border: 1px solid $lightest-grey-overlay !important;
   }
 }
 
@@ -70,8 +88,6 @@ textarea {
   overflow-x: hidden;
   white-space: nowrap;
 }
-
-
 
 .subdomain-form {
   padding-right: 0;

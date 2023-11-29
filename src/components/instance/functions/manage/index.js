@@ -32,13 +32,10 @@ function getRelativeFilepath(absolutePath) {
   // filepath is <project>/path/to/file.js
 
   return absolutePath.split('/').slice(2).join('/');
-
 }
 
 function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
-
   return instanceList.reduce((memo, instance) => {
-
     const csId = instance.compute_stack_id;
     const deployTarget = instanceAuthList[csId];
 
@@ -46,28 +43,23 @@ function getDeployTargets(instanceList, instanceAuthList, thisCsId, auth) {
       return memo;
     }
 
-    const [ major, minor ] = deployTarget?.version.split('.') || [];
+    const [major, minor] = deployTarget?.version.split('.') || [];
 
     // exclude < 4.2
 
     if (parseInt(major, 10) >= 4 && parseInt(minor, 10) >= 2) {
-
       memo.push({
         isCurrentInstance: csId === thisCsId,
         auth,
-        instance
+        instance,
       });
-
     }
 
     return memo;
-
   }, []);
-
 }
 
 function ManageIndex({ refreshCustomFunctions, loading }) {
-
   const { compute_stack_id } = useParams();
   const registration = useStoreState(instanceState, (s) => s.registration);
   const { fileTree } = useStoreState(instanceState, (s) => s.custom_functions);
@@ -76,15 +68,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
   const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
   const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const instances = useStoreState(appState, (s) => s.instances);
-  const [ instanceAuths ] = useInstanceAuth({});
-  const [ editorCache, setEditorCache ] = useEditorCache({});
-  const theme = useStoreState(appState, (s) => s.theme);
-  const [ restartingInstance, setRestartingInstance ] = useState(false);
+  const [instanceAuths] = useInstanceAuth({});
+  const [editorCache, setEditorCache] = useEditorCache({});
+  const [restartingInstance, setRestartingInstance] = useState(false);
   const alert = useAlert();
 
   function removeFileFromLocalStorage({ path }) {
-
-    const updatedCache = {...editorCache};
+    const updatedCache = { ...editorCache };
     const fileKey = `${compute_stack_id}_${path}`;
 
     if (fileKey in updatedCache) {
@@ -92,7 +82,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     }
 
     setEditorCache({
-      ...updatedCache
+      ...updatedCache,
     });
   }
 
@@ -103,29 +93,25 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     setEditorCache({
       ...editorCache,
-      [fileKey]: content
+      [fileKey]: content,
     });
-
   }
 
   async function restartWithLoadingState({ auth: instanceAuth, url: instanceUrl }) {
-
     setRestartingInstance(true);
 
-    setTimeout(async () => { 
+    setTimeout(async () => {
       await restartService({
         auth: instanceAuth,
         url: instanceUrl,
-        service: 'http_workers'
+        service: 'http_workers',
       });
       setRestartingInstance(false);
     }, 100);
-
   }
 
   // save file to instance
   async function saveFileToInstance(selectedFile, restartRequired) {
-
     // handle cached situation
     // - NOTE: this 'selectedFile' is not reactive.
     // - remove cache entry for this file
@@ -137,7 +123,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       url,
       project: selectedFile.project,
       file: filepathRelativeToProjectDir,
-      payload: selectedFile.content
+      payload: selectedFile.content,
     };
 
     const { error, message } = await setComponentFile(payload);
@@ -154,15 +140,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     selectedFile.cached = false;
 
     await refreshCustomFunctions();
-
   }
 
   // eslint-disable-next-line no-empty-function
-  async function renameFolder() {
-  }
+  async function renameFolder() {}
 
   async function renameFile(newFileName, info) {
-
     const { path, content, project } = info;
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
     const newFilenameRelativePath = parentDir ? `${parentDir}/${newFileName}` : newFileName;
@@ -172,7 +155,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth,
       url,
       project,
-      file: getRelativeFilepath(path)
+      file: getRelativeFilepath(path),
     });
 
     await setComponentFile({
@@ -180,15 +163,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       url,
       project,
       file: newFilenameRelativePath,
-      payload: content
-    })
+      payload: content,
+    });
 
     refreshCustomFunctions();
-
   }
 
   async function selectNewFile(selectedFile) {
-
     const { path, project, name } = selectedFile;
     const newFile = getRelativeFilepath(path);
     const fileCacheKey = `${compute_stack_id}_${path}`;
@@ -196,15 +177,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     const isCached = fileCacheKey in editorCache;
 
     if (isCached) {
-
       return {
         cached: isCached,
         content: cachedFile,
         path,
         project,
-        name
+        name,
       };
-
     }
 
     // TODO: set file content to local storage copy if it exists.
@@ -213,11 +192,10 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth,
       url,
       project,
-      file: newFile
+      file: newFile,
     });
 
     if (error) {
-
       alert.error(content);
 
       return {
@@ -225,9 +203,8 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
         path,
         project,
         name,
-        cached: false
+        cached: false,
       };
-
     }
 
     return {
@@ -235,18 +212,16 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       content,
       path,
       project,
-      name
+      name,
     };
-
   }
 
   async function deleteFile(f) {
-
     const { error, message } = await dropComponent({
       auth,
       url,
       project: f.project,
-      file: getRelativeFilepath(f.path)
+      file: getRelativeFilepath(f.path),
     });
 
     if (error) {
@@ -254,15 +229,13 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     }
 
     await refreshCustomFunctions();
-
   }
 
   async function deletePackage({ name: project }) {
-
     const { error, message } = await dropComponent({
       auth,
       url,
-      project
+      project,
     });
 
     if (error) {
@@ -272,12 +245,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await restartService({ auth, url, service: 'http_workers' });
     await refreshCustomFunctions();
-
   }
 
   async function deleteFolder({ path, project }) {
-
-
     const targetDirpath = getRelativeFilepath(path);
 
     // if we're deleting a top-level directory, that's a project,
@@ -285,44 +255,37 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     // relative to project name as 'file'.
 
     if (targetDirpath.length > 0) {
-
       const { error, message } = await dropComponent({
         auth,
         url,
         project,
-        file: targetDirpath
+        file: targetDirpath,
       });
 
       if (error) {
         alert.error(message);
       }
-
     } else {
-
       const { error, message } = await dropComponent({
         auth,
         url,
-        project
+        project,
       });
 
       if (error) {
         alert.error(message);
       }
-
     }
 
     await refreshCustomFunctions();
-
   }
 
   async function createNewProject(newProjectName) {
-
     const { error, message } = await addComponent({
       auth,
       url,
-      project: newProjectName
+      project: newProjectName,
     });
-
 
     if (error) {
       alert.error(message);
@@ -331,11 +294,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     await restartService({ auth, url, service: 'http_workers' });
 
     await refreshCustomFunctions();
-
   }
 
   async function createNewProjectFolder(newFolderName, parentFolder) {
-
     const { path, project } = parentFolder;
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFolderName}` : newFolderName;
@@ -344,45 +305,39 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth,
       url,
       project,
-      file: relativeFilepath
-    })
+      file: relativeFilepath,
+    });
 
     if (error) {
       alert.error(message);
     }
 
     await refreshCustomFunctions();
-
   }
 
   async function installPackage(projectName, packageUrl, deployTargets) {
-
     const deployPromises = deployTargets.map(async (t) => {
-
       // TODO: check error here.
 
       const { error, message } = await deployComponent({
-
         auth: t.auth,
         url: t.instance.url,
         project: projectName,
-        packageUrl
+        packageUrl,
       });
 
       if (error) {
         alert.error(message);
       }
 
-     // TODO: what do we actually want to do about an invalid package?
+      // TODO: what do we actually want to do about an invalid package?
       // change to restartService({ auth, url, service: 'http_workers' });
       await restartService({
         auth: t.auth,
         url: t.instance.url,
-        service: 'http_workers'
+        service: 'http_workers',
       });
-
     });
-
 
     await Promise.all(deployPromises);
     await refreshCustomFunctions();
@@ -407,12 +362,9 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     */
 
     await refreshCustomFunctions();
-
-
   }
 
   async function createNewFile(newFilename, parentFolder) {
-
     const { path, project } = parentFolder;
     const relativeDirpath = getRelativeFilepath(path);
     const relativeFilepath = relativeDirpath ? `${relativeDirpath}/${newFilename}` : newFilename;
@@ -426,7 +378,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       url,
       project,
       file: relativeFilepath,
-      payload
+      payload,
     });
 
     await refreshCustomFunctions();
@@ -436,20 +388,15 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       path: [parentFolder.path, newFilename].join('/'),
       project,
     };
-
   }
 
   async function deployProject({ project, deployTarget }) {
-
-    const {
-      auth: otherInstanceAuth,
-      instance: otherInstance
-    } = deployTarget;
+    const { auth: otherInstanceAuth, instance: otherInstance } = deployTarget;
 
     const { payload } = await packageComponent({
       auth,
       url,
-      project: project.name
+      project: project.name,
     });
 
     // deploy to targetInstance
@@ -457,29 +404,27 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth: otherInstanceAuth,
       url: otherInstance.url,
       project: project.name,
-      payload
-    })
+      payload,
+    });
 
     // restart targetInstance
     await restartService({
       auth: otherInstanceAuth,
       url: otherInstance.url,
-      service: 'http_workers'
+      service: 'http_workers',
     });
 
     // restart this instance
     await restartService({
       auth,
       url,
-      service: 'http_workers'
+      service: 'http_workers',
     });
 
     await refreshCustomFunctions();
-
   }
 
   async function revertFileChanges(selectedFile) {
-
     // unset local storage version
     removeFileFromLocalStorage({ path: selectedFile.path });
 
@@ -488,7 +433,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       auth,
       url,
       project: selectedFile.project,
-      file: getRelativeFilepath(selectedFile.path)
+      file: getRelativeFilepath(selectedFile.path),
     });
 
     if (error) {
@@ -499,16 +444,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     // return canonical file content to caller
     return message;
-
   }
 
-  return supportsApplicationsAPI ?
+  return supportsApplicationsAPI ? (
     <ApplicationsEditor
-      theme={theme}
       fileTree={fileTree}
-      deployTargets={
-        getDeployTargets(instances, instanceAuths, compute_stack_id, auth)
-      }
+      deployTargets={getDeployTargets(instances, instanceAuths, compute_stack_id, auth)}
       onRevertFile={revertFileChanges}
       onFileChange={saveFileToLocalStorage}
       onFileSave={saveFileToInstance}
@@ -525,14 +466,12 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onFileRename={renameFile}
       onFolderRename={renameFolder}
       refreshingCustomFunctions={loading}
-      restartInstance={ async () =>restartWithLoadingState({auth, url}) }
+      restartInstance={async () => restartWithLoadingState({ auth, url })}
       restartingInstance={restartingInstance}
-      />
-    :
-    <CustomFunctionsEditor
-      refreshCustomFunctions={refreshCustomFunctions}
-      loading={loading} />
-
+    />
+  ) : (
+    <CustomFunctionsEditor refreshCustomFunctions={refreshCustomFunctions} loading={loading} />
+  );
 }
 
 export default ManageIndex;

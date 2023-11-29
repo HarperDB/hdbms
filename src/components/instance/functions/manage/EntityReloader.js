@@ -14,7 +14,7 @@ function EntityReloader({ loading, refreshCustomFunctions, restarting }) {
     <span className="structure-reloader d-block text-center mb-4">
       <Button disabled={loading} color="link" onClick={refreshCustomFunctions}>
         <span className="me-2">refresh projects</span>
-        <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+        <i title="Refresh Endpoint Files" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
       </Button>
       <span className="mx-3 text">|</span>
       <Button disabled={restarting} color="link" onClick={() => restartService({ auth, url, service: 'custom_functions' })} className="me-2">

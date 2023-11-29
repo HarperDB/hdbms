@@ -1,42 +1,49 @@
 import React, { useState } from 'react';
-import { Row, Col, Input } from 'reactstrap';
+import { Input } from 'reactstrap';
 import cn from 'classnames';
-import FormValidationError from '../../../shared/FormValidationError';
 
-function ClusterField({ label, value, type = 'text', max = null, min = null, editable = false, handleChange, validator = () => true, errorMessage = null, showDivider = true }) {
+function ClusterField({
+  label,
+  value,
+  type = 'text',
+  max = null,
+  min = null,
+  editable = false,
+  handleChange,
+  validator = () => true,
+  errorMessage = 'is required',
+  addSpace = true,
+  valid = false,
+}) {
   const [error, setError] = useState(null);
 
   return editable ? (
     <>
-      {showDivider && <hr className="my-3" />}
-      <div className="text-nowrap mt-2 mb-1">{`${label}`}</div>
+      {addSpace && <br />}
+      <div className={cn('text-nowrap mt-2 mb-1', { 'text-danger': error })}>
+        {label} {error}
+      </div>
       <Input
         id={`cluster-field-${label}`}
         type={type}
-        className={cn('cluster-field', { error })}
+        className={cn('cluster-field form-control', { error })}
         max={max}
         min={min}
         defaultValue={value}
+        valid={valid}
         onChange={(e) => handleChange(e.target.value)}
         onBlur={(e) => {
           const isValid = validator(e.target.value);
           setError(isValid ? null : errorMessage);
         }}
       />
-      {error && <FormValidationError error={error} />}
     </>
   ) : (
-    <Row>
-      <Col xs="12">
-        <hr className="my-3" />
-      </Col>
-      <Col xs="10" className="text">
-        {`${label}: ${value}`}
-      </Col>
-      <Col xs="2" className="text text-end">
-        <i className="fa fa-check-circle fa-lg text-success" />
-      </Col>
-    </Row>
+    <>
+      {addSpace && <br />}
+      <div className="text-nowrap mt-2 mb-1">{label}</div>
+      <Input readOnly valid type={type} value={value} />
+    </>
   );
 }
 

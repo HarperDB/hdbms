@@ -3,45 +3,36 @@ import { useDebounce } from 'use-debounce';
 import cn from 'classnames';
 import SelectDropdown from 'react-select';
 
-import {
-
-  findNpmPackageName,
-  getNpmDistTags
-
-} from './lib';
+import { findNpmPackageName, getNpmDistTags } from './lib';
 
 export default function NpmPackageSelector({ pkg, setPackageSpec }) {
-
   /*
    * packageQuery is what's in the input field (@scope/package)
    * matchingPackage is the name of the package that matches the search exactly
    */
 
-  const [ packageQuery, setPackageQuery ] = useState('');
-  const [ debouncedPackageQuery ] = useDebounce(packageQuery, 300);
-  const [ distTags, setDistTags ] = useState('');
-  const [ selectedDistTag, setSelectedDistTag ] = useState('');
-  const [ matchingPackage, setMatchingPackage ] = useState('');
+  const [packageQuery, setPackageQuery] = useState('');
+  const [debouncedPackageQuery] = useDebounce(packageQuery, 300);
+  const [distTags, setDistTags] = useState('');
+  const [selectedDistTag, setSelectedDistTag] = useState('');
+  const [matchingPackage, setMatchingPackage] = useState('');
 
   // result is a packageSepc
   // for package query status icons
-  const [ loadingTags, setLoadingTags ] = useState(false);
-  const [ found, setFound ] = useState(false);
-
+  const [loadingTags, setLoadingTags] = useState(false);
+  const [found, setFound] = useState(false);
 
   function updatePackageQuery(e) {
     setPackageQuery(e.target.value);
   }
 
-  function updateSelectedDistTag({value}) {
+  function updateSelectedDistTag({ value }) {
     setSelectedDistTag(value);
   }
 
   useEffect(() => {
-
     setPackageQuery(pkg?.package || '');
   }, [pkg]);
-
 
   // searches npm using current, debounced query
   // returns an exactly matching package name if it exists
@@ -59,84 +50,65 @@ export default function NpmPackageSelector({ pkg, setPackageSpec }) {
   useEffect(updatePackageSpec, [matchingPackage, selectedDistTag, setPackageSpec]);
 
   function updatePackageAndTags() {
-
-
     if (debouncedPackageQuery) {
-
       setLoadingTags(true);
-      findNpmPackageName(debouncedPackageQuery).then(packageName => {
+      findNpmPackageName(debouncedPackageQuery)
+        .then((packageName) => {
+          setLoadingTags(false);
+          setFound(!!packageName);
+          setMatchingPackage(packageName);
 
-        setLoadingTags(false);
-        setFound(!!packageName);
-        setMatchingPackage(packageName);
-
-
-        if (packageName) {
-
-          getNpmDistTags(packageName).then(tags => {
-            setDistTags(tags);
-            setSelectedDistTag(null);
-          }).catch(e => {
-            throw e;
-          });
-
-        }
-
-      }).catch(() => {
-        setLoadingTags(false);
-      });
-
+          if (packageName) {
+            getNpmDistTags(packageName)
+              .then((tags) => {
+                setDistTags(tags);
+                setSelectedDistTag(null);
+              })
+              .catch((e) => {
+                throw e;
+              });
+          }
+        })
+        .catch(() => {
+          setLoadingTags(false);
+        });
     } else {
       setMatchingPackage(null);
       setDistTags(null);
       setSelectedDistTag(null);
     }
-
   }
 
   useEffect(updatePackageAndTags, [debouncedPackageQuery]);
 
   return (
     <>
-      <div className="package-install-npm-lookup">
-        <label className="form-label">Npm Package:</label>
-        <div className="package-install-npm-query-container">
-          <input
-            className="package-install-query-input"
-            title="enter an npm package specifier"
-            value={packageQuery}
-            placeholder="[@scope]/package"
-            onChange={ updatePackageQuery } />
-          <span className="search-status-icon-container">
-            <i className={
-              cn("package-install-query-status fas", { 
-                "fa-spinner fa-spin loading": loadingTags, 
-                "fa-check found": debouncedPackageQuery.length > 0 && found,
-                "fa-times not-found": debouncedPackageQuery.length > 0 && !(loadingTags || found), 
-                "fa-check not-searching": debouncedPackageQuery.length === 0
-              })
-             } />
-          </span>
+      <div className="input-group">
+        <input className="mt-2 form-control" title="enter an npm package specifier" value={packageQuery} placeholder="Enter the [@scope]/package" onChange={updatePackageQuery} />
+        <div className="input-group-append">
+          <i
+            className={cn('input-group-text fa mt-2', {
+              'fa-spinner fa-spin loading': loadingTags,
+              'fa-check found': debouncedPackageQuery.length > 0 && found,
+              'fa-times not-found': debouncedPackageQuery.length > 0 && !(loadingTags || found),
+              'fa-check not-searching': debouncedPackageQuery.length === 0,
+            })}
+          />
         </div>
       </div>
-      <div className="package-install-npm-tags-container">
-        <label className="form-label">Choose a Tag:</label>
-        <SelectDropdown
-          className="react-select-container npm-tag-select"
-          classNamePrefix="react-select"
-          isDisabled={ !packageQuery }
-          placeholder="choose a tag"
-          disabled={ !distTags }
-          onChange={ updateSelectedDistTag }
-          options={
-            Object.entries(distTags || []).map(([tagName, tagValue]) => ({
-              label: `${tagName} (${tagValue})`,
-              value: tagName
-            }))
-          } />
 
-      </div>
+      <SelectDropdown
+        className="react-select-container mt-2"
+        classNamePrefix="react-select"
+        isDisabled={!packageQuery}
+        placeholder="Choose a tag"
+        disabled={!distTags}
+        onChange={updateSelectedDistTag}
+        options={Object.entries(distTags || []).map(([tagName, tagValue]) => ({
+          label: `${tagName} (${tagValue})`,
+          value: tagName,
+        }))}
+      />
     </>
   );
-
 }

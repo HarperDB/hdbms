@@ -11,7 +11,7 @@ function EntityManager({ items, activeItem, activeSchema = false, showForm, base
   const [isDropping, toggleDropItem] = useState(false);
   const [isCreating, toggleCreate] = useState(false);
   const registration = useStoreState(instanceState, (s) => s.registration);
-  const [ major, minor ] = registration?.version.split('.') || []; 
+  const [major, minor] = registration?.version?.split('.') || [];
   const versionAsFloat = parseFloat(`${major}.${minor}`);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ function EntityManager({ items, activeItem, activeSchema = false, showForm, base
           </CardBody>
         ) : items && !items.length && !showForm ? (
           <CardBody>
-            <div className="py-3 text-center no-content">no visible { versionAsFloat >= 4.2 ? 'databases' : 'schemas' } or tables</div>
+            <div className="py-3 text-center no-content">no visible {versionAsFloat >= 4.2 ? 'databases' : 'schemas'} or tables</div>
           </CardBody>
         ) : null}
       </Card>

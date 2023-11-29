@@ -7,10 +7,9 @@ export const metadata = {
   link: 'examples',
   label: 'example code',
   icon: 'code',
-  iconCode: 'f121',
-}
+};
 function InstanceExamples() {
-  return <Examples />
+  return <Examples />;
 }
 
 export default InstanceExamples;

@@ -20,7 +20,6 @@ function CodeEditor() {
   const [originalCode, setOriginalCode] = useState('');
 
   const setEditorToFile = useCallback(async () => {
-
     if (project && type && file && file !== 'undefined') {
       const endpoint_code = await getCustomFunction({ auth, url, project, type, file });
       setCode(endpoint_code?.message);
@@ -59,7 +58,7 @@ function CodeEditor() {
         <Col className="text-end">
           <Button onClick={setEditorToFile} color="link" className="me-2">
             <span className="me-2">reload</span>
-            <i title="Reload File" className="fa fa-refresh" />
+            <i title="Reload File" className="fa fa-sync-alt" />
           </Button>
           <span className="mx-3 text">|</span>
           <Button onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/functions/deploy/${project}`)} color="link" className="me-2">
@@ -72,32 +71,16 @@ function CodeEditor() {
         {code ? (
           <CardBody>
             <div className="code-editor-holder">
-              <Editor
-                height="100%"
-                defaultLanguage="javascript"
-                value={code}
-                theme="vs-dark"
-                onChange={ setCode } />
+              <Editor height="100%" defaultLanguage="javascript" value={code} theme="vs-dark" onChange={setCode} />
             </div>
             <Row>
               <Col md="6" className="mt-2">
-                <Button block color="grey"
-                    title="Revert Code to Last Saved State"
-                    disabled={ code === originalCode }
-                    onClick={ setEditorToFile }
-                    id="reset"
-                    >
+                <Button block color="grey" title="Revert Code to Last Saved State" disabled={code === originalCode} onClick={setEditorToFile} id="reset">
                   <i className="fa fa-undo" />
                 </Button>
               </Col>
               <Col md="6" className="mt-2">
-
-                <Button 
-                    block
-                    title="Save Code to Instance"
-                    color="success"
-                    id="addEditItem"
-                    onClick={handleSubmit}>
+                <Button block title="Save Code to Instance" color="success" id="addEditItem" onClick={handleSubmit}>
                   <i className="fa fa-save" />
                 </Button>
               </Col>

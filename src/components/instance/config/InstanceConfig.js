@@ -11,7 +11,7 @@ function InstanceConfig({ instanceConfig }) {
   return (
     <JSONInput
       placeholder={instanceConfig}
-      height="calc(100vh - 580px)"
+      height="calc(100vh - 566px)"
       theme="light_mitsuketa_tribute"
       viewOnly
       colors={{
@@ -25,6 +25,7 @@ function InstanceConfig({ instanceConfig }) {
       }}
       style={{
         warningBox: { display: 'none' },
+        body: { padding: '8px 0 0 0' },
       }}
       locale={locale}
       width="100%"
