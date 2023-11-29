@@ -11,7 +11,7 @@ export default function DefaultWindow({ active, fileTree, AddProjectButton, Inst
           <li className="default-window-option"><AddProjectButton /></li>
           <li className="default-window-option"><InstallPackageButton /></li>
           {
-            fileTree?.entries.length > 0 &&
+            fileTree?.entries?.length > 0 &&
             <li className="default-window-option">
               <i className="menu-pointer-icon fa fa-arrow-left" /> <span>Choose a file from the menu on the left</span>
             </li>
