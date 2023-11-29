@@ -4,6 +4,7 @@ import { InstallPackageButton } from '../EditorMenu';
 
 export default function DefaultWindow({ active, AddProjectButtonClick, InstallPackageButtonClick }) {
   return !active ? null : (
+
     <div className="content-window">
       <h4 className="mb-5">Add A New Application</h4>
       <AddProjectButton text="Create A New Application Using The Default Template" extraClasses="btn btn-block btn-success" onClick={AddProjectButtonClick} />
