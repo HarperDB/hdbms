@@ -54,7 +54,8 @@ function Deploy() {
           now_has_current_project = Object.keys(instance_custom_functions).includes(project);
         }
 
-        tableData.map((instance) => {
+        const newTableData = [...tableData];
+        newTableData.map((instance) => {
           if (instance.compute_stack_id === destination_compute_stack_id) {
             instance.custom_functions_status = custom_functions_status;
             instance.has_current_project = now_has_current_project;
@@ -62,7 +63,7 @@ function Deploy() {
           return instance;
         });
 
-        setTableData(tableData);
+        setTableData(newTableData);
         setLoading({ [destination_compute_stack_id]: null });
       }
     },

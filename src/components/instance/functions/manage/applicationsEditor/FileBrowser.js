@@ -47,7 +47,7 @@ function ProjectIcon() {
   return <i className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ toggleClosed }) {
-  return <i onClick={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
+  return <i onClick={toggleClosed} onKeyDown={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
 }
 
 function FiletypeIcon({ extension }) {
@@ -166,11 +166,7 @@ function Folder({ directoryEntry, userOnSelect, onFolderSelect, onDeployProject,
   // top-level dir === package
   // FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
   if (directoryEntry.path.split('/').length === 2) {
-    if (directoryEntry.package) {
-      Icon = () => PackageIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
-    } else {
-      Icon = () => ProjectIcon({ toggleClosed: () => setOpen(!open) });
-    }
+    Icon = () => ProjectIcon();
   } else if (directoryEntry.entries) {
     Icon = () => FolderIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
   } else {

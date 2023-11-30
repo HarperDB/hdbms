@@ -118,14 +118,6 @@ function TopNav({ isMaintenance, loggedIn = false }) {
               </NavItem>
             </>
           )}
-          {!config.is_local_studio && (
-            <li className="nav-item">
-              <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
-                <i className="fas fa-tools" />
-                <span className="d-none d-lg-inline-block">&nbsp;docs</span>
-              </a>
-            </li>
-          )}
           {themes.length > 1 && (
             <NavItem>
               <Button
@@ -140,6 +132,14 @@ function TopNav({ isMaintenance, loggedIn = false }) {
                 <span className="d-none d-lg-inline-block">&nbsp;theme</span>
               </Button>
             </NavItem>
+          )}
+          {!config.is_local_studio && (
+            <li className="nav-item">
+              <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
+                <i className="fas fa-tools" />
+                <span className="d-none d-lg-inline-block">&nbsp;docs</span>
+              </a>
+            </li>
           )}
           <NavItem>
             {loggedIn ? (

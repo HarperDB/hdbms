@@ -36,7 +36,6 @@ const ResetPassword = lazy(() => import(/* webpackChunkName: "resetPassword" */ 
 const UpdatePassword = lazy(() => import(/* webpackChunkName: "updatePassword" */ './auth/UpdatePassword'));
 const Organization = lazy(() => import(/* webpackChunkName: "organization" */ './organization'));
 const Organizations = lazy(() => import(/* webpackChunkName: "organizations" */ './organizations'));
-const Resources = lazy(() => import(/* webpackChunkName: "resources" */ './resources'));
 const Instances = lazy(() => import(/* webpackChunkName: "instances" */ './instances'));
 const Instance = lazy(() => import(/* webpackChunkName: "instance" */ './instance'));
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
@@ -147,7 +146,6 @@ function App() {
               <Routes>
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
                 <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
-                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
                   <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
                   <Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
@@ -165,7 +163,6 @@ function App() {
                 <Route element={<SignIn />} path="/" />
                 <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
                 <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
-                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>
