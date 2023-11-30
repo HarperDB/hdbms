@@ -10,13 +10,6 @@ import Loader from '../../shared/Loader';
 import listRoles from '../../../functions/api/instance/listRoles';
 import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
-export const metadata = {
-  path: `roles/:role_id?`,
-  link: 'roles',
-  label: 'roles',
-  icon: 'check-square',
-};
-
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));
 
 const defaultState = {

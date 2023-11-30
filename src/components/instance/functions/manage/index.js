@@ -16,8 +16,8 @@ import restartService from '../../../../functions/api/instance/restartService';
 import useInstanceAuth from '../../../../functions/state/instanceAuths';
 import useEditorCache from '../../../../functions/state/editorCache';
 
-import ApplicationsEditor from '../../../shared/webide';
-import CustomFunctionsEditor from './CustomFunctionsEditor';
+import ApplicationsEditor from './applicationsEditor';
+import Index from './customFunctionsEditor';
 
 /*
  * Parse the relative path, which is what the components api expects.
@@ -470,7 +470,7 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       restartingInstance={restartingInstance}
     />
   ) : (
-    <CustomFunctionsEditor refreshCustomFunctions={refreshCustomFunctions} loading={loading} />
+    <Index refreshCustomFunctions={refreshCustomFunctions} loading={loading} />
   );
 }
 

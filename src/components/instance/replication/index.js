@@ -11,13 +11,6 @@ import Loader from '../../shared/Loader';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import checkClusterStatus from '../../../functions/instance/clustering/checkClusterStatus';
 
-export const metadata = {
-  path: `replication`,
-  link: 'replication',
-  label: 'replication',
-  icon: 'cubes',
-};
-
 function ClusteringIndex() {
   const { compute_stack_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth, [compute_stack_id]);

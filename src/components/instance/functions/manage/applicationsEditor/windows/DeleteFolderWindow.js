@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonWithLoader from '../../ButtonWithLoader';
+import ButtonWithLoader from '../../../../../shared/ButtonWithLoader';
 
 export default function DeleteFolderWindow({ active, selectedFolder, onConfirm, onCancel }) {
   if (!active) {

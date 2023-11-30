@@ -2,9 +2,9 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 
-import instanceState from '../../../../functions/state/instanceState';
+import instanceState from '../../../../../functions/state/instanceState';
 
-import restartService from '../../../../functions/api/instance/restartService';
+import restartService from '../../../../../functions/api/instance/restartService';
 
 function EntityReloader({ loading, refreshCustomFunctions, restarting }) {
   const auth = useStoreState(instanceState, (s) => s.auth);

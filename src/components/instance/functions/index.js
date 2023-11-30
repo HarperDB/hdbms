@@ -11,13 +11,6 @@ import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/functions/buildCustomFunctions';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 
-export const metadata = {
-  path: `functions/:action?/:project?/:type?/:file?`,
-  link: 'functions',
-  label: 'functions',
-  icon: 'project-diagram',
-};
-
 function CustomFunctionsIndex() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);

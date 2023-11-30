@@ -5,10 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 
-import instanceState from '../../../../functions/state/instanceState';
-import setCustomFunction from '../../../../functions/api/instance/setCustomFunction';
-import restartService from '../../../../functions/api/instance/restartService';
-import getCustomFunction from '../../../../functions/api/instance/getCustomFunction';
+import instanceState from '../../../../../functions/state/instanceState';
+import setCustomFunction from '../../../../../functions/api/instance/setCustomFunction';
+import restartService from '../../../../../functions/api/instance/restartService';
+import getCustomFunction from '../../../../../functions/api/instance/getCustomFunction';
 
 function CodeEditor() {
   const navigate = useNavigate();

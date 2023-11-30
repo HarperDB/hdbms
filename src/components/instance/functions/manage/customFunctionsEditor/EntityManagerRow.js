@@ -4,11 +4,11 @@ import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import instanceState from '../../../../functions/state/instanceState';
-import buildCustomFunctions from '../../../../functions/instance/functions/buildCustomFunctions';
-import dropCustomFunction from '../../../../functions/api/instance/dropCustomFunction';
-import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
-import restartService from '../../../../functions/api/instance/restartService';
+import instanceState from '../../../../../functions/state/instanceState';
+import buildCustomFunctions from '../../../../../functions/instance/functions/buildCustomFunctions';
+import dropCustomFunction from '../../../../../functions/api/instance/dropCustomFunction';
+import dropCustomFunctionProject from '../../../../../functions/api/instance/dropCustomFunctionProject';
+import restartService from '../../../../../functions/api/instance/restartService';
 
 function EntityManagerRow({ item, baseUrl, isActive, toggleDropItem, isDropping, itemType, restarting }) {
   const { project } = useParams();

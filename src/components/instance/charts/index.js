@@ -16,13 +16,6 @@ import config from '../../../config';
 
 let controller;
 
-export const metadata = {
-  path: `charts`,
-  link: 'charts',
-  label: 'charts',
-  icon: 'chart-line',
-};
-
 function DashboardIndex() {
   const { customer_id } = useParams();
   const navigate = useNavigate();

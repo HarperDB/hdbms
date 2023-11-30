@@ -165,11 +165,4 @@ function BrowseIndex() {
   );
 }
 
-export const metadata = {
-  path: `browse/:schema?/:table?/:action?/:hash?`,
-  link: 'browse',
-  label: 'browse',
-  icon: 'list',
-};
-
 export default BrowseIndex;

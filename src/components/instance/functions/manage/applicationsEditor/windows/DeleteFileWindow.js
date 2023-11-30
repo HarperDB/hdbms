@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonWithLoader from '../../ButtonWithLoader';
+import ButtonWithLoader from '../../../../../shared/ButtonWithLoader';
 
 export default function DeleteFileWindow({ active, selectedFile, onConfirm, onCancel }) {
   if (!active) {

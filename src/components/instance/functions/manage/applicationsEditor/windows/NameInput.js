@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import cn from 'classnames';
-import ButtonWithLoader from '../../ButtonWithLoader';
+import ButtonWithLoader from '../../../../../shared/ButtonWithLoader';
 
 export default function NameInput({ onCancel, onConfirm, onEnter, value, type, validate = () => true }) {
   const [name, setName] = useState(value || '');

@@ -4,19 +4,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 
-import appState from '../../../../functions/state/appState';
-import instanceState from '../../../../functions/state/instanceState';
+import appState from '../../../../../functions/state/appState';
+import instanceState from '../../../../../functions/state/instanceState';
 
-import DataTable from '../../../shared/DataTable';
-import buildCustomFunctionDeployColumns from '../../../../functions/instance/clustering/deployRows';
-import useInstanceAuth from '../../../../functions/state/instanceAuths';
-import packageCustomFunctionProject from '../../../../functions/api/instance/packageCustomFunctionProject';
-import customFunctionsStatus from '../../../../functions/api/instance/customFunctionsStatus';
-import getCustomFunctions from '../../../../functions/api/instance/getCustomFunctions';
-import deployCustomFunctionProject from '../../../../functions/api/instance/deployCustomFunctionProject';
-import dropCustomFunctionProject from '../../../../functions/api/instance/dropCustomFunctionProject';
-import installNodeModules from '../../../../functions/api/instance/installNodeModules';
-import restartService from '../../../../functions/api/instance/restartService';
+import DataTable from '../../../../shared/DataTable';
+import buildCustomFunctionDeployColumns from '../../../../../functions/instance/clustering/deployRows';
+import useInstanceAuth from '../../../../../functions/state/instanceAuths';
+import packageCustomFunctionProject from '../../../../../functions/api/instance/packageCustomFunctionProject';
+import customFunctionsStatus from '../../../../../functions/api/instance/customFunctionsStatus';
+import getCustomFunctions from '../../../../../functions/api/instance/getCustomFunctions';
+import deployCustomFunctionProject from '../../../../../functions/api/instance/deployCustomFunctionProject';
+import dropCustomFunctionProject from '../../../../../functions/api/instance/dropCustomFunctionProject';
+import installNodeModules from '../../../../../functions/api/instance/installNodeModules';
+import restartService from '../../../../../functions/api/instance/restartService';
 
 const defaultTableState = { filtered: [], sorted: [], page: 0, totalPages: 1, pageSize: 20, autoRefresh: false, showFilter: false, lastUpdate: false };
 
@@ -66,7 +66,7 @@ function Deploy() {
         setLoading({ [destination_compute_stack_id]: null });
       }
     },
-    [instanceAuths, project, tableData]
+    [instanceAuths, project, tableData],
   );
 
   const handleClick = useCallback(
@@ -110,7 +110,7 @@ function Deploy() {
         }, 1000);
       }
     },
-    [file, instanceAuths, payload, project, tableData, updateInstanceCFStatus, skipNodeModules]
+    [file, instanceAuths, payload, project, tableData, updateInstanceCFStatus, skipNodeModules],
   );
 
   useAsyncEffect(async () => {
@@ -135,7 +135,7 @@ function Deploy() {
             return { ...instance, custom_functions_status, has_auth: true, has_current_project: Object.keys(instance_custom_functions).includes(project) };
           }
           return { ...instance, custom_functions_status: false };
-        })
+        }),
       );
       setTableData(loadedInstances);
     }

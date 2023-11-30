@@ -8,8 +8,8 @@ import { isValidProjectName, parsePackageType } from './lib';
 import GithubRepoSelector from './GithubRepoSelector';
 import NpmPackageSelector from './NpmPackageSelector';
 import UrlInstallField from './UrlInstallField';
-import config from '../../../../config';
-import instanceState from '../../../../functions/state/instanceState';
+import config from '../../../../../../config';
+import instanceState from '../../../../../../functions/state/instanceState';
 
 export default function PackageInstallWindow({ selectedPackage, onConfirm, onCancel, deployTargets: availableDeployTargets, active }) {
   const defaultPackageType = false;

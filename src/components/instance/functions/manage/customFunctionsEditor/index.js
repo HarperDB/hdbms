@@ -5,19 +5,19 @@ import { useStoreState } from 'pullstate';
 import { useParams, useNavigate } from 'react-router-dom';
 import useInterval from 'use-interval';
 
-import instanceState from '../../../../functions/state/instanceState';
+import instanceState from '../../../../../functions/state/instanceState';
 
 import EntityManager from './EntityManager';
 import CodeEditor from './CodeEditor';
 import Deploy from './Deploy';
-import EmptyPrompt from '../../../shared/EmptyPrompt';
-import ErrorFallback from '../../../shared/ErrorFallback';
-import addError from '../../../../functions/api/lms/addError';
+import EmptyPrompt from '../../../../shared/EmptyPrompt';
+import ErrorFallback from '../../../../shared/ErrorFallback';
+import addError from '../../../../../functions/api/lms/addError';
 import EntityReloader from './EntityReloader';
 import StaticEntityStatus from './StaticEntityStatus';
-import CopyableText from '../../../shared/CopyableText';
+import CopyableText from '../../../../shared/CopyableText';
 
-function CustomFunctionsEditor({ refreshCustomFunctions, loading }) {
+function Index({ refreshCustomFunctions, loading }) {
   const { customer_id, compute_stack_id, action = 'edit', project, file } = useParams();
   const navigate = useNavigate();
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
@@ -94,11 +94,7 @@ function CustomFunctionsEditor({ refreshCustomFunctions, loading }) {
                 restarting={restarting}
                 showForm={action === 'edit'}
               />
-              { supportsStaticRoutes && <StaticEntityStatus
-                url={cf_server_url}
-                project={project}
-                fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} /> }
-
+              {supportsStaticRoutes && <StaticEntityStatus url={cf_server_url} project={project} fileCount={(project && custom_functions?.endpoints[project]?.static) || 0} />}
             </>
           )}
           <hr className="mt-0" />
@@ -125,4 +121,4 @@ function CustomFunctionsEditor({ refreshCustomFunctions, loading }) {
   );
 }
 
-export default CustomFunctionsEditor;
+export default Index;
