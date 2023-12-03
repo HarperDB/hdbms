@@ -29,7 +29,7 @@ function Payment() {
   const isLocal = newInstance.is_local;
   const isWavelength = newInstance.is_wavelength;
   const computeProduct = products[isLocal ? 'local_compute' : isWavelength ? 'wavelength_compute' : 'cloud_compute'].find(
-    (p) => p.value.stripe_plan_id === newInstance.stripe_plan_id
+    (p) => p.value.stripe_plan_id === newInstance.stripe_plan_id,
   );
   const storageProduct = isLocal ? { price: 0 } : products.cloud_storage.find((p) => p.value.data_volume_size === newInstance.data_volume_size);
 
@@ -105,7 +105,13 @@ function Payment() {
           <div className="mb-4">
             {computeProduct?.value?.compute_price ? (
               <div className="mb-2">
-                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>.
+                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>
+                {computeProduct?.value?.trial_period_days && (
+                  <span>
+                    ,<span className="text-danger"> which will begin after your {computeProduct?.value?.trial_period_days} free trial</span>
+                  </span>
+                )}
+                .
               </div>
             ) : null}
             {storageProduct?.value?.storage_price ? (

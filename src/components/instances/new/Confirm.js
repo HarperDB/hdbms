@@ -33,10 +33,10 @@ function Confirm() {
   const totalPriceString = allPrePaid
     ? 'PREPAID'
     : totalPrice
-    ? `$${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
-    : somePrePaid
-    ? 'PREPAID / FREE'
-    : 'FREE';
+      ? `$${commaNumbers(totalPrice.toFixed(2))}/${newInstance.compute_interval}`
+      : somePrePaid
+        ? 'PREPAID / FREE'
+        : 'FREE';
   const analyticsProductsArray = [{ name: 'compute', id: newInstance.compute_ram_string, price: newInstance?.compute_price || 0 }];
   if (!newInstance.is_local) {
     analyticsProductsArray.push({ name: 'storage', id: newInstance.data_volume_size_string, price: newInstance?.storage_price || 0 });
@@ -171,10 +171,23 @@ function Confirm() {
               <b>{totalPriceString}</b>
             </Col>
           </Row>
+          {newInstance.trial_period_days && (
+            <>
+              <hr />
+              <Row>
+                <Col sm="8" className="text-nowrap text-grey">
+                  Free Trial Period
+                </Col>
+                <Col sm="4" className="text-sm-end text-nowrap">
+                  <b>{newInstance.trial_period_days} Days</b>
+                </Col>
+              </Row>
+            </>
+          )}
         </CardBody>
       </Card>
       <hr className="my-3" />
-      { is_unpaid ? (
+      {is_unpaid ? (
         <Unpaid />
       ) : unlimited_local_install ? (
         <UnlimitedEnterprise />

@@ -3,7 +3,6 @@ import getProducts from '../api/lms/getProducts';
 import getRegions from '../api/lms/getRegions';
 import getWavelengthRegions from '../api/lms/getWavelengthRegions';
 import getAkamaiRegions from '../api/lms/getAkamaiRegions';
-import getPostManCollection from '../examples/getPostManCollection';
 import appState from '../state/appState';
 import refreshUser from './refreshUser';
 import config from '../../config';
@@ -33,7 +32,6 @@ export default ({ currentPath, navigate, setFetchingUser, persistedUser, setPers
     getRegions();
     getWavelengthRegions();
     getAkamaiRegions();
-    getPostManCollection();
 
     return appState.update((s) => {
       s.auth = { email: persistedUser?.email, pass: persistedUser?.pass };

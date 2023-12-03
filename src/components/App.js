@@ -22,7 +22,6 @@ import getProducts from '../functions/api/lms/getProducts';
 import getRegions from '../functions/api/lms/getRegions';
 import getWavelengthRegions from '../functions/api/lms/getWavelengthRegions';
 import getCurrentVersion from '../functions/api/lms/getCurrentVersion';
-import getPostManCollection from '../functions/examples/getPostManCollection';
 import checkVersion from '../functions/app/checkVersion';
 import init from '../functions/app/init';
 import refreshUser from '../functions/app/refreshUser';
@@ -67,7 +66,6 @@ function App() {
   const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
   const akamaiRegions = useStoreState(appState, (s) => s.akamaiRegions);
   const version = useStoreState(appState, (s) => s.version);
-  const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
   const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
@@ -123,7 +121,6 @@ function App() {
     if (!regions) getRegions();
     if (!wavelengthRegions) getWavelengthRegions();
     if (!akamaiRegions) getAkamaiRegions();
-    if (!postmanCollection) getPostManCollection();
   }, config.refresh_content_interval);
 
   useInterval(() => {

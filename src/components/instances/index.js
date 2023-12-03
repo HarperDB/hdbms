@@ -39,9 +39,6 @@ function InstancesIndex() {
   const [instanceAuths] = useInstanceAuth({});
 
   useEffect(() => {
-    if (isOrgOwner && window.userGuiding && instances && !instances.length) {
-      window.userGuiding.previewGuide(config.user_guide_id, { checkHistory: true });
-    }
     if (action === 'login') {
       alert.error('Please log in to that instance');
     }
@@ -72,7 +69,7 @@ function InstancesIndex() {
 
   useInterval(
     () => instances?.length && instances.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),
-    config.refresh_content_interval
+    config.refresh_content_interval,
   );
 
   useEffect(() => {
@@ -90,7 +87,7 @@ function InstancesIndex() {
   useAsyncEffect(
     () => setMounted(true),
     () => setMounted(false),
-    []
+    [],
   );
 
   return (
@@ -98,8 +95,8 @@ function InstancesIndex() {
       <SubNav refreshInstances={refreshInstances} />
       {isOrgUser && instances ? (
         <>
-          { unlimited_local_install && <UnlimitedEnterprise /> }
-          { is_unpaid  && <Unpaid /> }
+          {unlimited_local_install && <UnlimitedEnterprise />}
+          {is_unpaid && <Unpaid />}
           <Row>
             {isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
             <InstanceList />
