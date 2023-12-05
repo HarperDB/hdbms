@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import ReactMonacoEditor from '@monaco-editor/react';
+import ReactMonacoEditor, { loader } from '@monaco-editor/react';
+
+loader.init().then((monaco) => {
+  monaco.editor.defineTheme('hdb', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [],
+    colors: {
+      'editor.background': '#111111',
+    },
+  });
+});
 
 function parseFileExtension(filename) {
   const parts = (filename || '')?.split('.');
@@ -38,7 +49,7 @@ function Editor({ active, file, onFileChange }) {
       height="100%"
       language={language}
       value={file?.content || ''}
-      theme="vs-dark"
+      theme="hdb"
       onChange={onFileChange}
       options={{
         readOnly: file?.readOnly,

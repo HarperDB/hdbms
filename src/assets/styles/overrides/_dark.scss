@@ -35,7 +35,7 @@
   }
 
   .card {
-    background: $color-black !important;
+    background: $faintest-white-overlay !important;
     border: 1px solid $color-darkestgrey !important;
     box-shadow: 0 0 5px $color-pureblack !important;
     color: $color-lightgrey !important;
@@ -78,10 +78,10 @@
       border: 1px solid $color-black;
 
       .item-row {
-        background-color: $color-black !important;
+        background-color: $faintest-white-overlay !important;
 
         &.active {
-          background-color: $color-black !important;
+          background-color: $faintest-white-overlay !important;
         }
       }
     }
@@ -249,6 +249,7 @@
   #webide {
     .file-browser-outer-container {
       .file-browser-scroll-container {
+        background: $faintest-white-overlay !important;
         .file-browser {
           > li {
             border-bottom-color: $faint-white-overlay !important;
@@ -267,6 +268,9 @@
           }
         }
       }
+    }
+    .editor-window {
+      background: $faintest-white-overlay !important;
     }
   }
 

@@ -377,19 +377,59 @@
   #webide {
     color: $color-black !important;
 
-    .file-menu-item,
-    .editor-menu-item {
-      color: $color-black !important;
+    .file-browser-outer-container {
+      .file-browser-scroll-container,
+      .editor-window {
+        background: $lightest-grey-overlay !important;
+        border: 1px solid $color-lightgrey !important;
 
-      button {
-        color: $color-black !important;
+        .monaco-editor, .monaco-diff-editor {
+          --vscode-editor-background: $color-pureblack !important;
+        }
+
+
+        .file-browser{
+          .folder {
+            .folder-container {
+              .file,
+              .package {
+                &.package-selected {
+                  .package-text {
+                    color: $color-black !important;
+                  }
+                }
+
+                &.file-selected {
+                  .filename-text {
+                    color: $color-black !important;
+                  }
+                }
+
+                &.folder-selected {
+                  .filename-text {
+                    color: $color-black !important;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
 
-      button:disabled,
-      button[disabled],
-      button:disabled::before,
-      button[disabled]::before{
-        color: $grey-overlay !important;
+      .file-menu-item,
+      .editor-menu-item {
+        color: $color-black !important;
+
+        button {
+          color: $color-black !important;
+        }
+
+        button:disabled,
+        button[disabled],
+        button:disabled::before,
+        button[disabled]::before {
+          color: $grey-overlay !important;
+        }
       }
     }
   }
