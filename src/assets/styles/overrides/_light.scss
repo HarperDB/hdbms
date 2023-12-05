@@ -383,11 +383,6 @@
         background: $lightest-grey-overlay !important;
         border: 1px solid $color-lightgrey !important;
 
-        .monaco-editor, .monaco-diff-editor {
-          --vscode-editor-background: $color-pureblack !important;
-        }
-
-
         .file-browser{
           .folder {
             .folder-container {
@@ -430,6 +425,20 @@
         button[disabled]::before {
           color: $grey-overlay !important;
         }
+      }
+    }
+  }
+
+  .editor-menu-item,
+  .file-menu-item {
+    span,
+    i {
+      color: $color_black !important;
+    }
+    button[disabled] {
+      span,
+      i {
+        color: $color_grey !important;
       }
     }
   }
