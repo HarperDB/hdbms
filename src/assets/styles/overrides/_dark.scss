@@ -250,6 +250,7 @@
     .file-browser-outer-container {
       .file-browser-scroll-container {
         background: $faintest-white-overlay !important;
+
         .file-browser {
           > li {
             border-bottom-color: $faint-white-overlay !important;
@@ -269,6 +270,7 @@
         }
       }
     }
+
     .editor-window {
       background: $faintest-white-overlay !important;
     }
