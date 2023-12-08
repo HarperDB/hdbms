@@ -53,7 +53,7 @@ function Restart({ instanceAction, setInstanceAction }) {
         instance restarting. please wait.
       </CardBody>
     </Card>
-  ) : is_being_modified ? (
+  ) : !config.is_local_studio && is_being_modified ? (
     <Card className="error">
       <CardBody>instance updating. please wait.</CardBody>
     </Card>

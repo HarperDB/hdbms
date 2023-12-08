@@ -9,6 +9,7 @@ import appState from '../../functions/state/appState';
 import getUser from '../../functions/api/lms/getUser';
 import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/Loader';
+import usePersistedUser from '../../functions/state/persistedUser';
 
 function SignIn() {
   const { search } = useLocation();
@@ -17,6 +18,7 @@ function SignIn() {
   const theme = useStoreState(appState, (s) => s.theme);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
 
   const submit = () => {
     setFormState({ submitted: true });
@@ -29,6 +31,7 @@ function SignIn() {
       setFormState({ error: 'portal access denied' });
     } else {
       setFormState({ processing: true });
+      setPersistedUser({ ...persistedUser, email, pass });
       getUser({ email, pass, loggingIn: true });
     }
   };
@@ -43,7 +46,7 @@ function SignIn() {
   useEffect(
     () => !formState.submitted && setFormState({}),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formData]
+    [formData],
   );
 
   useEffect(() => {

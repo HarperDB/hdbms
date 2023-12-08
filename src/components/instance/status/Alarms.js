@@ -51,10 +51,9 @@ function Alarms() {
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>alarms</Col>
-        <Col xs="12" className="d-inline-flex d-md-none mb-2" />
-        <Col className="text-md-end">
+        <Col className="text-end">
           <Button color="link" title="Update Jobs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
-            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+            <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
             <span className="me-2">auto</span>
@@ -64,11 +63,11 @@ function Alarms() {
       </Row>
       <Card className="my-3">
         <CardBody className="item-list">
-          <Row>
-            <Col xs="3" className="text-bold">
+          <Row className="header">
+            <Col xs="3" className="text-bold text-nowrap">
               status
             </Col>
-            <Col xs="3" className="text-bold">
+            <Col xs="3" className="text-bold text-nowrap">
               date
             </Col>
             <Col xs="6" className="text-end text-danger text-bold">
@@ -89,6 +88,7 @@ function Alarms() {
           </div>
         </CardBody>
       </Card>
+      <br />
     </ErrorBoundary>
   );
 }

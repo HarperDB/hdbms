@@ -10,14 +10,6 @@ import Loader from '../../shared/Loader';
 import listRoles from '../../../functions/api/instance/listRoles';
 import registrationInfo from '../../../functions/api/instance/registrationInfo';
 
-export const metadata = {
-  path: `roles/:role_id?`,
-  link: 'roles',
-  label: 'roles',
-  icon: 'check-square',
-  iconCode: 'f14a',
-};
-
 const JSONViewer = lazy(() => import(/* webpackChunkName: "roles-jsonviewer" */ './JsonViewer'));
 
 const defaultState = {
@@ -39,7 +31,7 @@ function RolesIndex() {
   const [formState, setFormState] = useState(defaultState);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/roles`;
   const version = useStoreState(instanceState, (s) => s.registration?.version);
-  const [ major, minor ] = version?.split('.') || [];
+  const [major, minor] = version?.split('.') || [];
   const versionAsFloat = parseFloat(`${major}.${minor}`);
 
   const fetchRoles = useCallback(async () => {
@@ -81,9 +73,7 @@ function RolesIndex() {
       </Col>
       <Col xl="9" lg="8" md="7" xs="12">
         <Row className="floating-card-header">
-          {formState.canEdit && (
-            <Col>edit role &gt; {formState.roleName}</Col>
-          )}
+          {formState.canEdit && <Col>edit role &gt; {formState.roleName}</Col>}
           <Col className="text-md-end">
             {formState.canEdit && (
               <>
@@ -96,7 +86,7 @@ function RolesIndex() {
             )}
             <Button color="link" onClick={fetchRoles} className="me-2">
               <span className="me-2">refresh roles</span>
-              <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+              <i title="Refresh Roles" className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
             </Button>
           </Col>
         </Row>
@@ -112,7 +102,7 @@ function RolesIndex() {
           <Card className="my-3">
             <CardBody>
               {role_id ? (
-                <div className="empty-prompt">Super Users and Cluster Users have full access to all { versionAsFloat >= 4.2 ? 'databases' : 'schemas'}, tables, and attributes.</div>
+                <div className="empty-prompt">Super Users and Cluster Users have full access to all {versionAsFloat >= 4.2 ? 'databases' : 'schemas'}, tables, and attributes.</div>
               ) : (
                 <div className="empty-prompt">Please choose or add a role to manage it.</div>
               )}

@@ -373,4 +373,74 @@
       outline-color: $color-lightpurple !important;
     }
   }
+
+  #webide {
+    color: $color-black !important;
+
+    .file-browser-outer-container {
+      .file-browser-scroll-container,
+      .editor-window {
+        background: $lightest-grey-overlay !important;
+        border: 1px solid $color-lightgrey !important;
+
+        .file-browser{
+          .folder {
+            .folder-container {
+              .file,
+              .package {
+                &.package-selected {
+                  .package-text {
+                    color: $color-black !important;
+                  }
+                }
+
+                &.file-selected {
+                  .filename-text {
+                    color: $color-black !important;
+                  }
+                }
+
+                &.folder-selected {
+                  .filename-text {
+                    color: $color-black !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .file-menu-item,
+      .editor-menu-item {
+        color: $color-black !important;
+
+        button {
+          color: $color-black !important;
+        }
+
+        button:disabled,
+        button[disabled],
+        button:disabled::before,
+        button[disabled]::before {
+          color: $grey-overlay !important;
+        }
+      }
+    }
+  }
+
+  .editor-menu-item,
+  .file-menu-item {
+    span,
+    i {
+      color: $color_black !important;
+    }
+
+    button[disabled] {
+      span,
+      i {
+        color: $color_grey !important;
+      }
+    }
+  }
 }

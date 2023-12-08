@@ -22,12 +22,10 @@ import getProducts from '../functions/api/lms/getProducts';
 import getRegions from '../functions/api/lms/getRegions';
 import getWavelengthRegions from '../functions/api/lms/getWavelengthRegions';
 import getCurrentVersion from '../functions/api/lms/getCurrentVersion';
-import getPostManCollection from '../functions/examples/getPostManCollection';
 import checkVersion from '../functions/app/checkVersion';
 import init from '../functions/app/init';
 import refreshUser from '../functions/app/refreshUser';
 import changeFavIcon from '../functions/app/changeFavIcon';
-import getThemes from '../functions/app/getThemes';
 import getAkamaiRegions from '../functions/api/lms/getAkamaiRegions';
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ './TopNav'));
@@ -37,7 +35,6 @@ const ResetPassword = lazy(() => import(/* webpackChunkName: "resetPassword" */ 
 const UpdatePassword = lazy(() => import(/* webpackChunkName: "updatePassword" */ './auth/UpdatePassword'));
 const Organization = lazy(() => import(/* webpackChunkName: "organization" */ './organization'));
 const Organizations = lazy(() => import(/* webpackChunkName: "organizations" */ './organizations'));
-const Resources = lazy(() => import(/* webpackChunkName: "resources" */ './resources'));
 const Instances = lazy(() => import(/* webpackChunkName: "instances" */ './instances'));
 const Instance = lazy(() => import(/* webpackChunkName: "instance" */ './instance'));
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './profile'));
@@ -69,11 +66,9 @@ function App() {
   const wavelengthRegions = useStoreState(appState, (s) => s.wavelengthRegions);
   const akamaiRegions = useStoreState(appState, (s) => s.akamaiRegions);
   const version = useStoreState(appState, (s) => s.version);
-  const postmanCollection = useStoreState(appState, (s) => s.postmanCollection);
   const [fetchingUser, setFetchingUser] = useState(true);
   const [showVersionAlert, setShowVersionAlert] = useState(false);
   const [persistedUser, setPersistedUser] = usePersistedUser({});
-  const currentTheme = persistedUser?.theme;
   const loggedIn = auth?.user_id;
   const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
   const isMaintenance = version?.maintenance && isNotEmployee;
@@ -85,8 +80,8 @@ function App() {
   }, [location.pathname]);
 
   useEffect(() => {
-    changeFavIcon(currentTheme);
-  }, [currentTheme]);
+    changeFavIcon(persistedUser?.theme);
+  }, [persistedUser?.theme]);
 
   useEffect(() => {
     setShowVersionAlert(checkVersion({ apiVersion: version.studio }));
@@ -117,8 +112,7 @@ function App() {
   }, [location, canonicalUrl]);
 
   useEffect(() => {
-    init({ auth: persistedUser, location, navigate, setFetchingUser, setPersistedUser, controller });
-    getThemes(currentTheme);
+    init({ currentPath: location.pathname, navigate, persistedUser, setPersistedUser, setFetchingUser, controller });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -127,7 +121,6 @@ function App() {
     if (!regions) getRegions();
     if (!wavelengthRegions) getWavelengthRegions();
     if (!akamaiRegions) getAkamaiRegions();
-    if (!postmanCollection) getPostManCollection();
   }, config.refresh_content_interval);
 
   useInterval(() => {
@@ -139,7 +132,7 @@ function App() {
     <div className={`${theme} ${config.maintenance ? 'maintenance' : ''}`}>
       <div id="app-container">
         <Suspense fallback={<Loader header=" " spinner />}>
-          <TopNav isMaintenance={isMaintenance} />
+          <TopNav isMaintenance={isMaintenance} loggedIn />
         </Suspense>
         {fetchingUser ? (
           <Loader header="signing in" spinner />
@@ -150,7 +143,6 @@ function App() {
               <Routes>
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
                 <Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
-                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
                   <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
                   <Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
@@ -168,7 +160,6 @@ function App() {
                 <Route element={<SignIn />} path="/" />
                 <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
                 <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
-                <Route element={isMaintenance ? <Maintenance /> : <Resources />} path="/resources/*" />
                 <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
               </Routes>
             </Suspense>

@@ -21,14 +21,6 @@ import InstanceConfig from './InstanceConfig';
 import getConfiguration from '../../../functions/api/instance/getConfiguration';
 import ConfigLoader from './ConfigLoader';
 
-export const metadata = {
-  path: `config`,
-  link: 'config',
-  label: 'config',
-  icon: 'wrench',
-  iconCode: 'f0ad',
-};
-
 function ConfigIndex() {
   const { customer_id, compute_stack_id } = useParams();
   const auth = useStoreState(appState, (s) => s.auth);
@@ -47,11 +39,11 @@ function ConfigIndex() {
   const [clusterNodeName, setClusterNodeName] = useState('');
   const unusedCompute = useStoreState(
     appState,
-    (s) => s.subscriptions[is_local ? 'local_compute' : 'cloud_compute']?.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || []
+    (s) => s.subscriptions[is_local ? 'local_compute' : 'cloud_compute']?.filter((p) => !p.value.compute_subscription_name || p.value.compute_quantity_available) || [],
   );
   const unusedStorage = useStoreState(
     appState,
-    (s) => s.subscriptions?.cloud_storage?.filter((p) => !p.value.storage_subscription_name || p.value.storage_quantity_available) || []
+    (s) => s.subscriptions?.cloud_storage?.filter((p) => !p.value.storage_subscription_name || p.value.storage_quantity_available) || [],
   );
   const [showPrepaidCompute, setShowPrepaidCompute] = useState(!!compute_subscription_id);
   const [showPrepaidStorage, setShowPrepaidStorage] = useState(!!storage_subscription_id);
@@ -81,7 +73,7 @@ function ConfigIndex() {
     <Row id="config">
       <Col xs="12">
         <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-          <Details clusterNodeName={clusterNodeName} />
+          <Details clusterNodeName={clusterNodeName} instanceConfig={instanceConfig} />
         </ErrorBoundary>
       </Col>
       {isOrgOwner && theme !== 'akamai' && (
@@ -160,8 +152,8 @@ function ConfigIndex() {
       </Col>
       <Col xs="12">
         <span className="floating-card-header">instance config (read only)</span>
-        <Card className="mt-3 mb-4 instance-details">
-          <CardBody>
+        <Card className="mt-3 mb-4">
+          <CardBody className="p-0">
             <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
               {instanceConfig ? <InstanceConfig instanceConfig={instanceConfig} /> : <ConfigLoader />}
             </ErrorBoundary>

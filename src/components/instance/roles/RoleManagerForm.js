@@ -38,6 +38,8 @@ function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
       return alert.error('Role names must have only letters and underscores');
     }
 
+    const permission = itemType === 'cluster user' ? { cluster_user: true } : itemType === 'super user' ? { super_user: true } : {};
+
     const response = await addRole({
       auth,
       url,
@@ -45,10 +47,7 @@ function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
       compute_stack_id,
       customer_id,
       role: entity.name,
-      permission: {
-        cluster_user: itemType === 'cluster user',
-        super_user: itemType === 'super user',
-      },
+      permission,
     });
 
     if (response.error) {
@@ -62,7 +61,7 @@ function RoleManagerForm({ itemType, toggleDropItem, toggleCreate, baseUrl }) {
   };
 
   useEffect(() => {
-    toggleDropItem()
+    toggleDropItem();
   }, [toggleDropItem]);
 
   return (

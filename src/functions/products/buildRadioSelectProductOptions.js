@@ -14,6 +14,7 @@ export default (plans) => {
       name = undefined,
       quantity = undefined,
       available = undefined,
+      trial_period_days = null,
       metadata: { ram_allocation, instance_type, has_gpus },
     }) => {
       const compute_price = subscription_id ? 0 : parseInt(amount_decimal, 10) / 100;
@@ -24,7 +25,7 @@ export default (plans) => {
       const compute_ram_string = `${compute_ram / 1024}GB`;
       const label = `${compute_ram_string} RAM  ${has_gpus ? '+ GPU Support ' : ''}•  ${
         subscription_id ? `${name}  •  ${available} remaining` : amount_decimal !== '0' ? `${compute_comma_amount}/${interval}` : 'FREE'
-      } ${!active ? '(legacy)' : ''}`;
+      } ${!active ? '(legacy)' : ''} ${trial_period_days ? `• ${trial_period_days} DAY FREE TRIAL` : ''}`;
 
       return (
         compute_ram &&
@@ -33,6 +34,7 @@ export default (plans) => {
           value: {
             active,
             instance_type,
+            trial_period_days,
             stripe_plan_id: id,
             compute_interval: interval,
             compute_subscription_name: name,
@@ -48,7 +50,7 @@ export default (plans) => {
           },
         })
       );
-    }
+    },
   );
 
   return computeOptionsArray.sort((a, b) => {

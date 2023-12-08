@@ -5,14 +5,6 @@ import DataTable from './Datatable';
 import QueryWindow from './QueryWindow';
 import QueryHistory from './QueryHistory';
 
-export const metadata = {
-  path: `query`,
-  link: 'query',
-  label: 'query',
-  icon: 'search',
-  iconCode: 'f002',
-};
-
 function QueryIndex() {
   const [query, setQuery] = useState(false);
 

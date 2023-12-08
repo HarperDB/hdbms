@@ -25,7 +25,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
       </Col>
       <Col className="text-end">
         <Button id="refresh" color="link" tabIndex="0" title={`Refresh table ${table}`} className="me-2" onClick={refresh}>
-          <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-refresh'}`} />
+          <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
         </Button>
         <Button id="toggleAutoRefresh" color="link" tabIndex="0" title="Turn on Auto-Refresh" onClick={toggleAutoRefresh}>
           <span className="me-2">auto</span>
@@ -53,7 +53,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
           title={`Bulk Upload CSV to ${table}`}
           onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
         >
-          <i className="fa fa-file-text-o" />
+          <i className="fa fa-file-upload" />
         </Button>
       </Col>
     </Row>

@@ -11,18 +11,13 @@ import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/functions/buildCustomFunctions';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 
-export const metadata = {
-  path: `functions/:action?/:project?/:type?/:file?`,
-  link: 'functions',
-  label: 'functions',
-  icon: 'project-diagram',
-  iconCode: 'f542',
-};
-
 function CustomFunctionsIndex() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
+  const registration = useStoreState(instanceState, (s) => s.registration);
+  const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
+  const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
   const restarting = useStoreState(instanceState, (s) => s.restarting);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,16 +32,16 @@ function CustomFunctionsIndex() {
   }, [auth, url, restarting]);
 
   useEffect(() => {
-    refreshCustomFunctions(); 
+    refreshCustomFunctions();
   }, [refreshCustomFunctions]);
 
   useEffect(() => {
-    const isConfigured = custom_functions?.is_enabled && custom_functions?.port;
+    const isConfigured = (custom_functions?.is_enabled && custom_functions?.port) || supportsApplicationsAPI;
     setShowManage(isConfigured);
     if (isConfigured) {
       setConfiguring(false);
     }
-  }, [custom_functions]);
+  }, [custom_functions, supportsApplicationsAPI]);
 
   useInterval(() => {
     if (configuring) refreshCustomFunctions();

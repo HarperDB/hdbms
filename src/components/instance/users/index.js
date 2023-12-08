@@ -8,13 +8,6 @@ import Loader from '../../shared/Loader';
 const DataTable = lazy(() => import(/* webpackChunkName: "instance-users-datatable" */ './Datatable'));
 const EditUser = lazy(() => import(/* webpackChunkName: "instance-users-edit" */ './Edit'));
 
-export const metadata = {
-  path: `users/:username?`,
-  link: 'users',
-  label: 'users',
-  icon: 'users',
-  iconCode: 'f0c0',
-};
 function UsersIndex() {
   const { username } = useParams();
   const [lastUpdate, setLastUpdate] = useState(true);

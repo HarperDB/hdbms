@@ -122,7 +122,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         autoRefresh={tableState.autoRefresh}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
-        toggleFilter={() =>  setTableState({ ...tableState, showFilter: !tableState.showFilter })}
+        toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
         <CardBody className="react-table-holder">
@@ -137,24 +137,22 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
             onFilteredChange={(value) => {
-                setTableState({ ...tableState, page: 0, filtered: value })
+              setTableState({ ...tableState, page: 0, filtered: value });
             }}
             onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
             onPageChange={(value) => setTableState({ ...tableState, page: value })}
             onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
             onRowClick={(rowData) => {
+              // encode schema, table and hashValue because they can contain uri components
+              const hashValue = rowData[tableState.hashAttribute];
+              const encodedSchema = encodeURIComponent(schema);
+              const encodedTable = encodeURIComponent(table);
+              const encodedHash = encodeURIComponent(hashValue);
 
-                // encode schema, table and hashValue because they can contain uri components
-                const hashValue = rowData[tableState.hashAttribute];
-                const encodedSchema = encodeURIComponent(schema);
-                const encodedTable = encodeURIComponent(table);
-                const encodedHash = encodeURIComponent(hashValue);
+              const recordViewUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${encodedSchema}/${encodedTable}/edit/${encodedHash}`;
+              const navigateOptions = { state: { hashValue } };
 
-                const recordViewUrl = `/o/${customer_id}/i/${compute_stack_id}/browse/${encodedSchema}/${encodedTable}/edit/${encodedHash}`;
-                const navigateOptions = { state: { hashValue } };
-
-                navigate(recordViewUrl, navigateOptions);
-
+              navigate(recordViewUrl, navigateOptions);
             }}
           />
         </CardBody>

@@ -205,8 +205,23 @@ $partner-brand-color: #017ac6;
     }
 
     &-footer {
-      color: $color-black;
+      color: $color-black !important;
     }
+  }
+
+  .editor-menu-item,
+  .file-menu-item {
+      span,
+      i {
+        color: $color_black !important;
+      }
+
+      button[disabled] {
+        span,
+        i {
+          color: $color_grey !important;
+        }
+      }
   }
 
   .content-container {

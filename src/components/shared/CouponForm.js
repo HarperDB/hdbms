@@ -20,7 +20,7 @@ function CouponForm() {
   const { search } = useLocation();
   const { code } = queryString.parse(search);
   const auth = useStoreState(appState, (s) => s.auth);
-  const [formData, setFormData] = useState({ coupon_code: code });
+  const [formData, setFormData] = useState({ coupon_code: code || '' });
   const [formState, setFormState] = useState({});
   const [mounted, setMounted] = useState(false);
 
@@ -35,7 +35,6 @@ function CouponForm() {
           const response = await addCoupon({ auth, customer_id, coupon_code });
 
           if (response.result === false || response.error) {
-            setFormData({ coupon_code: '' });
             setFormState({ error: response.message });
           } else {
             if (window._kmq) window._kmq.push(['record', 'user added coupon']);
@@ -49,7 +48,7 @@ function CouponForm() {
       }
     },
     () => controller?.abort(),
-    [formState]
+    [formState],
   );
 
   useAsyncEffect(() => {
@@ -64,7 +63,7 @@ function CouponForm() {
       }
     },
     () => setMounted(false),
-    []
+    [],
   );
 
   return (
