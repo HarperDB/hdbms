@@ -105,13 +105,7 @@ function Payment() {
           <div className="mb-4">
             {computeProduct?.value?.compute_price ? (
               <div className="mb-2">
-                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>
-                {computeProduct?.value?.trial_period_days && (
-                  <span>
-                    ,<span className="text-danger"> which will begin after your {computeProduct?.value?.trial_period_days} free trial</span>
-                  </span>
-                )}
-                .
+                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>.
               </div>
             ) : null}
             {storageProduct?.value?.storage_price ? (

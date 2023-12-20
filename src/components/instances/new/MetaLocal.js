@@ -208,7 +208,7 @@ function MetaLocal() {
             &nbsp;
             {formState.url && (
               <a href={formState.url} target="_blank" rel="noopener noreferrer">
-                <i className="ms-3 fa fa-lg fa-external-link-square text-purple" />
+                <i className="ms-3 fa-lg fas fa-external-link-alt text-purple" />
               </a>
             )}
           </CardBody>
