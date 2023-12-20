@@ -189,7 +189,8 @@ function Confirm() {
           )}
           {!usedFreetrial && (
             <div className="mb-3">
-              This organization is entitled to a <b>$20 discount</b> with coupon code <b>FREETRIAL</b>. Enter the code into the form below to receive the credit.
+              This organization is entitled to a credit equal to 1 month of 1GB RAM/1GB Disk with coupon code <b>FREETRIAL</b>. Enter the code into the form below to receive the
+              credit.
             </div>
           )}
           <hr />

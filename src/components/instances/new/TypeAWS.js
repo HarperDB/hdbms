@@ -33,7 +33,7 @@ function TypeAWS({ setFormData }) {
           <li>On AWS EC2</li>
           <li>Billed Monthly</li>
           <li>24/7 Customer Support</li>
-          {usedFreetrial ? <li>Choose RAM and Disk Size</li> : <li className="text-danger">$20 CREDIT WITH CODE: FREETRIAL</li>}
+          {usedFreetrial ? <li>Choose RAM and Disk Size</li> : <li className="text-danger">1 MONTH FREE TRIAL (1GB RAM/1GB DISK)</li>}
         </ul>
       </CardBody>
     </Card>
