@@ -181,7 +181,7 @@ function Confirm() {
         <UnlimitedEnterprise />
       ) : (
         <div className="px-2">
-          {stripeCoupons?.length && (
+          {stripeCoupons?.length > 0 && (
             <div className="mb-3">
               This organization has <b>{stripeCoupons.length}</b> coupon{stripeCoupons.length > 1 && 's'} on file, good for a total product credit of{' '}
               <b>${stripeCoupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
@@ -189,8 +189,8 @@ function Confirm() {
           )}
           {!usedFreetrial && (
             <div className="mb-3">
-              This organization is entitled to a credit equal to 1 month of 1GB RAM/1GB Disk with coupon code <b>FREETRIAL</b>. Enter the code into the form below to receive the
-              credit.
+              This organization is entitled to a credit equal to 1 month of 1GB RAM/1GB Disk (a $33 value) with coupon code <b className="text-success">FREETRIAL</b>. Enter the
+              code into the form below to receive the credit.
             </div>
           )}
           <hr />
