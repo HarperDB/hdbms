@@ -29,7 +29,7 @@ function TypeEnterprise({ setFormData }) {
           <li>Billed Annually, Free Tier Available</li>
           <li>24/7 Customer Support</li>
           <li>
-            <a href="https://docs.harperdb.io/docs/install-harperdb" target="_blank" rel="noopener noreferrer">
+            <a href="https://docs.harperdb.io/docs/getting-started" target="_blank" rel="noopener noreferrer">
               Click To View Install Docs
             </a>
           </li>

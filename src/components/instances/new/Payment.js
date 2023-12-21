@@ -20,6 +20,8 @@ function Payment() {
   const auth = useStoreState(appState, (s) => s.auth);
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const stripeId = useStoreState(appState, (s) => s.customer?.stripe_id);
+  const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
+  const usedFreetrial = stripeCoupons.find((c) => c.name === 'FREETRIAL');
   const products = useStoreState(appState, (s) => s.products);
   const [newInstance] = useNewInstance({});
   const [formData, setFormData] = useState({ postal_code: false, card: false, expire: false, cvc: false });
@@ -105,13 +107,7 @@ function Payment() {
           <div className="mb-4">
             {computeProduct?.value?.compute_price ? (
               <div className="mb-2">
-                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>
-                {computeProduct?.value?.trial_period_days && (
-                  <span>
-                    ,<span className="text-danger"> which will begin after your {computeProduct?.value?.trial_period_days} free trial</span>
-                  </span>
-                )}
-                .
+                The selected <b>instance type</b> has a cost of <b>{computeProduct?.value?.compute_price_string_with_interval}</b>.
               </div>
             ) : null}
             {storageProduct?.value?.storage_price ? (
@@ -119,7 +115,13 @@ function Payment() {
                 The selected <b>storage size</b> has a cost of <b>{storageProduct?.value?.storage_price_string_with_interval}</b>.
               </div>
             ) : null}
-            Please add a credit card to your account using the form below. If you registered using a promo code, your card will not be charged until your promo credits run out.
+            {!usedFreetrial && (
+              <div className="mb-2">
+                This organization is entitled to a credit equal to 1 month of 1GB RAM/1GB Disk (a $33 value) with coupon code <b className="text-success">FREETRIAL</b>. Enter the
+                code into the form on the next page to receive the credit.
+              </div>
+            )}
+            Please add a credit card to your account using the form below. If you have a coupon code, your card will not be charged until your credits run out.
           </div>
           <ContentContainer header="Credit Card Details">
             <CreditCardForm setFormData={setFormData} formData={formData} setFormState={setFormState} />

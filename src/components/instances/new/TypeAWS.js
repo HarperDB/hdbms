@@ -6,6 +6,9 @@ import appState from '../../../functions/state/appState';
 
 function TypeAWS({ setFormData }) {
   const theme = useStoreState(appState, (s) => s.theme);
+  const stripeCoupons = useStoreState(appState, (s) => s.customer.stripe_coupons);
+  const usedFreetrial = stripeCoupons.find((c) => c.name === 'FREETRIAL');
+
   return (
     <Card className="mb-3">
       <CardBody className="instance-form-card-body">
@@ -28,9 +31,9 @@ function TypeAWS({ setFormData }) {
         <hr />
         <ul className="mb-0">
           <li>On AWS EC2</li>
-          <li>Billed Monthly, Free Tier Available</li>
+          <li>Billed Monthly</li>
           <li>24/7 Customer Support</li>
-          <li>Choose RAM and Disk Size</li>
+          {usedFreetrial ? <li>Choose RAM and Disk Size</li> : <li className="text-danger">1 MONTH FREE TRIAL (1GB RAM/1GB DISK)</li>}
         </ul>
       </CardBody>
     </Card>

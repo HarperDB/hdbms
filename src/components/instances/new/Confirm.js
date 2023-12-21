@@ -24,6 +24,7 @@ function Confirm() {
   const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid);
   const unlimited_local_install = useStoreState(appState, (s) => s.customer.unlimited_local_install);
   const stripeCoupons = useStoreState(appState, (s) => s.customer?.stripe_coupons);
+  const usedFreetrial = stripeCoupons.find((c) => c.name === 'FREETRIAL');
   const subdomain = useStoreState(appState, (s) => s.customer?.subdomain);
   const totalPrice = (newInstance?.compute_price || 0) + (newInstance?.storage_price || 0);
   const allPrePaid = newInstance.compute_subscription_id && (newInstance.is_local || newInstance.storage_subscription_id);
@@ -171,19 +172,6 @@ function Confirm() {
               <b>{totalPriceString}</b>
             </Col>
           </Row>
-          {newInstance.trial_period_days && (
-            <>
-              <hr />
-              <Row>
-                <Col sm="8" className="text-nowrap text-grey">
-                  Free Trial Period
-                </Col>
-                <Col sm="4" className="text-sm-end text-nowrap">
-                  <b>{newInstance.trial_period_days} Days</b>
-                </Col>
-              </Row>
-            </>
-          )}
         </CardBody>
       </Card>
       <hr className="my-3" />
@@ -191,13 +179,21 @@ function Confirm() {
         <Unpaid />
       ) : unlimited_local_install ? (
         <UnlimitedEnterprise />
-      ) : stripeCoupons?.length ? (
-        <div className="px-2 text-center text-success">
-          This organization has <b>{stripeCoupons.length}</b> coupon{stripeCoupons.length > 1 && 's'} on file, good for a total product credit of{' '}
-          <b>${stripeCoupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
-        </div>
       ) : (
         <div className="px-2">
+          {stripeCoupons?.length > 0 && (
+            <div className="mb-3">
+              This organization has <b>{stripeCoupons.length}</b> coupon{stripeCoupons.length > 1 && 's'} on file, good for a total product credit of{' '}
+              <b>${stripeCoupons.reduce((total, coupon) => total + parseInt(coupon.amount_off / 100, 10), 0)}</b>. Charges beyond that amount will be billed to your card.
+            </div>
+          )}
+          {!usedFreetrial && (
+            <div className="mb-3">
+              This organization is entitled to a credit equal to 1 month of 1GB RAM/1GB Disk (a $33 value) with coupon code <b className="text-success">FREETRIAL</b>. Enter the
+              code into the form below to receive the credit.
+            </div>
+          )}
+          <hr />
           <CouponForm />
         </div>
       )}

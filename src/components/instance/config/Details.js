@@ -21,9 +21,9 @@ function Details({ clusterNodeName, instanceConfig }) {
   const authHeader = auth?.user ? `${btoa(`${auth.user}:${auth.pass}`)}` : '...';
   const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
   const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
-  const { hostname } = window.location;
+  const { hostname, origin } = window.location;
 
-  const urlObject = new URL(url);
+  const urlObject = new URL(config.is_local_studio ? origin : url);
 
   const operationsApiURL = !config.is_local_studio
     ? `${instanceConfig.operationsApi?.network?.securePort ? 'https://' : 'http://'}${urlObject.hostname}:${
