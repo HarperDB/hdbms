@@ -38,7 +38,7 @@ function SignUp() {
     <div id="login-form" className="sign-up">
       <Card className="mb-3">
         <CardBody className="px-3" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
-          <div className="sign-up-header">Sign Up And Launch Your Free HarperDB Cloud Instance Today</div>
+          <div className="sign-up-header">Sign Up And Launch Your HarperDB Cloud Instance Today</div>
           <Row>
             <Col xs="12" md="8">
               <div className="sign-up-content">

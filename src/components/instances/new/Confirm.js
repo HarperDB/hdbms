@@ -48,7 +48,8 @@ function Confirm() {
     const { tc_version } = formData;
     if (submitted) {
       if (tc_version) {
-        if (window._kmq) window._kmq.push(['record', totalPrice ? 'purchased instance' : 'created free instance', analyticsProductsArray]);
+        if (window._kmq)
+          window._kmq.push(['record', totalPrice ? 'purchased instance' : newInstance.is_local ? 'registered local instance' : 'created free instance', analyticsProductsArray]);
         setNewInstance({ ...newInstance, tc_version });
         setTimeout(() => navigate(`/o/${customer_id}/instances/new/status`), 0);
       } else {
