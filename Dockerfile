@@ -1,4 +1,4 @@
-FROM node:current as builder
+FROM node:current AS builder
 
 ARG ENVIRONMENT="dev"
 
