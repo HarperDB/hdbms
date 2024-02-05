@@ -28,7 +28,7 @@ export default async ({ formData, theme }) => {
     };
   }
 
-  if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1) {
+  if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1 && formData.email.indexOf('walmart.com') === -1) {
     return {
       error: 'portal signup denied',
     };
