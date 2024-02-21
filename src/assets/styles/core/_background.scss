@@ -1,4 +1,5 @@
 #app-bg-color {
+  background: $gradient-purple-magenta !important;
   bottom: 0;
   height: 100vh;
   left: 0;
@@ -6,6 +7,5 @@
   right: 0;
   top: 0;
   width: 100vw;
-  background: $gradient-purple-magenta !important;
   z-index: -2;
 }
