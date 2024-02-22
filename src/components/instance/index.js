@@ -81,7 +81,7 @@ function InstanceIndex() {
   useAsyncEffect(
     () => setMounted(true),
     () => setMounted(false),
-    []
+    [],
   );
 
   useInterval(async () => {
@@ -98,7 +98,7 @@ function InstanceIndex() {
         setInstanceAuths({ ...instanceAuths, [compute_stack_id]: { ...instanceAuth, super: result.role?.permission?.super_user } });
       }
     }
-  }, config.refresh_content_interval);
+  }, config.check_user_interval);
 
   return (
     <>
