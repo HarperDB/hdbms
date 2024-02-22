@@ -6,6 +6,7 @@ export default {
   google_analytics_code: 'UA-XXXXXXXXXXXXX-3',
   tc_version: '2020-01-01',
   check_version_interval: 300000,
+  check_user_interval: 900000,
   refresh_content_interval: 10000,
   free_cloud_instance_limit: 1,
   max_file_upload_size: 10380902,
