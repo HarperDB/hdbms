@@ -12,7 +12,8 @@ function isValidUrl(url) {
 
 function isValidTarballUrl(url) {
   // npm restrictions on the tarball url install here: https://docs.npmjs.com/cli/v9/commands/npm-install
-  return isValidUrl(url) && (url.endsWith('.tar') || url.endsWith('.tar.gz') || url.endsWith('.tgz'));
+  // updated to indexOf to allow signed URLs (with tokens appended)
+  return isValidUrl(url) && (url.indexOf('.tar') !== -1 || url.indexOf('.tar.gz') !== -1 || url.indexOf('.tgz') !== -1);
 }
 
 export default function UrlInstallField({ pkg, setPackageSpec }) {
