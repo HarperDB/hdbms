@@ -15,7 +15,7 @@ export default async (props) =>
       is_ssl: props.is_ssl,
       host: props.host,
       login_domain: props.login_domain || window.location.host,
-      port: props.port,
+      port: !props.is_local && props.cloud_provider === 'akamai' ? 9925 : props.port, // For akamai studio cloud instances use port 9925 instead of the default (443)
       instance_region: props.instance_region,
       wavelength_zone_id: props.instance_region,
       instance_type: props.instance_type,
