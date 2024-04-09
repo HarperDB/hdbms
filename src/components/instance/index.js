@@ -65,7 +65,12 @@ function InstanceIndex() {
       await registrationInfo({ auth: instanceAuth, url: thisInstance.url });
       setLoadingInstance(false);
       if (error) {
-        setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
+        if (config.is_local_studio) {
+          setInstanceAuths({ ...instanceAuths, local: false });
+          setTimeout(() => navigate(`/`), 10);
+        } else {
+          setTimeout(() => navigate(`/o/${customer_id}/instances`), 10);
+        }
       }
     }
   }, [thisInstance]);
@@ -85,7 +90,7 @@ function InstanceIndex() {
   );
 
   useInterval(async () => {
-    if (url) {
+    if (url && !config.is_local_studio) {
       const result = await userInfo({ auth: instanceAuth, url });
       if (result.error && result.message !== 'Network request failed' && !restarting) {
         alert.error('Unable to connect to instance.');

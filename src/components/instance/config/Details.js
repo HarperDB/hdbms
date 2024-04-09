@@ -22,7 +22,6 @@ function Details({ clusterNodeName, instanceConfig }) {
   const iopsString = is_local ? 'HARDWARE LIMIT' : `${storage?.iops}`;
   const formatted_creation_date = creation_date ? new Date(creation_date).toLocaleDateString() : 'N/A';
   const { hostname, origin } = window.location;
-
   const urlObject = new URL(config.is_local_studio ? origin : url);
 
   const operationsApiURL = !config.is_local_studio
