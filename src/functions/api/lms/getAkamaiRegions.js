@@ -29,6 +29,11 @@ export default async () => {
         country: 'us',
       },
       {
+        value: 'us-ord',
+        label: 'Chicago, IL',
+        country: 'us',
+      },
+      {
         value: 'us-west',
         label: 'Fremont, CA',
         country: 'us',
@@ -41,6 +46,26 @@ export default async () => {
       {
         value: 'us-east',
         label: 'Newark, NJ',
+        country: 'us',
+      },
+      {
+        value: 'us-lax',
+        label: 'Los Angeles, CA',
+        country: 'us',
+      },
+      {
+        value: 'us-mia',
+        label: 'Miami, FL',
+        country: 'us',
+      },
+      {
+        value: 'us-sea',
+        label: 'Seattle, WA',
+        country: 'us',
+      },
+      {
+        value: 'us-iad',
+        label: 'Washington, DC',
         country: 'us',
       },
       {
@@ -62,6 +87,51 @@ export default async () => {
         value: 'ap-northeast',
         label: 'Tokyo, JP',
         country: 'jp',
+      },
+      {
+        value: 'se-sto',
+        label: 'Stockholm, SE',
+        country: 'se',
+      },
+      {
+        value: 'nl-ams',
+        label: 'Amsterdam, NL',
+        country: 'nl',
+      },
+      {
+        value: 'fr-par',
+        label: 'Paris, FR',
+        country: 'fr',
+      },
+      {
+        value: 'es-mad',
+        label: 'Madrid, ES',
+        country: 'es',
+      },
+      {
+        value: 'jp-osa',
+        label: 'Osaka, JP',
+        country: 'jp',
+      },
+      {
+        value: 'in-maa',
+        label: 'Chennai, IN',
+        country: 'in',
+      },
+      {
+        value: 'id-cgk',
+        label: 'Jakarta, ID',
+        country: 'id',
+      },
+      {
+        value: 'br-gru',
+        label: 'São Paulo, BR',
+        country: 'br',
+      },
+      {
+        value: 'br-gru',
+        label: 'São Paulo, BR',
+        country: 'br',
       },
     ].sort((a, b) => (a.label < b.label ? -1 : 1));
 
