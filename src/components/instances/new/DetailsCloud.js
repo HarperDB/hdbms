@@ -73,7 +73,13 @@ function DetailsCloud() {
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
         setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
-      } else if (stripe_plan_id && stripe_storage_plan_id && instance_region && instance_type && data_volume_size) {
+      } else if (
+        stripe_plan_id &&
+        (stripe_storage_plan_id || newInstance.cloud_provider === 'akamai') &&
+        instance_region &&
+        instance_type &&
+        (data_volume_size || newInstance.cloud_provider === 'akamai')
+      ) {
         setNewInstance({ ...newInstance, ...formData });
         setTimeout(() => navigate(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
       } else {
