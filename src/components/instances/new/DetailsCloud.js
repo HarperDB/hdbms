@@ -20,7 +20,7 @@ function DetailsCloud() {
   const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
   const unusedStorage = useStoreState(
     appState,
-    (s) => s.subscriptions?.cloud_storage?.filter((p) => p.value.active && p.value.storage_quantity_available >= p.value.data_volume_size) || []
+    (s) => s.subscriptions?.cloud_storage?.filter((p) => p.value.active && p.value.storage_quantity_available >= p.value.data_volume_size) || [],
   );
   const products = useStoreState(
     appState,
@@ -28,28 +28,33 @@ function DetailsCloud() {
       newInstance.cloud_provider === 'lumen'
         ? s.products.lumen_compute?.filter((p) => p.value.active) || []
         : newInstance.cloud_provider === 'verizon'
-        ? s.products.wavelength_compute?.filter((p) => p.value.active) || []
-        : newInstance.cloud_provider === 'akamai'
-        ? s.products.akamai_compute?.filter((p) => p.value.active) || []
-        : newInstance.showPrepaidCompute
-        ? unusedCompute
-        : s.products.cloud_compute.filter((p) => p.value.active),
-    [newInstance.showPrepaidCompute]
+          ? s.products.wavelength_compute?.filter((p) => p.value.active) || []
+          : newInstance.cloud_provider === 'akamai'
+            ? s.products.akamai_compute?.filter((p) => p.value.active) || []
+            : newInstance.showPrepaidCompute
+              ? unusedCompute
+              : s.products.cloud_compute.filter((p) => p.value.active),
+    [newInstance.showPrepaidCompute],
   );
   const storage = useStoreState(
     appState,
-    (s) => (newInstance.cloud_provider === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
-    [newInstance.showPrepaidStorage]
+    (s) =>
+      newInstance.cloud_provider === 'lumen' || newInstance.cloud_provider === 'akamai'
+        ? false
+        : newInstance.showPrepaidStorage
+          ? unusedStorage
+          : s.products.cloud_storage.filter((p) => p.value.active),
+    [newInstance.showPrepaidStorage],
   );
 
   const regions = useStoreState(appState, (s) =>
     newInstance.cloud_provider === 'lumen'
       ? []
       : newInstance.cloud_provider === 'verizon'
-      ? s.wavelengthRegions
-      : newInstance.cloud_provider === 'akamai'
-      ? s.akamaiRegions
-      : s.regions
+        ? s.wavelengthRegions
+        : newInstance.cloud_provider === 'akamai'
+          ? s.akamaiRegions
+          : s.regions,
   );
   const hasCard = useStoreState(appState, (s) => s.hasCard);
   const [formState, setFormState] = useState({});
