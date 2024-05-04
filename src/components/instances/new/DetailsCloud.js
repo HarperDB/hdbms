@@ -64,7 +64,8 @@ function DetailsCloud() {
   const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
   const freeCloudInstanceLimit = config.free_cloud_instance_limit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
-  const canProceedToNextPage = formData.stripe_plan_id && formData.instance_region && (newInstance.cloud_provider === 'lumen' || formData.stripe_storage_plan_id);
+  const canProceedToNextPage =
+    formData.stripe_plan_id && formData.instance_region && (newInstance.cloud_provider === 'lumen' || newInstance.cloud_provider === 'akamai' || formData.stripe_storage_plan_id);
 
   useAsyncEffect(() => {
     const { submitted } = formState;
