@@ -18,14 +18,17 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
     5000,
     { clustering: { is_enabled: false } },
   );
+
+  console.log(hydratedInstances);
+
   const thisInstance = hydratedInstances.find((i) => i.compute_stack_id === compute_stack_id);
 
   const processedConnections =
-    thisInstance.clustering.message || !thisInstance.clustering.is_enabled
+    thisInstance.clustering?.message || !thisInstance.clustering?.is_enabled
       ? []
-      : thisInstance.clustering.engine === 'nats'
-        ? await processNatsConnections({ auth, url, instances: hydratedInstances, connections: thisInstance.clustering.connections })
-        : processSocketClusterConnections({ connections: thisInstance.clustering.status.outbound_connections });
+      : thisInstance.clustering?.engine === 'nats'
+        ? await processNatsConnections({ auth, url, instances: hydratedInstances, connections: thisInstance.clustering?.connections })
+        : processSocketClusterConnections({ connections: thisInstance.clustering?.status.outbound_connections });
 
   const network = {
     is_enabled: thisInstance.clustering.is_enabled,
