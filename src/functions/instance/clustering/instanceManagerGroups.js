@@ -1,6 +1,6 @@
-export default ({ instances, instanceAuths, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
+export default ({ instances, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
   const activeInstances = instances.filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS');
-  const compatibleInstances = activeInstances.filter((i) => i.clustering?.engine === instance_cluster_engine && instanceAuths[i.compute_stack_id]);
+  const compatibleInstances = activeInstances.filter((i) => i.clustering.engine === instance_cluster_engine);
 
   const processedInstances = compatibleInstances.map((i) => {
     const connection =
@@ -30,7 +30,7 @@ export default ({ instances, instanceAuths, network, instance_region, instance_w
   });
 
   const unreachable = instances
-    .filter((i) => i.clustering?.engine !== instance_cluster_engine || !instanceAuths[i.compute_stack_id])
+    .filter((i) => i.clustering.engine !== instance_cluster_engine)
     .map((i) => ({
       instance_name: i.instance_name,
       compute_stack_id: i.name,

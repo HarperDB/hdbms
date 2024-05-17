@@ -6,17 +6,9 @@ import processInstance from './processInstance';
 import processNatsConnections from './processNatsConnections';
 import processSocketClusterConnections from './processSocketClusterConnections';
 
-Promise.delay = (t, val) =>
-  new Promise((resolve) => {
-    setTimeout(resolve.bind(null, val), t);
-  });
-Promise.raceAll = (promises, timeoutTime, timeoutVal) => Promise.all(promises.map((p) => Promise.race([p, Promise.delay(timeoutTime, timeoutVal)])));
-
 const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAuths, setLoading }) => {
-  const hydratedInstances = await Promise.raceAll(
-    instances.map((instance) => processInstance({ instance, auth: instanceAuths[instance.compute_stack_id] })),
-    5000,
-    { clustering: { is_enabled: false } },
+  const hydratedInstances = await Promise.all(
+    instances.filter((i) => !!instanceAuths[i.compute_stack_id]).map((instance) => processInstance({ instance, auth: instanceAuths[instance.compute_stack_id] }))
   );
   const thisInstance = hydratedInstances.find((i) => i.compute_stack_id === compute_stack_id);
 
@@ -24,8 +16,8 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
     thisInstance.clustering.message || !thisInstance.clustering.is_enabled
       ? []
       : thisInstance.clustering.engine === 'nats'
-        ? await processNatsConnections({ auth, url, instances: hydratedInstances, connections: thisInstance.clustering.connections })
-        : processSocketClusterConnections({ connections: thisInstance.clustering.status.outbound_connections });
+      ? await processNatsConnections({ auth, url, instances: hydratedInstances, connections: thisInstance.clustering.connections })
+      : processSocketClusterConnections({ connections: thisInstance.clustering.status.outbound_connections });
 
   const network = {
     is_enabled: thisInstance.clustering.is_enabled,
@@ -33,8 +25,7 @@ const buildNetwork = async ({ auth, url, instances, compute_stack_id, instanceAu
   };
 
   const clusterPartners = instanceManagerGroups({
-    instances: hydratedInstances.filter((i) => i.compute_stack_id !== compute_stack_id),
-    instanceAuths,
+    instances: hydratedInstances.filter((i) => instanceAuths[i.compute_stack_id] && i.compute_stack_id !== compute_stack_id),
     network,
     instance_region: thisInstance.instance_region,
     instance_wavelength_zone_id: thisInstance.wavelength_zone_id,
