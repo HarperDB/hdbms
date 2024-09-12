@@ -9,36 +9,40 @@ import updatePassword from '../../../functions/api/lms/updatePassword';
 import FormStatus from '../../shared/FormStatus';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
+import usePersistedUser from '../../../functions/state/persistedUser';
 
 function Password() {
   const auth = useStoreState(appState, (s) => s.auth);
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const formStateHeight = '259px';
 
-  const submit = () => {
+  const submit = async () => {
     setFormState({ submitted: true });
     const { oldpassword, newpassword, newpassword2 } = formData;
     if (oldpassword !== auth.pass) {
       setFormState({ error: 'old password is incorrect' });
+      setFormData({});
     } else if (newpassword !== newpassword2) {
       setFormState({ error: 'new passwords do not match' });
+      setFormData({});
     } else if (!oldpassword || !newpassword || !newpassword2) {
       setFormState({ error: 'all fields are required' });
+      setFormData({});
     } else {
       setFormState({ processing: true });
-      updatePassword({ auth, user_id: auth.user_id, password: newpassword });
+      const newAuth = await updatePassword({ auth, user_id: auth.user_id, password: newpassword });
+
+      if (!newAuth || newAuth.passwordError) {
+        setFormState({ error: auth.message });
+      } else {
+        setPersistedUser({ ...persistedUser, pass: newpassword });
+        setFormState({ success: auth.message });
+        setFormData({});
+      }
     }
   };
-
-  useEffect(() => {
-    if (auth?.passwordError) {
-      setFormState({ error: auth.message });
-    } else if (auth?.passwordSuccess) {
-      setFormState({ success: auth.message });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth.passwordError, auth.passwordSuccess]);
 
   useEffect(() => {
     let mounted = true;

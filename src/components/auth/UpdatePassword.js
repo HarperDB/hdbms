@@ -16,8 +16,6 @@ function UpdatePassword() {
   const [formData, setFormData] = useState({});
   const [persistedUser, setPersistedUser] = usePersistedUser({});
 
-  console.log(auth);
-
   const setPasswordError = () => {
     setFormData({});
     setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
