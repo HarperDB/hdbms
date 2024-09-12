@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Input, Button } from 'reactstrap';
-import useAsyncEffect from 'use-async-effect';
 import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
@@ -8,22 +7,26 @@ import appState from '../../functions/state/appState';
 
 import updatePassword from '../../functions/api/lms/updatePassword';
 import Loader from '../shared/Loader';
+import usePersistedUser from '../../functions/state/persistedUser';
 
 function UpdatePassword() {
   const navigate = useNavigate();
   const auth = useStoreState(appState, (s) => s.auth);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
+
+  console.log(auth);
 
   const setPasswordError = () => {
     setFormData({});
     setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
   };
 
-  // NOTE: Marketing requested to send a conversion event when this page is 
+  // NOTE: Marketing requested to send a conversion event when this page is
   // loaded to indicate that the user in fact signed up.  Triggering here for now
   // because the only route to get here is via signup form.  if this becomes a destination
-  // from multiple places, we need a solution that scopes the conversion call to the 
+  // from multiple places, we need a solution that scopes the conversion call to the
   // correct action.
   useEffect(() => {
     if (window.lintrk) {
@@ -31,39 +34,36 @@ function UpdatePassword() {
     }
   }, []);
 
-  useAsyncEffect(async () => {
-    const { submitted, processing } = formState;
-    if (submitted && !processing) {
-      const { password } = formData;
+  const submit = async () => {
+    setFormState({ submitted: true });
+    const { password } = formData;
+    if (!password || !/^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/.test(password)) {
+      setPasswordError();
+    } else {
+      setFormState({ processing: true });
 
-      if (!password || !/^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/.test(password)) {
+      const newAuth = await updatePassword({ auth, user_id: auth.user_id, password });
+
+      if (!newAuth || newAuth.passwordError) {
         setPasswordError();
       } else {
-        setFormState({ processing: true });
-        updatePassword({ auth, ...auth, password });
+        setPersistedUser({ ...persistedUser, pass: password });
+        setTimeout(navigate('/'), 100);
       }
     }
-  }, [formState]);
+  };
 
-  useEffect(() => {
-    if (auth?.passwordSuccess) {
-      navigate('/');
-    } else if (auth?.passwordError) {
-      setPasswordError();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
-
-  useAsyncEffect(() => !formState.submitted && setFormState({}), [formData]);
+  // eslint-disable-next-line
+  useEffect(() => !formState.submitted && setFormState({}), [formData]);
 
   return (
     <div id="login-form">
       {formState.processing ? (
-        <Loader header="adding account password" spinner relative />
+        <Loader header="setting account password" spinner relative />
       ) : (
         <>
           <Card className="mb-3">
-            <CardBody onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
+            <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
               <div className="instructions">
                 Add an account password
                 <br />
@@ -83,7 +83,7 @@ function UpdatePassword() {
                 title="password"
                 placeholder="add password"
               />
-              <Button id="updateMyPassword" onClick={() => setFormState({ submitted: true })} disabled={formState.submitted} title="Add Account Password" block color="purple">
+              <Button id="updateMyPassword" onClick={submit} disabled={formState.submitted} title="Add Account Password" block color="purple">
                 Add Account Password
               </Button>
             </CardBody>
