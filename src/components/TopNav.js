@@ -49,6 +49,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
       appState.update((s) => {
         s.auth = false;
       });
+      setPersistedUser({ theme });
     }
     navigate('/');
   };

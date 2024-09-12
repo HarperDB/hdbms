@@ -14,13 +14,12 @@ import usePersistedUser from '../../functions/state/persistedUser';
 function SignIn() {
   const { search } = useLocation();
   const { user, token } = queryString.parse(search, { decode: false });
-  const auth = useStoreState(appState, (s) => s.auth);
   const theme = useStoreState(appState, (s) => s.theme);
   const [formState, setFormState] = useState({});
   const [formData, setFormData] = useState({});
   const [persistedUser, setPersistedUser] = usePersistedUser({});
 
-  const submit = () => {
+  const submit = async () => {
     setFormState({ submitted: true });
     const { email, pass } = formData;
     if (!isEmail(email)) {
@@ -31,23 +30,17 @@ function SignIn() {
       setFormState({ error: 'portal access denied' });
     } else {
       setFormState({ processing: true });
-      setPersistedUser({ ...persistedUser, email, pass });
-      getUser({ email, pass, loggingIn: true });
+
+      const newAuth = await getUser({ email, pass, loggingIn: true });
+
+      if (!newAuth || newAuth?.error) {
+        setFormState({ error: ['Unauthorized', 'User does not exist'].includes(newAuth?.message) ? 'Login Failed' : newAuth?.message || 'Login Failed' });
+        setTimeout(() => setFormState({}), 5000);
+      } else {
+        setPersistedUser({ ...persistedUser, email, pass });
+      }
     }
   };
-
-  useEffect(() => {
-    if (auth?.error) {
-      setFormState({ error: ['Unauthorized', 'User does not exist'].includes(auth.message) ? 'Login Failed' : auth.message });
-      setTimeout(() => setFormState({}), 3000);
-    }
-  }, [auth]);
-
-  useEffect(
-    () => !formState.submitted && setFormState({}),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formData],
-  );
 
   useEffect(() => {
     if (user && token) {

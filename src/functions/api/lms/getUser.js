@@ -36,9 +36,12 @@ export default async ({ email, pass, loggingIn = false, signal }) => {
       response.orgs = [response.orgs];
     }
 
-    return appState.update((s) => {
-      s.auth = { email, pass, ...response };
+    const newAuth = { email, pass, ...response };
+    appState.update((s) => {
+      s.auth = newAuth;
     });
+
+    return newAuth;
   } catch (e) {
     if (!loggingIn) {
       addError({
