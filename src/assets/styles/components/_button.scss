@@ -1,8 +1,9 @@
 .btn {
   align-items: center;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 31%, rgba(0, 0, 0, 0.05) 100%);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 5%) 31%, rgb(0 0 0 / 5%) 100%);
   border: 1px solid $faintest-white-overlay !important;
   border-radius: $border-radius;
+
   // box-shadow: 0 0 3px $grey-overlay !important;
   display: inline-flex;
   font-family: $font-family-sans;
@@ -22,7 +23,7 @@
   }
 
   &:active {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 31%, rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(to bottom, rgb(0 0 0 / 5%) 31%, rgb(255 255 255 / 5%) 100%);
   }
 
   &.btn-sm {

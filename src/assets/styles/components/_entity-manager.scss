@@ -10,8 +10,7 @@
       &.scrollable {
         max-height: calc(50vh - 160px);
         min-height: 49px;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
 
         &.creating {
           max-height: calc(50vh - 209px);
@@ -39,7 +38,7 @@
           width: 100%;
 
           input {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgb(255 255 255 / 30%);
             border-color: transparent;
             color: $color-black;
 

@@ -3,11 +3,10 @@
     border-bottom: 1px solid $lighter-grey-overlay;
     font-size: 12px;
     min-height: calc(100vh - 328px);
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     width: 100%;
 
-    @media screen and (max-width: 767px) {
+    @media screen and (width <= 767px) {
       min-height: calc(100vh - 626px);
     }
 
@@ -119,7 +118,7 @@
     .btn {
       max-width: 100px;
 
-      @media screen and (max-width: 575px) {
+      @media screen and (width <= 575px) {
         max-width: 100%;
       }
     }

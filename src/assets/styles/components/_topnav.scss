@@ -13,7 +13,7 @@
   width: 100%;
   z-index: 99 !important;
 
-  @media screen and (max-width: 991px) {
+  @media screen and (width <= 991px) {
     padding: 0 1rem;
   }
 
@@ -34,7 +34,7 @@
       height: 30px;
       width: 120px;
 
-      @media screen and (max-width: 530px) {
+      @media screen and (width <= 530px) {
         background-image: url('../../images/logo/logo_dog_only.png');
         width: 30px;
       }
@@ -51,7 +51,7 @@
       margin-left: 1rem;
       white-space: nowrap;
 
-      @media screen and (max-width: 511px) {
+      @media screen and (width <= 511px) {
         margin-left: 0.5rem;
       }
 
@@ -88,7 +88,7 @@
       overflow: hidden;
       transition: flex 500ms;
 
-      @media screen and (max-width: 511px) {
+      @media screen and (width <= 511px) {
         margin-left: 0.5rem;
       }
 
@@ -106,7 +106,7 @@
         justify-content: center;
         padding: 0 15px;
 
-        @media screen and (max-width: 511px) {
+        @media screen and (width <= 511px) {
           padding: 0 5px;
         }
       }
@@ -115,7 +115,7 @@
         border-right: 1px solid $faint-white-overlay;
         white-space: nowrap;
 
-        @media screen and (max-width: 511px) {
+        @media screen and (width <= 511px) {
           font-size: 10px;
           font-weight: $font-weight-bold;
           max-width: 75px;

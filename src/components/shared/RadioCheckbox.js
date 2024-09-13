@@ -9,7 +9,7 @@ function RadioCheckbox({ required, onChange, options, type, defaultValue, ...res
     let newValue = [...value];
 
     if (newValue.indexOf(v) !== -1 && isRadio && required) {
-      // eslint-disable-next-line no-console
+      // eslint-disable-next-line
       console.log('not unsetting required radio');
     } else if (newValue.indexOf(v) === -1 && isRadio) {
       newValue = [v];
@@ -26,21 +26,20 @@ function RadioCheckbox({ required, onChange, options, type, defaultValue, ...res
     if (defaultValue) {
       handleClick(defaultValue.value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div {...rest}>
-      {optionsArray &&
-        optionsArray.map((option) => (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-          <div role="button" tabIndex="0" key={`${type}${option.value}${option.label}`} onClick={() => handleClick(option.value)}>
-            <div className={`radio-checkbox ${value.indexOf(option.value) !== -1 ? 'show' : 'hidden'}`}>
-              {type === 'checkbox' ? <span className="checkmark">&#10004;</span> : <div className="dot" />}
-            </div>
-            <div className="radio-checkbox-label">{option.label}</div>
+      {optionsArray?.map((option) => (
+        // eslint-disable-next-line
+        <div role="button" tabIndex="0" key={`${type}${option.value}${option.label}`} onClick={() => handleClick(option.value)}>
+          <div className={`radio-checkbox ${value.indexOf(option.value) !== -1 ? 'show' : 'hidden'}`}>
+            {type === 'checkbox' ? <span className="checkmark">&#10004;</span> : <div className="dot" />}
           </div>
-        ))}
+          <div className="radio-checkbox-label">{option.label}</div>
+        </div>
+      ))}
     </div>
   );
 }

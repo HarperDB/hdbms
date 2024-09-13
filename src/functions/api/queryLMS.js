@@ -3,7 +3,7 @@ import config from '../../config';
 import addError from './lms/addError';
 
 export default async ({ endpoint, payload, auth, signal = undefined }) => {
-  // eslint-disable-next-line no-console
+   
   // console.log('Querying LMS API', endpoint);
   const errorObject = {
     type: 'lms api',

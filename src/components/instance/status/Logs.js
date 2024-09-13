@@ -41,7 +41,7 @@ function Logs() {
       controller?.abort();
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth, lastUpdate]);
 
   useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
@@ -79,7 +79,7 @@ function Logs() {
               </div>
             ) : logs && logs.length ? (
               logs.map((l, i) => (
-                // eslint-disable-next-line react/no-array-index-key
+                // eslint-disable-next-line
                 <LogRow key={i} {...l} />
               ))
             ) : logs && !logs.length ? (

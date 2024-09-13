@@ -43,11 +43,11 @@ export default async ({
     const response = json.body || json;
 
     if (!response.error) {
-      // eslint-disable-next-line no-console
+      // eslint-disable-next-line
       console.log('Reported ', config.env, body.status, type, operation);
     }
   } catch (e) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line
     console.log(e);
   }
 };

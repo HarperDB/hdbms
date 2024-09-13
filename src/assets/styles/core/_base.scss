@@ -13,7 +13,7 @@ body {
       min-width: $min-width;
       padding: 0 2rem;
 
-      @media screen and (max-width: 991px) {
+      @media screen and (width <= 991px) {
         padding: 0 1rem;
       }
     }

@@ -5,6 +5,7 @@ import { Input } from 'reactstrap';
 function isValidUrl(url) {
   try {
     return Boolean(new URL(url));
+    // eslint-disable-next-line
   } catch (e) {
     return false;
   }

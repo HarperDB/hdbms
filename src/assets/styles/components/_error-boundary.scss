@@ -4,8 +4,7 @@
 
   .error-message {
     color: $color-danger;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     white-space: nowrap;
   }
 

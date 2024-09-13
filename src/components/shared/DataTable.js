@@ -12,7 +12,7 @@ import addError from '../../functions/api/lms/addError';
 import ErrorFallback from './ErrorFallback';
 
 function TextViewer({ value }) {
-  return <div className="text-renderer">{value}</div>
+  return <div className="text-renderer">{value}</div>;
 }
 
 function ImageViewer({ src }) {
@@ -88,7 +88,7 @@ function DataTable({
         initialState: { pageIndex: currentPage, pageSize },
       },
       useFilters,
-      usePagination
+      usePagination,
     );
   const [localLoading, setLocalLoading] = useState(true);
 
@@ -100,7 +100,7 @@ function DataTable({
     } else {
       onFilteredChange(state.filters);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [state.filters, showFilter]);
 
   useEffect(() => {
@@ -125,7 +125,14 @@ function DataTable({
         )}
       </div>
       {manual ? (
-        <DataTablePaginationManual page={currentPage} pageSize={pageSize} totalPages={totalPages} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} loading={loading} />
+        <DataTablePaginationManual
+          page={currentPage}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          loading={loading}
+        />
       ) : (
         <DataTablePaginationAuto
           previousPage={previousPage}

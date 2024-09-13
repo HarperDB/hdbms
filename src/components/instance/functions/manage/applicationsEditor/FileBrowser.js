@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { Card, CardBody } from 'reactstrap';
@@ -47,6 +44,7 @@ function ProjectIcon() {
   return <i className={cn(`project-icon fas fa-file-code`)} />;
 }
 function FolderIcon({ toggleClosed }) {
+  // eslint-disable-next-line
   return <i onClick={toggleClosed} onKeyDown={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
 }
 

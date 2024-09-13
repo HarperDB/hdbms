@@ -96,6 +96,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, 
       version: registration.version,
       retry: true,
     };
+    // eslint-disable-next-line
   } catch (e) {
     return {
       status: 'UNABLE TO CONNECT',

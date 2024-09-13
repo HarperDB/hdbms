@@ -146,7 +146,7 @@ function Deploy() {
       ...tableState,
       totalPages: Math.ceil((tableData.length || tableState.pageSize) / tableState.pageSize),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [setTableState, tableState.pageSize]);
 
   return (

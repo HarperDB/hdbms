@@ -32,7 +32,7 @@
       padding: 2rem !important;
     }
 
-    @media screen and (max-width: 767px), screen and (max-height: 530px) {
+    @media screen and (width <= 767px), screen and (height <= 530px) {
       margin-bottom: 50px;
       top: -50px;
       transform: translateX(-50%);
@@ -51,7 +51,7 @@
       text-align: center;
       width: 100%;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (width <= 767px) {
         font-size: 1.1rem !important;
       }
     }

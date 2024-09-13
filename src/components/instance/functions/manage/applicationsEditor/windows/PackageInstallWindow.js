@@ -134,6 +134,7 @@ export default function PackageInstallWindow({ selectedPackage, onConfirm, onCan
               setLoading(true);
               try {
                 await onConfirm(projectName, packageSpec, deployTargets);
+                // eslint-disable-next-line
               } catch (e) {
                 setLoading(false);
               }

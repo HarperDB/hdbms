@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */ // NOTE: disabling because there are callbacks here that haven't been implemented.
+// NOTE: disabling because there are callbacks here that haven't been implemented.
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
@@ -39,13 +39,9 @@ function WebIDE({
   onDeletePackage,
   onDeployProject,
   onFileSelect,
-  onFileRename,
-  onFolderRename,
   onInstallPackage,
-  onUpdate,
   restartInstance,
   restartingInstance,
-  refreshCustomFunctions,
 }) {
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null); // selectedFile = { content, path: /components/project/rest/of/path.js, project }

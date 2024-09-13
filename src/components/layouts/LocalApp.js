@@ -32,7 +32,7 @@ function LocalApp() {
 
   useEffect(() => {
     init({ currentPath: location.pathname, navigate, persistedUser, setPersistedUser, setFetchingUser, instanceAuths, controller });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   return (

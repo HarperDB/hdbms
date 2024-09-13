@@ -41,6 +41,7 @@ function CsvUploadURL() {
           s.lastUpdate = Date.now();
         });
         return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+        // eslint-disable-next-line
       } catch (e) {
         return setTimeout(() => {
           instanceState.update((s) => {
@@ -50,8 +51,8 @@ function CsvUploadURL() {
         }, 2000);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mounted]
+    // eslint-disable-next-line
+    [mounted],
   );
 
   useAsyncEffect(async () => {
@@ -71,7 +72,7 @@ function CsvUploadURL() {
   useAsyncEffect(
     () => setMounted(true),
     () => setMounted(false),
-    []
+    [],
   );
 
   return (

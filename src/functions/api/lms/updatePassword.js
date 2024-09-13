@@ -15,14 +15,20 @@ export default async ({ auth, user_id, password }) => {
     });
 
     if (response.error) {
-      return appState.update((s) => {
-        s.auth = { ...auth, ...response, passwordError: Date.now() };
+      const newAuth = { ...auth, ...response, passwordError: Date.now() };
+      appState.update((s) => {
+        s.auth = newAuth;
       });
+      return newAuth;
     }
 
-    return appState.update((s) => {
-      s.auth = { ...auth, passwordSuccess: Date.now(), update_password: false, ...response, pass: password };
+    const newAuth = { ...auth, passwordSuccess: Date.now(), update_password: false, ...response, pass: password };
+
+    appState.update((s) => {
+      s.auth = newAuth;
     });
+
+    return newAuth;
   } catch (e) {
     return addError({
       type: 'lms data',

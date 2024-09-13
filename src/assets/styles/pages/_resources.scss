@@ -3,7 +3,7 @@
     &.installation {
       min-height: 414px;
 
-      @media only screen and (max-width: 991px) {
+      @media only screen and (width <= 991px) {
         min-height: 0;
       }
     }
@@ -24,8 +24,7 @@
 
   .video-scroller {
     max-height: 500px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     padding-right: 5px;
   }
 
@@ -40,18 +39,15 @@
     .title {
       align-items: center;
       background: $dark-grey-overlay;
-      bottom: 0;
       color: $color-white;
       display: flex;
       font-weight: $font-weight-bold;
       height: 100%;
+      inset: 0;
       justify-content: center;
-      left: 0;
       padding: 15px;
       position: absolute;
-      right: 0;
       text-align: center;
-      top: 0;
       width: 100%;
     }
 
@@ -67,7 +63,7 @@
   .custom-example-prompt {
     white-space: nowrap;
 
-    @media only screen and (max-width: 991px) {
+    @media only screen and (width <= 991px) {
       white-space: normal;
     }
   }

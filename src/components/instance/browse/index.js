@@ -130,7 +130,7 @@ function BrowseIndex() {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line
   useEffect(validate, [structure, schema, table, compute_stack_id]);
   useEffect(syncInstanceStructure, [auth, url, schema, table]);
 

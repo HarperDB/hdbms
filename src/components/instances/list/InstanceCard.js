@@ -15,14 +15,14 @@ function InstanceCard({ flippedCard, setFlippedCard, compute_stack_id, customer_
     if (flippedCard !== compute_stack_id) {
       setFlipState(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [flippedCard]);
 
   useEffect(() => {
     if (flipState) {
       setFlippedCard(compute_stack_id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [flipState]);
 
   return (

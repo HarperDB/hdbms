@@ -40,13 +40,14 @@ function CsvUploadFile() {
           return setTimeout(() => validateData(uploadJobId), 1000);
         }
         return setTimeout(() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`), 1000);
+        // eslint-disable-next-line
       } catch (e) {
         return setTimeout(() => {
           navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}`);
         }, 2000);
       }
     },
-    [mounted] // eslint-disable-line react-hooks/exhaustive-deps
+    [mounted], // eslint-disable-line
   );
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -81,7 +82,7 @@ function CsvUploadFile() {
   useAsyncEffect(
     () => setMounted(true),
     () => setMounted(false),
-    []
+    [],
   );
 
   return (

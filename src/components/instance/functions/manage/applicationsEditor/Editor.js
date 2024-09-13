@@ -43,7 +43,7 @@ function Editor({ active, file, onFileChange }) {
     return null;
   }
 
-  // eslint-disable-next-line no-unused-vars
+   
   return (
     <ReactMonacoEditor
       height="100%"

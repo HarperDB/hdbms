@@ -84,7 +84,7 @@ function EntityManagerForm({ items, toggleDropItem, toggleCreate, baseUrl, resta
     if (entityName && items.find((i) => i === entityName)) {
       navigate(`${baseUrl}/${entityName}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [items]);
 
   return (

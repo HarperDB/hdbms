@@ -42,7 +42,7 @@ function Profile() {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth.profileError, auth.profileSuccess]);
 
   useEffect(() => {
@@ -68,84 +68,84 @@ function Profile() {
           <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="Please try again" />
         ) : (
           <Card className="mb-3">
-              <CardBody>
-                <Row>
-                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    {auth?.email_bounced && !auth?.profileSuccess ? <span className="text-danger">please provide a valid email address</span> : <span>{auth.email}</span>}
-                  </Col>
-                  <Col md="6" xs="12">
-                    <Input
-                      id="email"
-                      type="text"
-                      className={`mb-0 text-center ${auth?.email_bounced && !auth?.profileSuccess ? 'error' : ''}`}
-                      name="email"
-                      placeholder="email address"
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      value={formData.email || ''}
-                      disabled={formState.submitted}
-                    />
-                  </Col>
-                  <Col xs="12">
-                    <hr className="my-2" />
-                  </Col>
-                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    first name
-                  </Col>
-                  <Col md="6" xs="12">
-                    <Input
-                      id="firstname"
-                      type="text"
-                      className="mb-0 text-center"
-                      name="fname"
-                      placeholder="first name"
-                      onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
-                      value={formData.firstname || ''}
-                      disabled={formState.submitted}
-                    />
-                  </Col>
-                  <Col xs="12">
-                    <hr className="my-2" />
-                  </Col>
-                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    last name
-                  </Col>
-                  <Col md="6" xs="12">
-                    <Input
-                      id="lastname"
-                      type="text"
-                      className="mb-0 text-center"
-                      name="lname"
-                      placeholder="last name"
-                      onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-                      value={formData.lastname || ''}
-                      disabled={formState.submitted}
-                    />
-                  </Col>
-                  <Col xs="12">
-                    <hr className="my-2" />
-                  </Col>
-                  <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
-                    github repo
-                  </Col>
-                  <Col md="6" xs="12">
-                    <Input
-                      id="github_repo"
-                      type="text"
-                      className="mb-0 text-center"
-                      name="github_repo"
-                      placeholder="github repo"
-                      onChange={(e) => setFormData({ ...formData, github_repo: e.target.value })}
-                      value={formData.github_repo || ''}
-                      disabled={formState.submitted}
-                    />
-                  </Col>
-                </Row>
-                <hr className="mt-2 mb-4" />
-                <Button id="saveProfile" color="purple" block onClick={submit} disabled={formState.submitted}>
-                  Save Profile
-                </Button>
-              </CardBody>
-            </Card>
+            <CardBody>
+              <Row>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  {auth?.email_bounced && !auth?.profileSuccess ? <span className="text-danger">please provide a valid email address</span> : <span>{auth.email}</span>}
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    id="email"
+                    type="text"
+                    className={`mb-0 text-center ${auth?.email_bounced && !auth?.profileSuccess ? 'error' : ''}`}
+                    name="email"
+                    placeholder="email address"
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    value={formData.email || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  first name
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    id="firstname"
+                    type="text"
+                    className="mb-0 text-center"
+                    name="fname"
+                    placeholder="first name"
+                    onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+                    value={formData.firstname || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  last name
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    id="lastname"
+                    type="text"
+                    className="mb-0 text-center"
+                    name="lname"
+                    placeholder="last name"
+                    onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+                    value={formData.lastname || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+                <Col xs="12">
+                  <hr className="my-2" />
+                </Col>
+                <Col xs="6" className="text text-nowrap d-none d-md-block pt-2">
+                  github repo
+                </Col>
+                <Col md="6" xs="12">
+                  <Input
+                    id="github_repo"
+                    type="text"
+                    className="mb-0 text-center"
+                    name="github_repo"
+                    placeholder="github repo"
+                    onChange={(e) => setFormData({ ...formData, github_repo: e.target.value })}
+                    value={formData.github_repo || ''}
+                    disabled={formState.submitted}
+                  />
+                </Col>
+              </Row>
+              <hr className="mt-2 mb-4" />
+              <Button id="saveProfile" color="purple" block onClick={submit} disabled={formState.submitted}>
+                Save Profile
+              </Button>
+            </CardBody>
+          </Card>
         )}
       </div>
     </ErrorBoundary>

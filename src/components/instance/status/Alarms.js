@@ -42,7 +42,7 @@ function Alarms() {
       controller?.abort();
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth, lastUpdate]);
 
   useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);

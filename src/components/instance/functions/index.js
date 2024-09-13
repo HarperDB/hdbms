@@ -10,14 +10,14 @@ import ComingSoon from './comingsoon';
 import Loader from '../../shared/Loader';
 import buildCustomFunctions from '../../../functions/instance/functions/buildCustomFunctions';
 import EmptyPrompt from '../../shared/EmptyPrompt';
+import supportsApplications from '../../../functions/instance/functions/supportsApplications';
 
 function CustomFunctionsIndex() {
   const auth = useStoreState(instanceState, (s) => s.auth);
   const url = useStoreState(instanceState, (s) => s.url);
   const custom_functions = useStoreState(instanceState, (s) => s.custom_functions);
   const registration = useStoreState(instanceState, (s) => s.registration);
-  const [majorVersion, minorVersion] = (registration?.version || '').split('.') || [];
-  const supportsApplicationsAPI = parseFloat(`${majorVersion}.${minorVersion}`) >= 4.2;
+  const useApplications = supportsApplications({ version: registration?.version });
   const restarting = useStoreState(instanceState, (s) => s.restarting);
   const [showManage, setShowManage] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -36,12 +36,12 @@ function CustomFunctionsIndex() {
   }, [refreshCustomFunctions]);
 
   useEffect(() => {
-    const isConfigured = (custom_functions?.is_enabled && custom_functions?.port) || supportsApplicationsAPI;
+    const isConfigured = (custom_functions?.is_enabled && custom_functions?.port) || useApplications;
     setShowManage(isConfigured);
     if (isConfigured) {
       setConfiguring(false);
     }
-  }, [custom_functions, supportsApplicationsAPI]);
+  }, [custom_functions, useApplications]);
 
   useInterval(() => {
     if (configuring) refreshCustomFunctions();

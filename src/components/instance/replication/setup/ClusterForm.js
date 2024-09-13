@@ -121,8 +121,8 @@ function ClusterForm({ setConfiguring, clusterStatus, refreshStatus, compute_sta
         label="Cluster Role"
         handleChange={(clusterRole) => updateForm({ clusterRole })}
         value={formData.clusterRole}
-        valid={formData.clusterRole.trim().length > 0}
-        validator={(value) => value.trim().length > 0}
+        valid={formData.clusterRole?.trim().length > 0}
+        validator={(value) => value?.trim().length > 0}
         editable={!clusterStatus?.cluster_role?.role}
         addSpace={false}
       />

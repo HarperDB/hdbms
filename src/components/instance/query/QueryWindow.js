@@ -16,7 +16,7 @@ function QueryWindow({ setQuery, query }) {
       setFormData(query.query || query);
       submitRef.current.focus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [query]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function QueryWindow({ setQuery, query }) {
       setFormData('');
       setFormState({ submitted: false });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [formState]);
 
   return (
@@ -40,6 +40,12 @@ function QueryWindow({ setQuery, query }) {
         <span className="floating-card-header">sql query</span>
         <Card className="mt-3 mb-4">
           <CardBody>
+            <div className="pb-3 border-white">
+              SQL queries are intended for data examination using primary keys. For performant queries in your application, please use our{' '}
+              <a href="https://docs.harperdb.io/docs/developers/rest" target="_blank" rel="noopener noreferrer">
+                REST Interface
+              </a>
+            </div>
             <Input
               id="sql_query"
               type="textarea"

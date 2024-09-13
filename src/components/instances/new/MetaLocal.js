@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useState } from 'react';
 import { Col, Input, Row, Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
@@ -81,6 +80,7 @@ function MetaLocal() {
             setNewInstance({ ...newInstance, ...instanceData });
             setTimeout(() => navigate(`/o/${customer_id}/instances/new/details_local`), 0);
           }
+          // eslint-disable-next-line
         } catch (e) {
           setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
         }

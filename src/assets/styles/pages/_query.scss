@@ -4,11 +4,10 @@ $split-height: calc(50vh - 182px) !important;
   #query-history {
     .query-scroller {
       height: $split-height;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden auto;
       padding: 0;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (width <= 767px) {
         height: 120px !important;
         max-height: 120px;
         min-height: 120px;
@@ -45,7 +44,7 @@ $split-height: calc(50vh - 182px) !important;
       height: $split-height;
       tab-size: 2;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (width <= 767px) {
         height: 100px !important;
         max-height: 100px;
         min-height: 100px;

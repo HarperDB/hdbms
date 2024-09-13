@@ -2,6 +2,7 @@ import { lazy, React } from 'react';
 
 import Browse from './browse';
 import config from '../../config';
+import supportsApplications from '../../functions/instance/functions/supportsApplications';
 
 const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
@@ -13,6 +14,8 @@ const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './role
 const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ './functions'));
 
 const routes = ({ super_user, version = null }) => {
+  const useApplications = supportsApplications({ version });
+
   const browse = {
     element: <Browse />,
     path: `browse/:schema?/:table?/:action?/:hash?`,
@@ -93,24 +96,12 @@ const routes = ({ super_user, version = null }) => {
     icon: 'wrench',
   };
 
-  let supportsApplications = false;
-
-  if (version) {
-    const [a, b] = version?.split('.') || [];
-
-    const major = parseInt(a, 10);
-    const minor = parseInt(b, 10);
-    const versionAsFloat = parseFloat(`${major}.${minor}`);
-
-    supportsApplications = versionAsFloat >= 4.2;
-  }
-
   if (config.is_local_studio && super_user) {
-    return [browse, query, users, roles, cluster, supportsApplications ? applications : functions, metrics, configure];
+    return [browse, query, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
   }
 
   if (super_user) {
-    return [browse, query, users, roles, charts, cluster, supportsApplications ? applications : functions, metrics, configure];
+    return [browse, query, users, roles, charts, cluster, useApplications ? applications : functions, metrics, configure];
   }
 
   if (config.is_local_studio) {

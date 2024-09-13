@@ -29,8 +29,8 @@ function UsersIndex() {
       refreshUsers();
       getCustomer({ auth, customer_id });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    // eslint-disable-next-line
+    [],
   );
 
   useInterval(() => refreshUsers(), config.refresh_content_interval);

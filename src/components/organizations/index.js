@@ -25,7 +25,7 @@ function OrganizationsIndex() {
       s.instances = false;
       s.hasCard = false;
       s.lastUpdate = false;
-    })
+    }),
   );
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function OrganizationsIndex() {
     if (activeOrgs.length === 1 && (!list || list === 'sign-up')) {
       navigate(`/o/${auth.orgs[0].customer_id}/instances`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth, list]);
 
   return (

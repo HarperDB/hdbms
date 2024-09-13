@@ -43,8 +43,8 @@ function Datatable({ lastUpdate, setLastUpdate }) {
     (user_id) => {
       navigate(`/o/${customer_id}/i/${compute_stack_id}/users/${user_id}`);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [compute_stack_id, customer_id]
+    // eslint-disable-next-line
+    [compute_stack_id, customer_id],
   );
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function Datatable({ lastUpdate, setLastUpdate }) {
       isMounted = false;
       controller?.abort();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth, lastUpdate, tableState.pageSize]);
 
   useEffect(() => {
@@ -90,7 +90,7 @@ function Datatable({ lastUpdate, setLastUpdate }) {
       isMounted = false;
       controller?.abort();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [sortParam, sortDesc]);
 
   return (
