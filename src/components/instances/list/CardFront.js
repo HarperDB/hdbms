@@ -60,8 +60,8 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [instanceAuth, instanceData.status]
+    // eslint-disable-next-line
+    [instanceAuth, instanceData.status],
   );
 
   useAsyncEffect(async () => {
@@ -74,12 +74,12 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
           status === 'CREATE_IN_PROGRESS'
             ? 'CREATING INSTANCE'
             : status === 'UPDATE_IN_PROGRESS'
-            ? 'UPDATING INSTANCE'
-            : status === 'CREATE_FAILED'
-            ? 'CREATE FAILED'
-            : status === 'DELETE_FAILED'
-            ? 'DELETE FAILED'
-            : 'CONFIGURING NETWORK',
+              ? 'UPDATING INSTANCE'
+              : status === 'CREATE_FAILED'
+                ? 'CREATE FAILED'
+                : status === 'DELETE_FAILED'
+                  ? 'DELETE FAILED'
+                  : 'CONFIGURING NETWORK',
         error: ['CREATE_FAILED', 'DELETE_FAILED'].includes(status),
         retry: status === 'CONFIGURING_NETWORK',
       });

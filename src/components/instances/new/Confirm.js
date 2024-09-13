@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import React, { useState } from 'react';
 import { Col, Row, Button, Card, CardBody } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';

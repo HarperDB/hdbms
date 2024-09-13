@@ -24,11 +24,10 @@
     width: 270px !important;
 
     .card-body {
-      align-content: center;
       display: flex;
       flex-direction: column;
       height: 205px;
-      justify-content: center;
+      place-content: center center;
     }
   }
 }

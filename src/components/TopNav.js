@@ -25,13 +25,13 @@ function TopNav({ isMaintenance, loggedIn = false }) {
 
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [auth.orgs],
   );
 
   const showManageIcon = useMemo(
     () => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner',
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [auth.orgs, customer.customer_id],
   );
 

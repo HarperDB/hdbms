@@ -81,12 +81,11 @@ function Datatable({ query }) {
       controller?.abort();
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [query, lastUpdate]);
 
   useEffect(() => {
     setTableState(defaultTableState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.query]);
 
   useInterval(() => {

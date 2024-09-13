@@ -142,9 +142,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
     await refreshCustomFunctions();
   }
 
-  // eslint-disable-next-line no-empty-function
-  async function renameFolder() {}
-
   async function renameFile(newFileName, info) {
     const { path, content, project } = info;
     const parentDir = getRelativeFilepath(path).split('/').slice(0, -1).join('/');
@@ -341,27 +338,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
 
     await Promise.all(deployPromises);
     await refreshCustomFunctions();
-
-    /*
-    for (const deployTarget of deployTargets) {
-
-      // TODO: check error here.
-      await deployComponent({
-        auth: deployTarget.auth,
-        url: deployTarget.instance.url,
-        project: projectName,
-        packageUrl
-      });
-
-     // TODO: what do we actually want to do about an invalid package?
-      // change to restartService({ auth, url, service: 'http_worker' });
-
-      await restartService({ auth: deployTarget.auth, url: deployTarget.instance.url, service: 'http_workers' });
-
-    }
-    */
-
-    await refreshCustomFunctions();
   }
 
   async function createNewFile(newFilename, parentFolder) {
@@ -464,7 +440,6 @@ function ManageIndex({ refreshCustomFunctions, loading }) {
       onDeletePackage={deletePackage}
       onFileSelect={selectNewFile}
       onFileRename={renameFile}
-      onFolderRename={renameFolder}
       refreshingCustomFunctions={loading}
       restartInstance={async () => restartWithLoadingState({ auth, url })}
       restartingInstance={restartingInstance}

@@ -14,14 +14,14 @@ function OrgCard({ flippedCard, setFlippedCard, customer_id, ...rest }) {
     if (flippedCard !== customer_id) {
       setFlipState(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [flippedCard]);
 
   useEffect(() => {
     if (flipState) {
       setFlippedCard(customer_id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [flipState]);
 
   return (

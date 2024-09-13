@@ -25,8 +25,8 @@ function BillingIndex() {
     () => {
       getCustomer({ auth, customer_id });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    // eslint-disable-next-line
+    [],
   );
 
   useAsyncEffect(() => {

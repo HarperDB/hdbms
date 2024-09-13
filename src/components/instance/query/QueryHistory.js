@@ -17,7 +17,7 @@ function QueryHistory({ setQuery, query }) {
       newQueries.unshift(query);
       setQueries({ ...queries, [compute_stack_id]: newQueries });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [query]);
 
   return (

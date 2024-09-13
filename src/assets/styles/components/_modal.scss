@@ -9,11 +9,11 @@
   }
 
   .instance-form-card-holder {
-    @media screen and (max-width: 991px) {
+    @media screen and (width <= 991px) {
       margin-bottom: 1rem;
 
       &:last-child {
-        @media screen and (max-width: 991px) {
+        @media screen and (width <= 991px) {
           margin-bottom: 0;
         }
       }

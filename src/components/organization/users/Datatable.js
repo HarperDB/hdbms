@@ -43,8 +43,8 @@ function Datatable() {
         navigate(`/o/${customer_id}/users/${user_id}`);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [auth.user_id, customer_id]
+    // eslint-disable-next-line
+    [auth.user_id, customer_id],
   );
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function Datatable() {
       const sortedTableData = [...userData].sort((a, b) => (a[sortParam] > b[sortParam] && sortDesc ? -1 : a[sortParam] > b[sortParam] ? 1 : sortDesc ? 1 : -1));
       setTableState({ ...tableState, tableData: sortedTableData });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [sortParam, sortDesc]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ function Datatable() {
         totalPages: Math.ceil((users.length || tableState.pageSize) / tableState.pageSize),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [users, setTableState, tableState.pageSize]);
 
   return (

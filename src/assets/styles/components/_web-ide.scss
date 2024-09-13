@@ -1,4 +1,4 @@
-#webide{
+#webide {
   color: $color-white;
 
   .file-menu,
@@ -31,7 +31,7 @@
       button:disabled,
       button[disabled],
       button:disabled::before,
-      button[disabled]::before{
+      button[disabled]::before {
         color: $white-overlay !important;
         cursor: not-allowed;
       }
@@ -54,10 +54,9 @@
       border: 1px solid $color-darkestgrey !important;
       border-radius: $border-radius;
       height: calc(100vh - 237px) !important;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden auto;
 
-      @media(max-width: 767px) {
+      @media(width <= 767px) {
         max-height: 250px;
       }
 
@@ -170,11 +169,11 @@
       border-radius: $border-radius;
       height: calc(100vh - 237px) !important;
       min-height: 281px;
-      overflow:hidden;
+      overflow: hidden;
       padding: 1vh 0;
 
-      @media(max-width: 767px) {
-        max-height: calc(100vh - 515px)
+      @media(width <= 767px) {
+        max-height: calc(100vh - 515px);
       }
 
       .card-body {

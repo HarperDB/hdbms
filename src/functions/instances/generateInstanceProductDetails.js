@@ -6,7 +6,7 @@ export default ({ instance, products, regions, subscriptions }) => {
     const computeProducts = instance.compute_subscription_id ? subscriptions[chooseCompute(instance)] : products[chooseCompute(instance)];
 
     const compute = computeProducts?.find(
-      (p) => p.value.stripe_plan_id === instance.stripe_plan_id && (!instance.compute_subscription_id || p.value.compute_subscription_id === instance.compute_subscription_id)
+      (p) => p.value.stripe_plan_id === instance.stripe_plan_id && (!instance.compute_subscription_id || p.value.compute_subscription_id === instance.compute_subscription_id),
     );
 
     const storageProducts = instance.storage_subscription_id ? subscriptions.cloud_storage : products.cloud_storage;
@@ -17,7 +17,7 @@ export default ({ instance, products, regions, subscriptions }) => {
           (p) =>
             p.value.data_volume_size === instance.data_volume_size &&
             p.value.stripe_storage_plan_id === instance.stripe_storage_plan_id &&
-            (!instance.storage_subscription_id || p.value.storage_subscription_id === instance.storage_subscription_id)
+            (!instance.storage_subscription_id || p.value.storage_subscription_id === instance.storage_subscription_id),
         );
 
     const totalPrice = parseFloat(compute?.value?.compute_price || 0) + parseFloat(storage?.value?.storage_price || 0);
@@ -28,7 +28,7 @@ export default ({ instance, products, regions, subscriptions }) => {
 
     return { compute: compute?.value, storage: storage?.value, totalPrice, totalPriceString, totalPriceStringWithInterval, region };
   } catch (e) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line
     return console.log(e);
   }
 };

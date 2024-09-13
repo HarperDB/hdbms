@@ -36,8 +36,7 @@ ul {
 }
 
 .scrollable {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden auto;
 }
 
 .clickable {
@@ -47,6 +46,7 @@ ul {
 hr {
   background-color: $grey-overlay; /* Modern Browsers */
   border: 0 none;
+
   /* Set the hr color */
   color: $light-grey-overlay; /* old IE */
   height: 1px !important;

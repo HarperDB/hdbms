@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
-
 import React, { useState } from 'react';
 import cn from 'classnames';
 import ButtonWithLoader from '../../../../../shared/ButtonWithLoader';
@@ -21,7 +18,6 @@ export default function NameInput({ onCancel, onConfirm, onEnter, value, type, v
     <>
       <input
         className={cn('w-100 text-center', { invalid: name.length > 0 && !isValidName })}
-        autoFocus
         onChange={(e) => {
           setName(e.target.value);
           setIsValidName(validate(e.target.value));

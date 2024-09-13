@@ -62,7 +62,6 @@ function InstancesIndex() {
     }
   }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     refreshInstances();
   }, [auth, products, regions, subscriptions, customer_id, instanceAuths, refreshInstances]);
@@ -81,7 +80,7 @@ function InstancesIndex() {
     } else if (mounted && instances) {
       alert.success('You are no longer an owner of this organization');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [isOrgOwner, isOrgUser?.status]);
 
   useAsyncEffect(

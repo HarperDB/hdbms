@@ -99,12 +99,12 @@ function App() {
         navigate(redirect);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [auth?.email]);
 
   useEffect(() => {
     if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [showVersionAlert]);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function App() {
 
   useEffect(() => {
     init({ currentPath: location.pathname, navigate, persistedUser, setPersistedUser, setFetchingUser, controller });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   useInterval(() => {

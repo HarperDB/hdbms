@@ -17,6 +17,7 @@ export default ({ apiVersion }) => {
       if (majorVersionUpdate || minorVersionUpdate || patchVersionUpdate) {
         showVersionAlert = apiVersion;
       }
+      // eslint-disable-next-line
     } catch (e) {
       return false;
     }

@@ -57,7 +57,7 @@ function RolesIndex() {
     } else {
       setFormState(defaultState);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [role_id, roles]);
 
   useEffect(() => {

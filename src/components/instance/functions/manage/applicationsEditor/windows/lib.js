@@ -3,45 +3,37 @@ export function isValidProjectName(name) {
 }
 
 export async function ensureRepoExists(user, repo) {
-
   try {
-
     const response = await fetch(`https://api.github.com/repos/${user}/${repo}`);
     const data = await response.json();
 
     return response.status < 400 ? data.name : null;
-
-  } catch(e) {
+    // eslint-disable-next-line
+  } catch (e) {
     return null;
   }
-
 }
 
 export async function getGithubTags(user, repo) {
-
   const response = await fetch(`https://api.github.com/repos/${user}/${repo}/git/refs/tags`);
 
   if (response.status < 400) {
     const tagData = await response.json();
-    return tagData.map(tag => tag.ref.split('/').slice(-1)[0]);
+    return tagData.map((tag) => tag.ref.split('/').slice(-1)[0]);
   }
 
   return [];
-
 }
 
 export async function findNpmPackageName(query) {
-
   const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}`);
   const packages = await response.json();
-  const pkg = packages.objects.find(p => p.package.name === query);
+  const pkg = packages.objects.find((p) => p.package.name === query);
 
   return pkg?.package?.name;
-
 }
 
 export async function getNpmDistTags(packageName) {
-
   // searching for a non-existent package via https://registry.npmjs.org/<packageName> will throw a cors error
   // so instead, we search for repo using api /search endpoint, compare desired package name
   // against the returned results array. If one exactly matches, that package exists.
@@ -52,11 +44,9 @@ export async function getNpmDistTags(packageName) {
   const packageResponseData = await packageResponse.json();
 
   return packageResponseData['dist-tags'];
-
 }
 
 export function parsePackageType(pkg) {
-
   if (!pkg) {
     return null;
   }
@@ -67,24 +57,21 @@ export function parsePackageType(pkg) {
     repo: null,
     url: null,
     package: null,
-    tag: null
+    tag: null,
   };
 
   if (pkg.url.match('://')) {
-
     // it's a url
     meta.url = pkg.url;
     meta.type = 'url';
-
   } else if (pkg.url.match('semver:')) {
     // it's a github repo
-    const [ user, repo, semverTag ] = pkg.url.split(/[/#]/);
+    const [user, repo, semverTag] = pkg.url.split(/[/#]/);
     meta.type = 'github';
     meta.user = user;
     meta.repo = repo;
-    meta.tag = semverTag.replace('semver:','');
+    meta.tag = semverTag.replace('semver:', '');
   } else {
-
     meta.type = 'npm';
     const parts = pkg.url.split('/');
 
@@ -92,26 +79,22 @@ export function parsePackageType(pkg) {
     // what does the form need?
 
     if (parts.length === 1) {
-    // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2]
+      // no scope, e.g harperdb[@2], not @harperdb/harperdb[@2]
 
-      const [ p, tag ] = parts[0].split('@');
+      const [p, tag] = parts[0].split('@');
 
       meta.package = p;
       meta.tag = tag;
-
     } else if (parts.length === 2) {
-    // has @scope, e.g @harperdb/harperdb[@2]
+      // has @scope, e.g @harperdb/harperdb[@2]
 
-      const [ ,pkgAndTag ] = parts;
-      const [ p, tag ] = pkgAndTag.split('@');
+      const [, pkgAndTag] = parts;
+      const [p, tag] = pkgAndTag.split('@');
 
       meta.package = p;
       meta.tag = tag;
-
     }
-
   }
 
   return meta;
-
 }

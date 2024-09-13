@@ -56,7 +56,7 @@ function Index({ refreshCustomFunctions, loading }) {
           s.restarting_service = false;
         });
       } catch (e) {
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line
         console.log(e);
       }
     }

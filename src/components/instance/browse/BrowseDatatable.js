@@ -108,7 +108,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
       controller3?.abort();
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate, activeTable]);
 
   useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
