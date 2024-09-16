@@ -88,7 +88,7 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, 
       };
     }
 
-    restartInstance({ auth: instanceAuth, url });
+    alert('License applied, a restart is required to take effect');
 
     return {
       status: 'APPLYING LICENSE',
