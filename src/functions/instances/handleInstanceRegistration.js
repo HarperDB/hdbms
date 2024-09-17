@@ -1,9 +1,4 @@
 import registrationInfo from '../api/instance/registrationInfo';
-import getFingerprint from '../api/instance/getFingerprint';
-import restartInstance from '../api/instance/restartInstance';
-import setLicense from '../api/instance/setLicense';
-
-import createLicense from '../api/lms/createLicense';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 
 export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, cloud_provider, instance_id, compute_stack_id, compute, status }) => {
@@ -60,41 +55,15 @@ export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, 
       return {
         status: 'UNABLE TO CONNECT',
         error: true,
-        retry: true,
-      };
-    }
-
-    const registration_matches_stripe_plan = !compute || (registration.registered && registration.ram_allocation === compute.compute_ram);
-
-    if (registration_matches_stripe_plan) {
-      return {
-        status: 'OK',
-        error: false,
-        version: registration.version,
         retry: false,
       };
     }
 
-    const fingerprint = await getFingerprint({ auth: instanceAuth, url });
-    const license = await createLicense({ auth, compute_stack_id, customer_id, fingerprint });
-    const apply = await setLicense({ auth: instanceAuth, key: license.key, company: license.company.toString(), url });
-
-    if (apply.error) {
-      return {
-        status: 'APPLYING LICENSE',
-        error: false,
-        version: registration.version,
-        retry: true,
-      };
-    }
-
-    restartInstance({ auth: instanceAuth, url });
-
     return {
-      status: 'APPLYING LICENSE',
+      status: 'OK',
       error: false,
       version: registration.version,
-      retry: true,
+      retry: false,
     };
     // eslint-disable-next-line
   } catch (e) {
