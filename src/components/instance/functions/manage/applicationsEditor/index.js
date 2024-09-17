@@ -308,6 +308,7 @@ function WebIDE({
             active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
             file={selectedFile}
             onFileChange={async (fileContent) => {
+              if (!selectedFile) return;
               updateFileInMemory(fileContent);
               await onFileChange({ path: selectedFile?.path, content: fileContent });
               setSelectedFile({ ...selectedFile, content: fileContent, cached: true });
