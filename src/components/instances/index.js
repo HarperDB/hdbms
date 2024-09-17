@@ -20,7 +20,6 @@ import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
 import Unpaid from '../shared/Unpaid';
 import UnlimitedEnterprise from '../shared/UnlimitedEnterprise';
-import useInstanceAuth from '../../functions/state/instanceAuths';
 
 function InstancesIndex() {
   const navigate = useNavigate();
@@ -35,58 +34,36 @@ function InstancesIndex() {
   const instances = useStoreState(appState, (s) => s.instances);
   const isOrgUser = useStoreState(appState, (s) => s.auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id && o.status !== 'invited'), [customer_id]);
   const isOrgOwner = isOrgUser?.status === 'owner';
-  const [mounted, setMounted] = useState(false);
-  const [instanceAuths] = useInstanceAuth({});
+
+  const refreshInstances = useCallback(() => {
+    if (auth && customer_id && products && regions && subscriptions) {
+      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
+    }
+  }, [auth, customer_id, products, regions, subscriptions, instances?.length]);
+
+  useEffect(() => {
+    refreshInstances();
+  }, [auth, customer_id, products, regions, subscriptions]);
 
   useEffect(() => {
     if (action === 'login') {
       alert.error('Please log in to that instance');
+    } else if (!isOrgUser) {
+      alert.error('You have been removed from this organization');
+      navigate('/');
     }
-  }, [action, alert, instances, isOrgOwner]);
+  }, [action, alert, isOrgUser]);
 
   useEffect(() => {
     if (auth && customer_id) {
       getCustomer({ auth, customer_id });
+      getAlarms({ auth, customer_id });
     }
   }, [customer_id, auth]);
 
-  useEffect(() => {
-    if (auth && customer_id) {
-      getAlarms({ auth, customer_id });
-    }
-  }, [customer_id, instances, auth]);
-
-  const refreshInstances = useCallback(() => {
-    if (auth && products && regions && subscriptions && customer_id && instanceAuths) {
-      getInstances({ auth, customer_id, products, regions, subscriptions, instanceCount: instances?.length });
-    }
-  }, [auth, customer_id, instances, products, regions, subscriptions, instanceAuths]);
-
-  useEffect(() => {
-    refreshInstances();
-  }, [auth, products, regions, subscriptions, customer_id, instanceAuths, refreshInstances]);
-
   useInterval(
-    () => instances?.length && instances.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),
+    () => instances?.some((i) => ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status)) && refreshInstances(),
     config.refresh_content_interval,
-  );
-
-  useEffect(() => {
-    if (mounted && instances && isOrgOwner) {
-      alert.success('You have been made an owner of this organization');
-    } else if (mounted && instances && !isOrgUser) {
-      alert.error('You have been removed from this organization');
-      navigate('/');
-    } else if (mounted && instances) {
-      alert.success('You are no longer an owner of this organization');
-    }
-    // eslint-disable-next-line
-  }, [isOrgOwner, isOrgUser?.status]);
-
-  useAsyncEffect(
-    () => setMounted(true),
-    () => setMounted(false),
-    [],
   );
 
   return (

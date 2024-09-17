@@ -137,9 +137,12 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
     return setInstanceData({ ...instanceData, ...registrationResult });
   }, [status, instanceAuth?.user, instanceAuth?.pass, lastUpdate]);
 
-  useInterval(() => {
-    if (instanceData.retry) setLastUpdate(Date.now());
-  }, config.refresh_content_interval / 5);
+  useInterval(
+    () => {
+      if (instanceData.retry) setLastUpdate(Date.now());
+    },
+    instanceData.status === 'SSL ERROR' ? config.refresh_content_interval / 3 : config.refresh_content_interval,
+  );
 
   return (
     <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
