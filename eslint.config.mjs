@@ -17,6 +17,7 @@ const compat = new FlatCompat({
 export default [...fixupConfigRules(
     compat.extends("react-app", "airbnb", "plugin:jsx-a11y/recommended", "prettier"),
 ), {
+    // root: true,
     plugins: {
         "jsx-a11y": fixupPluginRules(jsxA11Y),
         prettier
@@ -40,7 +41,7 @@ export default [...fixupConfigRules(
         "no-underscore-dangle": ["warn", {
             allow: ["_kmq", "_kmk"],
         }],
-
+        "no-unsafe-optional-chaining": 0,
         "jsx-a11y/label-has-associated-control": 0,
         "react/jsx-no-bind": 0,
 

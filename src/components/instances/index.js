@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Row } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { useAlert } from 'react-alert';
-import useAsyncEffect from 'use-async-effect';
 import useInterval from 'use-interval';
 
 import config from '../../config';
@@ -43,6 +42,7 @@ function InstancesIndex() {
 
   useEffect(() => {
     refreshInstances();
+    // eslint-disable-next-line
   }, [auth, customer_id, products, regions, subscriptions]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ function InstancesIndex() {
       alert.error('You have been removed from this organization');
       navigate('/');
     }
-  }, [action, alert, isOrgUser]);
+  }, [action, alert, isOrgUser, navigate]);
 
   useEffect(() => {
     if (auth && customer_id) {

@@ -52,10 +52,10 @@ export default function EditorMenu({ children }) {
       {children.map(
         (child) =>
           child && (
-            <li className="editor-menu-item" key={crypto.randomUUID()}>
+            <li className="editor-menu-item" key={crypto.randomUUID?.() ?? Math.random().toString().slice(2)}>
               {child}
             </li>
-          ),
+          )
       )}
     </ul>
   );
