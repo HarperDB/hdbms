@@ -1,7 +1,7 @@
 import registrationInfo from '../api/instance/registrationInfo';
 import handleCloudInstanceUsernameChange from './handleCloudInstanceUsernameChange';
 
-export default async ({ auth, customer_id, instanceAuth, url, is_local, is_ssl, cloud_provider, instance_id, compute_stack_id, compute, status }) => {
+export default async ({ instanceAuth, url, is_local, is_ssl, cloud_provider, instance_id, status }) => {
   try {
     let registration = await registrationInfo({ auth: instanceAuth, url });
 

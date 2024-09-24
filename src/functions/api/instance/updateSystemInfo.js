@@ -56,27 +56,27 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
   const memoryStatus = skip.includes('memory')
     ? cachedSystemInfo.memoryStatus
     : freeMemory / totalMemory < 0.1
-    ? 'danger'
-    : freeMemory / totalMemory < 0.25
-    ? 'warning'
-    : 'success';
+      ? 'danger'
+      : freeMemory / totalMemory < 0.25
+        ? 'warning'
+        : 'success';
 
   // DISK
   const totalDisk = skip.includes('disk')
     ? parseFloat(cachedSystemInfo.totalDisk)
     : result.system.platform === 'darwin'
-    ? result.disk.size?.[0].size / B2GB1000
-    : !is_local
-    ? result.disk.size?.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024
-    : result.disk.size?.[0].size / B2GB1024;
+      ? result.disk?.size?.[0].size / B2GB1000
+      : !is_local
+        ? result.disk?.size?.find((disk) => disk.mount === '/home/ubuntu/hdb').size / B2GB1024
+        : result.disk?.size?.[0].size / B2GB1024;
 
   const usedDisk = skip.includes('disk')
     ? parseFloat(cachedSystemInfo.usedDisk)
     : result.system.platform === 'darwin'
-    ? result.disk.size?.reduce((a, b) => a + b.used, 0) / B2GB1000
-    : !is_local
-    ? result.disk.size?.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB1024
-    : result.disk.size?.reduce((a, b) => a + b.used, 0) / B2GB1024;
+      ? result.disk?.size?.reduce((a, b) => a + b.used, 0) / B2GB1000
+      : !is_local
+        ? result.disk?.size?.find((disk) => disk.mount === '/home/ubuntu/hdb').used / B2GB1024
+        : result.disk?.size?.reduce((a, b) => a + b.used, 0) / B2GB1024;
 
   const freeDisk = skip.includes('disk') ? parseFloat(cachedSystemInfo.freeDisk) : totalDisk - usedDisk;
 
@@ -95,10 +95,10 @@ export default async ({ auth, url, signal, refresh, is_local, cachedSystemInfo, 
   const networkLatencyStatus = skip.includes('network')
     ? parseFloat(cachedSystemInfo.networkLatencyStatus)
     : networkLatency > 1000
-    ? 'danger'
-    : networkLatency > 500
-    ? 'warning'
-    : 'success';
+      ? 'danger'
+      : networkLatency > 500
+        ? 'warning'
+        : 'success';
 
   const systemInfo = {
     totalMemory: totalMemory?.toFixed(2),

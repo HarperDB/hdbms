@@ -104,16 +104,12 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
     setProcessing(true);
 
     const registrationResult = await handleInstanceRegistration({
-      auth,
-      customer_id,
       instanceAuth,
       url,
       is_local,
       is_ssl,
       cloud_provider,
       instance_id,
-      compute_stack_id,
-      compute,
       instance_name,
       status: instanceData.status,
     });

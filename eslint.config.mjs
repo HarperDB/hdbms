@@ -41,7 +41,7 @@ export default [...fixupConfigRules(
         "no-underscore-dangle": ["warn", {
             allow: ["_kmq", "_kmk"],
         }],
-
+        "no-unsafe-optional-chaining": 0,
         "jsx-a11y/label-has-associated-control": 0,
         "react/jsx-no-bind": 0,
 
