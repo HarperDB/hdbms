@@ -51,10 +51,10 @@ function FileMenu({ children }) {
       {children.map(
         (child) =>
           child && (
-            <li className="file-menu-item" key={crypto.randomUUID()}>
+            <li className="file-menu-item" key={crypto.randomUUID?.() ?? Math.random().toString().slice(2)}>
               {child}
             </li>
-          ),
+          )
       )}
     </ul>
   );

@@ -9,7 +9,7 @@ function addMetadata(fileTree, path, rootDir, readOnly = false) {
 
   if (path === rootDir) {
     fileTree.path = rootDir;
-    fileTree.key = crypto.randomUUID();
+    fileTree.key = crypto.randomUUID?.() ?? Math.random().toString().slice(2);
   }
 
   for (const entry of fileTree.entries) {
@@ -24,7 +24,7 @@ function addMetadata(fileTree, path, rootDir, readOnly = false) {
     const [, project] = newPath.split('/');
     entry.project = project;
     entry.path = newPath;
-    entry.key = crypto.randomUUID();
+    entry.key = crypto.randomUUID?.() ?? Math.random().toString().slice(2);
     entry.readOnly = readOnly || !!entry.package;
 
     addMetadata(entry, newPath, rootDir, entry.readOnly);
