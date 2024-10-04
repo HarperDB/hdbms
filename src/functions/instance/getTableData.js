@@ -3,7 +3,7 @@ import sql from '../api/instance/sql';
 import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
-export default async ({ schema, table, filtered, pageSize, sorted, page, auth, url, signal, signal2 }) => {
+export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
   let fetchError = false;
   let newTotalRecords = 0;
   let newTotalPages = 1;
@@ -31,19 +31,7 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
 
   if (newTotalRecords) {
     try {
-      if (sorted.length) {
-        let dataSQL = `SELECT * FROM \`${schema}\`.\`${table}\` `;
-        if (filtered.length) dataSQL += `WHERE ${filtered.map((f) => ` \`${f.id}\` LIKE '%${f.value}%'`).join(' AND ')} `;
-        if (sorted.length) dataSQL += `ORDER BY \`${sorted[0].id}\` ${sorted[0].desc ? 'DESC' : 'ASC'}`;
-        dataSQL += ` OFFSET ${offset} FETCH ${pageSize}`;
-
-        newData = await sql({
-          sql: dataSQL,
-          auth,
-          url,
-          signal,
-        });
-      } else if (filtered.length) {
+      if (filtered.length) {
         newData = await searchByConditions({
           schema,
           table,
@@ -51,10 +39,12 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
           get_attributes: ['*'],
           limit: pageSize,
           offset,
+          sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
           conditions: filtered.map((f) => ({ search_attribute: f.id, search_type: 'contains', search_value: f.value })),
           auth,
           url,
           signal,
+          onlyCached,
         });
       } else {
         newData = await searchByValue({
@@ -65,9 +55,11 @@ export default async ({ schema, table, filtered, pageSize, sorted, page, auth, u
           get_attributes: ['*'],
           limit: pageSize,
           offset,
+          sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
           auth,
           url,
           signal,
+          onlyCached,
         });
       }
       if (newData.error || !Array.isArray(newData)) {
