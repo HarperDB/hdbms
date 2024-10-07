@@ -5,14 +5,19 @@ export default async ({ operation, auth, url, timeout = 0, authType = undefined,
     const controller = new AbortController();
     const id = setTimeout(() => (timeout ? controller.abort() : null), timeout);
 
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    if (authType === 'token')
+      headers.Authorization = `Bearer ${auth.token}`;
+    else if (auth?.pass)
+      headers.Authorization = `Basic ${btoa(`${auth.user}:${auth.pass}`)}`;
     const request = await fetch(url, {
       signal: signal || controller.signal,
       method: 'POST',
       body: JSON.stringify(operation),
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: authType === 'token' ? `Bearer ${auth.token}` : `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
-      },
+      headers,
+      credentials: 'include',
     });
 
     clearTimeout(id);
@@ -24,6 +29,7 @@ export default async ({ operation, auth, url, timeout = 0, authType = undefined,
         error: true,
         message: response.error,
         type: 'response',
+        status: request.status,
         role_errors: response.main_permissions?.join(', '),
         access_errors: response.unauthorized_access?.map((e) => ({
           schema: e.schema,

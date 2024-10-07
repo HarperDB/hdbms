@@ -62,27 +62,27 @@ function SystemInfo() {
             </div>
           ) : (
             <Row>
-              <Col md="2" sm="4" xs="6">
+              <Col>
                 <ContentContainer header="Total Memory" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.totalMemory || '...'}GB</div>
                 </ContentContainer>
               </Col>
-              <Col md="2" sm="4" xs="6">
+              <Col>
                 <ContentContainer header="Active Memory" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.usedMemory || '...'}GB</div>
                 </ContentContainer>
               </Col>
-              <Col md="2" sm="4" xs="6">
+              <Col>
                 <ContentContainer header="Available Memory" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo?.memoryStatus || 'grey'}`}>{systemInfo?.freeMemory || '...'}GB</div>
                 </ContentContainer>
               </Col>
-              <Col md="2" sm="4" xs="6">
+              <Col>
                 <ContentContainer header="CPU Cores" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.cpuCores || '...'}</div>
                 </ContentContainer>
               </Col>
-              <Col md="2" sm="4" xs="6">
+              <Col>
                 <ContentContainer header="CPU Load" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo?.cpuLoad || '...'}%</div>
                 </ContentContainer>
