@@ -31,6 +31,7 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
           <span className="me-2">auto</span>
           <i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
         </Button>
+        <span className="mx-3 text">|</span>
         <Button id="toggleOnlyCached" color="link" tabIndex="0" title="Only show cached data" onClick={toggleOnlyCached}>
           <span className="me-2">only cached</span>
           <i className={`fa fa-lg fa-toggle-${onlyCached ? 'on' : 'off'}`} />

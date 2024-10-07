@@ -109,7 +109,7 @@ function DataTable({
   }, [iterable?.length]);
 
   return (
-    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+    <ErrorBoundary onError={(err, componentStack) => addError({ error: { message: err.message, componentStack } })} FallbackComponent={ErrorFallback}>
       <div className="react-table-scroller">
         <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
         {loading || localLoading ? (
@@ -121,7 +121,7 @@ function DataTable({
         ) : (
           <div className="centered text-center">
             <i className="fa fa-exclamation-triangle text-danger" />
-            <div className="mt-2 text-darkgrey">{error ? 'Error loading data: ' + error : 'no records'}</div>
+            <div className="mt-2 text-darkgrey">{error ? `Error loading data: ${error}` : 'no records'}</div>
           </div>
         )}
       </div>

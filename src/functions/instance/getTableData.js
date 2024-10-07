@@ -1,5 +1,4 @@
 import describeTable from '../api/instance/describeTable';
-import sql from '../api/instance/sql';
 import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
@@ -78,7 +77,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
   if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
   if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
-  const dataTableColumns = (hashAttribute ? [ hashAttribute, ...orderedColumns ] : [ ...orderedColumns ]).map((k) => ({
+  const dataTableColumns = (hashAttribute ? [hashAttribute, ...orderedColumns] : [...orderedColumns]).map((k) => ({
     Header: k === '$id' ? 'Primary Key' : k.toString(),
     accessor: (row) => row[k.toString()],
   }));
