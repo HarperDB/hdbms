@@ -22,7 +22,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 
     const { record_count, attributes, hash_attribute } = result;
     allAttributes = attributes.map((a) => a.attribute);
-    hashAttribute = hash_attribute;
+    hashAttribute = hash_attribute ?? '$id';
     newTotalRecords = record_count;
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
@@ -36,7 +36,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
           schema,
           table,
           operator: 'and',
-          get_attributes: ['*'],
+          get_attributes: ['$id', '*'],
           limit: pageSize,
           offset,
           sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
@@ -52,7 +52,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
           table,
           search_attribute: hashAttribute,
           search_value: '*',
-          get_attributes: ['*'],
+          get_attributes: ['$id', '*'],
           limit: pageSize,
           offset,
           sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
@@ -79,7 +79,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
   if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
   const dataTableColumns = (hashAttribute ? [ hashAttribute, ...orderedColumns ] : [ ...orderedColumns ]).map((k) => ({
-    Header: k.toString(),
+    Header: k === '$id' ? 'Primary Key' : k.toString(),
     accessor: (row) => row[k.toString()],
   }));
 
