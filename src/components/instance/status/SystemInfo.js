@@ -78,21 +78,6 @@ function SystemInfo() {
                 </ContentContainer>
               </Col>
               <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Total Disk" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.totalDisk || '...'}GB</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Used Disk" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.usedDisk || '...'}GB</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Free Disk" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.diskStatus || 'grey'}`}>{systemInfo?.freeDisk || '...'}GB</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
                 <ContentContainer header="CPU Cores" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.cpuCores || '...'}</div>
                 </ContentContainer>
@@ -100,28 +85,6 @@ function SystemInfo() {
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="CPU Load" className="mb-3">
                   <div className={`nowrap-scroll text-${systemInfo?.cpuStatus || 'grey'}`}>{systemInfo?.cpuLoad || '...'}%</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Network Volume Up" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.networkTransferred || '...'}GB</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Network Volume Down" className="mb-3">
-                  <div className="nowrap-scroll">{systemInfo?.networkReceived || '...'}GB</div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Network Latency" className="mb-3">
-                  <div className={`nowrap-scroll text-${systemInfo?.networkLatencyStatus || 'grey'}`}>
-                    {systemInfo?.networkLatency ? `${systemInfo?.networkLatency} ms` : 'N/A'}
-                  </div>
-                </ContentContainer>
-              </Col>
-              <Col md="2" sm="4" xs="6">
-                <ContentContainer header="Disk IOPS" className="mb-3">
-                  <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
                 </ContentContainer>
               </Col>
             </Row>
