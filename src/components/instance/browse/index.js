@@ -27,6 +27,7 @@ const defaultTableState = {
   page: 0,
   pageSize: 20,
   autoRefresh: false,
+  onlyCached: false,
   showFilter: false,
   newEntityAttributes: false,
   hashAttribute: false,

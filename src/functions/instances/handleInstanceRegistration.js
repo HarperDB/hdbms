@@ -27,7 +27,7 @@ export default async ({ instanceAuth, url, is_local, is_ssl, cloud_provider, ins
       }
     }
 
-    if ((registration.error && registration.message === 'Login failed') || registration.error === 'Login failed') {
+    if ((registration.status === 401) || registration.error === 'Login failed') {
       return {
         status: 'LOGIN FAILED',
         error: true,
