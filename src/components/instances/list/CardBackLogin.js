@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import handleCloudInstanceUsernameChange from '../../../functions/instances/handleCloudInstanceUsernameChange';
+import login from '../../../functions/api/instance/login';
 import userInfo from '../../../functions/api/instance/userInfo';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
@@ -22,7 +23,21 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
       if (!user || !pass) {
         setFormState({ error: 'All fields are required' });
       } else {
-        const result = await userInfo({ auth: { user, pass }, url });
+        let login_not_supported;
+        let result;
+        if (pass) {
+          // try to log in with the provided credentials
+          const login_result = await login({ auth: { user, pass }, url });
+          if (login_result.error) {
+            login_not_supported = true;
+          } else {
+            result = await userInfo({ url });
+            if (result.error)
+              login_not_supported = true;
+          }
+          if (login_not_supported) result = await userInfo({ auth: { user, pass }, url });
+        } else
+          result = await userInfo({ url });
 
         if (is_ssl && is_local && result.error && result.type === 'catch') {
           setFormState({ error: 'SSL ERROR. ACCEPT SELF-SIGNED CERT?', url });
@@ -46,7 +61,7 @@ function CardBackLogin({ compute_stack_id, url, is_ssl, setFlipState, flipState,
         } else {
           setInstanceAuths({
             ...instanceAuths,
-            [compute_stack_id]: { user: formData.user, pass: formData.pass, super: result.role.permission.super_user, structure: result.role.permission.structure_user },
+            [compute_stack_id]: { user: formData.user, pass: login_not_supported ? formData.pass : '', super: result.role.permission.super_user, structure: result.role.permission.structure_user },
           });
           setTimeout(() => setFlipState(false), 100);
         }
