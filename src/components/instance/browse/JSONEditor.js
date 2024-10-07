@@ -97,7 +97,9 @@ function JSONEditor({ newEntityAttributes, hashAttribute }) {
               schema,
               table,
               hash_values,
-              get_attributes: ['*']
+              get_attributes: ['*'],
+              onlyIfCached: true,
+              noCacheStore: true
           },
           auth,
           url

@@ -59,6 +59,7 @@ const defaultColumn = {
 function DataTable({
   columns,
   data,
+  error,
   currentPage,
   pageSize,
   totalPages,
@@ -120,7 +121,7 @@ function DataTable({
         ) : (
           <div className="centered text-center">
             <i className="fa fa-exclamation-triangle text-danger" />
-            <div className="mt-2 text-darkgrey">no records</div>
+            <div className="mt-2 text-darkgrey">{error ? 'Error loading data: ' + error : 'no records'}</div>
           </div>
         )}
       </div>
