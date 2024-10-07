@@ -9,6 +9,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
   let newData = [];
   let allAttributes = false;
   let hashAttribute = false;
+  let get_attributes = ['*']
   const offset = page * pageSize;
 
   try {
@@ -21,7 +22,12 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 
     const { record_count, attributes, hash_attribute } = result;
     allAttributes = attributes.map((a) => a.attribute);
-    hashAttribute = hash_attribute ?? '$id';
+    if (hash_attribute == undefined) {
+      hashAttribute = '$id';
+      get_attributes = ['$id', '*'];
+    } else
+      hashAttribute = hash_attribute;
+
     newTotalRecords = record_count;
     newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
   } catch (e) {
@@ -35,7 +41,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
           schema,
           table,
           operator: 'and',
-          get_attributes: ['$id', '*'],
+          get_attributes,
           limit: pageSize,
           offset,
           sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
@@ -51,7 +57,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
           table,
           search_attribute: hashAttribute,
           search_value: '*',
-          get_attributes: ['$id', '*'],
+          get_attributes,
           limit: pageSize,
           offset,
           sort: sorted.length ? { attribute: sorted[0].id, descending: sorted[0].desc } : undefined,
