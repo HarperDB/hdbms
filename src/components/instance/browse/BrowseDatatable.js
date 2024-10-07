@@ -69,6 +69,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         filtered: tableState.filtered,
         pageSize: tableState.pageSize,
         sorted: tableState.sorted,
+        onlyCached: tableState.onlyCached,
         page: tableState.page,
         auth,
         url,
@@ -78,7 +79,13 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
 
       if (isMounted) {
         setLoading(false);
-        if (!newData.error) {
+        if (newData.error) {
+          setTableState({
+            ...tableState,
+            tableData: [],
+            error,
+          });
+        } else {
           if (!tableState.filtered.length) {
             setTotalPages(newTotalPages);
             setTotalRecords(newTotalRecords);
@@ -109,7 +116,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
       isMounted = false;
     };
     // eslint-disable-next-line
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, lastUpdate, activeTable]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.onlyCached, lastUpdate, activeTable]);
 
   useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
@@ -120,8 +127,10 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         loading={loading}
         loadingFilter={loadingFilter}
         autoRefresh={tableState.autoRefresh}
+        onlyCached={tableState.onlyCached}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
+        toggleOnlyCached={() => setTableState({ ...tableState, onlyCached: !tableState.onlyCached })}
         toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
@@ -130,6 +139,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             manual
             columns={tableState.dataTableColumns || []}
             data={tableState.tableData || []}
+            error={tableState.error}
             currentPage={tableState.page}
             pageSize={tableState.pageSize}
             totalPages={totalPages || 0}

@@ -25,6 +25,7 @@ const defaultTableState = {
   totalPages: 1,
   pageSize: 20,
   autoRefresh: false,
+  onlyCached: false,
   showFilter: false,
   lastUpdate: false,
 };
@@ -103,7 +104,9 @@ function Datatable({ query }) {
         filtered={tableState.filtered}
         toggleFilter={(newValues) => setTableState({ ...tableState, ...newValues })}
         autoRefresh={tableState.autoRefresh}
+        onlyCached={tableState.onlyCached}
         setAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
+        setOnlyCached={() => setTableState({ ...tableState, onlyCached: !tableState.onlyCached })}
         setLastUpdate={setLastUpdate}
         setShowChartModal={setShowChartModal}
       />
