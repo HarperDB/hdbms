@@ -27,7 +27,6 @@ const defaultTableState = {
   page: 0,
   pageSize: 20,
   autoRefresh: false,
-  onlyCached: false,
   showFilter: false,
   newEntityAttributes: false,
   hashAttribute: false,
@@ -56,7 +55,7 @@ function BrowseIndex() {
   const location = useLocation();
   const { schema, table, action, customer_id, compute_stack_id } = useParams();
   const [instanceAuths] = useInstanceAuth({});
-  const auth = instanceAuths && instanceAuths[compute_stack_id];
+  const auth = instanceAuths?.[compute_stack_id];
   const url = useStoreState(instanceState, (s) => s.url);
   const registration = useStoreState(instanceState, (s) => s.registration);
   const version = registration?.version;
