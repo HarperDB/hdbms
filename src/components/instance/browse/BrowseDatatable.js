@@ -11,6 +11,7 @@ import DataTableHeader from './BrowseDatatableHeader';
 import DataTable from '../../shared/DataTable';
 import getTableData from '../../../functions/instance/getTableData';
 import getTablePagination from '../../../functions/instance/getTablePagination';
+import usePersistedUser from '../../../functions/state/persistedUser';
 
 let controller;
 let controller2;
@@ -26,6 +27,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
   const [loading, setLoading] = useState(false);
   const [loadingFilter, setLoadingFilter] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(true);
+  const [persistedUser, setPersistedUser] = usePersistedUser({});
 
   useEffect(() => {
     controller?.abort();
@@ -69,7 +71,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         filtered: tableState.filtered,
         pageSize: tableState.pageSize,
         sorted: tableState.sorted,
-        onlyCached: tableState.onlyCached,
+        onlyCached: persistedUser?.onlyCached?.[activeTable],
         page: tableState.page,
         auth,
         url,
@@ -116,7 +118,13 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
       isMounted = false;
     };
     // eslint-disable-next-line
-  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, tableState.onlyCached, lastUpdate, activeTable]);
+  }, [tableState.sorted, tableState.page, tableState.filtered, tableState.pageSize, persistedUser.onlyCached, lastUpdate, activeTable]);
+
+  const toggleOnlyCached = () => {
+    const onlyCached = typeof persistedUser.onlyCached === 'object' ? { ...persistedUser.onlyCached } : {};
+    onlyCached[activeTable] = !persistedUser?.onlyCached?.[activeTable];
+    setPersistedUser({ ...persistedUser, onlyCached });
+  };
 
   useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
@@ -127,10 +135,10 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
         loading={loading}
         loadingFilter={loadingFilter}
         autoRefresh={tableState.autoRefresh}
-        onlyCached={tableState.onlyCached}
+        onlyCached={persistedUser?.onlyCached?.[activeTable]}
         refresh={() => setLastUpdate(Date.now())}
         toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
-        toggleOnlyCached={() => setTableState({ ...tableState, onlyCached: !tableState.onlyCached })}
+        toggleOnlyCached={toggleOnlyCached}
         toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
       />
       <Card className="my-3">
