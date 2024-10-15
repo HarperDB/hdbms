@@ -22,7 +22,7 @@ import CardFrontStatusRow from '../../shared/CardFrontStatusRow';
 import ErrorFallback from '../../shared/ErrorFallback';
 
 const modifyingStatus = ['CREATING INSTANCE', 'DELETING INSTANCE', 'UPDATING INSTANCE', 'LOADING', 'CONFIGURING NETWORK', 'APPLYING LICENSE'];
-const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED'];
+const clickableStatus = ['OK', 'PLEASE LOG IN', 'LOGIN FAILED', 'LICENSE UPDATED - PLEASE RESTART'];
 
 function CardFront({ compute_stack_id, instance_id, url, status, instance_name, is_local, is_ssl, cloud_provider, setFlipState, flipState, compute, storage, wavelength_zone_id }) {
   const { customer_id } = useParams();
@@ -30,7 +30,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const auth = useStoreState(appState, (s) => s.auth);
   const isOrgOwner = auth?.orgs?.find((o) => o.customer_id?.toString() === customer_id)?.status === 'owner';
   const [instanceAuths, setInstanceAuths] = useInstanceAuth({});
-  const instanceAuth = useMemo(() => instanceAuths && instanceAuths[compute_stack_id], [instanceAuths, compute_stack_id]);
+  const instanceAuth = useMemo(() => instanceAuths?.[compute_stack_id], [instanceAuths, compute_stack_id]);
   const [instanceData, setInstanceData] = useState({ status: 'LOADING', clustering: '', version: '' });
   const [lastUpdate, setLastUpdate] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -40,9 +40,9 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
   const statusClass = `text-bold text-${instanceData.error ? 'danger' : 'success'}`;
   const ramString = `${compute?.compute_ram_string || '...'}`;
   const typeString = generateTypeString({ wavelength_zone_id, is_local, cloud_provider });
-  const alarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts, [compute_stack_id]);
-  const diskClass = alarms && alarms.Storage ? 'text-danger' : '';
-  const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms && alarms.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
+  const alarms = useStoreState(appState, (s) => s.alarms?.[compute_stack_id]?.alarmCounts, [compute_stack_id]);
+  const diskClass = alarms?.Storage ? 'text-danger' : '';
+  const diskString = `${storage?.data_volume_size_string || 'DEVICE DISK'} ${alarms?.Storage ? `/ ${alarms.Storage} ALARM${alarms.Storage > 1 ? 'S' : ''}` : ''}`;
 
   const handleCardClick = useCallback(
     async (e) => {
@@ -50,7 +50,7 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
         e.stopPropagation();
       } else if (!instanceAuth) {
         setFlipState('login');
-      } else if (instanceData.status === 'OK') {
+      } else if (instanceData.status === 'OK' || instanceData.status === 'LICENSE UPDATED - PLEASE RESTART') {
         const result = await userInfo({ auth: instanceAuth, url });
         if (result.error) {
           setInstanceData({ ...instanceData, status: 'UNABLE TO CONNECT', error: true, retry: true });
@@ -104,6 +104,8 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
     setProcessing(true);
 
     const registrationResult = await handleInstanceRegistration({
+      auth,
+      customer_id,
       instanceAuth,
       url,
       is_local,
@@ -111,6 +113,8 @@ function CardFront({ compute_stack_id, instance_id, url, status, instance_name, 
       cloud_provider,
       instance_id,
       instance_name,
+      compute_stack_id,
+      compute,
       status: instanceData.status,
     });
 
