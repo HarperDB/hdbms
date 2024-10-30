@@ -98,7 +98,7 @@ function MetaLocal() {
     <>
       <Card>
         <CardBody>
-          <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 16 char max.">
+          <ContentContainer header="Instance Name" subheader="letters, numbers, and hyphens only. 14 char max.">
             <Row>
               <Col sm="4" className="pt-2 text-nowrap text-grey">
                 Example: &quot;local-1&quot;
@@ -113,10 +113,11 @@ function MetaLocal() {
                         .replace(/^0+/, '')
                         .replace(/^-+/, '')
                         .replace(/[^a-z\d-]+/gi, '')
-                        .substring(0, 15)
+                        .substring(0, 14)
                         .toLowerCase(),
                     })
                   }
+                  max={14}
                   type="text"
                   title="instance_name"
                   value={formData.instance_name}
