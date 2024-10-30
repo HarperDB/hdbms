@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Navbar, Nav, NavItem, Button } from 'reactstrap';
+import { Navbar, Nav, NavItem, Button, NavbarBrand } from 'reactstrap';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -25,13 +25,13 @@ function TopNav({ isMaintenance, loggedIn = false }) {
 
   const showInviteBadge = useMemo(
     () => auth?.orgs?.filter((org) => org.status === 'invited').length,
-     
+
     [auth.orgs],
   );
 
   const showManageIcon = useMemo(
     () => auth?.orgs?.find((o) => o.customer_id?.toString() === customer?.customer_id?.toString())?.status === 'owner',
-     
+
     [auth.orgs, customer.customer_id],
   );
 
@@ -66,13 +66,13 @@ function TopNav({ isMaintenance, loggedIn = false }) {
       FallbackComponent={ErrorFallback}
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
-        <div className="navbar-brand">
+        <NavbarBrand>
           <NavLink to={config.is_local_studio ? `o/local/i/local/browse` : '/organizations'}>
             <div id="logo" title="Go to Organizations Home" />
           </NavLink>
-        </div>
+        </NavbarBrand>
 
-        <Nav className="ms-auto" navbar>
+        <Nav navbar>
           {loggedIn && !isMaintenance && !config.is_local_studio && (
             <>
               <NavItem className="ms-0">
@@ -119,6 +119,14 @@ function TopNav({ isMaintenance, loggedIn = false }) {
               </NavItem>
             </>
           )}
+          {!config.is_local_studio && (
+            <NavItem>
+              <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
+                <i className="fas fa-tools" />
+                <span className="d-none d-lg-inline-block">&nbsp;Resources</span>
+              </a>
+            </NavItem>
+          )}
           {themes.length > 1 && (
             <NavItem>
               <Button
@@ -130,28 +138,21 @@ function TopNav({ isMaintenance, loggedIn = false }) {
                 onClick={() => toggleTheme(nextTheme)}
               >
                 <i className="fas fa-palette" />
-                <span className="d-none d-lg-inline-block">&nbsp;theme</span>
+                <span className="d-none d-lg-inline-block">&nbsp;Theme</span>
               </Button>
             </NavItem>
           )}
-          {!config.is_local_studio && (
-            <li className="nav-item">
-              <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
-                <i className="fas fa-tools" />
-                <span className="d-none d-lg-inline-block">&nbsp;docs</span>
-              </a>
-            </li>
-          )}
+
           <NavItem>
             {loggedIn ? (
               <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
                 <i className="fa fa-sign-out-alt" />
-                <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign out</span>
+                <span className="d-none d-lg-inline-block login-text-label">&nbsp;Sign Out</span>
               </Button>
             ) : (
               <NavLink id="goToLogin" title="Log In" to="/">
                 <i className="fa fa-sign-in-alt" />
-                <span className="d-none d-lg-inline-block login-text-label">&nbsp;sign in</span>
+                <span className="d-none d-lg-inline-block login-text-label">&nbsp;Sign In</span>
               </NavLink>
             )}
           </NavItem>

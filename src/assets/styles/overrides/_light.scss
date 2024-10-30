@@ -1,27 +1,26 @@
 .light {
   #app-nav {
-    background: $color-white !important;
-    border-bottom: 1px solid $color-lightgrey;
+    background: $color-black !important;
+    border-bottom: 1px solid $color-darkestgrey;
 
     #logo {
-      background-image: url('../../images/logo/logo_dog_light.png');
+      background-image: url('../../images/logo/logo_dog.png');
 
       @media screen and (width <= 530px) {
-        background-image: url('../../images/logo/logo_dog_only.png');
+        background-image: url('../../images/logo/logo_dog.png');
       }
     }
 
     .navbar-nav {
       .active-org {
-        border-right-color: $color-lightgrey !important;
-
+        border-right-color: $faintest-white-overlay !important;
 
         &.open {
           border-color: $color-lightgrey !important;
         }
 
         .org-name {
-          color: $color-black !important;
+          color: $color-white !important;
         }
       }
 
@@ -29,10 +28,13 @@
         .btn-link,
         .nav-link,
         a {
-          color: $grey-overlay !important;
+          color: $color-lightgrey !important;
 
           &.active {
-            color: $black-overlay !important;
+            color: $color-white !important;
+          }
+          &:hover {
+            color: $color-white !important;
           }
         }
       }
@@ -54,7 +56,7 @@
           color: $grey-overlay !important;
 
           &.active {
-            color: $black-overlay !important;
+            color: $color-white !important;
           }
         }
       }
@@ -357,8 +359,6 @@
   .version {
     color: $color-darkgrey !important;
   }
-
-
 
   a,
   button,

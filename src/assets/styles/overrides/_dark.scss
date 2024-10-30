@@ -1,6 +1,6 @@
 .dark {
   #app-nav {
-    background: $color-pureblack !important;
+    background: $color-black !important;
     border-bottom: 1px solid $color-darkestgrey;
 
     .navbar-nav {
@@ -106,7 +106,6 @@
           &.asc {
             box-shadow: inset 0 2px 0 0 $faint-white-overlay;
           }
-
         }
       }
     }
@@ -275,5 +274,4 @@
       background: $faintest-white-overlay !important;
     }
   }
-
 }
