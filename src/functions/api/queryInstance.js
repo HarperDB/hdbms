@@ -17,7 +17,7 @@ export default async ({ operation, auth, url, timeout = 0, authType = undefined,
       method: 'POST',
       body: JSON.stringify(operation),
       headers,
-      credentials: 'include',
+      credentials: headers.Authorization ? 'omit' : 'include',
     });
 
     clearTimeout(id);
