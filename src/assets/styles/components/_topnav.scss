@@ -1,7 +1,7 @@
 #app-nav {
   background: $gradient-purple-magenta !important;
   border-bottom: 1px solid $black-overlay;
-  height: 60px;
+  height: 80px;
   justify-content: space-between !important;
   left: 0;
   min-width: $min-width;
@@ -27,12 +27,12 @@
     position: relative;
 
     #logo {
-      background-image: url('../../images/logo/logo_dog.png');
+      background-image: url('../../images/logo/logo_harper_db_studio.png');
       background-position: center left;
       background-repeat: no-repeat;
       background-size: contain;
       height: 30px;
-      width: 120px;
+      width: 400px;
 
       @media screen and (width <= 530px) {
         background-image: url('../../images/logo/logo_dog_only.png');

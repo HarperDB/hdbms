@@ -130,13 +130,13 @@ function App() {
 
   return (
     <div className={`${theme} ${config.maintenance ? 'maintenance' : ''}`}>
-      <div id="app-container">
-        <Suspense fallback={<Loader header=" " spinner />}>
-          <TopNav isMaintenance={isMaintenance} loggedIn={loggedIn} />
-        </Suspense>
-        {fetchingUser ? (
-          <Loader header="signing in" spinner />
-        ) : loggedIn ? (
+      <Suspense fallback={<Loader header=" " spinner />}>
+        <TopNav isMaintenance={isMaintenance} loggedIn={loggedIn} />
+      </Suspense>
+      {fetchingUser ? (
+        <Loader header="signing in" spinner />
+      ) : loggedIn ? (
+        <div id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
@@ -153,7 +153,9 @@ function App() {
               </Routes>
             </Suspense>
           </ErrorBoundary>
-        ) : (
+        </div>
+      ) : (
+        <div id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Routes>
@@ -164,8 +166,8 @@ function App() {
               </Routes>
             </Suspense>
           </ErrorBoundary>
-        )}
-      </div>
+        </div>
+      )}
       <div id="app-bg-color" />
       <div className="version">
         HarperDB Studio v{config.studio_version}
