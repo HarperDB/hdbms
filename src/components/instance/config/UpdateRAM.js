@@ -29,6 +29,7 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
   const is_wavelength = useStoreState(instanceState, (s) => s.wavelength_zone_id);
   const compute_subscription_id = useStoreState(instanceState, (s) => s.compute_subscription_id);
   const is_being_modified = useStoreState(instanceState, (s) => !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(s.status));
+  const is_unpaid = useStoreState(appState, (s) => s.customer?.is_unpaid)
 
   const filteredProducts = useStoreState(appState, (s) => s.products[is_local ? 'local_compute' : is_wavelength ? 'wavelength_compute' : 'cloud_compute']);
   const filteredSubscriptions = useStoreState(appState, (s) =>
@@ -128,7 +129,7 @@ function UpdateRAM({ setInstanceAction, showPrepaidCompute }) {
             onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/${customer_id}/i/${compute_stack_id}/config`)}
           />
         </div>
-      ) : hasChanged && (storage?.storage_price || formData?.compute_price) && !hasCard ? (
+      ) : hasChanged && (storage?.storage_price || formData?.compute_price) && !hasCard && !is_unpaid ? (
         <VisitCard
           disabled={!hasChanged || formState.submitted}
           label="Add Credit Card To Account"
