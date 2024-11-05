@@ -2,8 +2,8 @@ $partner-brand-color: #0075c9;
 
 .lumen {
   #app-nav {
-    background: $color-white !important;
-    border-bottom: 1px solid $color-lightgrey;
+    background: $color-black !important;
+    border-bottom: 1px solid $color-black;
 
     #logo {
       background-image: url('../../images/logo/lumen.png');
@@ -285,7 +285,7 @@ $partner-brand-color: #0075c9;
     box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
   }
 
-  #login-form {
+  .login-form {
     .card {
       background: $color-white !important;
       border: 1px solid $lighter-grey-overlay !important;

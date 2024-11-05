@@ -8,6 +8,7 @@ import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 import queryString from 'query-string';
+import { Col, Container, Row } from 'reactstrap';
 
 import appState from '../../functions/state/appState';
 import usePersistedUser from '../../functions/state/persistedUser';
@@ -27,6 +28,7 @@ import init from '../../functions/app/init';
 import refreshUser from '../../functions/app/refreshUser';
 import changeFavIcon from '../../functions/app/changeFavIcon';
 import getAkamaiRegions from '../../functions/api/lms/getAkamaiRegions';
+
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ '../TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ '../auth/SignUp'));
@@ -155,15 +157,47 @@ function App() {
           </ErrorBoundary>
         </div>
       ) : (
-        <div id="app-container">
+        <div className="auth-container">
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Routes>
-                <Route element={<SignIn />} path="/" />
-                <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
-                <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
-                <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
-              </Routes>
+              <Container fluid="xs" className="h-100">
+                <Row xs="1" sm="2" className="h-100">
+                  <Col className="auth-studio-info p-5 d-flex justify-content-center align-items-center">
+                    <div>
+                      <h2>HarperDB Studio</h2>
+                      <span>Manage all your HarperDB instances.</span>
+                      <ul>
+                        <li>
+                          <h3>Manage All Instances</h3>
+                          <span>Set access, cluster, monitor, and more.</span>
+                        </li>
+                        <li>
+                          <h3>Embedded API Server</h3>
+                          <span>Custom Functions give you unlimited application flexibility.</span>
+                        </li>
+                        <li>
+                          <h3>Fully Managed Cloud & 5G Instances</h3>
+                          <span>Go from zero to code in minutes.</span>
+                        </li>
+                        <li>
+                          <h3>Deploy Anywhere</h3>
+                          <span>Docker</span>
+                          <span>npm</span>
+                          <span>all options</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </Col>
+                  <Col className="p-5 d-flex justify-content-center align-items-center bg-dark">
+                    <Routes>
+                      <Route element={<SignIn />} path="/" />
+                      <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
+                      <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
+                      <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
+                    </Routes>
+                  </Col>
+                </Row>
+              </Container>
             </Suspense>
           </ErrorBoundary>
         </div>

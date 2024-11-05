@@ -1,36 +1,30 @@
-#login-form {
-  left: 50%;
-  max-width: 270px;
-  min-width: 270px;
-  position: relative;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+.auth-studio-info {
+  color: $color-white;
+}
 
-  .card {
-    background: $faint-white-overlay !important;
-    border: 1px solid $faint-white-overlay !important;
-    box-shadow: none !important;
-    z-index: 2;
+.auth-container {
+  background: linear-gradient(44.5deg, #3100d3 39.04%, #d52bff 98.58%);
+}
 
-    .card-body {
-      color: $color-white;
-      min-height: 205px;
+.btn-gradient-blue {
+  background: linear-gradient(90deg, #30cbfd 0%, #4b5eec 100%) !important;
 
-      .instructions {
-        color: $color-white;
-        padding-bottom: 16.5px;
-        text-align: center;
-      }
-    }
+  &:hover {
+    background: #4b5eec !important;
   }
+}
 
+.login-form {
+  width: 100%;
+  max-width: 320px;
+  color: $color-white;
+
+  .instructions {
+    font-size: 1.5rem !important;
+    font-weight: $font-weight-light;
+  }
   &.sign-up {
     max-width: 770px;
-
-    .card-body {
-      padding: 2rem !important;
-    }
 
     @media screen and (width <= 767px), screen and (height <= 530px) {
       margin-bottom: 50px;
@@ -77,13 +71,11 @@
   input {
     background: $faint-white-overlay !important;
     color: $color-white;
-    text-align: center !important;
 
     &::placeholder {
       color: $white-overlay !important;
       font-family: $font-family-sans;
       font-weight: $font-weight-light;
-      text-align: center !important;
     }
   }
 
@@ -109,9 +101,8 @@
   }
 
   .login-nav-link {
-    color: $white-overlay !important;
-    display: inline-block;
-    font-size: 85%;
+    color: $color-white !important;
+    font-size: $font-size-root;
     height: 16px;
     text-transform: lowercase;
     white-space: nowrap;

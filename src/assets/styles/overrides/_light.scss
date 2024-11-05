@@ -1,7 +1,7 @@
 .light {
   #app-nav {
-    background: $color-white !important;
-    border-bottom: 1px solid $color-lightgrey;
+    background: $color-black !important;
+    border-bottom: 1px solid $color-black;
 
     #logo {
       background-image: url('../../images/logo/logo_dog_light.png');
@@ -14,7 +14,6 @@
     .navbar-nav {
       .active-org {
         border-right-color: $color-lightgrey !important;
-
 
         &.open {
           border-color: $color-lightgrey !important;
@@ -29,10 +28,10 @@
         .btn-link,
         .nav-link,
         a {
-          color: $grey-overlay !important;
+          color: $color-lightgrey !important;
 
           &.active {
-            color: $black-overlay !important;
+            color: $color-white !important;
           }
         }
       }
@@ -280,7 +279,7 @@
     }
   }
 
-  #login-form {
+  .login-form {
     .card {
       background: $color-white !important;
       border: 1px solid $color-lightgrey !important;
@@ -357,8 +356,6 @@
   .version {
     color: $color-darkgrey !important;
   }
-
-
 
   a,
   button,
