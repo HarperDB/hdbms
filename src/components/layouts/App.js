@@ -162,7 +162,7 @@ function App() {
             <Suspense fallback={<Loader header=" " spinner />}>
               <Container fluid="xs" className="h-100">
                 <Row xs="1" sm="2" className="h-100">
-                  <Col className="auth-studio-info p-5 d-flex justify-content-center align-items-center">
+                  <Col className="auth-studio-info p-5 d-none d-sm-flex justify-content-center align-items-center">
                     <div>
                       <h2>HarperDB Studio</h2>
                       <span>Manage all your HarperDB instances.</span>
