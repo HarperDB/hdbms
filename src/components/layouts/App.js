@@ -164,26 +164,26 @@ function App() {
                 <Row xs="1" sm="2" className="h-100">
                   <Col className="auth-studio-info p-5 d-none d-sm-flex justify-content-center align-items-center">
                     <div>
-                      <h2>HarperDB Studio</h2>
-                      <span>Manage all your HarperDB instances.</span>
-                      <ul>
+                      <h2 className="auth-title">HarperDB Studio</h2>
+                      <span className="auth-subtitle d-inline-block mb-3">Manage all your HarperDB instances.</span>
+                      <ul className="auth-info-list-items">
                         <li>
-                          <h3>Manage All Instances</h3>
-                          <span>Set access, cluster, monitor, and more.</span>
+                          <h3 className="item-title">Manage All Instances</h3>
+                          <span className="item-subtitle">Set access, cluster, monitor, and more.</span>
                         </li>
                         <li>
-                          <h3>Embedded API Server</h3>
-                          <span>Custom Functions give you unlimited application flexibility.</span>
+                          <h3 className="item-title">Embedded API Server</h3>
+                          <span className="item-subtitle">Custom Functions give you unlimited application flexibility.</span>
                         </li>
                         <li>
-                          <h3>Fully Managed Cloud & 5G Instances</h3>
-                          <span>Go from zero to code in minutes.</span>
+                          <h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>
+                          <span className="item-subtitle">Go from zero to code in minutes.</span>
                         </li>
                         <li>
-                          <h3>Deploy Anywhere</h3>
-                          <span>Docker</span>
-                          <span>npm</span>
-                          <span>all options</span>
+                          <h3 className="item-title">Deploy Anywhere</h3>
+                          <span className="deploy-subitem">Docker</span>
+                          <span className="deploy-subitem">npm</span>
+                          <span className="deploy-subitem">all options</span>
                         </li>
                       </ul>
                     </div>

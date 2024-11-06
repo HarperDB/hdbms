@@ -11,6 +11,38 @@
   }
 }
 
+.auth-subtitle {
+  font-size: 1.75rem;
+  font-family: $font-family-ubuntu;
+  font-weight: 100 !important;
+}
+.auth-info-list-items {
+  font-family: $font-family-ubuntu;
+  list-style-image: url('../../images/svg/checkmark.svg');
+  li {
+    margin-bottom: 1.5rem;
+
+    .item-title {
+      font-weight: $font-weight-normal;
+      font-size: 1.5rem !important;
+      margin-bottom: 0.25rem !important;
+    }
+    .item-subtitle {
+      display: inline-block;
+      font-weight: $font-weight-light;
+      font-size: 1rem;
+    }
+    .deploy-subitem {
+      display: inline-block;
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+      font-size: $font-size-medium;
+      border: 2px solid $color-lightblue;
+      border-radius: 5px;
+    }
+  }
+}
+
 .login-form {
   width: 100%;
   max-width: 320px;
