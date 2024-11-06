@@ -205,13 +205,25 @@
     }
   }
 
-  .login-form {
-    .card {
-      background: $color-pureblack !important;
-    }
+  .auth-form-container {
+    background-color: $color-pureblack;
+  }
 
+  .login-form {
     input {
-      background: $faintest-white-overlay !important;
+      background: $faint-white-overlay !important;
+      color: $color-white;
+
+      &::placeholder {
+        color: $white-overlay !important;
+        font-family: $font-family-sans;
+        font-weight: $font-weight-light;
+      }
+      &:focus {
+        color: $color-white;
+        border-color: $color-lightblue;
+        outline: 0;
+      }
     }
   }
 

@@ -188,7 +188,7 @@ function App() {
                       </ul>
                     </div>
                   </Col>
-                  <Col className="p-5 d-flex justify-content-center align-items-center bg-dark">
+                  <Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
                     <Routes>
                       <Route element={<SignIn />} path="/" />
                       <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />

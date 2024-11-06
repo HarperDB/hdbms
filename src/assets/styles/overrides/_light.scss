@@ -279,15 +279,15 @@
     }
   }
 
-  .login-form {
-    .card {
-      background: $color-white !important;
-      border: 1px solid $color-lightgrey !important;
-      color: $color-lightgrey !important;
+  .auth-form-container {
+    background-color: $color-white;
+  }
 
-      .instructions {
-        color: $color-darkgrey;
-      }
+  .login-form {
+    color: $color-black;
+
+    .instructions {
+      color: $color-darkgrey;
     }
 
     &.sign-up {
