@@ -3,14 +3,6 @@
     background: $color-black !important;
     border-bottom: 1px solid $color-black;
 
-    #logo {
-      background-image: url('../../images/logo/logo_dog_light.png');
-
-      @media screen and (width <= 530px) {
-        background-image: url('../../images/logo/logo_dog_only.png');
-      }
-    }
-
     .navbar-nav {
       .active-org {
         border-right-color: $color-lightgrey !important;
