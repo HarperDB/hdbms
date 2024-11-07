@@ -17,15 +17,15 @@ function ResetPassword() {
       const { email } = formData;
 
       if (!isEmail(email)) {
-        setFormState({ error: 'valid email is required' });
-        setTimeout(() => setFormState({}), 2000);
+        setFormState({ error: 'A valid email is required' });
+        setTimeout(() => setFormState({}), 5000);
       } else {
         setFormState({ processing: true });
         const response = await resetPassword({ email });
 
         if (response.error && response.message !== 'User does not exist') {
           setFormState({ error: response.message });
-          setTimeout(() => setFormState({}), 2000);
+          setTimeout(() => setFormState({}), 5000);
         } else {
           setFormState({ success: true });
         }
@@ -40,16 +40,16 @@ function ResetPassword() {
   return (
     <div className="login-form">
       {formState.processing ? (
-        <Loader header="resetting password" spinner relative />
+        <Loader header="Resetting password" spinner relative />
       ) : formState.success ? (
-        <Loader header="success!" body="check the provided email for a temporary password." links={[{ to: '/', text: 'Go to Sign In', className: 'text-center' }]} relative />
+        <Loader header="success!" body="Check the provided email for a temporary password." links={[{ to: '/', text: 'Go to Sign In', className: 'text-center' }]} relative />
       ) : (
         <>
           <Form>
-            <h2 className="instructions mb-2">Enter your account email</h2>
+            <h2 className="mb-2 instructions">Enter your account email</h2>
             <span className="mb-2 d-inline-block">If a matching account exists, we&apos;ll send you a password reset link.</span>
             <span className="login-nav-link error d-inline-block">{formState.error}</span>
-            <Label className="d-block mb-3">
+            <Label className="mb-3 d-block">
               <span className="mb-2 d-inline-block">Email</span>
               <Input
                 name="email"
@@ -71,7 +71,7 @@ function ResetPassword() {
               id="sendPasswordResetEmail"
               onClick={() => setFormState({ submitted: true })}
               disabled={formState.submitted}
-              className="rounded-pill btn-gradient-blue border-0"
+              className="border-0 rounded-pill btn-gradient-blue"
               title="Send Password Reset Email"
               block
               color="purple"
@@ -79,7 +79,7 @@ function ResetPassword() {
               Send Password Reset Email
             </Button>
           </Form>
-          <div className="mt-3 d-flex justify-content-between px-4">
+          <div className="px-4 mt-3 d-flex justify-content-between">
             <NavLink to="/" className="login-nav-link d-inline-block">
               Back to Sign In
             </NavLink>

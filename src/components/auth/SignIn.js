@@ -23,11 +23,11 @@ function SignIn() {
     setFormState({ submitted: true });
     const { email, pass } = formData;
     if (!isEmail(email)) {
-      setFormState({ error: 'a valid email is required' });
+      setFormState({ error: 'A valid email is required' });
     } else if (!pass) {
-      setFormState({ error: 'password is required' });
+      setFormState({ error: 'Password is required' });
     } else if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1 && formData.email.indexOf('walmart.com') === -1) {
-      setFormState({ error: 'portal access denied' });
+      setFormState({ error: 'Portal access denied' });
     } else {
       setFormState({ processing: true });
 
@@ -55,9 +55,9 @@ function SignIn() {
       ) : (
         <>
           <Form>
-            <h2 className="instructions mb-2">Sign in to HarperDB Studio</h2>
+            <h2 className="mb-2 instructions">Sign in to HarperDB Studio</h2>
             <span className="login-nav-link error d-inline-block">{formState.error}</span>
-            <Label className="d-block mb-3">
+            <Label className="mb-3 d-block">
               <span className="mb-2 d-inline-block">Email</span>
               <Input
                 name="email"
@@ -75,7 +75,7 @@ function SignIn() {
                 placeholder="email address"
               />
             </Label>
-            <Label className="d-block mb-4">
+            <Label className="mb-4 d-block">
               <span className="mb-2 d-inline-block">Password</span>
               <Input
                 id="password"
@@ -93,11 +93,11 @@ function SignIn() {
                 placeholder="password"
               />
             </Label>
-            <Button id="signIn" className="rounded-pill btn-gradient-blue border-0" onClick={submit} title="Sign In My Account" block disabled={formState.submitted}>
+            <Button id="signIn" className="border-0 rounded-pill btn-gradient-blue" onClick={submit} title="Sign In My Account" block disabled={formState.submitted}>
               Sign In
             </Button>
           </Form>
-          <div className="mt-3 d-flex justify-content-between px-4">
+          <div className="px-4 mt-3 d-flex justify-content-between">
             <NavLink to="/sign-up" className="login-nav-link d-inline-block">
               Sign Up for Free
             </NavLink>
