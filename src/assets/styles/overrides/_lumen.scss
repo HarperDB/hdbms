@@ -297,18 +297,18 @@ $partner-brand-color: #0075c9;
     }
 
     &.sign-up {
-      .sign-up-content,
-      .sign-up-header {
-        color: $color-darkgrey !important;
-      }
+      // .sign-up-content,
+      // .sign-up-header {
+      //   color: $color-darkgrey !important;
+      // }
 
-      .sign-up-header {
-        border-bottom: 1px solid $light-grey-overlay;
-      }
+      // .sign-up-header {
+      //   border-bottom: 1px solid $light-grey-overlay;
+      // }
 
-      hr {
-        background: $light-grey-overlay;
-      }
+      // hr {
+      //   background: $light-grey-overlay;
+      // }
     }
 
     input {

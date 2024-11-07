@@ -283,18 +283,18 @@
     }
 
     &.sign-up {
-      .sign-up-content,
-      .sign-up-header {
-        color: $color-darkgrey !important;
-      }
+      // .sign-up-content,
+      // .sign-up-header {
+      //   color: $color-darkgrey !important;
+      // }
 
-      .sign-up-header {
-        border-bottom: 1px solid $color-lightgrey;
-      }
+      // .sign-up-header {
+      //   border-bottom: 1px solid $color-lightgrey;
+      // }
 
-      hr {
-        background: $color-lightgrey;
-      }
+      // hr {
+      //   background: $color-lightgrey;
+      // }
     }
 
     input {

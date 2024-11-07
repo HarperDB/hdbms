@@ -47,7 +47,8 @@ function ResetPassword() {
         <>
           <Form>
             <h2 className="instructions mb-2">Enter your account email</h2>
-            <span className="mb-4 d-inline-block">If a matching account exists, we&apos;ll send you a password reset link.</span>
+            <span className="mb-2 d-inline-block">If a matching account exists, we&apos;ll send you a password reset link.</span>
+            <span className="login-nav-link error d-inline-block">{formState.error}</span>
             <Label className="d-block mb-3">
               <span className="mb-2 d-inline-block">Email</span>
               <Input
@@ -78,21 +79,14 @@ function ResetPassword() {
               Send Password Reset Email
             </Button>
           </Form>
-          {formState.error ? (
-            <div className="login-nav-link error">
-              {formState.error}
-              &nbsp;
-            </div>
-          ) : (
-            <div className="mt-3 d-flex justify-content-between px-4">
-              <NavLink to="/" className="login-nav-link d-inline-block">
-                Back to Sign In
-              </NavLink>
-              <NavLink to="/sign-up" className="login-nav-link d-inline-block">
-                Sign Up for Free
-              </NavLink>
-            </div>
-          )}
+          <div className="mt-3 d-flex justify-content-between px-4">
+            <NavLink to="/" className="login-nav-link d-inline-block">
+              Back to Sign In
+            </NavLink>
+            <NavLink to="/sign-up" className="login-nav-link d-inline-block">
+              Sign Up for Free
+            </NavLink>
+          </div>
         </>
       )}
     </div>
