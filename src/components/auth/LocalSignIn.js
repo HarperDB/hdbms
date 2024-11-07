@@ -57,14 +57,14 @@ function SignIn() {
               href={formState.url || null}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-center text-bold text-small d-block text-nowrap text-decoration-none"
+              className="my-2 text-center text-bold text-small d-block text-nowrap text-decoration-none"
             >
               <span className="login-nav-link error">{formState.error}</span>
               {formState.url && <i className="ms-2 fa fa-lg fa-external-link-square text-danger" />}
             </a>
           )}
           <Label className="mb-3 d-block">
-            <span className="mb-2 d-inline-block">Email</span>
+            <span className="mb-2 d-inline-block">Instance user</span>
             <Input
               id="username"
               autoComplete="username"
@@ -95,7 +95,7 @@ function SignIn() {
               onKeyDown={keyDown}
             />
           </Label>
-          <Button id="signIn" className="border-0 rounded-pill btn-gradient-blue" onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
+          <Button id="signIn" className="border-0 rounded-pill btn-gradient-blue" onClick={submit} title="Sign In My Account" block disabled={formState.submitted}>
             Sign In
           </Button>
         </Form>
