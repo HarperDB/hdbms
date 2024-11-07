@@ -82,27 +82,30 @@ function SignUp() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
               />
             </Label>
-            <Row>
-              <Col className="subdomain-form">
-                <Input
-                  id="subdomain"
-                  name="subdomain"
-                  className="mb-2"
-                  type="text"
-                  title="subdomain"
-                  placeholder="janedev"
-                  value={formData.subdomain || ''}
-                  disabled={formState.submitted}
-                  onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
-                />
-              </Col>
-              <Col className="subdomain-label">
-                .harperdbcloud.com{' '}
-                <Button color="link" onClick={() => setShowToolTip(!showToolTip)}>
-                  <i className="fa fa-question-circle" />
-                </Button>
-              </Col>
-            </Row>
+            <Label className="d-block mb-3">
+              <Row>
+                <span className="mb-2 d-inline-block">Subdomain</span>
+                <Col className="subdomain-form">
+                  <Input
+                    id="subdomain"
+                    name="subdomain"
+                    className="mb-2"
+                    type="text"
+                    title="subdomain"
+                    placeholder="janedev"
+                    value={formData.subdomain || ''}
+                    disabled={formState.submitted}
+                    onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
+                  />
+                </Col>
+                <Col className="subdomain-label">
+                  .harperdbcloud.com{' '}
+                  <Button color="link" onClick={() => setShowToolTip(!showToolTip)}>
+                    <i className="fa fa-question-circle" />
+                  </Button>
+                </Col>
+              </Row>
+            </Label>
             {showToolTip && <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>}
             <Label className="d-block mb-3">
               <span className="mb-2 d-inline-block">Coupon Code (Optional)</span>
