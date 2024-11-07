@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Form, Input, Button, Col, Row } from 'reactstrap';
+import { Form, Input, Button, Col, Row, Label } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { NavLink } from 'react-router-dom';
 
@@ -38,59 +38,60 @@ function ResetPassword() {
   }, [formData]);
 
   return (
-    <div id="login-form">
+    <div className="login-form">
       {formState.processing ? (
         <Loader header="resetting password" spinner relative />
       ) : formState.success ? (
         <Loader header="success!" body="check the provided email for a temporary password." links={[{ to: '/', text: 'Go to Sign In', className: 'text-center' }]} relative />
       ) : (
         <>
-          <Card className="mb-3">
-            <CardBody className="text-center" onKeyDown={(e) => e.keyCode !== 13 || setFormState({ submitted: true })}>
-              <div className="instructions">Please enter your account email. If a matching account exists, we&apos;ll send you a password reset link.</div>
-              <Form>
-                <Input
-                  id="email"
-                  name="email"
-                  autoComplete="email"
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
-                  disabled={formState.submitted}
-                  className="mt-3 mb-2 text-center"
-                  type="text"
-                  title="email"
-                  placeholder="email address"
-                />
-                <Button
-                  id="sendPasswordResetEmail"
-                  onClick={() => setFormState({ submitted: true })}
-                  disabled={formState.submitted}
-                  title="Send Password Reset Email"
-                  block
-                  color="purple"
-                >
-                  Send Password Reset Email
-                </Button>
-              </Form>
-            </CardBody>
-          </Card>
+          <Form>
+            <h2 className="instructions mb-2">Enter your account email</h2>
+            <span className="mb-4 d-inline-block">If a matching account exists, we&apos;ll send you a password reset link.</span>
+            <Label className="d-block mb-3">
+              <span className="mb-2 d-inline-block">Email</span>
+              <Input
+                name="email"
+                autoComplete="email"
+                required
+                id="email"
+                onChange={(e) => {
+                  e.currentTarget.focus();
+                  setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
+                }}
+                value={formData.email || ''}
+                disabled={formState.submitted}
+                type="text"
+                title="email"
+                placeholder="email address"
+              />
+            </Label>
+            <Button
+              id="sendPasswordResetEmail"
+              onClick={() => setFormState({ submitted: true })}
+              disabled={formState.submitted}
+              className="rounded-pill btn-gradient-blue border-0"
+              title="Send Password Reset Email"
+              block
+              color="purple"
+            >
+              Send Password Reset Email
+            </Button>
+          </Form>
           {formState.error ? (
             <div className="login-nav-link error">
               {formState.error}
               &nbsp;
             </div>
           ) : (
-            <Row>
-              <Col xs="6">
-                <NavLink to="/" className="login-nav-link">
-                  Back to Sign In
-                </NavLink>
-              </Col>
-              <Col xs="6" className="text-end">
-                <NavLink to="/sign-up" className="login-nav-link">
-                  Sign Up for Free
-                </NavLink>
-              </Col>
-            </Row>
+            <div className="mt-3 d-flex justify-content-between px-4">
+              <NavLink to="/" className="login-nav-link d-inline-block">
+                Back to Sign In
+              </NavLink>
+              <NavLink to="/sign-up" className="login-nav-link d-inline-block">
+                Sign Up for Free
+              </NavLink>
+            </div>
           )}
         </>
       )}
