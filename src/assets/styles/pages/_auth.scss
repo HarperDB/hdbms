@@ -78,20 +78,6 @@
       background: $faint-white-overlay;
     }
 
-    // .sign-up-header {
-    //   border-bottom: 1px solid $faint-white-overlay;
-    //   font-size: 1.5rem !important;
-    //   line-height: 1 !important;
-    //   margin-bottom: 25px !important;
-    //   padding-bottom: 25px;
-    //   text-align: center;
-    //   width: 100%;
-
-    //   @media screen and (width <= 767px) {
-    //     font-size: 1.1rem !important;
-    //   }
-    // }
-
     .sign-up-content {
       width: 100%;
 
@@ -127,7 +113,7 @@
   }
 
   .disclaimer {
-    color: $white-overlay !important;
+    color: $color-white !important;
     font-size: $font-size-small;
 
     a,
@@ -161,8 +147,5 @@
       white-space: normal;
       width: 100%;
     }
-  }
-  .disclaimer {
-    color: $color-white !important;
   }
 }
