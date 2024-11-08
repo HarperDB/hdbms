@@ -138,7 +138,7 @@ function App() {
       {fetchingUser ? (
         <Loader header="signing in" spinner />
       ) : loggedIn ? (
-        <div id="app-container">
+        <main id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
@@ -155,17 +155,17 @@ function App() {
               </Routes>
             </Suspense>
           </ErrorBoundary>
-        </div>
+        </main>
       ) : (
-        <div className="auth-container">
+        <main className="auth-container">
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
               <Container fluid="xs" className="h-100">
                 <Row xs="1" sm="2" className="h-100">
                   <Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
-                    <div>
+                    <div className='auth-studio-info-container'>
                       <h1 className="auth-title">HarperDB Studio</h1>
-                      <span className="mb-3 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
+                      <span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
                       <ul className="auth-info-list-items">
                         <li>
                           <h3 className="item-title">Manage All Instances</h3>
@@ -181,9 +181,11 @@ function App() {
                         </li>
                         <li>
                           <h3 className="item-title">Deploy Anywhere</h3>
-                          <span className="deploy-subitem">Docker</span>
-                          <span className="deploy-subitem">npm</span>
-                          <span className="deploy-subitem">all options</span>
+                          <div className='mt-3'>
+                            <span className="deploy-subitem">Docker</span>
+                            <span className="deploy-subitem">npm</span>
+                            <span className="deploy-subitem">all options</span>
+                          </div>
                         </li>
                       </ul>
                     </div>
@@ -200,7 +202,7 @@ function App() {
               </Container>
             </Suspense>
           </ErrorBoundary>
-        </div>
+        </main>
       )}
       <div id="app-bg-color" />
       <div className="version">

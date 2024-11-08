@@ -93,7 +93,7 @@ function SignUp() {
                     id="subdomain"
                     name="subdomain"
                     required
-                    className="mb-2"
+                    className=""
                     type="text"
                     title="subdomain"
                     placeholder="janedev"

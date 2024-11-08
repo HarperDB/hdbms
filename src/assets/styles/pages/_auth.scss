@@ -3,6 +3,10 @@
   background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
 }
 
+.auth-studio-info-container {
+  max-width: 450px;
+}
+
 .btn-gradient-blue {
   background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
 
@@ -11,8 +15,12 @@
   }
 }
 
+.auth-title {
+  font-size: 3.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
 .auth-subtitle {
-  font-size: 1.75rem;
+  font-size: 1.65rem;
   font-family: $font-family-ubuntu;
   font-weight: 100 !important;
 }
@@ -23,12 +31,13 @@
     margin-bottom: 1.5rem;
 
     .item-title {
-      font-weight: $font-weight-normal;
+      font-weight: $font-weight-bold;
       font-size: 1.5rem !important;
-      margin-bottom: 0.25rem !important;
+      margin-bottom: 0.5rem !important;
     }
     .item-subtitle {
       display: inline-block;
+      letter-spacing: 0.05em;
       font-weight: $font-weight-light;
       font-size: 1rem;
     }
@@ -152,5 +161,8 @@
       white-space: normal;
       width: 100%;
     }
+  }
+  .disclaimer {
+    color: $color-white !important;
   }
 }
