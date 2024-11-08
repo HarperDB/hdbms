@@ -7,7 +7,7 @@ textarea,
   border-radius: $border-radius;
   box-shadow: none !important;
   color: $color-black;
-  font-family: $font-family-sans;
+  font-family: $font-family-ubuntu;
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
@@ -54,7 +54,7 @@ textarea {
 
 ::placeholder {
   color: $color-grey !important;
-  font-family: $font-family-sans;
+  font-family: $font-family-ubuntu;
   font-weight: $font-weight-light;
 }
 
