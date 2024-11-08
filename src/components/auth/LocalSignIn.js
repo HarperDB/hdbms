@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Form, Input, Button, Label } from 'reactstrap';
+import { Form, Input, Button, Label } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
