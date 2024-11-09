@@ -173,7 +173,7 @@ function App() {
                         </li>
                         <li>
                           <h3 className="item-title">Embedded API Server</h3>
-                          <span className="item-subtitle">Custom Functions give you unlimited application flexibility.</span>
+                          <span className="item-subtitle">HarperDB components give you unlimited application flexibility.</span>
                         </li>
                         <li>
                           <h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>
