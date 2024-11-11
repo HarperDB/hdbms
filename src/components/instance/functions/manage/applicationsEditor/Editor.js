@@ -26,6 +26,7 @@ const extensionToLanguageMap = {
   html: 'html',
   css: 'css',
   graphql: 'graphql',
+  mjs: 'javascript'
 };
 
 // TODO: update code using whatever monaco hook is available. onupdate.
@@ -43,7 +44,6 @@ function Editor({ active, file, onFileChange }) {
     return null;
   }
 
-   
   return (
     <ReactMonacoEditor
       height="100%"
