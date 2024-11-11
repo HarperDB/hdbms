@@ -44,7 +44,6 @@ function Editor({ active, file, onFileChange }) {
     return null;
   }
 
-
   return (
     <ReactMonacoEditor
       height="100%"
