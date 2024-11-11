@@ -67,9 +67,15 @@ function TopNav({ isMaintenance, loggedIn = false }) {
     >
       <Navbar id="app-nav" dark fixed="top" expand="xs">
         <div className="navbar-brand">
-          <NavLink to={config.is_local_studio ? `o/local/i/local/browse` : '/organizations'}>
-            <div id="logo" title="Go to Organizations Home" />
-          </NavLink>
+          {loggedIn ? (
+            <NavLink to={config.is_local_studio ? `o/local/i/local/browse` : '/organizations'}>
+              <div id="logo" title="Go to Organizations Home" />
+            </NavLink>
+          ) : (
+            <NavLink to='/'>
+              <div id="logo" title="Go to sign in page" />
+            </NavLink>
+          )}
         </div>
 
         <Nav className="ms-auto" navbar>
