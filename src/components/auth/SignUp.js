@@ -99,7 +99,7 @@ function SignUp() {
                     placeholder="janedev"
                     value={formData.subdomain || ''}
                     disabled={formState.submitted}
-                    onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
+                    onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 14).toLowerCase() })}
                   />
                 </Col>
                 <Col className="subdomain-label">
