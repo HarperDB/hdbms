@@ -1,36 +1,72 @@
-#login-form {
-  left: 50%;
-  max-width: 270px;
-  min-width: 270px;
-  position: relative;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+.auth-studio-info {
+  color: $color-white;
+  background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
+}
 
-  .card {
-    background: $faint-white-overlay !important;
-    border: 1px solid $faint-white-overlay !important;
-    box-shadow: none !important;
-    z-index: 2;
+.auth-studio-info-container {
+  max-width: 450px;
+}
 
-    .card-body {
-      color: $color-white;
-      min-height: 205px;
+.btn-gradient-blue {
+  background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
 
-      .instructions {
-        color: $color-white;
-        padding-bottom: 16.5px;
-        text-align: center;
-      }
+  &:hover {
+    background: $color-blue !important;
+  }
+}
+
+.auth-title {
+  font-size: 3.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+.auth-subtitle {
+  font-size: 1.65rem;
+  font-family: $font-family-ubuntu;
+  font-weight: 100 !important;
+}
+.auth-info-list-items {
+  font-family: $font-family-ubuntu;
+  list-style-image: url('../../images/svg/checkmark.svg');
+  li {
+    margin-bottom: 1.5rem;
+
+    .item-title {
+      font-weight: $font-weight-bold;
+      font-size: 1.5rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+    .item-subtitle {
+      display: inline-block;
+      letter-spacing: 0.05em;
+      font-weight: $font-weight-light;
+      font-size: 1rem;
+    }
+    .deploy-subitem {
+      display: inline-block;
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+      font-size: $font-size-medium;
+      border: 2px solid $color-lightblue;
+      border-radius: 5px;
     }
   }
+}
 
+.auth-form-container {
+  background-color: $color-darkpurple;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 320px;
+  color: $color-white;
+
+  .instructions {
+    font-size: 1.5rem !important;
+    font-weight: $font-weight-light;
+  }
   &.sign-up {
     max-width: 770px;
-
-    .card-body {
-      padding: 2rem !important;
-    }
 
     @media screen and (width <= 767px), screen and (height <= 530px) {
       margin-bottom: 50px;
@@ -40,20 +76,6 @@
 
     hr {
       background: $faint-white-overlay;
-    }
-
-    .sign-up-header {
-      border-bottom: 1px solid $faint-white-overlay;
-      font-size: 1.5rem !important;
-      line-height: 1 !important;
-      margin-bottom: 25px !important;
-      padding-bottom: 25px;
-      text-align: center;
-      width: 100%;
-
-      @media screen and (width <= 767px) {
-        font-size: 1.1rem !important;
-      }
     }
 
     .sign-up-content {
@@ -77,18 +99,21 @@
   input {
     background: $faint-white-overlay !important;
     color: $color-white;
-    text-align: center !important;
 
     &::placeholder {
       color: $white-overlay !important;
-      font-family: $font-family-sans;
+      font-family: $font-family-ubuntu;
       font-weight: $font-weight-light;
-      text-align: center !important;
+    }
+    &:focus {
+      color: $color-white;
+      border-color: $color-lightblue;
+      outline: 0;
     }
   }
 
   .disclaimer {
-    color: $white-overlay !important;
+    color: $color-white !important;
     font-size: $font-size-small;
 
     a,
@@ -98,10 +123,6 @@
     }
   }
 
-  .btn {
-    text-transform: lowercase;
-  }
-
   .login-nav-link-holder {
     &:last-child {
       text-align: right;
@@ -109,9 +130,8 @@
   }
 
   .login-nav-link {
-    color: $white-overlay !important;
-    display: inline-block;
-    font-size: 85%;
+    color: $color-white !important;
+    font-size: $font-size-root;
     height: 16px;
     text-transform: lowercase;
     white-space: nowrap;

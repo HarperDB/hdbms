@@ -37,30 +37,34 @@ function LocalApp() {
 
   return (
     <div id="local-studio" className={`${persistedUser.theme}`}>
-      <div id="app-container">
+      <div className='vh-100'>
         <Suspense fallback={<Loader header=" " spinner />}>
           <TopNav loggedIn={instanceAuths?.local?.valid} />
         </Suspense>
         {fetchingUser ? (
-          <Loader header="signing in" spinner />
+          <Loader header="Signing in" spinner />
         ) : instanceAuths?.local?.valid ? (
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Suspense fallback={<Loader header=" " spinner />}>
-              {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
-              <Routes>
-                <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
-                <Route element={<Navigate to="/" replace />} />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
+          <div id="app-container">
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<Loader header=" " spinner />}>
+                {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
+                <Routes>
+                  <Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+                  <Route element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </div>
         ) : (
-          <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-            <Suspense fallback={<Loader header=" " spinner />}>
-              <Routes>
-                <Route element={<SignIn />} path="/" />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
+              <Suspense fallback={<Loader header=" " spinner />}>
+                <Routes>
+                  <Route element={<SignIn />} path="/" />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </div>
         )}
       </div>
       <div id="app-bg-color" />

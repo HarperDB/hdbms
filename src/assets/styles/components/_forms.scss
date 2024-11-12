@@ -7,7 +7,7 @@ textarea,
   border-radius: $border-radius;
   box-shadow: none !important;
   color: $color-black;
-  font-family: $font-family-sans;
+  font-family: $font-family-ubuntu;
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
@@ -54,7 +54,7 @@ textarea {
 
 ::placeholder {
   color: $color-grey !important;
-  font-family: $font-family-sans;
+  font-family: $font-family-ubuntu;
   font-weight: $font-weight-light;
 }
 
@@ -95,10 +95,17 @@ textarea {
 
 .subdomain-label {
   color: $color-white;
-  font-size: 0.7rem !important;
+  font-size: 1.1rem !important;
   padding-left: 0;
-  padding-top: 14px;
+  padding-right: 0;
   white-space: nowrap;
+  padding-top: 0.5rem;
+
+  p {
+    vertical-align: middle;
+    margin-bottom: 0 !important;
+    height: 100%;
+  }
 
   .btn-link {
     color: $color-white;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody, Form, Input, Button, Row, Col } from 'reactstrap';
+import { Form, Input, Button, Label } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import queryString from 'query-string';
@@ -23,11 +23,11 @@ function SignIn() {
     setFormState({ submitted: true });
     const { email, pass } = formData;
     if (!isEmail(email)) {
-      setFormState({ error: 'a valid email is required' });
+      setFormState({ error: 'A valid email is required' });
     } else if (!pass) {
-      setFormState({ error: 'password is required' });
+      setFormState({ error: 'Password is required' });
     } else if (theme === 'akamai' && formData.email.indexOf('harperdb.io') === -1 && formData.email.indexOf('akamai.com') === -1 && formData.email.indexOf('walmart.com') === -1) {
-      setFormState({ error: 'portal access denied' });
+      setFormState({ error: 'Portal access denied' });
     } else {
       setFormState({ processing: true });
 
@@ -49,67 +49,62 @@ function SignIn() {
   }, [user, token]);
 
   return (
-    <div id="login-form">
+    <div className="login-form">
       {formState.processing ? (
         <Loader header="signing in" spinner relative />
       ) : (
         <>
-          <Card className="mb-3">
-            <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
-              <Form>
-                <div className="instructions">Please sign into HarperDB Studio</div>
-                <Input
-                  name="email"
-                  autoComplete="email"
-                  id="email"
-                  onChange={(e) => {
-                    e.currentTarget.focus();
-                    setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
-                  }}
-                  value={formData.email || ''}
-                  disabled={formState.submitted}
-                  className="mb-2 text-center"
-                  type="text"
-                  title="email"
-                  placeholder="email address"
-                />
-                <Input
-                  id="password"
-                  onChange={(e) => {
-                    e.currentTarget.focus();
-                    setFormData({ ...formData, pass: e.target.value });
-                  }}
-                  value={formData.pass || ''}
-                  disabled={formState.submitted}
-                  className="mb-2 text-center"
-                  type="password"
-                  title="password"
-                  name="password"
-                  autoComplete="current-password"
-                  placeholder="password"
-                />
-                <Button id="signIn" onClick={submit} title="Sign In My Account" block color="purple" disabled={formState.submitted}>
-                  Sign In
-                </Button>
-              </Form>
-            </CardBody>
-          </Card>
-          {formState.error ? (
-            <div className="login-nav-link error">{formState.error}</div>
-          ) : (
-            <Row>
-              <Col xs="6">
-                <NavLink to="/sign-up" className="login-nav-link">
-                  Sign Up for Free
-                </NavLink>
-              </Col>
-              <Col xs="6" className="text-end">
-                <NavLink to="/reset-password" className="login-nav-link">
-                  Reset Password
-                </NavLink>
-              </Col>
-            </Row>
-          )}
+          <Form>
+            <h2 className="mb-2 instructions">Sign in to HarperDB Studio</h2>
+            <span className="login-nav-link error d-inline-block">{formState.error}</span>
+            <Label className="mb-3 d-block">
+              <span className="mb-2 d-inline-block">Email</span>
+              <Input
+                name="email"
+                autoComplete="email"
+                required
+                id="email"
+                onChange={(e) => {
+                  e.currentTarget.focus();
+                  setFormData({ ...formData, email: e.target.value.trim().toLowerCase() });
+                }}
+                value={formData.email || ''}
+                disabled={formState.submitted}
+                type="text"
+                title="email"
+                placeholder="email address"
+              />
+            </Label>
+            <Label className="mb-4 d-block">
+              <span className="mb-2 d-inline-block">Password</span>
+              <Input
+                id="password"
+                required
+                onChange={(e) => {
+                  e.currentTarget.focus();
+                  setFormData({ ...formData, pass: e.target.value });
+                }}
+                value={formData.pass || ''}
+                disabled={formState.submitted}
+                type="password"
+                title="password"
+                name="password"
+                autoComplete="current-password"
+                placeholder="password"
+              />
+            </Label>
+            <Button id="signIn" className="border-0 rounded-pill btn-gradient-blue" onClick={submit} title="Sign In My Account" block disabled={formState.submitted}>
+              Sign In
+            </Button>
+          </Form>
+          <div className="px-4 mt-3 d-flex justify-content-between">
+            <NavLink to="/sign-up" className="login-nav-link d-inline-block">
+              Sign Up for Free
+            </NavLink>
+            <NavLink to="/reset-password" className="login-nav-link d-inline-block">
+              Reset Password
+            </NavLink>
+          </div>
         </>
       )}
     </div>
