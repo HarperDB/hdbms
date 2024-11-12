@@ -1,20 +1,11 @@
 .light {
   #app-nav {
-    background: $color-white !important;
-    border-bottom: 1px solid $color-lightgrey;
-
-    #logo {
-      background-image: url('../../images/logo/logo_dog_light.png');
-
-      @media screen and (width <= 530px) {
-        background-image: url('../../images/logo/logo_dog_only.png');
-      }
-    }
+    background: $color-black !important;
+    border-bottom: 1px solid $color-black;
 
     .navbar-nav {
       .active-org {
         border-right-color: $color-lightgrey !important;
-
 
         &.open {
           border-color: $color-lightgrey !important;
@@ -29,10 +20,10 @@
         .btn-link,
         .nav-link,
         a {
-          color: $grey-overlay !important;
+          color: $color-lightgrey !important;
 
           &.active {
-            color: $black-overlay !important;
+            color: $color-white !important;
           }
         }
       }
@@ -280,30 +271,15 @@
     }
   }
 
-  #login-form {
-    .card {
-      background: $color-white !important;
-      border: 1px solid $color-lightgrey !important;
-      color: $color-lightgrey !important;
+  .auth-form-container {
+    background-color: $color-white;
+  }
 
-      .instructions {
-        color: $color-darkgrey;
-      }
-    }
+  .login-form {
+    color: $color-black;
 
-    &.sign-up {
-      .sign-up-content,
-      .sign-up-header {
-        color: $color-darkgrey !important;
-      }
-
-      .sign-up-header {
-        border-bottom: 1px solid $color-lightgrey;
-      }
-
-      hr {
-        background: $color-lightgrey;
-      }
+    .instructions {
+      color: $color-darkgrey;
     }
 
     input {
@@ -357,8 +333,6 @@
   .version {
     color: $color-darkgrey !important;
   }
-
-
 
   a,
   button,

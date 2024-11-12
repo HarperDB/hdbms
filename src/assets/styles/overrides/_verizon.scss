@@ -282,7 +282,7 @@ $partner-brand-color: #cd040b;
     box-shadow: inset 0 0 5px $lighter-grey-overlay !important;
   }
 
-  #login-form {
+  .login-form {
     .card {
       background: $color-white !important;
       border: 1px solid $lighter-grey-overlay !important;
@@ -290,21 +290,6 @@ $partner-brand-color: #cd040b;
 
       .instructions {
         color: $color-darkgrey;
-      }
-    }
-
-    &.sign-up {
-      .sign-up-content,
-      .sign-up-header {
-        color: $color-darkgrey !important;
-      }
-
-      .sign-up-header {
-        border-bottom: 1px solid $light-grey-overlay;
-      }
-
-      hr {
-        background: $light-grey-overlay;
       }
     }
 

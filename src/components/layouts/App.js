@@ -8,6 +8,7 @@ import useInterval from 'use-interval';
 import { positions, useAlert } from 'react-alert';
 import { ErrorBoundary } from 'react-error-boundary';
 import queryString from 'query-string';
+import { Col, Container, Row } from 'reactstrap';
 
 import appState from '../../functions/state/appState';
 import usePersistedUser from '../../functions/state/persistedUser';
@@ -27,6 +28,7 @@ import init from '../../functions/app/init';
 import refreshUser from '../../functions/app/refreshUser';
 import changeFavIcon from '../../functions/app/changeFavIcon';
 import getAkamaiRegions from '../../functions/api/lms/getAkamaiRegions';
+
 
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ '../TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ '../auth/SignUp'));
@@ -130,13 +132,13 @@ function App() {
 
   return (
     <div className={`${theme} ${config.maintenance ? 'maintenance' : ''}`}>
-      <div id="app-container">
-        <Suspense fallback={<Loader header=" " spinner />}>
-          <TopNav isMaintenance={isMaintenance} loggedIn={loggedIn} />
-        </Suspense>
-        {fetchingUser ? (
-          <Loader header="signing in" spinner />
-        ) : loggedIn ? (
+      <Suspense fallback={<Loader header=" " spinner />}>
+        <TopNav isMaintenance={isMaintenance} loggedIn={loggedIn} />
+      </Suspense>
+      {fetchingUser ? (
+        <Loader header="signing in" spinner />
+      ) : loggedIn ? (
+        <main id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Loader header=" " spinner />}>
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
@@ -153,19 +155,55 @@ function App() {
               </Routes>
             </Suspense>
           </ErrorBoundary>
-        ) : (
+        </main>
+      ) : (
+        <main className="auth-container">
           <ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
             <Suspense fallback={<Loader header=" " spinner />}>
-              <Routes>
-                <Route element={<SignIn />} path="/" />
-                <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
-                <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
-                <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
-              </Routes>
+              <Container fluid="xs" className="h-100">
+                <Row xs="1" sm="2" className="h-100">
+                  <Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
+                    <div className='auth-studio-info-container'>
+                      <h1 className="auth-title">HarperDB Studio</h1>
+                      <span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
+                      <ul className="auth-info-list-items">
+                        <li>
+                          <h3 className="item-title">Manage All Instances</h3>
+                          <span className="item-subtitle">Set access, cluster, monitor, and more.</span>
+                        </li>
+                        <li>
+                          <h3 className="item-title">Embedded API Server</h3>
+                          <span className="item-subtitle">HarperDB components give you unlimited application flexibility.</span>
+                        </li>
+                        <li>
+                          <h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>
+                          <span className="item-subtitle">Go from zero to code in minutes.</span>
+                        </li>
+                        <li>
+                          <h3 className="item-title">Deploy Anywhere</h3>
+                          <div className="mt-3">
+                            <a href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">Docker</a>
+                            <a href="https://www.npmjs.com/package/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">npm</a>
+                            <a href="https://docs.harperdb.io/docs/deployments/install-harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">all options</a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </Col>
+                  <Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
+                    <Routes>
+                      <Route element={<SignIn />} path="/" />
+                      <Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
+                      <Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
+                      <Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
+                    </Routes>
+                  </Col>
+                </Row>
+              </Container>
             </Suspense>
           </ErrorBoundary>
-        )}
-      </div>
+        </main>
+      )}
       <div id="app-bg-color" />
       <div className="version">
         HarperDB Studio v{config.studio_version}

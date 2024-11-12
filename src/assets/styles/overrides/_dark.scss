@@ -1,7 +1,7 @@
 .dark {
   #app-nav {
-    background: $color-pureblack !important;
-    border-bottom: 1px solid $color-darkestgrey;
+    background: $color-black !important;
+    border-bottom: 1px solid $color-black;
 
     .navbar-nav {
       .active-org {
@@ -69,7 +69,7 @@
   .form-control {
     background: $faintest-white-overlay !important;
     border: 1px solid $faint-white-overlay !important;
-    color: $color-lightgrey !important;
+    color: $color-white !important;
   }
 
   .entity-manager {
@@ -106,7 +106,6 @@
           &.asc {
             box-shadow: inset 0 2px 0 0 $faint-white-overlay;
           }
-
         }
       }
     }
@@ -206,13 +205,25 @@
     }
   }
 
-  #login-form {
-    .card {
-      background: $color-pureblack !important;
-    }
+  .auth-form-container {
+    background-color: $color-pureblack;
+  }
 
+  .login-form {
     input {
-      background: $faintest-white-overlay !important;
+      background: $faint-white-overlay !important;
+      color: $color-white;
+
+      &::placeholder {
+        color: $white-overlay !important;
+        font-family: $font-family-ubuntu;
+        font-weight: $font-weight-light;
+      }
+      &:focus {
+        color: $color-white;
+        border-color: $color-lightblue;
+        outline: 0;
+      }
     }
   }
 
@@ -275,5 +286,4 @@
       background: $faintest-white-overlay !important;
     }
   }
-
 }

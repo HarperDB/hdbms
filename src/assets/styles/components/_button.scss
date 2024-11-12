@@ -1,12 +1,9 @@
 .btn {
   align-items: center;
   background: linear-gradient(to bottom, rgb(255 255 255 / 5%) 31%, rgb(0 0 0 / 5%) 100%);
-  border: 1px solid $faintest-white-overlay !important;
   border-radius: $border-radius;
-
-  // box-shadow: 0 0 3px $grey-overlay !important;
   display: inline-flex;
-  font-family: $font-family-sans;
+  font-family: $font-family-ubuntu;
   font-size: $font-size-root;
   font-weight: $font-weight-light;
   height: 38px;
