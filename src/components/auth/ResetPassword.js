@@ -13,23 +13,27 @@ function ResetPassword() {
 
   useAsyncEffect(async () => {
     const { submitted, processing } = formState;
+    let errorMessageTimeout;
     if (submitted && !processing) {
       const { email } = formData;
 
       if (!isEmail(email)) {
         setFormState({ error: 'A valid email is required' });
-        setTimeout(() => setFormState({}), 5000);
+        errorMessageTimeout = setTimeout(() => setFormState({}), 5000);
       } else {
         setFormState({ processing: true });
         const response = await resetPassword({ email });
 
         if (response.error && response.message !== 'User does not exist') {
           setFormState({ error: response.message });
-          setTimeout(() => setFormState({}), 5000);
+          errorMessageTimeout = setTimeout(() => setFormState({}), 5000);
         } else {
           setFormState({ success: true });
         }
       }
+    }
+    return () => {
+      clearTimeout(errorMessageTimeout);
     }
   }, [formState]);
 
