@@ -1,6 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 
-import { Route, Routes, Navigate, useNavigate, useLocation, Outlet, useParams, Link } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate, useLocation, Outlet, useParams } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 
 import { useStoreState } from 'pullstate';
@@ -182,9 +182,9 @@ function App() {
                         <li>
                           <h3 className="item-title">Deploy Anywhere</h3>
                           <div className="mt-3">
-                            <Link to={{ pathname: "https://hub.docker.com/r/harperdb/harperdb" }} target="_blank" rel="noreferrer" className="deploy-subitem">Docker</Link>
-                            <Link to={{ pathname: "https://www.npmjs.com/package/harperdb" }} target="_blank" rel="noreferrer" className="deploy-subitem">npm</Link>
-                            <Link to={{ pathname: "https://docs.harperdb.io/docs/deployments/install-harperdb" }} target="_blank" rel="noreferrer" className="deploy-subitem">all options</Link>
+                            <a href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">Docker</a>
+                            <a href="https://www.npmjs.com/package/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">npm</a>
+                            <a href="https://docs.harperdb.io/docs/deployments/install-harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">all options</a>
                           </div>
                         </li>
                       </ul>
