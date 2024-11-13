@@ -140,7 +140,11 @@ function App() {
       ) : loggedIn ? (
         <main id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Suspense fallback={<Loader header=" " spinner />}>
+            <Suspense fallback={
+              <div className="auth-centered-container">
+                <Loader header=" " spinner />
+              </div>
+            }>
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
               <Routes>
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />

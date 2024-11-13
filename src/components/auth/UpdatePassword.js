@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Input, Button } from 'reactstrap';
+import { Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 
@@ -18,7 +18,7 @@ function UpdatePassword() {
 
   const setPasswordError = () => {
     setFormData({});
-    setTimeout(() => setFormState({ error: '8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.' }), 0);
+    setFormState({ error: true });
   };
 
   // NOTE: Marketing requested to send a conversion event when this page is
@@ -51,27 +51,18 @@ function UpdatePassword() {
     }
   };
 
-  // eslint-disable-next-line
-  useEffect(() => !formState.submitted && setFormState({}), [formData]);
-
   return (
-    <div id="login-form">
-      {formState.processing ? (
-        <Loader header="setting account password" spinner relative />
-      ) : (
-        <>
-          <Card className="mb-3">
-            <CardBody onKeyDown={(e) => e.keyCode !== 13 || submit()}>
-              <div className="instructions">
-                Add an account password
-                <br />
-                <br />
-                {formState.error ? (
-                  <i className="text-small text-danger text-bold">{formState.error}</i>
-                ) : (
-                  <i className="text-small text-bold">8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.</i>
-                )}
-              </div>
+    <div className="d-flex justify-content-center align-items-center auth-centered-container">
+      <div className="login-form">
+        {formState.processing ? (
+          <Loader header="setting account password" spinner relative />
+        ) : (
+          <>
+            <h2 className="mb-2 instructions">Add an account password</h2>
+            <span className={`text-small text-bold d-inline-block my-2 ${formState.error ? 'text-danger' : ''}`}>
+              <i>8 char min., 1 lower case, 1 upper case, 1 number, 1 special char.</i>
+            </span>
+            <Label className="mb-4 d-block">
               <Input
                 id="password1"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -79,16 +70,15 @@ function UpdatePassword() {
                 className="mb-2 text-center"
                 type="password"
                 title="password"
-                placeholder="add password"
+                placeholder="Add Password"
               />
-              <Button id="updateMyPassword" onClick={submit} disabled={formState.submitted} title="Add Account Password" block color="purple">
-                Add Account Password
-              </Button>
-            </CardBody>
-          </Card>
-          <div className="login-nav-link">&nbsp;</div>
-        </>
-      )}
+            </Label>
+            <Button type="submit" id="updateMyPassword" className="border-0 rounded-pill btn-gradient-blue" block onClick={submit} disabled={formState.submitted || formData.processing} title="Add Account Password">
+              Submit Account Password
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
