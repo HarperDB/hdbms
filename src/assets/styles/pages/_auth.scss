@@ -54,6 +54,10 @@
   }
 }
 
+.auth-centered-container {
+  height: calc(100% - 135px);
+}
+
 .auth-form-container {
   background-color: $color-darkpurple;
 }

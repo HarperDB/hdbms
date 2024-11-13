@@ -142,6 +142,7 @@ function SignUp() {
             <Button
               id="sign-up"
               block
+              type="submit"
               className="border-0 rounded-pill btn-gradient-blue"
               disabled={formState.submitted} onClick={() => setFormState({ submitted: true })}
             >
