@@ -78,6 +78,7 @@ function ResetPassword() {
               className="border-0 rounded-pill btn-gradient-blue"
               title="Send Password Reset Email"
               block
+              type="submit"
               color="purple"
             >
               Send Password Reset Email
