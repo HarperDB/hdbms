@@ -111,7 +111,7 @@ function DataTable({
 
   return (
     <ErrorBoundary onError={(err, componentStack) => addError({ error: { message: err.message, componentStack } })} FallbackComponent={ErrorFallback}>
-      <div className="react-table-scroller">
+      <div role="table" aria-label="Table Data" className="react-table-scroller">
         <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} dynamicAttributesFromDataTable={dynamicAttributesFromDataTable} />
         {loading || localLoading ? (
           <div className="centered text-center">
