@@ -1,14 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 
-// // loop through each column and add ' disableSortBy: true' if column Header string matches string from dynamicAttributesFromDataTable
-// columns.forEach((column) => {
-//   dynamicAttributesFromDataTable.forEach((dynamicAttribute) => {
-//     if (column.Header === dynamicAttribute) {
-//       column.enableSorting = false
-//     }
-//   })
-// })
 const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter, dynamicAttributesFromDataTable }) =>
   headerGroups.map((headerGroup) => {
     const { key, ...rest } = headerGroup.getHeaderGroupProps();
