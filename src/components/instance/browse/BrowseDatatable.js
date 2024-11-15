@@ -65,7 +65,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
       }
       controller = new AbortController();
       controller2 = new AbortController();
-      const { newData, newTotalRecords, newTotalPages, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
+      const { newData, newTotalRecords, newTotalPages, newEntityAttributes, hashAttribute, dataTableColumns, dynamicAttributesFromDataTable, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -103,6 +103,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             newEntityAttributes,
             hashAttribute,
             dataTableColumns,
+            dynamicAttributesFromDataTable,
             error,
           });
         }
@@ -154,6 +155,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
             showFilter={tableState.showFilter}
             sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
+            dynamicAttributesFromDataTable={tableState.dynamicAttributesFromDataTable}
             onFilteredChange={(value) => {
               setTableState({ ...tableState, page: 0, filtered: value });
             }}
