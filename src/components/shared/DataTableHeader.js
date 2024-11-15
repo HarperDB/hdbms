@@ -19,8 +19,6 @@ const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter, dyn
             <Col
               key={column.id}
               onClick={() => {
-                console.log('dynamicAttributesFromDataTable', dynamicAttributesFromDataTable);
-                console.log('column.id', column.id)
                 if (!dynamicAttributesFromDataTable.includes(column.id)) {
                   onSortedChange([{ id: column.id, desc: sorted[0]?.id === column.id ? !sorted[0]?.desc : false }])
                 }
