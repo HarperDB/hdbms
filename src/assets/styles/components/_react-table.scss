@@ -18,6 +18,11 @@
         min-width: 100px;
         white-space: nowrap;
 
+        &.disabled-column {
+          background-color: $lighter-grey-overlay !important;
+          cursor: not-allowed;
+        }
+
         &.sorted {
           &.desc {
             box-shadow: inset 0 -2px 0 0 $lighter-grey-overlay;
@@ -26,7 +31,6 @@
           &.asc {
             box-shadow: inset 0 2px 0 0 $lighter-grey-overlay;
           }
-
         }
       }
     }
@@ -128,7 +132,6 @@
         float: right;
       }
     }
-
 
     .paginator {
       align-items: center;
