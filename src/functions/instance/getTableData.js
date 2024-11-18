@@ -3,6 +3,7 @@ import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
 const getAttributesFromTableData = (tableData, existingAttributes) => {
+  if (existingAttributes.length >= 8) return [];
   const existing = new Map(existingAttributes.map((value, index) => [value, index]));
   const extra = new Map();
   for (const dataRow of tableData) {
@@ -13,13 +14,7 @@ const getAttributesFromTableData = (tableData, existingAttributes) => {
       }
     }
   }
-  const result = [];
-  for (const [key, count] of extra) {
-    if (count >= 8) {
-      result.push(key);
-    }
-  }
-  return result;
+  return Array.from(extra).sort(([, a], [, b]) => b - a).map(([key]) => key).slice(0, 8 - existingAttributes.length);
 }
 
 export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
