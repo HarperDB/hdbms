@@ -3,18 +3,24 @@ import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
 const getAttributesFromTableData = (tableData, existingAttributes) => {
-  const existing = new Set(existingAttributes);
-  const extra = new Set();
+  const existing = new Map(existingAttributes.map((value, index) => [value, index]));
+  const extra = new Map();
   for (const dataRow of tableData) {
     for (const key of Object.keys(dataRow)) {
       if (!existing.has(key)) {
-        extra.add(key);
+        const count = extra.get(key) || 0;
+        extra.set(key, count + 1);
       }
     }
   }
-  return Array.from(extra);
+  const result = [];
+  for (const [key, count] of extra) {
+    if (count >= 8) {
+      result.push(key);
+    }
+  }
+  return result;
 }
-
 
 export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
   let fetchError = false;
