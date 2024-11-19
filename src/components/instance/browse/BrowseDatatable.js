@@ -17,7 +17,7 @@ let controller;
 let controller2;
 let controller3;
 
-function BrowseDatatable({ tableState, setTableState, activeTable }) {
+function BrowseDatatable({ tableState, setTableState, activeTable, tableDescriptionAttributes }) {
   const navigate = useNavigate();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -147,6 +147,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
           <DataTable
             manual
             columns={tableState.dataTableColumns || []}
+            tableDescriptionAttributes={tableDescriptionAttributes}
             data={tableState.tableData || []}
             error={tableState.error}
             currentPage={tableState.page}
