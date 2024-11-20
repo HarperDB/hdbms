@@ -1,28 +1,30 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
-
 import isObject from '../../../functions/util/isObject';
-
-function JobsRow({ end_datetime, start_datetime, status, message }) {
+function JobsRow({
+  endDatetime,
+  startDatetime,
+  status,
+  message
+}) {
   return <div className="item-row">
     <Row>
       <Col xs="3" className={`text-nowrap ${status.toLowerCase()}`}>
         {status}
       </Col>
       <Col xs="3" className="text-nowrap">
-        {new Date(start_datetime).toLocaleDateString()}
+        {new Date(startDatetime).toLocaleDateString()}
       </Col>
       <Col xs="3" className="text-nowrap">
-        {new Date(start_datetime).toLocaleTimeString()}
+        {new Date(startDatetime).toLocaleTimeString()}
       </Col>
       <Col xs="3" className="text-nowrap">
-        {new Date(end_datetime).toLocaleTimeString()}
+        {new Date(endDatetime).toLocaleTimeString()}
       </Col>
       <Col xs="12" className="mt-1">
         {isObject(message) ? JSON.stringify(message) : message}
       </Col>
     </Row>
-  </div>
+  </div>;
 }
-
 export default JobsRow;

@@ -1,14 +1,12 @@
 import React from 'react';
-
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-
 function EmailBounced() {
   const navigate = useNavigate();
-  const { customer_id } = useParams();
-
-  return (
-    <Card>
+  const {
+    customerId
+  } = useParams();
+  return <Card>
       <CardBody>
         <div className="p-4 pb-0 text-center">
           <b>Unable to Create New Instance</b>
@@ -18,7 +16,7 @@ function EmailBounced() {
         </div>
         <Row>
           <Col sm="6">
-            <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
+            <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customerId}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
               Cancel
             </Button>
           </Col>
@@ -29,7 +27,6 @@ function EmailBounced() {
           </Col>
         </Row>
       </CardBody>
-    </Card>
-  );
+    </Card>;
 }
 export default EmailBounced;

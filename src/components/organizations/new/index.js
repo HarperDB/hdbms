@@ -4,29 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import useAsyncEffect from 'use-async-effect';
 import { ErrorBoundary } from 'react-error-boundary';
-
 import appState from '../../../functions/state/appState';
-
 import ContentContainer from '../../shared/ContentContainer';
 import handleAddOrg from '../../../functions/organizations/handleAddOrg';
 import getUser from '../../../functions/api/lms/getUser';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-
 function NewOrgIndex() {
-  const auth = useStoreState(appState, (s) => s.auth);
-  const theme = useStoreState(appState, (s) => s.theme);
+  const auth = useStoreState(appState, s => s.auth);
+  const theme = useStoreState(appState, s => s.theme);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [formState, setFormState] = useState({});
   const [showToolTip, setShowToolTip] = useState(false);
-
   const closeModal = () => navigate(`/organizations`);
-
   useAsyncEffect(async () => {
     if (formState.submitted) {
       setShowToolTip(false);
-      const newFormState = await handleAddOrg({ formData, auth });
+      const newFormState = await handleAddOrg({
+        formData,
+        auth
+      });
       setFormState(newFormState);
       if (!newFormState.error) {
         await getUser(auth);
@@ -34,17 +32,18 @@ function NewOrgIndex() {
       }
     }
   }, [formState]);
-
   useEffect(() => {
     if (!formState.submitted) setFormState({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
-
-  return (
-    <Modal id="new-org-modal" isOpen className={theme} centered fade={false}>
-      <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
-        {auth.email_bounced ? (
-          <ModalBody>
+  return <Modal id="new-org-modal" isOpen className={theme} centered fade={false}>
+      <ErrorBoundary onError={(error, componentStack) => addError({
+      error: {
+        message: error.message,
+        componentStack
+      }
+    })} FallbackComponent={ErrorFallback}>
+        {auth.emailBounced ? <ModalBody>
             <Card>
               <CardBody>
                 <div className="p-4 pb-0 text-center">
@@ -67,9 +66,7 @@ function NewOrgIndex() {
                 </Row>
               </CardBody>
             </Card>
-          </ModalBody>
-        ) : formState.submitted ? (
-          <ModalBody>
+          </ModalBody> : formState.submitted ? <ModalBody>
             <Card>
               <CardBody>
                 <div className="p-4 text-center">
@@ -84,9 +81,7 @@ function NewOrgIndex() {
                 </div>
               </CardBody>
             </Card>
-          </ModalBody>
-        ) : formState.success ? (
-          <ModalBody>
+          </ModalBody> : formState.success ? <ModalBody>
             <Card>
               <CardBody>
                 <div className="p-4 text-center">
@@ -101,9 +96,7 @@ function NewOrgIndex() {
                 </div>
               </CardBody>
             </Card>
-          </ModalBody>
-        ) : (
-          <>
+          </ModalBody> : <>
             <ModalHeader toggle={closeModal}>Add New Organization</ModalHeader>
             <ModalBody>
               <Card className="mb-3">
@@ -114,14 +107,10 @@ function NewOrgIndex() {
                         Ex: &quot;My Org&quot;
                       </Col>
                       <Col sm="8">
-                        <Input
-                          id="org_name"
-                          className="text-center"
-                          onChange={(e) => setFormData({ ...formData, org: e.target.value })}
-                          type="text"
-                          title="name"
-                          value={formData.org || ''}
-                        />
+                        <Input id="org_name" className="text-center" onChange={e => setFormData({
+                      ...formData,
+                      org: e.target.value
+                    })} type="text" title="name" value={formData.org || ''} />
                       </Col>
                     </Row>
                   </ContentContainer>
@@ -134,49 +123,35 @@ function NewOrgIndex() {
                         </Button>
                       </Col>
                       <Col sm="8">
-                        <Input
-                          id="subdomain"
-                          className="text-center"
-                          type="text"
-                          title="subdomain"
-                          value={formData.subdomain || ''}
-                          disabled={formState.submitted}
-                          onChange={(e) => setFormData({ ...formData, subdomain: e.target.value.substring(0, 15).toLowerCase() })}
-                        />
+                        <Input id="subdomain" className="text-center" type="text" title="subdomain" value={formData.subdomain || ''} disabled={formState.submitted} onChange={e => setFormData({
+                      ...formData,
+                      subdomain: e.target.value.substring(0, 15).toLowerCase()
+                    })} />
                       </Col>
                     </Row>
-                    {showToolTip && (
-                      <div className="text-center pt-2 pb-1 text-lightpurple text-small">
+                    {showToolTip && <div className="text-center pt-2 pb-1 text-lightpurple text-small">
                         <i>Part of the URL of your HarperDB Cloud Instances- see below.</i>
-                      </div>
-                    )}
+                      </div>}
                     <hr className="my-2 d-none d-sm-block" />
                     <Row>
                       <Col xs="12" className="pt-2 text-center text-nowrap overflow-hidden text-truncate">
-                        {formData.subdomain ? (
-                          <i className="text-grey">INSTANCE_NAME-{formData.subdomain}.harperdbcloud.com</i>
-                        ) : (
-                          <span className="text-lightgrey">INSTANCE_NAME-SUBDOMAIN.harperdbcloud.com</span>
-                        )}
+                        {formData.subdomain ? <i className="text-grey">INSTANCE_NAME-{formData.subdomain}.harperdbcloud.com</i> : <span className="text-lightgrey">INSTANCE_NAME-SUBDOMAIN.harperdbcloud.com</span>}
                       </Col>
                     </Row>
                   </ContentContainer>
                 </CardBody>
               </Card>
-              <Button id="createOrganization" onClick={() => setFormState({ submitted: true })} title="Create Organization" block className="mt-3" color="success">
+              <Button id="createOrganization" onClick={() => setFormState({
+            submitted: true
+          })} title="Create Organization" block className="mt-3" color="success">
                 Create Organization
               </Button>
-              {formState.error && (
-                <Card className="mt-3 error">
+              {formState.error && <Card className="mt-3 error">
                   <CardBody>{formState.error}</CardBody>
-                </Card>
-              )}
+                </Card>}
             </ModalBody>
-          </>
-        )}
+          </>}
       </ErrorBoundary>
-    </Modal>
-  );
+    </Modal>;
 }
-
 export default NewOrgIndex;

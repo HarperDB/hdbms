@@ -1,27 +1,32 @@
 import React from 'react';
 import { Col, Row, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import commaNumbers from '../../../functions/util/commaNumbers';
-
-function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, autoRefresh, toggleAutoRefresh, toggleFilter }) {
+function BrowseDatatableHeader({
+  totalRecords,
+  loading,
+  loadingFilter,
+  refresh,
+  autoRefresh,
+  toggleAutoRefresh,
+  toggleFilter
+}) {
   const navigate = useNavigate();
-  const { compute_stack_id, schema, table, customer_id } = useParams();
-
-  return (
-    <Row className="floating-card-header">
+  const {
+    computeStackId,
+    schema,
+    table,
+    customerId
+  } = useParams();
+  return <Row className="floating-card-header">
       <Col>
         {schema}
         &nbsp;
         {table && `> ${table} > `}
-        {!autoRefresh && (loading || loadingFilter) ? (
-          <i className="fa fa-spinner fa-spin" />
-        ) : (
-          <span>
+        {!autoRefresh && (loading || loadingFilter) ? <i className="fa fa-spinner fa-spin" /> : <span>
             {commaNumbers(totalRecords)} record
             {totalRecords !== 1 ? 's' : ''}
-          </span>
-        )}
+          </span>}
       </Col>
       <Col className="text-end">
         <Button id="refresh" color="link" tabIndex="0" title={`Refresh table ${table}`} className="me-2" onClick={refresh}>
@@ -35,29 +40,13 @@ function BrowseDatatableHeader({ totalRecords, loading, loadingFilter, refresh, 
         <Button id="toggleSearch" color="link" tabIndex="0" title={`Filter table ${table}`} className="me-3" onClick={toggleFilter}>
           <i className="fa fa-search" />
         </Button>
-        <Button
-          id="addRecord"
-          color="link"
-          tabIndex="0"
-          title={`Add new record to table ${table}`}
-          className="me-3"
-          onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
-        >
+        <Button id="addRecord" color="link" tabIndex="0" title={`Add new record to table ${table}`} className="me-3" onClick={() => navigate(`/o/${customerId}/i/${computeStackId}/browse/${schema}/${table}/add`)}>
           <i className="fa fa-plus" />
         </Button>
-        <Button
-          id="bulkUpload"
-          color="link"
-          tabIndex="0"
-          className="me-2"
-          title={`Bulk Upload CSV to ${table}`}
-          onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/csv`)}
-        >
+        <Button id="bulkUpload" color="link" tabIndex="0" className="me-2" title={`Bulk Upload CSV to ${table}`} onClick={() => navigate(`/o/${customerId}/i/${computeStackId}/browse/${schema}/${table}/csv`)}>
           <i className="fa fa-file-upload" />
         </Button>
       </Col>
-    </Row>
-  );
+    </Row>;
 }
-
 export default BrowseDatatableHeader;

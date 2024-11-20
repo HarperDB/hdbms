@@ -1,29 +1,29 @@
 export default {
   type: {
-    label: 'Select Hosting Provider',
+    label: 'Select Hosting Provider'
   },
-  provider_cloud: {
-    label: 'Choose Cloud Provider',
+  providerCloud: {
+    label: 'Choose Cloud Provider'
   },
-  meta_local: {
-    label: 'Instance Info',
+  metaLocal: {
+    label: 'Instance Info'
   },
-  meta_cloud: {
-    label: 'Instance Info',
+  metaCloud: {
+    label: 'Instance Info'
   },
-  details_local: {
-    label: 'Instance Specs',
+  detailsLocal: {
+    label: 'Instance Specs'
   },
-  details_cloud: {
-    label: 'Instance Specs',
+  detailsCloud: {
+    label: 'Instance Specs'
   },
   payment: {
-    label: 'Payment Details',
+    label: 'Payment Details'
   },
   confirm: {
-    label: 'Confirm Instance Details',
+    label: 'Confirm Instance Details'
   },
   status: {
-    label: 'Adding Your New Instance',
-  },
+    label: 'Adding Your New Instance'
+  }
 };

@@ -1,14 +1,17 @@
-const chooseCompute = ({ is_local, wavelength_zone_id, cloud_provider }) => {
+const chooseCompute = ({
+  isLocal,
+  wavelengthZoneId,
+  cloudProvider
+}) => {
   switch (true) {
-    case wavelength_zone_id:
+    case wavelengthZoneId:
       return 'wavelength_compute';
-    case is_local:
+    case isLocal:
       return 'local_compute';
-    case cloud_provider === 'akamai':
+    case cloudProvider === 'akamai':
       return 'akamai_compute';
     default:
       return 'cloud_compute';
   }
 };
-
 export default chooseCompute;

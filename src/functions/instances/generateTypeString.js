@@ -1,14 +1,17 @@
-const generateTypeString = ({ wavelength_zone_id, is_local, cloud_provider }) => {
+const generateTypeString = ({
+  wavelengthZoneId,
+  isLocal,
+  cloudProvider
+}) => {
   switch (true) {
-    case wavelength_zone_id:
+    case wavelengthZoneId:
       return 'HARPERDB CLOUD - VERIZON 5G';
-    case is_local:
+    case isLocal:
       return 'HARPERDB ENTERPRISE - USER MANAGED';
-    case cloud_provider === 'akamai':
+    case cloudProvider === 'akamai':
       return 'HARPERDB CLOUD - AKAMAI';
     default:
       return 'HARPERDB CLOUD - AWS';
   }
 };
-
 export default generateTypeString;

@@ -1,9 +1,14 @@
 import queryLMS from '../queryLMS';
-
-export default async ({ auth, user_id, customer_id }) =>
-  queryLMS({
-    endpoint: 'removeOrg',
-    method: 'POST',
-    payload: { user_id, customer_id },
-    auth,
-  });
+export default async ({
+  auth,
+  userId,
+  customerId
+}) => queryLMS({
+  endpoint: 'removeOrg',
+  method: 'POST',
+  payload: {
+    userId,
+    customerId
+  },
+  auth
+});

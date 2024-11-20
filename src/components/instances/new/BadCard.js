@@ -1,16 +1,13 @@
 import React from 'react';
-
 import { Button, Card, CardBody, Col, Row } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
-
 import VisitCard from "../../shared/VisitCard";
-
 function BadCard() {
   const navigate = useNavigate();
-  const { customer_id } = useParams();
-
-  return (
-    <Card>
+  const {
+    customerId
+  } = useParams();
+  return <Card>
       <CardBody>
         <div className="p-4 pb-0 text-center">
           <b>The Credit Card On File Has An Issue</b>
@@ -20,16 +17,15 @@ function BadCard() {
         </div>
         <Row>
           <Col sm="6">
-            <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customer_id}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
+            <Button id="cancelNewInstance" onClick={() => navigate(`/o/${customerId}/instances`)} title="Cancel New Org" block className="mt-2" color="grey">
               Cancel
             </Button>
           </Col>
           <Col sm="6">
-            <VisitCard label="Update Credit Card" onClick={() => navigate(`/o/${customer_id}/billing?returnURL=/o/${customer_id}/instances/new`)} />
+            <VisitCard label="Update Credit Card" onClick={() => navigate(`/o/${customerId}/billing?returnURL=/o/${customerId}/instances/new`)} />
           </Col>
         </Row>
       </CardBody>
-    </Card>
-  )
+    </Card>;
 }
 export default BadCard;

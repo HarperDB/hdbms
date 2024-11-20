@@ -1,9 +1,17 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
-
-export default async ({ channel, subscriptions, buttonState, instance_host, clusterPort, clusterName, auth, url }) => {
+export default async ({
+  channel,
+  subscriptions,
+  buttonState,
+  instanceHost,
+  clusterPort,
+  clusterName,
+  auth,
+  url
+}) => {
   const newSubscriptions = JSON.parse(JSON.stringify(subscriptions));
-  const existingChannelSubscriptionIndex = newSubscriptions.findIndex((s) => s.channel === channel);
+  const existingChannelSubscriptionIndex = newSubscriptions.findIndex(s => s.channel === channel);
   const [schema, table] = channel.split(':');
 
   // if we have no subscription for this node, add it to the subscriptions array
@@ -13,7 +21,7 @@ export default async ({ channel, subscriptions, buttonState, instance_host, clus
       schema,
       table,
       publish: buttonState === 'togglePublish',
-      subscribe: buttonState === 'toggleSubscribe',
+      subscribe: buttonState === 'toggleSubscribe'
     });
 
     // if we're changing the publish status
@@ -26,11 +34,7 @@ export default async ({ channel, subscriptions, buttonState, instance_host, clus
   }
 
   // get rid of subscription node if it's neither publishing or subscribing
-  if (
-    newSubscriptions[existingChannelSubscriptionIndex] &&
-    !newSubscriptions[existingChannelSubscriptionIndex].publish &&
-    !newSubscriptions[existingChannelSubscriptionIndex].subscribe
-  ) {
+  if (newSubscriptions[existingChannelSubscriptionIndex] && !newSubscriptions[existingChannelSubscriptionIndex].publish && !newSubscriptions[existingChannelSubscriptionIndex].subscribe) {
     // newSubscriptions.splice(existingChannelSubscriptionIndex, 1);
   }
 
@@ -38,28 +42,25 @@ export default async ({ channel, subscriptions, buttonState, instance_host, clus
   const operation = {
     operation: 'update_node',
     name: clusterName,
-    node_name: clusterName,
-    host: instance_host,
+    nodeName: clusterName,
+    host: instanceHost,
     port: clusterPort,
-    subscriptions: newSubscriptions,
+    subscriptions: newSubscriptions
   };
-
   const updateResult = await queryInstance({
     operation,
     auth,
-    url,
+    url
   });
-
   if (updateResult.error && updateResult.message.indexOf('add_node') !== -1) {
     operation.operation = 'add_node';
     await queryInstance({
       operation,
       auth,
-      url,
+      url
     });
   }
-
-  return instanceState.update((s) => {
+  return instanceState.update(s => {
     s.lastUpdate = Date.now();
   });
 };

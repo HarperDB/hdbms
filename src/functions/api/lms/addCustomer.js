@@ -1,19 +1,28 @@
 import queryLMS from '../queryLMS';
-
-export default async ({ firstname, lastname, email, customer_name, subdomain, coupon_code, htuk, pageName, pageUri, login_domain = window.location.host }) =>
-  queryLMS({
-    endpoint: 'addCustomer',
-    method: 'POST',
-    payload: {
-      firstname,
-      lastname,
-      email,
-      customer_name,
-      subdomain,
-      coupon_code,
-      htuk,
-      pageName,
-      pageUri,
-      login_domain
-    },
-  });
+export default async ({
+  firstname,
+  lastname,
+  email,
+  customerName,
+  subdomain,
+  couponCode,
+  htuk,
+  pageName,
+  pageUri,
+  loginDomain = window.location.host
+}) => queryLMS({
+  endpoint: 'addCustomer',
+  method: 'POST',
+  payload: {
+    firstname,
+    lastname,
+    email,
+    customerName,
+    subdomain,
+    couponCode,
+    htuk,
+    pageName,
+    pageUri,
+    loginDomain
+  }
+});

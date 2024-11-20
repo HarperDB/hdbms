@@ -1,9 +1,15 @@
 import queryLMS from '../queryLMS';
-
-export default async ({ auth, customer_id, coupon_code }) =>
-  queryLMS({
-    endpoint: 'addCoupon',
-    method: 'POST',
-    auth,
-    payload: { customer_id, coupon_code, user_id: auth.user_id },
-  });
+export default async ({
+  auth,
+  customerId,
+  couponCode
+}) => queryLMS({
+  endpoint: 'addCoupon',
+  method: 'POST',
+  auth,
+  payload: {
+    customerId,
+    couponCode,
+    userId: auth.userId
+  }
+});

@@ -1,37 +1,38 @@
 import listRoles from '../api/instance/listRoles';
 import addUser from '../api/instance/addUser';
 import dropUser from '../api/instance/dropUser';
-
-export default async ({ instance_id, instanceAuth, url }) => {
+export default async ({
+  instanceId,
+  instanceAuth,
+  url
+}) => {
   const roles = await listRoles({
     auth: {
-      user: instance_id,
-      pass: instance_id,
+      user: instanceId,
+      pass: instanceId
     },
-    url,
+    url
   });
-
   if (roles.error || !roles.length) {
     return false;
   }
-
-  const { role } = roles.find((r) => r.permission.super_user);
-
+  const {
+    role
+  } = roles.find(r => r.permission.superUser);
   await addUser({
     auth: {
-      user: instance_id,
-      pass: instance_id,
+      user: instanceId,
+      pass: instanceId
     },
     role,
     username: instanceAuth.user,
     password: instanceAuth.pass,
-    url,
+    url
   });
   await dropUser({
     auth: instanceAuth,
-    username: instance_id,
-    url,
+    username: instanceId,
+    url
   });
-
   return true;
 };

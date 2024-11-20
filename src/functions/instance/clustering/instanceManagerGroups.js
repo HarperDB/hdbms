@@ -1,49 +1,44 @@
-export default ({ instances, network, instance_region, instance_wavelength_zone_id, instance_cluster_engine }) => {
-  const activeInstances = instances.filter((i) => i.url && i.status !== 'DELETE_IN_PROGRESS');
-  const compatibleInstances = activeInstances.filter((i) => i.clustering.engine === instance_cluster_engine);
-
-  const processedInstances = compatibleInstances.map((i) => {
-    const connection =
-      instance_cluster_engine === 'socketcluster' ? network?.connections.find((n) => n.name === i.compute_stack_id) : network?.connections.find((n) => n.host === i.host);
+export default ({
+  instances,
+  network,
+  instanceRegion,
+  instanceWavelengthZoneId,
+  instanceClusterEngine
+}) => {
+  const activeInstances = instances.filter(i => i.url && i.status !== 'DELETE_IN_PROGRESS');
+  const compatibleInstances = activeInstances.filter(i => i.clustering.engine === instanceClusterEngine);
+  const processedInstances = compatibleInstances.map(i => {
+    const connection = instanceClusterEngine === 'socketcluster' ? network?.connections.find(n => n.name === i.computeStackId) : network?.connections.find(n => n.host === i.host);
     const subscriptions = connection?.subscriptions || [];
-    const clusterPort = i?.clustering?.config_cluster_port;
-    const instance_status = i.is_local ? 'OK' : i.status;
-    const instance_host =
-      instance_region && instance_region === i.instance_region && !i.wavelength_zone_id && !instance_wavelength_zone_id
-        ? i.private_ip
-        : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
-    const clusterName = i.clustering.node_name;
-
+    const clusterPort = i?.clustering?.configClusterPort;
+    const instanceStatus = i.isLocal ? 'OK' : i.status;
+    const instanceHost = instanceRegion && instanceRegion === i.instanceRegion && !i.wavelengthZoneId && !instanceWavelengthZoneId ? i.privateIp : i.url.match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i)[1];
+    const clusterName = i.clustering.nodeName;
     return {
-      instance_name: i.instance_name,
-      instance_url: i.url,
-      compute_stack_id: i.compute_stack_id,
-      instance_status,
-      instance_host,
+      instanceName: i.instanceName,
+      instanceUrl: i.url,
+      computeStackId: i.computeStackId,
+      instanceStatus,
+      instanceHost,
       clusterPort,
       clusterName,
       connection,
       subscriptions,
       structure: i.structure,
-      configured: i.clustering?.is_ready,
+      configured: i.clustering?.isReady
     };
   });
-
-  const unreachable = instances
-    .filter((i) => i.clustering.engine !== instance_cluster_engine)
-    .map((i) => ({
-      instance_name: i.instance_name,
-      compute_stack_id: i.name,
-    }));
-
-  const connected = processedInstances.filter((i) => i.connection && i.configured);
-  const unconnected = processedInstances.filter((i) => !i.connection && i.configured);
-  const unconfigured = processedInstances.filter((i) => !i.configured);
-
+  const unreachable = instances.filter(i => i.clustering.engine !== instanceClusterEngine).map(i => ({
+    instanceName: i.instanceName,
+    computeStackId: i.name
+  }));
+  const connected = processedInstances.filter(i => i.connection && i.configured);
+  const unconnected = processedInstances.filter(i => !i.connection && i.configured);
+  const unconfigured = processedInstances.filter(i => !i.configured);
   return {
     connected,
     unconnected,
     unconfigured,
-    unreachable,
+    unreachable
   };
 };

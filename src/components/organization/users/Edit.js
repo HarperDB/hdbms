@@ -1,17 +1,19 @@
 import React from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { CardBody, Card, Button, Col, Row } from 'reactstrap';
-
 import Role from './EditRole';
 import Delete from './EditDelete';
-
-function Edit({ userEmail }) {
-  const { user_id } = useParams();
-  const { pathname } = useLocation();
+function Edit({
+  userEmail
+}) {
+  const {
+    userId
+  } = useParams();
+  const {
+    pathname
+  } = useLocation();
   const navigate = useNavigate();
-
-  return (
-    <>
+  return <>
       <div className="floating-card-header">
         existing org users &gt; edit &gt; <b>{userEmail}</b>
       </div>
@@ -28,15 +30,13 @@ function Edit({ userEmail }) {
               <span className="text-small">make no further changes to this user</span>
             </Col>
             <Col xs="4">
-              <Button id="returnToOrganizationUserList" block color="grey" onClick={() => navigate(pathname.replace(`/${user_id}`, ''))}>
+              <Button id="returnToOrganizationUserList" block color="grey" onClick={() => navigate(pathname.replace(`/${userId}`, ''))}>
                 Return to User List
               </Button>
             </Col>
           </Row>
         </CardBody>
       </Card>
-    </>
-  );
+    </>;
 }
-
 export default Edit;

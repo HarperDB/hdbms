@@ -1,16 +1,17 @@
 export default {
-  studio_version: 'x.x.xx',
+  studioVersion: 'x.x.xx',
   env: 'dev',
-  stripe_public_key: 'pk_test_XXXXXXXXXXXXXXXXXXXXXX',
-  lms_api_url: 'XXXXXXXXXXXXXXXXXXXXXXXX',
-  google_analytics_code: 'UA-XXXXXXXXXXXXX-3',
-  tc_version: '2020-01-01',
-  check_version_interval: 300000,
-  refresh_content_interval: 10000,
-  free_cloud_instance_limit: 1,
-  max_file_upload_size: 10380902,
-  alarm_badge_threshold: 86400,
+  stripePublicKey: 'pk_test_XXXXXXXXXXXXXXXXXXXXXX',
+  lmsApiUrl: 'XXXXXXXXXXXXXXXXXXXXXXXX',
+  googleAnalyticsCode: 'UA-XXXXXXXXXXXXX-3',
+  tcVersion: '2020-01-01',
+  checkVersionInterval: 300000,
+  refreshContentInterval: 10000,
+  freeCloudInstanceLimit: 1,
+  maxFileUploadSize: 10380902,
+  alarmBadgeThreshold: 86400,
   maintenance: 0,
-  is_local_studio: process.env.REACT_APP_LOCALSTUDIO, // this is injected at build-time and loads LocalApp.js instead of App.js
-  local_studio_dev_url: 'http://localhost:9925', // this lets you dev the UI on port 3000 and talk to your local instance on 9925
+  isLocalStudio: process.env.REACT_APP_LOCALSTUDIO,
+  // this is injected at build-time and loads LocalApp.js instead of App.js
+  localStudioDevUrl: 'http://localhost:9925' // this lets you dev the UI on port 3000 and talk to your local instance on 9925
 };

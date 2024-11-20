@@ -1,54 +1,54 @@
 import { fetch } from 'whatwg-fetch';
-
-export default async ({ operation, auth, url, timeout = 0, authType = undefined, signal = undefined }) => {
+export default async ({
+  operation,
+  auth,
+  url,
+  timeout = 0,
+  authType = undefined,
+  signal = undefined
+}) => {
   try {
     const controller = new AbortController();
-    const id = setTimeout(() => (timeout ? controller.abort() : null), timeout);
-
+    const id = setTimeout(() => timeout ? controller.abort() : null, timeout);
     const request = await fetch(url, {
       signal: signal || controller.signal,
       method: 'POST',
       body: JSON.stringify(operation),
       headers: {
         'Content-Type': 'application/json',
-        authorization: authType === 'token' ? `Bearer ${auth.token}` : `Basic ${btoa(`${auth.user}:${auth.pass}`)}`,
-      },
+        authorization: authType === 'token' ? `Bearer ${auth.token}` : `Basic ${btoa(`${auth.user}:${auth.pass}`)}`
+      }
     });
-
     clearTimeout(id);
-
     const response = await request.json();
-
     if (response.error) {
       return {
         error: true,
         message: response.error,
         type: 'response',
-        role_errors: response.main_permissions?.join(', '),
-        access_errors: response.unauthorized_access?.map((e) => ({
+        roleErrors: response.mainPermissions?.join(', '),
+        accessErrors: response.unauthorizedAccess?.map(e => ({
           schema: e.schema,
           table: e.table,
-          type: e.required_attribute_permissions?.length ? 'attribute' : 'table',
-          entity: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.attribute_name : e.table,
-          permission: e.required_attribute_permissions?.length ? e.required_attribute_permissions[0]?.required_permissions.join(', ') : e.required_table_permissions?.join(', '),
-        })),
+          type: e.requiredAttributePermissions?.length ? 'attribute' : 'table',
+          entity: e.requiredAttributePermissions?.length ? e.requiredAttributePermissions[0]?.attributeName : e.table,
+          permission: e.requiredAttributePermissions?.length ? e.requiredAttributePermissions[0]?.requiredPermissions.join(', ') : e.requiredTablePermissions?.join(', ')
+        }))
       };
     }
-
     if (request.status !== 200) {
       return {
         error: true,
         message: `Error of type ${request.status}`,
-        type: 'status',
+        type: 'status'
       };
     }
-
     return response;
   } catch (e) {
     return {
       error: true,
       message: e.message,
-      type: 'catch',
+      type: 'catch'
     };
   }
 };

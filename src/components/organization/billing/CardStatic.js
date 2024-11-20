@@ -4,57 +4,74 @@ import { Row, Col, Button, CardBody, Card } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import { useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-
 import appState from '../../../functions/state/appState';
-
 import removePaymentMethod from '../../../functions/api/lms/removePaymentMethod';
 import FormStatus from '../../shared/FormStatus';
 import BadCard from '../../shared/BadCard';
 import getCustomer from '../../../functions/api/lms/getCustomer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-
-function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) {
-  const { customer_id } = useParams();
-  const auth = useStoreState(appState, (s) => s.auth);
-  const instances = useStoreState(appState, (s) => s.instances);
-  const stripeId = useStoreState(appState, (s) => s.customer?.stripe_id);
+function CardStatic({
+  setEditingCard,
+  customerCard,
+  formStateHeight,
+  badCard
+}) {
+  const {
+    customerId
+  } = useParams();
+  const auth = useStoreState(appState, s => s.auth);
+  const instances = useStoreState(appState, s => s.instances);
+  const stripeId = useStoreState(appState, s => s.customer?.stripeId);
   const [formState, setFormState] = useState({});
-
   useAsyncEffect(async () => {
-    const { submitted } = formState;
+    const {
+      submitted
+    } = formState;
     if (submitted) {
-      const hasPaidInstance = instances.find((i) => i.totalPrice);
+      const hasPaidInstance = instances.find(i => i.totalPrice);
       if (hasPaidInstance) {
-        setFormState({ error: 'You have active, non-free instances.' });
+        setFormState({
+          error: 'You have active, non-free instances.'
+        });
         setTimeout(() => setFormState({}), 2000);
       } else {
-        setFormState({ processing: true });
-
-        const response = await removePaymentMethod({ auth, stripe_id: stripeId, payment_method_id: customerCard.id, customer_id });
+        setFormState({
+          processing: true
+        });
+        const response = await removePaymentMethod({
+          auth,
+          stripeId: stripeId,
+          paymentMethodId: customerCard.id,
+          customerId
+        });
         if (response.error) {
-          setFormState({ error: response.message });
+          setFormState({
+            error: response.message
+          });
           setTimeout(() => setFormState({}), 2000);
         } else {
-          setFormState({ success: true });
-          await getCustomer({ auth, customer_id });
+          setFormState({
+            success: true
+          });
+          await getCustomer({
+            auth,
+            customerId
+          });
           setFormState({});
           setTimeout(() => setEditingCard(false), 0);
         }
       }
     }
   }, [formState]);
-
-  return (
-    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack }, customer_id })} FallbackComponent={ErrorFallback}>
-      {formState.processing ? (
-        <FormStatus height={formStateHeight} status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." />
-      ) : formState.success ? (
-        <FormStatus height={formStateHeight} status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." />
-      ) : formState.error ? (
-        <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." />
-      ) : (
-        <Card>
+  return <ErrorBoundary onError={(error, componentStack) => addError({
+    error: {
+      message: error.message,
+      componentStack
+    },
+    customerId
+  })} FallbackComponent={ErrorFallback}>
+      {formState.processing ? <FormStatus height={formStateHeight} status="processing" header="Removing Card From Account" subhead="The Credit Schnauzer is securely contacting Stripe." /> : formState.success ? <FormStatus height={formStateHeight} status="success" header="Card Removed Successfully" subhead="Your account is now limited to free products." /> : formState.error ? <FormStatus height={formStateHeight} status="error" header={formState.error} subhead="You must remove them to remove your card." /> : <Card>
           <CardBody>
             {badCard && <BadCard />}
             <Row>
@@ -74,7 +91,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 expiration
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{`${customerCard?.card?.exp_month} / ${customerCard?.card?.exp_year}`}</div>
+                <div className="input-static">{`${customerCard?.card?.expMonth} / ${customerCard?.card?.expYear}`}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -92,7 +109,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 country
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.country}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.country}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -101,7 +118,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 state/province
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.state}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.state}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -110,7 +127,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 address
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.line1}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.line1}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -119,7 +136,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 apt/unit
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.line2}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.line2}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -128,7 +145,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 city
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.city}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.city}</div>
               </Col>
               <Col xs="12">
                 <hr className="my-2" />
@@ -137,13 +154,15 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
                 billing postal code
               </Col>
               <Col md="6" xs="12">
-                <div className="input-static">{customerCard?.billing_details?.address?.postal_code}</div>
+                <div className="input-static">{customerCard?.billingDetails?.address?.postalCode}</div>
               </Col>
             </Row>
             <hr className="my-2" />
             <Row>
               <Col sm="6">
-                <Button id="removeCard" title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({ submitted: true })} block className="mt-3" color="danger">
+                <Button id="removeCard" title="Remove Card" disabled={formState.submitted} onClick={() => setFormState({
+              submitted: true
+            })} block className="mt-3" color="danger">
                   Remove Card
                 </Button>
               </Col>
@@ -154,10 +173,7 @@ function CardStatic({ setEditingCard, customerCard, formStateHeight, badCard }) 
               </Col>
             </Row>
           </CardBody>
-        </Card>
-      )}
-    </ErrorBoundary>
-  );
+        </Card>}
+    </ErrorBoundary>;
 }
-
 export default CardStatic;

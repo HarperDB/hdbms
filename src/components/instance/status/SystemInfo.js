@@ -3,78 +3,81 @@ import { useStoreState } from 'pullstate';
 import { Card, CardBody, Row, Col, Button } from 'reactstrap';
 import useInterval from 'use-interval';
 import { ErrorBoundary } from 'react-error-boundary';
-
 import appState from '../../../functions/state/appState';
 import instanceState from '../../../functions/state/instanceState';
 import config from '../../../config';
-
 import updateSystemInfo from '../../../functions/api/instance/updateSystemInfo';
 import ContentContainer from '../../shared/ContentContainer';
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
-
 let controller;
-
 function SystemInfo() {
-  const compute_stack_id = useStoreState(instanceState, (s) => s.compute_stack_id);
-  const auth = useStoreState(instanceState, (s) => s.auth);
-  const url = useStoreState(instanceState, (s) => s.url);
-  const systemInfo = useStoreState(instanceState, (s) => s.systemInfo);
-  const is_local = useStoreState(instanceState, (s) => s.is_local);
-  const storage = useStoreState(instanceState, (s) => s.storage);
-  const iopsAlarms = useStoreState(appState, (s) => s.alarms && s.alarms[compute_stack_id]?.alarmCounts['Disk I/O'], [compute_stack_id]);
+  const computeStackId = useStoreState(instanceState, s => s.computeStackId);
+  const auth = useStoreState(instanceState, s => s.auth);
+  const url = useStoreState(instanceState, s => s.url);
+  const systemInfo = useStoreState(instanceState, s => s.systemInfo);
+  const isLocal = useStoreState(instanceState, s => s.isLocal);
+  const storage = useStoreState(instanceState, s => s.storage);
+  const iopsAlarms = useStoreState(appState, s => s.alarms && s.alarms[computeStackId]?.alarmCounts['Disk I/O'], [computeStackId]);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
-
   async function fetchSystemInfo(useCache = false) {
     if (useCache) {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo, skip: ['disk', 'network'] });
+      await updateSystemInfo({
+        auth,
+        url,
+        isLocal,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        previousSystemInfo: systemInfo,
+        skip: ['disk', 'network']
+      });
     } else {
-      await updateSystemInfo({ auth, url, is_local, signal: controller.signal, refresh: !!systemInfo, previousSystemInfo: systemInfo });
+      await updateSystemInfo({
+        auth,
+        url,
+        isLocal,
+        signal: controller.signal,
+        refresh: !!systemInfo,
+        previousSystemInfo: systemInfo
+      });
     }
   }
-
   useEffect(() => {
     let isMounted = true;
-
     const fetchData = async () => {
       setLoading(true);
       controller = new AbortController();
       await fetchSystemInfo(!!lastUpdate);
       if (isMounted) setLoading(false);
     };
-
     if (auth) fetchData();
-
     return () => {
       controller?.abort();
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, lastUpdate]);
-
   useInterval(() => {
     if (auth && autoRefresh) {
       setLastUpdate(Date.now());
     }
-  }, config.refresh_content_interval);
-
-  return (
-    <ErrorBoundary onError={(error, componentStack) => addError({ error: { message: error.message, componentStack } })} FallbackComponent={ErrorFallback}>
+  }, config.refreshContentInterval);
+  return <ErrorBoundary onError={(error, componentStack) => addError({
+    error: {
+      message: error.message,
+      componentStack
+    }
+  })} FallbackComponent={ErrorFallback}>
       <Row className="floating-card-header">
         <Col>host system</Col>
         <Col className="text-end">
-          <Button
-            color="link"
-            title="Update Metrics"
-            className="me-2"
-            onClick={async () => {
-              setLoading(true);
-              await fetchSystemInfo(false);
-              setLoading(false);
-            }}
-          >
+          <Button color="link" title="Update Metrics" className="me-2" onClick={async () => {
+          setLoading(true);
+          await fetchSystemInfo(false);
+          setLoading(false);
+        }}>
             <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
           </Button>
           <Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
@@ -85,12 +88,9 @@ function SystemInfo() {
       </Row>
       <Card className="my-3 instance-details">
         <CardBody>
-          {!systemInfo && !autoRefresh ? (
-            <div className="pt-5 text-center">
+          {!systemInfo && !autoRefresh ? <div className="pt-5 text-center">
               <i className="fa fa-spinner fa-spin text-purple" />
-            </div>
-          ) : (
-            <Row>
+            </div> : <Row>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Total Memory" className="mb-3">
                   <div className="nowrap-scroll">{systemInfo?.totalMemory || '...'}GB</div>
@@ -150,15 +150,13 @@ function SystemInfo() {
               </Col>
               <Col md="2" sm="4" xs="6">
                 <ContentContainer header="Disk IOPS" className="mb-3">
-                  <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{is_local ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
+                  <div className={`nowrap-scroll text-${iopsAlarms ? 'danger' : ''}`}>{isLocal ? 'HARDWARE LIMIT' : storage?.iops || '...'}</div>
                 </ContentContainer>
               </Col>
-            </Row>
-          )}
+            </Row>}
         </CardBody>
       </Card>
       <br />
-    </ErrorBoundary>
-  );
+    </ErrorBoundary>;
 }
 export default SystemInfo;

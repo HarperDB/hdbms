@@ -3,176 +3,117 @@ import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import useAsyncEffect from 'use-async-effect';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
-
 import appState from '../../../functions/state/appState';
 import useNewInstance from '../../../functions/state/newInstance';
 import ContentContainer from '../../shared/ContentContainer';
 import RadioCheckbox from '../../shared/RadioCheckbox';
 import DetailsSubheader from './DetailsSubheader';
 import config from '../../../config';
-
 function DetailsCloud() {
   const navigate = useNavigate();
-  const { customer_id } = useParams();
-  const { user_id, orgs } = useStoreState(appState, (s) => s.auth);
+  const {
+    customerId
+  } = useParams();
+  const {
+    userId,
+    orgs
+  } = useStoreState(appState, s => s.auth);
   const [newInstance, setNewInstance] = useNewInstance({});
-  const is_unpaid = useStoreState(appState, (s) => s.customer.is_unpaid || newInstance.cloud_provider === 'akamai');
-  const unusedCompute = useStoreState(appState, (s) => s.subscriptions?.cloud_compute?.filter((p) => p.value.active && p.value.compute_quantity_available) || []);
-  const unusedStorage = useStoreState(
-    appState,
-    (s) => s.subscriptions?.cloud_storage?.filter((p) => p.value.active && p.value.storage_quantity_available >= p.value.data_volume_size) || []
-  );
-  const products = useStoreState(
-    appState,
-    (s) =>
-      newInstance.cloud_provider === 'lumen'
-        ? s.products.lumen_compute?.filter((p) => p.value.active) || []
-        : newInstance.cloud_provider === 'verizon'
-        ? s.products.wavelength_compute?.filter((p) => p.value.active) || []
-        : newInstance.cloud_provider === 'akamai'
-        ? s.products.akamai_compute?.filter((p) => p.value.active) || []
-        : newInstance.showPrepaidCompute
-        ? unusedCompute
-        : s.products.cloud_compute.filter((p) => p.value.active),
-    [newInstance.showPrepaidCompute]
-  );
-  const storage = useStoreState(
-    appState,
-    (s) => (newInstance.cloud_provider === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloud_storage.filter((p) => p.value.active)),
-    [newInstance.showPrepaidStorage]
-  );
-
-  const regions = useStoreState(appState, (s) =>
-    newInstance.cloud_provider === 'lumen'
-      ? []
-      : newInstance.cloud_provider === 'verizon'
-      ? s.wavelengthRegions
-      : newInstance.cloud_provider === 'akamai'
-      ? s.akamaiRegions
-      : s.regions
-  );
-  const hasCard = useStoreState(appState, (s) => s.hasCard);
+  const isUnpaid = useStoreState(appState, s => s.customer.isUnpaid || newInstance.cloudProvider === 'akamai');
+  const unusedCompute = useStoreState(appState, s => s.subscriptions?.cloudCompute?.filter(p => p.value.active && p.value.computeQuantityAvailable) || []);
+  const unusedStorage = useStoreState(appState, s => s.subscriptions?.cloudStorage?.filter(p => p.value.active && p.value.storageQuantityAvailable >= p.value.dataVolumeSize) || []);
+  const products = useStoreState(appState, s => newInstance.cloudProvider === 'lumen' ? s.products.lumenCompute?.filter(p => p.value.active) || [] : newInstance.cloudProvider === 'verizon' ? s.products.wavelengthCompute?.filter(p => p.value.active) || [] : newInstance.cloudProvider === 'akamai' ? s.products.akamaiCompute?.filter(p => p.value.active) || [] : newInstance.showPrepaidCompute ? unusedCompute : s.products.cloudCompute.filter(p => p.value.active), [newInstance.showPrepaidCompute]);
+  const storage = useStoreState(appState, s => newInstance.cloudProvider === 'lumen' ? false : newInstance.showPrepaidStorage ? unusedStorage : s.products.cloudStorage.filter(p => p.value.active), [newInstance.showPrepaidStorage]);
+  const regions = useStoreState(appState, s => newInstance.cloudProvider === 'lumen' ? [] : newInstance.cloudProvider === 'verizon' ? s.wavelengthRegions : newInstance.cloudProvider === 'akamai' ? s.akamaiRegions : s.regions);
+  const hasCard = useStoreState(appState, s => s.hasCard);
   const [formState, setFormState] = useState({});
-  const [formData, setFormData] = useState({ ...storage[0]?.value, ...products[0]?.value, ...newInstance });
-  const isFree = !formData.compute_price && !formData.compute_subscription_id && !formData.storage_price && !formData.storage_subscription_id;
-  const needsCard = products && storage && !hasCard && !isFree && !is_unpaid;
-  const totalFreeCloudInstances = orgs.filter((o) => user_id === o.owner_user_id).reduce((a, b) => a + b.free_cloud_instance_count, 0);
-  const freeCloudInstanceLimit = config.free_cloud_instance_limit;
+  const [formData, setFormData] = useState({
+    ...storage[0]?.value,
+    ...products[0]?.value,
+    ...newInstance
+  });
+  const isFree = !formData.computePrice && !formData.computeSubscriptionId && !formData.storagePrice && !formData.storageSubscriptionId;
+  const needsCard = products && storage && !hasCard && !isFree && !isUnpaid;
+  const totalFreeCloudInstances = orgs.filter(o => userId === o.ownerUserId).reduce((a, b) => a + b.freeCloudInstanceCount, 0);
+  const freeCloudInstanceLimit = config.freeCloudInstanceLimit;
   const canAddFreeCloudInstance = totalFreeCloudInstances < freeCloudInstanceLimit;
-  const canProceedToNextPage = formData.stripe_plan_id && formData.instance_region && (newInstance.cloud_provider === 'lumen' || formData.stripe_storage_plan_id);
-
+  const canProceedToNextPage = formData.stripePlanId && formData.instanceRegion && (newInstance.cloudProvider === 'lumen' || formData.stripeStoragePlanId);
   useAsyncEffect(() => {
-    const { submitted } = formState;
-    const { stripe_plan_id, stripe_storage_plan_id, instance_region, instance_type, data_volume_size } = formData;
+    const {
+      submitted
+    } = formState;
+    const {
+      stripePlanId,
+      stripeStoragePlanId,
+      instanceRegion,
+      instanceType,
+      dataVolumeSize
+    } = formData;
     if (submitted) {
       if (isFree && freeCloudInstanceLimit && !canAddFreeCloudInstance) {
-        setFormState({ error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own` });
-      } else if (stripe_plan_id && stripe_storage_plan_id && instance_region && instance_type && data_volume_size) {
-        setNewInstance({ ...newInstance, ...formData });
-        setTimeout(() => navigate(needsCard ? `/o/${customer_id}/instances/new/payment` : `/o/${customer_id}/instances/new/confirm`), 0);
+        setFormState({
+          error: `You are limited to ${freeCloudInstanceLimit} free cloud instance${freeCloudInstanceLimit !== 1 ? 's' : ''} across organizations you own`
+        });
+      } else if (stripePlanId && stripeStoragePlanId && instanceRegion && instanceType && dataVolumeSize) {
+        setNewInstance({
+          ...newInstance,
+          ...formData
+        });
+        setTimeout(() => navigate(needsCard ? `/o/${customerId}/instances/new/payment` : `/o/${customerId}/instances/new/confirm`), 0);
       } else {
-        setFormState({ error: 'All fields must be filled out.' });
+        setFormState({
+          error: 'All fields must be filled out.'
+        });
       }
     }
   }, [formState]);
-
   useAsyncEffect(() => setFormState({}), [formData]);
-
-  return (
-    <>
+  return <>
       <Card id="cloudInstanceSpecs">
         <CardBody>
-          <ContentContainer
-            header="Instance RAM"
-            subheader={<DetailsSubheader hasPrepaid={unusedCompute.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidCompute" />}
-            maxHeight="120px"
-          >
-            {!products ? (
-              <div className="text-center">
+          <ContentContainer header="Instance RAM" subheader={<DetailsSubheader hasPrepaid={unusedCompute.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidCompute" />} maxHeight="120px">
+            {!products ? <div className="text-center">
                 <i className="fa fa-spinner fa-spin text-purple mt-5" />
-              </div>
-            ) : products.length ? (
-              <RadioCheckbox
-                id="stripe_plan_id"
-                className="radio-button"
-                type="radio"
-                required
-                onChange={(value) => setFormData({ ...formData, ...value })}
-                options={products}
-                defaultValue={newInstance.stripe_plan_id ? products.find((p) => p.value.stripe_plan_id === newInstance.stripe_plan_id) : products[0]}
-              />
-            ) : (
-              <div className="text-center my-4 py-4">No products available at this time</div>
-            )}
+              </div> : products.length ? <RadioCheckbox id="stripe_plan_id" className="radio-button" type="radio" required onChange={value => setFormData({
+            ...formData,
+            ...value
+          })} options={products} defaultValue={newInstance.stripePlanId ? products.find(p => p.value.stripePlanId === newInstance.stripePlanId) : products[0]} /> : <div className="text-center my-4 py-4">No products available at this time</div>}
           </ContentContainer>
-          {storage && (
-            <ContentContainer
-              header="Storage Size"
-              subheader={<DetailsSubheader hasPrepaid={unusedStorage.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidStorage" />}
-              maxHeight="120px"
-            >
-              <RadioCheckbox
-                id="data_volume_size"
-                className="radio-button"
-                type="radio"
-                required
-                onChange={(value) => setFormData({ ...formData, ...value })}
-                options={storage}
-                defaultValue={newInstance.data_volume_size ? storage.find((p) => p.value.data_volume_size === newInstance.data_volume_size) : storage[0]}
-              />
-            </ContentContainer>
-          )}
+          {storage && <ContentContainer header="Storage Size" subheader={<DetailsSubheader hasPrepaid={unusedStorage.length} newInstance={newInstance} setNewInstance={setNewInstance} toggleValue="showPrepaidStorage" />} maxHeight="120px">
+              <RadioCheckbox id="data_volume_size" className="radio-button" type="radio" required onChange={value => setFormData({
+            ...formData,
+            ...value
+          })} options={storage} defaultValue={newInstance.dataVolumeSize ? storage.find(p => p.value.dataVolumeSize === newInstance.dataVolumeSize) : storage[0]} />
+            </ContentContainer>}
           <ContentContainer header="Instance Region" subheader="scroll for more" maxHeight="120px">
-            {!regions ? (
-              <div className="text-center">
+            {!regions ? <div className="text-center">
                 <i className="fa fa-spinner fa-spin text-purple mt-5" />
-              </div>
-            ) : regions.length ? (
-              <RadioCheckbox
-                id="instance_region"
-                className="radio-button"
-                type="radio"
-                required
-                onChange={(value) => setFormData({ ...formData, instance_region: value })}
-                options={regions}
-                value={formData.instance_region}
-                defaultValue={newInstance.instance_region ? regions.find((p) => p.value === newInstance.instance_region) : regions[0]}
-              />
-            ) : (
-              <div className="text-center my-4 py-4">No regions available at this time</div>
-            )}
+              </div> : regions.length ? <RadioCheckbox id="instance_region" className="radio-button" type="radio" required onChange={value => setFormData({
+            ...formData,
+            instanceRegion: value
+          })} options={regions} value={formData.instanceRegion} defaultValue={newInstance.instanceRegion ? regions.find(p => p.value === newInstance.instanceRegion) : regions[0]} /> : <div className="text-center my-4 py-4">No regions available at this time</div>}
           </ContentContainer>
         </CardBody>
       </Card>
       <Row>
         <Col sm="6">
-          <Button id="backToBasicInfo" onClick={() => navigate(`/o/${customer_id}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
+          <Button id="backToBasicInfo" onClick={() => navigate(`/o/${customerId}/instances/new/meta_cloud`)} title="Back to Basic Info" block className="mt-3" color="purple">
             <i className="fa fa-chevron-circle-left me-2" />
             Basic Info
           </Button>
         </Col>
         <Col sm="6">
-          <Button
-            id={needsCard ? 'addPaymentMethod' : 'confirmInstanceDetails'}
-            onClick={() => setFormState({ submitted: true })}
-            title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
-            block
-            className="mt-3"
-            color="purple"
-            disabled={!canProceedToNextPage}
-          >
+          <Button id={needsCard ? 'addPaymentMethod' : 'confirmInstanceDetails'} onClick={() => setFormState({
+          submitted: true
+        })} title={needsCard ? 'Add Payment Method' : 'Confirm Instance Details'} block className="mt-3" color="purple" disabled={!canProceedToNextPage}>
             {needsCard ? 'Add Payment Method' : 'Confirm Instance Details'}
             <i className="fa fa-chevron-circle-right ms-2" />
           </Button>
         </Col>
       </Row>
-      {formState.error && (
-        <Card className="mt-3 error">
+      {formState.error && <Card className="mt-3 error">
           <CardBody>{formState.error}</CardBody>
-        </Card>
-      )}
-    </>
-  );
+        </Card>}
+    </>;
 }
-
 export default DetailsCloud;

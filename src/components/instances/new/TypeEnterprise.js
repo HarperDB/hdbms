@@ -1,10 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, CardBody, Button } from 'reactstrap';
 import HarperDBDogLogo from '../../shared/logos/HarperDBDogLogo';
-
-function TypeEnterprise({ setFormData }) {
-  return (
-    <Card className="mb-3">
+function TypeEnterprise({
+  setFormData
+}) {
+  return <Card className="mb-3">
       <CardBody className="instance-form-card-body">
         <Row>
           <Col xs="8" className="logo-header">
@@ -12,12 +12,12 @@ function TypeEnterprise({ setFormData }) {
             <div className="ps-2">Enterprise</div>
           </Col>
           <Col xs="4">
-            <Button
-              id="createLocalInstanceButton"
-              color="purple"
-              block
-              onClick={() => setFormData({ cloud_provider: null, is_local: true, is_wavelength: false, is_akamai: false })}
-            >
+            <Button id="createLocalInstanceButton" color="purple" block onClick={() => setFormData({
+            cloudProvider: null,
+            isLocal: true,
+            isWavelength: false,
+            isAkamai: false
+          })}>
               Register
             </Button>
           </Col>
@@ -35,8 +35,6 @@ function TypeEnterprise({ setFormData }) {
           </li>
         </ul>
       </CardBody>
-    </Card>
-  );
+    </Card>;
 }
-
 export default TypeEnterprise;

@@ -2,35 +2,46 @@ import queryLMS from '../queryLMS';
 import instanceState from '../../state/instanceState';
 import addError from './addError';
 import config from '../../../config';
-
-export default async ({ auth, customer_id, compute_stack_id, signal }) => {
+export default async ({
+  auth,
+  customerId,
+  computeStackId,
+  signal
+}) => {
   let response = null;
-
   try {
     response = await queryLMS({
       endpoint: 'getCharts',
       method: 'POST',
-      payload: { customer_id, compute_stack_id, user_id: auth.user_id },
+      payload: {
+        customerId,
+        computeStackId,
+        userId: auth.userId
+      },
       auth,
-      signal,
+      signal
     });
-
     if (!response.error) {
-      instanceState.update((s) => {
+      instanceState.update(s => {
         s.charts = response;
       });
     }
-
     return response;
   } catch (e) {
     return addError({
       type: 'lms data',
       status: 'error',
-      url: config.lms_api_url,
+      url: config.lmsApiUrl,
       operation: 'getCharts',
-      request: { customer_id, compute_stack_id, user_id: auth.user_id },
-      error: { catch: e.toString() },
-      customer_id,
+      request: {
+        customerId,
+        computeStackId,
+        userId: auth.userId
+      },
+      error: {
+        catch: e.toString()
+      },
+      customerId
     });
   }
 };

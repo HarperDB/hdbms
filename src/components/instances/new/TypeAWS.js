@@ -3,23 +3,23 @@ import { Row, Col, Card, CardBody, Button } from 'reactstrap';
 import { useStoreState } from 'pullstate';
 import AWSLogo from '../../shared/logos/AWSLogo';
 import appState from '../../../functions/state/appState';
-
-function TypeAWS({ setFormData }) {
-  const theme = useStoreState(appState, (s) => s.theme);
-  return (
-    <Card className="mb-3">
+function TypeAWS({
+  setFormData
+}) {
+  const theme = useStoreState(appState, s => s.theme);
+  return <Card className="mb-3">
       <CardBody className="instance-form-card-body">
         <Row>
           <Col xs="8" className="logo-header">
             <AWSLogo theme={theme} />
           </Col>
           <Col xs="4">
-            <Button
-              id="createCloudInstanceButton"
-              color="purple"
-              block
-              onClick={() => setFormData({ cloud_provider: 'aws', is_local: false, is_wavelength: false, is_akamai: false })}
-            >
+            <Button id="createCloudInstanceButton" color="purple" block onClick={() => setFormData({
+            cloudProvider: 'aws',
+            isLocal: false,
+            isWavelength: false,
+            isAkamai: false
+          })}>
               Create
             </Button>
           </Col>
@@ -33,8 +33,6 @@ function TypeAWS({ setFormData }) {
           <li>Choose RAM and Disk Size</li>
         </ul>
       </CardBody>
-    </Card>
-  );
+    </Card>;
 }
-
 export default TypeAWS;
