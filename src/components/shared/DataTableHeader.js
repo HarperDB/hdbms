@@ -5,13 +5,11 @@ const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter, dyn
 
   const isIndexedAttribute = (columnId) => {
     let isIndexed = false;
-    for (let i = 0; i < tableDescriptionAttributes.length; i++) {
-      const attr = tableDescriptionAttributes[i];
+    tableDescriptionAttributes.forEach((attr) => {
       if (attr.attribute === columnId && (attr.is_primary_key || attr.indexed)) {
         isIndexed = true;
-        break;
       }
-    }
+    });
     return isIndexed;
   }
 
