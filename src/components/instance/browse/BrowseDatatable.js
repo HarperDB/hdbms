@@ -17,7 +17,7 @@ let controller;
 let controller2;
 let controller3;
 
-function BrowseDatatable({ tableState, setTableState, activeTable, tableDescriptionAttributes }) {
+function BrowseDatatable({ tableState, setTableState, activeTable }) {
   const navigate = useNavigate();
   const { compute_stack_id, schema, table, customer_id } = useParams();
   const auth = useStoreState(instanceState, (s) => s.auth);
@@ -65,7 +65,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
       }
       controller = new AbortController();
       controller2 = new AbortController();
-      const { newData, newTotalRecords, newTotalPages, newEntityAttributes, hashAttribute, dataTableColumns, dynamicAttributesFromDataTable, error } = await getTableData({
+      const { newData, newTotalRecords, newTotalPages, newEntityAttributes, hashAttribute, dataTableColumns, error } = await getTableData({
         schema,
         table,
         filtered: tableState.filtered,
@@ -103,7 +103,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
             newEntityAttributes,
             hashAttribute,
             dataTableColumns,
-            dynamicAttributesFromDataTable,
             error,
           });
         }
@@ -147,7 +146,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
           <DataTable
             manual
             columns={tableState.dataTableColumns || []}
-            tableDescriptionAttributes={tableDescriptionAttributes}
             data={tableState.tableData || []}
             error={tableState.error}
             currentPage={tableState.page}
@@ -156,7 +154,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
             showFilter={tableState.showFilter}
             sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
             loading={loading && !tableState.autoRefresh}
-            dynamicAttributesFromDataTable={tableState.dynamicAttributesFromDataTable}
             onFilteredChange={(value) => {
               setTableState({ ...tableState, page: 0, filtered: value });
             }}
