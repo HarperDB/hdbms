@@ -71,8 +71,6 @@ function DataTable({
   onRowClick,
   sorted,
   loading,
-  dynamicAttributesFromDataTable,
-  tableDescriptionAttributes,
   manual = false,
 }) {
   const { headerGroups, page, rows, prepareRow, state, setAllFilters, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize } =
@@ -112,8 +110,8 @@ function DataTable({
 
   return (
     <ErrorBoundary onError={(err, componentStack) => addError({ error: { message: err.message, componentStack } })} FallbackComponent={ErrorFallback}>
-      <div role="table" aria-label="Table Data" className="react-table-scroller">
-        <DataTableHeader headerGroups={headerGroups} tableDescriptionAttributes={tableDescriptionAttributes} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} dynamicAttributesFromDataTable={dynamicAttributesFromDataTable} />
+      <div className="react-table-scroller">
+        <DataTableHeader headerGroups={headerGroups} onSortedChange={onSortedChange} sorted={sorted} showFilter={showFilter} />
         {loading || localLoading ? (
           <div className="centered text-center">
             <i className="fa fa-spinner fa-spin" />
