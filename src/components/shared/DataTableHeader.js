@@ -22,11 +22,11 @@ const DataTableHeader = ({ headerGroups, onSortedChange, sorted, showFilter, dyn
             <Col
               key={column.id}
               onClick={() => {
-                if (!dynamicAttributesFromDataTable.includes(column.id) && isIndexedAttribute(column.id)) {
+                if (dynamicAttributesFromDataTable && !dynamicAttributesFromDataTable.includes(column.id) && isIndexedAttribute(column.id)) {
                   onSortedChange([{ id: column.id, desc: sorted[0]?.id === column.id ? !sorted[0]?.desc : false }])
                 }
               }}
-              className={`${sorted[0]?.id === column.id ? 'sorted' : ''} ${sorted[0]?.desc ? 'desc' : 'asc'} ${column.id.indexOf('hdb-narrow') !== -1 ? 'action' : ''} px-1 ${!dynamicAttributesFromDataTable.includes(column.id) && isIndexedAttribute(column.id) ? '' : 'disabled-column'}`}
+              className={`${sorted[0]?.id === column.id ? 'sorted' : ''} ${sorted[0]?.desc ? 'desc' : 'asc'} ${column.id.indexOf('hdb-narrow') !== -1 ? 'action' : ''} px-1 ${dynamicAttributesFromDataTable && !dynamicAttributesFromDataTable.includes(column.id) && isIndexedAttribute(column.id) ? '' : 'disabled-column'}`}
             >
               <div className="text-renderer">{column.render('Header')}</div>
             </Col>
