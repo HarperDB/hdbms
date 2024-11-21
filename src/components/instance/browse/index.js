@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy } from 'react';
+import React, { useState, useEffect, useContext, lazy } from 'react';
 import { Row, Col, Card, CardBody, CardTitle } from 'reactstrap';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
@@ -12,6 +12,7 @@ import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
+import { TableStateContext } from '../../../state/browse/TableContext';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
@@ -56,6 +57,7 @@ function NoPrimaryKeyMessage({ table }) {
 function BrowseIndex() {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const [tableContextState, setTableContextState] = useContext(TableStateContext);
 	const { schema, table, action, customer_id, compute_stack_id } = useParams();
 	const [instanceAuths] = useInstanceAuth({});
 	const auth = instanceAuths?.[compute_stack_id];
@@ -74,9 +76,8 @@ function BrowseIndex() {
 		showForm ||
 		(instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
 	const emptyPromptMessage = showForm
-		? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${
-				schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}`
-			}`
+		? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}`
+		}`
 		: "This user has not been granted access to any tables. A super-user must update this user's role.";
 	const [hasHashAttr, setHasHashAttr] = useState(true);
 
