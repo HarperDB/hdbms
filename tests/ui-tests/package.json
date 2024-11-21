@@ -1,0 +1,10 @@
+{
+  "name": "ui-tests",
+  "version": "1.0.0",
+  "description": "UI functional test automation with K6 browser",
+  "main": "test_suite/test-suite.js",
+  "scripts": {
+    "test": "echo \"Error: no tests specified\" && exit 1"
+  },
+  "private": true
+}
