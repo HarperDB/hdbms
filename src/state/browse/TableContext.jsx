@@ -17,7 +17,17 @@ const TableStateContext = createContext(defaultTableState);
 // const useTableState = () => useContext(TableStateContext);
 
 const TableStateProvider = (props) => {
-  const [tableContextState, setTableContextState] = useState(defaultTableState);
+  const [tableContextState, setTableContextState] = useState(() => {
+    // Check if there is a saved state in session storage
+    const savedState = sessionStorage.getItem('tableContextState');
+    return savedState ? JSON.parse(savedState) : defaultTableState;
+  });
+
+  useEffect(() => {
+    // Save the state to session storage whenever tableContextState gets updated in the app
+    sessionStorage.setItem('tableContextState', JSON.stringify(tableContextState));
+  }, [tableContextState]);
+
   const value = [tableContextState, setTableContextState];
   return <TableStateContext.Provider value={value} {...props} />
 }

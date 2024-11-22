@@ -139,6 +139,18 @@ function BrowseIndex() {
 			}
 
 			if (entities.activeTable !== `${compute_stack_id}:${schema}:${table}`) {
+				setTableContextState({
+					tableData: [],
+					dataTableColumns: [],
+					filtered: [],
+					sorted: [],
+					page: 0,
+					pageSize: 20,
+					autoRefresh: false,
+					showFilter: false,
+					newEntityAttributes: false,
+					hashAttribute: false,
+				});
 				setTableState(defaultTableState);
 			}
 			setEntities({ schemas, tables, activeTable: `${compute_stack_id}:${schema}:${table}` });
