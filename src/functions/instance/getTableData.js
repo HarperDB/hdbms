@@ -3,6 +3,7 @@ import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
 const getAttributesFromTableData = (tableData, existingAttributes) => {
+  if (!tableData.length) return [];
   if (existingAttributes.length >= 8) return [];
   const existing = new Map(existingAttributes.map((value, index) => [value, index]));
   const extra = new Map();
