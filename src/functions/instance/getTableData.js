@@ -2,6 +2,21 @@ import describeTable from '../api/instance/describeTable';
 import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
 
+const getAttributesFromTableData = (tableData, existingAttributes) => {
+  if (existingAttributes.length >= 8) return [];
+  const existing = new Map(existingAttributes.map((value, index) => [value, index]));
+  const extra = new Map();
+  for (const dataRow of tableData) {
+    for (const key of Object.keys(dataRow)) {
+      if (!existing.has(key)) {
+        const count = extra.get(key) || 0;
+        extra.set(key, count + 1);
+      }
+    }
+  }
+  return Array.from(extra).sort(([, a], [, b]) => b - a).map(([key]) => key).slice(0, 8 - existingAttributes.length);
+}
+
 export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
   let fetchError = false;
   let newTotalRecords = 0;
@@ -10,6 +25,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
   let allAttributes = false;
   let hashAttribute = false;
   let get_attributes = ['*'];
+  let dynamicAttributesFromDataTable = [];
   const offset = page * pageSize;
 
   try {
@@ -76,9 +92,12 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
     }
   }
 
+
+  dynamicAttributesFromDataTable = getAttributesFromTableData(newData, allAttributes)
+  allAttributes.push(...dynamicAttributesFromDataTable);
   // sort columns, but keep primary key / hash attribute first, and created and updated last.
   // NOTE: __created__ and __updated__ might not exist in the schema, only include if they exist.
-  const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a)).sort();
+  const orderedColumns = allAttributes.filter((a) => ![hashAttribute, '__createdtime__', '__updatedtime__'].includes(a))
   const newEntityAttributes = orderedColumns.reduce((ac, a) => ({ ...ac, [a]: null }), {});
 
   if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
@@ -97,5 +116,6 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
     hashAttribute,
     dataTableColumns,
     error: fetchError === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError,
+    dynamicAttributesFromDataTable,
   };
 };

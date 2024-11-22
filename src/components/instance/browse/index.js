@@ -64,13 +64,13 @@ function BrowseIndex() {
   const structure = useStoreState(instanceState, (s) => s.structure);
   const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
   const [tableState, setTableState] = useState(defaultTableState);
+  const [tableDescription, setTableDescription] = useState(null);
   const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
   const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
   const showTableForm = showForm || (instanceAuths[compute_stack_id]?.structure && instanceAuths[compute_stack_id]?.structure?.includes(schema));
   const emptyPromptMessage = showForm
-    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${
-        schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}`
-      }`
+    ? `Please ${(schema && entities.tables && !entities.tables.length) || !entities.schemas.length ? 'create' : 'choose'} a ${schema ? 'table' : `${versionAsFloat >= 4.2 ? 'database' : 'schema'}`
+    }`
     : "This user has not been granted access to any tables. A super-user must update this user's role.";
   const [hasHashAttr, setHasHashAttr] = useState(true);
 
@@ -78,18 +78,26 @@ function BrowseIndex() {
     buildInstanceStructure({ auth, url });
   };
 
-  const checkForHashAttribute = () => {
-    async function check() {
-      if (table) {
+  const fetchDescribeTable = async () => {
+    if (table) {
+      try {
         const result = await describeTable({ auth, url, schema, table });
-        setHasHashAttr(Boolean(result.hash_attribute));
+        setTableDescription(result);
+      } catch (e) {
+        addError(e);
       }
     }
-
-    check();
   };
 
-  useEffect(checkForHashAttribute, [auth, url, schema, table]);
+  useEffect(() => {
+    fetchDescribeTable();
+  }, [auth, url, schema, table]);
+
+  useEffect(() => {
+    if (tableDescription) {
+      setHasHashAttr(Boolean(tableDescription.hash_attribute));
+    }
+  }, [tableDescription]);
 
   const validate = () => {
     if (structure) {
@@ -153,7 +161,7 @@ function BrowseIndex() {
           ) : schema && table && action && entities.activeTable ? (
             <JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
           ) : schema && table && entities.activeTable ? (
-            <DataTable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
+            <DataTable activeTable={entities.activeTable} tableDescriptionAttributes={tableDescription?.attributes} tableState={tableState} setTableState={setTableState} />
           ) : schema && table && !hasHashAttr ? (
             <NoPrimaryKeyMessage />
           ) : (
