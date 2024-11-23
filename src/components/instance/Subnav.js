@@ -34,9 +34,8 @@ function Subnav({ routes = [] }) {
             label: (
               <span>
                 <i
-                  className={`d-none d-sm-inline-block fa me-2 fa-${
-                    i.is_local ? 'server' : ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) ? 'circle-exclamation' : 'cloud'
-                  } ${['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) && 'opacity-25'}`}
+                  className={`d-none d-sm-inline-block fa me-2 fa-${i.is_local ? 'server' : ['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) ? 'circle-exclamation' : 'cloud'
+                    } ${['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) && 'opacity-25'}`}
                 />
                 {i.instance_name} {['CREATE_IN_PROGRESS', 'UPDATE_IN_PROGRESS', 'CONFIGURING_NETWORK'].includes(i.status) && `(${i.status.replace(/_/g, ' ').toLowerCase()})`}
               </span>

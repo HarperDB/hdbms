@@ -5,7 +5,8 @@ import config from '../../config';
 import supportsApplications from '../../functions/instance/functions/supportsApplications';
 
 const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
-const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
+// NOTE: Temporarily disabling. The SQL engine in HarperDB is not optimized and when users use it, it can create significant production issues.
+// const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
 const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './replication'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
 const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
@@ -24,13 +25,14 @@ const routes = ({ super_user, version = null }) => {
     icon: 'list',
   };
 
-  const query = {
-    element: <Query />,
-    path: `query`,
-    link: 'query',
-    label: 'query',
-    icon: 'search',
-  };
+  // NOTE: Temporarily disabling. The SQL engine in HarperDB is not optimized and when users use it, it can create significant production issues.
+  // const query = {
+  //   element: <Query />,
+  //   path: `query`,
+  //   link: 'query',
+  //   label: 'query',
+  //   icon: 'search',
+  // };
 
   const users = {
     element: <Users />,
@@ -97,17 +99,17 @@ const routes = ({ super_user, version = null }) => {
   };
 
   if (config.is_local_studio && super_user) {
-    return [browse, query, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
+    return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
   }
 
   if (super_user) {
-    return [browse, query, users, roles, charts, cluster, useApplications ? applications : functions, metrics, configure];
+    return [browse, users, roles, charts, cluster, useApplications ? applications : functions, metrics, configure];
   }
 
   if (config.is_local_studio) {
-    return [browse, query, charts];
+    return [browse, charts];
   }
 
-  return [browse, query];
+  return [browse];
 };
 export default routes;
