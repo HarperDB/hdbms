@@ -14,4 +14,5 @@ export default {
   maintenance: 0,
   is_local_studio: process.env.REACT_APP_LOCALSTUDIO, // this is injected at build-time and loads LocalApp.js instead of App.js
   local_studio_dev_url: 'http://localhost:9925', // this lets you dev the UI on port 3000 and talk to your local instance on 9925
+  reo_dev_client_id: '',
 };
