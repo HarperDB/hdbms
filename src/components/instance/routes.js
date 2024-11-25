@@ -3,8 +3,8 @@ import { lazy, React } from 'react';
 import Browse from './browse';
 import config from '../../config';
 import supportsApplications from '../../functions/instance/functions/supportsApplications';
-
-const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
+// NOTE: Temporarily disabling. Query is used in Charts.
+// const Charts = lazy(() => import(/* webpackChunkName: "instance-charts" */ './charts'));
 // NOTE: Temporarily disabling. The SQL engine in HarperDB is not optimized and when users use it, it can create significant production issues.
 // const Query = lazy(() => import(/* webpackChunkName: "instance-query" */ './query'));
 const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './replication'));
@@ -50,13 +50,14 @@ const routes = ({ super_user, version = null }) => {
     icon: 'check-square',
   };
 
-  const charts = {
-    element: <Charts />,
-    path: `charts`,
-    link: 'charts',
-    label: 'charts',
-    icon: 'chart-line',
-  };
+  // NOTE: Temporarily disabling. Query is used in Charts.
+  // const charts = {
+  //   element: <Charts />,
+  //   path: `charts`,
+  //   link: 'charts',
+  //   label: 'charts',
+  //   icon: 'chart-line',
+  // };
 
   const cluster = {
     element: <Cluster />,
@@ -103,11 +104,11 @@ const routes = ({ super_user, version = null }) => {
   }
 
   if (super_user) {
-    return [browse, users, roles, charts, cluster, useApplications ? applications : functions, metrics, configure];
+    return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
   }
 
   if (config.is_local_studio) {
-    return [browse, charts];
+    return [browse];
   }
 
   return [browse];
