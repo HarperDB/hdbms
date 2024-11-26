@@ -1,20 +1,26 @@
 import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
+// Below line is importing loadReoScript from reodotdev, unsure why i'm getting this error. It IS in the package.json and *.lock files
 import { loadReoScript } from 'reodotdev';
 
 import './app.scss';
 import config from './config';
 
 const clientID = process.env.CLIENT_ID || "6565c3e84c377ad";
-const reoPromise = config.is_local_studio ? Promise.resolve() : loadReoScript({ clientID });
+const reoPromise = (is_local_studio) => is_local_studio ? Promise.resolve() : loadReoScript({ clientID })
 
-reoPromise
-  .then(Reo => {
-    Reo.init({ clientID });
-  })
-  .catch(error => {
+const initReoDotDev = async () => {
+  try {
+    const Reo = await reoPromise(config.is_local_studio);
+    await Reo.init({ clientID });
+  }
+  catch (error) {
     console.error('Error loading Reo', error);
-  })
+  }
+}
+if (!config.is_local_studio) {
+  initReoDotDev();
+}
 
 const App = lazy(() => import(/* webpackChunkName: "online-app" */ './components/App'));
 const LocalApp = lazy(() => import(/* webpackChunkName: "offline-app" */ './components/LocalApp'));
