@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 import { createRoot } from 'react-dom/client';
-// Below line is importing loadReoScript from reodotdev, unsure why i'm getting this error. It IS in the package.json and *.lock files
 import { loadReoScript } from 'reodotdev';
 
 import './app.scss';
@@ -18,7 +17,7 @@ const initReoDotDev = async () => {
     console.error('Error loading Reo', error);
   }
 }
-if (!config.is_local_studio) {
+if (!config.is_local_studio && !config.env === 'dev') {
   initReoDotDev();
 }
 
