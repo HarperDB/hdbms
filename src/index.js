@@ -11,7 +11,7 @@ const reoPromise = (is_local_studio) => is_local_studio ? Promise.resolve() : lo
 const initReoDotDev = async () => {
   try {
     const Reo = await reoPromise(config.is_local_studio);
-    await Reo.init({ clientID });
+    Reo.init({ clientID });
   }
   catch (error) {
     console.error('Error loading Reo', error);
