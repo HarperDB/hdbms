@@ -19,6 +19,7 @@ function SignIn() {
   const [formData, setFormData] = useState({});
   const [persistedUser, setPersistedUser] = usePersistedUser({});
 
+
   const submit = async () => {
     setFormState({ submitted: true });
     const { email, pass } = formData;
@@ -38,6 +39,13 @@ function SignIn() {
         setTimeout(() => setFormState({}), 5000);
       } else {
         setPersistedUser({ ...persistedUser, email, pass });
+        const identity = {
+          username: email,
+          type: "email",
+          company: email.split('@')[1] // domain name
+        };
+        /* global Reo */
+        Reo.identify(identity)
       }
     }
   };
