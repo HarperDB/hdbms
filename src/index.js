@@ -17,8 +17,8 @@ const initReoDotDev = async () => {
     console.error('Error loading Reo', error);
   }
 }
-// eslint-disable-next-line eqeqeq
-if (!config.is_local_studio && !config.env == 'dev') {
+
+if (!config.is_local_studio) {
   initReoDotDev();
 }
 
