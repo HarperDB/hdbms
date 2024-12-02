@@ -1,1 +1,1 @@
-node --eval "fs.writeFileSync('.husky/pre-commit','yarn lint-staged\n')"
+yarn lint-staged
