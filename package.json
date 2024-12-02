@@ -14,7 +14,8 @@
     "build:prod": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false PUBLIC_URL=https://ds5zz9rfvzuta.cloudfront.net react-scripts build",
     "build:local": "DISABLE_ESLINT_PLUGIN=true BUILD_PATH=./build-local GENERATE_SOURCEMAP=false REACT_APP_LOCALSTUDIO=true react-scripts build",
     "lint-dev": "eslint --fix src && npx stylelint --fix \"src/**/*.scss\"",
-    "lint-prod": "eslint --fix src"
+    "lint-prod": "eslint --fix src",
+    "prepare": "husky"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.2.0",
@@ -64,6 +65,9 @@
       "last 1 safari version"
     ]
   },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/compat": "^1.1.1",
@@ -76,6 +80,8 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "husky": "^9.1.7",
+    "pinst": "^3.0.0",
     "postcss-custom-properties": "^14.0.1",
     "prettier": "^3.1.0",
     "sass": "^1.46.0",
