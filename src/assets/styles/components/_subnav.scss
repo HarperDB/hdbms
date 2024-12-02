@@ -1,6 +1,6 @@
 .app-subnav {
   align-items: center;
-  background: $black-overlay !important;
+  background: $grey-overlay !important;
   border-bottom: 1px solid $black-overlay;
   display: flex;
   flex-flow: row nowrap;
@@ -157,5 +157,18 @@
     @media screen and (width >= 768px) {
       width: 105px;
     }
+  }
+
+  .free-instances {
+    color: $color-white;
+    margin-left: 10px;
+    width: auto;
+    align-items: center;
+    display: inline-flex;
+    font-size: 13px !important;
+    font-weight: 300 !important;
+    height: 38px;
+    overflow: visible;
+    position: relative;
   }
 }

@@ -72,7 +72,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
               <div id="logo" title="Go to Organizations Home" />
             </NavLink>
           ) : (
-            <NavLink to='/'>
+            <NavLink to="/">
               <div id="logo" title="Go to sign in page" />
             </NavLink>
           )}
@@ -84,7 +84,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
               <NavItem className="ms-0">
                 <NavLink id="viewOrganizations" title="View or Switch Organizations" to="/organizations">
                   <i className="fa fa-building d-inline-block" />
-                  <span className="d-none d-lg-inline-block">All Organizations</span>
+                  <span className="d-none d-md-inline-block">Organizations</span>
                   {showInviteBadge ? <span className="badge">{showInviteBadge}</span> : null}
                 </NavLink>
               </NavItem>
@@ -119,7 +119,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
               <NavItem>
                 <NavLink id="manageProfile" title="Manage My Profile" to="/profile">
                   <i className="fa fa-user" />
-                  <span className="d-none d-lg-inline-block">Profile</span>
+                  <span className="d-none d-xl-inline-block">Profile</span>
                   {auth?.email_bounced ? <span className="badge">!</span> : null}
                 </NavLink>
               </NavItem>
@@ -129,7 +129,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
             <li className="nav-item">
               <a target="_blank" rel="noreferrer" href="https://harperdb.io/docs" id="viewResources" title="HarperDB Documentation">
                 <i className="fas fa-tools" />
-                <span className="d-none d-lg-inline-block">Resources</span>
+                <span className="d-none d-xl-inline-block">Resources</span>
               </a>
             </li>
           )}
@@ -144,7 +144,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
                 onClick={() => toggleTheme(nextTheme)}
               >
                 <i className="fas fa-palette" />
-                <span className="d-none d-lg-inline-block">Theme</span>
+                <span className="d-none d-xl-inline-block">Theme</span>
               </Button>
             </NavItem>
           )}
@@ -152,12 +152,12 @@ function TopNav({ isMaintenance, loggedIn = false }) {
             {loggedIn ? (
               <Button id="logOut" tabIndex="0" color="link" title="Log Out" onKeyDown={(e) => e.keyCode !== 13 || logOut()} onClick={logOut}>
                 <i className="fa fa-sign-out-alt" />
-                <span className="d-lg-inline-block login-text-label">Sign Out</span>
+                <span className="d-none d-xl-inline-block login-text-label">Sign Out</span>
               </Button>
             ) : (
               <NavLink id="goToLogin" title="Log In" to="/">
                 <i className="fa fa-sign-in-alt" />
-                <span className="d-none d-lg-inline-block login-text-label">Sign In</span>
+                <span className="d-none d-xl-inline-block login-text-label">Sign In</span>
               </NavLink>
             )}
           </NavItem>

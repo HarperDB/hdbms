@@ -29,7 +29,6 @@ import refreshUser from '../../functions/app/refreshUser';
 import changeFavIcon from '../../functions/app/changeFavIcon';
 import getAkamaiRegions from '../../functions/api/lms/getAkamaiRegions';
 
-
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ '../TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ '../auth/SignUp'));
 const SignIn = lazy(() => import(/* webpackChunkName: "signIn" */ '../auth/SignIn'));
@@ -140,11 +139,13 @@ function App() {
       ) : loggedIn ? (
         <main id="app-container">
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Suspense fallback={
-              <div className="auth-centered-container">
-                <Loader header=" " spinner />
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="auth-centered-container">
+                  <Loader header=" " spinner />
+                </div>
+              }
+            >
               {/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
               <Routes>
                 <Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
@@ -167,7 +168,7 @@ function App() {
               <Container fluid="xs" className="h-100">
                 <Row xs="1" sm="2" className="h-100">
                   <Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
-                    <div className='auth-studio-info-container'>
+                    <div className="auth-studio-info-container">
                       <h1 className="auth-title">HarperDB Studio</h1>
                       <span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
                       <ul className="auth-info-list-items">
@@ -186,9 +187,15 @@ function App() {
                         <li>
                           <h3 className="item-title">Deploy Anywhere</h3>
                           <div className="mt-3">
-                            <a href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">Docker</a>
-                            <a href="https://www.npmjs.com/package/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">npm</a>
-                            <a href="https://docs.harperdb.io/docs/deployments/install-harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">all options</a>
+                            <a href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">
+                              Docker
+                            </a>
+                            <a href="https://www.npmjs.com/package/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">
+                              npm
+                            </a>
+                            <a href="https://docs.harperdb.io/docs/deployments/install-harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">
+                              all options
+                            </a>
                           </div>
                         </li>
                       </ul>
