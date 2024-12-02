@@ -4,6 +4,7 @@
   "endOfLine": "auto",
   "tabWidth": 2,
   "useTabs": false,
+  "semi": true,
   "jsxBracketSameLine": false,
   "jsxSingleQuote": false
 }
