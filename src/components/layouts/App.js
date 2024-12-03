@@ -29,7 +29,6 @@ import refreshUser from '../../functions/app/refreshUser';
 import changeFavIcon from '../../functions/app/changeFavIcon';
 import getAkamaiRegions from '../../functions/api/lms/getAkamaiRegions';
 
-
 const TopNav = lazy(() => import(/* webpackChunkName: "topnav" */ '../TopNav'));
 const SignUp = lazy(() => import(/* webpackChunkName: "signUp" */ '../auth/SignUp'));
 const SignIn = lazy(() => import(/* webpackChunkName: "signIn" */ '../auth/SignIn'));
@@ -72,7 +71,8 @@ function App() {
 	const [showVersionAlert, setShowVersionAlert] = useState(false);
 	const [persistedUser, setPersistedUser] = usePersistedUser({});
 	const loggedIn = auth?.user_id;
-	const isNotEmployee = loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
+	const isNotEmployee =
+		loggedIn && auth?.email.indexOf('harperdb.io') === -1 && auth?.email.indexOf('deliciousmonster.com') === -1;
 	const isMaintenance = version?.maintenance && isNotEmployee;
 
 	ReactGA.initialize(config.google_analytics_code);
@@ -105,7 +105,12 @@ function App() {
 	}, [auth?.email]);
 
 	useEffect(() => {
+<<<<<<< HEAD
 		if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
+=======
+		if (showVersionAlert)
+			alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
+>>>>>>> 69a3fc8c (formatted the app via prettier)
 		// eslint-disable-next-line
 	}, [showVersionAlert]);
 
@@ -169,7 +174,7 @@ function App() {
 							<Container fluid="xs" className="h-100">
 								<Row xs="1" sm="2" className="h-100">
 									<Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
-										<div className='auth-studio-info-container'>
+										<div className="auth-studio-info-container">
 											<h1 className="auth-title">HarperDB Studio</h1>
 											<span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
 											<ul className="auth-info-list-items">
@@ -179,8 +184,10 @@ function App() {
 												</li>
 												<li>
 													<h3 className="item-title">Embedded API Server</h3>
-													<span className="item-subtitle">HarperDB components give you unlimited application flexibility.</span>
-												</li>
+													<span className="item-subtitle">
+														HarperDB components give you unlimited application flexibility.
+													</span>
+												</li >
 												<li>
 													<h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>
 													<span className="item-subtitle">Go from zero to code in minutes.</span>
@@ -188,14 +195,35 @@ function App() {
 												<li>
 													<h3 className="item-title">Deploy Anywhere</h3>
 													<div className="mt-3">
-														<a href="https://hub.docker.com/r/harperdb/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">Docker</a>
-														<a href="https://www.npmjs.com/package/harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">npm</a>
-														<a href="https://docs.harperdb.io/docs/deployments/install-harperdb" target="_blank" rel="noreferrer" className="deploy-subitem">all options</a>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</Col>
+														<a
+															href="https://hub.docker.com/r/harperdb/harperdb"
+															target="_blank"
+															rel="noreferrer"
+															className="deploy-subitem"
+														>
+															Docker
+														</a>
+														<a
+															href="https://www.npmjs.com/package/harperdb"
+															target="_blank"
+															rel="noreferrer"
+															className="deploy-subitem"
+														>
+															npm
+														</a>
+														<a
+															href="https://docs.harperdb.io/docs/deployments/install-harperdb"
+															target="_blank"
+															rel="noreferrer"
+															className="deploy-subitem"
+														>
+															all options
+														</a>
+													</div >
+												</li >
+											</ul >
+										</div >
+									</Col >
 									<Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
 										<Routes>
 											<Route element={<SignIn />} path="/" />
@@ -204,18 +232,19 @@ function App() {
 											<Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
 										</Routes>
 									</Col>
-								</Row>
-							</Container>
-						</Suspense>
-					</ErrorBoundary>
-				</main>
-			)}
+								</Row >
+							</Container >
+						</Suspense >
+					</ErrorBoundary >
+				</main >
+			)
+			}
 			<div id="app-bg-color" />
 			<div className="version">
 				HarperDB Studio v{config.studio_version}
 				{version.maintenance && ' - MAINTENANCE MODE'}
 			</div>
-		</div>
+		</div >
 	);
 }
 

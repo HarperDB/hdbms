@@ -1,17 +1,17 @@
 .empty-prompt {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 262px) !important;
-  justify-content: center;
-  line-height: 1.5 !important;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 262px) !important;
+	justify-content: center;
+	line-height: 1.5 !important;
 
-  > .warning-text {
-    color: $color-warning !important;
-  }
+	> .warning-text {
+		color: $color-warning !important;
+	}
 
-  &.narrow {
-    padding-left: 25%;
-    padding-right: 25%;
-  }
+	&.narrow {
+		padding-left: 25%;
+		padding-right: 25%;
+	}
 }
