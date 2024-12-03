@@ -1,157 +1,157 @@
 .auth-studio-info {
-  color: $color-white;
-  background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
+	color: $color-white;
+	background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
 }
 
 .auth-studio-info-container {
-  max-width: 450px;
+	max-width: 450px;
 }
 
 .btn-gradient-blue {
-  background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
+	background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
 
-  &:hover {
-    background: $color-blue !important;
-  }
+	&:hover {
+		background: $color-blue !important;
+	}
 }
 
 .auth-title {
-  font-size: 3.25rem !important;
-  margin-bottom: 0.5rem !important;
+	font-size: 3.25rem !important;
+	margin-bottom: 0.5rem !important;
 }
 .auth-subtitle {
-  font-size: 1.65rem;
-  font-family: $font-family-ubuntu;
-  font-weight: 100 !important;
+	font-size: 1.65rem;
+	font-family: $font-family-ubuntu;
+	font-weight: 100 !important;
 }
 .auth-info-list-items {
-  font-family: $font-family-ubuntu;
-  list-style-image: url('../../images/svg/checkmark.svg');
-  li {
-    margin-bottom: 1.5rem;
+	font-family: $font-family-ubuntu;
+	list-style-image: url('../../images/svg/checkmark.svg');
+	li {
+		margin-bottom: 1.5rem;
 
-    .item-title {
-      font-weight: $font-weight-bold;
-      font-size: 1.5rem !important;
-      margin-bottom: 0.5rem !important;
-    }
-    .item-subtitle {
-      display: inline-block;
-      letter-spacing: 0.05em;
-      font-weight: $font-weight-light;
-      font-size: 1rem;
-    }
-    .deploy-subitem {
-      display: inline-block;
-      padding: 0.5rem;
-      margin-right: 0.5rem;
-      font-size: $font-size-medium;
-      border: 2px solid $color-lightblue;
-      border-radius: 5px;
-      text-decoration: none;
-      color: $color-white !important;
-    }
-  }
+		.item-title {
+			font-weight: $font-weight-bold;
+			font-size: 1.5rem !important;
+			margin-bottom: 0.5rem !important;
+		}
+		.item-subtitle {
+			display: inline-block;
+			letter-spacing: 0.05em;
+			font-weight: $font-weight-light;
+			font-size: 1rem;
+		}
+		.deploy-subitem {
+			display: inline-block;
+			padding: 0.5rem;
+			margin-right: 0.5rem;
+			font-size: $font-size-medium;
+			border: 2px solid $color-lightblue;
+			border-radius: 5px;
+			text-decoration: none;
+			color: $color-white !important;
+		}
+	}
 }
 
 .auth-centered-container {
-  height: calc(100% - 135px);
+	height: calc(100% - 135px);
 }
 
 .auth-form-container {
-  background-color: $color-darkpurple;
+	background-color: $color-darkpurple;
 }
 
 .login-form {
-  width: 100%;
-  max-width: 320px;
-  color: $color-white;
+	width: 100%;
+	max-width: 320px;
+	color: $color-white;
 
-  .instructions {
-    font-size: 1.5rem !important;
-    font-weight: $font-weight-light;
-  }
-  &.sign-up {
-    max-width: 770px;
+	.instructions {
+		font-size: 1.5rem !important;
+		font-weight: $font-weight-light;
+	}
+	&.sign-up {
+		max-width: 770px;
 
-    @media screen and (width <= 767px), screen and (height <= 530px) {
-      margin-bottom: 50px;
-      top: -50px;
-      transform: translateX(-50%);
-    }
+		@media screen and (width <= 767px), screen and (height <= 530px) {
+			margin-bottom: 50px;
+			top: -50px;
+			transform: translateX(-50%);
+		}
 
-    hr {
-      background: $faint-white-overlay;
-    }
+		hr {
+			background: $faint-white-overlay;
+		}
 
-    .sign-up-content {
-      width: 100%;
+		.sign-up-content {
+			width: 100%;
 
-      h3 {
-        font-size: 1.1rem !important;
-        padding-top: 15px;
-      }
-    }
+			h3 {
+				font-size: 1.1rem !important;
+				padding-top: 15px;
+			}
+		}
 
-    .sign-up-form {
-      .subdomain-explanation {
-        display: block;
-        font-size: 0.7rem;
-        padding-bottom: 8px;
-      }
-    }
-  }
+		.sign-up-form {
+			.subdomain-explanation {
+				display: block;
+				font-size: 0.7rem;
+				padding-bottom: 8px;
+			}
+		}
+	}
 
-  input {
-    background: $faint-white-overlay !important;
-    color: $color-white;
+	input {
+		background: $faint-white-overlay !important;
+		color: $color-white;
 
-    &::placeholder {
-      color: $white-overlay !important;
-      font-family: $font-family-ubuntu;
-      font-weight: $font-weight-light;
-    }
-    &:focus {
-      color: $color-white;
-      border-color: $color-lightblue;
-      outline: 0;
-    }
-  }
+		&::placeholder {
+			color: $white-overlay !important;
+			font-family: $font-family-ubuntu;
+			font-weight: $font-weight-light;
+		}
+		&:focus {
+			color: $color-white;
+			border-color: $color-lightblue;
+			outline: 0;
+		}
+	}
 
-  .disclaimer {
-    color: $color-white !important;
-    font-size: $font-size-small;
+	.disclaimer {
+		color: $color-white !important;
+		font-size: $font-size-small;
 
-    a,
-    a:hover {
-      color: $light-white-overlay !important;
-      text-decoration: underline !important;
-    }
-  }
+		a,
+		a:hover {
+			color: $light-white-overlay !important;
+			text-decoration: underline !important;
+		}
+	}
 
-  .login-nav-link-holder {
-    &:last-child {
-      text-align: right;
-    }
-  }
+	.login-nav-link-holder {
+		&:last-child {
+			text-align: right;
+		}
+	}
 
-  .login-nav-link {
-    color: $color-white !important;
-    font-size: $font-size-root;
-    height: 16px;
-    text-transform: lowercase;
-    white-space: nowrap;
+	.login-nav-link {
+		color: $color-white !important;
+		font-size: $font-size-root;
+		height: 16px;
+		text-transform: lowercase;
+		white-space: nowrap;
 
-    &:hover {
-      color: $color-white !important;
-    }
+		&:hover {
+			color: $color-white !important;
+		}
 
-    &.error {
-      color: $color-danger !important;
-      font-weight: $font-weight-bold;
-      text-align: center;
-      white-space: normal;
-      width: 100%;
-    }
-  }
+		&.error {
+			color: $color-danger !important;
+			font-weight: $font-weight-bold;
+			text-align: center;
+			white-space: normal;
+			width: 100%;
+		}
+	}
 }
