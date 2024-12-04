@@ -21,6 +21,8 @@ const getAttributesFromTableData = (tableData, existingAttributes) => {
 		.slice(0, 8 - existingAttributes.length);
 };
 
+const descriptionCache = new Map();
+
 export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
 	let fetchError = false;
 	let newTotalRecords = 0;
@@ -33,7 +35,12 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 	const offset = page * pageSize;
 
 	try {
-		const result = await describeTable({ auth, url, schema, table, signal: signal2 });
+		const tableKey = `${schema}/${table}`;
+		let result = descriptionCache.get(tableKey);
+		if (!result) {
+			result = await describeTable({ auth, url, schema, table, signal: signal2 });
+			descriptionCache.set(tableKey, result);
+		}
 
 		if (result.error) {
 			allAttributes = [];
