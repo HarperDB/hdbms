@@ -105,12 +105,8 @@ function App() {
 	}, [auth?.email]);
 
 	useEffect(() => {
-<<<<<<< HEAD
-		if (showVersionAlert) alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
-=======
 		if (showVersionAlert)
 			alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
->>>>>>> 69a3fc8c (formatted the app via prettier)
 		// eslint-disable-next-line
 	}, [showVersionAlert]);
 
@@ -147,11 +143,13 @@ function App() {
 			) : loggedIn ? (
 				<main id="app-container">
 					<ErrorBoundary FallbackComponent={ErrorFallback}>
-						<Suspense fallback={
-							<div className="auth-centered-container">
-								<Loader header=" " spinner />
-							</div>
-						}>
+						<Suspense
+							fallback={
+								<div className="auth-centered-container">
+									<Loader header=" " spinner />
+								</div>
+							}
+						>
 							{/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
 							<Routes>
 								<Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
@@ -187,7 +185,7 @@ function App() {
 													<span className="item-subtitle">
 														HarperDB components give you unlimited application flexibility.
 													</span>
-												</li >
+												</li>
 												<li>
 													<h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>
 													<span className="item-subtitle">Go from zero to code in minutes.</span>
@@ -219,11 +217,11 @@ function App() {
 														>
 															all options
 														</a>
-													</div >
-												</li >
-											</ul >
-										</div >
-									</Col >
+													</div>
+												</li>
+											</ul>
+										</div>
+									</Col>
 									<Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
 										<Routes>
 											<Route element={<SignIn />} path="/" />
@@ -232,19 +230,18 @@ function App() {
 											<Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
 										</Routes>
 									</Col>
-								</Row >
-							</Container >
-						</Suspense >
-					</ErrorBoundary >
-				</main >
-			)
-			}
+								</Row>
+							</Container>
+						</Suspense>
+					</ErrorBoundary>
+				</main>
+			)}
 			<div id="app-bg-color" />
 			<div className="version">
 				HarperDB Studio v{config.studio_version}
 				{version.maintenance && ' - MAINTENANCE MODE'}
 			</div>
-		</div >
+		</div>
 	);
 }
 
