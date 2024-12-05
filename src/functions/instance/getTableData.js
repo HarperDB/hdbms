@@ -21,7 +21,7 @@ const getAttributesFromTableData = (tableData, existingAttributes) => {
 		.slice(0, 8 - existingAttributes.length);
 };
 
-const descriptionCache = new Map();
+const descriptionCache = new Map(JSON.parse(sessionStorage.getItem('descriptionCache')) || []);
 
 export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, page, auth, url, signal, signal2 }) => {
 	let fetchError = false;

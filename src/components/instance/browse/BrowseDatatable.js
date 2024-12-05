@@ -12,7 +12,6 @@ import DataTable from '../../shared/DataTable';
 import getTableData from '../../../functions/instance/getTableData';
 import getTablePagination from '../../../functions/instance/getTablePagination';
 import usePersistedUser from '../../../functions/state/persistedUser';
-import { TableStateContext } from '../../../state/browse/TableContext';
 
 let controller;
 let controller2;
@@ -29,7 +28,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 	const [loadingFilter, setLoadingFilter] = useState(false);
 	const [lastUpdate, setLastUpdate] = useState(true);
 	const [persistedUser, setPersistedUser] = usePersistedUser({});
-	const [tableContextState, setTableContextState] = useContext(TableStateContext);
 
 	useEffect(() => {
 		controller?.abort();
@@ -49,7 +47,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				schema,
 				table,
 				filtered: tableState.filtered,
-				pageSize: tableState.pageSize,
+				pageSize: parseInt(tableState.pageSize, 10),
 				auth,
 				url,
 				signal: controller3.signal,
@@ -93,14 +91,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 			if (isMounted) {
 				setLoading(false);
 				if (newData.error) {
-					setTableContextState({
-						...tableContextState,
-						tableData: [],
-						newEntityAttributes,
-						hashAttribute,
-						dataTableColumns,
-						error: newData.error,
-					});
 					setTableState({
 						...tableState,
 						tableData: [],
@@ -116,14 +106,6 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 					} else {
 						fetchPagination();
 					}
-					setTableContextState({
-						...tableContextState,
-						tableData: newData,
-						newEntityAttributes,
-						hashAttribute,
-						dataTableColumns,
-						error,
-					});
 					setTableState({
 						...tableState,
 						tableData: newData,
@@ -174,12 +156,10 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				onlyCached={persistedUser?.onlyCached?.[activeTable]}
 				refresh={() => setLastUpdate(Date.now())}
 				toggleAutoRefresh={() => {
-					setTableContextState({ ...tableContextState, autoRefresh: !tableContextState.autoRefresh });
 					setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh });
 				}}
 				toggleOnlyCached={toggleOnlyCached}
 				toggleFilter={() => {
-					setTableContextState({ ...tableContextState, showFilter: !tableContextState.showFilter });
 					setTableState({ ...tableState, showFilter: !tableState.showFilter });
 				}}
 			/>
@@ -199,19 +179,15 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 						sorted={tableState.sorted.length ? tableState.sorted : [{ id: tableState.hashAttribute, desc: false }]}
 						loading={loading && !tableState.autoRefresh}
 						onFilteredChange={(value) => {
-							setTableContextState({ ...tableContextState, page: 0, filtered: value });
 							setTableState({ ...tableState, page: 0, filtered: value });
 						}}
 						onSortedChange={(value) => {
-							setTableContextState({ ...tableContextState, page: 0, sorted: value });
 							setTableState({ ...tableState, page: 0, sorted: value });
 						}}
 						onPageChange={(value) => {
-							setTableContextState({ ...tableContextState, page: value });
 							setTableState({ ...tableState, page: value });
 						}}
 						onPageSizeChange={(value) => {
-							setTableContextState({ ...tableContextState, page: 0, pageSize: value });
 							setTableState({ ...tableState, page: 0, pageSize: value });
 						}}
 						onRowClick={(rowData) => {
