@@ -1,6 +1,7 @@
 import describeTable from '../api/instance/describeTable';
 import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
+import { getTableDescriptionFromCache, setTableDescriptionInCache } from './state/describeTableCache';
 
 const getAttributesFromTableData = (tableData, existingAttributes) => {
 	if (!tableData.length) return [];
@@ -33,7 +34,11 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 	const offset = page * pageSize;
 
 	try {
-		const result = await describeTable({ auth, url, schema, table, signal: signal2 });
+		let result = getTableDescriptionFromCache(schema, table);
+		if (!result) {
+			result = await describeTable({ auth, url, schema, table, signal: signal2 });
+			setTableDescriptionInCache(schema, table, result);
+		}
 
 		if (result.error) {
 			allAttributes = [];

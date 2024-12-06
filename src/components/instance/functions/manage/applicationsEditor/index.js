@@ -25,6 +25,7 @@ import FileMenu, {
 } from './FileMenu';
 
 import EditorMenu, { SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
+import { clearTableDescriptionCache } from '../../../../../functions/instance/state/describeTableCache';
 
 // TODO:
 //
@@ -272,7 +273,10 @@ function WebIDE({
 
 					<NameProjectWindow
 						active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW}
-						onConfirm={addProject}
+						onConfirm={(newProjectName) => {
+							addProject(newProjectName);
+							clearTableDescriptionCache();
+						}}
 						onCancel={toDefaultWindow}
 					/>
 

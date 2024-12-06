@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useInterval from 'use-interval';
 import { Card, CardBody } from 'reactstrap';
@@ -12,6 +12,7 @@ import DataTable from '../../shared/DataTable';
 import getTableData from '../../../functions/instance/getTableData';
 import getTablePagination from '../../../functions/instance/getTablePagination';
 import usePersistedUser from '../../../functions/state/persistedUser';
+import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
 let controller;
 let controller2;
@@ -47,7 +48,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				schema,
 				table,
 				filtered: tableState.filtered,
-				pageSize: tableState.pageSize,
+				pageSize: parseInt(tableState.pageSize, 10),
 				auth,
 				url,
 				signal: controller3.signal,
@@ -78,7 +79,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				schema,
 				table,
 				filtered: tableState.filtered,
-				pageSize: tableState.pageSize,
+				pageSize: parseInt(tableState.pageSize, 10),
 				sorted: tableState.sorted,
 				onlyCached: persistedUser?.onlyCached?.[activeTable],
 				page: tableState.page,
@@ -154,10 +155,18 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				loadingFilter={loadingFilter}
 				autoRefresh={tableState.autoRefresh}
 				onlyCached={persistedUser?.onlyCached?.[activeTable]}
-				refresh={() => setLastUpdate(Date.now())}
-				toggleAutoRefresh={() => setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh })}
+				refresh={() => {
+					clearTableDescriptionCache();
+					setLastUpdate(Date.now());
+				}}
+				toggleAutoRefresh={() => {
+					setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh });
+					clearTableDescriptionCache();
+				}}
 				toggleOnlyCached={toggleOnlyCached}
-				toggleFilter={() => setTableState({ ...tableState, showFilter: !tableState.showFilter })}
+				toggleFilter={() => {
+					setTableState({ ...tableState, showFilter: !tableState.showFilter });
+				}}
 			/>
 			<Card className="my-3">
 				<CardBody className="react-table-holder">
@@ -177,9 +186,15 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 						onFilteredChange={(value) => {
 							setTableState({ ...tableState, page: 0, filtered: value });
 						}}
-						onSortedChange={(value) => setTableState({ ...tableState, page: 0, sorted: value })}
-						onPageChange={(value) => setTableState({ ...tableState, page: value })}
-						onPageSizeChange={(value) => setTableState({ ...tableState, page: 0, pageSize: value })}
+						onSortedChange={(value) => {
+							setTableState({ ...tableState, page: 0, sorted: value });
+						}}
+						onPageChange={(value) => {
+							setTableState({ ...tableState, page: value });
+						}}
+						onPageSizeChange={(value) => {
+							setTableState({ ...tableState, page: 0, pageSize: value });
+						}}
 						onRowClick={(rowData) => {
 							// encode schema, table and hashValue because they can contain uri components
 							const hashValue = rowData[tableState.hashAttribute];
