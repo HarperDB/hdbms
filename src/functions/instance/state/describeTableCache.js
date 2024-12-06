@@ -1,10 +1,4 @@
-const descriptionCache = () => {
-	try {
-		return new Map(JSON.parse(sessionStorage.getItem('descriptionCache')));
-	} catch {
-		return new Map();
-	}
-};
+const descriptionCache = () => new Map(JSON.parse(sessionStorage.descriptionCache ?? '{}'));
 
 const getTableKey = (schema, table) => `${schema}/${table}`;
 
