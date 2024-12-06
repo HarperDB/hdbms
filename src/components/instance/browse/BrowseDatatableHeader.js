@@ -3,6 +3,7 @@ import { Col, Row, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import commaNumbers from '../../../functions/util/commaNumbers';
+import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
 function BrowseDatatableHeader({
 	totalRecords,
@@ -82,7 +83,10 @@ function BrowseDatatableHeader({
 					tabIndex="0"
 					title={`Add new record to table ${table}`}
 					className="me-3"
-					onClick={() => navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`)}
+					onClick={() => {
+						clearTableDescriptionCache();
+						navigate(`/o/${customer_id}/i/${compute_stack_id}/browse/${schema}/${table}/add`);
+					}}
 				>
 					<i className="fa fa-plus" />
 				</Button>

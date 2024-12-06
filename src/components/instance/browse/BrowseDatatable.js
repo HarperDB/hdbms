@@ -12,6 +12,7 @@ import DataTable from '../../shared/DataTable';
 import getTableData from '../../../functions/instance/getTableData';
 import getTablePagination from '../../../functions/instance/getTablePagination';
 import usePersistedUser from '../../../functions/state/persistedUser';
+import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
 let controller;
 let controller2;
@@ -154,9 +155,13 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				loadingFilter={loadingFilter}
 				autoRefresh={tableState.autoRefresh}
 				onlyCached={persistedUser?.onlyCached?.[activeTable]}
-				refresh={() => setLastUpdate(Date.now())}
+				refresh={() => {
+					clearTableDescriptionCache();
+					setLastUpdate(Date.now());
+				}}
 				toggleAutoRefresh={() => {
 					setTableState({ ...tableState, autoRefresh: !tableState.autoRefresh });
+					clearTableDescriptionCache();
 				}}
 				toggleOnlyCached={toggleOnlyCached}
 				toggleFilter={() => {

@@ -1,12 +1,7 @@
 import describeTable from '../api/instance/describeTable';
 import searchByValue from '../api/instance/searchByValue';
 import searchByConditions from '../api/instance/searchByConditions';
-import {
-	descriptionCache,
-	getTableDescriptionFromCache,
-	setTableDescriptionInCache,
-	getTableKey,
-} from './state/describeTableCache';
+import { getTableDescriptionFromCache, setTableDescriptionInCache } from './state/describeTableCache';
 
 const getAttributesFromTableData = (tableData, existingAttributes) => {
 	if (!tableData.length) return [];

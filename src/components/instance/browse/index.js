@@ -12,6 +12,7 @@ import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
 import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
+import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
 const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
@@ -147,6 +148,13 @@ function BrowseIndex() {
 	// eslint-disable-next-line
 	useEffect(validate, [structure, schema, table, compute_stack_id]);
 	useEffect(syncInstanceStructure, [auth, url, schema, table]);
+	useEffect(() => {
+		const clearTableDescriptionCacheInterval = setInterval(() => {
+			clearTableDescriptionCache();
+		}, 60000);
+
+		return () => clearInterval(clearTableDescriptionCacheInterval);
+	}, []);
 
 	return (
 		<Row id="browse">

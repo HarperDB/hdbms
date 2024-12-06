@@ -14,22 +14,10 @@ const setTableDescriptionInCache = (schema, table, description) => {
 	sessionStorage.setItem('descriptionCache', JSON.stringify(Array.from(descriptionCache)));
 };
 
-const clearTableDescriptionFromCache = (schema, table) => {
-	const tableKey = getTableKey(schema, table);
-	descriptionCache.delete(tableKey);
+const clearTableDescriptionCache = () => {
+	if (!descriptionCache.size) return;
+	descriptionCache.clear();
+	sessionStorage.removeItem('descriptionCache');
 };
 
-const clearTableDescriptionCacheInterval = () => {
-	setInterval(() => {
-		descriptionCache.clear();
-	}, 60000);
-};
-
-export {
-	descriptionCache,
-	getTableKey,
-	getTableDescriptionFromCache,
-	setTableDescriptionInCache,
-	clearTableDescriptionFromCache,
-	clearTableDescriptionCacheInterval,
-};
+export { descriptionCache, getTableDescriptionFromCache, setTableDescriptionInCache, clearTableDescriptionCache };
