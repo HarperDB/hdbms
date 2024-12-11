@@ -3,11 +3,11 @@ import { Form, Input, Button, Label } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStoreState } from 'pullstate';
 import queryString from 'query-string';
+import queryFabric from '../../functions/api/functions/queryFabric';
 
 import appState from '../../functions/state/appState';
 
 import getUser from '../../functions/api/lms/getUser';
-import isEmail from '../../functions/util/isEmail';
 import Loader from '../shared/Loader';
 import usePersistedUser from '../../functions/state/persistedUser';
 
@@ -22,11 +22,7 @@ function SignIn() {
 	const submit = async () => {
 		setFormState({ submitted: true });
 		const { email, pass } = formData;
-		if (!isEmail(email)) {
-			setFormState({ error: 'A valid email is required' });
-		} else if (!pass) {
-			setFormState({ error: 'Password is required' });
-		} else if (
+		if (
 			theme === 'akamai' &&
 			formData.email.indexOf('harperdb.io') === -1 &&
 			formData.email.indexOf('akamai.com') === -1 &&
@@ -36,9 +32,25 @@ function SignIn() {
 		} else {
 			setFormState({ processing: true });
 
-			const newAuth = await getUser({ email, pass, loggingIn: true });
+			// const newAuth = await getUser({ email, pass, loggingIn: true });
+			const newAuth = await queryFabric({
+				url: '/Login',
+				method: 'POST',
+				// TODO: headers might not be needed
+				headers: {
+					'Authorization': `Basic ${window.btoa(`${email}:${pass}`)}`,
+					'Content-Type': 'application/json',
+				},
+				body: {
+					username: email,
+					password: pass,
+				},
+			});
+			// if (!newAuth.status < 400) {
 
-			if (!newAuth || newAuth?.error) {
+			// }
+			console.log('newAuth', newAuth);
+			if (!newAuth || newAuth?.error || newAuth.status >= 400) {
 				setFormState({
 					error: ['Unauthorized', 'User does not exist'].includes(newAuth?.message)
 						? 'Login Failed'
@@ -79,6 +91,7 @@ function SignIn() {
 								name="email"
 								autoComplete="email"
 								required
+								minLength={5}
 								id="email"
 								onChange={(e) => {
 									e.currentTarget.focus();
@@ -96,6 +109,7 @@ function SignIn() {
 							<Input
 								id="password"
 								required
+								minLength={2}
 								onChange={(e) => {
 									e.currentTarget.focus();
 									setFormData({ ...formData, pass: e.target.value });

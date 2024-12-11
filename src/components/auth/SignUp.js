@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Row, Col, Label } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
-import useAsyncEffect from 'use-async-effect';
 import queryString from 'query-string';
 import { useStoreState } from 'pullstate';
-
-import handleSignup from '../../functions/auth/handleSignup';
 import Loader from '../shared/Loader';
 import appState from '../../functions/state/appState';
 import queryFabric from '../../functions/api/functions/queryFabric';
@@ -27,8 +24,6 @@ const defaultFormData = {
 
 const defaultFormState = {
 	status: 'idle',
-	submitted: false,
-	pending: false,
 	error: null,
 };
 
@@ -48,6 +43,9 @@ function SignUp() {
 		// setFormData({ ...formData, htuk, pageName, pageUri });
 		const newFormState = await queryFabric({
 			url: '/User',
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			method: 'POST',
 			body: formData,
 		});
@@ -60,13 +58,6 @@ function SignUp() {
 			setFormData(defaultFormData);
 		}
 	};
-
-	// useAsyncEffect(async () => {
-	// 	if (formState.submitted) {
-	// 		const newFormState = await handleSignup({ formData, theme });
-	// 		if (!auth.email && newFormState) setFormState(newFormState);
-	// 	}
-	// }, [formState]);
 
 	return (
 		<div className="login-form">
