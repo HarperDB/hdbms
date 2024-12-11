@@ -8,35 +8,73 @@ import { useStoreState } from 'pullstate';
 import handleSignup from '../../functions/auth/handleSignup';
 import Loader from '../shared/Loader';
 import appState from '../../functions/state/appState';
+import queryFabric from '../../functions/api/functions/queryFabric';
+
+const defaultFormData = {
+	firstname: '',
+	lastname: '',
+	email: '',
+	subdomain: '',
+	password: '',
+};
+
+/**
+ * Default state of a form.
+ * @typedef {Object} defaultFormState
+ * @property {('idle'|'pending'|'resolved'|'rejected')} status - The current status of the form.
+ * @property {Error|null} error - Any error that occurred during form submission.
+ */
+
+const defaultFormState = {
+	status: 'idle',
+	submitted: false,
+	pending: false,
+	error: null,
+};
 
 function SignUp() {
 	const { search } = useLocation();
-	const { code, htuk, pageName, pageUri } = queryString.parse(search);
+	const { htuk, pageName, pageUri } = queryString.parse(search);
 	const auth = useStoreState(appState, (s) => s.auth);
 	const theme = useStoreState(appState, (s) => s.theme);
-	const [formState, setFormState] = useState({});
-	const [formData, setFormData] = useState({ coupon_code: code, htuk, pageName, pageUri });
+	const [formState, setFormState] = useState(defaultFormState);
+	const [formData, setFormData] = useState(defaultFormData);
 	const [showToolTip, setShowToolTip] = useState(false);
 
-	useAsyncEffect(async () => {
-		if (formState.submitted) {
-			const newFormState = await handleSignup({ formData, theme });
-			if (!auth.email && newFormState) setFormState(newFormState);
+	const submitForm = async (e) => {
+		e.preventDefault();
+		setFormState({ status: 'pending' });
+		console.log('formData', formData);
+		// setFormData({ ...formData, htuk, pageName, pageUri });
+		const newFormState = await queryFabric({
+			url: '/User',
+			method: 'POST',
+			body: formData,
+		});
+		setFormState({ status: 'idle' });
+		if (!newFormState.email) {
+			setFormState({ error: newFormState });
 		}
-	}, [formState]);
 
-	useEffect(() => {
-		if (!formState.submitted) setFormState({});
-		// eslint-disable-next-line
-	}, [formData]);
+		if (newFormState.email) {
+			setFormData(defaultFormData);
+		}
+	};
+
+	// useAsyncEffect(async () => {
+	// 	if (formState.submitted) {
+	// 		const newFormState = await handleSignup({ formData, theme });
+	// 		if (!auth.email && newFormState) setFormState(newFormState);
+	// 	}
+	// }, [formState]);
 
 	return (
 		<div className="login-form">
-			{formState.submitted ? (
+			{formState.status === 'pending' ? (
 				<Loader header="creating your account" spinner relative />
 			) : (
 				<>
-					<Form>
+					<Form onSubmit={submitForm}>
 						<h2 className="mb-2 instructions">Sign Up</h2>
 						<span className="mb-2 login-nav-link error d-inline-block">{formState.error}</span>
 						<Label className="mb-3 d-block">
@@ -44,14 +82,15 @@ function SignUp() {
 							<Input
 								id="firstname"
 								name="fname"
-								required
+								minLength={2}
 								maxLength={40}
+								required
 								autoComplete="given-name"
 								type="text"
 								title="first name"
 								placeholder="Jane"
 								value={formData.firstname || ''}
-								disabled={formState.submitted}
+								disabled={formState.status === 'pending'}
 								onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
 							/>
 						</Label>
@@ -61,13 +100,14 @@ function SignUp() {
 								id="lastname"
 								name="lname"
 								maxLength={40}
+								minLength={2}
 								required
 								autoComplete="family-name"
 								type="text"
 								title="last name"
 								placeholder="Doe"
 								value={formData.lastname || ''}
-								disabled={formState.submitted}
+								disabled={formState.status === 'pending'}
 								onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
 							/>
 						</Label>
@@ -77,6 +117,7 @@ function SignUp() {
 								id="email"
 								autoComplete="email"
 								name="email"
+								minLength={5}
 								maxLength={80}
 								required
 								className="mb-2"
@@ -84,8 +125,24 @@ function SignUp() {
 								title="email"
 								placeholder="jane.doe@harperdb.io"
 								value={formData.email || ''}
-								disabled={formState.submitted}
+								disabled={formState.status === 'pending'}
 								onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}
+							/>
+						</Label>
+						<Label className="mb-3 d-block">
+							<span className="mb-2 d-inline-block">Password</span>
+							<Input
+								id="password"
+								name="password"
+								required
+								type="password"
+								minLength={6}
+								className="mb-2"
+								title="user password"
+								placeholder="Min. 6 characters"
+								value={formData.password || ''}
+								onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+								disabled={formState.status === 'pending'}
 							/>
 						</Label>
 						<Label className="mb-3 d-block">
@@ -98,10 +155,11 @@ function SignUp() {
 										required
 										className=""
 										type="text"
+										maxLength={14}
 										title="subdomain"
 										placeholder="janedev"
 										value={formData.subdomain || ''}
-										disabled={formState.submitted}
+										disabled={formState.status === 'pending'}
 										onChange={(e) =>
 											setFormData({ ...formData, subdomain: e.target.value.substring(0, 14).toLowerCase() })
 										}
@@ -116,20 +174,6 @@ function SignUp() {
 							</Row>
 						</Label>
 						{showToolTip && <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>}
-						<Label className="mb-3 d-block">
-							<span className="mb-2 d-inline-block">Coupon Code (Optional)</span>
-							<Input
-								id="coupon_code"
-								type="text"
-								className="mb-2"
-								name="coupon_code"
-								title="coupon code"
-								placeholder="XXXXXXXXX"
-								value={formData.coupon_code || ''}
-								onChange={(e) => setFormData({ ...formData, coupon_code: e.target.value })}
-								disabled={formState.submitted}
-							/>
-						</Label>
 
 						<div className="mt-3 mb-3 d-block">
 							<div className="disclaimer">
@@ -147,16 +191,17 @@ function SignUp() {
 								</a>
 							</div>
 						</div>
-
 						<Button
-							id="sign-up"
 							block
 							type="submit"
 							className="border-0 rounded-pill btn-gradient-blue"
-							disabled={formState.submitted}
-							onClick={() => setFormState({ submitted: true })}
+							disabled={formState.status === 'pending'}
 						>
-							{formState.submitted ? <i className="text-white fa fa-spinner fa-spin" /> : <span>Sign Up For Free</span>}
+							{formState.status === 'pending' ? (
+								<i className="text-white fa fa-spinner fa-spin" />
+							) : (
+								<span>Sign Up For Free</span>
+							)}
 						</Button>
 					</Form>
 					<div className="px-4 mt-3">

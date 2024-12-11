@@ -1,10 +1,12 @@
 import isEmail from '../util/isEmail';
 import addCustomer from '../api/lms/addCustomer';
+import config from '../../config';
 import isAlphaNumeric from '../util/isAlphaNumeric';
 import getUser from '../api/lms/getUser';
+import useQueryFabric from '../api/functions/queryFabric';
 
 export default async ({ formData, theme }) => {
-	const { firstname, lastname, email, subdomain, coupon_code, htuk, pageName, pageUri } = formData;
+	const { firstname, lastname, email, subdomain, password } = formData;
 
 	if (!firstname || !lastname || !email || !subdomain) {
 		return {
@@ -22,9 +24,9 @@ export default async ({ formData, theme }) => {
 			error: 'subdomain: alphanumeric characters only',
 		};
 	}
-	if (subdomain.length > 16) {
+	if (subdomain.length > 14) {
 		return {
-			error: 'subdomain: max 16 characters',
+			error: 'subdomain: max 14 characters',
 		};
 	}
 
@@ -39,30 +41,20 @@ export default async ({ formData, theme }) => {
 		};
 	}
 
-	const response = await addCustomer({
-		firstname,
-		lastname,
-		email,
-		customer_name: `${firstname}'s Org`,
-		subdomain,
-		coupon_code,
-		htuk,
-		pageName,
-		pageUri,
-	});
-	if (response.error) {
-		return {
-			error: response.message.replace('Bad request: ', '').replace(/['"]+/g, ''),
-		};
+	try {
+		const { response } = await useQueryFabric({
+			url: '/User',
+			method: 'POST',
+			body: {
+				email,
+				firstname,
+				lastname,
+				password,
+				subdomain,
+			},
+		});
+		return await response.json();
+	} catch (error) {
+		return error;
 	}
-	if (window._kmq) {
-		window._kmq.push(['identify', email]);
-		window._kmq.push(['record', 'successful_signup', { email, firstname, lastname }]);
-	}
-
-	if (response.temp_password) {
-		return getUser({ email, pass: response.temp_password, loggingIn: true });
-	}
-
-	return { success: true };
 };
