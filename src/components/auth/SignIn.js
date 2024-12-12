@@ -37,18 +37,12 @@ function SignIn() {
 				url: '/Login',
 				method: 'POST',
 				// TODO: headers might not be needed
-				headers: {
-					'Authorization': `Basic ${window.btoa(`${email}:${pass}`)}`,
-					'Content-Type': 'application/json',
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: {
-					username: email,
+					email,
 					password: pass,
 				},
 			});
-			// if (!newAuth.status < 400) {
-
-			// }
 			console.log('newAuth', newAuth);
 			if (!newAuth || newAuth?.error || newAuth.status >= 400) {
 				setFormState({
