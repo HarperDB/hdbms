@@ -13,6 +13,7 @@ const initReoDotDev = async () => {
 		const Reo = await reoPromise(config.is_local_studio);
 		Reo.init({ clientID });
 	} catch (error) {
+		// eslint-disable-next-line
 		console.error('Error loading Reo', error);
 	}
 };

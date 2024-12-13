@@ -1,9 +1,9 @@
 @font-face {
-	font-family: 'RadioGroteskBold';
+	font-family: RadioGroteskBold;
+	font-weight: bolder;
 	src:
 		local('RadioGroteskBold'),
 		url('../../fonts/PPRadioGrotesk-Bold.woff') format('woff');
-	font-weight: bolder;
 }
 
 body {
@@ -15,8 +15,8 @@ body {
 }
 
 h1 {
-	font-size: $font-size-h1;
 	font-family: $font-family-sans;
+	font-size: $font-size-h1;
 	font-weight: $font-weight-light;
 	margin: 0 !important;
 
