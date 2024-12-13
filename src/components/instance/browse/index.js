@@ -85,18 +85,17 @@ function BrowseIndex() {
 		buildInstanceStructure({ auth, url });
 	};
 
-	const fetchDescribeTable = async () => {
-		if (table) {
-			try {
-				const result = await describeTable({ auth, url, schema, table });
-				setTableDescription(result);
-			} catch (e) {
-				addError(e);
-			}
-		}
-	};
-
 	useEffect(() => {
+		const fetchDescribeTable = async () => {
+			if (table) {
+				try {
+					const result = await describeTable({ auth, url, schema, table });
+					setTableDescription(result);
+				} catch (e) {
+					addError(e);
+				}
+			}
+		};
 		fetchDescribeTable();
 	}, [auth, url, schema, table]);
 

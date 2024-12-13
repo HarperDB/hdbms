@@ -98,13 +98,13 @@ textarea {
 	font-size: 1.1rem !important;
 	padding-left: 0;
 	padding-right: 0;
-	white-space: nowrap;
 	padding-top: 0.5rem;
+	white-space: nowrap;
 
 	p {
-		vertical-align: middle;
-		margin-bottom: 0 !important;
 		height: 100%;
+		margin-bottom: 0 !important;
+		vertical-align: middle;
 	}
 
 	.btn-link {
