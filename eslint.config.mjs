@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-plugin-prettier';
@@ -7,7 +6,6 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
-/* eslint-disable no-underscore-dangle */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
@@ -24,9 +22,6 @@ export default [
 			'jsx-a11y': fixupPluginRules(jsxA11Y),
 			prettier,
 		},
-
-		files: ['src/**/*.{js,jsx,ts,tsx}'],
-		ignores: ['public/**/*'],
 
 		rules: {
 			'camelcase': 0,

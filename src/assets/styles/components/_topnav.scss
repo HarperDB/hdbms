@@ -1,5 +1,5 @@
 #app-nav {
-	background: $color-black !important;
+	background: $color-pureblack !important;
 	border-bottom: 1px solid $color-black;
 	height: 80px;
 	justify-content: space-between !important;
@@ -25,6 +25,7 @@
 		margin-right: 0;
 		padding: 0;
 		position: relative;
+		width: 250px !important;
 
 		#logo {
 			background-image: url('../../images/logo/logo_harper_db_studio.png');
@@ -34,7 +35,7 @@
 			height: 40px;
 			width: 400px;
 
-			@media screen and (width <= 530px) {
+			@media screen and (width <= 650px) {
 				background-image: url('../../images/logo/logo_dog_only.png');
 				width: 30px;
 			}
@@ -69,6 +70,7 @@
 				&:hover {
 					color: $color-white !important;
 				}
+
 				span {
 					padding-left: 0.25rem;
 				}
@@ -118,7 +120,7 @@
 				border-right: 1px solid $faint-white-overlay;
 				white-space: nowrap;
 
-				@media screen and (width <= 511px) {
+				@media screen and (width <= 400px) {
 					font-size: 10px;
 					font-weight: $font-weight-bold;
 					max-width: 75px;

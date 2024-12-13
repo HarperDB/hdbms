@@ -107,8 +107,8 @@ export default async ({
 			version: registration.version,
 			retry: true,
 		};
-		 
 	} catch (e) {
+		// eslint-disable-next-line
 		console.log(e);
 		return {
 			status: 'UNABLE TO CONNECT2',

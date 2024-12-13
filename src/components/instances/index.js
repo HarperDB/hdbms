@@ -17,8 +17,6 @@ import getInstances from '../../functions/api/lms/getInstances';
 import Loader from '../shared/Loader';
 import getCustomer from '../../functions/api/lms/getCustomer';
 import getAlarms from '../../functions/api/lms/getAlarms';
-import Unpaid from '../shared/Unpaid';
-import UnlimitedEnterprise from '../shared/UnlimitedEnterprise';
 
 function InstancesIndex() {
 	const navigate = useNavigate();
@@ -74,11 +72,9 @@ function InstancesIndex() {
 
 	return (
 		<div id="instances">
-			<SubNav refreshInstances={refreshInstances} />
+			<SubNav refreshInstances={refreshInstances} unlimitedLocalInstall={unlimited_local_install} unPaid={is_unpaid} />
 			{isOrgUser && instances ? (
 				<>
-					{unlimited_local_install && <UnlimitedEnterprise />}
-					{is_unpaid && <Unpaid />}
 					<Row>
 						{isOrgOwner ? <NewInstanceCard /> : !instances?.length ? <NoInstancesCard /> : null}
 						<InstanceList />

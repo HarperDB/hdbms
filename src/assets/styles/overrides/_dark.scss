@@ -1,8 +1,5 @@
 .dark {
 	#app-nav {
-		background: $color-black !important;
-		border-bottom: 1px solid $color-black;
-
 		.navbar-nav {
 			.active-org {
 				background: $faintest-white-overlay !important;
@@ -219,9 +216,10 @@
 				font-family: $font-family-ubuntu;
 				font-weight: $font-weight-light;
 			}
+
 			&:focus {
-				color: $color-white;
 				border-color: $color-lightblue;
+				color: $color-white;
 				outline: 0;
 			}
 		}
