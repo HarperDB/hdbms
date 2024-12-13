@@ -45,6 +45,7 @@ function SignUp() {
 								id="firstname"
 								name="fname"
 								required
+								maxLength={40}
 								autoComplete="given-name"
 								type="text"
 								title="first name"
@@ -59,6 +60,7 @@ function SignUp() {
 							<Input
 								id="lastname"
 								name="lname"
+								maxLength={40}
 								required
 								autoComplete="family-name"
 								type="text"
@@ -75,6 +77,7 @@ function SignUp() {
 								id="email"
 								autoComplete="email"
 								name="email"
+								maxLength={80}
 								required
 								className="mb-2"
 								type="text"
