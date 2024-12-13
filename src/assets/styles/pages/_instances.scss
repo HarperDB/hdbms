@@ -1,82 +1,85 @@
 #instances {
-	.navbar-nav {
-		max-width: 400px;
-	}
+  .navbar-nav {
+    max-width: 500px;
+  }
 
-	.card {
-		&.instance {
-			cursor: pointer;
-			height: 170px;
-			min-width: 278px;
+  .card {
+    &.instance {
+      cursor: pointer;
+      height: 170px;
+      min-width: 278px;
 
-			&.unclickable {
-				cursor: not-allowed;
-			}
+      &.unclickable {
+        cursor: not-allowed;
+      }
 
-			&.new {
-				color: $color-purple;
-				font-size: 95%;
+      &.new {
+        color: $color-purple;
+        font-size: 95%;
 
-				.new-instance-plus {
-					transform: rotate(-90deg);
-					transition: transform 500ms ease-in-out;
-				}
+        .new-instance-plus {
+          transform: rotate(-90deg);
+          transition: transform 500ms ease-in-out;
+        }
 
-				&:hover {
-					.new-instance-plus {
-						transform: rotate(90deg);
-					}
-				}
-			}
+        &:hover {
+          .new-instance-plus {
+            transform: rotate(90deg);
+          }
+        }
+      }
 
-			.instance-name {
-				height: 17px;
-				line-height: 1 !important;
-				overflow: hidden;
-				padding-top: 2px;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
+      .instance-name {
+        height: 17px;
+        line-height: 1 !important;
+        overflow: hidden;
+        padding-top: 2px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-			.instance-icons {
-				cursor: pointer;
-				position: relative;
-				text-align: right;
+      .instance-icons {
+        cursor: pointer;
+        position: relative;
+        text-align: right;
 
-				.instance-icon {
-					margin-left: 10px;
+        .instance-icon {
+          margin-left: 10px;
 
-					i {
-						font-size: 12px;
-					}
-				}
-			}
+          i {
+            font-size: 12px;
+          }
+        }
+      }
 
-			.copyable-text-holder {
-				height: 16px;
-				margin: 12px 0;
+      .copyable-text-holder {
+        height: 16px;
+        margin: 12px 0;
 
-				.text-container {
-					font-size: 12px !important;
-					padding-top: 1px;
-				}
-			}
+        .text-container {
+          font-size: 12px !important;
+          padding-top: 1px;
+        }
+      }
 
-			.card-front-status-row {
-				font-size: 62%;
-				text-transform: uppercase;
 
-				div {
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
+      .card-front-status-row {
+        font-size: 62%;
+        text-transform: uppercase;
 
-					hr {
-						margin-bottom: 0.2rem !important;
-						margin-top: 0.2rem !important;
-					}
-				}
-			}
-		}
-	}
+        div {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          hr {
+            margin-bottom: 0.2rem !important;
+            margin-top: 0.2rem !important;
+          }
+        }
+      }
+    }
+  }
+
+
 }

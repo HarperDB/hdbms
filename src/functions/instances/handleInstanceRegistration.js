@@ -107,7 +107,6 @@ export default async ({
 			version: registration.version,
 			retry: true,
 		};
-		 
 	} catch (e) {
 		console.log(e);
 		return {
