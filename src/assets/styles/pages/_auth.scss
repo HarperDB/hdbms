@@ -1,157 +1,164 @@
 .auth-studio-info {
-  color: $color-white;
-  background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
+	background: linear-gradient(44.5deg, $color-darkblue 39.04%, $color-pink 98.58%);
+	color: $color-white;
 }
 
 .auth-studio-info-container {
-  max-width: 450px;
+	max-width: 450px;
 }
 
 .btn-gradient-blue {
-  background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
+	background: linear-gradient(90deg, $color-lightblue 0%, $color-blue 100%) !important;
 
-  &:hover {
-    background: $color-blue !important;
-  }
+	&:hover {
+		background: $color-blue !important;
+	}
 }
 
 .auth-title {
-  font-size: 3.25rem !important;
-  margin-bottom: 0.5rem !important;
+	font-size: 2.25rem !important;
+	margin-bottom: 0.5rem !important;
 }
-.auth-subtitle {
-  font-size: 1.65rem;
-  font-family: $font-family-ubuntu;
-  font-weight: 100 !important;
-}
-.auth-info-list-items {
-  font-family: $font-family-ubuntu;
-  list-style-image: url('../../images/svg/checkmark.svg');
-  li {
-    margin-bottom: 1.5rem;
 
-    .item-title {
-      font-weight: $font-weight-bold;
-      font-size: 1.5rem !important;
-      margin-bottom: 0.5rem !important;
-    }
-    .item-subtitle {
-      display: inline-block;
-      letter-spacing: 0.05em;
-      font-weight: $font-weight-light;
-      font-size: 1rem;
-    }
-    .deploy-subitem {
-      display: inline-block;
-      padding: 0.5rem;
-      margin-right: 0.5rem;
-      font-size: $font-size-medium;
-      border: 2px solid $color-lightblue;
-      border-radius: 5px;
-      text-decoration: none;
-      color: $color-white !important;
-    }
-  }
+.auth-subtitle {
+	font-family: $font-family-ubuntu;
+	font-size: 1.2rem;
+	font-weight: 100 !important;
+}
+
+.auth-info-list-items {
+	font-family: $font-family-ubuntu;
+	list-style-image: url('../../images/svg/checkmark.svg');
+
+	li {
+		margin-bottom: 1.5rem;
+
+		.item-title {
+			font-size: 1.2rem !important;
+			font-weight: $font-weight-bold;
+			margin-bottom: 0.5rem !important;
+		}
+
+		.item-subtitle {
+			display: inline-block;
+			font-size: 1rem;
+			font-weight: $font-weight-light;
+			letter-spacing: 0.05em;
+		}
+
+		.deploy-subitem {
+			border: 2px solid $color-lightblue;
+			border-radius: 5px;
+			color: $color-white !important;
+			display: inline-block;
+			font-size: $font-size-medium;
+			margin-right: 0.5rem;
+			padding: 0.5rem;
+			text-decoration: none;
+		}
+	}
 }
 
 .auth-centered-container {
-  height: calc(100% - 135px);
+	height: calc(100% - 135px);
 }
 
 .auth-form-container {
-  background-color: $color-darkpurple;
+	background-color: $color-darkpurple;
 }
 
 .login-form {
-  width: 100%;
-  max-width: 320px;
-  color: $color-white;
+	color: $color-white;
+	max-width: 320px;
+	width: 100%;
 
-  .instructions {
-    font-size: 1.5rem !important;
-    font-weight: $font-weight-light;
-  }
-  &.sign-up {
-    max-width: 770px;
+	.instructions {
+		font-size: 1.5rem !important;
+		font-weight: $font-weight-light;
+	}
 
-    @media screen and (width <= 767px), screen and (height <= 530px) {
-      margin-bottom: 50px;
-      top: -50px;
-      transform: translateX(-50%);
-    }
+	&.sign-up {
+		max-width: 770px;
 
-    hr {
-      background: $faint-white-overlay;
-    }
+		@media screen and (width <= 767px), screen and (height <= 530px) {
+			margin-bottom: 50px;
+			top: -50px;
+			transform: translateX(-50%);
+		}
 
-    .sign-up-content {
-      width: 100%;
+		hr {
+			background: $faint-white-overlay;
+		}
 
-      h3 {
-        font-size: 1.1rem !important;
-        padding-top: 15px;
-      }
-    }
+		.sign-up-content {
+			width: 100%;
 
-    .sign-up-form {
-      .subdomain-explanation {
-        display: block;
-        font-size: 0.7rem;
-        padding-bottom: 8px;
-      }
-    }
-  }
+			h3 {
+				font-size: 1.1rem !important;
+				padding-top: 15px;
+			}
+		}
 
-  input {
-    background: $faint-white-overlay !important;
-    color: $color-white;
+		.sign-up-form {
+			.subdomain-explanation {
+				display: block;
+				font-size: 0.7rem;
+				padding-bottom: 8px;
+			}
+		}
+	}
 
-    &::placeholder {
-      color: $white-overlay !important;
-      font-family: $font-family-ubuntu;
-      font-weight: $font-weight-light;
-    }
-    &:focus {
-      color: $color-white;
-      border-color: $color-lightblue;
-      outline: 0;
-    }
-  }
+	input {
+		background: $faint-white-overlay !important;
+		color: $color-white;
 
-  .disclaimer {
-    color: $color-white !important;
-    font-size: $font-size-small;
+		&::placeholder {
+			color: $white-overlay !important;
+			font-family: $font-family-ubuntu;
+			font-weight: $font-weight-light;
+		}
 
-    a,
-    a:hover {
-      color: $light-white-overlay !important;
-      text-decoration: underline !important;
-    }
-  }
+		&:focus {
+			border-color: $color-lightblue;
+			color: $color-white;
+			outline: 0;
+		}
+	}
 
-  .login-nav-link-holder {
-    &:last-child {
-      text-align: right;
-    }
-  }
+	.disclaimer {
+		color: $color-white !important;
+		font-size: $font-size-small;
 
-  .login-nav-link {
-    color: $color-white !important;
-    font-size: $font-size-root;
-    height: 16px;
-    text-transform: lowercase;
-    white-space: nowrap;
+		a,
+		a:hover {
+			color: $light-white-overlay !important;
+			text-decoration: underline !important;
+		}
+	}
 
-    &:hover {
-      color: $color-white !important;
-    }
+	.login-nav-link-holder {
+		&:last-child {
+			text-align: right;
+		}
+	}
 
-    &.error {
-      color: $color-danger !important;
-      font-weight: $font-weight-bold;
-      text-align: center;
-      white-space: normal;
-      width: 100%;
-    }
-  }
+	.login-nav-link {
+		color: $color-white !important;
+		font-size: $font-size-root;
+		height: 16px;
+		text-transform: lowercase;
+		white-space: nowrap;
+
+		&:hover {
+			color: $color-white !important;
+		}
+
+		&.error {
+			color: $color-danger !important;
+			font-weight: $font-weight-bold;
+			text-align: center;
+			white-space: normal;
+			width: 100%;
+		}
+	}
 }
