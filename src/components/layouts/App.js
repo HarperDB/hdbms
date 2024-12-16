@@ -53,6 +53,13 @@ function ValidatedRoute(auth) {
 	return <Navigate to="/organization" replace />;
 }
 
+function PrivateRoute(auth) {
+	if (auth.auth.user_id) {
+		return <Outlet />;
+	}
+	return <Navigate to="/sign-in" replace />;
+}
+
 function App() {
 	const canonicalUrl = document.querySelector('link[rel="canonical"]');
 	const navigate = useNavigate();
@@ -152,15 +159,18 @@ function App() {
 						>
 							{/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
 							<Routes>
-								<Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
-								<Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
-								<Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
-									<Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
-									<Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-									<Route element={<Organization />} path="/o/:customer_id/*" />
+								{/* create protected routes */}
+								<Route element={<PrivateRoute auth={auth} />}>
+									<Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
+									<Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
+									<Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
+										<Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+										<Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+										<Route element={<Organization />} path="/o/:customer_id/*" />
+									</Route>
+									<Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
+									<Route element={<Navigate to="/" replace />} />
 								</Route>
-								<Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
-								<Route element={<Navigate to="/" replace />} />
 							</Routes>
 						</Suspense>
 					</ErrorBoundary>
