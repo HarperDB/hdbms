@@ -14,7 +14,7 @@ import EmptyPrompt from '../../shared/EmptyPrompt';
 import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
-const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
+const BrowseDatatable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
 const JSONEditor = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JSONEditor'));
 const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
@@ -40,7 +40,7 @@ function NoPrimaryKeyMessage({ table }) {
 		<Card className="my-3 missing-primary-key">
 			<CardBody>
 				<CardTitle>No Primary Key</CardTitle>
-				<i className="fa fa-warning mt-3" />
+				<i className="mt-3 fa fa-warning" />
 				<span className="mt-3">
 					The table {`'${table}'`} does not have a primary key. The HarperDB Studio does not currently support tables
 					without a primary key defined. Please see the{' '}
@@ -84,20 +84,6 @@ function BrowseIndex() {
 	const syncInstanceStructure = () => {
 		buildInstanceStructure({ auth, url });
 	};
-
-	useEffect(() => {
-		const fetchDescribeTable = async () => {
-			if (table) {
-				try {
-					const result = await describeTable({ auth, url, schema, table });
-					setTableDescription(result);
-				} catch (e) {
-					addError(e);
-				}
-			}
-		};
-		fetchDescribeTable();
-	}, [auth, url, schema, table]);
 
 	useEffect(() => {
 		if (tableDescription) {
@@ -198,12 +184,7 @@ function BrowseIndex() {
 					) : schema && table && action && entities.activeTable ? (
 						<JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
 					) : schema && table && entities.activeTable ? (
-						<DataTable
-							activeTable={entities.activeTable}
-							tableDescriptionAttributes={tableDescription?.attributes}
-							tableState={tableState}
-							setTableState={setTableState}
-						/>
+						<BrowseDatatable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
 					) : schema && table && !hasHashAttr ? (
 						<NoPrimaryKeyMessage />
 					) : (
