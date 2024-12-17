@@ -53,13 +53,6 @@ function ValidatedRoute(auth) {
 	return <Navigate to="/organization" replace />;
 }
 
-function PrivateRoute(auth) {
-	if (auth.auth.user_id) {
-		return <Outlet />;
-	}
-	return <Navigate to="/" replace />;
-}
-
 function App() {
 	const canonicalUrl = document.querySelector('link[rel="canonical"]');
 	const navigate = useNavigate();
