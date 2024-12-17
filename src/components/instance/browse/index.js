@@ -5,7 +5,6 @@ import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
-import describeTable from '../../../functions/api/instance/describeTable';
 
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
@@ -68,7 +67,6 @@ function BrowseIndex() {
 	const structure = useStoreState(instanceState, (s) => s.structure);
 	const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
 	const [tableState, setTableState] = useState(defaultTableState);
-	const [tableDescription, setTableDescription] = useState(null);
 	const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
 	const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
 	const showTableForm =
@@ -86,10 +84,10 @@ function BrowseIndex() {
 	};
 
 	useEffect(() => {
-		if (tableDescription) {
-			setHasHashAttr(Boolean(tableDescription.hash_attribute));
+		if (tableState) {
+			setHasHashAttr(Boolean(tableState.hashAttribute));
 		}
-	}, [tableDescription]);
+	}, [tableState]);
 
 	const validate = () => {
 		if (structure) {
