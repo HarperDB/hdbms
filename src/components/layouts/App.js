@@ -57,7 +57,7 @@ function PrivateRoute(auth) {
 	if (auth.auth.user_id) {
 		return <Outlet />;
 	}
-	return <Navigate to="/sign-in" replace />;
+	return <Navigate to="/" replace />;
 }
 
 function App() {
@@ -145,48 +145,34 @@ function App() {
 			</Suspense>
 			{fetchingUser ? (
 				<div className="vh-100">
-					<Loader header="signing in" spinner />
+					<Loader header="Signing in..." spinner />
 				</div>
-			) : loggedIn ? (
-				<main id="app-container">
-					<ErrorBoundary FallbackComponent={ErrorFallback}>
-						<Suspense
-							fallback={
-								<div className="auth-centered-container">
-									<Loader header=" " spinner />
-								</div>
-							}
-						>
-							{/* can we put instance routes in here, each in a suspense tag (since they're lazily loaded) */}
-							<Routes>
-								{/* create protected routes */}
-								<Route element={<PrivateRoute auth={auth} />}>
-									<Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
-									<Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
-									<Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
-										<Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
-										<Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
-										<Route element={<Organization />} path="/o/:customer_id/*" />
-									</Route>
-									<Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
-									<Route element={<Navigate to="/" replace />} />
-								</Route>
-							</Routes>
-						</Suspense>
-					</ErrorBoundary>
-				</main>
 			) : (
-				<main className="auth-container">
-					<ErrorBoundary FallbackComponent={ErrorFallbackAuth}>
-						<Suspense fallback={<Loader header=" " spinner />}>
-							<AuthLayout>
-								<Routes>
-									<Route element={<SignIn />} path="/" />
-									<Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
-									<Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
-									<Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
-								</Routes>
-							</AuthLayout>
+				<main id={loggedIn ? 'app-container' : ''} className={!loggedIn ? 'auth-container' : ''}>
+					<ErrorBoundary FallbackComponent={loggedIn ? ErrorFallback : ErrorFallbackAuth}>
+						<Suspense fallback={<Loader header="Loading..." spinner />}>
+							<Routes>
+								{loggedIn ? (
+									<>
+										<Route element={isMaintenance ? <Maintenance /> : <UpdatePassword />} path="/update-password" />
+										<Route element={isMaintenance ? <Maintenance /> : <Profile />} path="/profile/*" />
+										<Route element={isMaintenance ? <Maintenance /> : <ValidatedRoute auth={auth} />}>
+											<Route element={<Instance />} path="/o/:customer_id/i/:compute_stack_id/*" />
+											<Route element={<Instances />} path="/o/:customer_id/instances/:action?/:purchaseStep?" />
+											<Route element={<Organization />} path="/o/:customer_id/*" />
+										</Route>
+										<Route element={isMaintenance ? <Maintenance /> : <Organizations />} path="/:list?/:action?" />
+										<Route element={<Navigate to="/" replace />} />
+									</>
+								) : (
+									<Route element={<AuthLayout />}>
+										<Route element={<SignIn />} path="/" />
+										<Route element={config.maintenance ? <Maintenance /> : <SignUp />} path="/sign-up" />
+										<Route element={isMaintenance ? <Maintenance /> : <ResetPassword />} path="/reset-password" />
+										<Route path="*" element={<Navigate to={`/?redirect=${pathname}${search}`} replace />} />
+									</Route>
+								)}
+							</Routes>
 						</Suspense>
 					</ErrorBoundary>
 				</main>

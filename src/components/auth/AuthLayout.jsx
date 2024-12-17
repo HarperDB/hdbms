@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router';
 import { Col, Container, Row } from 'reactstrap';
 
 function AuthLayout({ children }) {
@@ -53,7 +54,9 @@ function AuthLayout({ children }) {
 						</ul>
 					</div>
 				</Col>
-				<Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">{children}</Col>
+				<Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
+					<Outlet />
+				</Col>
 			</Row>
 		</Container>
 	);
