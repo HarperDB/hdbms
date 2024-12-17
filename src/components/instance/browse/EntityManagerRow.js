@@ -58,6 +58,9 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 		toggleConfirmDropItem(false);
 	};
 
+	const syncInstanceStructure = () => {
+		buildInstanceStructure({ auth, url });
+	};
 	const handleSetActive = () =>
 		isActive || isDropping || isConfirmingDropItem ? false : navigate(`${baseUrl}/${item}`);
 
@@ -66,7 +69,10 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 			key={item}
 			title={`View${isActive ? 'ing' : ''} ${itemType} ${item}`}
 			className={`item-row ${isActive ? 'active' : ''}`}
-			onClick={handleSetActive}
+			onClick={() => {
+				handleSetActive();
+				syncInstanceStructure();
+			}}
 			tabIndex="0"
 		>
 			<Col className={`item-label ${isConfirmingDropItem ? 'text-danger text-nowrap' : ''}`}>
@@ -86,7 +92,7 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 							title={`confirm drop ${itemType} ${item}`}
 							onClick={confirmItemForDrop}
 						>
-							<i className="fa fa-check text-white" />
+							<i className="text-white fa fa-check" />
 						</Button>
 						<Button
 							id="cancelDropItem"
@@ -95,7 +101,7 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 							title={`Cancel drop ${itemType} ${item}`}
 							onClick={cancelConfirmDrop}
 						>
-							<i className="fa fa-times text-white" />
+							<i className="text-white fa fa-times" />
 						</Button>
 					</>
 				) : isDropping ? (
@@ -106,7 +112,7 @@ function EntityManagerRow({ item, itemType, baseUrl, isActive, toggleDropItem, i
 						title={`Drop ${itemType} ${item}`}
 						onClick={selectItemForDrop}
 					>
-						<i className="fa fa-minus text-white" />
+						<i className="text-white fa fa-minus" />
 					</Button>
 				) : isActive ? (
 					<Button tabIndex="-1" color="purple" className="round">

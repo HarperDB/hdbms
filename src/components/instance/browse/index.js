@@ -10,7 +10,6 @@ import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
-import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
 const BrowseDatatable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
@@ -79,10 +78,6 @@ function BrowseIndex() {
 		: "This user has not been granted access to any tables. A super-user must update this user's role.";
 	const [hasHashAttr, setHasHashAttr] = useState(true);
 
-	const syncInstanceStructure = () => {
-		buildInstanceStructure({ auth, url });
-	};
-
 	useEffect(() => {
 		if (tableState) {
 			setHasHashAttr(Boolean(tableState.hashAttribute));
@@ -130,7 +125,6 @@ function BrowseIndex() {
 
 	// eslint-disable-next-line
 	useEffect(validate, [structure, schema, table, compute_stack_id]);
-	useEffect(syncInstanceStructure, [auth, url, schema, table]);
 	useEffect(() => {
 		const clearTableDescriptionCacheInterval = setInterval(() => {
 			clearTableDescriptionCache();
