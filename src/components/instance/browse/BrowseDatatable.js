@@ -18,7 +18,7 @@ let controller;
 let controller2;
 let controller3;
 
-function BrowseDatatable({ tableState, setTableState, activeTable, tableDescriptionAttributes }) {
+function BrowseDatatable({ tableState, setTableState, activeTable }) {
 	const navigate = useNavigate();
 	const { compute_stack_id, schema, table, customer_id } = useParams();
 	const auth = useStoreState(instanceState, (s) => s.auth);
@@ -74,6 +74,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 				hashAttribute,
 				dynamicAttributesFromDataTable,
 				dataTableColumns,
+				schemaAttributes,
 				error,
 			} = await getTableData({
 				schema,
@@ -114,6 +115,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 						hashAttribute,
 						dataTableColumns,
 						dynamicAttributesFromDataTable,
+						schemaAttributes,
 						error,
 					});
 				}
@@ -175,7 +177,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable, tableDescript
 						columns={tableState.dataTableColumns || []}
 						data={tableState.tableData || []}
 						error={tableState.error}
-						tableDescriptionAttributes={tableDescriptionAttributes}
+						tableDescriptionAttributes={tableState.schemaAttributes}
 						dynamicAttributesFromDataTable={tableState.dynamicAttributesFromDataTable}
 						currentPage={tableState.page}
 						pageSize={tableState.pageSize}

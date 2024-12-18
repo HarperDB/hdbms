@@ -68,7 +68,6 @@ function InstanceIndex() {
 		if (thisInstance && instanceAuth) {
 			instanceState.update(() => thisInstance);
 			const { error } = await buildInstanceStructure({ auth: instanceAuth, url: thisInstance.url });
-			await registrationInfo({ auth: instanceAuth, url: thisInstance.url });
 			setLoadingInstance(false);
 			if (error) {
 				if (config.is_local_studio) {

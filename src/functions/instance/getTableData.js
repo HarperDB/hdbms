@@ -29,6 +29,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 	let newData = [];
 	let allAttributes = false;
 	let hashAttribute = false;
+	let schemaAttributes = [];
 	let get_attributes = ['*'];
 	let dynamicAttributesFromDataTable = [];
 	const offset = page * pageSize;
@@ -46,6 +47,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 		}
 
 		const { record_count, attributes, hash_attribute } = result;
+		schemaAttributes = attributes;
 		allAttributes = attributes.map((a) => a.attribute);
 		if (hash_attribute === undefined) {
 			hashAttribute = '$id';
@@ -55,6 +57,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 		}
 
 		newTotalRecords = record_count;
+		schemaAttributes = attributes;
 		newTotalPages = newTotalRecords && Math.ceil(newTotalRecords / pageSize);
 	} catch (e) {
 		fetchError = e.message;
@@ -124,6 +127,7 @@ export default async ({ schema, table, filtered, pageSize, onlyCached, sorted, p
 		newTotalRecords,
 		newTotalPages,
 		hashAttribute,
+		schemaAttributes,
 		dataTableColumns,
 		error: fetchError === 'table' ? `You are not authorized to view ${schema}:${table}` : fetchError,
 		dynamicAttributesFromDataTable,
