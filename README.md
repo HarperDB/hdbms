@@ -1,76 +1,50 @@
-# HarperDB Studio
+# React + TypeScript + Vite
 
-The comprehensive management suite for HarperDB.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-- [https://studio.harperdb.io](https://studio.harperdb.io)
+Currently, two official plugins are available:
 
-## What’s in the box
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- Third party software (click to review each library's licensing)
-  - [ReactJS](https://reactjs.org/) site scaffold via Create React App
-  - [react-router](https://reacttraining.com/react-router/) for navigation
-  - [pullstate](https://lostpebble.github.io/pullstate/) for global state management
+## Expanding the ESLint configuration
 
-## Magic... how does it work?
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Follow these steps to run a local version of HarperDB Studio.
+- Configure the top-level `parserOptions` property like this:
 
-1. **In your terminal, clone the UI scaffold, enter the directory, and install dependencies.**
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-   ```
-   git clone https://github.com/harperdb/hdbms.git
-   cd hdbms
-   yarn
-   ```
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-1. **Create your local config file.**
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-   - Create a copy of the file `/src/config/index.example.js`, renaming it `index.js`.
-   - update the `stripe_public_key` and/or other variables in that file as desired
-   - save the file
-   - **Never commit `/src/config/index.js` to GitHub!**
-
-1. **Generate https certificates for local development**
-
-   Install mkcert tool (OS X)
-
-   ```
-   brew install mkcert
-   brew install nss (if you need Firefox)
-   ```
-
-   Install mkcert tool (Windows)
-
-   ```
-   scoop bucket add extras
-   scoop install mkcert
-   ```
-
-   Setup mkcert on your machine (creates a CA)
-
-   ```
-   mkcert -install
-   ```
-
-   Create .cert directory if it doesn't exist
-
-   ```
-   mkdir -p .cert
-   ```
-
-   Generate the certificate (ran from the root of this project)
-
-   ```
-   mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
-   ```
-
-   **NOTE:** If you use Firefox, restart it to get the cert to take effect.
-
-1. Start the project.
-
-   ```
-   yarn start
-   ```
-
-1. Visit the project at https://localhost:3000.
-   - The development web server uses a self-signed certificate, and you may see a warning about the site being insecure. In your local development environment, it is safe to click "Advanced" > "proceed to site anyway."
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
