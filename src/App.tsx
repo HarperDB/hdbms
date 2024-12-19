@@ -6,6 +6,8 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
+  console.log('version', import.meta.env.VITE_STUDIO_VERSION) 
+  console.log('REACT_APP_LOCALSTUDIO', import.meta.env.VITE_REACT_APP_LOCALSTUDIO) 
   return (
     <>
       <div>
