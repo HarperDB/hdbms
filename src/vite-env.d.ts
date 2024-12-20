@@ -2,9 +2,10 @@
 
 interface ImportMetaEnv {
 	readonly VITE_STUDIO_VERSION: string;
-	readonly VITE_REACT_APP_LOCALSTUDIO: string;
+	readonly VITE_REACT_APP_LOCALSTUDIO: string; //INFO: This flag is the local version of studio ran on HarperDb instances
 	readonly DISABLE_ESLINT_PLUGIN: string;
 	readonly VITE_PUBLIC_URL: string;
+	readonly VITE_PUBLIC_STRIPE_KEY: string;
 	readonly VITE_LOCAL_STUDIO_DEV_URL: string;
 	readonly VITE_REO_DEV_CLIENT_ID: string;
 	readonly VITE_LMS_API_URL: string;
