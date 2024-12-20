@@ -5,8 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"dev:local": "vite --mode local",
-		"build": "tsc -b && vite build",
+		"dev:local": "vite --mode localstudio",
+		"build:stage": "tsc -b && vite build --mode staging",
+		"build:prod": "tsc -b && vite build --mode production",
+		"build:local": "tsc -b && vite build --mode localstudio",
+		"build:dev": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
