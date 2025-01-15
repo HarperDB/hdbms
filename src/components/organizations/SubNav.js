@@ -17,8 +17,8 @@ function SubNav() {
 				<Nav navbar>
 					<div className="filter-holder">
 						<Search />
-						<SortOrgs />
 					</div>
+					<SortOrgs />
 				</Nav>
 			</Navbar>
 		</ErrorBoundary>

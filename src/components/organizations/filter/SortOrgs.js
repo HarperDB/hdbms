@@ -21,7 +21,7 @@ function SortOrgs() {
 	return (
 		<Button
 			color="link"
-			className="me-2"
+			className="btn btn-purple px-4 mx-2"
 			onClick={() => {
 				appState.update((s) => {
 					s.auth.orgs = sortOrgsList(orgs, sortAsc);
