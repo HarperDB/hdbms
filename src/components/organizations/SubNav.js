@@ -3,6 +3,7 @@ import { Navbar, Nav } from 'reactstrap';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import Search from './filter/Search';
+import SortOrgs from './filter/SortOrgs';
 import ErrorFallback from '../shared/ErrorFallback';
 import addError from '../../functions/api/lms/addError';
 
@@ -16,6 +17,7 @@ function SubNav() {
 				<Nav navbar>
 					<div className="filter-holder">
 						<Search />
+						<SortOrgs />
 					</div>
 				</Nav>
 			</Navbar>
