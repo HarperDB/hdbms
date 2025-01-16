@@ -4,7 +4,7 @@ import { useStoreState } from 'pullstate';
 
 import appState from '../../../functions/state/appState';
 
-const sortOrgsList = (orgs, isAscending) => {
+function sortOrgsList(orgs, isAscending) {
 	const orgsList = [...orgs];
 	if (isAscending) {
 		orgsList.sort((a, b) => a.customer_name.localeCompare(b.customer_name));
