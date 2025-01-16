@@ -12,7 +12,7 @@ function sortOrgsList(orgs, isAscending) {
 		orgsList.sort((a, b) => b.customer_name.localeCompare(a.customer_name));
 	}
 	return orgsList;
-};
+}
 
 function SortOrgs() {
 	const orgs = useStoreState(appState, (s) => s.auth.orgs);
