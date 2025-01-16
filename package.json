@@ -1,6 +1,6 @@
 {
 	"name": "harperdb-studio",
-	"version": "4.8.12",
+	"version": "4.8.13",
 	"description": "A UI for HarperDB",
 	"deploymentUrl": "studio.harperdb.io",
 	"private": true,
