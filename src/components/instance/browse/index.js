@@ -5,16 +5,14 @@ import { useStoreState } from 'pullstate';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import instanceState from '../../../functions/state/instanceState';
-import describeTable from '../../../functions/api/instance/describeTable';
 
 import ErrorFallback from '../../shared/ErrorFallback';
 import addError from '../../../functions/api/lms/addError';
 import useInstanceAuth from '../../../functions/state/instanceAuths';
 import EmptyPrompt from '../../shared/EmptyPrompt';
-import buildInstanceStructure from '../../../functions/instance/browse/buildInstanceStructure';
 import { clearTableDescriptionCache } from '../../../functions/instance/state/describeTableCache';
 
-const DataTable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
+const BrowseDatatable = lazy(() => import(/* webpackChunkName: "browse-datatable" */ './BrowseDatatable'));
 const EntityManager = lazy(() => import(/* webpackChunkName: "browse-entitymanager" */ './EntityManager'));
 const JSONEditor = lazy(() => import(/* webpackChunkName: "browse-jsonviewer" */ './JSONEditor'));
 const CSVUpload = lazy(() => import(/* webpackChunkName: "browse-csvupload" */ './CsvUpload'));
@@ -40,7 +38,7 @@ function NoPrimaryKeyMessage({ table }) {
 		<Card className="my-3 missing-primary-key">
 			<CardBody>
 				<CardTitle>No Primary Key</CardTitle>
-				<i className="fa fa-warning mt-3" />
+				<i className="mt-3 fa fa-warning" />
 				<span className="mt-3">
 					The table {`'${table}'`} does not have a primary key. The HarperDB Studio does not currently support tables
 					without a primary key defined. Please see the{' '}
@@ -59,8 +57,6 @@ function BrowseIndex() {
 	const location = useLocation();
 	const { schema, table, action, customer_id, compute_stack_id } = useParams();
 	const [instanceAuths] = useInstanceAuth({});
-	const auth = instanceAuths?.[compute_stack_id];
-	const url = useStoreState(instanceState, (s) => s.url);
 	const registration = useStoreState(instanceState, (s) => s.registration);
 	const version = registration?.version;
 	const [major, minor] = version?.split('.') || [];
@@ -68,7 +64,6 @@ function BrowseIndex() {
 	const structure = useStoreState(instanceState, (s) => s.structure);
 	const [entities, setEntities] = useState({ schemas: [], tables: [], activeTable: false });
 	const [tableState, setTableState] = useState(defaultTableState);
-	const [tableDescription, setTableDescription] = useState(null);
 	const baseUrl = `/o/${customer_id}/i/${compute_stack_id}/browse`;
 	const showForm = instanceAuths[compute_stack_id]?.super || instanceAuths[compute_stack_id]?.structure === true;
 	const showTableForm =
@@ -81,29 +76,11 @@ function BrowseIndex() {
 		: "This user has not been granted access to any tables. A super-user must update this user's role.";
 	const [hasHashAttr, setHasHashAttr] = useState(true);
 
-	const syncInstanceStructure = () => {
-		buildInstanceStructure({ auth, url });
-	};
-
 	useEffect(() => {
-		const fetchDescribeTable = async () => {
-			if (table) {
-				try {
-					const result = await describeTable({ auth, url, schema, table });
-					setTableDescription(result);
-				} catch (e) {
-					addError(e);
-				}
-			}
-		};
-		fetchDescribeTable();
-	}, [auth, url, schema, table]);
-
-	useEffect(() => {
-		if (tableDescription) {
-			setHasHashAttr(Boolean(tableDescription.hash_attribute));
+		if (tableState) {
+			setHasHashAttr(Boolean(tableState.hashAttribute));
 		}
-	}, [tableDescription]);
+	}, [tableState]);
 
 	const validate = () => {
 		if (structure) {
@@ -146,7 +123,6 @@ function BrowseIndex() {
 
 	// eslint-disable-next-line
 	useEffect(validate, [structure, schema, table, compute_stack_id]);
-	useEffect(syncInstanceStructure, [auth, url, schema, table]);
 	useEffect(() => {
 		const clearTableDescriptionCacheInterval = setInterval(() => {
 			clearTableDescriptionCache();
@@ -198,12 +174,7 @@ function BrowseIndex() {
 					) : schema && table && action && entities.activeTable ? (
 						<JSONEditor newEntityAttributes={tableState.newEntityAttributes} hashAttribute={tableState.hashAttribute} />
 					) : schema && table && entities.activeTable ? (
-						<DataTable
-							activeTable={entities.activeTable}
-							tableDescriptionAttributes={tableDescription?.attributes}
-							tableState={tableState}
-							setTableState={setTableState}
-						/>
+						<BrowseDatatable activeTable={entities.activeTable} tableState={tableState} setTableState={setTableState} />
 					) : schema && table && !hasHashAttr ? (
 						<NoPrimaryKeyMessage />
 					) : (
