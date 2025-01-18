@@ -42,10 +42,19 @@ export default [
 				route('roles', './components/clusters/users/Roles.tsx'), // Page
 			]),
 
-			// Cluster Instance routes
+			// Cluster Instance routes (only 1 instace because we'll replicate actions across all instances)
 			...prefix('org/:id/clusters/:id/instance', [
 				index('./components/instance/index.tsx'),
-				route('new-instance', './components/instance/NewInstance.tsx'),
+				route('new-instance', './components/instance/NewInstance.tsx') /* Maybe???? 
+					Should we have a way for users to add more instances here or migrate this functionality to the 
+					clusters page. They would then edit an existing cluster and add/remove instance(s)?
+				*/,
+			]),
+
+			// Cluster Instance Info routes
+			...prefix('org/:id/clusters/:id/instance/info', [
+				index('./components/instance/info/index.tsx'),
+				route('logs', './components/instance/info/Logs.tsx'),
 			]),
 
 			/* TODO: Figure out how to redirect any unknown route to the last successful route.
