@@ -1,5 +1,7 @@
 import { type RouteConfig, index, layout, prefix, route } from '@react-router/dev/routes';
 
+// TODO: Setup route module type safety ref:https://reactrouter.com/how-to/route-module-type-safety
+// TODO: Figure out how to migrate routes to the feature specific folders.
 export default [
 	// Public routes
 	layout('./components/layouts/AuthLayout.tsx', [
@@ -11,38 +13,37 @@ export default [
 	// Protected routes
 	...prefix('app', [
 		layout('./components/layouts/DashLayout.tsx', [
-			// Orgs routes *base route*
+			// Orgs routes *app base route*
 			index('./components/organizations/index.tsx'),
-			route('new-org', './components/organizations/NewOrg.tsx'),
+			route('new-org', './components/organizations/NewOrg.tsx'), // Modal
 
+			// Profile routes
 			...prefix('profile', [
 				index('./components/profile/index.tsx'),
-				route('update', './components/profile/UpdateProfile.tsx'),
+				route('update', './components/profile/UpdateProfile.tsx'), // Modal
 			]),
 
-			// Org routes
+			// Org specific routes (Clusters List, Billing, etc...)
 			...prefix('org/:id', [
 				index('./components/organization/index.tsx'),
 				route('billing', './components/organization/Billing.tsx'),
+				route('create-cluster', './components/clusters/NewCluster.tsx'), // Modal
+				route('edit-cluster', './components/clusters/EditCluster.tsx'), // Modal
 			]),
 
-			// Cluster routes
-			...prefix('org/:id/clusters/:id', [
-				index('./components/clusters/index.tsx'),
-				route('new-cluster', './components/clusters/NewCluster.tsx'),
+			// Instance(s) routes inside a Cluster
+			...prefix('org/:id/clusters/:id', [index('./components/clusters/index.tsx')]),
 
-				// Cluster Users routes
-				...prefix('users', [
-					index('./components/clusters/users/index.tsx'),
-					route('new-user', './components/clusters/users/NewUser.tsx'), // Modal
-					route('add', './components/clusters/users/AddUser.tsx'), // Modal
-					route('/:id', './components/clusters/users/EditUser.tsx'),
-					route('roles', './components/clusters/users/Roles.tsx'),
-				]),
+			// Cluster Users routes
+			...prefix('org/:id/clusters/:id/users', [
+				index('./components/clusters/users/index.tsx'),
+				route('add', './components/clusters/users/AddUser.tsx'), // Modal
+				route('/:id', './components/clusters/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+				route('roles', './components/clusters/users/Roles.tsx'), // Page
 			]),
 
 			// Cluster Instance routes
-			...prefix('org/:id/clusters/:id/instance/', [
+			...prefix('org/:id/clusters/:id/instance', [
 				index('./components/instance/index.tsx'),
 				route('new-instance', './components/instance/NewInstance.tsx'),
 			]),

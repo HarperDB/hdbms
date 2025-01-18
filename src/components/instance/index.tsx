@@ -10,3 +10,5 @@ function Instance() {
     </div>
   )
 }
+
+export default Instance;
