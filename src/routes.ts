@@ -1,7 +1,7 @@
 import { type RouteConfig, index, layout, prefix, route } from '@react-router/dev/routes';
 
 // TODO: Setup route module type safety ref:https://reactrouter.com/how-to/route-module-type-safety
-// TODO: Figure out how to migrate routes to the feature specific folders.
+// TODO: Migrate routes to the feature specific folders.
 export default [
 	// Public routes
 	layout('./components/layouts/AuthLayout.tsx', [
@@ -74,7 +74,7 @@ export default [
 				route('logs', './components/instance/info/Logs.tsx'),
 			]),
 
-			/* TODO: Figure out how to redirect any unknown route to the last successful route.
+			/* TODO: Redirect any unknown route to nearest valid route.
 				Examples:
 
 					Invalid route: /app/org/123/unknown-route
