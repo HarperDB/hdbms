@@ -25,44 +25,33 @@ export default [
 
 			// Org specific routes (Clusters List, Billing, etc...)
 			...prefix('org/:orgId', [
-				index('./components/organization/index.tsx'),
+				index('./components/organization/index.tsx'), // Will inherit ClusterList from clusters/ClusterList.tsx
 				route('billing', './components/organization/Billing.tsx'),
 				route('create-cluster', './components/clusters/NewCluster.tsx'), // Modal
 				route('edit-cluster', './components/clusters/EditCluster.tsx'), // Modal
 			]),
 
-			// Instance routes inside a Cluster
+			// Cluster routes (Instance List, Create Instance)
 			...prefix('org/:orgId/clusters/:clusterId', [
-				// Cluster Instance routes (only "1" instance because we'll replicate actions across all instances)
-				index('./components/instance/index.tsx'),
-				route('new-instance', './components/instance/NewInstance.tsx') /* Maybe???? 
+				index('./components/cluster/index.tsx'), // Will inherit InstanceList from instances/InstanceList.tsx
+				route('create-instance', './components/cluster/NewInstance.tsx') /* Maybe????
 					Should we have a way for users to add more instances here or migrate this functionality to the 
 					clusters page. They would then edit an existing cluster and add/remove instance(s)?
 				*/,
 			]),
 
-			// Cluster Instance Info routes
-			...prefix('org/:orgId/clusters/:clusterId/info', [
-				index('./components/instance/info/index.tsx'),
-				route('logs', './components/instance/info/Logs.tsx'),
-			]),
-
 			// Cluster Users routes
 			...prefix('org/:orgId/clusters/:clusterId/users', [
-				index('./components/clusters/users/index.tsx'),
-				route('add', './components/clusters/users/AddUser.tsx'), // Modal
-				route('/:id', './components/clusters/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
-				route('roles', './components/clusters/users/Roles.tsx'), // Page
+				index('./components/cluster/users/index.tsx'),
+				route('add', './components/cluster/users/AddUser.tsx'), // Modal
+				route('/:id', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+				route('roles', './components/cluster/users/Roles.tsx'), // Page
 			]),
 
-			...prefix('org/:orgId/clusters/:clusterId/applications', [
-				// New (Create/Import a new application)
-				/* Editor
-						Dynamically append file path to url
-				*/
-			]),
-
-			...prefix('org/:orgId/clusters/:clusterId/browse', [
+			// Instance routes
+			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/browse', [
+				// default route/view when navigating to an instance
+				index('./components/instance/browse/index.tsx'),
 				// Add Table
 				// Add Database
 				/* Database /:databaseId
@@ -70,6 +59,19 @@ export default [
 				 			Add Record
 				 			Edit Record /edit/:recordId
 				*/
+			]),
+
+			...prefix('org/:orgId/clusters/:clusterId/instance/:instanceId/applications', [
+				// New (Create/Import a new application)
+				/* Editor
+						Append folder/file path to url
+				*/
+			]),
+
+			// Instance Info routes
+			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/info', [
+				index('./components/instance/info/index.tsx'),
+				route('logs', './components/instance/info/Logs.tsx'),
 			]),
 
 			/* TODO: Figure out how to redirect any unknown route to the last successful route.
