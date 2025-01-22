@@ -60,10 +60,9 @@ export default [
 			]),
 
 			...prefix('org/:orgId/clusters/:clusterId/instance/:instanceId/applications', [
-				// New (Create/Import a new application)
-				/* Editor
-						Append folder/file path to url
-				*/
+				index('./components/instance/browse/applications/index.tsx'), // Show List of applications/components
+				route('new', './components/instance/browse/applications/NewApplication.tsx'), // Modal
+				route('edit/:appId', './components/instance/browse/applications/EditApplication.tsx'), // Append folder/file path to url (deep linking)
 			]),
 
 			// Instance Info routes
