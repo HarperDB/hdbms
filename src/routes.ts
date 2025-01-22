@@ -44,8 +44,14 @@ export default [
 			...prefix('org/:orgId/clusters/:clusterId/users', [
 				index('./components/cluster/users/index.tsx'),
 				route('add', './components/cluster/users/AddUser.tsx'), // Modal
-				route('/:id', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
-				route('roles', './components/cluster/users/Roles.tsx'), // Page
+				route('edit/:id', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+			]),
+
+			// Cluster Roles routes
+			...prefix('org/:orgId/clusters/:clusterId/roles', [
+				index('./components/cluster/roles/index.tsx'),
+				route('add', './components/cluster/roles/AddRole.tsx'), // Modal
+				route('edit/:id', './components/cluster/roles/EditRole.tsx'), // Modal
 			]),
 
 			// Instance routes
