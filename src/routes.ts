@@ -51,14 +51,12 @@ export default [
 			// Instance routes
 			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/browse', [
 				// default route/view when navigating to an instance
-				index('./components/instance/browse/index.tsx'),
-				// Add Table
-				// Add Database
-				/* Database /:databaseId
-				 		View Table /:tableId
-				 			Add Record
-				 			Edit Record /edit/:recordId
-				*/
+				index('./components/instance/browse/index.tsx'), // Show first database and first table in the list by default
+				route('add-database', './components/instance/browse/AddDatabase.tsx'), // Modal
+				route(':/:databaseId/add-table', './components/instance/browse/AddTable.tsx'), // Modal
+				route('/:databaseId/:tableId', './components/instance/browse/BrowseDataTable.tsx'), // Child-view inside index.tsx
+				route('/:databaseId/:tableId/add-record', './components/instance/browse/AddRecord.tsx'), // Modal
+				route('/:databaseId/:tableId/edit/:recordId', './components/instance/browse/EditRecord.tsx'), // Child-view
 			]),
 
 			...prefix('org/:orgId/clusters/:clusterId/instance/:instanceId/applications', [
