@@ -12,6 +12,7 @@ export default [
 
 	// Protected routes
 	...prefix('app', [
+		// TODO: eliminate /app base route and move all routes to root level
 		layout('./components/layouts/DashLayout.tsx', [
 			// Orgs routes *app base route*
 			index('./components/organizations/index.tsx'), // redirects to /app/orgs as base route
@@ -31,27 +32,24 @@ export default [
 				route('edit-cluster', './components/clusters/EditCluster.tsx'), // Modal
 			]),
 
-			// Cluster routes (Instance List, Create Instance)
-			...prefix('orgs/:orgId/clusters/:clusterId', [
-				index('./components/cluster/index.tsx'), // Will inherit InstanceList from instances/InstanceList.tsx
-				route('create-instance', './components/cluster/NewInstance.tsx') /* Maybe????
-					Should we have a way for users to add more instances here or migrate this functionality to the 
-					clusters page. They would then edit an existing cluster and add/remove instance(s)?
-				*/,
-			]),
-
-			// Cluster Users routes
-			...prefix('orgs/:orgId/clusters/:clusterId/users', [
-				index('./components/cluster/users/index.tsx'),
-				route('add', './components/cluster/users/AddUser.tsx'), // Modal
-				route('edit/:userId', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
-			]),
-
-			// Cluster Roles routes
-			...prefix('orgs/:orgId/clusters/:clusterId/roles', [
+			// Org Roles routes
+			...prefix('orgs/:orgId/roles', [
 				index('./components/cluster/roles/index.tsx'),
 				route('add', './components/cluster/roles/AddRole.tsx'), // Modal
 				route('edit/:roleId', './components/cluster/roles/EditRole.tsx'), // Modal
+			]),
+
+			// Org Members routes
+			...prefix('orgs/:orgId/members', [
+				index('./components/cluster/members/index.tsx'),
+				route('add', './components/cluster/members/AddMember.tsx'), // Modal
+				route('edit/:userId', './components/cluster/members/EditMember.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+			]),
+
+			// Cluster routes (Instance List, Create Instance)
+			...prefix('orgs/:orgId/clusters/:clusterId', [
+				index('./components/cluster/index.tsx'), // Will inherit InstanceList from instances/InstanceList.tsx
+				route('create-instance', './components/cluster/NewInstance.tsx'), // Modal
 			]),
 
 			// Instance routes
