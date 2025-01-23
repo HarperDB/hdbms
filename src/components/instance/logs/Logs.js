@@ -85,9 +85,14 @@ function Logs() {
 								<i className="fa fa-spinner fa-spin text-lightgrey" />
 							</div>
 						) : logs && logs.length ? (
-							logs.map((l, i) => (
-								// eslint-disable-next-line
-								<LogRow key={i} {...l} />
+							logs.map((log) => (
+								<LogRow
+									level={log.level}
+									timestamp={log.timestamp}
+									message={log.message}
+									tags={log.tags}
+									thread={log.thread}
+								/>
 							))
 						) : logs && !logs.length ? (
 							<div className="pt-5 text-center">no logs found</div>

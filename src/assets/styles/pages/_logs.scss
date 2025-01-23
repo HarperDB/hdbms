@@ -1,0 +1,62 @@
+#logs {
+	.instance-details {
+		.card-body {
+			padding-bottom: 0;
+		}
+
+		.nowrap-scroll {
+			overflow: hidden;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+	}
+
+	.item-list {
+		font-size: 0.65rem;
+		padding: 0;
+
+		.header {
+			padding: 16px 16px 8px;
+		}
+
+		hr {
+			background-color: $color-grey !important;
+		}
+
+		.item-scroller {
+			height: calc(100vh - 434px);
+			overflow: hidden auto;
+
+			.item-row {
+				border-bottom: 1px solid $lightest-grey-overlay;
+				padding: 16px;
+
+				.text-nowrap {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				.error,
+				.fatal {
+					color: $color-danger;
+				}
+
+				.warn {
+					color: $color-warning;
+				}
+
+				.complete,
+				.notify {
+					color: $color-success;
+				}
+			}
+		}
+	}
+
+	.configLoader {
+		height: 38px;
+		padding-top: 15px;
+		text-align: center;
+		width: 100%;
+	}
+}

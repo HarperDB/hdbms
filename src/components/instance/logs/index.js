@@ -4,7 +4,7 @@ import Logs from './Logs';
 
 function LogsIndex() {
 	return (
-		<Row id="config">
+		<Row id="logs">
 			<Col lg="2" xs="12">
 				<h1>Logs Sidebar</h1>
 			</Col>
