@@ -14,8 +14,8 @@ export default [
 	...prefix('app', [
 		layout('./components/layouts/DashLayout.tsx', [
 			// Orgs routes *app base route*
-			index('./components/organizations/index.tsx'),
-			route('new-org', './components/organizations/NewOrg.tsx'), // Modal
+			index('./components/organizations/index.tsx'), // redirects to /app/orgs as base route
+			route('new', './components/organizations/NewOrg.tsx'), // Modal
 
 			// Profile routes
 			...prefix('profile', [
@@ -24,7 +24,7 @@ export default [
 			]),
 
 			// Org specific routes (Clusters List, Billing, etc...)
-			...prefix('org/:orgId', [
+			...prefix('orgs/:orgId', [
 				index('./components/organization/index.tsx'), // Will inherit ClusterList from clusters/ClusterList.tsx
 				route('billing', './components/organization/Billing.tsx'),
 				route('create-cluster', './components/clusters/NewCluster.tsx'), // Modal
@@ -32,7 +32,7 @@ export default [
 			]),
 
 			// Cluster routes (Instance List, Create Instance)
-			...prefix('org/:orgId/clusters/:clusterId', [
+			...prefix('orgs/:orgId/clusters/:clusterId', [
 				index('./components/cluster/index.tsx'), // Will inherit InstanceList from instances/InstanceList.tsx
 				route('create-instance', './components/cluster/NewInstance.tsx') /* Maybe????
 					Should we have a way for users to add more instances here or migrate this functionality to the 
@@ -41,21 +41,21 @@ export default [
 			]),
 
 			// Cluster Users routes
-			...prefix('org/:orgId/clusters/:clusterId/users', [
+			...prefix('orgs/:orgId/clusters/:clusterId/users', [
 				index('./components/cluster/users/index.tsx'),
 				route('add', './components/cluster/users/AddUser.tsx'), // Modal
-				route('edit/:id', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+				route('edit/:userId', './components/cluster/users/EditUser.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
 			]),
 
 			// Cluster Roles routes
-			...prefix('org/:orgId/clusters/:clusterId/roles', [
+			...prefix('orgs/:orgId/clusters/:clusterId/roles', [
 				index('./components/cluster/roles/index.tsx'),
 				route('add', './components/cluster/roles/AddRole.tsx'), // Modal
-				route('edit/:id', './components/cluster/roles/EditRole.tsx'), // Modal
+				route('edit/:roleId', './components/cluster/roles/EditRole.tsx'), // Modal
 			]),
 
 			// Instance routes
-			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/browse', [
+			...prefix('orgs/:orgId/clusters/:clusterId/instances/:instanceId/browse', [
 				// default route/view when navigating to an instance
 				index('./components/instance/browse/index.tsx'), // Show first database and first table in the list by default
 				route('add-database', './components/instance/browse/AddDatabase.tsx'), // Modal
@@ -65,14 +65,14 @@ export default [
 				route('/:databaseId/:tableId/edit/:recordId', './components/instance/browse/EditRecord.tsx'), // Child-view
 			]),
 
-			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/applications', [
+			...prefix('orgs/:orgId/clusters/:clusterId/instances/:instanceId/applications', [
 				index('./components/instance/browse/applications/index.tsx'), // Show List of applications/components
 				route('new', './components/instance/browse/applications/NewApplication.tsx'), // Modal
 				route('edit/:appId', './components/instance/browse/applications/EditApplication.tsx'), // Append folder/file path to url (deep linking)
 			]),
 
 			// Instance Info routes
-			...prefix('org/:orgId/clusters/:clusterId/instances/:instanceId/info', [
+			...prefix('orgs/:orgId/clusters/:clusterId/instances/:instanceId/info', [
 				index('./components/instance/info/index.tsx'),
 				route('logs', './components/instance/info/Logs.tsx'),
 			]),
@@ -80,23 +80,23 @@ export default [
 			/* TODO: Redirect any unknown route to nearest valid route.
 				Examples:
 
-					Invalid route: /app/org/123/unknown-route
-					Redirect to: /app/org/123
+					Invalid route: /app/orgs/123/unknown-route
+					Redirect to: /app/orgs/123
 
-					Invalid route: /app/org/123/clusters
-					Redirect to: /app/org/123
+					Invalid route: /app/orgs/123/clusters
+					Redirect to: /app/orgs/123
 
-					Invalid route: /app/org/123/clusters/unknown-route
-					Redirect to: /app/org/123
+					Invalid route: /app/orgs/123/clusters/unknown-route
+					Redirect to: /app/orgs/123
 
-					Invalid route: /app/org/123/clusters/456/unknown-route
-					Redirect to: /app/org/123/clusters/456
+					Invalid route: /app/orgs/123/clusters/456/unknown-route
+					Redirect to: /app/orgs/123/clusters/456
 
-					Invalid route: /app/org/123/unknown-route/456
-					Redirect to: /app/org/123
+					Invalid route: /app/orgs/123/unknown-route/456
+					Redirect to: /app/orgs/123
 
-					Invalid route: /app/org/123/clusters/456/unknown-route/789
-					Redirect to: /app/org/123/clusters/456
+					Invalid route: /app/orgs/123/clusters/456/unknown-route/789
+					Redirect to: /app/orgs/123/clusters/456
 
 					etc....
 			*/
