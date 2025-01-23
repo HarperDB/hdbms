@@ -34,16 +34,16 @@ export default [
 
 			// Org Roles routes
 			...prefix('orgs/:orgId/roles', [
-				index('./components/cluster/roles/index.tsx'),
-				route('add', './components/cluster/roles/AddRole.tsx'), // Modal
-				route('edit/:roleId', './components/cluster/roles/EditRole.tsx'), // Modal
+				index('./components/organization/roles/index.tsx'),
+				route('add', './components/organization/roles/AddRole.tsx'), // Modal
+				route('edit/:roleId', './components/organization/roles/EditRole.tsx'), // Modal
 			]),
 
 			// Org Members routes
 			...prefix('orgs/:orgId/members', [
-				index('./components/cluster/members/index.tsx'),
-				route('add', './components/cluster/members/AddMember.tsx'), // Modal
-				route('edit/:userId', './components/cluster/members/EditMember.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
+				index('./components/organization/members/index.tsx'),
+				route('add', './components/organization/members/AddMember.tsx'), // Modal
+				route('edit/:userId', './components/organization/members/EditMember.tsx'), // Modal or Sub-view (similar to what's currently in studio)?
 			]),
 
 			// Cluster routes (Instance List, Create Instance)
