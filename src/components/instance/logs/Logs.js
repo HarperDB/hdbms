@@ -65,18 +65,18 @@ function Logs() {
 			</Row>
 			<Card className="my-3">
 				<CardBody className="item-list">
-					<Row xs="5" className="header">
-						<Col className="text-bold text-nowrap">status</Col>
-						<Col className="text-bold text-nowrap">date</Col>
+					<Row xs="6" className="header">
+						<Col className="text-bold text-nowrap">Status</Col>
+						<Col className="text-bold text-nowrap">Date</Col>
 						<Col className="text-left text-bold text-nowrap">
 							{!loading && logsError ? (
 								<span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span>
 							) : (
-								<span>time</span>
+								<span>Time</span>
 							)}
 						</Col>
-						<Col className="text-bold text-nowrap">thread</Col>
-						<Col className="text-bold text-nowrap">tags</Col>
+						<Col className="text-bold text-nowrap">Thread</Col>
+						<Col className="text-bold text-nowrap">Tags</Col>
 					</Row>
 					<hr className="mt-1 mb-0" />
 					<div className="item-scroller">
@@ -85,13 +85,16 @@ function Logs() {
 								<i className="fa fa-spinner fa-spin text-lightgrey" />
 							</div>
 						) : logs && logs.length ? (
-							logs.map((log) => (
+							logs.map((log, index) => (
 								<LogRow
+									// eslint-disable-next-line react/no-array-index-key
+									key={log.timestamp + index} // NOTE - Timestamp is not entirely unique, but it's the best we have for now, added index for "improved" uniqueness
 									level={log.level}
 									timestamp={log.timestamp}
 									message={log.message}
 									tags={log.tags}
 									thread={log.thread}
+									onRowClick={() => {}}
 								/>
 							))
 						) : logs && !logs.length ? (
