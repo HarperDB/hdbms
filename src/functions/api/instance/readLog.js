@@ -1,11 +1,11 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal }) => {
+export default async ({ auth, url, signal, filters }) => {
 	const logs = await queryInstance({
 		operation: {
 			operation: 'read_log',
-			limit: 1000,
+			...filters,
 			order: 'desc',
 		},
 		auth,

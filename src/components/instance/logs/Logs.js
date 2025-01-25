@@ -38,7 +38,18 @@ function Logs() {
 		const fetchData = async () => {
 			setLoading(true);
 			controller = new AbortController();
-			await readLog({ auth, url, signal: controller.signal, currentLogCount: logs?.length || 0 });
+			await readLog({
+				auth,
+				url,
+				signal: controller.signal,
+				currentLogCount: logs?.length || 0,
+				filters: {
+					limit: 1000,
+					// from: lastUpdate,
+					// until: Date.now(),
+					// level: '',
+				},
+			});
 			if (isMounted) setLoading(false);
 		};
 
@@ -127,37 +138,33 @@ function Logs() {
 				</CardBody>
 			</Card>
 			<br />
-			<Modal isOpen={isModalOpen} className={theme} centered fade={false}>
+			<Modal isOpen={isModalOpen} className={theme} centered fade={false} id="log-info-modal">
 				<ModalHeader toggle={toggleModal}>View Log Info</ModalHeader>
 				<ModalBody>
 					{selectedLogInfo && (
 						<div>
 							<p>
-								<span>Level:</span> {selectedLogInfo?.level}
+								<b>Level:</b>{' '}
+								<span className={`${selectedLogInfo?.level?.toLowerCase()}`}>
+									{selectedLogInfo?.level?.toUpperCase()}
+								</span>
 							</p>
-
-							<p>
-								<b>Timestamp:</b>
-								{new Date(selectedLogInfo?.timestamp || null).toLocaleDateString()}
+							<p className="mb-1">
+								<b>Timestamp(UTC):</b>
 							</p>
-							<p>{selectedLogInfo?.timestamp}</p>
-							<p>
+							<span>{selectedLogInfo?.timestamp}</span>
+							<p className="mt-4">
 								<b>Thread:</b> {selectedLogInfo?.thread}
 							</p>
 							<p>
 								<b>Tags:</b> {selectedLogInfo?.tags?.join(', ')}
 							</p>
-							{/* <p>{isObject(selectedLogInfo?.message) && selectedLogInfo?.message.error ? selectedLogInfo?.message.error : JSON.stringify(selectedLogInfo?.message).slice(1, -1)}</p> */}
-							<p className="mb-0">
+							<p className="mb-2">
 								<b>Message:</b>
 							</p>
-							{typeof selectedLogInfo?.message === 'object' ? (
-								<pre>
-									<code>{JSON.stringify(selectedLogInfo?.message)}</code>
-								</pre>
-							) : (
-								<p>{selectedLogInfo?.message}</p>
-							)}
+							<code>
+								{selectedLogInfo?.message?.error ? selectedLogInfo?.message?.error : selectedLogInfo?.message}
+							</code>
 						</div>
 					)}
 				</ModalBody>
