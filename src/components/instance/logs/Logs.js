@@ -17,7 +17,7 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
-function Logs() {
+function Logs({ logsFilter }) {
 	const { compute_stack_id } = useParams();
 	const auth = useStoreState(instanceState, (s) => s.auth);
 	const url = useStoreState(instanceState, (s) => s.url);
@@ -43,12 +43,7 @@ function Logs() {
 				url,
 				signal: controller.signal,
 				currentLogCount: logs?.length || 0,
-				filters: {
-					limit: 1000,
-					// from: lastUpdate,
-					// until: Date.now(),
-					// level: '',
-				},
+				logsFilter, // default log limit is 1000
 			});
 			if (isMounted) setLoading(false);
 		};

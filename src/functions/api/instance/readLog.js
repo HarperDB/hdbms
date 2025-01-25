@@ -1,7 +1,7 @@
 import queryInstance from '../queryInstance';
 import instanceState from '../../state/instanceState';
 
-export default async ({ auth, url, signal, filters }) => {
+export default async ({ auth, url, signal, logFilter: filters }) => {
 	const logs = await queryInstance({
 		operation: {
 			operation: 'read_log',
