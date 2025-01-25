@@ -1,4 +1,5 @@
 #logs {
+	height: 100%;
 	.instance-details {
 		.card-body {
 			padding-bottom: 0;
@@ -24,12 +25,12 @@
 		}
 
 		.item-scroller {
-			height: calc(100vh - 434px);
+			height: calc(100vh - 275px);
 			overflow: hidden auto;
 
 			.item-row {
 				border-bottom: 1px solid $lightest-grey-overlay;
-				padding: 16px;
+				padding: 8px;
 
 				.text-nowrap {
 					overflow: hidden;

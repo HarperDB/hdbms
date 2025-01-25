@@ -72,18 +72,29 @@ function Logs() {
 			</Row>
 			<Card className="my-3">
 				<CardBody className="item-list">
-					<Row xs="5" className="header">
-						<Col className="text-bold text-nowrap">Status</Col>
-						<Col className="text-bold text-nowrap">Date</Col>
-						<Col className="text-left text-bold text-nowrap">
+					<Row xs="12" md="12" className="header">
+						<Col xs="2" md="1" className="text-bold text-nowrap">
+							Status
+						</Col>
+						<Col xs="2" md="2" className="text-bold text-nowrap">
+							Date
+						</Col>
+						<Col xs="2" md="2" className="text-left text-bold text-nowrap">
 							{!loading && logsError ? (
 								<span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span>
 							) : (
 								<span>Time</span>
 							)}
 						</Col>
-						<Col className="text-bold text-nowrap">Thread</Col>
-						<Col className="text-bold text-nowrap">Tags</Col>
+						<Col xs="2" md="1" className="text-bold text-nowrap">
+							Thread
+						</Col>
+						<Col xs="2" md="2" className="text-bold text-nowrap">
+							Tags
+						</Col>
+						<Col xs="2" md="3" className="text-bold text-nowrap">
+							Message
+						</Col>
 					</Row>
 					<hr className="mt-1 mb-0" />
 					<div className="item-scroller">
@@ -121,25 +132,34 @@ function Logs() {
 				<ModalBody>
 					{selectedLogInfo && (
 						<div>
-							<b>Level:</b> {selectedLogInfo?.level}
-							<br />
-							<b>Timestamp:</b> {selectedLogInfo?.timestamp}
-							<br />
-							<b>Thread:</b> {selectedLogInfo?.thread}
-							<br />
-							<b>Tags:</b> {selectedLogInfo?.tags?.join(', ')}
-							<br />
-							{/* <b>Message:</b> {isObject(logs[selectedLogInfo]?.message) ? JSON.stringify(logs[selectedLogInfo]?.message) : logs[selectedLogInfo]?.message} */}
-							<pre>
-								<code>
-									{isObject(selectedLogInfo?.message)
-										? JSON.stringify(selectedLogInfo?.message)
-										: selectedLogInfo?.message}
-								</code>
-							</pre>
+							<p>
+								<span>Level:</span> {selectedLogInfo?.level}
+							</p>
+
+							<p>
+								<b>Timestamp:</b>
+								{new Date(selectedLogInfo?.timestamp || null).toLocaleDateString()}
+							</p>
+							<p>{selectedLogInfo?.timestamp}</p>
+							<p>
+								<b>Thread:</b> {selectedLogInfo?.thread}
+							</p>
+							<p>
+								<b>Tags:</b> {selectedLogInfo?.tags?.join(', ')}
+							</p>
+							{/* <p>{isObject(selectedLogInfo?.message) && selectedLogInfo?.message.error ? selectedLogInfo?.message.error : JSON.stringify(selectedLogInfo?.message).slice(1, -1)}</p> */}
+							<p className="mb-0">
+								<b>Message:</b>
+							</p>
+							{typeof selectedLogInfo?.message === 'object' ? (
+								<pre>
+									<code>{JSON.stringify(selectedLogInfo?.message)}</code>
+								</pre>
+							) : (
+								<p>{selectedLogInfo?.message}</p>
+							)}
 						</div>
 					)}
-					testing
 				</ModalBody>
 			</Modal>
 		</ErrorBoundary>
