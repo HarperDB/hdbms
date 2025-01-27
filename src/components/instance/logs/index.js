@@ -14,8 +14,12 @@ function LogsIndex() {
 	const applyFilters = (event) => {
 		event.preventDefault();
 		setLogsFilter({
-			limit: event.target.elements.logLimitInput.value,
-			level: event.target.elements.logLevelSelect.value,
+			start: 0,
+			limit: parseInt(event.target.elements.logLimitInput.value, 10) || 1000,
+			level: event.target.elements.logLevelSelect.value || undefined,
+			from: undefined,
+			until: undefined,
+			order: 'desc',
 		});
 	};
 

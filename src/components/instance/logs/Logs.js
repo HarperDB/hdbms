@@ -17,6 +17,18 @@ import addError from '../../../functions/api/lms/addError';
 
 let controller;
 
+const fetchData = async ({ auth, url, logsFilter }) => {
+	console.log('logsFilter', logsFilter);
+	controller = new AbortController();
+	await readLog({
+		auth,
+		url,
+		signal: controller.signal,
+		// currentLogCount: logs?.length || 0,
+		logsFilter, // default log limit is 1000
+	});
+};
+
 function Logs({ logsFilter }) {
 	const { compute_stack_id } = useParams();
 	const auth = useStoreState(instanceState, (s) => s.auth);
@@ -33,29 +45,17 @@ function Logs({ logsFilter }) {
 	const toggleModal = () => setIsModalOpen(!isModalOpen);
 
 	useEffect(() => {
-		let isMounted = true;
-
-		const fetchData = async () => {
+		if (auth) {
 			setLoading(true);
-			controller = new AbortController();
-			await readLog({
-				auth,
-				url,
-				signal: controller.signal,
-				currentLogCount: logs?.length || 0,
-				logsFilter, // default log limit is 1000
-			});
-			if (isMounted) setLoading(false);
-		};
-
-		if (auth) fetchData();
+			fetchData({ auth, url, logsFilter });
+			setLoading(false);
+		}
 
 		return () => {
 			controller?.abort();
-			isMounted = false;
 		};
 		// eslint-disable-next-line
-	}, [auth, lastUpdate]);
+	}, [auth, lastUpdate, logsFilter]);
 
 	useInterval(() => auth && autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
 
