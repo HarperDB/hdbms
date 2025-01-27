@@ -30,16 +30,16 @@ const isValidDateRange = (startDate, endDate) => {
 	const end = new Date(endDate);
 	return start <= end;
 };
-
+const defaultFormState = {
+	start: 0,
+	limit: 1000,
+	level: undefined,
+	from: undefined,
+	until: undefined,
+	order: 'desc',
+};
 function LogsIndex() {
-	const [logsFilter, setLogsFilter] = useState({
-		start: 0,
-		limit: 1000,
-		level: undefined,
-		from: undefined,
-		until: undefined,
-		order: 'desc',
-	});
+	const [logsFilter, setLogsFilter] = useState(defaultFormState);
 	const alert = useAlert();
 	const applyFilters = (event) => {
 		event.preventDefault();
@@ -60,7 +60,7 @@ function LogsIndex() {
 
 	const resetForm = () => {
 		const logsFilterForm = document.getElementById('logs-filter-form');
-		setLogsFilter({});
+		setLogsFilter(defaultFormState);
 		logsFilterForm.reset();
 	};
 	return (
