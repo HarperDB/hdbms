@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 import instanceState from '../../../functions/state/instanceState';
 import appState from '../../../functions/state/appState';
 import config from '../../../config';
-import isObject from '../../../functions/util/isObject';
 
 import readLog from '../../../functions/api/instance/readLog';
 import LogRow from './LogRow';
@@ -18,7 +17,6 @@ import addError from '../../../functions/api/lms/addError';
 let controller;
 
 const fetchData = async ({ auth, url, logsFilter }) => {
-	console.log('logsFilter', logsFilter);
 	controller = new AbortController();
 	await readLog({
 		auth,
@@ -70,7 +68,7 @@ function Logs({ logsFilter }) {
 					<Button color="link" title="Update Logs" className="me-2" onClick={() => setLastUpdate(Date.now())}>
 						<i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`} />
 					</Button>
-					<Button color="link" title="Turn on autofresh" onClick={() => setAutoRefresh(!autoRefresh)}>
+					<Button color="link" title="Turn on auto refresh" onClick={() => setAutoRefresh(!autoRefresh)}>
 						<span className="me-2">auto</span>
 						<i className={`fa fa-lg fa-toggle-${autoRefresh ? 'on' : 'off'}`} />
 					</Button>
