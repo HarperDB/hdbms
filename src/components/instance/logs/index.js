@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import Select from 'react-select';
 import { useAlert } from 'react-alert';
 import Logs from './Logs';
@@ -57,48 +57,70 @@ function LogsIndex() {
 		<Row id="logs">
 			<Col lg="2" xs="12">
 				<h2 className="mb-3 filters-header">Log Filters</h2>
-				<form onSubmit={applyFilters} ref={logsFilterFormRef}>
-					<Select
-						name="logLimitSelect"
-						ref={logLimitSelectRef}
-						placeholder="Log Limit"
-						isSearchable={false}
-						options={[
-							{ value: 1000, label: '1000' },
-							{ value: 500, label: '500' },
-							{ value: 250, label: '250' },
-							{ value: 100, label: '100' },
-							{ value: 10, label: '10' },
-						]}
-					/>
-					<Select
-						name="logLevelSelect"
-						isSearchable={false}
-						className="mt-3"
-						ref={logLevelSelectRef}
-						placeholder="Log Level"
-						defaultValue={null}
-						options={[
-							{ value: null, label: 'All' },
-							{ value: 'notify', label: 'Notify' },
-							{ value: 'error', label: 'Error' },
-							{ value: 'warn', label: 'Warn' },
-							{ value: 'info', label: 'Info' },
-							{ value: 'debug', label: 'Debug' },
-							{ value: 'trace', label: 'Trace' },
-						]}
-					/>
+				<form onSubmit={applyFilters} onReset={resetForm} ref={logsFilterFormRef}>
+					<Row>
+						<Col xs="6" lg="12" className="mb-3">
+							<Select
+								name="logLimitSelect"
+								isSearchable={false}
+								className="react-select-container"
+								classNamePrefix="react-select"
+								ref={logLimitSelectRef}
+								placeholder="Log Limit"
+								options={[
+									{ value: 1000, label: '1000' },
+									{ value: 500, label: '500' },
+									{ value: 250, label: '250' },
+									{ value: 100, label: '100' },
+									{ value: 10, label: '10' },
+								]}
+							/>
+						</Col>
 
-					<Input name="logFromInput" type="datetime-local" className="mt-3" />
-					<Input name="logUntilInput" type="datetime-local" className="mt-3" />
-					<div className=" mt-3">
-						<Button type="submit" className="btn btn-purple px-4 w-100">
-							Apply
-						</Button>
-						<Button type="button" className="btn btn-purple px-4 w-100 mt-3" onClick={resetForm}>
-							Reset
-						</Button>
-					</div>
+						<Col xs="6" lg="12" className="mb-3">
+							<Select
+								name="logLevelSelect"
+								isSearchable={false}
+								className="react-select-container"
+								classNamePrefix="react-select"
+								ref={logLevelSelectRef}
+								placeholder="Log Level"
+								defaultValue={null}
+								options={[
+									{ value: null, label: 'All' },
+									{ value: 'notify', label: 'Notify' },
+									{ value: 'error', label: 'Error' },
+									{ value: 'warn', label: 'Warn' },
+									{ value: 'info', label: 'Info' },
+									{ value: 'debug', label: 'Debug' },
+									{ value: 'trace', label: 'Trace' },
+								]}
+							/>
+						</Col>
+						<Col xs="8" lg="12" className="mb-3">
+							<Label htmlFor="logFromInput" className="input-label">
+								Start Date:
+							</Label>
+							<Input name="logFromInput" type="datetime-local" />
+						</Col>
+						<Col xs="8" lg="12" className="mb-3">
+							<Label htmlFor="logUntilInput" className="input-label">
+								End Date:
+							</Label>
+							<Input name="logUntilInput" type="datetime-local" />
+						</Col>
+
+						<Col xs="6" lg="12" className="mb-3">
+							<Button type="submit" className="btn btn-purple px-4 w-100">
+								Apply
+							</Button>
+						</Col>
+						<Col xs="6" lg="12" className="mb-3">
+							<Button type="reset" className="btn btn-purple px-4 w-100">
+								Reset
+							</Button>
+						</Col>
+					</Row>
 				</form>
 			</Col>
 			<Col lg="10" xs="12">

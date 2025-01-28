@@ -141,6 +141,15 @@
 		}
 	}
 
+	#logs {
+		.react-select__single-value {
+			color: $color-darkgrey !important;
+		}
+
+		.react-select__placeholder {
+			color: $color-darkgrey !important;
+		}
+	}
 	input,
 	select,
 	textarea,

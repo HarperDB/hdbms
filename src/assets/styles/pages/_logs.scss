@@ -19,6 +19,26 @@
 		}
 	}
 
+	.react-select__control {
+		background-color: $color-white !important;
+	}
+
+	.react-select__single-value {
+		color: $color-darkgrey !important;
+	}
+
+	.react-select__placeholder {
+		color: $color-darkgrey !important;
+	}
+
+	.input-label {
+		color: $color-white;
+		font-weight: $font-weight-bold;
+		white-space: nowrap;
+		font-size: 13px !important;
+		display: block;
+	}
+
 	.item-list {
 		font-size: 0.65rem;
 		padding: 0;

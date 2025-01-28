@@ -58,6 +58,19 @@
 		background-color: $color-pureblack !important;
 		border: 1px solid $faint-white-overlay !important;
 	}
+	#logs {
+		.react-select__control {
+			background-color: $color-pureblack !important;
+		}
+
+		.react-select__single-value {
+			color: $color-white !important;
+		}
+
+		.react-select__placeholder {
+			color: $color-white !important;
+		}
+	}
 
 	input,
 	select,
