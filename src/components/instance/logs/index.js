@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Col, Row } from 'reactstrap';
+import React, { useState, useRef } from 'react';
+import { Button, Col, Input, Row } from 'reactstrap';
+import Select from 'react-select';
 import { useAlert } from 'react-alert';
 import Logs from './Logs';
 /*
@@ -40,9 +41,13 @@ const defaultFormState = {
 };
 function LogsIndex() {
 	const [logsFilter, setLogsFilter] = useState(defaultFormState);
+	const logsFilterFormRef = useRef();
+	const logLimitSelectRef = useRef();
+	const logLevelSelectRef = useRef();
 	const alert = useAlert();
 	const applyFilters = (event) => {
 		event.preventDefault();
+
 		if (!isValidDateRange(event.target.elements.logFromInput.value, event.target.elements.logUntilInput.value)) {
 			alert.error('Please provide a valid date range.');
 			return;
@@ -50,7 +55,7 @@ function LogsIndex() {
 
 		setLogsFilter({
 			start: 0,
-			limit: parseInt(event.target.elements.logLimitInput.value, 10) || 1000,
+			limit: event.target.elements.logLimitSelect.value || 1000,
 			level: event.target.elements.logLevelSelect.value || undefined,
 			from: event.target.elements.logFromInput.value || undefined,
 			until: event.target.elements.logUntilInput.value || undefined,
@@ -59,35 +64,55 @@ function LogsIndex() {
 	};
 
 	const resetForm = () => {
-		const logsFilterForm = document.getElementById('logs-filter-form');
+		logsFilterFormRef.current.reset();
+		logLimitSelectRef.current.clearValue();
+		logLevelSelectRef.current.clearValue();
 		setLogsFilter(defaultFormState);
-		logsFilterForm.reset();
 	};
 	return (
 		<Row id="logs">
 			<Col lg="2" xs="12">
 				<h3>Filters</h3>
-				<form onSubmit={applyFilters} id="logs-filter-form">
-					<input name="limit" id="logLimitInput" type="number" max={1000} min={1} placeholder="Log Limit" />
-					<select name="level" id="logLevelSelect">
-						<option hidden disabled value>
-							{' '}
-							-- Select a log level --{' '}
-						</option>
-						<option />
-						<option value="notify">Notify</option>
-						<option value="error">Error</option>
-						<option value="warn">Warn</option>
-						<option value="info">Info</option>
-						<option value="debug">Debug</option>
-						<option value="trace">Trace</option>
-					</select>
-					<input name="from" id="logFromInput" onChange={isValidDateRange} type="datetime-local" />
-					<input name="until" id="logUntilInput" type="datetime-local" />
-					<button type="submit">Apply</button>
-					<button type="button" onClick={resetForm}>
+				<form onSubmit={applyFilters} ref={logsFilterFormRef}>
+					<Select
+						name="logLimitSelect"
+						ref={logLimitSelectRef}
+						placeholder="Log Limit"
+						isSearchable={false}
+						options={[
+							{ value: 1000, label: '1000' },
+							{ value: 500, label: '500' },
+							{ value: 250, label: '250' },
+							{ value: 100, label: '100' },
+							{ value: 10, label: '10' },
+						]}
+					/>
+					<Select
+						name="logLevelSelect"
+						isSearchable={false}
+						className="mt-2"
+						ref={logLevelSelectRef}
+						placeholder="Log Level"
+						defaultValue={null}
+						options={[
+							{ value: null, label: 'All' },
+							{ value: 'notify', label: 'Notify' },
+							{ value: 'error', label: 'Error' },
+							{ value: 'warn', label: 'Warn' },
+							{ value: 'info', label: 'Info' },
+							{ value: 'debug', label: 'Debug' },
+							{ value: 'trace', label: 'Trace' },
+						]}
+					/>
+
+					<Input name="logFromInput" onChange={isValidDateRange} type="datetime-local" />
+					<Input name="logUntilInput" type="datetime-local" />
+					<Button type="submit" className="btn btn-purple px-4 m-2">
+						Apply
+					</Button>
+					<Button type="button" className="btn btn-purple px-4 m-2" onClick={resetForm}>
 						Reset
-					</button>
+					</Button>
 				</form>
 			</Col>
 			<Col lg="10" xs="12">
