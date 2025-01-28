@@ -55,9 +55,14 @@
 			height: calc(100vh - 275px);
 			overflow: hidden auto;
 
+			&::-webkit-scrollbar {
+				width: 10px;
+			}
+
 			.item-row {
 				border-bottom: 1px solid $lightest-grey-overlay;
 				padding: 8px;
+				height: 75px;
 
 				.text-nowrap {
 					overflow: hidden;
@@ -76,6 +81,15 @@
 				.complete,
 				.notify {
 					color: $color-success;
+				}
+				pre {
+					height: 100%;
+					overflow-x: auto;
+					margin-bottom: 0;
+					font-size: 12px;
+				}
+				code {
+					overflow-x: auto;
 				}
 			}
 		}
