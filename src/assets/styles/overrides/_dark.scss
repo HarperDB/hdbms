@@ -217,6 +217,10 @@
 		.modal-header {
 			background: $dark-grey-overlay !important;
 		}
+
+		code {
+			color: $color-white !important;
+		}
 	}
 
 	.auth-form-container {

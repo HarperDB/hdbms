@@ -80,23 +80,23 @@ function Logs({ logsFilter }) {
 						<Col xs="2" md="1" className="text-bold text-nowrap">
 							Status
 						</Col>
-						<Col xs="2" md="2" className="text-bold text-nowrap">
+						<Col xs="2" md="2" lg="1" className="text-bold text-nowrap">
 							Date
 						</Col>
-						<Col xs="2" md="2" className="text-left text-bold text-nowrap">
+						<Col xs="2" md="2" lg="1" className="text-left text-bold text-nowrap">
 							{!loading && logsError ? (
 								<span className="text-danger">log fetch error: {new Date().toLocaleTimeString().toLowerCase()}</span>
 							) : (
 								<span>Time</span>
 							)}
 						</Col>
-						<Col xs="2" md="1" className="text-bold text-nowrap">
+						<Col xs="2" md="1" lg="1" className="text-bold text-nowrap">
 							Thread
 						</Col>
-						<Col xs="2" md="2" className="text-bold text-nowrap">
+						<Col xs="2" md="2" lg="1" className="text-bold text-nowrap">
 							Tags
 						</Col>
-						<Col xs="2" md="3" className="text-bold text-nowrap">
+						<Col xs="2" md="3" lg="7" className="text-bold text-nowrap">
 							Message
 						</Col>
 					</Row>

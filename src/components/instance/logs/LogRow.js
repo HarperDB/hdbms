@@ -9,19 +9,19 @@ function LogsRow({ onRowClick, level, timestamp, message, tags, thread }) {
 			<Col xs="2" md="1" className={`text-nowrap ${level?.toLowerCase()}`}>
 				{level?.toUpperCase() || 'UNKNOWN'}
 			</Col>
-			<Col xs="2" md="2" className="">
+			<Col xs="2" md="2" lg="1" className="">
 				{new Date(timestamp || null).toLocaleDateString()}
 			</Col>
-			<Col xs="2" md="2" className="">
+			<Col xs="2" md="2" lg="1" className="">
 				{new Date(timestamp || null).toLocaleTimeString()}
 			</Col>
-			<Col xs="2" md="1" className="">
+			<Col xs="2" md="1" lg="1" className="">
 				{thread}
 			</Col>
-			<Col xs="2" md="2" className="">
+			<Col xs="2" md="2" lg="1" className="">
 				{tags?.join(', ')}
 			</Col>
-			<Col xs="2" md="4" className="">
+			<Col xs="2" md="4" lg="7" className="">
 				{isObject(message) && message.error ? (
 					message.error
 				) : (
