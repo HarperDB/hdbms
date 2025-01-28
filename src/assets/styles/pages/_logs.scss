@@ -1,5 +1,12 @@
 #logs {
 	height: 100%;
+	.filters-header {
+		color: $color-white;
+		font-weight: $font-weight-bold;
+		white-space: nowrap;
+		font-size: 13px !important;
+	}
+
 	.instance-details {
 		.card-body {
 			padding-bottom: 0;

@@ -3,25 +3,6 @@ import { Button, Col, Input, Row } from 'reactstrap';
 import Select from 'react-select';
 import { useAlert } from 'react-alert';
 import Logs from './Logs';
-/*
-logFilter object:
-	limit: <number>
-	level: 'notify' | 'error', | 'warn' | 'info' | 'debug' | 'trace'
-	from: DATE (UTC) timestamp
-	until: DATE (UTC) timestamp
-	order: 'asc' | 'desc'
-*/
-
-const formatDate = (date) =>
-	new Intl.DateTimeFormat('en-US', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false,
-	}).format(date);
 
 const isValidDateRange = (startDate, endDate) => {
 	if (!startDate && !endDate) return true;
@@ -31,13 +12,18 @@ const isValidDateRange = (startDate, endDate) => {
 	const end = new Date(endDate);
 	return start <= end;
 };
+/*
+logFilter object:
+ limit: 1000 | 500 | 250 | 100 | 10 || 1000
+ level: 'notify' | 'error', | 'warn' | 'info' | 'debug' | 'trace' || undefined
+ from: DATE (UTC) timestamp || undefined
+ until: DATE (UTC) timestamp || undefined
+*/
 const defaultFormState = {
-	start: 0,
 	limit: 1000,
 	level: undefined,
 	from: undefined,
 	until: undefined,
-	order: 'desc',
 };
 function LogsIndex() {
 	const [logsFilter, setLogsFilter] = useState(defaultFormState);
@@ -54,12 +40,10 @@ function LogsIndex() {
 		}
 
 		setLogsFilter({
-			start: 0,
 			limit: event.target.elements.logLimitSelect.value || 1000,
 			level: event.target.elements.logLevelSelect.value || undefined,
 			from: event.target.elements.logFromInput.value || undefined,
 			until: event.target.elements.logUntilInput.value || undefined,
-			order: 'desc',
 		});
 	};
 
@@ -72,7 +56,7 @@ function LogsIndex() {
 	return (
 		<Row id="logs">
 			<Col lg="2" xs="12">
-				<h3>Filters</h3>
+				<h2 className="mb-3 filters-header">Log Filters</h2>
 				<form onSubmit={applyFilters} ref={logsFilterFormRef}>
 					<Select
 						name="logLimitSelect"
@@ -90,7 +74,7 @@ function LogsIndex() {
 					<Select
 						name="logLevelSelect"
 						isSearchable={false}
-						className="mt-2"
+						className="mt-3"
 						ref={logLevelSelectRef}
 						placeholder="Log Level"
 						defaultValue={null}
@@ -105,14 +89,16 @@ function LogsIndex() {
 						]}
 					/>
 
-					<Input name="logFromInput" onChange={isValidDateRange} type="datetime-local" />
-					<Input name="logUntilInput" type="datetime-local" />
-					<Button type="submit" className="btn btn-purple px-4 m-2">
-						Apply
-					</Button>
-					<Button type="button" className="btn btn-purple px-4 m-2" onClick={resetForm}>
-						Reset
-					</Button>
+					<Input name="logFromInput" type="datetime-local" className="mt-3" />
+					<Input name="logUntilInput" type="datetime-local" className="mt-3" />
+					<div className=" mt-3">
+						<Button type="submit" className="btn btn-purple px-4 w-100">
+							Apply
+						</Button>
+						<Button type="button" className="btn btn-purple px-4 w-100 mt-3" onClick={resetForm}>
+							Reset
+						</Button>
+					</div>
 				</form>
 			</Col>
 			<Col lg="10" xs="12">

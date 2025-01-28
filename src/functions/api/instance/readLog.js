@@ -5,7 +5,9 @@ export default async ({ auth, url, signal, logsFilter }) => {
 	const logs = await queryInstance({
 		operation: {
 			operation: 'read_log',
+			start: 0,
 			...logsFilter,
+			order: 'desc',
 		},
 		auth,
 		url,
