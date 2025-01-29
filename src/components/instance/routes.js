@@ -10,6 +10,7 @@ import supportsApplications from '../../functions/instance/functions/supportsApp
 const Cluster = lazy(() => import(/* webpackChunkName: "instance-cluster" */ './replication'));
 const Config = lazy(() => import(/* webpackChunkName: "instance-config" */ './config'));
 const Metrics = lazy(() => import(/* webpackChunkName: "instance-status" */ './status'));
+const LogsIndex = lazy(() => import(/* webpackChunkName: "instance-logs" */ './logs'));
 const Users = lazy(() => import(/* webpackChunkName: "instance-users" */ './users'));
 const Roles = lazy(() => import(/* webpackChunkName: "instance-roles" */ './roles'));
 const Functions = lazy(() => import(/* webpackChunkName: "custom-functions" */ './functions'));
@@ -90,6 +91,13 @@ const routes = ({ super_user, version = null }) => {
 		label: 'status',
 		icon: 'tachometer-alt',
 	};
+	const logs = {
+		element: <LogsIndex />,
+		path: `logs`,
+		link: 'logs',
+		label: 'logs',
+		icon: 'tachometer-alt',
+	};
 
 	const configure = {
 		element: <Config />,
@@ -100,11 +108,11 @@ const routes = ({ super_user, version = null }) => {
 	};
 
 	if (config.is_local_studio && super_user) {
-		return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
+		return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure, logs];
 	}
 
 	if (super_user) {
-		return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure];
+		return [browse, users, roles, cluster, useApplications ? applications : functions, metrics, configure, logs];
 	}
 
 	if (config.is_local_studio) {
