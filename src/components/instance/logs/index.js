@@ -40,7 +40,7 @@ function LogsIndex() {
 		}
 
 		setLogsFilter({
-			limit: event.target.elements.logLimitSelect.value || 1000,
+			limit: parseInt(event.target.elements.logLimitSelect.value, 10) || 1000,
 			level: event.target.elements.logLevelSelect.value || undefined,
 			from: event.target.elements.logFromInput.value || undefined,
 			until: event.target.elements.logUntilInput.value || undefined,
