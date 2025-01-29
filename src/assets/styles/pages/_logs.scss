@@ -62,7 +62,6 @@
 			.item-row {
 				border-bottom: 1px solid $lightest-grey-overlay;
 				padding: 4px;
-				max-height: 75px;
 
 				.text-nowrap {
 					overflow: hidden;
@@ -83,12 +82,8 @@
 					color: $color-success;
 				}
 				pre {
-					max-height: 70px;
 					margin-bottom: 0;
 					font-size: 12px;
-				}
-				code {
-					max-height: 70px;
 				}
 			}
 		}
