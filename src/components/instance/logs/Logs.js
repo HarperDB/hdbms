@@ -155,9 +155,11 @@ function Logs({ logsFilter }) {
 							<p className="mb-2">
 								<b>Message:</b>
 							</p>
-							<code>
+							<pre>
+								{/* <code> */}
 								{selectedLogInfo?.message?.error ? selectedLogInfo?.message?.error : selectedLogInfo?.message}
-							</code>
+								{/* </code> */}
+							</pre>
 						</div>
 					)}
 				</ModalBody>
