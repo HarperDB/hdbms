@@ -66,3 +66,22 @@
 		}
 	}
 }
+
+#log-info-modal {
+	.error,
+	.fatal {
+		color: $color-danger;
+	}
+
+	.warn {
+		color: $color-warning;
+	}
+
+	.complete,
+	.notify {
+		color: $color-success;
+	}
+	code {
+		color: initial;
+	}
+}

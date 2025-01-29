@@ -141,6 +141,15 @@
 		}
 	}
 
+	#logs {
+		.react-select__single-value {
+			color: $color-darkgrey !important;
+		}
+
+		.react-select__placeholder {
+			color: $color-darkgrey !important;
+		}
+	}
 	input,
 	select,
 	textarea,
@@ -223,6 +232,10 @@
 		background: radial-gradient($lighter-grey-overlay 1px, transparent 0) !important;
 		background-size: 3px 3px !important;
 		color: $color-grey !important;
+	}
+
+	.filters-header {
+		color: $color-black !important;
 	}
 
 	.modal-content {
