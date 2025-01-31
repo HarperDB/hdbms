@@ -25,3 +25,5 @@ function DashLayout() {
     </div>
   )
 }
+
+export default DashLayout;
