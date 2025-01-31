@@ -1,11 +1,10 @@
 import { Outlet } from 'react-router';
-import { Col, Container, Row } from 'reactstrap';
 
 function AuthLayout() {
 	return (
-		<Container fluid="xs" className="h-100">
-			<Row xs="1" sm="2" className="h-100">
-				<Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
+		<div className="h-100 bg-white dark:bg-gray-500">
+			<div className="h-100">
+				<div className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
 					<div className="auth-studio-info-container">
 						<h1 className="auth-title">HarperDB Studio</h1>
 						<span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
@@ -53,12 +52,12 @@ function AuthLayout() {
 							</li>
 						</ul>
 					</div>
-				</Col>
-				<Col className="p-5 d-flex justify-content-center align-items-center auth-form-container">
+				</div>
+				<div className="p-5 d-flex justify-content-center align-items-center auth-form-container">
 					<Outlet />
-				</Col>
-			</Row>
-		</Container>
+				</div>
+			</div>
+		</div>
 	);
 }
 
