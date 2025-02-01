@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .react-router/
+.yarn
 
 # Editor directories and files
 .vscode/*

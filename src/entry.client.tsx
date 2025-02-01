@@ -6,6 +6,6 @@ import "./index.css";
 ReactDOM.hydrateRoot(
   document,
   <React.StrictMode>
-    <HydratedRouter />
+      <HydratedRouter />
   </React.StrictMode>
 );  
