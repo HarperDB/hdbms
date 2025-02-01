@@ -1,23 +1,23 @@
 import { type RouteConfig, index, layout, prefix, route } from '@react-router/dev/routes';
-import organizationsRoutes from './components/organizations/routes';
-import profileRoutes from './components/profile/routes';
-import organizationRoutes from './components/organization/routes';
-import clusterRoutes from './components/cluster/routes';
-import instanceRoutes from './components/instance/routes';
+import organizationsRoutes from './features/organizations/routes';
+import profileRoutes from './features/profile/routes';
+import organizationRoutes from './features/organization/routes';
+import clusterRoutes from './features/cluster/routes';
+import instanceRoutes from './features/instance/routes';
 
 // TODO: Setup route module type safety ref:https://reactrouter.com/how-to/route-module-type-safety
 export default [
 	// Public routes
-	layout('./components/layouts/AuthLayout.tsx', [
-		index('./components/auth/SignIn.tsx'),
-		route('sign-up', './components/auth/SignUp.tsx'),
-		route('reset-password', './components/auth/ResetPassword.tsx'),
+	layout('./features/layouts/AuthLayout.tsx', [
+		index('./features/auth/SignIn.tsx'),
+		route('sign-up', './features/auth/SignUp.tsx'),
+		route('reset-password', './features/auth/ResetPassword.tsx'),
 	]),
 
 	// Protected routes
 	...prefix('app', [
 		// TODO: eliminate /app base route and move all routes to root level
-		layout('./components/layouts/DashLayout.tsx', [
+		layout('./features/layouts/DashLayout.tsx', [
 			// Orgs routes *app base route*
 			...organizationsRoutes,
 
@@ -62,6 +62,6 @@ export default [
 		]),
 	]),
 
-	route('/', './App.tsx'),
+	// route('/', './App.tsx'),
 	route('*?', 'catchall.tsx'),
 ] satisfies RouteConfig;

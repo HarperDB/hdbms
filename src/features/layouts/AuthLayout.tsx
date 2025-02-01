@@ -1,10 +1,11 @@
+import { Provider } from '@/components/ui/provider';
 import { Outlet } from 'react-router';
 
 function AuthLayout() {
 	return (
-		<main className=''>
-			<div className=''>
-				<section className=''>
+		<Provider>
+		<main>
+				<section>
 					<div>
 						<h1>HarperDB Studio</h1>
 						<span>Manage all your HarperDB instances.</span>
@@ -50,11 +51,11 @@ function AuthLayout() {
 						</ul>
 					</div>
 				</section>
-				<section className=''>
+				<section>
 					<Outlet />
 				</section>
-			</div>
 		</main>
+		</Provider>
 	);
 }
 
