@@ -5,7 +5,7 @@ function AuthLayout() {
 		<div>
 				<section>
 					<div>
-						<h1>HarperDB Studio</h1>
+						<h1 className='text-3xl font-bold underline'>HarperDB Studio</h1>
 						<span>Manage all your HarperDB instances.</span>
 						<ul>
 							<li>
