@@ -3,7 +3,7 @@ import { Field } from '@/components/ui/field';
 
 function SignIn() {
   return (
-    <div className="w-full max-w-[320px]">
+    <div>
       <h1>Sign In</h1>
       <form>
         <Field invalid label="Email" errorText="Invalid email">
