@@ -3,7 +3,8 @@ function SignIn() {
     <div>
       <h1>Sign In</h1>
       <form>
-        <label label="Email" errorText="Invalid email">
+        <label>
+        Email
         <input 
           id="email"
           name="email"  
@@ -12,7 +13,8 @@ function SignIn() {
           onChange={() => { console.log('email changed') }}
         />
         </label>
-        <label label="Password" errorText="Invalid password">
+        <label>
+        Password
         <input 
           required
           id="password"
