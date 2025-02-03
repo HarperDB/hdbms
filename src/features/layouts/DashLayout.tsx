@@ -1,9 +1,7 @@
-import { Provider } from "@/components/ui/provider";
 import { Outlet } from "react-router";
 
 function DashLayout() {
   return (
-    <Provider>
     <div>
       <header>
         <nav>
@@ -25,7 +23,6 @@ function DashLayout() {
         <p>Powered by HarperDB</p>
       </footer>
     </div>
-    </Provider>
   )
 }
 
