@@ -1,15 +1,12 @@
-import { Provider } from '@/components/ui/provider';
-import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 import { Outlet } from 'react-router';
 
 function AuthLayout() {
 	return (
-		<Provider>
-		<SimpleGrid columns={[1, 2]}>
-				<Box as='section' display={{ base: "none", md: "block" }}>
-					<Box>
-						<Text as='h1'>HarperDB Studio</Text>
-						<Text as='span'>Manage all your HarperDB instances.</Text>
+		<div>
+				<section>
+					<div>
+						<h1>HarperDB Studio</h1>
+						<span>Manage all your HarperDB instances.</span>
 						<ul>
 							<li>
 								<h3>Manage All Instances</h3>
@@ -50,13 +47,12 @@ function AuthLayout() {
 								</div>
 							</li>
 						</ul>
-					</Box>
-				</Box>
-				<Box as='section' display='flex' justifyContent='center' alignItems='center' minHeight='100vh'>
+					</div>
+				</section>
+				<section>
 					<Outlet />
-				</Box>
-		</SimpleGrid>
-		</Provider>
+				</section>
+		</div>
 	);
 }
 
