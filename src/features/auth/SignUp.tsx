@@ -30,7 +30,7 @@ function SignUp() {
 					</label>
 					<input id="password" name="password" type="password" placeholder="confirm password" />
 				</div>
-				<div className="text-xs ">
+				<div className="text-xs">
 					By creating an account, you agree to the&nbsp;
 					<a
           className='underline'
