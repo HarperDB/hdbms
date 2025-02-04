@@ -5,8 +5,8 @@ function SignUp() {
     <div className="text-white w-sm">
       <h1 className="text-3xl font-light">Sign Up</h1>
 
-      <form>
-      <div className="py-2">
+      <form className="mt-6">
+      <div className="pb-2">
         <label className="block pb-2 text-sm" htmlFor="firstname">
         First Name
         </label>
