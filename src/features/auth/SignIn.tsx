@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 function SignIn() {
   return (
     <div className="text-white">
@@ -29,6 +30,10 @@ function SignIn() {
         </div>
         <button type="submit" className="w-full py-2 mt-6 text-sm rounded-full blue-gradient">Sign In</button>
       </form>
+      <div className="flex px-4 mt-4 underline place-content-between">
+        <Link className="text-sm" to="/sign-up" data-discover="true">Sign up for free</Link>
+        <Link className="text-sm" to="/reset-password" data-discover="true">Reset password</Link>
+        </div>
     </div>
   )
 }
