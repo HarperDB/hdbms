@@ -12,8 +12,7 @@ function SignIn() {
           id="email"
           name="email"  
           type="email"
-          placeholder="email address"
-          onChange={() => { console.log('email changed') }}
+          placeholder="jane.doe@harperdb.io"
         />
         </div>
         <div>
@@ -33,7 +32,7 @@ function SignIn() {
       <div className="flex px-4 mt-4 underline place-content-between">
         <Link className="text-sm" to="/sign-up">Sign up for free</Link>
         <Link className="text-sm" to="/reset-password">Reset password</Link>
-        </div>
+      </div>
     </div>
   )
 }
