@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 function ResetPassword() {
   return (
     <div className="text-white w-sm">
@@ -13,6 +15,10 @@ function ResetPassword() {
           Send Reset Link
         </button>
       </form>
+      <div className="flex px-4 mt-4 underline place-content-between">
+        <Link className="text-sm" to="/">Back to sign in</Link>
+        <Link className="text-sm" to="/sign-up">Sign up for free</Link>
+      </div>
     </div>
   )
 }
