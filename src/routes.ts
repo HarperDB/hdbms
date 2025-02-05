@@ -6,7 +6,34 @@ import clusterRoutes from './features/cluster/routes';
 import instanceRoutes from './features/instance/routes';
 
 // TODO: Setup route module type safety ref:https://reactrouter.com/how-to/route-module-type-safety
-export default [
+
+const HDBLocalInstanceRoutes = [
+	index('./features/auth/LocalSignIn.tsx'),
+	...prefix('local', [
+		// TODO: eliminate /app base route and move all routes to root level
+		layout('./features/layouts/DashLayout.tsx', [
+			// Profile routes ('/app/profile')
+			...profileRoutes,
+
+			// Org specific routes (Clusters List, Billing, Roles, Members, etc...)
+			// (e.g. /app/orgs/:orgId)
+			...organizationRoutes,
+
+			// Cluster routes (Instance List, Create Instance)
+			// (e.g. /app/orgs/:orgId/clusters/:clusterId)
+			...clusterRoutes,
+
+			// Instance routes
+			// (e.g. /app/orgs/:orgId/clusters/:clusterId/instances/:instanceId/*)
+			...instanceRoutes,
+
+			/* TODO: Redirect any unknown route to nearest valid route. */
+		]),
+	]),
+	route('*?', 'catchall.tsx'),
+];
+
+const HDBCloudRoutes = [
 	// Public routes
 	layout('./features/layouts/AuthLayout.tsx', [
 		index('./features/auth/SignIn.tsx'),
@@ -61,7 +88,11 @@ export default [
 			*/
 		]),
 	]),
-
-	// route('/', './App.tsx'),
 	route('*?', 'catchall.tsx'),
 ] satisfies RouteConfig;
+
+console.log('No bueno:', import.meta.env.VITE_REACT_APP_LOCALSTUDIO);
+
+const loadedRoutes = import.meta.env.VITE_REACT_APP_LOCALSTUDIO == 'true' ? HDBLocalInstanceRoutes : HDBCloudRoutes;
+
+export default loadedRoutes;

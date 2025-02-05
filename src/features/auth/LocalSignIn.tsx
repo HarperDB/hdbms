@@ -1,5 +1,6 @@
 function LocalSignIn() {
   return (
+    <main className='flex items-center justify-center h-screen px-6 bg-blue-pink-gradient dark:bg-black-dark'>
     <div className="text-white">
       <h1 className="text-3xl font-light">Please sign into HarperDB</h1>
       <form>
@@ -28,7 +29,23 @@ function LocalSignIn() {
         </div>
         <button type="submit" className="w-full py-2 mt-6 text-sm rounded-full blue-gradient">Sign In</button>
       </form>
+      <button className='fixed p-2 text-white bg-blue-400 rounded-md bottom-4 right-4'
+					  onClick={() => {
+							document.documentElement.classList.toggle(
+								"dark"
+							);
+							localStorage.setItem(
+								"theme",
+								document.documentElement.classList.contains(
+									"dark"
+								)
+									? "dark"
+									: "light"
+							);
+						}}
+				>Toggle Theme</button>
     </div>
+    </main>
   )
 }
 
