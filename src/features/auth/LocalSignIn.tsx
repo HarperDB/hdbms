@@ -1,6 +1,6 @@
 function LocalSignIn() {
   return (
-    <main className='flex items-center justify-center h-screen px-6 bg-blue-pink-gradient dark:bg-black-dark'>
+    <main className='flex items-center justify-center h-screen px-6 blue-pink-gradient dark:bg-black-dark'>
     <div className="text-white">
       <h1 className="text-3xl font-light">Please sign into HarperDB</h1>
       <form>

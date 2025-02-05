@@ -4,7 +4,7 @@
 	"version": "4.12.2",
 	"type": "module",
 	"scripts": {
-		"dev": "react-router dev",
+		"dev": "vite dev",
 		"dev:local": "vite --mode localstudio",
 		"build:stage": "tsc -b && vite build --mode staging",
 		"build:prod": "tsc -b && vite build --mode production",
