@@ -91,8 +91,8 @@ const HDBCloudRoutes = [
 	route('*?', 'catchall.tsx'),
 ] satisfies RouteConfig;
 
-console.log('No bueno:', import.meta.env.VITE_REACT_APP_LOCALSTUDIO);
+console.log('No bueno:', process.env.VITE_REACT_APP_LOCALSTUDIO);
 
-const loadedRoutes = import.meta.env.VITE_REACT_APP_LOCALSTUDIO == 'true' ? HDBLocalInstanceRoutes : HDBCloudRoutes;
+const loadedRoutes = process.env.VITE_REACT_APP_LOCALSTUDIO == 'true' ? HDBLocalInstanceRoutes : HDBCloudRoutes;
 
 export default loadedRoutes;
