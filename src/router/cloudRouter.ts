@@ -6,7 +6,7 @@ import ResetPassword from '@/features/auth/ResetPassword';
 import Organizations from '@/features/organizations';
 import ProtectedRoutes from '@/shared/components/ProtectedRoutes';
 
-const localRouter = createBrowserRouter([
+const cloudRouter = createBrowserRouter([
 	{
 		path: '/',
 		Component: AuthLayout,
@@ -37,4 +37,4 @@ const localRouter = createBrowserRouter([
 	},
 ]);
 
-export default localRouter;
+export default cloudRouter;

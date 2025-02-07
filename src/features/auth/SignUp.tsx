@@ -9,12 +9,14 @@ function SignUp() {
 		formState: { errors: formErrors } 
 	} = useForm<SignUpRequest>();
 
-	const { mutate: signUpSubmit,
-		data: signUpResponse, isLoading, isError, isSuccess, error} = useOnSignUpSubmitMutation({
-			onSuccess: (data, variables, context) => {
-				// navigate('/app');
-			}
-		});
+	const { 
+		mutate: signUpSubmit,
+		data: signUpResponse,
+		isLoading,
+		isError,
+		isSuccess,
+		error
+	} = useOnSignUpSubmitMutation();
 
 	const submitForm: SubmitHandler<SignUpRequest> = ({email, password, firstname, lastname}) => {
 		signUpSubmit({email, password, firstname, lastname})

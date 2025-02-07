@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import { useOnLoginSubmitMutation, SignInRequest } from "@/features/auth/queries/use-signIn"
+import { useOnLoginSubmitMutation, SignInRequest, onLoginSubmit } from "@/features/auth/queries/use-signIn"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 function SignIn() {
@@ -13,14 +13,15 @@ function SignIn() {
      data: loginResponse, isLoading, isError, isSuccess, error} = useOnLoginSubmitMutation({
       onSuccess: (data, variables, context) => {
         // navigate('/app');
+        console.log(headers.getSetCookie())
       }
      });
 
      console.log(formErrors);
 
   const submitForm: SubmitHandler<SignInRequest> = ({email, password}) =>{
-    loginSubmit({email, password})
-    console.log(loginResponse)
+      loginSubmit({email, password})
+      console.log(loginResponse);
   }
 
   return (
