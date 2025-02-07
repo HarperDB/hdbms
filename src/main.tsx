@@ -5,7 +5,7 @@ import LocalApp from "@/LocalApp";
 import "@/index.css";
 
 const isLocalStudio = import.meta.env.VITE_REACT_APP_LOCALSTUDIO == "true";
-console.log("No bueno:", isLocalStudio);
+
 ReactDOM.createRoot(
   document.getElementById("root")!
 ).render(

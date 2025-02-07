@@ -33,7 +33,7 @@ const HDBLocalInstanceRoutes = [
 	route('*?', 'catchall.tsx'),
 ];
 
-const HDBCloudRoutes = [
+const HDBFabricRoutes = [
 	// Public routes
 	layout('./features/layouts/AuthLayout.tsx', [
 		index('./features/auth/SignIn.tsx'),
@@ -93,6 +93,6 @@ const HDBCloudRoutes = [
 
 console.log('No bueno:', process.env.VITE_REACT_APP_LOCALSTUDIO);
 
-const loadedRoutes = process.env.VITE_REACT_APP_LOCALSTUDIO == 'true' ? HDBLocalInstanceRoutes : HDBCloudRoutes;
+const loadedRoutes = process.env.VITE_REACT_APP_LOCALSTUDIO == 'true' ? HDBLocalInstanceRoutes : HDBFabricRoutes;
 
 export default loadedRoutes;
