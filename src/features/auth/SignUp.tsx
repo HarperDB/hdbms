@@ -1,34 +1,72 @@
 import { Link } from 'react-router';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { SignUpRequest, useOnSignUpSubmitMutation } from '@/features/auth/queries/use-signup';
 
 function SignUp() {
+	const {
+		register, 
+		handleSubmit, 
+		formState: { errors: formErrors } 
+	} = useForm<SignUpRequest>();
+
+	const { mutate: signUpSubmit,
+		data: signUpResponse, isLoading, isError, isSuccess, error} = useOnSignUpSubmitMutation({
+			onSuccess: (data, variables, context) => {
+				// navigate('/app');
+			}
+		});
+
+	const submitForm: SubmitHandler<SignUpRequest> = ({email, password, firstname, lastname}) => {
+		signUpSubmit({email, password, firstname, lastname})
+		console.log(signUpResponse);
+	}
+	
 	return (
 		<div className="text-white w-sm">
 			<h1 className="text-3xl font-light">Sign Up</h1>
-
-			<form className="mt-6">
+			<form className="mt-6" onSubmit={handleSubmit(submitForm)}>
 				<div className="mb-2">
 					<label className="block pb-2 text-sm" htmlFor="firstname">
 						First Name
 					</label>
-					<input id="firstname" name="firstname" type="text" placeholder="Jane" />
+					<input 
+						id="firstname" 
+						{...register("firstname", { required: true })}
+						type="text"
+						placeholder="Jane" />
 				</div>
 				<div className="my-4">
 					<label className="block pb-2 text-sm" htmlFor="lastname">
 						Last Name
 					</label>
-					<input id="lastname" name="lastname" type="text" placeholder="Doe" />
+					<input
+						id="lastname"
+						{...register("lastname", { required: true })}
+						type="text" 
+						placeholder="Doe"
+					/>
 				</div>
 				<div className="my-4">
 					<label className="block pb-2 text-sm" htmlFor="email">
 						Email
 					</label>
-					<input id="email" name="email" type="email" placeholder="jane.doe@harperdb.io" />
+					<input
+					id="email"
+					{...register("email", { required: true })}
+					type="email"
+					placeholder="jane.doe@harperdb.io" 
+					/>
 				</div>
 				<div className="my-4">
 					<label className="block pb-2 text-sm" htmlFor="password">
 						Password
 					</label>
-					<input id="password" name="password" type="password" placeholder="confirm password" />
+					<input
+						id="password"
+						{...register("password", { required: true })}
+						type="password"
+						placeholder="confirm password"
+					/>
 				</div>
 				<div className="text-xs">
 					By creating an account, you agree to the&nbsp;
