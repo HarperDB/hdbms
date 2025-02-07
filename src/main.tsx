@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import StudioApp from "@/StudioApp";
+import CloudApp from "@/CloudApp";
 import LocalApp from "@/LocalApp";
 import "@/index.css";
 
@@ -10,6 +10,6 @@ ReactDOM.createRoot(
   document.getElementById("root")!
 ).render(
   <React.StrictMode>
-      {isLocalStudio ? <LocalApp /> : <StudioApp />}
+      {isLocalStudio ? <LocalApp /> : <CloudApp />}
   </React.StrictMode>
 );

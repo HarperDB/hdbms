@@ -14,12 +14,12 @@ type SignInResponse = {
 	lastname: string;
 };
 
-const onLoginSubmit = async ({ email, password }: SignInRequest): Promise<SignInResponse> => {
+export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise<SignInResponse> => {
 	const { data: response } = await apiClient.post('/Login', {
 		email,
 		password,
 	});
-	if (response) {
+	if (response.ok) {
 		return response as SignInResponse;
 	}
 	throw new Error('Something went wrong');
