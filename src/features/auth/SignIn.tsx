@@ -1,23 +1,28 @@
 import { Link } from "react-router"
-import { useOnLoginSubmitMutation, SignInRequest, onLoginSubmit } from "@/features/auth/queries/use-signIn"
+import { useOnLoginSubmitMutation, SignInRequest } from "@/features/auth/queries/useSignIn"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { errors: formErrors },
+    // formState: { errors: formErrors },
   } = useForm<SignInRequest>()
   
   const { mutate: loginSubmit,
-     data: loginResponse, isLoading, isError, isSuccess, error} = useOnLoginSubmitMutation({
-      onSuccess: (data, variables, context) => {
-        // navigate('/app');
-        console.log(headers.getSetCookie())
-      }
+     data: loginResponse,
+    //  isLoading,
+    //  isError,
+    //  isSuccess,
+    //  error
+    } = useOnLoginSubmitMutation({
+      // onSuccess: (data, variables, context) => {
+      //   // navigate('/app');
+      //   console.log(headers.getSetCookie())
+      // }
      });
 
-     console.log(formErrors);
+    //  console.log(formErrors);
 
   const submitForm: SubmitHandler<SignInRequest> = ({email, password}) =>{
       loginSubmit({email, password})

@@ -10,7 +10,7 @@ function DashLayout() {
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/dashboard">Dashboard</a>
+              <a href="/app">Dashboard</a>
             </li>
           </ul>
         </nav>

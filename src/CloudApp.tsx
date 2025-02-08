@@ -14,7 +14,7 @@ function StudioApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={cloudRouter} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
     </QueryClientProvider>
   )
 }
