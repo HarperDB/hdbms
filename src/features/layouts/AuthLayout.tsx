@@ -12,6 +12,7 @@ function ListItem ({ title, children }: { title: string, children: React.ReactNo
 
 
 function AuthLayout() {
+
 	return (
 		<div className='grid h-screen grid-cols-1 md:grid-cols-2'>
 				<section className='items-center justify-center hidden text-white md:flex blue-pink-gradient'>

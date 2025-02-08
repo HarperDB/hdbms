@@ -4,7 +4,7 @@ import AuthLayout from '@/features/layouts/AuthLayout';
 import SignUp from '@/features/auth/SignUp';
 import ResetPassword from '@/features/auth/ResetPassword';
 import Organizations from '@/features/organizations';
-import ProtectedRoutes from '@/shared/components/ProtectedRoutes';
+import ProtectedRoutes from '@/features/layouts/ProtectedRoutes';
 
 const cloudRouter = createBrowserRouter([
 	{

@@ -1,21 +1,21 @@
 import { Link } from 'react-router';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { SignUpRequest, useOnSignUpSubmitMutation } from '@/features/auth/queries/use-signup';
+import { SignUpRequest, useOnSignUpSubmitMutation } from '@/features/auth/queries/useSignUp';
 
 function SignUp() {
 	const {
 		register, 
 		handleSubmit, 
-		formState: { errors: formErrors } 
+		// formState: { errors: formErrors } 
 	} = useForm<SignUpRequest>();
 
 	const { 
 		mutate: signUpSubmit,
 		data: signUpResponse,
-		isLoading,
-		isError,
-		isSuccess,
-		error
+		// isLoading,
+		// isError,
+		// isSuccess,
+		// error
 	} = useOnSignUpSubmitMutation();
 
 	const submitForm: SubmitHandler<SignUpRequest> = ({email, password, firstname, lastname}) => {
