@@ -45,11 +45,16 @@ function ProjectIcon() {
 }
 function FolderIcon({ toggleClosed, isOpen }) {
 	return (
-		// eslint-disable-next-line jsx-a11y/no-static-element-interactions
+		// TODO: A11y on this is not good at all..... Need to refactor the file tree to make the file tree more accessible for ALL users.
 		<i
 			onClick={toggleClosed}
 			onKeyDown={toggleClosed}
 			className={cn(`folder-icon fas ${isOpen ? 'fa-folder-open' : 'fa-folder'}`)}
+			tabIndex={0}
+			aria-expanded={isOpen}
+			aria-controls="folder"
+			aria-label={isOpen ? 'close folder' : 'open folder'}
+			role="button"
 		/>
 	);
 }
