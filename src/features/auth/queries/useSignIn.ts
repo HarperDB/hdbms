@@ -19,7 +19,7 @@ export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise
 		email,
 		password,
 	});
-	if (response.ok) {
+	if (response) {
 		return response as SignInResponse;
 	}
 	throw new Error('Something went wrong');
