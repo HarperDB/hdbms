@@ -40,8 +40,19 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
-function ProjectIcon() {
-	return <i className={cn(`project-icon fas fa-file-code`)} />;
+function ProjectIcon({ toggleClosed, isOpen }) {
+	return (
+		<i
+			onClick={toggleClosed}
+			onKeyDown={toggleClosed}
+			className={cn(`project-icon fas fa-file-code`)}
+			tabIndex={0}
+			aria-expanded={isOpen}
+			aria-controls="folder"
+			aria-label={isOpen ? 'close project' : 'open project'}
+			role="button"
+		/>
+	);
 }
 function FolderIcon({ toggleClosed, isOpen }) {
 	return (
@@ -176,7 +187,7 @@ function Folder({
 	selectedFolder,
 	selectedPackage,
 }) {
-	const [open, setOpen] = useState(true);
+	const [open, setOpen] = useState(false);
 
 	const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 	const fileExtension = parseFileExtension(directoryEntry.name);
@@ -185,7 +196,7 @@ function Folder({
 	// top-level dir === package
 	// FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
 	if (directoryEntry.path.split('/').length === 2) {
-		Icon = () => ProjectIcon();
+		Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else if (directoryEntry.entries) {
 		Icon = () => FolderIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else {
