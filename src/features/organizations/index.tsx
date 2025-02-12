@@ -1,7 +1,7 @@
 function Organizations() {
   return (
     <div>
-      <h1>Organizations</h1>
+      <h1>Organizations List</h1>
     </div>
   )
 }

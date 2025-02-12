@@ -1,8 +1,9 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useOnLoginSubmitMutation, SignInRequest } from "@/features/auth/queries/useSignIn"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 function SignIn() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -17,7 +18,7 @@ function SignIn() {
     //  error
     } = useOnLoginSubmitMutation({
       // onSuccess: (data, variables, context) => {
-      //   // navigate('/app');
+        // navigate('/app');
       //   console.log(headers.getSetCookie())
       // }
      });
@@ -27,6 +28,9 @@ function SignIn() {
   const submitForm: SubmitHandler<SignInRequest> = ({email, password}) =>{
       loginSubmit({email, password})
       console.log(loginResponse);
+      if(loginResponse){
+        navigate('/');
+      }
   }
 
   return (

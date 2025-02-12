@@ -3,17 +3,17 @@ import { Navigate } from "react-router";
 import { useOnGetCurrentUser } from "@/features/layouts/queries/useOnGetCurrentUser";
 
 const ProtectedRoutes = () => {
-		const currentUser = useOnGetCurrentUser();
+		const {isPending, isError, isSuccess, data: currentUser} = useOnGetCurrentUser();
 		console.log(currentUser);
-		if(currentUser.isPending) {
+		if(isPending) {
 			return <div>Loading...</div>;
 		}
 
-		if(currentUser.isError) {
-			return <Navigate to="/" />;
+		if(isError) {
+			return <Navigate to="/sign-in" />;
 		}
 
-		if(currentUser.isSuccess) {
+		if(isSuccess) {
 			return <DashLayout />;
 		}
 	// TODO: Use cookies to check if user is logged in

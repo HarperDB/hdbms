@@ -91,7 +91,7 @@ function SignUp() {
 					Sign Up
 				</button>
 				<div className="w-full px-4 mt-4 text-center underline place-content-between">
-					<Link className="text-sm" to="/">
+					<Link className="text-sm" to="/sign-in">
 						Already have an account? Sign in instead.
 					</Link>
 				</div>

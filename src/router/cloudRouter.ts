@@ -1,10 +1,11 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router';
-import SignIn from '@/features/auth/SignIn';
-import AuthLayout from '@/features/layouts/AuthLayout';
-import SignUp from '@/features/auth/SignUp';
-import ResetPassword from '@/features/auth/ResetPassword';
-import Organizations from '@/features/organizations';
-import ProtectedRoutes from '@/features/layouts/ProtectedRoutes';
+const AuthLayout = lazy(() => import('@/features/layouts/AuthLayout'));
+const SignIn = lazy(() => import('@/features/auth/SignIn'));
+const SignUp = lazy(() => import('@/features/auth/SignUp'));
+const ResetPassword = lazy(() => import('@/features/auth/ResetPassword'));
+const Organizations = lazy(() => import('@/features/organizations'));
+const ProtectedRoutes = lazy(() => import('@/features/layouts/ProtectedRoutes'));
 
 const cloudRouter = createBrowserRouter([
 	{
@@ -12,7 +13,7 @@ const cloudRouter = createBrowserRouter([
 		Component: AuthLayout,
 		children: [
 			{
-				index: true,
+				path: 'sign-in',
 				Component: SignIn,
 			},
 			{
@@ -26,7 +27,7 @@ const cloudRouter = createBrowserRouter([
 		],
 	},
 	{
-		path: '/app',
+		path: '/',
 		Component: ProtectedRoutes,
 		children: [
 			{
