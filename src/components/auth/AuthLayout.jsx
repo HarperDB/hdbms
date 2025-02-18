@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router';
 import { Col, Container, Row } from 'reactstrap';
 
-function AuthLayout({ children }) {
+function AuthLayout() {
 	return (
 		<Container fluid="xs" className="h-100">
 			<Row xs="1" sm="2" className="h-100">

@@ -40,12 +40,34 @@ function directorySortComparator(a, b) {
 
 const isFolder = (entry) => Boolean(entry.entries);
 
-function ProjectIcon() {
-	return <i className={cn(`project-icon fas fa-file-code`)} />;
+function ProjectIcon({ toggleClosed, isOpen }) {
+	return (
+		<i
+			onClick={toggleClosed}
+			onKeyDown={toggleClosed}
+			className={cn(`project-icon fas fa-file-code`)}
+			tabIndex={0}
+			aria-expanded={isOpen}
+			aria-controls="folder"
+			aria-label={isOpen ? 'close project' : 'open project'}
+			role="button"
+		/>
+	);
 }
-function FolderIcon({ toggleClosed }) {
-	// eslint-disable-next-line
-	return <i onClick={toggleClosed} onKeyDown={toggleClosed} className={cn(`folder-icon fas fa-folder-open`)} />;
+function FolderIcon({ toggleClosed, isOpen }) {
+	return (
+		// TODO: A11y on this is not good at all..... Need to refactor the file tree to make the file tree more accessible for ALL users.
+		<i
+			onClick={toggleClosed}
+			onKeyDown={toggleClosed}
+			className={cn(`folder-icon fas ${isOpen ? 'fa-folder-open' : 'fa-folder'}`)}
+			tabIndex={0}
+			aria-expanded={isOpen}
+			aria-controls="folder"
+			aria-label={isOpen ? 'close folder' : 'open folder'}
+			role="button"
+		/>
+	);
 }
 
 function FiletypeIcon({ extension }) {
@@ -99,7 +121,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 	const deployFileIconClass = 'deploy-project';
 	const isFileSelected = directoryEntry.path === selectedFile;
 	const isFolderSelected = directoryEntry.path === selectedFolder?.path;
-
 	// file receives open/close toggle func from
 	// parent. if it's a dir, calls toggle func on click
 	// if it's a flat file, calls onFileSelect so
@@ -119,7 +140,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 		// that we don't untoggle directory selection; leave selected if icon clicked.
 		const iconWasClicked =
 			e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass);
-
 		// if icon's clicked, select, but don't unselect.
 		// if (iconWasClicked) return;
 
@@ -176,7 +196,7 @@ function Folder({
 	// top-level dir === package
 	// FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
 	if (directoryEntry.path.split('/').length === 2) {
-		Icon = () => ProjectIcon();
+		Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else if (directoryEntry.entries) {
 		Icon = () => FolderIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else {
@@ -188,7 +208,12 @@ function Folder({
 			{
 				// FIXME: don't hardcode 'components', get from root .name property of fileTree.
 				directoryEntry.name !== 'components' ? (
-					<li key={directoryEntry.key} className={cn('folder-container')}>
+					<li
+						key={directoryEntry.key}
+						className={cn(
+							`${directoryEntry.entries ? 'folder-container' : 'file-container'} ${open ? 'folder-open' : 'folder-closed'}`
+						)}
+					>
 						{directoryEntry.package ? (
 							<Package
 								selectedPackage={selectedPackage}

@@ -81,6 +81,62 @@
 					padding: 0 !important;
 					padding-inline-start: 8px !important;
 
+					.file-container {
+						button::before,
+						i::before {
+							background: transparent !important;
+							border: 0;
+							font-size: 16px !important;
+							margin: 0;
+							outline: none !important;
+							padding: 0;
+						}
+
+						.package-text,
+						.filename-text {
+							color: $color-grey !important;
+							font-size: 14px !important;
+							padding-left: 8px;
+						}
+
+						.file,
+						.package {
+							background: transparent;
+							border: 0;
+							margin: 1px 0;
+							outline: none !important; // TODO: fix this because it is not accessible; style differently
+							padding: 3px;
+							text-align: left;
+							white-space: nowrap;
+
+							.filetype-js {
+								color: $color-warning;
+							}
+
+							.filetype-yaml {
+								color: $color-primary;
+							}
+
+							.filetype-unknown {
+								color: $color-lightgrey;
+							}
+
+							&.file-selected {
+								.filename-text {
+									color: $color-white !important;
+
+									&::after {
+										content: '\f35a' !important;
+										font-family: 'Font Awesome 5 Free', sans-serif !important;
+										font-size: 16px;
+										position: absolute;
+										right: 8px;
+									}
+								}
+							}
+						}
+					}
+
 					.folder-container {
 						button::before,
 						i::before {
@@ -118,18 +174,6 @@
 								color: $color-info;
 							}
 
-							.filetype-js {
-								color: $color-warning;
-							}
-
-							.filetype-yaml {
-								color: $color-primary;
-							}
-
-							.filetype-unknown {
-								color: $color-lightgrey;
-							}
-
 							&.folder-selected {
 								.filename-text {
 									color: $color-white !important;
@@ -157,6 +201,12 @@
 							}
 						}
 					}
+				}
+				.folder-open ~ li {
+					display: block;
+				}
+				.folder-closed ~ li {
+					display: none;
 				}
 			}
 		}
