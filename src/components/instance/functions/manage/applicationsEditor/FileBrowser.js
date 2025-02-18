@@ -187,7 +187,7 @@ function Folder({
 	selectedFolder,
 	selectedPackage,
 }) {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 
 	const entries = [...(directoryEntry.entries || [])].sort(directorySortComparator);
 	const fileExtension = parseFileExtension(directoryEntry.name);
