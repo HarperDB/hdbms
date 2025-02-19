@@ -57,32 +57,6 @@
 } */
 
 :root {
-  --background: hsl(255, 40%, 24%); /* Dark Purple: #312556 */
-  --foreground: hsl(0 0% 3.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(0 0% 3.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(0 0% 3.9%);
-  --primary: 	hsl(244, 40%, 39%); /* Purple #403b8a */
-  --primary-foreground: hsl(0 0% 98%);
-  --secondary: hsl(0 0% 96.1%);
-  --secondary-foreground: hsl(0 0% 9%);
-  --muted: hsl(0 0% 96.1%);
-  --muted-foreground: hsl(0 0% 45.1%);
-  --accent: hsl(0 0% 96.1%);
-  --accent-foreground: hsl(0 0% 9%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(0 0% 89.8%);
-  --input: hsl(0 0% 89.8%);
-  --ring: hsl(0 0% 3.9%);
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-  --radius: 0.6rem;
-
   --white: hsl(0, 0%, 99.61%); /* #fefefe */
   --black: hsl(0, 0%, 12.94%); /* #212121 */
   /* --black-light: hsl(0, 0%, 12%); #ffffff */
@@ -110,11 +84,40 @@
   --purple: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
   --purple-light: hsl(289.87, 39.9%, 37.84%); /* #7a3a87 */
   --purple-dark: hsl(254.69, 39.84%, 24.12%); /* #312556 */
+  --purple-dark-faded: hsl(255deg 27% 32%); /* #312556 */
+
+  --background: hsl(255, 40%, 24%); /* Dark Purple: #312556 */
+  --foreground: hsl(0 0% 3.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 3.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 3.9%);
+  --primary: 	hsl(244, 40%, 39%); /* Purple #403b8a */
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(0 0% 96.1%);
+  --secondary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 96.1%);
+  --muted-foreground: hsl(0 0% 45.1%);
+  --accent: hsl(0 0% 96.1%);
+  --accent-foreground: hsl(0 0% 9%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 89.8%);
+  --input: hsl(0 0% 89.8%);
+  --ring: var(--purple-light);
+  --chart-1: hsl(12 76% 61%);
+  --chart-2: hsl(173 58% 39%);
+  --chart-3: hsl(197 37% 24%);
+  --chart-4: hsl(43 74% 66%);
+  --chart-5: hsl(27 87% 67%);
+  --radius: 0.6rem;
+
+ 
 
 }
 
 .dark {
-  --background: hsl(0, 0%, 7%); /* Dark Black: #111111 */
+  --background: var(--color-black-dark); /* Dark Black: #111111 */
   --foreground: hsl(0 0% 98%);
   --card: hsl(0 0% 3.9%);
   --card-foreground: hsl(0 0% 98%);
@@ -132,7 +135,7 @@
   --destructive-foreground: hsl(0 0% 98%);
   --border: hsl(0 0% 14.9%);
   --input: hsl(0 0% 14.9%);
-  --ring: hsl(0 0% 83.1%);
+  --ring: var(--purple-light);
   --chart-1: hsl(220 70% 50%);
   --chart-2: hsl(160 60% 45%);
   --chart-3: hsl(30 80% 55%);
@@ -158,7 +161,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
-  --color-input: var(--input);
+  --color-input: var(--purple-dark);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -198,7 +201,8 @@
 
   --color-purple: var(--purple);
   --color-purple-light: var(--purple-light);
-  --color-purple-dark: var(--purple-dark);  
+  --color-purple-dark: var(--purple-dark);
+  --color-purple-dark-faded: var(--purple-dark-faded);
 
 
   --checkmark-icon: url('@/assets/checkmark.svg');
