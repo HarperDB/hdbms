@@ -1,20 +1,31 @@
 import { createBrowserRouter } from 'react-router';
 import LocalSignIn from '@/features/auth/LocalSignIn';
+import ProtectedRoutes from '@/features/layouts/ProtectedRoutes';
+import Instance from '@/features/instance';
+import ClusterList from '@/features/organization';
 
 const localRouter = createBrowserRouter([
 	{
-		path: '/',
+		path: '/sign-in',
 		Component: LocalSignIn,
-		// children: [
-		//   {
-		//     path: "shows/:showId",
-		//     Component: Show,
-		//     loader: ({ request, params }) =>
-		//       fetch(`/api/show/${params.id}.json`, {
-		//         signal: request.signal,
-		//       }),
-		//   },
-		// ],
+	},
+	{
+		path: '/',
+		Component: ProtectedRoutes,
+		children: [
+			{
+				index: true,
+				Component: Instance,
+			},
+			{
+				path: 'clusters',
+				Component: ClusterList, // When clicking a cluster, it should be a direct link to the other localhost studio. ex. https://192.168.1:9925
+			},
+			{
+				path: 'clusters/:clusterId/instances',
+				Component: Instance,
+			},
+		],
 	},
 ]);
 
