@@ -7,35 +7,32 @@ function SignIn() {
   const {
     register,
     handleSubmit,
-    // formState: { errors: formErrors },
+    formState: { errors: formErrors, isLoading: isFormLoading, isDirty: isFormDirty },
   } = useForm<SignInRequest>()
   
-  const { mutate: loginSubmit,
-     data: loginResponse,
-    //  isLoading,
+  const { mutate: submitLoginData,
+     isPending: isSubmitLoginDataPending,
     //  isError,
     //  isSuccess,
     //  error
-    } = useOnLoginSubmitMutation({
-      // onSuccess: (data, variables, context) => {
-        // navigate('/app');
-      //   console.log(headers.getSetCookie())
-      // }
-     });
+    } = useOnLoginSubmitMutation();
 
     //  console.log(formErrors);
 
-  const submitForm: SubmitHandler<SignInRequest> = ({email, password}) =>{
-      loginSubmit({email, password})
-      console.log(loginResponse);
-      if(loginResponse){
+  const submitForm: SubmitHandler<SignInRequest> = async ({email, password}) => {
+    await submitLoginData({email, password}, {
+      onSuccess: () => {
         navigate('/');
+      },
+      onError: (error) => {
+        console.log('error:', error);
       }
+    })
   }
 
   return (
     <div className="text-white">
-      <h1 className="text-3xl font-light">Sign in to HarperDB Studio</h1>
+      <h1 className="text-3xl font-light">Sign in to Harper Fabric</h1>
       <form onSubmit={handleSubmit(submitForm)}>
         <div className="py-4">
         <label className="block pb-2 text-sm" htmlFor="email">
@@ -59,7 +56,13 @@ function SignIn() {
           placeholder="password" 
         />
         </div>
-        <button type="submit" className="w-full py-2 mt-6 text-sm rounded-full blue-gradient">Sign In</button>
+        <button 
+          type="submit" 
+          className="w-full py-2 mt-6 text-sm rounded-full blue-gradient"
+          disabled={isSubmitLoginDataPending || isFormLoading || isFormDirty} 
+        >
+          Sign In
+        </button>
       </form>
       <div className="flex px-4 mt-4 underline place-content-between">
         <Link className="text-sm" to="/sign-up">Sign up for free</Link>

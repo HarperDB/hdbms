@@ -2,7 +2,7 @@ function LocalSignIn() {
   return (
     <main className='flex items-center justify-center h-screen px-6 blue-pink-gradient dark:bg-black-dark'>
     <div className="text-white">
-      <h1 className="text-3xl font-light">Please sign into HarperDB</h1>
+      <h1 className="text-3xl font-light">Please sign into Harper Fabric</h1>
       <form>
         <div className="py-4">
         <label className="block pb-2 text-sm" htmlFor="instanceuser">

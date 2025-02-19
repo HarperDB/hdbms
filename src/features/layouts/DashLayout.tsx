@@ -20,7 +20,7 @@ function DashLayout() {
       </div>
       <footer>
         <p>© 2021</p>
-        <p>Powered by HarperDB</p>
+        <p>Powered by Harper Systems</p>
       </footer>
     </div>
   )

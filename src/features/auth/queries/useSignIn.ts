@@ -1,5 +1,5 @@
 import apiClient from '@/config/apiClient';
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
 export type SignInRequest = {
@@ -15,23 +15,20 @@ type SignInResponse = {
 };
 
 export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise<SignInResponse> => {
-	const { data: response } = await apiClient.post('/Login', {
+	const { data } = await apiClient.post('/Login', {
 		email,
 		password,
 	});
-	if (response) {
-		return response as SignInResponse;
+	if (data) {
+		// return data as SignInResponse;
+		return data;
+	} else {
+		throw new Error('Something went wrong');
 	}
-	throw new Error('Something went wrong');
 };
 
-export function useOnLoginSubmitMutation(options?: UseMutationOptions<SignInResponse, Error, SignInRequest>) {
+export function useOnLoginSubmitMutation() {
 	return useMutation<SignInResponse, Error, SignInRequest>({
-		...options,
-		mutationFn: onLoginSubmit,
-		onSuccess: (data, variables, context) => {
-			options?.onSuccess?.(data, variables, context);
-			// Shared on success logic
-		},
+		mutationFn: (loginData) => onLoginSubmit(loginData),
 	});
 }
