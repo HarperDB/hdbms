@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --color-white: #fefefe;
+/* @theme { */
+  /* --color-white: #fefefe;
   --color-black:#212121;
   --color-black-light: #ffffff1c;
   --color-black-dark:#111111;
@@ -29,28 +31,185 @@
 
   --color-purple: #403b8a;
   --color-purple-light: #7a3a87;
-  --color-purple-dark: #312556;
+  --color-purple-dark: #312556; */
 
-  --checkmark-icon: url('@/assets/checkmark.svg');
-}
+  /* --checkmark-icon: url('@/assets/checkmark.svg'); */
+/* } */
 
 .blue-pink-gradient {
   background: linear-gradient(44.5deg, var(--color-blue-400) 39.04%, var(--color-pink) 98.58%);
 }
 
-.blue-gradient {
+/* .blue-gradient {
   background: linear-gradient(90deg, #30cbfd 0%, #4b5eec 100%);
-}
+} */
 
-input {
-  @apply w-full px-4 py-2 font-light text-white border border-none rounded-md bg-black-light placeholder:text-sm;
+/* input {
+  @apply w-full px-4 py-2 font-light text-white border border-none rounded-md placeholder:text-sm;
 
-  
   @variant focus {
     @apply outline-none ring-1 ring-purple-light border-purple-light
   }
-  
+
   @variant dark {
     @apply bg-black border-gray-600 
+  }
+} */
+
+:root {
+  --background: hsl(255, 40%, 24%); /* Dark Purple: #312556 */
+  --foreground: hsl(0 0% 3.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 3.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 3.9%);
+  --primary: 	hsl(244, 40%, 39%); /* Purple #403b8a */
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(0 0% 96.1%);
+  --secondary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 96.1%);
+  --muted-foreground: hsl(0 0% 45.1%);
+  --accent: hsl(0 0% 96.1%);
+  --accent-foreground: hsl(0 0% 9%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 89.8%);
+  --input: hsl(0 0% 89.8%);
+  --ring: hsl(0 0% 3.9%);
+  --chart-1: hsl(12 76% 61%);
+  --chart-2: hsl(173 58% 39%);
+  --chart-3: hsl(197 37% 24%);
+  --chart-4: hsl(43 74% 66%);
+  --chart-5: hsl(27 87% 67%);
+  --radius: 0.6rem;
+
+  --white: hsl(0, 0%, 99.61%); /* #fefefe */
+  --black: hsl(0, 0%, 12.94%); /* #212121 */
+  /* --black-light: hsl(0, 0%, 12%); #ffffff */
+  --black-dark: hsl(0, 0%, 6.67%); /* #111111 */
+
+  --grey: hsl(0, 0%, 60.39%); /* #9a9a9a */
+  --grey-100: hsl(0, 0%, 93.73%); /* #efefef */
+  --grey-200: hsl(0, 0%, 92.94%); /* #ededed */
+  --grey-300: hsl(0, 0%, 86.67%); /* #dddddd */
+  --grey-400: hsl(0, 0%, 41.18%); /* #696969 */
+  --grey-500: hsl(0, 0%, 33.33%); /* #555555 */
+  --grey-600: hsl(0, 0%, 13.73%); /* #232323 */
+
+  --red: hsl(336.84, 79%, 60.78%); /* #ea4c89 */
+  --green: hsl(151.07, 49.12%, 55.29%); /* #55c58f */
+  --yellow: hsl(38.82, 100%, 50%); /* #ffa500 */
+  --pink: hsl(288.11, 100%, 58.43%); /* #d52bff */
+
+  --blue: hsl(232.92, 80.9%, 60.98%); /* #4b5eec */
+  --blue-100: hsl(194.63, 98.09%, 59.02%); /* #30cbfd */
+  --blue-200: hsl(240, 100%, 88.43%); /* #c4c4ff */
+  --blue-300: hsl(241.05, 100%, 77.65%); /* #8f8dff */
+  --blue-400: hsl(253.93, 100%, 41.37%); /* #3100d3 */
+
+  --purple: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
+  --purple-light: hsl(289.87, 39.9%, 37.84%); /* #7a3a87 */
+  --purple-dark: hsl(254.69, 39.84%, 24.12%); /* #312556 */
+
+}
+
+.dark {
+  --background: hsl(0, 0%, 7%); /* Dark Black: #111111 */
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(0 0% 3.9%);
+  --card-foreground: hsl(0 0% 98%);
+  --popover: hsl(0 0% 3.9%);
+  --popover-foreground: hsl(0 0% 98%);
+  --primary: hsl(0 0% 98%);
+  --primary-foreground: hsl(0 0% 9%);
+  --secondary: hsl(0 0% 14.9%);
+  --secondary-foreground: hsl(0 0% 98%);
+  --muted: hsl(0 0% 14.9%);
+  --muted-foreground: hsl(0 0% 63.9%);
+  --accent: hsl(0 0% 14.9%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(0 0% 14.9%);
+  --input: hsl(0 0% 14.9%);
+  --ring: hsl(0 0% 83.1%);
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-white: var(--white);
+  --color-black: var(--black);
+  /* --color-black-light: var(--black-light); */
+  --color-black-dark: var(--black-dark);
+
+  --color-grey: var(--grey);
+  --color-grey-100: var(--grey-100);
+  --color-grey-200: var(--grey-200);
+  --color-grey-300: var(--grey-300);
+  --color-grey-400: var(--grey-400);
+  --color-grey-500: var(--grey-500);
+  --color-grey-600: var(--grey-600);
+
+  --color-red: var(--red);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-pink: var(--pink);
+
+  --color-blue: var(--blue);
+  --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
+  --color-blue-300: var(--blue-300);
+  --color-blue-400: var(--blue-400);
+  --color-blue-gradient: 90deg, var(--blue-100) 0%, var(--blue) 100%;
+  --color-blue-none: 90deg, var(--blue) 0%, var(--blue) 100%;
+
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --color-purple-dark: var(--purple-dark);  
+
+
+  --checkmark-icon: url('@/assets/checkmark.svg');
+  
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

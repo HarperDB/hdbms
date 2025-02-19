@@ -59,7 +59,7 @@ function AuthLayout() {
 						</ul>
 					</div>
 				</section>
-				<section className='flex items-center justify-center px-6 bg-purple-dark dark:bg-black-dark'>
+				<section className='flex items-center justify-center px-6'>
 					<Outlet />
 				</section>
 				<button className='fixed p-2 text-white bg-blue-400 rounded-md bottom-4 right-4'
