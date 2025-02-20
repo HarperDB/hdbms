@@ -4,57 +4,9 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* @theme { */
-  /* --color-white: #fefefe;
-  --color-black:#212121;
-  --color-black-light: #ffffff1c;
-  --color-black-dark:#111111;
-
-  --color-grey: #9a9a9a;
-  --color-grey-100: #efefef;
-  --color-grey-200: #ededed;
-  --color-grey-300: #dddddd;
-  --color-grey-400: #696969;
-  --color-grey-500: #555555;
-  --color-grey-600: #232323;
-
-  --color-red: #ea4c89;
-  --color-green: #55c58f;
-  --color-yellow: #ffa500;
-  --color-pink: #d52bff;
-
-  --color-blue: #4b5eec;
-  --color-blue-100: #30cbfd;
-  --color-blue-200: #c4c4ff;
-  --color-blue-300: #8f8dff;
-  --color-blue-400: #3100d3;
-
-  --color-purple: #403b8a;
-  --color-purple-light: #7a3a87;
-  --color-purple-dark: #312556; */
-
-  /* --checkmark-icon: url('@/assets/checkmark.svg'); */
-/* } */
-
 .blue-pink-gradient {
   background: linear-gradient(44.5deg, var(--color-blue-400) 39.04%, var(--color-pink) 98.58%);
 }
-
-/* .blue-gradient {
-  background: linear-gradient(90deg, #30cbfd 0%, #4b5eec 100%);
-} */
-
-/* input {
-  @apply w-full px-4 py-2 font-light text-white border border-none rounded-md placeholder:text-sm;
-
-  @variant focus {
-    @apply outline-none ring-1 ring-purple-light border-purple-light
-  }
-
-  @variant dark {
-    @apply bg-black border-gray-600 
-  }
-} */
 
 :root {
   --white: hsl(0, 0%, 99.61%); /* #fefefe */
@@ -111,8 +63,6 @@
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
-
- 
 
 }
 
@@ -204,9 +154,8 @@
   --color-purple-dark: var(--purple-dark);
   --color-purple-dark-faded: var(--purple-dark-faded);
 
-
   --checkmark-icon: url('@/assets/checkmark.svg');
-  
+
 }
 
 @layer base {

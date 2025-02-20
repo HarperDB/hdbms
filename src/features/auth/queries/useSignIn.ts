@@ -20,6 +20,7 @@ export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise
 		password,
 	});
 	if (data) {
+		console.log('headers', Headers);
 		// return data as SignInResponse;
 		return data;
 	} else {
