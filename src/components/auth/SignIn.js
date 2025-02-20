@@ -71,7 +71,7 @@ function SignIn() {
 			) : (
 				<>
 					<Form>
-						<h2 className="mb-2 instructions">Sign in to HarperDB Studio</h2>
+						<h2 className="mb-2 instructions">Sign in to Harper Studio</h2>
 						<span className="login-nav-link error d-inline-block">{formState.error}</span>
 						<Label className="mb-3 d-block">
 							<span className="mb-2 d-inline-block">Email</span>

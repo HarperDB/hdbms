@@ -59,7 +59,7 @@ function SignIn() {
 				<Loader header="Signing in" spinner relative />
 			) : (
 				<Form>
-					<h2 className="mb-2 instructions">Please sign into HarperDB</h2>
+					<h2 className="mb-2 instructions">Please sign into Harper</h2>
 					{formState.error && (
 						<a
 							href={formState.url || null}

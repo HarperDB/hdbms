@@ -7,7 +7,7 @@ import config from '../../config';
 function ErrorFallbackAuth({ error, componentStack, resetErrorBoundary }) {
 	return (
 		<div id="login-form">
-			<div id="login-logo" title="HarperDB Logo" />
+			<div id="login-logo" title="Harper Logo" />
 			<div className="version">Studio v{config.studio_version}</div>
 			<ErrorFallback error={error} componentStack={componentStack} />
 			<div className="text-center">

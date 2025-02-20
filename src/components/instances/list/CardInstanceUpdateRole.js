@@ -7,7 +7,7 @@ function CardInstanceUpdateRole({ formState, setFormState, setFormData = false }
 			{formState.error.split('.').map((text) =>
 				text.length ? (
 					<div key={text} className="text-small text-bold text-danger mb-2">
-						{text.replace(' in HarperDB Studio', ' as a Super User')}.
+						{text.replace(' in Harper Studio', ' as a Super User')}.
 					</div>
 				) : null
 			)}

@@ -89,7 +89,7 @@ function MetaLocal() {
 					}
 					// eslint-disable-next-line
 				} catch (e) {
-					setFormState({ error: 'We found no HarperDB at that url/port. Is it running?' });
+					setFormState({ error: 'We found no Harper instance at that url/port. Is it running?' });
 				}
 			} else {
 				setFormState({ error: 'All fields must be filled out.' });
