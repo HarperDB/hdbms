@@ -11,20 +11,20 @@ function ListItem({ title, children }: { title: string; children: React.ReactNod
 }
 
 function AuthLayout() {
-	const { isPending, isError, isSuccess, data: currentUser } = useOnGetCurrentUser();
-	console.log(currentUser);
+	// const { isPending, isError, isSuccess, data: currentUser } = useOnGetCurrentUser();
+	// console.log(currentUser);
 
-	if (isPending) {
-		return <div>Loading...</div>;
-	}
+	// if (isPending) {
+	// 	return <div>Loading...</div>;
+	// }
 
-	if (isError) {
-		return <Navigate to="/sign-in" />;
-	}
+	// if (isError) {
+	// 	return <Navigate to="/sign-in" />;
+	// }
 
-	if (isSuccess) {
-		return <Navigate to="/" />;
-	}
+	// if (isSuccess) {
+	// 	return <Navigate to="/" />;
+	// }
 	return (
 		<div className="grid h-screen grid-cols-1 md:grid-cols-2">
 			<section className="items-center justify-center hidden text-white md:flex blue-pink-gradient px-6">

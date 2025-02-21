@@ -1,4 +1,4 @@
-import { Plus, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';

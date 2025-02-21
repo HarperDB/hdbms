@@ -1,8 +1,9 @@
 'use client';
-
 import * as React from 'react';
 import { Link } from 'react-router';
+import { QueryCache } from '@tanstack/react-query';
 import { X, Menu } from 'lucide-react';
+const queryCache = new QueryCache();
 
 import {
 	NavigationMenu,
@@ -97,7 +98,16 @@ const DesktopNav = () => {
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/sign-in">Sign Out</Link>
+								<Link
+									to="/sign-in"
+									onClick={() => {
+										document.cookie = 'localhost_5173-hdb-session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+										// TODO: create a custom hook to clear the cache
+										queryCache.clear();
+									}}
+								>
+									Sign Out
+								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 					</NavigationMenuList>
