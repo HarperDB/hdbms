@@ -2,7 +2,7 @@ import apiClient from '@/config/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
-export type SignInRequest = {
+export type SignInCredentials = {
 	email: string;
 	password: string;
 };
@@ -14,13 +14,12 @@ type SignInResponse = {
 	lastname: string;
 };
 
-export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise<SignInResponse> => {
+export const onLoginSubmit = async ({ email, password }: SignInCredentials): Promise<SignInResponse> => {
 	const { data } = await apiClient.post('/Login', {
 		email,
 		password,
 	});
 	if (data) {
-		console.log('headers', Headers);
 		// return data as SignInResponse;
 		return data;
 	} else {
@@ -29,7 +28,7 @@ export const onLoginSubmit = async ({ email, password }: SignInRequest): Promise
 };
 
 export function useOnLoginSubmitMutation() {
-	return useMutation<SignInResponse, Error, SignInRequest>({
+	return useMutation<SignInResponse, Error, SignInCredentials>({
 		mutationFn: (loginData) => onLoginSubmit(loginData),
 	});
 }

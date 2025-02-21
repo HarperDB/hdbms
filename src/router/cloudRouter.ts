@@ -9,20 +9,32 @@ const ProtectedRoutes = lazy(() => import('@/features/layouts/ProtectedRoutes'))
 
 const cloudRouter = createBrowserRouter([
 	{
-		path: '/',
+		path: '/sign-in',
 		Component: AuthLayout,
 		children: [
 			{
-				path: 'sign-in',
+				index: true,
 				Component: SignIn,
 			},
+		],
+	},
+	{
+		path: '/reset-password',
+		Component: AuthLayout,
+		children: [
 			{
-				path: 'sign-up',
-				Component: SignUp,
-			},
-			{
-				path: 'reset-password',
+				index: true,
 				Component: ResetPassword,
+			},
+		],
+	},
+	{
+		path: '/sign-up',
+		Component: AuthLayout,
+		children: [
+			{
+				index: true,
+				Component: SignUp,
 			},
 		],
 	},
