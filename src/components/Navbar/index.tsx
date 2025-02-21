@@ -11,7 +11,7 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { Button } from '@/components/ui/button';
+
 function MobileNav() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	return (
@@ -85,17 +85,19 @@ const DesktopNav = () => {
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/docs">Resources</Link>
+								<Link to="https://docs.harperdb.io/docs" target="_blank" rel="noreferrer noopener">
+									Resources
+								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/docs">Theme</Link>
+								<Link to="/">Theme</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/docs">Sign Out</Link>
+								<Link to="/sign-in">Sign Out</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 					</NavigationMenuList>

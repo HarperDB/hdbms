@@ -5,12 +5,12 @@ function DashLayout() {
 	return (
 		<div>
 			<header
-				className="bg-black-dark
-       py-2 absolute top-0 z-40 w-full"
+				className="bg-black-dark dark:bg-black-dark
+       py-2 absolute top-0 z-40 w-full dark:border-b dark:border-black"
 			>
 				<NavBar />
 			</header>
-			<div className=" mt-24 md:mt-20 h-full px-6">
+			<div className="mt-28 md:mt-24 h-full px-6">
 				<Outlet />
 			</div>
 			<footer className="fixed p-2 text-gray-400 rounded-md bottom-0 right-0">
