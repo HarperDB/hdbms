@@ -34,7 +34,7 @@ function OrgCard({
 				<Badge>{roleName}</Badge>
 			</CardContent>
 			{isOrgMenuOpen && (
-				<Card className="absolute top-12 right-5 z-40 border border-gray-700 shadow-xl p-3 rounded-md">
+				<Card className="absolute top-12 right-5 z-40 border dark:border-gray-700 shadow-xl p-3 rounded-md">
 					<Button className="block w-20" size="sm">
 						Edit
 					</Button>
