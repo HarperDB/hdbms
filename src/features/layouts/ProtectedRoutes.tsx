@@ -1,15 +1,17 @@
 import DashLayout from '@/features/layouts/DashLayout';
 import { Navigate } from 'react-router';
-import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
+// import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
+import useAuth from '@/shared/hooks/useAuth';
 
 const ProtectedRoutes = () => {
-	const { isPending, isError, isSuccess } = useOnGetCurrentUser();
+	console.log('ProtectedRoutes');
+	const { user, isPending, isSuccess } = useAuth();
 
 	if (isPending) {
 		return <div>Loading...</div>;
 	}
 
-	if (isError) {
+	if (!isPending && !user) {
 		return <Navigate to="/sign-in" />;
 	}
 
