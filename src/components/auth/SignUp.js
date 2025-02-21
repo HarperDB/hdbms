@@ -115,7 +115,7 @@ function SignUp() {
 								</Col>
 							</Row>
 						</Label>
-						{showToolTip && <i className="subdomain-explanation">The URL of your HarperDB Cloud Instances</i>}
+						{showToolTip && <i className="subdomain-explanation">The URL of your Harper Cloud Instances</i>}
 						<Label className="mb-3 d-block">
 							<span className="mb-2 d-inline-block">Coupon Code (Optional)</span>
 							<Input

@@ -7,7 +7,7 @@ function NoProjects() {
 		<Card className="file-browser-scroll-container">
 			<CardBody>
 				<div className="p-4">
-					You have no HarperDB applications yet. <br />
+					You have no Harper applications yet. <br />
 					<br />
 					Click &quot;
 					<i className="fas fa-plus" /> app&quot; above to create one!
@@ -17,7 +17,7 @@ function NoProjects() {
 					<a className="docs-link" href="https://docs.harperdb.io" target="_blank" rel="noreferrer">
 						documentation
 					</a>{' '}
-					for more info on HarperDB Applications.
+					for more info on Harper Applications.
 				</div>
 			</CardBody>
 		</Card>

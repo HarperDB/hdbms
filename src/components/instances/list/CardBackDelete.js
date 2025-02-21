@@ -84,7 +84,7 @@ function CardBackDelete({
 						{is_local ? (
 							<ul className="text-small my-0 text-nowrap">
 								<li>
-									<b>DOES NOT</b> uninstall HarperDB.
+									<b>DOES NOT</b> uninstall Harper.
 								</li>
 								<li>
 									<b>DOES</b> leave all your data intact.

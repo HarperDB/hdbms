@@ -106,7 +106,7 @@ function App() {
 
 	useEffect(() => {
 		if (showVersionAlert)
-			alert.info(`HarperDB Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
+			alert.info(`Harper Studio v${showVersionAlert} is now available. Refresh to update.`, versionAlertOptions);
 		// eslint-disable-next-line
 	}, [showVersionAlert]);
 
@@ -172,7 +172,7 @@ function App() {
 			)}
 			<div id="app-bg-color" />
 			<div className="version">
-				HarperDB Studio v{config.studio_version}
+				Harper Studio v{config.studio_version}
 				{version.maintenance && ' - MAINTENANCE MODE'}
 			</div>
 		</div>
