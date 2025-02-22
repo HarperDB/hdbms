@@ -83,10 +83,10 @@ function SignIn() {
 				</form>
 			</Form>
 			<div className="flex px-4 mt-4 underline place-content-between">
-				<Link className="text-sm" to="/sign-up">
+				<Link className="text-sm" to="/signup">
 					Sign up for free
 				</Link>
-				<Link className="text-sm" to="/reset-password">
+				<Link className="text-sm" to="/resetpassword">
 					Reset password
 				</Link>
 			</div>
