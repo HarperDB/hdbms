@@ -21,7 +21,7 @@ export const buttonVariants = cva(
   outline-ring/50 
   focus-visible:ring-1 
   focus-visible:outline-1 
-  focus-visible:ring-purple-light 
+  focus-visible:ring-purple-200 
   aria-invalid:focus-visible:ring-0`,
 	{
 		variants: {

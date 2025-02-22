@@ -27,7 +27,7 @@ function AuthLayout() {
 	// }
 	return (
 		<div className="grid h-screen grid-cols-1 md:grid-cols-2">
-			<section className="items-center justify-center hidden text-white md:flex blue-pink-gradient px-6">
+			<section className="items-center justify-center hidden text-white md:flex bg-linear-(--blue-pink-gradient) px-6">
 				<div>
 					<h1 className="text-3xl font-bold">HarperDB Studio</h1>
 					<span>Manage all your HarperDB instances.</span>
@@ -77,7 +77,7 @@ function AuthLayout() {
 					</ul>
 				</div>
 			</section>
-			<section className="flex items-center justify-center px-6">
+			<section className="flex items-center justify-center px-6 bg-linear-(--purple-gradient) dark:bg-linear-(--black-dark-gradient)">
 				<Outlet />
 			</section>
 			<button
