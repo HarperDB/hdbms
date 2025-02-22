@@ -11,8 +11,8 @@ const ProtectedRoutes = () => {
 		return <div>Loading...</div>;
 	}
 
-	if (!isPending && !user) {
-		return <Navigate to="/sign-in" />;
+	if (!isPending && !user?.id) {
+		return <Navigate to="/signin" />;
 	}
 
 	if (isSuccess) {

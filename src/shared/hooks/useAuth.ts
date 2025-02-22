@@ -1,4 +1,5 @@
 import apiClient from '@/config/apiClient';
+import Cookies from 'js-cookie';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 type OrgRoles = {
 	id: string;
@@ -22,6 +23,11 @@ type SignInCredentials = {
 
 const useAuth = () => {
 	const queryClient = useQueryClient();
+
+	// const isAuthenticated = () => {
+	// 	console.log('Cookies.get', Cookies.get('localhost_5173-hdb-session'));
+	// 	return !!Cookies.get('localhost_5173-hdb-session');
+	// };
 
 	const {
 		data: user,
