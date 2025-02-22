@@ -58,47 +58,4 @@ const cloudRouter = createBrowserRouter([
 	},
 ]);
 
-// const cloudRouter = createBrowserRouter([
-// 	{
-// 		path: '/sign-in',
-// 		Component: AuthLayout,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: SignIn,
-// 			},
-// 		],
-// 	},
-// 	{
-// 		path: '/reset-password',
-// 		Component: AuthLayout,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: ResetPassword,
-// 			},
-// 		],
-// 	},
-// 	{
-// 		path: '/sign-up',
-// 		Component: AuthLayout,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: SignUp,
-// 			},
-// 		],
-// 	},
-// 	{
-// 		path: '/',
-// 		Component: ProtectedRoutes,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: Organizations,
-// 			},
-// 		],
-// 	},
-// ]);
-
 export default cloudRouter;

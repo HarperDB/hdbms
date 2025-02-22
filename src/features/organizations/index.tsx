@@ -2,9 +2,10 @@ import { Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 // import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
-// import OrgCard from '@/features/organizations/components/OrgCard';
+import OrgCard from '@/features/organizations/components/OrgCard';
+import useAuth from '@/shared/hooks/useAuth';
 function Organizations() {
-	// const { data: currentUser } = useOnGetCurrentUser();
+	const { user } = useAuth();
 	return (
 		<div>
 			<div className="flex flex-col-reverse md:flex-row justify-between mb-10">
@@ -23,11 +24,11 @@ function Organizations() {
 				</Button>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-				{/* {currentUser?.roles?.map(({ organizationId, organizationName, roleName }) => (
+				{user?.roles?.map(({ organizationId, organizationName, roleName }) => (
 					<div key={organizationId} className="cols-span-1 md:col-span-4 lg:col-span-3 2xl:col-span-2">
 						<OrgCard organizationId={organizationId} organizationName={organizationName} roleName={roleName} />
 					</div>
-				))} */}
+				))}
 			</div>
 		</div>
 	);

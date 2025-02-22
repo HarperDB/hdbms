@@ -1,6 +1,6 @@
 import apiClient from '@/config/apiClient';
 import Cookies from 'js-cookie';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, QueryCache } from '@tanstack/react-query';
 type OrgRoles = {
 	id: string;
 	organizationId: string;
@@ -23,11 +23,9 @@ type SignInCredentials = {
 
 const useAuth = () => {
 	const queryClient = useQueryClient();
+	const queryCache = new QueryCache();
 
-	// const isAuthenticated = () => {
-	// 	console.log('Cookies.get', Cookies.get('localhost_5173-hdb-session'));
-	// 	return !!Cookies.get('localhost_5173-hdb-session');
-	// };
+	const isCurrentUser = queryClient.getQueryData(['user']);
 
 	const {
 		data: user,
@@ -36,26 +34,15 @@ const useAuth = () => {
 	} = useQuery<User | null>({
 		queryKey: ['user'],
 		queryFn: async () => {
-			const isCurrentUser = queryClient.getQueryData(['user']);
-			if (isCurrentUser) {
-				return isCurrentUser as User;
-			}
 			const response = await apiClient.get('/User/current');
 			if (response.status == 200 && response.data) {
 				return response.data as User;
 			}
 			return null;
 		},
+		enabled: !isCurrentUser,
 		refetchOnWindowFocus: false,
 	});
-	// const { data: user, isLoading } = useQuery<User | null>({
-	// 	queryKey: ['user'],
-	// 	queryFn: async () => {
-	// 		const res = await fetch('/');
-	// 		if (!res.ok) return null;
-	// 		return res.json();
-	// 	},
-	// });
 
 	const login = useMutation({
 		mutationFn: async ({ email, password }: SignInCredentials) => {
@@ -73,15 +60,10 @@ const useAuth = () => {
 		},
 	});
 
-	const logout = useMutation({
-		mutationFn: async () => {
-			const res = await fetch('/api/logout', { method: 'POST' });
-			if (!res.ok) throw new Error('Logout failed');
-		},
-		onSuccess: () => {
-			queryClient.setQueryData(['user'], null);
-		},
-	});
+	const logout = () => {
+		queryCache.clear();
+		Cookies.remove('localhost_5173-hdb-session');
+	};
 
 	return { user, isPending, isSuccess, login, logout };
 };
