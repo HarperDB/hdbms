@@ -4,15 +4,16 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-.blue-pink-gradient {
+/* .blue-pink-gradient {
   background: linear-gradient(44.5deg, var(--color-blue-400) 39.04%, var(--color-pink) 98.58%);
-}
+} */
 
 :root {
   --white: hsl(0, 0%, 99.61%); /* #fefefe */
   --black: hsl(0, 0%, 12.94%); /* #212121 */
   /* --black-light: hsl(0, 0%, 12%); #ffffff */
   --black-dark: hsl(0, 0%, 6.67%); /* #111111 */
+  --black-dark-gradient: 90deg, var(--black-dark) 100%, var(--black-dark) 100%; /* Faux gradient to get around how linear-gradient overrides background color works */
 
   --grey: hsl(0, 0%, 60.39%); /* #9a9a9a */
   --grey-100: hsl(0, 0%, 93.73%); /* #efefef */
@@ -33,11 +34,18 @@
   --blue-200: hsl(240, 100%, 88.43%); /* #c4c4ff */
   --blue-300: hsl(241.05, 100%, 77.65%); /* #8f8dff */
   --blue-400: hsl(253.93, 100%, 41.37%); /* #3100d3 */
+  --blue-gradient: 90deg, var(--blue-100) 0%, var(--blue) 100%;
+  
 
-  --purple: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
-  --purple-light: hsl(289.87, 39.9%, 37.84%); /* #7a3a87 */
-  --purple-dark: hsl(254.69, 39.84%, 24.12%); /* #312556 */
-  --purple-dark-faded: hsl(255deg 27% 32%); /* #312556 */
+  /* --purple: hsl(243.8, 40.1%, 38.63%); #403b8a  OG purple refactor to new purple variable below */
+  --purple-dark-faded: hsl(255deg 27% 32%); /* #2800a1 */
+  
+  --purple: hsl(289.87, 39.9%, 37.84%); /* #7a3a87 */
+  --purple-100: hsl(273.91, 100%, 31.57%); /* #5B00A1 */
+  --purple-200: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
+  --purple-300: hsl(254.91, 100%, 31.57%); /* #2800a1 */
+  --purple-400: hsl(254.69, 39.84%, 24.12%); /* #312556 */
+  --purple-gradient: 90deg, var(--purple-400) 100%, var(--purple-400) 100%;
 
   --background: hsl(255, 40%, 24%); /* Dark Purple: #312556 */
   --foreground: hsl(0 0% 3.9%);
@@ -45,7 +53,7 @@
   --card-foreground: hsl(0 0% 3.9%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(0 0% 3.9%);
-  --primary: 	hsl(244, 40%, 39%); /* Purple #403b8a */
+  --primary: 	var(--purple-200); /* Purple #403b8a */
   --primary-foreground: hsl(0 0% 98%);
   --secondary: hsl(0 0% 96.1%);
   --secondary-foreground: hsl(0 0% 9%);
@@ -57,14 +65,15 @@
   --destructive-foreground: hsl(0 0% 98%);
   --border: hsl(0 0% 89.8%);
   --input: hsl(0 0% 89.8%);
-  --ring: var(--purple-light);
+  --ring: var(--purple);
   --chart-1: hsl(12 76% 61%);
   --chart-2: hsl(173 58% 39%);
   --chart-3: hsl(197 37% 24%);
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
   --radius: 0.6rem;
-
+  --blue-pink-gradient: 44.5deg, var(--color-blue-400) 39.04%, var(--color-pink) 98.58%;
+  
 }
 
 .dark {
@@ -74,7 +83,7 @@
   --card-foreground: var(--color-white);
   --popover: hsl(0 0% 3.9%);
   --popover-foreground: hsl(0 0% 98%);
-  --primary: var(--purple);
+  --primary: var(--purple-200);
   --primary-foreground: var(--color-white);
   --secondary: hsl(0 0% 14.9%);
   --secondary-foreground: hsl(0 0% 98%);
@@ -86,7 +95,7 @@
   --destructive-foreground: hsl(0 0% 98%);
   --border: hsl(0 0% 14.9%);
   --input: hsl(0 0% 14.9%);
-  --ring: var(--purple-light);
+  --ring: var(--purple);
   --chart-1: hsl(220 70% 50%);
   --chart-2: hsl(160 60% 45%);
   --chart-3: hsl(30 80% 55%);
@@ -112,7 +121,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
-  --color-input: var(--purple-dark);
+  --color-input: var(--purple-400);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -128,6 +137,7 @@
   --color-black: var(--black);
   /* --color-black-light: var(--black-light); */
   --color-black-dark: var(--black-dark);
+  --color-black-dark-gradient: var(--black-dark-gradient); /* Faux gradient to get around how linear-gradient overrides background color works */
 
   --color-grey: var(--grey);
   --color-grey-100: var(--grey-100);
@@ -147,13 +157,15 @@
   --color-blue-200: var(--blue-200);
   --color-blue-300: var(--blue-300);
   --color-blue-400: var(--blue-400);
-  --color-blue-gradient: 90deg, var(--blue-100) 0%, var(--blue) 100%;
+  --color-blue-gradient: var(--blue-gradient);
+  --color-blue-pink-gradient: var(--blue-pink-gradient);
   --color-blue-none: 90deg, var(--blue) 0%, var(--blue) 100%;
 
+  --color-purple-200: var(--purple-200);
   --color-purple: var(--purple);
-  --color-purple-light: var(--purple-light);
-  --color-purple-dark: var(--purple-dark);
-  --color-purple-dark-faded: var(--purple-dark-faded);
+  --color-purple-400: var(--purple-400);
+  --color-purple-300: var(--purple-300);
+  --color-purple-gradient: var(--purple-gradient);
 
   --checkmark-icon: url('@/assets/checkmark.svg');
 
@@ -164,6 +176,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-linear-(--blue-pink-gradient) dark:bg-linear-(--black-dark-gradient) text-foreground bg-no-repeat h-[88vh];
   }
 }

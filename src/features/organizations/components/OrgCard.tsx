@@ -15,7 +15,7 @@ function OrgCard({
 	const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
 	return (
 		<Card className="relative">
-			<CardHeader>
+			<CardHeader className="p-4">
 				<CardDescription className="flex justify-between">
 					<span>ORG ID: {organizationId}</span>
 					<Button
@@ -30,7 +30,7 @@ function OrgCard({
 				</CardDescription>
 				<CardTitle>{organizationName}</CardTitle>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="pb-4">
 				<Badge>{roleName}</Badge>
 			</CardContent>
 			{isOrgMenuOpen && (

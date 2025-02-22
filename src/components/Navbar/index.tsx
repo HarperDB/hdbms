@@ -1,9 +1,7 @@
 'use client';
 import * as React from 'react';
 import { Link } from 'react-router';
-import { QueryCache } from '@tanstack/react-query';
 import { X, Menu } from 'lucide-react';
-const queryCache = new QueryCache();
 
 import {
 	NavigationMenu,
@@ -123,18 +121,5 @@ export function NavBar() {
 			<MobileNav />
 			<DesktopNav />
 		</>
-	);
-}
-
-function ListItem({ title, children, href, ...props }: React.ComponentPropsWithoutRef<'li'> & { href: string }) {
-	return (
-		<li {...props}>
-			<NavigationMenuLink asChild>
-				<Link href={href}>
-					<div className="text-sm leading-none font-medium">{title}</div>
-					<p className="text-muted-foreground line-clamp-2 text-sm leading-snug">{children}</p>
-				</Link>
-			</NavigationMenuLink>
-		</li>
 	);
 }
