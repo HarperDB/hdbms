@@ -12,6 +12,7 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
+import useAuth from '@/shared/hooks/useAuth';
 
 function MobileNav() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -66,6 +67,7 @@ function MobileNav() {
 }
 
 const DesktopNav = () => {
+	const { logout } = useAuth();
 	return (
 		<div className="hidden md:block">
 			<div className="flex h-16 items-center justify-between px-12">
@@ -76,12 +78,12 @@ const DesktopNav = () => {
 					<NavigationMenuList>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/docs">Organizations</Link>
+								<Link to="/">Organizations</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/docs">Profile</Link>
+								<Link to="/profile">Profile</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
@@ -99,11 +101,9 @@ const DesktopNav = () => {
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
 								<Link
-									to="/sign-in"
+									to="/signin"
 									onClick={() => {
-										document.cookie = 'localhost_5173-hdb-session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-										// TODO: create a custom hook to clear the cache
-										queryCache.clear();
+										logout();
 									}}
 								>
 									Sign Out
