@@ -14,7 +14,7 @@ function OrgCard({
 }) {
 	const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
 	return (
-		<Card className="relative">
+		<Card className="relative shadow-none hover:shadow-xl hover:ring-1">
 			<CardHeader className="p-4">
 				<CardDescription className="flex justify-between">
 					<span>ORG ID: {organizationId}</span>
