@@ -40,22 +40,22 @@ function PlaceholderChart() {
 	return (
 		<Chart
 			options={chartOptions({
-				title: 'HarperDB Satisfaction Over Time (Placeholder Example)',
+				title: 'Harper Satisfaction Over Time (Placeholder Example)',
 				type: 'line',
 				labels: generateMonths(),
 				theme,
 			})}
 			series={[
 				{
-					name: 'HarperDB Core',
+					name: 'Harper Core',
 					data: [98, 98, 97, 99, 98, 97, 100, 100, 100, 100, 100, 100],
 				},
 				{
-					name: 'HarperDB Studio',
+					name: 'Harper Studio',
 					data: [95, 97, 99, 97, 98, 96, 98, 100, 99, 98, 100, 99],
 				},
 				{
-					name: 'HarperDB Documentation',
+					name: 'Harper Documentation',
 					data: [90, 92, 94, 92, 94, 92, 95, 97, 99, 95, 97, 98],
 				},
 			]}

@@ -7,8 +7,8 @@ function AuthLayout() {
 			<Row xs="1" sm="2" className="h-100">
 				<Col className="p-5 auth-studio-info d-none d-sm-flex justify-content-center align-items-center">
 					<div className="auth-studio-info-container">
-						<h1 className="auth-title">HarperDB Studio</h1>
-						<span className="mb-4 auth-subtitle d-inline-block">Manage all your HarperDB instances.</span>
+						<h1 className="auth-title">Harper Studio</h1>
+						<span className="mb-4 auth-subtitle d-inline-block">Manage all your Harper instances.</span>
 						<ul className="auth-info-list-items">
 							<li>
 								<h3 className="item-title">Manage All Instances</h3>
@@ -16,7 +16,7 @@ function AuthLayout() {
 							</li>
 							<li>
 								<h3 className="item-title">Embedded API Server</h3>
-								<span className="item-subtitle">HarperDB components give you unlimited application flexibility.</span>
+								<span className="item-subtitle">Harper components give you unlimited application flexibility.</span>
 							</li>
 							<li>
 								<h3 className="item-title">Fully Managed Cloud & 5G Instances</h3>

@@ -228,7 +228,7 @@ function Confirm() {
 					/>
 				</Col>
 				<Col xs="10" sm="11" className="text-small pt-1 pe-2">
-					I agree to HarperDB&apos;s&nbsp;
+					I agree to Harper&apos;s&nbsp;
 					<a href="https://harperdb.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">
 						Privacy Policy
 					</a>{' '}
@@ -238,7 +238,7 @@ function Confirm() {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						HarperDB Cloud Terms of Service
+						Harper Cloud Terms of Service
 					</a>
 				</Col>
 			</Row>

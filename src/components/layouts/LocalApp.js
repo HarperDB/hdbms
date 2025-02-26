@@ -76,7 +76,7 @@ function LocalApp() {
 				)}
 			</div>
 			<div id="app-bg-color" />
-			<div className="version">HarperDB Local Studio v{config.studio_version}</div>
+			<div className="version">Harper Local Studio v{config.studio_version}</div>
 		</div>
 	);
 }

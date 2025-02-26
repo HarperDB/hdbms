@@ -167,7 +167,7 @@ function NewOrgIndex() {
 										</Row>
 										{showToolTip && (
 											<div className="text-center pt-2 pb-1 text-lightpurple text-small">
-												<i>Part of the URL of your HarperDB Cloud Instances- see below.</i>
+												<i>Part of the URL of your Harper Cloud Instances- see below.</i>
 											</div>
 										)}
 										<hr className="my-2 d-none d-sm-block" />

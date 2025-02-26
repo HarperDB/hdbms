@@ -72,7 +72,7 @@ function Remove({ setInstanceAction }) {
 							{is_local ? (
 								<ul className="text-small mb-0">
 									<li>
-										<b>DOES NOT</b> uninstall HarperDB.
+										<b>DOES NOT</b> uninstall Harper.
 									</li>
 									<li>
 										<b>DOES</b> leave all your data intact.

@@ -7,7 +7,7 @@ import appState from '../../../functions/state/appState';
 function NewInstanceCard() {
 	const navigate = useNavigate();
 	const { customer_id } = useParams();
-	const platformName = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'HarperDB'));
+	const platformName = useStoreState(appState, (s) => (s.themes.length === 1 ? s.themes[0] : 'Harper'));
 
 	const handleClick = () => {
 		if (window._kmq) window._kmq.push(['record', 'clicked new instance card']);
