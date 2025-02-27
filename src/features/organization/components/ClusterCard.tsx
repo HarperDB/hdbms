@@ -4,47 +4,47 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Ellipsis } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
-function OrgCard({
-	organizationId,
-	organizationName,
-	roleName,
+function ClusterCard({
+	clusterId,
+	clusterName,
+  organizationId,
 }: {
-	organizationId: string;
-	organizationName: string;
-	roleName: string;
+  clusterId: string;
+  clusterName: string;
+  organizationId: string;
 }) {
-	const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
+	const [isClusterMenuOpen, setIsClusterMenuOpen] = useState(false);
 	return (
 		<Card className="relative">
 			<CardHeader className="">
 				<CardDescription className="flex justify-between items-center">
-					<span>ORG ID: {organizationId}</span>
+					<span>CLUSTER ID: {clusterId}</span>
 					<Button
 						className="cursor-pointer"
 						variant="ghost"
 						onClick={() => {
-							setIsOrgMenuOpen(!isOrgMenuOpen);
+							setIsClusterMenuOpen(!isClusterMenuOpen);
 						}}
-					>	
+					>
 						<Ellipsis />
 					</Button>
 				</CardDescription>
-				<CardTitle>{organizationName}</CardTitle>
+				<CardTitle><h2>{clusterName}</h2></CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
-				<Badge>{roleName}</Badge>
+      <Badge>Offline</Badge>
 				<Link
-					to={`/orgs/${organizationId}/clusters`}
+					to={`/orgs/${organizationId}/clusters/${clusterId}`}
 					className="text-sm"
-					aria-label={`View ${organizationName}`}
-					title={`View ${organizationName}`}
+					aria-label={`View ${clusterName}`}
+					title={`View ${clusterName}`}
 				>
 					<span className='hover:border-b-2 py-2'>
 					View <ArrowRight className="inline-block" />
 					</span>
 				</Link>
 			</CardContent>
-			{isOrgMenuOpen && (
+			{isClusterMenuOpen && (
 				<Card className="absolute top-12 right-5 gap-3 z-40 border border-gray-700 shadow-xl p-3 rounded-md">
 					<Button className="block w-20" size="sm">
 						Edit
@@ -58,4 +58,4 @@ function OrgCard({
 	);
 }
 
-export default OrgCard;
+export default ClusterCard;

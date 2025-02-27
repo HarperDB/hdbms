@@ -1,9 +1,12 @@
-function ClusterList() {
+import { Outlet } from "@tanstack/react-router";
+
+
+function OrganizationIndex() {
   return (
-    <div>
-      <h1>Cluster List</h1>
-    </div>
+    <>
+      <Outlet />
+    </>
   )
 }
 
-export default ClusterList;
+export default OrganizationIndex;
