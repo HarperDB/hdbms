@@ -20,8 +20,8 @@ export const onLoginSubmit = async ({ email, password }: SignInCredentials): Pro
 		password,
 	});
 	if (data) {
-		// return data as SignInResponse;
-		return data;
+		return data as SignInResponse;
+		// return data;
 	} else {
 		throw new Error('Something went wrong');
 	}

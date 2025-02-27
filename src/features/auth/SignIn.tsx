@@ -37,7 +37,6 @@ function SignIn() {
 	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
 		await submitLoginData(formData, {
 			onSuccess: () => {
-				form.reset();
 				navigate('/');
 			},
 			onError: (error) => {
