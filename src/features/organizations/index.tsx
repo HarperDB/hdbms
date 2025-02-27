@@ -1,11 +1,10 @@
 import { Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-// import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
 import OrgCard from '@/features/organizations/components/OrgCard';
-import useAuth from '@/shared/hooks/useAuth';
-function Organizations() {
-	const { user } = useAuth();
+import { useGetCurrentUser } from '@/shared/hooks/useGetCurrentUser';
+function OrganizationsIndex() {
+	const { data: user } = useGetCurrentUser();
 	return (
 		<div>
 			<div className="flex flex-col-reverse md:flex-row justify-between mb-10">
@@ -18,7 +17,7 @@ function Organizations() {
 						</span>
 					</Button>
 				</div>
-				<Button variant="positive" className="rounded-full">
+				<Button variant="positive" className="rounded-full md:w-44">
 					<Plus />
 					New Organization
 				</Button>
@@ -34,4 +33,4 @@ function Organizations() {
 	);
 }
 
-export default Organizations;
+export default OrganizationsIndex;
