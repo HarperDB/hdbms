@@ -1,5 +1,5 @@
-import { Navigate, Outlet } from 'react-router';
-import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
+import { Outlet } from 'react-router';
+// import { useOnGetCurrentUser } from '@/features/layouts/queries/useOnGetCurrentUser';
 
 function ListItem({ title, children }: { title: string; children: React.ReactNode }) {
 	return (

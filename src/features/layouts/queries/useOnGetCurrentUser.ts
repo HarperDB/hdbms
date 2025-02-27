@@ -28,5 +28,6 @@ export function useOnGetCurrentUser() {
 	return useQuery({
 		queryKey: ['user'],
 		queryFn: onGetCurrentUser,
+		retry: false,
 	});
 }

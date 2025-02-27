@@ -1,5 +1,4 @@
 import apiClient from '@/config/apiClient';
-import Cookies from 'js-cookie';
 import { useQuery, useMutation, useQueryClient, QueryCache } from '@tanstack/react-query';
 type OrgRoles = {
 	id: string;
@@ -25,12 +24,10 @@ const useAuth = () => {
 	const queryClient = useQueryClient();
 	const queryCache = new QueryCache();
 
-	const isCurrentUser = queryClient.getQueryData(['user']);
-
 	const {
 		data: user,
-		isPending,
-		isSuccess,
+		isPending: isUserPending,
+		isSuccess: isUserSuccess,
 	} = useQuery<User | null>({
 		queryKey: ['user'],
 		queryFn: async () => {
@@ -40,8 +37,7 @@ const useAuth = () => {
 			}
 			return null;
 		},
-		enabled: !isCurrentUser,
-		refetchOnWindowFocus: false,
+		retry: false,
 	});
 
 	const login = useMutation({
@@ -60,12 +56,21 @@ const useAuth = () => {
 		},
 	});
 
-	const logout = () => {
-		queryCache.clear();
-		Cookies.remove('localhost_5173-hdb-session');
-	};
+	const logout = useQuery<User | null>({
+		queryKey: ['user'],
+		queryFn: async () => {
+			const response = await apiClient.get('/Logout');
+			if (response.status == 200 && response.data) {
+				queryClient.setQueryData(['user'], null);
+				queryCache.clear();
+				return null;
+			}
+			throw new Error('Logout failed');
+		},
+		retry: false,
+	});
 
-	return { user, isPending, isSuccess, login, logout };
+	return { user, login, logout, isUserPending, isUserSuccess };
 };
 
 export default useAuth;

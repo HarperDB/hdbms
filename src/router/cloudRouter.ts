@@ -1,14 +1,14 @@
 import { lazy } from 'react';
-import { createBrowserRouter } from 'react-router';
+import { createHashRouter } from 'react-router';
 const AuthLayout = lazy(() => import('@/features/layouts/AuthLayout'));
 const SignIn = lazy(() => import('@/features/auth/SignIn'));
 const SignUp = lazy(() => import('@/features/auth/SignUp'));
 const ResetPassword = lazy(() => import('@/features/auth/ResetPassword'));
 const Organizations = lazy(() => import('@/features/organizations'));
-const ProtectedRoutes = lazy(() => import('@/features/layouts/ProtectedRoutes'));
+const DashLayout = lazy(() => import('@/features/layouts/DashLayout'));
 const Profile = lazy(() => import('@/features/profile'));
 
-const cloudRouter = createBrowserRouter([
+const cloudRouter = createHashRouter([
 	{
 		path: 'signin',
 		Component: AuthLayout,
@@ -40,7 +40,7 @@ const cloudRouter = createBrowserRouter([
 		],
 	},
 	{
-		Component: ProtectedRoutes,
+		Component: DashLayout,
 		children: [
 			{
 				path: 'organizations',

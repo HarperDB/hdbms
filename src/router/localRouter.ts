@@ -1,10 +1,10 @@
-import { createBrowserRouter } from 'react-router';
+import { createHashRouter } from 'react-router';
 import LocalSignIn from '@/features/auth/LocalSignIn';
 import ProtectedRoutes from '@/features/layouts/ProtectedRoutes';
 import Instance from '@/features/instance';
 import ClusterList from '@/features/organization';
 
-const localRouter = createBrowserRouter([
+const localRouter = createHashRouter([
 	{
 		path: '/sign-in',
 		Component: LocalSignIn,
