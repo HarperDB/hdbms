@@ -2,7 +2,7 @@ import { Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import OrgCard from '@/features/organizations/components/OrgCard';
-import { useGetCurrentUser } from '@/shared/hooks/useGetCurrentUser';
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 function OrganizationsIndex() {
 	const { data: user } = useGetCurrentUser();
 	return (

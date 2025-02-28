@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { X, Menu } from 'lucide-react';
 
@@ -30,7 +30,11 @@ function MobileNav() {
 					{isMenuOpen ? <X /> : <Menu />}
 				</button>
 			</div>
-			<div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden space-y-1 pb-3 bg-black-dark absolute left-0 top-full w-full rounded-b-md`}>
+			<div
+				className={`${
+					isMenuOpen ? 'block' : 'hidden'
+				} md:hidden space-y-1 pb-3 bg-black-dark absolute left-0 top-full w-full rounded-b-md`}
+			>
 				<Link to="/" className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">
 					Organizations
 				</Link>
@@ -96,12 +100,7 @@ const DesktopNav = () => {
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link
-									to="/signin"
-	
-								>
-									Sign Out
-								</Link>
+								<Link to="/">Sign Out</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 					</NavigationMenuList>
