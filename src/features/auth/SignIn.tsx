@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router';
-import { useOnLoginSubmitMutation } from '@/features/auth/queries/useSignIn';
+import { useLoginMutation } from '@/features/auth/queries/useSignIn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -24,7 +24,7 @@ const SignInSchema = z.object({
 
 function SignIn() {
 	const navigate = useNavigate();
-  const router = useRouter();
+	const router = useRouter();
 	const form = useForm<z.infer<typeof SignInSchema>>({
 		resolver: zodResolver(SignInSchema),
 		defaultValues: {
@@ -33,13 +33,13 @@ function SignIn() {
 		},
 	});
 
-	const { mutate: submitLoginData } = useOnLoginSubmitMutation();
+	const { mutate: submitLoginData } = useLoginMutation();
 
 	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
 		await submitLoginData(formData, {
 			onSuccess: () => {
 				navigate({ to: '/orgs' });
-        router.invalidate();
+				router.invalidate();
 			},
 
 			onError: (error) => {
@@ -57,10 +57,15 @@ function SignIn() {
 						control={form.control}
 						name="email"
 						render={({ field }) => (
-							<FormItem className='my-2'>
+							<FormItem className="my-2">
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input type="email" placeholder="jane.smith@harperdb.io" className="bg-purple-400 border-purple-400" {...field} />
+									<Input
+										type="email"
+										placeholder="jane.smith@harperdb.io"
+										className="bg-purple-400 border-purple-400"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -70,10 +75,15 @@ function SignIn() {
 						control={form.control}
 						name="password"
 						render={({ field }) => (
-							<FormItem className='my-2'>
+							<FormItem className="my-2">
 								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input type="password" placeholder="password" className="bg-purple-400 border-purple-400" {...field} />
+									<Input
+										type="password"
+										placeholder="password"
+										className="bg-purple-400 border-purple-400"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

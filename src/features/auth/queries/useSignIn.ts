@@ -20,14 +20,13 @@ export const onLoginSubmit = async ({ email, password }: SignInCredentials): Pro
 		password,
 	});
 	if (data) {
-		// return data as SignInResponse;
-		return data;
+		return data as SignInResponse;
 	} else {
 		throw new Error('Something went wrong');
 	}
 };
 
-export function useOnLoginSubmitMutation() {
+export function useLoginMutation() {
 	return useMutation<SignInResponse, Error, SignInCredentials>({
 		mutationFn: (loginData) => onLoginSubmit(loginData),
 	});
