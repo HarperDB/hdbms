@@ -14,74 +14,59 @@ import Clusters from '@/features/clusters';
 // const Profile = lazy(() => import('@/features/profile'));
 
 const rootRoute = createRootRoute({
-  component: StudioCloud,
+	component: StudioCloud,
 });
 
 // Public Auth Routes
 
 const authLayout = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "_authLayout",
-  component: AuthLayout,
-})
+	getParentRoute: () => rootRoute,
+	id: '_authLayout',
+	component: AuthLayout,
+});
 
 const signInRoute = createRoute({
-  getParentRoute: () => authLayout,
-  path: 'signin',
-  component: SignIn,
-})
+	getParentRoute: () => authLayout,
+	path: '/',
+	component: SignIn,
+});
 
 const signUpRoute = createRoute({
-  getParentRoute: () => authLayout,
-  path: 'signup',
-  component: SignUp,
-})
-
+	getParentRoute: () => authLayout,
+	path: 'signup',
+	component: SignUp,
+});
 
 // Dashboard Routes
 const dashboardLayout = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "_dashboardLayout",
-  component: Dashboard,
-})
+	getParentRoute: () => rootRoute,
+	id: '_dashboardLayout',
+	component: Dashboard,
+});
 
 // Organizations Routes
 const orgsRoute = createRoute({
-  getParentRoute: () => dashboardLayout,
-  path: 'orgs',
-  component: OrganizationsIndex,
-})
+	getParentRoute: () => dashboardLayout,
+	path: 'orgs',
+	component: OrganizationsIndex,
+});
 
 const orgIndexRoute = createRoute({
-  getParentRoute: () => dashboardLayout,
-  path: 'orgs/$organizationId',
-  component: OrganizationIndex,
-})
+	getParentRoute: () => dashboardLayout,
+	path: 'orgs/$organizationId',
+	component: OrganizationIndex,
+});
 
 const orgClustersRoute = createRoute({
-  getParentRoute: () => orgIndexRoute,
-  path: 'clusters',
-  component: Clusters,
-})
-
-
+	getParentRoute: () => orgIndexRoute,
+	path: 'clusters',
+	component: Clusters,
+});
 
 export const cloudRouteTree = rootRoute.addChildren([
-  authLayout.addChildren([
-    signInRoute,
-    signUpRoute
-  ]),
-  dashboardLayout.addChildren([
-    orgsRoute.addChildren([
-      orgIndexRoute.addChildren([
-        orgClustersRoute
-      ]),
-    ]), 
-  ]),
-])
-
-
-
+	authLayout.addChildren([signInRoute, signUpRoute]),
+	dashboardLayout.addChildren([orgsRoute.addChildren([orgIndexRoute.addChildren([orgClustersRoute])])]),
+]);
 
 // const cloudRouter = createHashRouter([
 // 	{
@@ -94,26 +79,26 @@ export const cloudRouteTree = rootRoute.addChildren([
 // 			},
 // 		],
 // 	},
-	// {
-	// 	path: 'signup',
-	// 	Component: AuthLayout,
-	// 	children: [
-	// 		{
-	// 			index: true,
-	// 			Component: SignUp,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: 'resetpassword',
-	// 	Component: AuthLayout,
-	// 	children: [
-	// 		{
-	// 			index: true,
-	// 			Component: ResetPassword,
-	// 		},
-	// 	],
-	// },
+// {
+// 	path: 'signup',
+// 	Component: AuthLayout,
+// 	children: [
+// 		{
+// 			index: true,
+// 			Component: SignUp,
+// 		},
+// 	],
+// },
+// {
+// 	path: 'resetpassword',
+// 	Component: AuthLayout,
+// 	children: [
+// 		{
+// 			index: true,
+// 			Component: ResetPassword,
+// 		},
+// 	],
+// },
 // 	{
 // 		Component: Dashboard,
 // 		children: [
