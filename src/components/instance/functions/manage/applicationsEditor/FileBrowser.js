@@ -14,7 +14,12 @@ function NoProjects() {
 					<br />
 					<br />
 					See the{' '}
-					<a className="docs-link" href="https://docs.harperdb.io" target="_blank" rel="noreferrer">
+					<a
+						className="docs-link"
+						href="https://docs.harperdb.io/docs/developers/applications"
+						target="_blank"
+						rel="noreferrer"
+					>
 						documentation
 					</a>{' '}
 					for more info on Harper Applications.
@@ -70,22 +75,15 @@ function FolderIcon({ toggleClosed, isOpen }) {
 	);
 }
 
-function FiletypeIcon({ extension }) {
-	switch (extension) {
-		case 'js':
-			return <i className={cn('file-icon filetype-js fab fa-js')} />;
-		case 'yaml':
-			return <i className={cn('file-icon filetype-yaml fas fa-cog')} />;
-		default:
-			return <i className={cn('file-icon filetype-unknown far fa-file-alt')} />;
-	}
-}
-
-function PackageIcon() {
-	return <i className={cn('package-icon fas fa-cube')} />;
+function FiletypeIcon(extension) {
+	let extensionCn = 'unknown far fa-file-alt';
+	if (extension === 'js') extensionCn = 'js fab fa-js';
+	if (extension === 'yaml') extensionCn = 'yaml fas fa-cog';
+	return <i className={cn(`file-icon filetype-${extensionCn}`)} />;
 }
 
 function Package({ name, url, onPackageSelect, selectedPackage }) {
+	console.log('selected package ', selectedPackage);
 	// FIXME: when we click another package, they both get selected.
 	const [selected, setSelected] = useState(Boolean(selectedPackage) && name === selectedPackage?.name);
 
@@ -107,9 +105,8 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 			className={cn('package', {
 				'package-selected': selected,
 			})}
-			onKeyDown={() => {}}
 		>
-			<PackageIcon />
+			<i className={cn('package-icon fas fa-cube')} />
 			<span className="package-text">{name}</span>
 		</button>
 	);
@@ -125,11 +122,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 	// parent. if it's a dir, calls toggle func on click
 	// if it's a flat file, calls onFileSelect so
 	// parent can get file content.
-
-	function noOp() {
-		// TODO: figure out how to handle keyboard events properly.
-		// for now, use this to avoid react a11y errors.
-	}
 
 	function handleToggleSelected(e) {
 		// TODO FIX HANDLING SO WE CAN HAVE NUANCED CLICK BEHAVIOR
@@ -167,7 +159,6 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 				'file-selected': isFileSelected,
 				'folder-selected': isFolderSelected,
 			})}
-			onKeyDown={noOp}
 		>
 			<Icon className="filename-icon" />
 			<span className="filename-text">{directoryEntry.name}</span>
@@ -194,13 +185,12 @@ function Folder({
 
 	let Icon;
 	// top-level dir === package
-	// FolderIcon/PackageIcon is func so we can give it open args now, but instantiate it later.
 	if (directoryEntry.path.split('/').length === 2) {
 		Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else if (directoryEntry.entries) {
 		Icon = () => FolderIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
 	} else {
-		Icon = () => FiletypeIcon({ extension: fileExtension });
+		Icon = () => FiletypeIcon(fileExtension);
 	}
 
 	return (

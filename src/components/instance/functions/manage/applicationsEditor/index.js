@@ -1,4 +1,3 @@
-// NOTE: disabling because there are callbacks here that haven't been implemented.
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import FileBrowser from './FileBrowser';
@@ -15,7 +14,6 @@ import EditorWindow, {
 	NameProjectFolderWindow,
 	NameProjectWindow,
 } from './EditorWindow';
-
 import FileMenu, {
 	AddFileButton,
 	AddProjectFolderButton,
@@ -23,14 +21,8 @@ import FileMenu, {
 	DeleteFolderButton,
 	DeleteFileButton,
 } from './FileMenu';
-
 import EditorMenu, { SaveButton, RestartInstanceButton, RestartOnSaveToggle, RevertFileButton } from './EditorMenu';
 import { clearTableDescriptionCache } from '../../../../../functions/instance/state/describeTableCache';
-
-// TODO:
-//
-// - tie editor state into urls to enable deep-linking and navigation
-// - revisit the nuances of windowing behavior
 
 function WebIDE({
 	deployTargets, // FIXME: does this belong here?
@@ -102,7 +94,7 @@ function WebIDE({
 		updateActiveEditorWindow(EDITOR_WINDOWS.CODE_EDITOR_WINDOW, activeEditorWindow);
 	}
 
-	// updates current in-memory code
+	// updates current in-memory code during editing
 	function updateFileInMemory(updatedCode) {
 		const update = {
 			...selectedFile,
@@ -110,6 +102,8 @@ function WebIDE({
 		};
 		setSelectedFile(update);
 	}
+
+	// console.log('selectedFile ', selectedFile);
 
 	return (
 		<Row id="webide">
@@ -166,13 +160,18 @@ function WebIDE({
 					selectedPackage={selectedPackage}
 					onDeployProject={onDeployProject}
 					onFolderSelect={(folder) => {
-						resetSelections();
+						console.log('folder select ', folder);
+						// TODO: why are we resetting here? this should not reset the currently selected file
+						// resetSelections();
 						setSelectedFolder(folder);
-						if (!folder) {
-							updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-						} else {
-							updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
-						}
+						// if (!folder) {
+						// 	// TODO: ok, why is this firing at all if "no folder"
+						// 	// ahhh it fires when you click the folder ICON
+						// 	// TODO: i want to open / close on folder icon OR text select
+						// 	updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
+						// } else {
+						updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
+						// }
 					}}
 					onPackageSelect={(pkg) => {
 						resetSelections();
@@ -184,13 +183,9 @@ function WebIDE({
 						}
 					}}
 					onFileSelect={async (entry) => {
-						const unselectAction = !entry;
-						resetSelections();
-
-						if (unselectAction) {
-							setSelectedFile(null);
-							updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-						} else {
+						// Update: the only thing that should happen here, is update the current file
+						// it doesnt make senese to "deselect a file" by clicking on it again, not expected IDE behavior
+						if (entry) {
 							const fileMeta = await onFileSelect(entry);
 							const { content, cached } = fileMeta;
 							setSelectedFile({ ...entry, content, cached });
@@ -339,7 +334,7 @@ function WebIDE({
 						active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
 						file={selectedFile}
 						onFileChange={async (fileContent) => {
-							if (!selectedFile) return;
+							if (!selectedFile) return; // this line should theorectically never happen...cant change a file if none selected
 							updateFileInMemory(fileContent);
 							await onFileChange({ path: selectedFile?.path, content: fileContent });
 							setSelectedFile({ ...selectedFile, content: fileContent, cached: true });
