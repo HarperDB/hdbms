@@ -1,8 +1,11 @@
 import { createRootRoute, createRoute } from '@tanstack/react-router';
 import StudioCloud from '../StudioCloud';
 import Dashboard from '../features/layouts/Dashboard';
+import ProfileIndex from '@/features/profile';
 import OrganizationsIndex from '../features/organizations';
 import OrganizationIndex from '@/features/organization';
+import ClusterIndex from '@/features/cluster';
+import ClusterList from '@/features/clusters/ClustersList';
 // const AuthLayout = lazy(() => import('@/features/layouts/AuthLayout'));
 // const SignIn = lazy(() => import('@/features/auth/SignIn'));
 // const SignUp = lazy(() => import('@/features/auth/SignUp'));
@@ -10,7 +13,7 @@ import OrganizationIndex from '@/features/organization';
 import AuthLayout from '../features/layouts/AuthLayout';
 import SignIn from '../features/auth/SignIn';
 import SignUp from '../features/auth/SignUp';
-import Clusters from '@/features/clusters';
+import ClustersIndex from '@/features/clusters';
 // const Profile = lazy(() => import('@/features/profile'));
 
 const rootRoute = createRootRoute({
@@ -37,11 +40,18 @@ const signUpRoute = createRoute({
 	component: SignUp,
 });
 
-// Dashboard Routes
+// Private Routes
 const dashboardLayout = createRoute({
 	getParentRoute: () => rootRoute,
 	id: '_dashboardLayout',
 	component: Dashboard,
+});
+
+//Profile Route
+const profileRoute = createRoute({
+	getParentRoute: () => dashboardLayout,
+	path: 'profile',
+	component: ProfileIndex,
 });
 
 // Organizations Routes
@@ -60,62 +70,26 @@ const orgIndexRoute = createRoute({
 const orgClustersRoute = createRoute({
 	getParentRoute: () => orgIndexRoute,
 	path: 'clusters',
-	component: Clusters,
+	component: ClustersIndex,
+});
+
+const orgClustersListRoute = createRoute({
+	getParentRoute: () => orgClustersRoute,
+	path: '/list',
+	component: ClusterList,
+});
+const orgClusterRoute = createRoute({
+	getParentRoute: () => orgClustersRoute,
+	path: '$clusterId',
+	component: ClusterIndex,
 });
 
 export const cloudRouteTree = rootRoute.addChildren([
 	authLayout.addChildren([signInRoute, signUpRoute]),
-	dashboardLayout.addChildren([orgsRoute.addChildren([orgIndexRoute.addChildren([orgClustersRoute])])]),
+	dashboardLayout.addChildren([
+		profileRoute,
+		orgsRoute.addChildren([
+			orgIndexRoute.addChildren([orgClustersRoute.addChildren([orgClustersListRoute, orgClusterRoute])]),
+		]),
+	]),
 ]);
-
-// const cloudRouter = createHashRouter([
-// 	{
-// 		path: 'signin',
-// 		Component: AuthLayout,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: SignIn,
-// 			},
-// 		],
-// 	},
-// {
-// 	path: 'signup',
-// 	Component: AuthLayout,
-// 	children: [
-// 		{
-// 			index: true,
-// 			Component: SignUp,
-// 		},
-// 	],
-// },
-// {
-// 	path: 'resetpassword',
-// 	Component: AuthLayout,
-// 	children: [
-// 		{
-// 			index: true,
-// 			Component: ResetPassword,
-// 		},
-// 	],
-// },
-// 	{
-// 		Component: Dashboard,
-// 		children: [
-// 			{
-// 				path: 'organizations',
-// 				Component: Organizations,
-// 			},
-// 			{
-// 				path: '/',
-// 				Component: Organizations,
-// 			},
-// 			{
-// 				path: '/profile',
-// 				Component: Profile,
-// 			},
-// 		],
-// 	},
-// ]);
-
-// export default cloudRouter;

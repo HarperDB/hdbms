@@ -16,9 +16,9 @@ function MobileNav() {
 	return (
 		<div className="md:hidden" id="mobile-menu">
 			<div className="flex items-center justify-between">
-				<div>
+				<Link to="/orgs">
 					<img src="/logo_harper_db_studio.png" alt="logo" className="w-64" />
-				</div>
+				</Link>
 				<button
 					type="button"
 					className="text-grey-400 hover:text-white shadow-xs hover:bg-black-dark"
@@ -35,7 +35,7 @@ function MobileNav() {
 					isMenuOpen ? 'block' : 'hidden'
 				} md:hidden space-y-1 pb-3 bg-black-dark absolute left-0 top-full w-full rounded-b-md`}
 			>
-				<Link to="/" className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">
+				<Link to="/orgs" className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">
 					Organizations
 				</Link>
 				<Link
@@ -72,13 +72,15 @@ const DesktopNav = () => {
 		<div className="hidden md:block">
 			<div className="flex items-center justify-between">
 				<div className="inline-block">
-					<img src="/logo_harper_db_studio.png" alt="logo" className="w-64" />
+					<Link to="/orgs">
+						<img src="/logo_harper_db_studio.png" alt="logo" className="w-64" />
+					</Link>
 				</div>
 				<NavigationMenu>
 					<NavigationMenuList>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/">Organizations</Link>
+								<Link to="/orgs">Organizations</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>

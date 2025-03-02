@@ -25,7 +25,7 @@ function OrgCard({
 						onClick={() => {
 							setIsOrgMenuOpen(!isOrgMenuOpen);
 						}}
-					>	
+					>
 						<Ellipsis />
 					</Button>
 				</CardDescription>
@@ -39,8 +39,8 @@ function OrgCard({
 					aria-label={`View ${organizationName}`}
 					title={`View ${organizationName}`}
 				>
-					<span className='hover:border-b-2 py-2'>
-					View <ArrowRight className="inline-block" />
+					<span className="hover:border-b-2 py-2">
+						View <ArrowRight className="inline-block" />
 					</span>
 				</Link>
 			</CardContent>

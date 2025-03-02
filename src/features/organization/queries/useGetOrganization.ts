@@ -1,7 +1,6 @@
 import apiClient from '@/config/apiClient';
 import { useQuery } from '@tanstack/react-query';
 
-
 type Cluster = {
 	id: string;
 	name: string;
@@ -17,23 +16,18 @@ type Organization = {
 	clusters?: Cluster[];
 };
 
-
-
 const getOrganization = async (orgId: string) => {
-  const response = await apiClient.get(`/Organization/${orgId}`);
-    if (response.status == 200 && response.data) {
-      return response.data as Organization;
-    }
-    return null;
+	const response = await apiClient.get(`/Organization/${orgId}`);
+	if (response.status == 200 && response.data) {
+		return response.data as Organization;
+	}
+	return null;
 };
 
-
-
-
 export function useGetOrganization(orgId: string) {
-  return useQuery({
-   queryKey: ['Organization', orgId],
-   queryFn: () => getOrganization(orgId),
-   retry: false,
- });
- }
+	return useQuery({
+		queryKey: ['organization', orgId],
+		queryFn: () => getOrganization(orgId),
+		retry: false,
+	});
+}

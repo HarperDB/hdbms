@@ -50,8 +50,8 @@ function SignUp() {
 	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
 		await submitSignUpData(formData, {
 			onSuccess: () => {
-				navigate({ to: '/orgs' });
-				router.invalidate();
+				//TODO: Trigger a success toast message
+				navigate({ to: '/' });
 			},
 
 			onError: (error) => {
