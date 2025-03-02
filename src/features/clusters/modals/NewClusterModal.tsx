@@ -11,24 +11,51 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { NewClusterInfo, useCreateNewClusterMutation } from '../queries/useCreateNewCluster';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-function NewClusterModal() {
+const NewClusterSchema = z.object({
+	clusterName: z.string({
+		message: 'Please enter a cluster name.',
+	}),
+	clusterPrefix: z.string({
+		message: 'Please enter a cluster prefix.',
+	}),
+});
+
+function NewClusterModal({ orgId }: { orgId: string }) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
-		// resolver: zodResolver(SignInSchema),
+		resolver: zodResolver(NewClusterSchema),
 		defaultValues: {
 			clusterName: '',
 			clusterPrefix: '',
 		},
 	});
 
-	const submitForm = async (formData: unknown) => {
-		console.log(formData);
+	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
+	const queryClient = useQueryClient();
+
+	const submitForm = async (formData: { clusterName: string; clusterPrefix: string }) => {
+		Object.assign(formData, { organizationId: orgId });
+		const updatedFormData = {
+			organizationId: orgId,
+			...formData,
+		} as NewClusterInfo;
+		submitNewClusterData(updatedFormData, {
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ['organization'], refetchType: 'active' });
+				setIsModalOpen(false);
+			},
+		});
 	};
 
 	return (
-		<Dialog>
+		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
 				<Button variant="positive" className="rounded-full md:w-44">
 					{' '}
