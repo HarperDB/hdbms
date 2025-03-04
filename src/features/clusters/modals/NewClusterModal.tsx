@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { NewClusterInfo, useCreateNewClusterMutation } from '../queries/useCreateNewCluster';
+import { NewClusterInfo, useCreateNewClusterMutation } from '../hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
