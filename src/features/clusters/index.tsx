@@ -1,10 +1,13 @@
-import { Navigate, Outlet, useMatch, useMatchRoute } from '@tanstack/react-router';
+import { Navigate, Outlet, getRouteApi, useMatchRoute } from '@tanstack/react-router';
+
+const route = getRouteApi('');
 
 function ClustersIndex() {
-	//if on current route, redirect to /list
-	const match = useMatch({ from: '/orgs/$organizationId/clusters', shouldThrow: false });
-	if (match !== undefined) {
-		return <Navigate to="/list" />;
+	const { organizationId } = route.useParams();
+	const matchRoute = useMatchRoute();
+	const match = matchRoute({ to: '/orgs/$organizationId/clusters' });
+	if (match) {
+		return <Navigate to={`/orgs/${organizationId}/clusters/list`} />;
 	} else {
 		return <Outlet />;
 	}

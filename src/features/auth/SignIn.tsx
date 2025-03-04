@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router';
-import { useLoginMutation } from '@/features/auth/queries/useSignIn';
+import { useLoginMutation } from '@/features/auth/hooks/useSignIn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';

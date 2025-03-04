@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useSignUpMutation } from '@/features/auth/queries/useSignUp';
+import { useSignUpMutation } from '@/features/auth/hooks/useSignUp';
 
 const SignInSchema = z.object({
 	firstname: z
