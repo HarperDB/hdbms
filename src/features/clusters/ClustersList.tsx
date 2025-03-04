@@ -10,7 +10,7 @@ const route = getRouteApi('');
 
 function ClustersList() {
 	const { organizationId } = route.useParams();
-	const { data: orgInfo, isLoading, isError, isSuccess } = useGetOrganization(organizationId);
+	const { data: orgInfo, isSuccess } = useGetOrganization(organizationId);
 
 	return (
 		<div>
@@ -30,7 +30,7 @@ function ClustersList() {
 			</section>
 			<section>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-					{isSuccess &&
+					{isSuccess && orgInfo?.clusters?.length ? (
 						orgInfo?.clusters.map((cluster) => (
 							<div key={cluster.id} className="cols-span-1 md:col-span-4 lg:col-span-3 2xl:col-span-2">
 								<ClusterCard
@@ -39,7 +39,12 @@ function ClustersList() {
 									organizationId={cluster.organizationId}
 								/>
 							</div>
-						))}
+						))
+					) : (
+						<div className="cols-span-1 md:col-span-12">
+							<h2 className="text-2xl text-center text-white">No clusters found. Create a new cluster.</h2>
+						</div>
+					)}
 				</div>
 			</section>
 		</div>

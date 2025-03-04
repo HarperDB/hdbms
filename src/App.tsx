@@ -5,6 +5,8 @@ import { localRouteTree } from './router/localRouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/react-query/queryClient';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 function App() {
 	const isLocalStudio = import.meta.env.VITE_REACT_APP_LOCALSTUDIO == 'true';
@@ -32,6 +34,21 @@ function App() {
 				>
 					Toggle Theme
 				</button>
+				{/* <button
+					className="fixed p-2 text-white bg-blue-400 rounded-md bottom-20 right-20"
+					onClick={() => {
+						toast.error('Error', {
+							description: 'testinggg',
+							action: {
+								label: 'Dismiss',
+								onClick: () => toast.dismiss(),
+							},
+						});
+					}}
+				>
+					testing toast component
+				</button> */}
+				<Toaster />
 			</QueryClientProvider>
 		</>
 	);

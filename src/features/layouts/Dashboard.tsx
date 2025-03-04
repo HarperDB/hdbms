@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from '@tanstack/react-router';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { NavBar } from '@/components/Navbar';
+import Loading from '@/components/Loading';
 
 function Dashboard() {
 	const { data: user, isLoading: isUserLoading } = useGetCurrentUser();
@@ -9,7 +10,7 @@ function Dashboard() {
 	}
 
 	if (isUserLoading) {
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 
 	return (
