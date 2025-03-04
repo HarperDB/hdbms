@@ -1,4 +1,5 @@
 import apiClient from '@/config/apiClient';
+import { queryKeys } from '@/react-query/constants';
 import { useQuery } from '@tanstack/react-query';
 
 type Cluster = {
@@ -26,7 +27,7 @@ const getOrganization = async (orgId: string) => {
 
 export function useGetOrganization(orgId: string) {
 	return useQuery({
-		queryKey: ['organization', orgId],
+		queryKey: [queryKeys.organization, orgId],
 		queryFn: () => getOrganization(orgId),
 		retry: false,
 	});

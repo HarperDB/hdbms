@@ -1,4 +1,5 @@
 import apiClient from '@/config/apiClient';
+import { queryKeys } from '@/react-query/constants';
 import { useQuery, useMutation, useQueryClient, QueryCache } from '@tanstack/react-query';
 type OrgRoles = {
 	id: string;
@@ -36,7 +37,6 @@ const useAuth = () => {
 	// });
 
 	const login = useMutation({
-
 		mutationFn: async ({ email, password }: SignInCredentials) => {
 			const { status, data } = await apiClient.post('/Login', {
 				email,
@@ -54,7 +54,7 @@ const useAuth = () => {
 	});
 
 	const logout = useQuery<User | null>({
-		queryKey: ['user'],
+		queryKey: [queryKeys.user],
 		queryFn: async () => {
 			const response = await apiClient.get('/Logout');
 			if (response.status == 200 && response.data) {

@@ -1,6 +1,6 @@
 import apiClient from '@/config/apiClient';
+import { queryKeys } from '@/react-query/constants';
 import { useQuery } from '@tanstack/react-query';
-
 
 type OrgRoles = {
 	id: string;
@@ -15,26 +15,20 @@ type User = {
 	email: string;
 	firstname: string;
 	lastname: string;
-	roles?: OrgRoles[];
+	roles: OrgRoles[];
 };
-
-
 
 const getCurrentUser = async () => {
-  const response = await apiClient.get('/User/current');
-    if (response.status == 200 && response.data) {
-      return response.data as User;
-    }
-    return null;
+	const { data } = await apiClient.get('/User/current');
+	return data as User;
 };
 
-
-
-
 export function useGetCurrentUser() {
-  return useQuery<User | null>({
-   queryKey: ['user'],
-   queryFn: () => getCurrentUser(),
-   retry: false,
- });
- }
+	const { data, isLoading } = useQuery({
+		queryKey: [queryKeys.user],
+		queryFn: getCurrentUser,
+		retry: false,
+	});
+
+	return { data, isLoading };
+}
