@@ -14,7 +14,7 @@ function Dashboard() {
 
 	return (
 		<div>
-			<header className="bg-black-dark dark:bg-black-dark sticky top-0 z-40 w-full dark:border-b dark:border-black h-20 py-4 px-4 md:px-12">
+			<header className="sticky top-0 z-40 w-full h-20 px-4 py-4 bg-black-dark dark:bg-black-dark dark:border-b dark:border-black md:px-12">
 				<NavBar />
 			</header>
 			<main className="pt-4 min-h-[calc(100vh-theme(spacing.20))] px-4 md:px-12">

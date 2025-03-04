@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '../hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/react-query/constants';
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -48,7 +49,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		} as NewClusterInfo;
 		submitNewClusterData(updatedFormData, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: ['organization'], refetchType: 'active' });
+				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
 			},
 		});
