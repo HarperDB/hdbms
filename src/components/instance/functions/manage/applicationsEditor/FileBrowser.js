@@ -248,20 +248,18 @@ function Entries({
 }
 
 const setDefaultEntriesVisibility = (entries) => 
-	// eslint-disable-next-line
+	 
 	 entries.map((entry) => {
-		if (isFolder(entry)) {
-			if (Array.isArray(entry.entries)) {
-				// Recursively call the function for nested entries
-				return {
-					...entry,
-					visible: true,
-					entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
-				};
-			} 
-				return entry; // Return the entry as is if it doesn't have entries
-			
-		}
+		if (Array.isArray(entry.entries)) {
+			// Recursively call the function for nested entries
+			return {
+				...entry,
+				visible: true,
+				entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
+			};
+		} 
+			return entry; // Return the entry as is if it doesn't havze entries
+		
 	})
 ;
 
