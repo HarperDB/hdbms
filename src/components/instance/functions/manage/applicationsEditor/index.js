@@ -103,11 +103,6 @@ function WebIDE({
 		setSelectedFile(update);
 	}
 
-	function updateFileTree(folder, isOpen) {
-		console.log('update visibility of files on tree ', folder);
-		console.log('isOpen ', isOpen);
-	}
-
 	return (
 		<Row id="webide">
 			<Col md="4" xl="3" className="file-browser-outer-container mb-3">
@@ -161,17 +156,14 @@ function WebIDE({
 					selectedFolder={selectedFolder}
 					selectedPackage={selectedPackage}
 					onDeployProject={onDeployProject}
-					onFolderSelect={(folder, isOpen) => {
+					onFolderSelect={(folder) => {
 						// all i want to happen here is: update currently selected folder
 						// do NOT update currently selected "file" or change view
 						// open or close the folder. that's the tough one
-						console.log('folder! ', folder);
+						// console.log('folder! ', folder);
 						// if folder is NOT null, the entry is returned. great!
 						// otherwise, a folder was clicked and it is null
 						setSelectedFolder(folder);
-
-						// experimeinetal - can probably handle in setSelectedFolder
-						// updateFileTree(folder, isOpen);
 					}}
 					onPackageSelect={(pkg) => {
 						resetSelections();

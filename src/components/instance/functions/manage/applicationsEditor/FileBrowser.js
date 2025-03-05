@@ -108,7 +108,15 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 }
 
 // Entry could be a harper component (top level), directory, or file
-function Entry({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFolderSelect, Icon }) {
+function Entry({
+	directoryEntry,
+	selectedFile,
+	selectedFolder,
+	onFileSelect,
+	onFolderSelect,
+	Icon,
+	setFileTreeVisibility,
+}) {
 	const isFileSelected = directoryEntry.path === selectedFile;
 	const isFolderSelected = directoryEntry.path === selectedFolder?.path;
 	// file receives open/close toggle func from
@@ -120,10 +128,11 @@ function Entry({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onF
 		const isDir = isFolder(directoryEntry);
 
 		if (isDir) {
-			// console.log('isDir & directoryEntry: ', directoryEntry);
+			console.log('Folder clicked: ', directoryEntry);
 			// console.log("isFolderSelected?? ", isFolderSelected);
 			// directory clicked: set to selected / highlighted & toggle visibliity
 			onFolderSelect(isFolderSelected ? null : directoryEntry);
+			setFileTreeVisibility(directoryEntry.key);
 
 			// one click on dir name toggles selected / highlighted state / ui
 			// if (isFolderSelected && iconWasClicked) {
@@ -166,6 +175,7 @@ function Entries({
 	selectedFile,
 	selectedFolder,
 	selectedPackage,
+	setFileTreeVisibility,
 }) {
 	const [open, setOpen] = useState(true);
 
@@ -175,9 +185,23 @@ function Entries({
 	let Icon;
 	// top-level dir === package
 	if (directoryEntry.path.split('/').length === 2) {
-		Icon = () => ProjectIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+		Icon = (e) =>
+			ProjectIcon({
+				isOpen: open,
+				toggleClosed: () => {
+					// setFileTreeVisibility(e);
+					setOpen(!open);
+				},
+			});
 	} else if (directoryEntry.entries) {
-		Icon = () => FolderIcon({ isOpen: open, toggleClosed: () => setOpen(!open) });
+		Icon = (e) =>
+			FolderIcon({
+				isOpen: open,
+				toggleClosed: () => {
+					// setFileTreeVisibility(e);
+					setOpen(!open);
+				},
+			});
 	} else {
 		Icon = () => FiletypeIcon(fileExtension);
 	}
@@ -214,6 +238,7 @@ function Entries({
 								}}
 								onFileSelect={onFileSelect}
 								onFolderSelect={onFolderSelect}
+								setFileTreeVisibility={setFileTreeVisibility}
 							/>
 						)}
 					</li>
@@ -239,6 +264,7 @@ function Entries({
 							onFileRename={onFileRename}
 							onFolderSelect={onFolderSelect}
 							onPackageSelect={onPackageSelect}
+							setFileTreeVisibility={setFileTreeVisibility}
 						/>
 					</ul>
 				</li>
@@ -258,10 +284,29 @@ const setDefaultEntriesVisibility = (entries) =>
 				entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
 			};
 		} 
-			return entry; // Return the entry as is if it doesn't havze entries
+			return entry; // Return the entry as is if it doesn't have entries
 		
 	})
 ;
+
+const toggleEntriesVisibility = (entries, key) => entries.map((entry) => {
+		if (Array.isArray(entry.entries)) {
+			if (entry.key === key) {
+				return {
+					...entry,
+					visible: !entry.visible,
+				};
+			} 
+				// Recursively call the function for nested entries
+				return {
+					...entry,
+					entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
+				};
+			
+		} 
+			return entry; // Return the entry as is if it doesn't have entries
+		
+	});
 
 // A recursive directory tree representation
 function FileBrowser({
@@ -278,7 +323,10 @@ function FileBrowser({
 	// This functionality controls file tree visibility based on which directories are toggled open or closed
 	const [files, setFiles] = useState(setDefaultEntriesVisibility(fileTree.entries));
 
-	console.log('files!!!! ', files);
+	function setFileTreeVisibility(folderKey) {
+		const updatedFiles = toggleEntriesVisibility(files, folderKey);
+		setFiles(updatedFiles);
+	}
 
 	return !fileTree?.entries?.length ? (
 		<NoProjects />
@@ -290,6 +338,7 @@ function FileBrowser({
 						selectedFile={selectedFile}
 						selectedFolder={selectedFolder}
 						selectedPackage={selectedPackage}
+						setFileTreeVisibility={setFileTreeVisibility}
 						onFileSelect={onFileSelect}
 						onFileRename={onFileRename}
 						onFolderSelect={onFolderSelect}
