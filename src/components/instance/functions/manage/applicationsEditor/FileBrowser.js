@@ -273,9 +273,9 @@ function Entries({
 	);
 }
 
-const setDefaultEntriesVisibility = (entries) => 
-	 
-	 entries.map((entry) => {
+/* eslint-disable */
+const setDefaultEntriesVisibility = (entries) => {
+	return entries.map((entry) => {
 		if (Array.isArray(entry.entries)) {
 			// Recursively call the function for nested entries
 			return {
@@ -283,30 +283,33 @@ const setDefaultEntriesVisibility = (entries) =>
 				visible: true,
 				entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
 			};
-		} 
+		} else {
 			return entry; // Return the entry as is if it doesn't have entries
-		
-	})
-;
+		}
+	});
+};
 
-const toggleEntriesVisibility = (entries, key) => entries.map((entry) => {
+const toggleEntriesVisibility = (entries, key) => {
+	return entries.map((entry) => {
 		if (Array.isArray(entry.entries)) {
 			if (entry.key === key) {
 				return {
 					...entry,
 					visible: !entry.visible,
 				};
-			} 
+			} else {
 				// Recursively call the function for nested entries
 				return {
 					...entry,
 					entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
 				};
-			
-		} 
+			}
+		} else {
 			return entry; // Return the entry as is if it doesn't have entries
-		
+		}
 	});
+};
+/* eslint-enable */
 
 // A recursive directory tree representation
 function FileBrowser({
