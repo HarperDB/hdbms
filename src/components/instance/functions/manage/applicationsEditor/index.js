@@ -103,7 +103,10 @@ function WebIDE({
 		setSelectedFile(update);
 	}
 
-	// console.log('selectedFile ', selectedFile);
+	function updateFileTree(folder, isOpen) {
+		console.log('update visibility of files on tree ', folder);
+		console.log('isOpen ', isOpen);
+	}
 
 	return (
 		<Row id="webide">
@@ -153,25 +156,22 @@ function WebIDE({
 					</FileMenu>
 				</div>
 				<FileBrowser
-					files={fileTree}
-					root={fileTree.path}
+					fileTree={fileTree}
 					selectedFile={selectedFile?.path}
 					selectedFolder={selectedFolder}
 					selectedPackage={selectedPackage}
 					onDeployProject={onDeployProject}
-					onFolderSelect={(folder) => {
-						console.log('folder select ', folder);
-						// TODO: why are we resetting here? this should not reset the currently selected file
-						// resetSelections();
+					onFolderSelect={(folder, isOpen) => {
+						// all i want to happen here is: update currently selected folder
+						// do NOT update currently selected "file" or change view
+						// open or close the folder. that's the tough one
+						console.log('folder! ', folder);
+						// if folder is NOT null, the entry is returned. great!
+						// otherwise, a folder was clicked and it is null
 						setSelectedFolder(folder);
-						// if (!folder) {
-						// 	// TODO: ok, why is this firing at all if "no folder"
-						// 	// ahhh it fires when you click the folder ICON
-						// 	// TODO: i want to open / close on folder icon OR text select
-						// 	updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_WINDOW, activeEditorWindow);
-						// } else {
-						updateActiveEditorWindow(EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW, activeEditorWindow);
-						// }
+
+						// experimeinetal - can probably handle in setSelectedFolder
+						// updateFileTree(folder, isOpen);
 					}}
 					onPackageSelect={(pkg) => {
 						resetSelections();
@@ -261,10 +261,10 @@ function WebIDE({
 						}}
 					/>
 
-					<DefaultFolderWindow
+					{/* <DefaultFolderWindow
 						active={activeEditorWindow === EDITOR_WINDOWS.DEFAULT_FOLDER_WINDOW}
 						type={selectedPackage ? 'package' : selectedFolder ? 'folder' : 'nothing'}
-					/>
+					/> */}
 
 					<NameProjectWindow
 						active={activeEditorWindow === EDITOR_WINDOWS.NAME_PROJECT_WINDOW}
@@ -334,7 +334,6 @@ function WebIDE({
 						active={activeEditorWindow === EDITOR_WINDOWS.CODE_EDITOR_WINDOW}
 						file={selectedFile}
 						onFileChange={async (fileContent) => {
-							if (!selectedFile) return; // this line should theorectically never happen...cant change a file if none selected
 							updateFileInMemory(fileContent);
 							await onFileChange({ path: selectedFile?.path, content: fileContent });
 							setSelectedFile({ ...selectedFile, content: fileContent, cached: true });

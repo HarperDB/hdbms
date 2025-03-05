@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { Card, CardBody } from 'reactstrap';
 
+function parseFileExtension(name) {
+	return name && [...name].includes('.') ? name.split('.').slice(-1)[0] : null;
+}
+
+function directorySortComparator(a, b) {
+	const A = +Boolean(a.entries);
+	const B = +Boolean(b.entries);
+	return A === B ? a.name.localeCompare(b.name) : B - A;
+}
+
+const isFolder = (entry) => Boolean(entry.entries);
+
 function NoProjects() {
 	return (
 		<Card className="file-browser-scroll-container">
@@ -29,22 +41,6 @@ function NoProjects() {
 	);
 }
 
-function parseFileExtension(name) {
-	return name && [...name].includes('.') ? name.split('.').slice(-1)[0] : null;
-}
-function directorySortComparator(a, b) {
-	// TODO: refactor.
-
-	// directories first, then flat files sorted
-	// ascending, alphanumerically
-	const A = +Boolean(a.entries);
-	const B = +Boolean(b.entries);
-
-	return A === B ? a.name.localeCompare(b.name) : B - A;
-}
-
-const isFolder = (entry) => Boolean(entry.entries);
-
 function ProjectIcon({ toggleClosed, isOpen }) {
 	return (
 		<i
@@ -59,9 +55,9 @@ function ProjectIcon({ toggleClosed, isOpen }) {
 		/>
 	);
 }
+
 function FolderIcon({ toggleClosed, isOpen }) {
 	return (
-		// TODO: A11y on this is not good at all..... Need to refactor the file tree to make the file tree more accessible for ALL users.
 		<i
 			onClick={toggleClosed}
 			onKeyDown={toggleClosed}
@@ -83,7 +79,6 @@ function FiletypeIcon(extension) {
 }
 
 function Package({ name, url, onPackageSelect, selectedPackage }) {
-	console.log('selected package ', selectedPackage);
 	// FIXME: when we click another package, they both get selected.
 	const [selected, setSelected] = useState(Boolean(selectedPackage) && name === selectedPackage?.name);
 
@@ -112,10 +107,8 @@ function Package({ name, url, onPackageSelect, selectedPackage }) {
 	);
 }
 
-function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFolderSelect, Icon }) {
-	const isDir = isFolder(directoryEntry);
-	const renameFileIconClass = 'rename-file';
-	const deployFileIconClass = 'deploy-project';
+// Entry could be a harper component (top level), directory, or file
+function Entry({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFolderSelect, Icon }) {
 	const isFileSelected = directoryEntry.path === selectedFile;
 	const isFolderSelected = directoryEntry.path === selectedFolder?.path;
 	// file receives open/close toggle func from
@@ -123,30 +116,27 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 	// if it's a flat file, calls onFileSelect so
 	// parent can get file content.
 
-	function handleToggleSelected(e) {
-		// TODO FIX HANDLING SO WE CAN HAVE NUANCED CLICK BEHAVIOR
-
-		// set the folder/file as currently selected folder/file
-		// visually highlight directory name
-		// note: if directory already highlighted, make sure if we've clicked on the pencil/edit icon
-		// that we don't untoggle directory selection; leave selected if icon clicked.
-		const iconWasClicked =
-			e.target.classList.contains(renameFileIconClass) || e.target.classList.contains(deployFileIconClass);
-		// if icon's clicked, select, but don't unselect.
-		// if (iconWasClicked) return;
+	function handleEntryClicked() {
+		const isDir = isFolder(directoryEntry);
 
 		if (isDir) {
+			// console.log('isDir & directoryEntry: ', directoryEntry);
+			// console.log("isFolderSelected?? ", isFolderSelected);
+			// directory clicked: set to selected / highlighted & toggle visibliity
+			onFolderSelect(isFolderSelected ? null : directoryEntry);
+
 			// one click on dir name toggles selected / highlighted state / ui
-			if (isFolderSelected && iconWasClicked) {
-				// TODO: don't
-			} else {
-				onFolderSelect(isFolderSelected ? null : directoryEntry);
-			}
-		} else if (isFileSelected) {
-			onFileSelect(null);
+			// if (isFolderSelected && iconWasClicked) {
+			// 	// TODO: don't
+			// } else {
+			// onFolderSelect(isFolderSelected ? null : directoryEntry);
+			// }
+			// } else if (isFileSelected) {
+			// 	// TODO: why are we doing this...?
+			// 	onFileSelect(null);
+			// } else {
 		} else {
-			// one click on file name sets it to selected / highlighted
-			// AND retrieves file content
+			// file clicked: set to selected / highlighted & retrieve file content
 			onFileSelect(directoryEntry);
 		}
 	}
@@ -154,7 +144,7 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 	return (
 		<button
 			type="button"
-			onClick={handleToggleSelected}
+			onClick={handleEntryClicked}
 			className={cn('file', {
 				'file-selected': isFileSelected,
 				'folder-selected': isFolderSelected,
@@ -166,9 +156,8 @@ function File({ directoryEntry, selectedFile, selectedFolder, onFileSelect, onFo
 	);
 }
 
-function Folder({
-	directoryEntry,
-	userOnSelect,
+function Entries({
+	directoryEntry, // this is actually the fileTree for current entry
 	onFolderSelect,
 	onDeployProject,
 	onFileSelect,
@@ -196,7 +185,8 @@ function Folder({
 	return (
 		<>
 			{
-				// FIXME: don't hardcode 'components', get from root .name property of fileTree.
+				// Note: 'components' in this context refers to all user projects AKA Harper Components
+				// TODO: do not pass top level of ALL projects to FileBrowser.js, adds unnecessary compute?
 				directoryEntry.name !== 'components' ? (
 					<li
 						key={directoryEntry.key}
@@ -212,7 +202,7 @@ function Folder({
 								url={directoryEntry.package}
 							/>
 						) : (
-							<File
+							<Entry
 								Icon={Icon}
 								selectedFile={selectedFile}
 								selectedFolder={selectedFolder}
@@ -224,7 +214,6 @@ function Folder({
 								}}
 								onFileSelect={onFileSelect}
 								onFolderSelect={onFolderSelect}
-								userOnSelect={userOnSelect}
 							/>
 						)}
 					</li>
@@ -240,7 +229,7 @@ function Folder({
 							'folder-contents-closed': false,
 						})}
 					>
-						<Folder
+						<Entries
 							selectedFile={selectedFile}
 							selectedFolder={selectedFolder}
 							selectedPackage={selectedPackage}
@@ -250,7 +239,6 @@ function Folder({
 							onFileRename={onFileRename}
 							onFolderSelect={onFolderSelect}
 							onPackageSelect={onPackageSelect}
-							userOnSelect={userOnSelect}
 						/>
 					</ul>
 				</li>
@@ -259,26 +247,48 @@ function Folder({
 	);
 }
 
+const setDefaultEntriesVisibility = (entries) => 
+	// eslint-disable-next-line
+	 entries.map((entry) => {
+		if (isFolder(entry)) {
+			if (Array.isArray(entry.entries)) {
+				// Recursively call the function for nested entries
+				return {
+					...entry,
+					visible: true,
+					entries: setDefaultEntriesVisibility(entry.entries), // Recursively modify entries
+				};
+			} 
+				return entry; // Return the entry as is if it doesn't have entries
+			
+		}
+	})
+;
+
 // A recursive directory tree representation
 function FileBrowser({
-	files,
-	userOnSelect,
+	fileTree,
 	onFileSelect,
+	onFolderSelect,
 	onPackageSelect,
 	onDeployProject,
 	onFileRename,
-	onFolderSelect,
 	selectedFile,
 	selectedFolder,
 	selectedPackage,
 }) {
-	return !files?.entries?.length ? (
+	// This functionality controls file tree visibility based on which directories are toggled open or closed
+	const [files, setFiles] = useState(setDefaultEntriesVisibility(fileTree.entries));
+
+	console.log('files!!!! ', files);
+
+	return !fileTree?.entries?.length ? (
 		<NoProjects />
 	) : (
 		<Card className="file-browser-scroll-container">
 			<CardBody>
 				<ul className="file-browser">
-					<Folder
+					<Entries
 						selectedFile={selectedFile}
 						selectedFolder={selectedFolder}
 						selectedPackage={selectedPackage}
@@ -287,8 +297,7 @@ function FileBrowser({
 						onFolderSelect={onFolderSelect}
 						onDeployProject={onDeployProject}
 						onPackageSelect={onPackageSelect}
-						userOnSelect={userOnSelect}
-						directoryEntry={files}
+						directoryEntry={fileTree}
 					/>
 				</ul>
 			</CardBody>
