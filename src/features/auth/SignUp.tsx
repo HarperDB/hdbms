@@ -34,7 +34,6 @@ const SignInSchema = z.object({
 
 function SignUp() {
 	const navigate = useNavigate();
-	const router = useRouter();
 	const form = useForm<z.infer<typeof SignInSchema>>({
 		resolver: zodResolver(SignInSchema),
 		defaultValues: {
@@ -53,10 +52,6 @@ function SignUp() {
 				//TODO: Trigger a success toast message
 				navigate({ to: '/' });
 			},
-
-			onError: (error) => {
-				console.log('error:', error);
-			},
 		});
 	};
 
@@ -64,7 +59,7 @@ function SignUp() {
 		<div className="text-white w-xs">
 			<h1 className="text-3xl font-light">Sign up for Harper Studio</h1>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(submitForm)} className="my-4 grid gap-4">
+				<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-4 my-4">
 					<FormField
 						control={form.control}
 						name="firstname"
@@ -128,13 +123,13 @@ function SignUp() {
 						)}
 					/>
 
-					<Button type="submit" variant="submit" className="w-full rounded-full my-2">
+					<Button type="submit" variant="submit" className="w-full my-2 rounded-full">
 						Sign Up For Free
 					</Button>
 				</form>
 			</Form>
 			<div className="flex px-4 mt-4 underline place-content-between">
-				<Link className="text-sm m-auto" to="/">
+				<Link className="m-auto text-sm" to="/">
 					Already have an account? Sign in instead.
 				</Link>
 			</div>

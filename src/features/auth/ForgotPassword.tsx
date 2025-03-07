@@ -1,5 +1,5 @@
-import { Link, useNavigate, useRouter } from '@tanstack/react-router';
-import { useLoginMutation } from '@/features/auth/hooks/useSignIn';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useForgotPasswordMutation } from '@/features/auth/hooks/useForgotPassword';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -7,39 +7,31 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-const SignInSchema = z.object({
+const ForgotPasswordSchema = z.object({
 	email: z
 		.string({
 			message: 'Please select an email to display.',
 		})
 		.max(75, { message: 'Email must be less than 75 characters' })
 		.email(),
-	password: z
-		.string({
-			message: 'Please enter your password',
-		})
-		.min(1, { message: 'Password is required' })
-		.max(50, { message: 'Password must be less than 50 characters' }),
 });
 
-function SignIn() {
+function ForgotPassword() {
 	const navigate = useNavigate();
-	const router = useRouter();
-	const form = useForm<z.infer<typeof SignInSchema>>({
-		resolver: zodResolver(SignInSchema),
+	const form = useForm<z.infer<typeof ForgotPasswordSchema>>({
+		resolver: zodResolver(ForgotPasswordSchema),
 		defaultValues: {
 			email: '',
-			password: '',
 		},
 	});
 
-	const { mutate: submitLoginData } = useLoginMutation();
+	const { mutate: submitForgotPasswordData } = useForgotPasswordMutation();
 
-	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
-		await submitLoginData(formData, {
+	const submitForm = async (formData: z.infer<typeof ForgotPasswordSchema>) => {
+		await submitForgotPasswordData(formData, {
 			onSuccess: () => {
-				navigate({ to: '/orgs' });
-				router.invalidate();
+				//TODO - Trigger a success toast message
+				navigate({ to: '/' });
 			},
 		});
 	};
@@ -67,39 +59,21 @@ function SignIn() {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem className="my-2">
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input
-										type="password"
-										placeholder="password"
-										className="bg-purple-400 border-purple-400"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 					<Button type="submit" variant="submit" className="w-full my-2 rounded-full">
 						Sign In
 					</Button>
 				</form>
 			</Form>
 			<div className="flex px-4 mt-4 underline place-content-between">
+				<Link className="text-sm" to="/">
+					Sign in to your account
+				</Link>
 				<Link className="text-sm" to="/signup">
 					Sign up for free
-				</Link>
-				<Link className="text-sm" to="/forgotpassword">
-					Forgot password?
 				</Link>
 			</div>
 		</div>
 	);
 }
 
-export default SignIn;
+export default ForgotPassword;
