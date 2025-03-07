@@ -60,7 +60,7 @@ function ForgotPassword() {
 						)}
 					/>
 					<Button type="submit" variant="submit" className="w-full my-2 rounded-full">
-						Sign In
+						Send Password Reset Email
 					</Button>
 				</form>
 			</Form>
