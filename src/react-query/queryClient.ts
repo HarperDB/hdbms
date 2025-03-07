@@ -1,9 +1,9 @@
-import { QueryCache, QueryClient } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 //toast component import
 
-function errorHandler(errorMsg: string) {
-	toast.error('Error:', {
+function errorHandler(errorMsg: string, errorStatus: number) {
+	toast.error(`Error: ${errorStatus}`, {
 		description: errorMsg,
 		action: {
 			label: 'Dismiss',
@@ -15,7 +15,12 @@ function errorHandler(errorMsg: string) {
 export const queryClient = new QueryClient({
 	queryCache: new QueryCache({
 		onError: (error) => {
-			errorHandler(error.message);
+			errorHandler(error.message, error.status);
+		},
+	}),
+	mutationCache: new MutationCache({
+		onError: (error) => {
+			errorHandler(error.message, error.status);
 		},
 	}),
 });
