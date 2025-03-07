@@ -13,6 +13,7 @@ import ClusterList from '@/features/clusters/ClustersList';
 import AuthLayout from '../features/layouts/AuthLayout';
 import SignIn from '../features/auth/SignIn';
 import SignUp from '../features/auth/SignUp';
+import ForgotPassword from '../features/auth/ForgotPassword';
 import ClustersIndex from '@/features/clusters';
 // const Profile = lazy(() => import('@/features/profile'));
 
@@ -38,6 +39,11 @@ const signUpRoute = createRoute({
 	getParentRoute: () => authLayout,
 	path: 'signup',
 	component: SignUp,
+});
+const forgotPasswordRoute = createRoute({
+	getParentRoute: () => authLayout,
+	path: 'forgotpassword',
+	component: ForgotPassword,
 });
 
 // Private Routes
@@ -85,7 +91,7 @@ const orgClusterRoute = createRoute({
 });
 
 export const cloudRouteTree = rootRoute.addChildren([
-	authLayout.addChildren([signInRoute, signUpRoute]),
+	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute]),
 	dashboardLayout.addChildren([
 		profileRoute,
 		orgsRoute.addChildren([
