@@ -10,7 +10,7 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
 			className={cn(
 				`border-input file:text-foreground placeholder:text-muted-foreground selection:bg-purple
         selection:text-primary-foreground aria-invalid:outline-destructive/60 aria-invalid:ring-destructive/20 
-        dark:aria-invalid:outline-destructive dark:bg-black dark:border-black-dark dark:aria-invalid:ring-destructive/50 ring-ring/10 
+        dark:aria-invalid:outline-destructive dark:aria-invalid:ring-destructive/50 ring-ring/10 
         dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 aria-invalid:outline-destructive/60 
         dark:aria-invalid:outline-destructive dark:aria-invalid:ring-destructive/40 
         aria-invalid:ring-destructive/20 aria-invalid:border-destructive/60 dark:aria-invalid:border-destructive 

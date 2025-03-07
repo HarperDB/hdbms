@@ -186,7 +186,7 @@
 
 @layer base {
   h1 {
-    @apply font-radioGrotesk font-bold;
+    @apply font-bold font-radioGrotesk;
   }
   * {
     @apply border-border outline-ring/50;

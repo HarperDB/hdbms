@@ -2,34 +2,38 @@ import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
 import { useQuery } from '@tanstack/react-query';
 
-type OrgRoles = {
+type Instance = {
 	id: string;
-	organizationId: string;
-	organizationName: string;
-	roleName: 'admin' | 'member';
+	status: 'PROVISIONING' | 'RUNNING' | 'STOPPED' | 'TERMINATED';
+	instanceTypeId: string;
+	hostId: string;
+	createdByUserId: string;
+	fqdns: string[];
+	replicationHosts: string[];
+	clusterId: string;
+	name: string;
+	version: string;
+	tempPassword: string;
 };
 
-// TODO: Consolidate with useOnSignUpSubmitMutation
-type User = {
+type Cluster = {
 	id: string;
-	email: string;
-	firstname: string;
-	lastname: string;
-	roles?: OrgRoles[];
+	organizationId: string;
+	name: string;
+	instances: Instance[];
 };
 
 const getClusterInfo = async (clusterId: string) => {
-	const response = await apiClient.get(`/Cluster/${clusterId}`);
-	if (response.status == 200 && response.data) {
-		return response.data as User;
-	}
-	return null;
+	const { data } = await apiClient.get(`/Cluster/${clusterId}`);
+	return data as Cluster;
 };
 
 export function useGetClusterInfo(clusterId: string) {
-	return useQuery<User | null>({
+	const { data, isLoading } = useQuery({
 		queryKey: [queryKeys.cluster, clusterId],
 		queryFn: () => getClusterInfo(clusterId),
 		retry: false,
 	});
+
+	return { data, isLoading };
 }
