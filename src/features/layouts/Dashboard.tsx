@@ -6,7 +6,7 @@ import Loading from '@/components/Loading';
 function Dashboard() {
 	const { data: user, isLoading: isUserLoading } = useGetCurrentUser();
 	if (!user && !isUserLoading) {
-		return <Navigate to="/signin" />;
+		return <Navigate to="/" />;
 	}
 
 	if (isUserLoading) {

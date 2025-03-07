@@ -42,7 +42,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { clusterName: string; clusterPrefix: string }) => {
-		Object.assign(formData, { organizationId: orgId });
+		// Object.assign(formData, { organizationId: orgId });
 		const updatedFormData = {
 			organizationId: orgId,
 			...formData,

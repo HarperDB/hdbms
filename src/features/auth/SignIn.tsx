@@ -41,10 +41,6 @@ function SignIn() {
 				navigate({ to: '/orgs' });
 				router.invalidate();
 			},
-
-			onError: (error) => {
-				console.log('error:', error);
-			},
 		});
 	};
 
@@ -89,7 +85,7 @@ function SignIn() {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" variant="submit" className="w-full rounded-full my-2">
+					<Button type="submit" variant="submit" className="w-full my-2 rounded-full">
 						Sign In
 					</Button>
 				</form>
