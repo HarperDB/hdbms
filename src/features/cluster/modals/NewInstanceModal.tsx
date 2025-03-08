@@ -75,7 +75,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 			<DialogTrigger asChild>
 				<Button variant="positive" className="rounded-full md:w-44">
 					{' '}
-					<Plus /> New Cluster
+					<Plus /> New Instance
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
