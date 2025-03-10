@@ -55,7 +55,7 @@ function NewOrganizationModal() {
 	const submitForm = async (formData: NewOrganizationInfo) => {
 		submitNewOrganizationData(formData, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
+				queryClient.invalidateQueries({ queryKey: [queryKeys.user], refetchType: 'active' });
 				setIsModalOpen(false);
 			},
 		});
