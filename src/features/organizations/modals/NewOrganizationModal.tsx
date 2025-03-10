@@ -49,11 +49,11 @@ function NewOrganizationModal() {
 		},
 	});
 
-	const { mutate: submitNewClusterData } = useCreateNewOrganizationMutation();
+	const { mutate: submitNewOrganizationData } = useCreateNewOrganizationMutation();
 	const queryClient = useQueryClient();
 
 	const submitForm = async (formData: NewOrganizationInfo) => {
-		submitNewClusterData(formData, {
+		submitNewOrganizationData(formData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
