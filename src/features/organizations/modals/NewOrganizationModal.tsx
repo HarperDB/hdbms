@@ -14,39 +14,46 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { NewClusterInfo, useCreateNewClusterMutation } from '../hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
+import {
+	NewOrganizationInfo,
+	useCreateNewOrganizationMutation,
+} from '@/features/organizations/hooks/useCreateNewOrganization';
 
-const NewClusterSchema = z.object({
-	clusterName: z.string({
-		message: 'Please enter a cluster name.',
-	}),
-	clusterPrefix: z.string({
-		message: 'Please enter a cluster prefix.',
-	}),
+const NewOrganizationSchema = z.object({
+	orgName: z
+		.string({
+			message: 'Please enter a cluster name.',
+		})
+		.max(30, {
+			message: 'Cluster name must be less than 30 characters.',
+		}),
+	orgSubdomain: z
+		.string({
+			message: 'Please enter a cluster prefix.',
+		})
+		.max(14, {
+			message: 'Subdomain must be less than 14 characters.',
+		}),
 });
 
-function NewClusterModal({ orgId }: { orgId: string }) {
+function NewOrganizationModal() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
-		resolver: zodResolver(NewClusterSchema),
+		resolver: zodResolver(NewOrganizationSchema),
 		defaultValues: {
-			clusterName: '',
-			clusterPrefix: '',
+			orgName: '',
+			orgSubdomain: '',
 		},
 	});
 
-	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
+	const { mutate: submitNewClusterData } = useCreateNewOrganizationMutation();
 	const queryClient = useQueryClient();
 
-	const submitForm = async (formData: { clusterName: string; clusterPrefix: string }) => {
-		const updatedFormData = {
-			organizationId: orgId,
-			...formData,
-		} as NewClusterInfo;
-		submitNewClusterData(updatedFormData, {
+	const submitForm = async (formData: NewOrganizationInfo) => {
+		submitNewClusterData(formData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
@@ -59,24 +66,24 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 			<DialogTrigger asChild>
 				<Button variant="positive" className="rounded-full md:w-44">
 					{' '}
-					<Plus /> New Cluster
+					<Plus /> New Organization
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create a New Cluster</DialogTitle>
-					<DialogDescription>Create a new cluster here.</DialogDescription>
+					<DialogTitle>Create a New Organization</DialogTitle>
+					<DialogDescription>Create a new organization here.</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
 						<FormField
 							control={form.control}
-							name="clusterName"
+							name="orgName"
 							render={({ field }) => (
 								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Name</FormLabel>
+									<FormLabel className="pb-1">Organization Name</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. rad-cluster" {...field} />
+										<Input type="text" placeholder="Harper Systems" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -84,12 +91,12 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<FormField
 							control={form.control}
-							name="clusterPrefix"
+							name="orgSubdomain"
 							render={({ field }) => (
 								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Prefix</FormLabel>
+									<FormLabel className="pb-1">Organization Subdomain</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. rad-c1" {...field} />
+										<Input type="text" placeholder="harper-dev" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -97,7 +104,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<DialogFooter>
 							<Button type="submit" variant="submit" className="rounded-full">
-								Create New Cluster <ArrowRight />
+								Create New Organization <ArrowRight />
 							</Button>
 						</DialogFooter>
 					</form>
@@ -107,4 +114,4 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	);
 }
 
-export default NewClusterModal;
+export default NewOrganizationModal;
