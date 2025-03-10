@@ -1,8 +1,9 @@
-import { Plus, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import OrgCard from '@/features/organizations/components/OrgCard';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import NewOrganizationModal from '@/features/organizations/modals/NewOrganizationModal';
 function OrganizationsIndex() {
 	const { data: user } = useGetCurrentUser();
 	return (
@@ -17,10 +18,7 @@ function OrganizationsIndex() {
 						</span>
 					</Button>
 				</div>
-				<Button variant="positive" className="rounded-full md:w-44">
-					<Plus />
-					New Organization
-				</Button>
+				<NewOrganizationModal />
 			</div>
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-12">
 				{user?.roles.map(({ organizationId, organizationName, roleName }) => (
