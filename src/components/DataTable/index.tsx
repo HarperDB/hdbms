@@ -17,11 +17,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 	});
 
 	return (
-		<div className="rounded-md border">
+		<div className="bg-black-dark rounded-md">
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id} className="hover:bg-">
+						<TableRow key={headerGroup.id} className="border-none">
 							{headerGroup.headers.map((header) => {
 								return (
 									<TableHead key={header.id}>
@@ -32,7 +32,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 						</TableRow>
 					))}
 				</TableHeader>
-				<TableBody>
+				<TableBody className="bg-black">
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow

@@ -34,7 +34,7 @@ export const onNewInstanceSubmit = async ({
 		instanceTypeId,
 		clusterId,
 		storage,
-		hostId: 'hos-ukg97o94gswdkx4j',
+		hostId: 'hos-mvyzv2wwwnnvn2v6',
 		gtmFqdn: 'gtmFqdn',
 	});
 	if (data) {
