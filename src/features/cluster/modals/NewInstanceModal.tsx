@@ -105,7 +105,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 								<FormItem className="">
 									<FormLabel className="pb-1">Instance Type ID</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. type-2" {...field} />
+										<Input type="text" placeholder="ex. typ-2" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
