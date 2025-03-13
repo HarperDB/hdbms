@@ -89,7 +89,7 @@ function CardBackLogin({
 						...instanceAuths,
 						[compute_stack_id]: {
 							user: formData.user,
-							pass: login_not_supported ? formData.pass : '',
+							// pass: login_not_supported ? formData.pass : '',
 							super: result.role.permission.super_user,
 							structure: result.role.permission.structure_user,
 						},
