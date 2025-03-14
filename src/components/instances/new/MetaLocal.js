@@ -13,6 +13,7 @@ import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import isAlphaUnderscoreHyphen from '../../../functions/util/isAlphaUnderscoreHyphen';
 import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 import userInfo from '../../../functions/api/instance/userInfo';
+import login from '../../../functions/api/instance/login';
 
 function MetaLocal() {
 	const navigate = useNavigate();
@@ -50,7 +51,23 @@ function MetaLocal() {
 				setFormState({ error: 'usernames must have only letters, underscores, and hyphens' });
 			} else if (instance_name.length && user.length && pass.length && host.length && port.length) {
 				try {
-					const currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
+					let login_not_supported;
+					let currentUser;
+					if (pass) {
+						const login_result = await login({ auth: { user, pass }, url });
+						if (login_result.error) {
+							setFormState({ error: 'Login failed. Using instance credentials?' });
+						} else {
+							currentUser = await userInfo({ url });
+							if (currentUser.error) {
+								login_not_supported = true;
+							}
+							if (login_not_supported)
+								currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
+						}
+					} else {
+						currentUser = await userInfo({ url });
+					}
 
 					if (currentUser.error && currentUser.message === 'Login failed') {
 						setFormState({ error: 'The provided credentials cannot log into that instance.' });
