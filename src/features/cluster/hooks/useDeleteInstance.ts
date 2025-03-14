@@ -1,10 +1,15 @@
 import apiClient from '@/config/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
-const onDeleteInstanceSubmit = async (instanceId: string) => {
+type DeleteInstanceResponse = {
+	id: string;
+	deleted: boolean;
+};
+
+const onDeleteInstanceSubmit = async (instanceId: string): Promise<DeleteInstanceResponse> => {
 	const { data } = await apiClient.delete(`/HDBInstance/${instanceId}`);
 	if (data) {
-		return data;
+		return data as DeleteInstanceResponse;
 	} else {
 		throw new Error('Something went wrong');
 	}
