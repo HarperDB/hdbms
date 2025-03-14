@@ -3,9 +3,12 @@ import { useGetClusterInfo } from '@/features/cluster/hooks/useGetClusterInfo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
-import { ReactNode, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Edit, EllipsisIcon, Trash } from 'lucide-react';
+import EditInstanceModal from './modals/EditInstanceModal';
 
 const route = getRouteApi('');
 
@@ -16,15 +19,15 @@ function EmptyCluster() {
 const renderBadgeColor = (value: string) => {
 	switch (value) {
 		case 'PROVISIONING':
-			return <Badge color="yellow">Provisioning</Badge>;
+			return <Badge variant="warning">Provisioning</Badge>;
 		case 'RUNNING':
-			return <Badge color="green">Running</Badge>;
+			return <Badge variant="default">Running</Badge>;
 		case 'STOPPED':
-			return <Badge color="red">Stopped</Badge>;
+			return <Badge variant="secondary">Stopped</Badge>;
 		case 'TERMINATED':
-			return <Badge color="red">Terminated</Badge>;
+			return <Badge variant="destructive">Terminated</Badge>;
 		default:
-			return <Badge>{cell.getValue()}</Badge>;
+			return <Badge>{value}</Badge>;
 	}
 };
 
@@ -49,13 +52,20 @@ function ClusterIndex() {
 			{
 				accessorKey: 'status',
 				header: 'Status',
-				cell: (cell: CellContext<string, ReactNode>) => {
+				cell: (cell: CellContext<string, string>) => {
 					return renderBadgeColor(cell.getValue());
 				},
 			},
 			{
 				accessorKey: 'version',
 				header: 'Version',
+			},
+			{
+				id: 'actions',
+				header: () => '',
+				cell: (cell: CellContext<string, string>) => {
+					return <EditInstanceModal instanceId={cell.row.original.id} instanceName={cell.row.original.name} />;
+				},
 			},
 		],
 		[]

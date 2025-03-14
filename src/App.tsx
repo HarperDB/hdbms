@@ -5,7 +5,7 @@ import { localRouteTree } from './router/localRouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/react-query/queryClient';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 
 function App() {
