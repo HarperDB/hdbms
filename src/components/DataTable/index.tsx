@@ -38,7 +38,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 							<TableRow
 								key={row.id}
 								data-state={row.getIsSelected() && 'selected'}
-								className="hover:bg-muted/50 data-[state=selected]:bg-muted"
+								className="hover:bg-muted/10 data-[state=selected]:bg-muted"
 							>
 								{row.getVisibleCells().map((cell) => (
 									<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>

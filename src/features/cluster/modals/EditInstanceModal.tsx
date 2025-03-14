@@ -9,37 +9,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { ArrowLeft, ArrowRight, Edit, Trash, TriangleAlert } from 'lucide-react';
-import { set, useForm } from 'react-hook-form';
-import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/react-query/constants';
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 import { useDeleteInstance } from '../hooks/useDeleteInstance';
 import { toast } from 'sonner';
-
-const NewInstanceSchema = z.object({
-	name: z.string({
-		message: 'Please enter a instance name.',
-	}),
-	instanceTypeId: z.string({
-		message: 'Please enter a instance type id.',
-	}),
-	storage: z.string({
-		message: 'Please enter a storage value.',
-	}),
-});
 
 function DeleteInstanceContent({
 	setIsDeleteContentDisplayed,
