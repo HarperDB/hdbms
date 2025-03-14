@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { X, Menu } from 'lucide-react';
 
 import {
@@ -10,9 +10,15 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
+import { useSignOutMutation } from '@/features/auth/hooks/useSignOut';
+import { QueryCache } from '@tanstack/react-query';
+import { sign } from 'crypto';
 
 function MobileNav() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const { mutate: signOut } = useSignOutMutation();
+	const navigate = useNavigate();
+	const queryCache = new QueryCache();
 	return (
 		<div className="md:hidden" id="mobile-menu">
 			<div className="flex items-center justify-between">
@@ -57,7 +63,12 @@ function MobileNav() {
 					Theme
 				</Link>
 				<Link
-					to="/sign-in"
+					to={undefined}
+					onClick={() => {
+						signOut();
+						navigate({ to: '/' });
+						queryCache.clear();
+					}}
 					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
 				>
 					Sign Out
