@@ -6,6 +6,8 @@ type Cluster = {
 	id: string;
 	name: string;
 	organizationId: string;
+	prefix: string;
+	status: 'PROVISIONING' | 'RUNNING' | 'STOPPED' | 'TERMINATED';
 };
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
