@@ -3,11 +3,9 @@ import { useGetClusterInfo } from '@/features/cluster/hooks/useGetClusterInfo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Edit, EllipsisIcon, Trash } from 'lucide-react';
 import EditInstanceModal from './modals/EditInstanceModal';
 
 const route = getRouteApi('');
