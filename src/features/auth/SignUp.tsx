@@ -69,7 +69,12 @@ function SignUp() {
 							<FormItem>
 								<FormLabel className="pb-1">First Name</FormLabel>
 								<FormControl>
-									<Input type="text" placeholder="Jane" className="bg-purple-400 border-purple-400" {...field} />
+									<Input
+										type="text"
+										placeholder="Jane"
+										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -82,7 +87,12 @@ function SignUp() {
 							<FormItem>
 								<FormLabel className="pb-1">Last Name</FormLabel>
 								<FormControl>
-									<Input type="text" placeholder="Doe" className="bg-purple-400 border-purple-400" {...field} />
+									<Input
+										type="text"
+										placeholder="Doe"
+										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -98,7 +108,7 @@ function SignUp() {
 									<Input
 										type="email"
 										placeholder="jane.doe@harpersystems.dev"
-										className="bg-purple-400 border-purple-400"
+										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
 										{...field}
 									/>
 								</FormControl>
@@ -116,7 +126,7 @@ function SignUp() {
 									<Input
 										type="password"
 										placeholder="password"
-										className="bg-purple-400 border-purple-400"
+										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
 										{...field}
 									/>
 								</FormControl>

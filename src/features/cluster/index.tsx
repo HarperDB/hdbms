@@ -19,7 +19,7 @@ const renderBadgeColor = (value: string) => {
 		case 'PROVISIONING':
 			return <Badge variant="warning">Provisioning</Badge>;
 		case 'RUNNING':
-			return <Badge variant="default">Running</Badge>;
+			return <Badge variant="success">Running</Badge>;
 		case 'STOPPED':
 			return <Badge variant="secondary">Stopped</Badge>;
 		case 'TERMINATED':

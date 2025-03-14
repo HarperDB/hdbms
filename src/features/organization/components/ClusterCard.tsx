@@ -4,14 +4,32 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Ellipsis } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
+
+const renderBadgeColor = (value: string) => {
+	switch (value) {
+		case 'PROVISIONING':
+			return <Badge variant="warning">Provisioning</Badge>;
+		case 'RUNNING':
+			return <Badge variant="success">Running</Badge>;
+		case 'STOPPED':
+			return <Badge variant="secondary">Stopped</Badge>;
+		case 'TERMINATED':
+			return <Badge variant="destructive">Terminated</Badge>;
+		default:
+			return <Badge>{value}</Badge>;
+	}
+};
+
 function ClusterCard({
 	clusterId,
 	clusterName,
-  organizationId,
+	organizationId,
+	status,
 }: {
-  clusterId: string;
-  clusterName: string;
-  organizationId: string;
+	clusterId: string;
+	clusterName: string;
+	organizationId: string;
+	status: string;
 }) {
 	const [isClusterMenuOpen, setIsClusterMenuOpen] = useState(false);
 	return (
@@ -29,18 +47,20 @@ function ClusterCard({
 						<Ellipsis />
 					</Button>
 				</CardDescription>
-				<CardTitle><h2>{clusterName}</h2></CardTitle>
+				<CardTitle>
+					<h2>{clusterName}</h2>
+				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
-      <Badge>Offline</Badge>
+				{renderBadgeColor(status)}
 				<Link
 					to={`/orgs/${organizationId}/clusters/${clusterId}`}
 					className="text-sm"
 					aria-label={`View ${clusterName}`}
 					title={`View ${clusterName}`}
 				>
-					<span className='hover:border-b-2 py-2'>
-					View <ArrowRight className="inline-block" />
+					<span className="hover:border-b-2 py-2">
+						View <ArrowRight className="inline-block" />
 					</span>
 				</Link>
 			</CardContent>
