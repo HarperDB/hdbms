@@ -12,11 +12,13 @@ const SignInSchema = z.object({
 		.string({
 			message: 'Please enter your first name.',
 		})
+		.min(2, { message: 'First name is required.' })
 		.max(50, { message: 'First name must be less than 50 characters.' }),
 	lastname: z
 		.string({
 			message: 'Please enter your last name.',
 		})
+		.min(2, { message: 'Last name is required.' })
 		.max(50, { message: 'Last name must be less than 50 characters.' }),
 	email: z
 		.string({
@@ -28,7 +30,7 @@ const SignInSchema = z.object({
 		.string({
 			message: 'Please enter your password.',
 		})
-		.min(1, { message: 'Password is required.' })
+		.min(8, { message: 'Password must be 8 characters or more.' })
 		.max(50, { message: 'Password must be less than 50 characters.' }),
 });
 
@@ -57,7 +59,7 @@ function SignUp() {
 
 	return (
 		<div className="text-white w-xs">
-			<h1 className="text-3xl font-light">Sign up for Harper Studio</h1>
+			<h2 className="text-2xl font-light">Sign up for Harper Studio</h2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-4 my-4">
 					<FormField
