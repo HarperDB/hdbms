@@ -13,7 +13,7 @@ const SignInSchema = z.object({
 			message: 'Please select an email to display.',
 		})
 		.max(75, { message: 'Email must be less than 75 characters' })
-		.email(),
+		.email({ message: 'Please enter a valid email address' }),
 	password: z
 		.string({
 			message: 'Please enter your password',
@@ -46,14 +46,14 @@ function SignIn() {
 
 	return (
 		<div className="text-white w-xs">
-			<h1 className="text-3xl font-light">Sign in to Harper Fabric</h1>
+			<h2 className="text-2xl font-light">Sign in to Harper Fabric</h2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(submitForm)} className="my-4">
 					<FormField
 						control={form.control}
 						name="email"
 						render={({ field }) => (
-							<FormItem className="my-2">
+							<FormItem className="my-4">
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
@@ -71,7 +71,7 @@ function SignIn() {
 						control={form.control}
 						name="password"
 						render={({ field }) => (
-							<FormItem className="my-2">
+							<FormItem className="my-4">
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input

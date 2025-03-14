@@ -14,7 +14,7 @@ function AuthLayout() {
 		<div className="grid h-screen grid-cols-1 md:grid-cols-2">
 			<section className="items-center justify-center hidden text-white md:flex bg-linear-(--blue-pink-gradient) px-6">
 				<div>
-					<h1 className="text-3xl font-bold">HarperDB Studio</h1>
+					<h1 className="text-4xl font-bold">HarperDB Studio</h1>
 					<span>Manage all your HarperDB instances.</span>
 					<ul className="ps-5">
 						<ListItem title="Manage All Instances">

@@ -13,7 +13,7 @@ const ForgotPasswordSchema = z.object({
 			message: 'Please select an email to display.',
 		})
 		.max(75, { message: 'Email must be less than 75 characters' })
-		.email(),
+		.email({ message: 'Please enter a valid email address' }),
 });
 
 function ForgotPassword() {
@@ -38,7 +38,8 @@ function ForgotPassword() {
 
 	return (
 		<div className="text-white w-xs">
-			<h1 className="text-3xl font-light">Sign in to Harper Fabric</h1>
+			<h2 className="text-2xl font-light">Enter your account email</h2>
+			<p className="text-sm pt-1">If a matching account exists, we'll send you a password reset link.</p>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(submitForm)} className="my-4">
 					<FormField

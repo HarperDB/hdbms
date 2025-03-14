@@ -4,7 +4,7 @@
   font-style: bold;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/PPRadioGrotesk-Bold.woff") format("woff");
+  src: url("@/assets/fonts/PPRadioGrotesk-Bold.woff") format("woff");
 }
 
 @import "tailwindcss";
