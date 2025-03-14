@@ -43,6 +43,7 @@ function App() {
 								label: 'Dismiss',
 								onClick: () => toast.dismiss(),
 							},
+							duration: 100000,
 						});
 					}}
 				>

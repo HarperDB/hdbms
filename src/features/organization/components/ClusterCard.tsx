@@ -4,21 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Ellipsis } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
-
-const renderBadgeColor = (value: string) => {
-	switch (value) {
-		case 'PROVISIONING':
-			return <Badge variant="warning">Provisioning</Badge>;
-		case 'RUNNING':
-			return <Badge variant="success">Running</Badge>;
-		case 'STOPPED':
-			return <Badge variant="secondary">Stopped</Badge>;
-		case 'TERMINATED':
-			return <Badge variant="destructive">Terminated</Badge>;
-		default:
-			return <Badge>{value}</Badge>;
-	}
-};
+import { renderBadgeText, renderBadgeVariant } from '@/components/ui/utils/badgeStatus';
 
 function ClusterCard({
 	clusterId,
@@ -52,7 +38,7 @@ function ClusterCard({
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
-				{renderBadgeColor(status)}
+				<Badge variant={renderBadgeVariant(status)}>{renderBadgeText(status)}</Badge>
 				<Link
 					to={`/orgs/${organizationId}/clusters/${clusterId}`}
 					className="text-sm"

@@ -7,27 +7,13 @@ import { useMemo } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
+import { renderBadgeText, renderBadgeVariant } from '@/components/ui/utils/badgeStatus';
 
 const route = getRouteApi('');
 
 function EmptyCluster() {
 	return <p>No instances found.</p>;
 }
-
-const renderBadgeColor = (value: string) => {
-	switch (value) {
-		case 'PROVISIONING':
-			return <Badge variant="warning">Provisioning</Badge>;
-		case 'RUNNING':
-			return <Badge variant="success">Running</Badge>;
-		case 'STOPPED':
-			return <Badge variant="secondary">Stopped</Badge>;
-		case 'TERMINATED':
-			return <Badge variant="destructive">Terminated</Badge>;
-		default:
-			return <Badge>{value}</Badge>;
-	}
-};
 
 function ClusterIndex() {
 	const { clusterId } = route.useParams();
@@ -40,8 +26,15 @@ function ClusterIndex() {
 				header: 'Name', // Column header
 			},
 			{
-				accessorKey: 'clusterId',
-				header: 'Cluster ID',
+				accessorKey: 'fqdns',
+				header: 'FQDNs',
+				cell: (cell: CellContext<string, string>) => {
+					return cell.getValue().map((fqdn: string) => (
+						<a href={`https://${fqdn}`} target="_blank" rel="noreferrer" key={fqdn} className="block">
+							{fqdn}
+						</a>
+					));
+				},
 			},
 			{
 				accessorKey: 'instanceTypeId',
@@ -51,12 +44,27 @@ function ClusterIndex() {
 				accessorKey: 'status',
 				header: 'Status',
 				cell: (cell: CellContext<string, string>) => {
-					return renderBadgeColor(cell.getValue());
+					const status = cell.getValue();
+					return <Badge variant={renderBadgeVariant(status)}>{renderBadgeText(status)}</Badge>;
 				},
 			},
 			{
 				accessorKey: 'version',
 				header: 'Version',
+			},
+			// add cpu storage and memory
+			{
+				accessorKey: 'storage',
+				header: 'Storage',
+			},
+			// add cpu storage and memory
+			{
+				accessorKey: 'cpu',
+				header: 'CPU',
+			},
+			{
+				accessorKey: 'memory',
+				header: 'Memory',
 			},
 			{
 				id: 'actions',
