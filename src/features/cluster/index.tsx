@@ -29,7 +29,8 @@ function ClusterIndex() {
 				accessorKey: 'fqdns',
 				header: 'FQDNs',
 				cell: (cell: CellContext<string, string>) => {
-					return cell.getValue().map((fqdn: string) => (
+					const dnsURLs: string[] = cell.getValue() as unknown as string[];
+					return dnsURLs.map((fqdn: string) => (
 						<a href={`https://${fqdn}`} target="_blank" rel="noreferrer" key={fqdn} className="block">
 							{fqdn}
 						</a>
@@ -52,12 +53,10 @@ function ClusterIndex() {
 				accessorKey: 'version',
 				header: 'Version',
 			},
-			// add cpu storage and memory
 			{
 				accessorKey: 'storage',
 				header: 'Storage',
 			},
-			// add cpu storage and memory
 			{
 				accessorKey: 'cpu',
 				header: 'CPU',
@@ -70,6 +69,7 @@ function ClusterIndex() {
 				id: 'actions',
 				header: () => '',
 				cell: (cell: CellContext<string, string>) => {
+					//@ts-expect-error we're getting the id and name from the instance object from the row.
 					return <EditInstanceModal instanceId={cell.row.original.id} instanceName={cell.row.original.name} />;
 				},
 			},
@@ -91,7 +91,7 @@ function ClusterIndex() {
 					{isLoading ? (
 						<div>Loading...</div> // TODO: Add skeleton component
 					) : cluster?.instances.length ? (
-						<DataTable data={cluster.instances} columns={columns} />
+						<DataTable data={cluster.instances as unknown as string[]} columns={columns} />
 					) : (
 						<div className="text-center">
 							<EmptyCluster />

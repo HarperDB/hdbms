@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useSignOutMutation } from '@/features/auth/hooks/useSignOut';
 import { QueryCache } from '@tanstack/react-query';
-import { sign } from 'crypto';
 
 function MobileNav() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
