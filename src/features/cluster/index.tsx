@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
-import { renderBadgeText, renderBadgeVariant } from '@/components/ui/utils/badgeStatus';
+import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
 
 const route = getRouteApi('');
 
@@ -45,7 +45,7 @@ function ClusterIndex() {
 				header: 'Status',
 				cell: (cell: CellContext<string, string>) => {
 					const status = cell.getValue();
-					return <Badge variant={renderBadgeVariant(status)}>{renderBadgeText(status)}</Badge>;
+					return <Badge variant={renderBadgeStatusVariant(status)}>{renderBadgeStatusText(status)}</Badge>;
 				},
 			},
 			{

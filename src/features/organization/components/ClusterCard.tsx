@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Ellipsis } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
-import { renderBadgeText, renderBadgeVariant } from '@/components/ui/utils/badgeStatus';
+import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
 
 function ClusterCard({
 	clusterId,
@@ -38,7 +38,7 @@ function ClusterCard({
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
-				<Badge variant={renderBadgeVariant(status)}>{renderBadgeText(status)}</Badge>
+				<Badge variant={renderBadgeStatusVariant(status)}>{renderBadgeStatusText(status)}</Badge>
 				<Link
 					to={`/orgs/${organizationId}/clusters/${clusterId}`}
 					className="text-sm"
