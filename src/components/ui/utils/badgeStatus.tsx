@@ -1,4 +1,4 @@
-const renderBadgeVariant = (value: string) => {
+const renderBadgeStatusVariant = (value: string) => {
 	switch (value) {
 		case 'PROVISIONING':
 			return 'warning';
@@ -27,7 +27,7 @@ const renderBadgeVariant = (value: string) => {
 	}
 };
 
-const renderBadgeText = (value: string) => {
+const renderBadgeStatusText = (value: string) => {
 	switch (value) {
 		case 'PROVISIONING':
 			return 'Provisioning';
@@ -56,4 +56,4 @@ const renderBadgeText = (value: string) => {
 	}
 };
 
-export { renderBadgeVariant, renderBadgeText };
+export { renderBadgeStatusVariant, renderBadgeStatusText };
