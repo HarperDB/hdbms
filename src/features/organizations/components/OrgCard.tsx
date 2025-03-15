@@ -34,7 +34,7 @@ function OrgCard({
 			<CardContent className="flex justify-between">
 				<Badge>{roleName}</Badge>
 				<Link
-					to={`/orgs/${organizationId}/clusters`}
+					to={`/orgs/${organizationId}/clusters/list`}
 					className="text-sm"
 					aria-label={`View ${organizationName}`}
 					title={`View ${organizationName}`}

@@ -16,7 +16,7 @@ type Instance = {
 	tempPassword: string;
 };
 
-type Cluster = {
+export type Cluster = {
 	id: string;
 	organizationId: string;
 	name: string;
