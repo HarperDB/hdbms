@@ -8,10 +8,10 @@ function OrganizationsIndex() {
 	const { data: user } = useGetCurrentUser();
 	return (
 		<div>
-			<div className="flex flex-col-reverse justify-between mb-10 md:flex-row">
-				<div className="">
-					<Input placeholder="Filter organizations by name" className="inline-block w-full md:w-64" />
-					<Button className="inline-block w-full md:w-auto md:ml-4">
+			<div className="flex flex-col-reverse justify-between gap-4 mb-10 md:gap-0 md:flex-row">
+				<div>
+					<Input placeholder="Filter organizations by name" className="inline-block w-3/5 md:w-64" />
+					<Button className="inline-block w-2/5 md:w-auto md:ml-4">
 						Sort by A-Z
 						<span>
 							<ChevronDown className="inline-block" />

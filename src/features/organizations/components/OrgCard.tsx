@@ -44,6 +44,7 @@ function OrgCard({
 					</span>
 				</Link>
 			</CardContent>
+			{/* TODO: Replace with navigation menu component */}
 			{isOrgMenuOpen && (
 				<Card className="absolute top-12 right-5 gap-3 z-40 border border-gray-700 shadow-xl p-3 rounded-md">
 					<Button className="block w-20" size="sm">
