@@ -37,7 +37,7 @@ function App() {
 				{/* <button
 					className="fixed p-2 text-white bg-blue-400 rounded-md bottom-20 right-20"
 					onClick={() => {
-						toast.error('Error', {
+						toast.success('Error', {
 							description: 'testinggg',
 							action: {
 								label: 'Dismiss',
@@ -49,7 +49,7 @@ function App() {
 				>
 					testing toast component
 				</button> */}
-				<Toaster />
+				<Toaster richColors />
 			</QueryClientProvider>
 		</>
 	);
