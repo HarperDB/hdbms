@@ -1,13 +1,11 @@
-import { Outlet } from "@tanstack/react-router"
+import { Outlet } from '@tanstack/react-router';
 
 function FabricLocal() {
-
-  return (
-    <>
-      <h1>Fabric Local</h1>
-      <Outlet />
-    </>
-  )
+	return (
+		<>
+			<Outlet />
+		</>
+	);
 }
 
-export default FabricLocal
+export default FabricLocal;
