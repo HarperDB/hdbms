@@ -1,21 +1,19 @@
-import { Link, useNavigate, useRouter } from '@tanstack/react-router';
-import { useLoginMutation } from '@/features/auth/hooks/useSignIn';
+import { useNavigate, useRouter } from '@tanstack/react-router';
+// import { useLoginMutation } from '@/features/auth/hooks/useSignIn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const SignInSchema = z.object({
-	email: z
+const LocalSignInSchema = z.object({
+	instanceUser: z
 		.string({
-			message: 'Please select an email to display.',
+			message: 'Please enter the instance username.',
 		})
-		.max(75, { message: 'Email must be less than 75 characters' })
-		.email({ message: 'Please enter a valid email address' }),
-	password: z
+		.max(75, { message: 'Email must be less than 75 characters' }),
+	instancePassword: z
 		.string({
 			message: 'Please enter your password',
 		})
@@ -24,25 +22,25 @@ const SignInSchema = z.object({
 });
 
 function LocalSignIn() {
-	const navigate = useNavigate();
-	const router = useRouter();
-	const form = useForm<z.infer<typeof SignInSchema>>({
-		resolver: zodResolver(SignInSchema),
+	// const navigate = useNavigate();
+	// const router = useRouter();
+	const form = useForm<z.infer<typeof LocalSignInSchema>>({
+		resolver: zodResolver(LocalSignInSchema),
 		defaultValues: {
-			email: '',
-			password: '',
+			instanceUser: '',
+			instancePassword: '',
 		},
 	});
 
-	const { mutate: submitLoginData } = useLoginMutation();
+	// const { mutate: submitLocalLoginData } = useLocalLoginMutation();
 
-	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
-		await submitLoginData(formData, {
-			onSuccess: () => {
-				navigate({ to: '/orgs' });
-				router.invalidate();
-			},
-		});
+	const submitForm = async (formData: z.infer<typeof LocalSignInSchema>) => {
+		// await submitLocalLoginData(formData, {
+		// 	onSuccess: () => {
+		// 		navigate({ to: '/orgs' });
+		// 		router.invalidate();
+		// 	},
+		// });
 	};
 
 	return (
@@ -53,14 +51,14 @@ function LocalSignIn() {
 					<form onSubmit={form.handleSubmit(submitForm)} className="my-4">
 						<FormField
 							control={form.control}
-							name="email"
+							name="instanceUser"
 							render={({ field }) => (
 								<FormItem className="my-4">
-									<FormLabel>Email</FormLabel>
+									<FormLabel>Instance User</FormLabel>
 									<FormControl>
 										<Input
-											type="email"
-											placeholder="jane.smith@harperdb.io"
+											type="text"
+											placeholder="harpersys"
 											className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
 											{...field}
 										/>
@@ -71,10 +69,10 @@ function LocalSignIn() {
 						/>
 						<FormField
 							control={form.control}
-							name="password"
+							name="instancePassword"
 							render={({ field }) => (
 								<FormItem className="my-4">
-									<FormLabel>Password</FormLabel>
+									<FormLabel>Instance Password</FormLabel>
 									<FormControl>
 										<Input
 											type="password"
