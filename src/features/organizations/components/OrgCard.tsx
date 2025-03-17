@@ -1,9 +1,15 @@
-import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Ellipsis } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 function OrgCard({
 	organizationId,
 	organizationName,
@@ -13,21 +19,22 @@ function OrgCard({
 	organizationName: string;
 	roleName: string;
 }) {
-	const [isOrgMenuOpen, setIsOrgMenuOpen] = useState(false);
 	return (
 		<Card className="relative">
 			<CardHeader className="">
 				<CardDescription className="flex justify-between items-center">
 					<span>ORG ID: {organizationId}</span>
-					<Button
-						className="cursor-pointer"
-						variant="ghost"
-						onClick={() => {
-							setIsOrgMenuOpen(!isOrgMenuOpen);
-						}}
-					>
-						<Ellipsis />
-					</Button>
+					<DropdownMenu>
+						<DropdownMenuTrigger>
+							<Ellipsis aria-label="Organization options" />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Org options</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>Edit</DropdownMenuItem>
+							<DropdownMenuItem>Delete</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</CardDescription>
 				<CardTitle>{organizationName}</CardTitle>
 			</CardHeader>
@@ -44,17 +51,6 @@ function OrgCard({
 					</span>
 				</Link>
 			</CardContent>
-			{/* TODO: Replace with navigation menu component */}
-			{isOrgMenuOpen && (
-				<Card className="absolute top-12 right-5 gap-3 z-40 border border-gray-700 shadow-xl p-3 rounded-md">
-					<Button className="block w-20" size="sm">
-						Edit
-					</Button>
-					<Button className="block w-20" size="sm" variant="destructive">
-						Delete
-					</Button>
-				</Card>
-			)}
 		</Card>
 	);
 }
