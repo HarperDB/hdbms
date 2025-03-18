@@ -3,8 +3,11 @@ import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { NavBar } from '@/components/Navbar';
 import Loading from '@/components/Loading';
 
+const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO == 'true';
+
 function Dashboard() {
 	const { data: user, isLoading: isUserLoading } = useGetCurrentUser();
+
 	if (!user && !isUserLoading) {
 		return <Navigate to="/" />;
 	}
