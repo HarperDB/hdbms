@@ -8,23 +8,21 @@ import Instance from '../features/instance';
 // import Instance from '@/features/instance';
 // import ClusterList from '@/features/organization';
 
-
 const rootRoute = createRootRoute({
-  component: StudioLocal,
+	component: StudioLocal,
 });
 
 // Auth Route
-const signInRoute = createRoute({
+const localSignInRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: '/',
 	component: LocalSignIn,
 });
 
-
 // Dashboard Routes
 const dashboardLayout = createRoute({
 	getParentRoute: () => rootRoute,
-	id: "_dashboardLayout",
+	id: '_dashboardLayout',
 	component: Dashboard,
 });
 
@@ -34,14 +32,10 @@ const localInstanceRoute = createRoute({
 	component: Instance,
 });
 
-
 export const localRouteTree = rootRoute.addChildren([
-	signInRoute,
-	dashboardLayout.addChildren([
-		localInstanceRoute,
-	]),
-])
-
+	localSignInRoute,
+	dashboardLayout.addChildren([localInstanceRoute]),
+]);
 
 // const localRouter = createHashRouter([
 // 	{
