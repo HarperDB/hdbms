@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
 
 const LocalSignInSchema = z.object({
 	instanceUser: z
@@ -22,8 +23,8 @@ const LocalSignInSchema = z.object({
 });
 
 function LocalSignIn() {
-	// const navigate = useNavigate();
-	// const router = useRouter();
+	const navigate = useNavigate();
+	const router = useRouter();
 	const form = useForm<z.infer<typeof LocalSignInSchema>>({
 		resolver: zodResolver(LocalSignInSchema),
 		defaultValues: {
@@ -32,15 +33,15 @@ function LocalSignIn() {
 		},
 	});
 
-	// const { mutate: submitLocalLoginData } = useLocalLoginMutation();
+	const { mutate: submitLocalSignInCredentials } = useUserInfoMutation();
 
 	const submitForm = async (formData: z.infer<typeof LocalSignInSchema>) => {
-		// await submitLocalLoginData(formData, {
-		// 	onSuccess: () => {
-		// 		navigate({ to: '/orgs' });
-		// 		router.invalidate();
-		// 	},
-		// });
+		await submitLocalSignInCredentials(formData, {
+			onSuccess: () => {
+				navigate({ to: '/local' });
+				router.invalidate();
+			},
+		});
 	};
 
 	return (
