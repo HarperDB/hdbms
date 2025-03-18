@@ -9,7 +9,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Toaster } from '@/components/ui/sonner';
 
 function App() {
-	const isLocalStudio = import.meta.env.VITE_REACT_APP_LOCALSTUDIO == 'true';
+	const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO == 'true';
 	const hashHistory = createHashHistory();
 	const loadedRouter = isLocalStudio ? localRouteTree : cloudRouteTree;
 

@@ -15,11 +15,13 @@ function errorHandler(errorMsg: string, errorStatus: number) {
 export const queryClient = new QueryClient({
 	queryCache: new QueryCache({
 		onError: (error) => {
+			// @ts-expect-error - error is not typed
 			errorHandler(error.message, error.status);
 		},
 	}),
 	mutationCache: new MutationCache({
 		onError: (error) => {
+			// @ts-expect-error - error is not typed
 			errorHandler(error.message, error.status);
 		},
 	}),
