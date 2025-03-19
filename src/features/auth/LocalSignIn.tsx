@@ -1,20 +1,19 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
-// import { useLoginMutation } from '@/features/auth/hooks/useSignIn';
+import { useLocalSignIn } from '@/features/auth/hooks/useLocalSignIn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
 
 const LocalSignInSchema = z.object({
-	instanceUser: z
+	username: z
 		.string({
 			message: 'Please enter the instance username.',
 		})
 		.max(75, { message: 'Email must be less than 75 characters' }),
-	instancePassword: z
+	password: z
 		.string({
 			message: 'Please enter your password',
 		})
@@ -28,17 +27,17 @@ function LocalSignIn() {
 	const form = useForm<z.infer<typeof LocalSignInSchema>>({
 		resolver: zodResolver(LocalSignInSchema),
 		defaultValues: {
-			instanceUser: '',
-			instancePassword: '',
+			username: '',
+			password: '',
 		},
 	});
 
-	const { mutate: submitLocalSignInCredentials } = useUserInfoMutation();
+	const { mutate: submitLocalSignInCredentials } = useLocalSignIn();
 
 	const submitForm = async (formData: z.infer<typeof LocalSignInSchema>) => {
 		await submitLocalSignInCredentials(formData, {
 			onSuccess: () => {
-				navigate({ to: '/local' });
+				navigate({ to: '/instance' });
 				router.invalidate();
 			},
 		});
@@ -52,7 +51,7 @@ function LocalSignIn() {
 					<form onSubmit={form.handleSubmit(submitForm)} className="my-4">
 						<FormField
 							control={form.control}
-							name="instanceUser"
+							name="username"
 							render={({ field }) => (
 								<FormItem className="my-4">
 									<FormLabel>Instance User</FormLabel>
@@ -70,7 +69,7 @@ function LocalSignIn() {
 						/>
 						<FormField
 							control={form.control}
-							name="instancePassword"
+							name="password"
 							render={({ field }) => (
 								<FormItem className="my-4">
 									<FormLabel>Instance Password</FormLabel>

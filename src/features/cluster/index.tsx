@@ -8,6 +8,8 @@ import { CellContext } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
 import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
+import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
+import InstanceLogInModal from './modals/InstanceLoginInModal';
 
 const route = getRouteApi('');
 
@@ -18,6 +20,7 @@ function EmptyCluster() {
 function ClusterIndex() {
 	const { clusterId } = route.useParams();
 	const { data: cluster, isLoading } = useGetClusterInfo(clusterId);
+	const { mutate: submitRegistrationData } = useRegistrationInfo();
 
 	const columns = useMemo(
 		() => [
@@ -27,14 +30,29 @@ function ClusterIndex() {
 			},
 			{
 				accessorKey: 'fqdns',
-				header: 'FQDNs',
+				header: 'Instance Url',
 				cell: (cell: CellContext<string, string>) => {
 					const dnsURLs: string[] = cell.getValue() as unknown as string[];
-					return dnsURLs.map((fqdn: string) => (
-						<a href={`https://${fqdn}`} target="_blank" rel="noreferrer" key={fqdn} className="block">
-							{fqdn}
-						</a>
-					));
+					if (localStorage.getItem(`${cell.row.original?.id}`)) {
+						return (
+							<a href={`https://${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
+								{dnsURLs[0]}
+							</a>
+						);
+					}
+
+					// return (
+					// 	<a href={`https://${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
+					// 		{dnsURLs[0]}
+					// 	</a>
+					// );
+					return (
+						<InstanceLogInModal
+							instanceId={cell.row.original.id}
+							instanceUrl={dnsURLs[0]}
+							instanceName={cell.row.original.name}
+						/>
+					);
 				},
 			},
 			{

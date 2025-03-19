@@ -28,6 +28,7 @@ export function useGetCurrentUser() {
 		queryKey: [queryKeys.user],
 		queryFn: getCurrentUser,
 		retry: false,
+		enabled: import.meta.env.VITE_LOCAL_STUDIO !== 'true',
 	});
 
 	return { data, isLoading };

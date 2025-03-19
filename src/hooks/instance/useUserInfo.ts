@@ -14,14 +14,9 @@ type SignInResponse = {
 	lastname: string;
 };
 
-export const onUserInfoSubmit = async ({
-	instanceUser,
-	instancePassword,
-}: SignInCredentials): Promise<SignInResponse> => {
+export const onUserInfoSubmit = async (): Promise<SignInResponse> => {
 	const { data } = await apiClient.post('/', {
 		operation: 'user_info',
-		username: instanceUser,
-		password: instancePassword,
 	});
 	if (data) {
 		return data as SignInResponse;
@@ -31,7 +26,7 @@ export const onUserInfoSubmit = async ({
 };
 
 export function useUserInfoMutation() {
-	return useMutation<SignInResponse, Error, SignInCredentials>({
-		mutationFn: (loginData) => onUserInfoSubmit(loginData),
+	return useMutation({
+		mutationFn: () => onUserInfoSubmit(),
 	});
 }
