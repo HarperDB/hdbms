@@ -12,41 +12,50 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
+import { CreateAuthTokensRequest, useCreateAuthTokens } from '@/hooks/instance/useCreateAuthTokens';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 
 const NewClusterSchema = z.object({
-	clusterName: z.string({
+	username: z.string({
 		message: 'Please enter a cluster name.',
 	}),
-	clusterPrefix: z.string({
+	password: z.string({
 		message: 'Please enter a cluster prefix.',
 	}),
 });
 
-function NewClusterModal({ orgId }: { orgId: string }) {
+function InstanceLogInModal({
+	instanceId,
+	instanceUrl,
+	instanceName,
+}: {
+	instanceId: string;
+	instanceUrl: string;
+	instanceName: string;
+}) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
 		resolver: zodResolver(NewClusterSchema),
 		defaultValues: {
-			clusterName: '',
-			clusterPrefix: '',
+			username: '',
+			password: '',
 		},
 	});
 
-	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
+	const { mutate: submitInstanceLoginInfo } = useCreateAuthTokens();
 	const queryClient = useQueryClient();
 
-	const submitForm = async (formData: { clusterName: string; clusterPrefix: string }) => {
+	const submitForm = async (formData: { username: string; password: string }) => {
 		const updatedFormData = {
-			organizationId: orgId,
+			instanceId,
+			instanceUrl,
 			...formData,
-		} as NewClusterInfo;
-		submitNewClusterData(updatedFormData, {
+		} as CreateAuthTokensRequest;
+		submitInstanceLoginInfo(updatedFormData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
@@ -59,24 +68,26 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 			<DialogTrigger asChild>
 				<Button variant="positive" className="rounded-full md:w-44">
 					{' '}
-					<Plus /> New Cluster
+					Log In
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create a New Cluster</DialogTitle>
-					<DialogDescription>Create a new cluster here.</DialogDescription>
+					<DialogTitle>Enter Credentials</DialogTitle>
+					<DialogDescription>
+						Log into instance <strong>{instanceName}</strong>
+					</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
 						<FormField
 							control={form.control}
-							name="clusterName"
+							name="username"
 							render={({ field }) => (
 								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Name</FormLabel>
+									<FormLabel className="pb-1">Username</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. rad-cluster" {...field} />
+										<Input type="text" placeholder="harpersys" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -84,12 +95,12 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<FormField
 							control={form.control}
-							name="clusterPrefix"
+							name="password"
 							render={({ field }) => (
 								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Prefix</FormLabel>
+									<FormLabel className="pb-1">Password</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. rad-c1" {...field} />
+										<Input type="password" placeholder="password" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -97,7 +108,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<DialogFooter>
 							<Button type="submit" variant="submit" className="rounded-full">
-								Create New Cluster <ArrowRight />
+								Log In to Instance <ArrowRight />
 							</Button>
 						</DialogFooter>
 					</form>
@@ -107,4 +118,4 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	);
 }
 
-export default NewClusterModal;
+export default InstanceLogInModal;

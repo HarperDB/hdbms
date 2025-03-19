@@ -2,17 +2,26 @@ import { Outlet, Navigate } from '@tanstack/react-router';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { NavBar } from '@/components/Navbar';
 import Loading from '@/components/Loading';
+import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
+import { useEffect } from 'react';
 
-const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO == 'true';
+const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO === 'true';
 
 function Dashboard() {
 	const { data: user, isLoading: isUserLoading } = useGetCurrentUser();
+	const { mutate: submitUserInfoData, data: userInfo, isPending: isUserInfoLoading } = useUserInfoMutation();
 
-	if (!user && !isUserLoading) {
+	useEffect(() => {
+		if (isLocalStudio && !userInfo && !isUserInfoLoading) {
+			submitUserInfoData();
+		}
+	}, [isUserInfoLoading, submitUserInfoData, userInfo]);
+
+	if (!user && !isUserLoading && !isLocalStudio) {
 		return <Navigate to="/" />;
 	}
 
-	if (isUserLoading) {
+	if (isUserLoading || isUserInfoLoading) {
 		return <Loading />;
 	}
 

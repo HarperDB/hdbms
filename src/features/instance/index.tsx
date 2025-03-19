@@ -1,9 +1,12 @@
+import { Outlet } from '@tanstack/react-router';
+
 function Instance() {
-  return (
-    <div>
-      <h1>Instance</h1>
-    </div>
-  )
+	// check if user is logged into instance
+	return (
+		<>
+			<h1>Instance Page</h1>
+		</>
+	);
 }
 
 export default Instance;
