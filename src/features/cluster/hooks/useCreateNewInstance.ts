@@ -6,6 +6,7 @@ export type NewInstanceInfo = {
 	name: string;
 	instanceTypeId: string;
 	clusterId: string;
+	url: string;
 	storage: number;
 };
 
@@ -18,7 +19,7 @@ type NewInstanceInfoResponse = {
 	clusterId: string;
 	name: string;
 	version: string;
-	fqdns: string[];
+	url: string[];
 	replicationHosts: string[];
 	tempPassword: string;
 };
@@ -26,6 +27,7 @@ type NewInstanceInfoResponse = {
 export const onNewInstanceSubmit = async ({
 	name,
 	instanceTypeId,
+	url,
 	clusterId,
 	storage,
 }: NewInstanceInfo): Promise<NewInstanceInfoResponse> => {
@@ -34,7 +36,8 @@ export const onNewInstanceSubmit = async ({
 		instanceTypeId,
 		clusterId,
 		storage,
-		hostId: 'hos-mvyzv2wwwnnvn2v6',
+		fqdns: url,
+		hostId: 'hos-zyknwmtjs3obunoy',
 		gtmFqdn: 'gtmFqdn',
 	});
 	if (data) {

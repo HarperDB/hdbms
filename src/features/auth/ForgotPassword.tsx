@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 const ForgotPasswordSchema = z.object({
 	email: z
 		.string({
-			message: 'Please select an email to display.',
+			message: 'Please enter a valid email address',
 		})
 		.max(75, { message: 'Email must be less than 75 characters' })
 		.email({ message: 'Please enter a valid email address' }),
