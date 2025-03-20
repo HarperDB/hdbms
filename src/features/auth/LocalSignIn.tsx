@@ -37,7 +37,7 @@ function LocalSignIn() {
 	const submitForm = async (formData: z.infer<typeof LocalSignInSchema>) => {
 		await submitLocalSignInCredentials(formData, {
 			onSuccess: () => {
-				navigate({ to: '/instance' });
+				navigate({ to: '/instance/browse' });
 				router.invalidate();
 			},
 		});

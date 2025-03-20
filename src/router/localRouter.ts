@@ -3,6 +3,10 @@ import StudioLocal from '../StudioLocal';
 import LocalSignIn from '../features/auth/LocalSignIn';
 import Dashboard from '../features/layouts/Dashboard';
 import Instance from '../features/instance';
+import Browse from '@/features/instance/browse';
+import Applications from '@/features/instance/applications';
+import Log from '@/features/instance/log';
+import Status from '@/features/instance/status';
 // import LocalSignIn from '@/features/auth/LocalSignIn';
 // import ProtectedRoutes from '@/features/layouts/ProtectedRoutes';
 // import Instance from '@/features/instance';
@@ -32,34 +36,38 @@ const localInstanceRoute = createRoute({
 	component: Instance,
 });
 
+const browseInstanceRoute = createRoute({
+	getParentRoute: () => localInstanceRoute,
+	path: 'browse',
+	component: Browse,
+});
+
+const applicationsInstanceRoute = createRoute({
+	getParentRoute: () => localInstanceRoute,
+	path: 'applications',
+	component: Applications,
+});
+
+const statusInstanceRoute = createRoute({
+	getParentRoute: () => localInstanceRoute,
+	path: 'status',
+	component: Status,
+});
+
+const logsInstanceRoute = createRoute({
+	getParentRoute: () => localInstanceRoute,
+	path: 'logs',
+	component: Log,
+});
+
 export const localRouteTree = rootRoute.addChildren([
 	localSignInRoute,
-	dashboardLayout.addChildren([localInstanceRoute]),
+	dashboardLayout.addChildren([
+		localInstanceRoute.addChildren([
+			browseInstanceRoute,
+			applicationsInstanceRoute,
+			statusInstanceRoute,
+			logsInstanceRoute,
+		]),
+	]),
 ]);
-
-// const localRouter = createHashRouter([
-// 	{
-// 		path: '/sign-in',
-// 		Component: LocalSignIn,
-// 	},
-// 	{
-// 		path: '/',
-// 		Component: ProtectedRoutes,
-// 		children: [
-// 			{
-// 				index: true,
-// 				Component: Instance,
-// 			},
-// 			{
-// 				path: 'clusters',
-// 				Component: ClusterList, // When clicking a cluster, it should be a direct link to the other localhost studio. ex. https://192.168.1:9925
-// 			},
-// 			{
-// 				path: 'clusters/:clusterId/instances',
-// 				Component: Instance,
-// 			},
-// 		],
-// 	},
-// ]);
-
-// export default localRouter;
