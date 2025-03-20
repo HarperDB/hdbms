@@ -8,7 +8,7 @@ import { CellContext, ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
 import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
-import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
+// import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
 import InstanceLogInModal from './modals/InstanceLoginInModal';
 
 const route = getRouteApi('');
@@ -32,7 +32,7 @@ function EmptyCluster() {
 function ClusterIndex() {
 	const { clusterId } = route.useParams();
 	const { data: cluster, isLoading } = useGetClusterInfo(clusterId);
-	const { mutate: submitRegistrationData } = useRegistrationInfo();
+	// const { mutate: submitRegistrationData } = useRegistrationInfo();
 
 	const columns: ColumnDef<ColumnTypes, string>[] = useMemo(
 		() => [
