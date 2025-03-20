@@ -14,10 +14,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { CreateAuthTokensRequest, useCreateAuthTokens } from '@/hooks/instance/useCreateAuthTokens';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
+import { InstanceLoginCredentials, useInstanceLogin } from '@/hooks/instance/useInstanceLogin';
 
 const NewClusterSchema = z.object({
 	username: z.string({
@@ -29,7 +29,6 @@ const NewClusterSchema = z.object({
 });
 
 function InstanceLogInModal({
-	instanceId,
 	instanceUrl,
 	instanceName,
 }: {
@@ -46,15 +45,14 @@ function InstanceLogInModal({
 		},
 	});
 
-	const { mutate: submitInstanceLoginInfo } = useCreateAuthTokens();
+	const { mutate: submitInstanceLoginInfo } = useInstanceLogin();
 	const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { username: string; password: string }) => {
 		const updatedFormData = {
-			instanceId,
 			instanceUrl,
 			...formData,
-		} as CreateAuthTokensRequest;
+		} as unknown as InstanceLoginCredentials;
 		submitInstanceLoginInfo(updatedFormData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
 import { useMemo } from 'react';
-import { CellContext } from '@tanstack/react-table';
+import { CellContext, ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
 import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
@@ -12,6 +12,18 @@ import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
 import InstanceLogInModal from './modals/InstanceLoginInModal';
 
 const route = getRouteApi('');
+
+type ColumnTypes = {
+	id: string;
+	name: string;
+	fqdns: string[];
+	instanceTypeId: string;
+	status: string;
+	version: string;
+	storage: string;
+	cpu: string;
+	memory: string;
+};
 
 function EmptyCluster() {
 	return <p>No instances found.</p>;
@@ -22,7 +34,7 @@ function ClusterIndex() {
 	const { data: cluster, isLoading } = useGetClusterInfo(clusterId);
 	const { mutate: submitRegistrationData } = useRegistrationInfo();
 
-	const columns = useMemo(
+	const columns: ColumnDef<ColumnTypes, string>[] = useMemo(
 		() => [
 			{
 				accessorKey: 'name', // Accessor key for the "name" field from data object
@@ -31,21 +43,16 @@ function ClusterIndex() {
 			{
 				accessorKey: 'fqdns',
 				header: 'Instance Url',
-				cell: (cell: CellContext<string, string>) => {
+				cell: (cell: CellContext<ColumnTypes, string>) => {
 					const dnsURLs: string[] = cell.getValue() as unknown as string[];
 					if (localStorage.getItem(`${cell.row.original?.id}`)) {
 						return (
-							<a href={`https://${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
+							<a href={`${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
 								{dnsURLs[0]}
 							</a>
 						);
 					}
 
-					// return (
-					// 	<a href={`https://${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
-					// 		{dnsURLs[0]}
-					// 	</a>
-					// );
 					return (
 						<InstanceLogInModal
 							instanceId={cell.row.original.id}
@@ -62,7 +69,7 @@ function ClusterIndex() {
 			{
 				accessorKey: 'status',
 				header: 'Status',
-				cell: (cell: CellContext<string, string>) => {
+				cell: (cell: CellContext<ColumnTypes, string>) => {
 					const status = cell.getValue();
 					return <Badge variant={renderBadgeStatusVariant(status)}>{renderBadgeStatusText(status)}</Badge>;
 				},
@@ -86,8 +93,7 @@ function ClusterIndex() {
 			{
 				id: 'actions',
 				header: () => '',
-				cell: (cell: CellContext<string, string>) => {
-					//@ts-expect-error we're getting the id and name from the instance object from the row.
+				cell: (cell: CellContext<ColumnTypes, string>) => {
 					return <EditInstanceModal instanceId={cell.row.original.id} instanceName={cell.row.original.name} />;
 				},
 			},
@@ -109,7 +115,7 @@ function ClusterIndex() {
 					{isLoading ? (
 						<div>Loading...</div> // TODO: Add skeleton component
 					) : cluster?.instances.length ? (
-						<DataTable data={cluster.instances as unknown as string[]} columns={columns} />
+						<DataTable data={cluster.instances as unknown as ColumnTypes[]} columns={columns} />
 					) : (
 						<div className="text-center">
 							<EmptyCluster />

@@ -35,6 +35,9 @@ const NewInstanceSchema = z.object({
 	instanceTypeId: z.string({
 		message: 'Please enter a instance type id.',
 	}),
+	url: z.string({
+		message: 'Please enter a host url.',
+	}),
 	storage: z.string({
 		message: 'Please enter a storage value.',
 	}),
@@ -47,6 +50,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 		defaultValues: {
 			name: '',
 			instanceTypeId: '',
+			url: '',
 			storage: '',
 		},
 	});
@@ -104,6 +108,19 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							render={({ field }) => (
 								<FormItem className="">
 									<FormLabel className="pb-1">Instance Type ID</FormLabel>
+									<FormControl>
+										<Input type="text" placeholder="ex. typ-2" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="url"
+							render={({ field }) => (
+								<FormItem className="">
+									<FormLabel className="pb-1">Url</FormLabel>
 									<FormControl>
 										<Input type="text" placeholder="ex. typ-2" {...field} />
 									</FormControl>

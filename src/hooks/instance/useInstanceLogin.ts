@@ -3,21 +3,21 @@ import { useMutation } from '@tanstack/react-query';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
 export type InstanceLoginCredentials = {
-	instanceURL: string;
+	instanceUrl: string;
 	username: string;
 	password: string;
 };
 
-type RegistrationInfoResponse = {
+type InstanceLoginResponse = {
 	message: string;
 };
 
 export const onInstanceLoginSubmit = async ({
-	instanceURL,
+	instanceUrl,
 	username,
 	password,
-}: InstanceLoginCredentials): Promise<RegistrationInfoResponse> => {
-	const { data } = await instanceClient.post(instanceURL, {
+}: InstanceLoginCredentials): Promise<InstanceLoginResponse> => {
+	const { data } = await instanceClient.post(`${instanceUrl}`, {
 		operation: 'login',
 		username,
 		password,
@@ -30,7 +30,7 @@ export const onInstanceLoginSubmit = async ({
 };
 
 export function useInstanceLogin() {
-	return useMutation<RegistrationInfoResponse, Error, InstanceLoginCredentials>({
+	return useMutation<InstanceLoginResponse, Error, InstanceLoginCredentials>({
 		mutationFn: (instanceData) => onInstanceLoginSubmit(instanceData),
 	});
 }
