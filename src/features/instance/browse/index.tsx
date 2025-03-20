@@ -1,8 +1,16 @@
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/Sidebar';
+
 function Browse() {
 	return (
 		<>
-			<div>Sidebar</div>
-			<div>table View</div>
+			<SidebarProvider>
+				<AppSidebar />
+				<main>
+					<SidebarTrigger />
+					<p>table</p>
+				</main>
+			</SidebarProvider>
 		</>
 	);
 }

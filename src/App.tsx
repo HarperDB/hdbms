@@ -17,6 +17,7 @@ function App() {
 		routeTree: loadedRouter,
 		scrollRestoration: true,
 		history: hashHistory,
+		defaultNotFoundComponent: () => <div>Not Found</div>,
 	});
 
 	return (
