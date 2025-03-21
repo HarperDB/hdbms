@@ -1,6 +1,6 @@
 import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 
 type Instance = {
 	id: string;
@@ -16,7 +16,7 @@ type Instance = {
 	tempPassword: string;
 };
 
-export type Cluster = {
+type Cluster = {
 	id: string;
 	organizationId: string;
 	name: string;
@@ -28,12 +28,13 @@ const getClusterInfo = async (clusterId: string) => {
 	return data as Cluster;
 };
 
-export function useGetClusterInfo(clusterId: string) {
-	const { data, isLoading } = useQuery({
+function getClusterInfoQueryOptions(clusterId: string) {
+	return queryOptions({
 		queryKey: [queryKeys.cluster, clusterId],
 		queryFn: () => getClusterInfo(clusterId),
 		retry: false,
 	});
-
-	return { data, isLoading };
 }
+
+export type { Cluster };
+export { getClusterInfoQueryOptions };

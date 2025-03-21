@@ -31,6 +31,7 @@ const getOrganizationQueryOptions = (orgId: string) => {
 	return queryOptions({
 		queryKey: [queryKeys.organization, orgId],
 		queryFn: () => getOrganization(orgId),
+		retry: false,
 	});
 };
 

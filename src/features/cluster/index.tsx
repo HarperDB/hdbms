@@ -1,5 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router';
-import { useGetClusterInfo } from '@/features/cluster/hooks/useGetClusterInfo';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
@@ -31,7 +32,7 @@ function EmptyCluster() {
 
 function ClusterIndex() {
 	const { clusterId } = route.useParams();
-	const { data: cluster, isLoading } = useGetClusterInfo(clusterId);
+	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId));
 	// const { mutate: submitRegistrationData } = useRegistrationInfo();
 
 	const columns: ColumnDef<ColumnTypes, string>[] = useMemo(
