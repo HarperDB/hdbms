@@ -1,6 +1,6 @@
 import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 
 type Instance = {
 	id: string;
