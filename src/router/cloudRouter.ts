@@ -1,26 +1,25 @@
-import { createRootRoute, createRoute } from '@tanstack/react-router';
+import { createRootRouteWithContext, createRoute } from '@tanstack/react-router';
 import StudioCloud from '../StudioCloud';
-import Dashboard from '../features/layouts/Dashboard';
+import Dashboard from '@/features/layouts/Dashboard';
 import ProfileIndex from '@/features/profile';
 import OrganizationsIndex from '../features/organizations';
 import OrganizationIndex from '@/features/organization';
 import ClusterIndex from '@/features/cluster';
 import ClusterList from '@/features/clusters/ClustersList';
-// const AuthLayout = lazy(() => import('@/features/layouts/AuthLayout'));
-// const SignIn = lazy(() => import('@/features/auth/SignIn'));
-// const SignUp = lazy(() => import('@/features/auth/SignUp'));
-// const ResetPassword = lazy(() => import('@/features/auth/ResetPassword'));
-import AuthLayout from '../features/auth/AuthLayout';
-import SignIn from '../features/auth/SignIn';
-import SignUp from '../features/auth/SignUp';
-import ForgotPassword from '../features/auth/ForgotPassword';
+import AuthLayout from '@/features/auth/AuthLayout';
+import SignIn from '@/features/auth/SignIn';
+import SignUp from '@/features/auth/SignUp';
+import ForgotPassword from '@/features/auth/ForgotPassword';
 import ClustersLayoutComponent from '@/features/clusters';
 import OrganizationsLayout from '@/features/organizations/OrganizationsLayout';
 import OrganizationLayout from '@/features/organization/OrganizationLayout';
 import ClusterLayout from '@/features/cluster/ClusterLayout';
-// const Profile = lazy(() => import('@/features/profile'));
+import { getOrganizationQueryOptions } from '@/features/organization/queries/getOrganizationQuery';
+import { QueryClient } from '@tanstack/react-query';
 
-const rootRoute = createRootRoute({
+const rootRoute = createRootRouteWithContext<{
+	queryClient: QueryClient;
+}>()({
 	component: StudioCloud,
 });
 
@@ -76,9 +75,13 @@ const orgsIndexRoute = createRoute({
 	component: OrganizationsIndex,
 });
 
+// Organization Routes
 const orgLayoutRoute = createRoute({
 	getParentRoute: () => orgsLayoutRoute,
 	path: '$organizationId',
+	loader: (opts) => {
+		opts.context.queryClient.ensureQueryData(getOrganizationQueryOptions(opts.params.organizationId));
+	},
 	component: OrganizationLayout,
 });
 
@@ -88,6 +91,7 @@ const orgIndexRoute = createRoute({
 	component: OrganizationIndex,
 });
 
+// Organization Clusters Routes
 const orgClustersLayoutRoute = createRoute({
 	getParentRoute: () => orgLayoutRoute,
 	path: 'clusters',
@@ -100,6 +104,7 @@ const orgClustersIndexRoute = createRoute({
 	component: ClusterList,
 });
 
+// Organization Cluster Routes
 const orgClusterLayoutRoute = createRoute({
 	getParentRoute: () => orgClustersLayoutRoute,
 	path: '$clusterId',
