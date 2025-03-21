@@ -7,6 +7,8 @@ import { queryClient } from '@/react-query/queryClient';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 // import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
+import ErrorComponent from '@/components/ErrorComponent';
+import NotFoundComponent from '@/components/NotFoundComponent';
 
 function App() {
 	const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO == 'true';
@@ -16,7 +18,8 @@ function App() {
 	const router = createRouter({
 		routeTree: loadedRouter,
 		history: hashHistory,
-		defaultNotFoundComponent: () => <div>Not Found</div>,
+		defaultNotFoundComponent: () => <NotFoundComponent />,
+		defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
 		defaultPreload: 'intent',
 		// Since we're using React Query, we don't want loader calls to ever be stale
 		// This will ensure that the loader is always called when the route is preloaded or visited
