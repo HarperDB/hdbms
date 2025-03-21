@@ -3,14 +3,15 @@ import ClusterCard from '@/features/organization/components/ClusterCard';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useGetOrganization } from '@/features/organization/hooks/useGetOrganization';
+import { getOrganizationQueryOptions } from '@/features/organization/queries/getOrganizationQuery';
 import NewClusterModal from '@/features/clusters/modals/NewClusterModal';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const route = getRouteApi('');
 
 function ClustersList() {
 	const { organizationId } = route.useParams();
-	const { data: orgInfo, isSuccess } = useGetOrganization(organizationId);
+	const { data: orgInfo, isSuccess } = useSuspenseQuery(getOrganizationQueryOptions(organizationId));
 
 	return (
 		<div>
