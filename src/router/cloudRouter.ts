@@ -10,11 +10,14 @@ import ClusterList from '@/features/clusters/ClustersList';
 // const SignIn = lazy(() => import('@/features/auth/SignIn'));
 // const SignUp = lazy(() => import('@/features/auth/SignUp'));
 // const ResetPassword = lazy(() => import('@/features/auth/ResetPassword'));
-import AuthLayout from '../features/layouts/AuthLayout';
+import AuthLayout from '../features/auth/AuthLayout';
 import SignIn from '../features/auth/SignIn';
 import SignUp from '../features/auth/SignUp';
 import ForgotPassword from '../features/auth/ForgotPassword';
-import ClustersIndex from '@/features/clusters';
+import ClustersLayoutComponent from '@/features/clusters';
+import OrganizationsLayout from '@/features/organizations/OrganizationsLayout';
+import OrganizationLayout from '@/features/organization/OrganizationLayout';
+import ClusterLayout from '@/features/cluster/ClusterLayout';
 // const Profile = lazy(() => import('@/features/profile'));
 
 const rootRoute = createRootRoute({
@@ -61,32 +64,51 @@ const profileRoute = createRoute({
 });
 
 // Organizations Routes
-const orgsRoute = createRoute({
+const orgsLayoutRoute = createRoute({
 	getParentRoute: () => dashboardLayout,
 	path: 'orgs',
+	component: OrganizationsLayout,
+});
+
+const orgsIndexRoute = createRoute({
+	getParentRoute: () => orgsLayoutRoute,
+	path: '/',
 	component: OrganizationsIndex,
 });
 
+const orgLayoutRoute = createRoute({
+	getParentRoute: () => orgsLayoutRoute,
+	path: '$organizationId',
+	component: OrganizationLayout,
+});
+
 const orgIndexRoute = createRoute({
-	getParentRoute: () => dashboardLayout,
-	path: 'orgs/$organizationId',
+	getParentRoute: () => orgLayoutRoute,
+	path: '/',
 	component: OrganizationIndex,
 });
 
-const orgClustersRoute = createRoute({
-	getParentRoute: () => orgIndexRoute,
+const orgClustersLayoutRoute = createRoute({
+	getParentRoute: () => orgLayoutRoute,
 	path: 'clusters',
-	component: ClustersIndex,
+	component: ClustersLayoutComponent,
 });
 
 const orgClustersIndexRoute = createRoute({
-	getParentRoute: () => orgClustersRoute,
+	getParentRoute: () => orgClustersLayoutRoute,
 	path: '/',
 	component: ClusterList,
 });
-const orgClusterRoute = createRoute({
-	getParentRoute: () => orgClustersRoute,
+
+const orgClusterLayoutRoute = createRoute({
+	getParentRoute: () => orgClustersLayoutRoute,
 	path: '$clusterId',
+	component: ClusterLayout,
+});
+
+const orgClusterIndexRoute = createRoute({
+	getParentRoute: () => orgClusterLayoutRoute,
+	path: '/',
 	component: ClusterIndex,
 });
 
@@ -94,8 +116,15 @@ export const cloudRouteTree = rootRoute.addChildren([
 	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute]),
 	dashboardLayout.addChildren([
 		profileRoute,
-		orgsRoute.addChildren([
-			orgIndexRoute.addChildren([orgClustersRoute.addChildren([orgClustersIndexRoute, orgClusterRoute])]),
+		orgsLayoutRoute.addChildren([
+			orgsIndexRoute,
+			orgLayoutRoute.addChildren([
+				orgIndexRoute,
+				orgClustersLayoutRoute.addChildren([
+					orgClustersIndexRoute,
+					orgClusterLayoutRoute.addChildren([orgClusterIndexRoute]),
+				]),
+			]),
 		]),
 	]),
 ]);
