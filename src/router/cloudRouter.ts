@@ -79,9 +79,9 @@ const orgClustersRoute = createRoute({
 	component: ClustersIndex,
 });
 
-const orgClustersListRoute = createRoute({
+const orgClustersIndexRoute = createRoute({
 	getParentRoute: () => orgClustersRoute,
-	path: '/list',
+	path: '/',
 	component: ClusterList,
 });
 const orgClusterRoute = createRoute({
@@ -95,7 +95,7 @@ export const cloudRouteTree = rootRoute.addChildren([
 	dashboardLayout.addChildren([
 		profileRoute,
 		orgsRoute.addChildren([
-			orgIndexRoute.addChildren([orgClustersRoute.addChildren([orgClustersListRoute, orgClusterRoute])]),
+			orgIndexRoute.addChildren([orgClustersRoute.addChildren([orgClustersIndexRoute, orgClusterRoute])]),
 		]),
 	]),
 ]);
