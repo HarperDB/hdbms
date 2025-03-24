@@ -2,7 +2,7 @@ import apiClient from '@/config/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
-export type VerifyEmailToken = {
+type VerifyEmailToken = {
 	token: string;
 };
 
@@ -11,8 +11,10 @@ type VerifyEmailResponse = {
 	email: string;
 };
 
-export const onResetPasswordSubmit = async (token: VerifyEmailToken): Promise<VerifyEmailResponse> => {
-	const { data } = await apiClient.post('/ForgotPassword', token);
+const onVerifyEmailTokenSubmit = async (token: VerifyEmailToken): Promise<VerifyEmailResponse> => {
+	const { data } = await apiClient.put('/VerifyEmail', {
+		token: token.toString(),
+	});
 	if (data) {
 		return data as VerifyEmailResponse;
 	} else {
@@ -20,8 +22,11 @@ export const onResetPasswordSubmit = async (token: VerifyEmailToken): Promise<Ve
 	}
 };
 
-export function useVerifyEmailMutation() {
+function useVerifyEmailMutation() {
 	return useMutation<VerifyEmailResponse, Error, VerifyEmailToken>({
-		mutationFn: (emailToken) => onResetPasswordSubmit(emailToken),
+		mutationFn: (emailToken) => onVerifyEmailTokenSubmit(emailToken),
 	});
 }
+
+export type { VerifyEmailToken, VerifyEmailResponse };
+export { useVerifyEmailMutation };
