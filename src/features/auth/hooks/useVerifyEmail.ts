@@ -15,11 +15,7 @@ const onVerifyEmailTokenSubmit = async (token: VerifyEmailToken): Promise<Verify
 	const { data } = await apiClient.put('/VerifyEmail', {
 		token: token.toString(),
 	});
-	if (data) {
-		return data as VerifyEmailResponse;
-	} else {
-		throw new Error('Something went wrong');
-	}
+	return data as VerifyEmailResponse;
 };
 
 function useVerifyEmailMutation() {
