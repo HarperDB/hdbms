@@ -18,6 +18,7 @@ import ClusterLayout from '@/features/cluster/ClusterLayout';
 
 import { getOrganizationQueryOptions } from '@/features/organization/queries/getOrganizationQuery';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
+import VerifyEmail from '@/features/auth/VerifyEmail';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -48,6 +49,12 @@ const forgotPasswordRoute = createRoute({
 	getParentRoute: () => authLayout,
 	path: 'forgotpassword',
 	component: ForgotPassword,
+});
+
+const verifyEmailRoute = createRoute({
+	getParentRoute: () => authLayout,
+	path: 'verifyemail',
+	component: VerifyEmail,
 });
 
 // Private Routes
@@ -123,7 +130,7 @@ const orgClusterIndexRoute = createRoute({
 });
 
 export const cloudRouteTree = rootRoute.addChildren([
-	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute]),
+	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute, verifyEmailRoute]),
 	dashboardLayout.addChildren([
 		profileRoute,
 		orgsLayoutRoute.addChildren([
