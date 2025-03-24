@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const ForgotPasswordSchema = z.object({
 	email: z
@@ -25,12 +26,18 @@ function ForgotPassword() {
 		},
 	});
 
-	const { mutate: submitForgotPasswordData } = useForgotPasswordMutation();
+	const { mutate: submitForgotPasswordData, isPending } = useForgotPasswordMutation();
 
 	const submitForm = async (formData: z.infer<typeof ForgotPasswordSchema>) => {
 		await submitForgotPasswordData(formData, {
-			onSuccess: () => {
-				//TODO - Trigger a success toast message
+			onSuccess: (message) => {
+				toast.success('Success', {
+					description: `${message}`,
+					action: {
+						label: 'Dismiss',
+						onClick: () => toast.dismiss(),
+					},
+				});
 				navigate({ to: '/' });
 			},
 		});
@@ -50,6 +57,7 @@ function ForgotPassword() {
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
+										disabled={isPending}
 										type="email"
 										placeholder="jane.smith@harperdb.io"
 										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
@@ -60,7 +68,7 @@ function ForgotPassword() {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" variant="submit" className="w-full my-2 rounded-full">
+					<Button type="submit" variant="submit" disabled={isPending} className="w-full my-2 rounded-full">
 						Send Password Reset Email
 					</Button>
 				</form>
