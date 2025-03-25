@@ -25,10 +25,7 @@ function RestPassword() {
 	});
 
 	const submitForm = async (formData: { password: string; confirmPassword: string }) => {
-		const { password, confirmPassword } = formData;
-		if (password !== confirmPassword) {
-			return 'Passwords do not match';
-		}
+		console.log('Form submitted with data:', formData);
 	};
 
 	return (
