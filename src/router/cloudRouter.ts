@@ -15,10 +15,11 @@ import ClustersLayoutComponent from '@/features/clusters';
 import OrganizationsLayout from '@/features/organizations/OrganizationsLayout';
 import OrganizationLayout from '@/features/organization/OrganizationLayout';
 import ClusterLayout from '@/features/cluster/ClusterLayout';
+import VerifyEmail from '@/features/auth/VerifyEmail';
+import ResetPassword from '@/features/auth/ResetPassword';
 
 import { getOrganizationQueryOptions } from '@/features/organization/queries/getOrganizationQuery';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
-import VerifyEmail from '@/features/auth/VerifyEmail';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -26,7 +27,7 @@ const rootRoute = createRootRouteWithContext<{
 	component: StudioCloud,
 });
 
-// Public Auth Routes
+// ***Public Auth Routes***
 
 const authLayout = createRoute({
 	getParentRoute: () => rootRoute,
@@ -56,6 +57,13 @@ const verifyEmailRoute = createRoute({
 	path: 'verifyemail',
 	component: VerifyEmail,
 });
+
+const resetpasswordRoute = createRoute({
+	getParentRoute: () => authLayout,
+	path: 'resetpassword',
+	component: ResetPassword,
+});
+// ***Public Auth Routes***
 
 // Private Routes
 const dashboardLayout = createRoute({
@@ -130,7 +138,7 @@ const orgClusterIndexRoute = createRoute({
 });
 
 export const cloudRouteTree = rootRoute.addChildren([
-	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute, verifyEmailRoute]),
+	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute, verifyEmailRoute, resetpasswordRoute]),
 	dashboardLayout.addChildren([
 		profileRoute,
 		orgsLayoutRoute.addChildren([
