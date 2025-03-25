@@ -2,6 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -16,6 +18,15 @@ const ResetPasswordSchema = z
 	});
 
 function RestPassword() {
+	const { token } = useSearch({ strict: false });
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!token) {
+			navigate({ to: '/' });
+		}
+	}, [token, navigate]);
+
 	const form = useForm({
 		resolver: zodResolver(ResetPasswordSchema),
 		defaultValues: {
