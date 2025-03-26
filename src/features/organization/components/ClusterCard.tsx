@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Ellipsis } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
+import { BadgeStatusVariant, renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,7 +21,7 @@ function ClusterCard({
 	clusterId: string;
 	clusterName: string;
 	organizationId: string;
-	status: string;
+	status: BadgeStatusVariant;
 }) {
 	return (
 		<Card className="relative">
