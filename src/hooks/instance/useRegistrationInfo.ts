@@ -19,9 +19,8 @@ export const onRegistrationInfoSubmit = async (instanceURL: string): Promise<Reg
 	});
 	if (data) {
 		return data;
-	} else {
-		throw new Error('Something went wrong');
 	}
+	throw new Error('Something went wrong');
 };
 
 export function useRegistrationInfo() {

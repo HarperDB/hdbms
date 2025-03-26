@@ -5,12 +5,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
 import { useMemo } from 'react';
-import { CellContext, ColumnDef } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
-import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
+import { BadgeStatus, renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
 // import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
 import InstanceLogInModal from './modals/InstanceLoginInModal';
+
+// 1. Once successfully logging into one instance, we should be able to use the same credentials(cookie) for all instances in the cluster.
+// Essentially looping through and do a query to logging into all the other instances.
+
+// 2. Depending upon the status, we should call that instance's API to get the latest status and update the UI accordingly.
+
+// 3. Navigate to the instance once the user clicks on the instance URL. If the instance is in a "PROVISIONING" state, we should show a loading spinner and disable the button until the instance is ready.
 
 const route = getRouteApi('');
 
@@ -33,9 +40,9 @@ function EmptyCluster() {
 function ClusterIndex() {
 	const { clusterId } = route.useParams();
 	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId));
-	// const { mutate: submitRegistrationData } = useRegistrationInfo();
+	// const { mutate: submitRegistrationData, data: registrationInfo } = useRegistrationInfo();
 
-	const columns: ColumnDef<ColumnTypes, string>[] = useMemo(
+	const columns: ColumnDef<ColumnTypes, unknown>[] = useMemo(
 		() => [
 			{
 				accessorKey: 'name', // Accessor key for the "name" field from data object
@@ -44,20 +51,14 @@ function ClusterIndex() {
 			{
 				accessorKey: 'fqdns',
 				header: 'Instance Url',
-				cell: (cell: CellContext<ColumnTypes, string>) => {
-					const dnsURLs: string[] = cell.getValue() as unknown as string[];
-					if (localStorage.getItem(`${cell.row.original?.id}`)) {
-						return (
-							<a href={`${dnsURLs[0]}`} target="_blank" rel="noreferrer" key={dnsURLs[0]} className="block">
-								{dnsURLs[0]}
-							</a>
-						);
-					}
+				cell: (cell) => {
+					const dnsURLs: string[] = cell.getValue() as string[];
 
+					const instanceURL = dnsURLs[0];
 					return (
 						<InstanceLogInModal
 							instanceId={cell.row.original.id}
-							instanceUrl={dnsURLs[0]}
+							instanceUrl={instanceURL}
 							instanceName={cell.row.original.name}
 						/>
 					);
@@ -70,8 +71,8 @@ function ClusterIndex() {
 			{
 				accessorKey: 'status',
 				header: 'Status',
-				cell: (cell: CellContext<ColumnTypes, string>) => {
-					const status = cell.getValue();
+				cell: (cell) => {
+					const status = cell.getValue() as BadgeStatus;
 					return <Badge variant={renderBadgeStatusVariant(status)}>{renderBadgeStatusText(status)}</Badge>;
 				},
 			},
@@ -94,7 +95,7 @@ function ClusterIndex() {
 			{
 				id: 'actions',
 				header: () => '',
-				cell: (cell: CellContext<ColumnTypes, string>) => {
+				cell: (cell) => {
 					return <EditInstanceModal instanceId={cell.row.original.id} instanceName={cell.row.original.name} />;
 				},
 			},
