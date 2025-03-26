@@ -23,7 +23,7 @@ const NewClusterSchema = z.object({
 	clusterName: z.string({
 		message: 'Please enter a cluster name.',
 	}),
-	clusterPrefix: z.string({
+	clusterTag: z.string({
 		message: 'Please enter a cluster prefix.',
 	}),
 });
@@ -34,14 +34,14 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		resolver: zodResolver(NewClusterSchema),
 		defaultValues: {
 			clusterName: '',
-			clusterPrefix: '',
+			clusterTag: '',
 		},
 	});
 
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 	const queryClient = useQueryClient();
 
-	const submitForm = async (formData: { clusterName: string; clusterPrefix: string }) => {
+	const submitForm = async (formData: { clusterName: string; clusterTag: string }) => {
 		const updatedFormData = {
 			organizationId: orgId,
 			...formData,
@@ -84,7 +84,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<FormField
 							control={form.control}
-							name="clusterPrefix"
+							name="clusterTag"
 							render={({ field }) => (
 								<FormItem className="">
 									<FormLabel className="pb-1">Cluster Prefix</FormLabel>
