@@ -87,7 +87,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 							name="clusterTag"
 							render={({ field }) => (
 								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Prefix</FormLabel>
+									<FormLabel className="pb-1">Cluster Tag</FormLabel>
 									<FormControl>
 										<Input type="text" placeholder="ex. rad-c1" {...field} />
 									</FormControl>
