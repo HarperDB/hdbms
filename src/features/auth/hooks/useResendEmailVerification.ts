@@ -10,7 +10,7 @@ type ResendVerificationEmailResponse = {
 	email: string;
 };
 
-export const onResendEmailVerificationSubmit = async ({
+const onResendEmailVerificationSubmit = async ({
 	email,
 }: ResendEmailVerificationRequest): Promise<ResendVerificationEmailResponse> => {
 	const { data } = await apiClient.post('/ResendVerificationEmail', {

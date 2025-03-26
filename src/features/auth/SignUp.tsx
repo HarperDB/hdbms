@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSignUpMutation } from '@/features/auth/hooks/useSignUp';
+import { toast } from 'sonner';
 
 const SignInSchema = z.object({
 	firstname: z
@@ -49,9 +50,15 @@ function SignUp() {
 	const { mutate: submitSignUpData } = useSignUpMutation();
 
 	const submitForm = async (formData: z.infer<typeof SignInSchema>) => {
-		await submitSignUpData(formData, {
-			onSuccess: () => {
-				//TODO: Trigger a success toast message
+		submitSignUpData(formData, {
+			onSuccess: (message) => {
+				toast.success('Success', {
+					description: `${message}`,
+					action: {
+						label: 'Dismiss',
+						onClick: () => toast.dismiss(),
+					},
+				});
 				navigate({ to: '/' });
 			},
 		});

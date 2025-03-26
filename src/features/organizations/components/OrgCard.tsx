@@ -21,7 +21,7 @@ function OrgCard({
 }) {
 	return (
 		<Card className="relative">
-			<CardHeader className="">
+			<CardHeader>
 				<CardDescription className="flex justify-between items-center">
 					<span>ORG ID: {organizationId}</span>
 					<DropdownMenu>
@@ -36,7 +36,9 @@ function OrgCard({
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</CardDescription>
-				<CardTitle>{organizationName}</CardTitle>
+				<CardTitle>
+					<h2>{organizationName}</h2>
+				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
 				<Badge>{roleName}</Badge>

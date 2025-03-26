@@ -1,10 +1,16 @@
-import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Ellipsis } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 import { renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 function ClusterCard({
 	clusterId,
@@ -17,21 +23,22 @@ function ClusterCard({
 	organizationId: string;
 	status: string;
 }) {
-	const [isClusterMenuOpen, setIsClusterMenuOpen] = useState(false);
 	return (
 		<Card className="relative">
-			<CardHeader className="">
+			<CardHeader>
 				<CardDescription className="flex justify-between items-center">
 					<span>CLUSTER ID: {clusterId}</span>
-					<Button
-						className="cursor-pointer"
-						variant="ghost"
-						onClick={() => {
-							setIsClusterMenuOpen(!isClusterMenuOpen);
-						}}
-					>
-						<Ellipsis />
-					</Button>
+					<DropdownMenu>
+						<DropdownMenuTrigger>
+							<Ellipsis aria-label="Cluster options" />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Cluster options</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>Edit</DropdownMenuItem>
+							<DropdownMenuItem>Delete</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</CardDescription>
 				<CardTitle>
 					<h2>{clusterName}</h2>
@@ -50,16 +57,6 @@ function ClusterCard({
 					</span>
 				</Link>
 			</CardContent>
-			{isClusterMenuOpen && (
-				<Card className="absolute top-12 right-5 gap-3 z-40 border border-gray-700 shadow-xl p-3 rounded-md">
-					<Button className="block w-20" size="sm">
-						Edit
-					</Button>
-					<Button className="block w-20" size="sm" variant="destructive">
-						Delete
-					</Button>
-				</Card>
-			)}
 		</Card>
 	);
 }

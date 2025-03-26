@@ -5,7 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
+import { useResetPasswordMutation } from './hooks/useResetPassword';
 
 const ResetPasswordSchema = z
 	.object({
@@ -35,8 +37,25 @@ function RestPassword() {
 		},
 	});
 
+	const { mutate: submitResetPasswordData, isPending } = useResetPasswordMutation();
+
 	const submitForm = async (formData: { password: string; confirmPassword: string }) => {
 		console.log('Form submitted with data:', formData);
+		await submitResetPasswordData(
+			{ token: token as string, password: formData.password },
+			{
+				onSuccess: () => {
+					toast.success('Success', {
+						description: 'Your password has been reset successfully.',
+						action: {
+							label: 'Dismiss',
+							onClick: () => toast.dismiss(),
+						},
+					});
+					navigate({ to: '/' });
+				},
+			}
+		);
 	};
 
 	return (
@@ -52,7 +71,7 @@ function RestPassword() {
 								<FormLabel>New Password</FormLabel>
 								<FormControl>
 									<Input
-										// disabled={isPending}
+										disabled={isPending}
 										type="password"
 										placeholder="enter new password"
 										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
@@ -71,7 +90,7 @@ function RestPassword() {
 								<FormLabel>Confirm Password</FormLabel>
 								<FormControl>
 									<Input
-										// disabled={isPending}
+										disabled={isPending}
 										type="password"
 										placeholder="confirm new password"
 										className="bg-purple-400 border-purple-400 dark:bg-black dark:border-black"
@@ -82,7 +101,7 @@ function RestPassword() {
 							</FormItem>
 						)}
 					/>
-					<Button variant="submit" type="submit" className="w-full my-2 rounded-full">
+					<Button variant="submit" type="submit" disabled={isPending} className="w-full my-2 rounded-full">
 						Submit New Password
 					</Button>
 				</form>
