@@ -1,28 +1,27 @@
 import apiClient from '@/config/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
-// TODO: Consolidate with useOnSignUpSubmitMutation
 export type NewClusterInfo = {
 	clusterName: string;
 	organizationId: string;
-	clusterPrefix: string;
+	clusterTag: string;
 };
 
 type NewClusterInfoResponse = {
 	id: string;
 	name: string;
 	organizationId: string;
-	prefix: string;
+	tag: string;
 };
 
 export const onNewClusterSubmit = async ({
 	clusterName,
 	organizationId,
-	clusterPrefix,
+	clusterTag,
 }: NewClusterInfo): Promise<NewClusterInfoResponse> => {
 	const { data } = await apiClient.post('/Cluster', {
 		name: clusterName,
-		prefix: clusterPrefix,
+		tag: clusterTag,
 		organizationId,
 	});
 	if (data) {
