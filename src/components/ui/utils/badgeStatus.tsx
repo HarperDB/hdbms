@@ -1,59 +1,60 @@
-const renderBadgeStatusVariant = (value: string) => {
+export type BadgeStatusVariant =
+	| 'PROVISIONING'
+	| 'CLONE_PENDING'
+	| 'UPDATING_HDB_NODES'
+	| 'UPDATING'
+	| 'CLONE_READY'
+	| 'RUNNING'
+	| 'UPDATED'
+	| 'STOPPED'
+	| 'TERMINATED'
+	| 'TERMINATING'
+	| 'ERROR';
+
+type BadgeStatusVariantValues = 'warning' | 'success' | 'secondary' | 'destructive';
+
+const renderBadgeStatusVariant = (value: BadgeStatusVariant): BadgeStatusVariantValues => {
 	switch (value) {
 		case 'PROVISIONING':
+		case 'CLONE_PENDING':
+		case 'UPDATING_HDB_NODES':
+		case 'UPDATING':
 			return 'warning';
+		case 'CLONE_READY':
 		case 'RUNNING':
+		case 'UPDATED':
 			return 'success';
 		case 'STOPPED':
 			return 'secondary';
 		case 'TERMINATED':
-			return 'destructive';
-		case 'CLONE_PENDING':
-			return 'warning';
-		case 'UPDATING_HDB_NODES':
-			return 'warning';
-		case 'UPDATING':
-			return 'warning';
-		case 'UPDATED':
-			return 'success';
+		case 'TERMINATING':
 		case 'ERROR':
 			return 'destructive';
-		case 'TERMINATING':
-			return 'destructive';
-		case 'CLONE_READY':
-			return 'success';
 		default:
-			return 'default';
+			return value;
 	}
 };
 
-const renderBadgeStatusText = (value: string) => {
-	switch (value) {
-		case 'PROVISIONING':
-			return 'Provisioning';
-		case 'RUNNING':
-			return 'Running';
-		case 'STOPPED':
-			return 'Stopped';
-		case 'TERMINATED':
-			return 'Terminated';
-		case 'CLONE_PENDING':
-			return 'Clone Pending';
-		case 'UPDATING_HDB_NODES':
-			return 'Updating HDB Nodes';
-		case 'UPDATING':
-			return 'Updating';
-		case 'UPDATED':
-			return 'Updated';
-		case 'ERROR':
-			return 'Error';
-		case 'TERMINATING':
-			return 'Terminating';
-		case 'CLONE_READY':
-			return 'Clone Ready';
-		default:
-			return '';
-	}
+const BADGE_STATUS_TEXT = {
+	PROVISIONING: 'Provisioning',
+	RUNNING: 'Running',
+	STOPPED: 'Stopped',
+	TERMINATED: 'Terminated',
+	CLONE_PENDING: 'Clone Pending',
+	UPDATING_HDB_NODES: 'Updating HDB Nodes',
+	UPDATING: 'Updating',
+	UPDATED: 'Updated',
+	ERROR: 'Error',
+	TERMINATING: 'Terminating',
+	CLONE_READY: 'Clone Ready',
+} as const;
+
+export type BadgeStatus = keyof typeof BADGE_STATUS_TEXT;
+
+const renderBadgeStatusText = (value: BadgeStatus) => {
+	const status = BADGE_STATUS_TEXT[value];
+	if (status) return status;
+	throw new Error('Unsupported Status');
 };
 
 export { renderBadgeStatusVariant, renderBadgeStatusText };

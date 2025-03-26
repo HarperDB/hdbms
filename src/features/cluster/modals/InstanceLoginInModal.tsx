@@ -31,10 +31,12 @@ const NewClusterSchema = z.object({
 function InstanceLogInModal({
 	instanceUrl,
 	instanceName,
+	onInstanceLogin,
 }: {
 	instanceId: string;
 	instanceUrl: string;
 	instanceName: string;
+	onInstanceLogin?: () => void;
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
@@ -52,11 +54,12 @@ function InstanceLogInModal({
 		const updatedFormData = {
 			instanceUrl,
 			...formData,
-		} as unknown as InstanceLoginCredentials;
+		} as InstanceLoginCredentials;
 		submitInstanceLoginInfo(updatedFormData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
+				onInstanceLogin?.();
 			},
 		});
 	};
@@ -65,7 +68,6 @@ function InstanceLogInModal({
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
 				<Button variant="positive" className="rounded-full md:w-44">
-					{' '}
 					Log In
 				</Button>
 			</DialogTrigger>

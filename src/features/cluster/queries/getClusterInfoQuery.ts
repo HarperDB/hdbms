@@ -1,10 +1,11 @@
+import { BadgeStatus } from '@/components/ui/utils/badgeStatus';
 import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
 import { queryOptions } from '@tanstack/react-query';
 
 type Instance = {
 	id: string;
-	status: 'PROVISIONING' | 'RUNNING' | 'STOPPED' | 'TERMINATED';
+	status: BadgeStatus;
 	instanceTypeId: string;
 	hostId: string;
 	createdByUserId: string;

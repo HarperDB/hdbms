@@ -24,9 +24,8 @@ export const onInstanceLoginSubmit = async ({
 	});
 	if (data) {
 		return data;
-	} else {
-		throw new Error('Something went wrong');
 	}
+	throw new Error('Something went wrong');
 };
 
 export function useInstanceLogin() {
