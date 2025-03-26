@@ -12,12 +12,10 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useSignOutMutation } from '@/features/auth/hooks/useSignOut';
 import { QueryCache } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-function MobileNav() {
+function MobileNav({ signOut }: { signOut: () => void }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const { mutate: signOut } = useSignOutMutation();
-	const navigate = useNavigate();
-	const queryCache = new QueryCache();
 	return (
 		<div className="md:hidden" id="mobile-menu">
 			<div className="flex items-center justify-between">
@@ -63,11 +61,7 @@ function MobileNav() {
 				</Link>
 				<Link
 					to={undefined}
-					onClick={() => {
-						signOut();
-						navigate({ to: '/' });
-						queryCache.clear();
-					}}
+					onClick={signOut}
 					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
 				>
 					Sign Out
@@ -77,7 +71,7 @@ function MobileNav() {
 	);
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ signOut }: { signOut: () => void }) => {
 	return (
 		<div className="hidden md:block">
 			<div className="flex items-center justify-between">
@@ -112,7 +106,9 @@ const DesktopNav = () => {
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/">Sign Out</Link>
+								<Link to={undefined} onClick={signOut}>
+									Sign Out
+								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 					</NavigationMenuList>
@@ -123,10 +119,28 @@ const DesktopNav = () => {
 };
 
 export function NavBar() {
+	const { mutate: signOut } = useSignOutMutation();
+	const navigate = useNavigate();
+	const queryCache = new QueryCache();
+	const handleSignOut = () => {
+		signOut(undefined, {
+			onSuccess: () => {
+				toast.success('Success', {
+					description: 'You have been signed out successfully.',
+					action: {
+						label: 'Dismiss',
+						onClick: () => toast.dismiss(),
+					},
+				});
+				navigate({ to: '/' });
+			},
+		});
+		queryCache.clear();
+	};
 	return (
 		<>
-			<MobileNav />
-			<DesktopNav />
+			<MobileNav signOut={handleSignOut} />
+			<DesktopNav signOut={handleSignOut} />
 		</>
 	);
 }
