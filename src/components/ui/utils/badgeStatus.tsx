@@ -9,7 +9,8 @@ export type BadgeStatusVariant =
 	| 'STOPPED'
 	| 'TERMINATED'
 	| 'TERMINATING'
-	| 'ERROR';
+	| 'ERROR'
+	| 'REMOVED';
 
 type BadgeStatusVariantValues = 'warning' | 'success' | 'secondary' | 'destructive';
 
@@ -29,6 +30,7 @@ const renderBadgeStatusVariant = (value: BadgeStatusVariant): BadgeStatusVariant
 		case 'TERMINATED':
 		case 'TERMINATING':
 		case 'ERROR':
+		case 'REMOVED':
 			return 'destructive';
 		default:
 			return value;
@@ -47,6 +49,7 @@ const BADGE_STATUS_TEXT = {
 	ERROR: 'Error',
 	TERMINATING: 'Terminating',
 	CLONE_READY: 'Clone Ready',
+	REMOVED: 'Removed',
 } as const;
 
 export type BadgeStatus = keyof typeof BADGE_STATUS_TEXT;

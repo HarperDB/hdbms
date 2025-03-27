@@ -53,7 +53,9 @@ function ClusterIndex() {
 				header: 'Instance Url',
 				cell: (cell) => {
 					const dnsURLs: string[] = cell.getValue() as string[];
-
+					if (!['CLONE_READY', 'RUNNING', 'UPDATED'].includes(cell.row.original.status)) {
+						return <p>N/A</p>;
+					}
 					const instanceURL = dnsURLs[0];
 					return (
 						<InstanceLogInModal
