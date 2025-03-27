@@ -1,4 +1,4 @@
-import { getRouteApi } from '@tanstack/react-router';
+import { getRouteApi, Link } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +38,7 @@ function EmptyCluster() {
 }
 
 function ClusterIndex() {
-	const { clusterId } = route.useParams();
+	const { organizationId, clusterId } = route.useParams();
 	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId));
 	// const { mutate: submitRegistrationData, data: registrationInfo } = useRegistrationInfo();
 
@@ -58,11 +58,25 @@ function ClusterIndex() {
 					}
 					const instanceURL = dnsURLs[0];
 					return (
-						<InstanceLogInModal
-							instanceId={cell.row.original.id}
-							instanceUrl={instanceURL}
-							instanceName={cell.row.original.name}
-						/>
+						<>
+							<InstanceLogInModal
+								instanceId={cell.row.original.id}
+								instanceUrl={instanceURL}
+								instanceName={cell.row.original.name}
+							/>
+							<Link
+								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
+								className="text-sm"
+								aria-label={`Go to ${cell.row.original.name} instance`}
+								title={`Go to ${cell.row.original.name} instance`}
+								target="_blank"
+							>
+								<span className="hover:border-b-2 py-2">
+									{instanceURL}
+									{/* <ArrowRight className="inline-block" /> */}
+								</span>
+							</Link>
+						</>
 					);
 				},
 			},

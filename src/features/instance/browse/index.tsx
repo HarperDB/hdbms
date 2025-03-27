@@ -8,6 +8,9 @@ function Browse() {
 				<AppSidebar />
 				<main>
 					<SidebarTrigger />
+					<div className="w-full">
+						<h1 className="text-2xl text-white">Browse</h1>
+					</div>
 					<p>table</p>
 				</main>
 			</SidebarProvider>
