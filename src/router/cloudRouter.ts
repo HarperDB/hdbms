@@ -20,6 +20,8 @@ import ResetPassword from '@/features/auth/ResetPassword';
 
 import { getOrganizationQueryOptions } from '@/features/organization/queries/getOrganizationQuery';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
+import InstanceLayout from '@/features/instance/InstanceLayout';
+import Browse from '@/features/instance/browse';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -109,21 +111,21 @@ const orgIndexRoute = createRoute({
 });
 
 // Organization Clusters Routes
-const orgClustersLayoutRoute = createRoute({
+const clustersLayoutRoute = createRoute({
 	getParentRoute: () => orgLayoutRoute,
 	path: 'clusters',
 	component: ClustersLayoutComponent,
 });
 
-const orgClustersIndexRoute = createRoute({
-	getParentRoute: () => orgClustersLayoutRoute,
+const clustersIndexRoute = createRoute({
+	getParentRoute: () => clustersLayoutRoute,
 	path: '/',
 	component: ClusterList,
 });
 
 // Organization Cluster Routes
-const orgClusterLayoutRoute = createRoute({
-	getParentRoute: () => orgClustersLayoutRoute,
+const clusterLayoutRoute = createRoute({
+	getParentRoute: () => clustersLayoutRoute,
 	path: '$clusterId',
 	component: ClusterLayout,
 	loader: (opts) => {
@@ -131,10 +133,22 @@ const orgClusterLayoutRoute = createRoute({
 	},
 });
 
-const orgClusterIndexRoute = createRoute({
-	getParentRoute: () => orgClusterLayoutRoute,
+const clusterIndexRoute = createRoute({
+	getParentRoute: () => clusterLayoutRoute,
 	path: '/',
 	component: ClusterIndex,
+});
+
+const instanceLayoutRoute = createRoute({
+	getParentRoute: () => clusterLayoutRoute,
+	path: 'instance/$instanceId',
+	component: InstanceLayout,
+});
+
+const instanceIndexRoute = createRoute({
+	getParentRoute: () => instanceLayoutRoute,
+	path: '/',
+	component: Browse, // Placeholder for instance details
 });
 
 export const cloudRouteTree = rootRoute.addChildren([
@@ -145,9 +159,9 @@ export const cloudRouteTree = rootRoute.addChildren([
 			orgsIndexRoute,
 			orgLayoutRoute.addChildren([
 				orgIndexRoute,
-				orgClustersLayoutRoute.addChildren([
-					orgClustersIndexRoute,
-					orgClusterLayoutRoute.addChildren([orgClusterIndexRoute]),
+				clustersLayoutRoute.addChildren([
+					clustersIndexRoute,
+					clusterLayoutRoute.addChildren([clusterIndexRoute, instanceLayoutRoute.addChildren([instanceIndexRoute])]),
 				]),
 			]),
 		]),
