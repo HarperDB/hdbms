@@ -98,6 +98,9 @@ function ClusterIndex() {
 				id: 'actions',
 				header: () => '',
 				cell: (cell) => {
+					if (!['CLONE_READY', 'RUNNING', 'UPDATED'].includes(cell.row.original.status)) {
+						return null;
+					}
 					return <EditInstanceModal instanceId={cell.row.original.id} instanceName={cell.row.original.name} />;
 				},
 			},
