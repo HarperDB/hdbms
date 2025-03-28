@@ -11,15 +11,15 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowRight, MonitorUp, Plus } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
-import { RadioButtonGroup } from '@/components/RadioButtonGroup';
-import awsLogo from '@/assets/aws_logo.svg';
+// import { RadioButtonGroup } from '@/components/RadioButtonGroup';
+// import awsLogo from '@/assets/aws_logo.svg';
 import {
 	Select,
 	SelectTrigger,
@@ -38,8 +38,11 @@ const NewClusterSchema = z.object({
 	clusterTag: z.string({
 		message: 'Please enter a cluster prefix.',
 	}),
-	cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
-		required_error: 'Please select an option.',
+	// cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
+	// 	required_error: 'Please select an option.',
+	// }),
+	instanceTypes: z.string({
+		required_error: 'Please select an instance type.',
 	}),
 	storage: z.string({
 		required_error: 'Please select a storage size.',
@@ -60,20 +63,20 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 
-	const typeOptions = [
-		{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
-		{
-			value: 'linode',
-			label: 'Linode',
-			icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
-		},
-		{
-			value: 'self-hosted',
-			label: 'Self-Hosted',
-			icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
-		},
-		{ value: 'none', label: 'None', icon: <MonitorUp className="size-4" /> },
-	];
+	// const typeOptions = [
+	// 	{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
+	// 	{
+	// 		value: 'linode',
+	// 		label: 'Linode',
+	// 		icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
+	// 	},
+	// 	{
+	// 		value: 'self-hosted',
+	// 		label: 'Self-Hosted',
+	// 		icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
+	// 	},
+	// 	{ value: 'none', label: 'None', icon: <MonitorUp className="size-4" /> },
+	// ];
 
 	const submitForm = async (formData: { clusterName: string; clusterTag: string }) => {
 		console.log('Form submitted with data:', formData);
@@ -104,7 +107,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
 						<InfoForm />
-						<FormField
+						{/* <FormField
 							control={form.control}
 							name="cloudProvider"
 							render={({ field }) => (
@@ -116,11 +119,10 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 									<FormMessage />
 								</FormItem>
 							)}
-						/>
-						{/* Get instance type from api call and populate dropdown */}
+						/> */}
 						<FormField
 							control={form.control}
-							name="instancetypes"
+							name="instanceTypes"
 							render={({ field }) => (
 								<FormItem className="">
 									<FormLabel className="pb-1">Instance Type</FormLabel>

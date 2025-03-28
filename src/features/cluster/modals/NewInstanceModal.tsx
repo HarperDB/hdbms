@@ -83,8 +83,8 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create a New Cluster</DialogTitle>
-					<DialogDescription>Create a new cluster here.</DialogDescription>
+					<DialogTitle>Create a New Instance</DialogTitle>
+					<DialogDescription>Create a new instance here.</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
