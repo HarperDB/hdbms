@@ -77,8 +77,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
-				<Button variant="positive" className="rounded-full md:w-44">
-					{' '}
+				<Button variant="positive" className="rounded-full w-full md:w-44">
 					<Plus /> New Instance
 				</Button>
 			</DialogTrigger>

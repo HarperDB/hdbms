@@ -15,10 +15,10 @@ function ClustersList() {
 
 	return (
 		<div>
-			<section>
+			<section className="py-5 bg-muted-foreground/20">
 				{isSuccess && orgInfo?.clusters?.length ? (
-					<div className="flex flex-col-reverse justify-between gap-4 mb-10 md:gap-0 md:flex-row">
-						<div>
+					<div className="flex flex-col-reverse justify-between items-center gap-4 md:gap-0 md:flex-row px-4 md:px-12">
+						<div className="w-full">
 							<Input placeholder="Filter clusters by name" className="inline-block w-3/5 md:w-64" />
 							<Button className="inline-block w-2/5 md:w-auto md:ml-4">
 								Sort by A-Z
@@ -31,7 +31,7 @@ function ClustersList() {
 					</div>
 				) : null}
 			</section>
-			<section>
+			<section className="px-4 md:px-12 pt-4">
 				<>
 					{isSuccess && orgInfo?.clusters?.length ? (
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-12">

@@ -68,7 +68,7 @@ function SendEmailVerification() {
 					)}
 				/>
 				<Button type="submit" variant="submit" disabled={isPending} className="w-full my-2 rounded-full">
-					Send Password Reset Email
+					Send Verification Email
 				</Button>
 			</form>
 		</Form>

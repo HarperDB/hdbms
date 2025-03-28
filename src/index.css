@@ -48,7 +48,7 @@
   --purple-100: hsl(288.78, 100%, 27.25%); /* #71008B */
   --purple-200: hsl(273.91, 100%, 31.57%); /* #5B00A1 */
   --purple-300: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
-  --purple-400: hsl(255deg 27% 32%); /* #2800a1 */
+  --purple-400: hsl(255deg 27% 32%); /* #473c68 */
   --purple-500: hsl(254.69, 39.84%, 24.12%); /* #312556 */
   --purple-gradient: 90deg, var(--purple-500) 100%, var(--purple-500) 100%;
   --purple-dark-to-light-gradient: 45deg, var(--purple-200) 0%, var(--purple-100) 100%;

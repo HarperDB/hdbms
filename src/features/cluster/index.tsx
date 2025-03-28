@@ -122,29 +122,36 @@ function ClusterIndex() {
 		[]
 	);
 	return (
-		<div className="mx-auto max-w-7xl">
-			<Card className="min-h-96">
-				<CardHeader className="flex justify-between">
-					<div>
-						<CardTitle className="flex items-center justify-between">
-							{cluster?.name} <NewInstanceModal clusterId={clusterId} />{' '}
-						</CardTitle>
-						<CardDescription>Cluster ID: {clusterId}</CardDescription>
-					</div>
-				</CardHeader>
-				<CardContent className="min-h-96">
-					{isLoading ? (
-						<div>Loading...</div> // TODO: Add skeleton component
-					) : cluster?.instances.length ? (
-						<DataTable data={cluster.instances as unknown as ColumnTypes[]} columns={columns} />
-					) : (
-						<div className="text-center">
-							<EmptyCluster />
+		<>
+			<div>
+				<section className="py-5 bg-muted-foreground/20">
+					{cluster?.instances.length ? (
+						<div className="flex flex-col justify-between items-center gap-4 md:gap-0 md:flex-row px-4 md:px-12">
+							<div className="w-full text-white">
+								<h2 className="text-xl font-semibold">{cluster?.name}</h2>
+								<p className="text-xs md:text-sm">Cluster ID: {clusterId}</p>
+							</div>
+							<NewInstanceModal clusterId={clusterId} />
 						</div>
-					)}
-				</CardContent>
-			</Card>
-		</div>
+					) : null}
+				</section>
+			</div>
+			<div className="mx-auto max-w-7xl">
+				<Card className="min-h-96 p-0 mt-4">
+					<CardContent className="min-h-96 p-0">
+						{isLoading ? (
+							<div>Loading...</div> // TODO: Add skeleton component
+						) : cluster?.instances.length ? (
+							<DataTable data={cluster.instances as unknown as ColumnTypes[]} columns={columns} />
+						) : (
+							<div className="text-center">
+								<EmptyCluster />
+							</div>
+						)}
+					</CardContent>
+				</Card>
+			</div>
+		</>
 	);
 }
 
