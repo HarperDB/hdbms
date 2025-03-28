@@ -11,7 +11,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, Plus, PlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
@@ -30,6 +30,12 @@ import {
 	SelectItem,
 } from '@/components/ui/select';
 import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTypeQuery';
+
+// type RegionInfo = {
+// 	region: string;
+// 	cloudProvider: string;
+// 	count: number;
+// };
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -59,6 +65,8 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 			clusterTag: '',
 		},
 	});
+
+	// const [regionList, setRegionList] = useState<RegionInfo[]>();
 
 	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
@@ -182,6 +190,13 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 								</FormItem>
 							)}
 						/>
+						<section>
+							{/* TODO -  Regions component List component goes here */}
+							<Button type="button" variant="positive" className="rounded-full">
+								<PlusIcon />
+								Add Instance
+							</Button>
+						</section>
 						<DialogFooter>
 							<Button type="submit" variant="submit" className="rounded-full">
 								Create New Cluster <ArrowRight />
