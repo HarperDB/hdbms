@@ -30,7 +30,7 @@ function Dashboard() {
 			<header className="sticky top-0 z-40 w-full h-20 px-4 py-4 bg-black-dark dark:bg-black-dark dark:border-b dark:border-black md:px-12">
 				<NavBar />
 			</header>
-			<main className="pt-4 min-h-[calc(100vh-theme(spacing.20))] px-4 md:px-12">
+			<main className="min-h-[calc(100vh-theme(spacing.20))]">
 				<Outlet />
 			</main>
 		</div>
