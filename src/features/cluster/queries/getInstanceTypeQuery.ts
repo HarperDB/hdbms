@@ -2,9 +2,7 @@ import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
 import { queryOptions } from '@tanstack/react-query';
 
-type InstanceTypes = {
-	data: InstanceType[];
-};
+type InstanceTypes = InstanceType[];
 
 type InstanceType = {
 	id: string;
