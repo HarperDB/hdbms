@@ -18,7 +18,7 @@ type InstanceType = {
 };
 
 const getInstanceTypes = async () => {
-	const { data } = await apiClient.get(`/InstanceType`);
+	const { data } = await apiClient.get(`/InstanceType/`);
 	return data as InstanceTypes;
 };
 

@@ -57,8 +57,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		},
 	});
 
-	const { data: instanceTypes, isInstanceTypesLoading } = useQuery(getInstanceTypeOptions());
-	console.log('Instance Types:', instanceTypes);
+	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 
 	const typeOptions = [
@@ -105,86 +104,82 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
 						<InfoForm />
-						<section>
-							<FormField
-								control={form.control}
-								name="cloudProvider"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Cloud Provider</FormLabel>
-										<FormControl>
-											<RadioButtonGroup options={typeOptions} control={form.control} {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</section>
-						<section>
-							{/* Get instance type from api call and populate dropdown */}
-							{/* <FormField
-								control={form.control}
-								name="storage"
-								render={({ field }) => (
-									<FormItem className="">
-										<FormLabel className="pb-1">Storage Size</FormLabel>
-										<FormControl>
-											<Select onValueChange={field.onChange} {...field}>
-												<SelectTrigger className="w-[180px]">
-													<SelectValue placeholder="Select Storage Size" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														{instanceTypes?.map((type) => (
-															<SelectItem key={type.value} value={type.value}>
-																{type.label}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/> */}
-							<FormField
-								control={form.control}
-								name="storage"
-								render={({ field }) => (
-									<FormItem className="">
-										<FormLabel className="pb-1">Storage Size</FormLabel>
-										<FormControl>
-											<Select onValueChange={field.onChange} {...field}>
-												<SelectTrigger className="w-[180px]">
-													<SelectValue placeholder="Select Storage Size" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>Storage Size</SelectLabel>
-														<SelectItem value="1">1GB</SelectItem>
-														<SelectItem value="10">10GB</SelectItem>
-														<SelectItem value="100">100GB</SelectItem>
-														<SelectItem value="250">250GB</SelectItem>
-														<SelectItem value="500">500GB</SelectItem>
-														<SelectItem value="1000">1TB</SelectItem>
-														<SelectItem value="1500">1.5TB</SelectItem>
-														<SelectItem value="2000">2TB</SelectItem>
-														<SelectItem value="2500">2.5TB</SelectItem>
-														<SelectItem value="3000">3TB</SelectItem>
-														<SelectItem value="3500">3.5TB</SelectItem>
-														<SelectItem value="4000">4TB</SelectItem>
-														<SelectItem value="4500">4.5TB</SelectItem>
-														<SelectItem value="5000">5TB</SelectItem>
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</section>
+						<FormField
+							control={form.control}
+							name="cloudProvider"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Cloud Provider</FormLabel>
+									<FormControl>
+										<RadioButtonGroup options={typeOptions} control={form.control} {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						{/* Get instance type from api call and populate dropdown */}
+						<FormField
+							control={form.control}
+							name="instancetypes"
+							render={({ field }) => (
+								<FormItem className="">
+									<FormLabel className="pb-1">Instance Type</FormLabel>
+									<FormControl>
+										<Select onValueChange={field.onChange} {...field}>
+											<SelectTrigger className="w-[180px]">
+												<SelectValue placeholder="Select Instance Type" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													{instanceTypes?.map((type) => (
+														<SelectItem key={type.id} value={type.id}>
+															{type.id}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="storage"
+							render={({ field }) => (
+								<FormItem className="">
+									<FormLabel className="pb-1">Storage Size</FormLabel>
+									<FormControl>
+										<Select onValueChange={field.onChange} {...field}>
+											<SelectTrigger className="w-[180px]">
+												<SelectValue placeholder="Select Storage Size" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>Storage Size</SelectLabel>
+													<SelectItem value="1">1GB</SelectItem>
+													<SelectItem value="10">10GB</SelectItem>
+													<SelectItem value="100">100GB</SelectItem>
+													<SelectItem value="250">250GB</SelectItem>
+													<SelectItem value="500">500GB</SelectItem>
+													<SelectItem value="1000">1TB</SelectItem>
+													<SelectItem value="1500">1.5TB</SelectItem>
+													<SelectItem value="2000">2TB</SelectItem>
+													<SelectItem value="2500">2.5TB</SelectItem>
+													<SelectItem value="3000">3TB</SelectItem>
+													<SelectItem value="3500">3.5TB</SelectItem>
+													<SelectItem value="4000">4TB</SelectItem>
+													<SelectItem value="4500">4.5TB</SelectItem>
+													<SelectItem value="5000">5TB</SelectItem>
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<DialogFooter>
 							<Button type="submit" variant="submit" className="rounded-full">
 								Create New Cluster <ArrowRight />
