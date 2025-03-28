@@ -15,7 +15,7 @@ import { ArrowRight, MonitorUp, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
 import { RadioButtonGroup } from '@/components/RadioButtonGroup';
@@ -29,6 +29,7 @@ import {
 	SelectLabel,
 	SelectItem,
 } from '@/components/ui/select';
+import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTypeQuery';
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -46,6 +47,7 @@ const NewClusterSchema = z.object({
 });
 
 function NewClusterModal({ orgId }: { orgId: string }) {
+	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
 		resolver: zodResolver(NewClusterSchema),
@@ -55,8 +57,9 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		},
 	});
 
+	const { data: instanceTypes, isInstanceTypesLoading } = useQuery(getInstanceTypeOptions());
+	console.log('Instance Types:', instanceTypes);
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
-	const queryClient = useQueryClient();
 
 	const typeOptions = [
 		{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
@@ -119,6 +122,32 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						</section>
 						<section>
 							{/* Get instance type from api call and populate dropdown */}
+							{/* <FormField
+								control={form.control}
+								name="storage"
+								render={({ field }) => (
+									<FormItem className="">
+										<FormLabel className="pb-1">Storage Size</FormLabel>
+										<FormControl>
+											<Select onValueChange={field.onChange} {...field}>
+												<SelectTrigger className="w-[180px]">
+													<SelectValue placeholder="Select Storage Size" />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectGroup>
+														{instanceTypes?.map((type) => (
+															<SelectItem key={type.value} value={type.value}>
+																{type.label}
+															</SelectItem>
+														))}
+													</SelectGroup>
+												</SelectContent>
+											</Select>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/> */}
 							<FormField
 								control={form.control}
 								name="storage"
