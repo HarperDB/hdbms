@@ -20,6 +20,15 @@ import { queryKeys } from '@/react-query/constants';
 import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
 import { RadioButtonGroup } from '@/components/RadioButtonGroup';
 import awsLogo from '@/assets/aws_logo.svg';
+import {
+	Select,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectGroup,
+	SelectLabel,
+	SelectItem,
+} from '@/components/ui/select';
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -30,6 +39,9 @@ const NewClusterSchema = z.object({
 	}),
 	cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
 		required_error: 'Please select an option.',
+	}),
+	storage: z.string({
+		required_error: 'Please select a storage size.',
 	}),
 });
 
@@ -99,6 +111,45 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 										<FormLabel>Cloud Provider</FormLabel>
 										<FormControl>
 											<RadioButtonGroup options={typeOptions} control={form.control} {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</section>
+						<section>
+							{/* Get instance type from api call and populate dropdown */}
+							<FormField
+								control={form.control}
+								name="storage"
+								render={({ field }) => (
+									<FormItem className="">
+										<FormLabel className="pb-1">Storage Size</FormLabel>
+										<FormControl>
+											<Select onValueChange={field.onChange} {...field}>
+												<SelectTrigger className="w-[180px]">
+													<SelectValue placeholder="Select Storage Size" />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectGroup>
+														<SelectLabel>Storage Size</SelectLabel>
+														<SelectItem value="1">1GB</SelectItem>
+														<SelectItem value="10">10GB</SelectItem>
+														<SelectItem value="100">100GB</SelectItem>
+														<SelectItem value="250">250GB</SelectItem>
+														<SelectItem value="500">500GB</SelectItem>
+														<SelectItem value="1000">1TB</SelectItem>
+														<SelectItem value="1500">1.5TB</SelectItem>
+														<SelectItem value="2000">2TB</SelectItem>
+														<SelectItem value="2500">2.5TB</SelectItem>
+														<SelectItem value="3000">3TB</SelectItem>
+														<SelectItem value="3500">3.5TB</SelectItem>
+														<SelectItem value="4000">4TB</SelectItem>
+														<SelectItem value="4500">4.5TB</SelectItem>
+														<SelectItem value="5000">5TB</SelectItem>
+													</SelectGroup>
+												</SelectContent>
+											</Select>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
