@@ -1,10 +1,8 @@
-import instanceClient from '@/config/instanceClient';
+// import instanceClient from '@/config/instanceClient';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
-export type InstanceData = {
-	instanceURL: string;
-};
 
 type RegistrationInfoResponse = {
 	id: string;
@@ -13,8 +11,8 @@ type RegistrationInfoResponse = {
 	lastname: string;
 };
 
-export const onRegistrationInfoSubmit = async (instanceURL: string): Promise<RegistrationInfoResponse> => {
-	const { data } = await instanceClient.post(instanceURL, {
+const onRegistrationInfoSubmit = async (instanceURL: string): Promise<RegistrationInfoResponse> => {
+	const { data } = await axios.post(instanceURL, {
 		operation: { operation: 'registration_info' },
 	});
 	if (data) {
@@ -23,8 +21,11 @@ export const onRegistrationInfoSubmit = async (instanceURL: string): Promise<Reg
 	throw new Error('Something went wrong');
 };
 
-export function useRegistrationInfo() {
+function useRegistrationInfoMutation() {
 	return useMutation<RegistrationInfoResponse, Error, string>({
-		mutationFn: (instanceData) => onRegistrationInfoSubmit(instanceData),
+		mutationFn: (instanceUrl) => onRegistrationInfoSubmit(instanceUrl),
+		retry: false,
 	});
 }
+
+export { useRegistrationInfoMutation };

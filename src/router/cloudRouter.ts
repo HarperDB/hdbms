@@ -22,6 +22,7 @@ import { getOrganizationQueryOptions } from '@/features/organization/queries/get
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import InstanceLayout from '@/features/instance/InstanceLayout';
 import Browse from '@/features/instance/browse';
+import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -143,6 +144,9 @@ const instanceLayoutRoute = createRoute({
 	getParentRoute: () => clusterLayoutRoute,
 	path: 'instance/$instanceId',
 	component: InstanceLayout,
+	loader: (opts) => {
+		opts.context.queryClient.ensureQueryData(getInstanceInfoQueryOptions(opts.params.instanceId));
+	},
 });
 
 const instanceIndexRoute = createRoute({

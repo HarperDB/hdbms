@@ -9,7 +9,6 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus } from 'lucide-react';
@@ -18,6 +17,8 @@ import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
+import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
+import { RadioGroupItem, RadioGroup } from '@/components/ui/radio-group';
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -25,6 +26,9 @@ const NewClusterSchema = z.object({
 	}),
 	clusterTag: z.string({
 		message: 'Please enter a cluster prefix.',
+	}),
+	type: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
+		required_error: 'Please select an option.',
 	}),
 });
 
@@ -68,32 +72,53 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
-						<FormField
-							control={form.control}
-							name="clusterName"
-							render={({ field }) => (
-								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Name</FormLabel>
-									<FormControl>
-										<Input type="text" placeholder="ex. rad-cluster" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="clusterTag"
-							render={({ field }) => (
-								<FormItem className="">
-									<FormLabel className="pb-1">Cluster Tag</FormLabel>
-									<FormControl>
-										<Input type="text" placeholder="ex. rad-c1" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						<InfoForm />
+						<section>
+							<h2 className="font-semibold">Cloud Provider</h2>
+							<hr className="my-2" />
+							<FormField
+								control={form.control}
+								name="type"
+								render={({ field }) => (
+									<FormItem className="space-y-3">
+										<FormLabel>Notify me about...</FormLabel>
+										<FormControl>
+											<RadioGroup
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+												className="flex flex-col space-y-1"
+											>
+												<FormItem className="flex items-center space-x-3 space-y-0">
+													<FormControl>
+														<RadioGroupItem value="aws" />
+													</FormControl>
+													<FormLabel className="font-normal">AWS</FormLabel>
+												</FormItem>
+												<FormItem className="flex items-center space-x-3 space-y-0">
+													<FormControl>
+														<RadioGroupItem value="linode" />
+													</FormControl>
+													<FormLabel className="font-normal">Linode</FormLabel>
+												</FormItem>
+												<FormItem className="flex items-center space-x-3 space-y-0">
+													<FormControl>
+														<RadioGroupItem value="self-hosted" />
+													</FormControl>
+													<FormLabel className="font-normal">Self-Hosted</FormLabel>
+												</FormItem>
+												<FormItem className="flex items-center space-x-3 space-y-0">
+													<FormControl>
+														<RadioGroupItem value="none" />
+													</FormControl>
+													<FormLabel className="font-normal">None</FormLabel>
+												</FormItem>
+											</RadioGroup>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</section>
 						<DialogFooter>
 							<Button type="submit" variant="submit" className="rounded-full">
 								Create New Cluster <ArrowRight />
