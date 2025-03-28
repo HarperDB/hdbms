@@ -11,14 +11,15 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, MonitorUp, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
-import { RadioGroupItem, RadioGroup } from '@/components/ui/radio-group';
+import { RadioButtonGroup } from '@/components/RadioButtonGroup';
+import awsLogo from '@/assets/aws_logo.svg';
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -27,7 +28,7 @@ const NewClusterSchema = z.object({
 	clusterTag: z.string({
 		message: 'Please enter a cluster prefix.',
 	}),
-	type: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
+	cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
 		required_error: 'Please select an option.',
 	}),
 });
@@ -45,7 +46,23 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 	const queryClient = useQueryClient();
 
+	const typeOptions = [
+		{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
+		{
+			value: 'linode',
+			label: 'Linode',
+			icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
+		},
+		{
+			value: 'self-hosted',
+			label: 'Self-Hosted',
+			icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
+		},
+		{ value: 'none', label: 'None', icon: <MonitorUp className="size-4" /> },
+	];
+
 	const submitForm = async (formData: { clusterName: string; clusterTag: string }) => {
+		console.log('Form submitted with data:', formData);
 		const updatedFormData = {
 			organizationId: orgId,
 			...formData,
@@ -65,7 +82,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 					<Plus /> New Cluster
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px]">
+			<DialogContent className="sm:max-w-[625px]">
 				<DialogHeader>
 					<DialogTitle>Create a New Cluster</DialogTitle>
 					<DialogDescription>Create a new cluster here.</DialogDescription>
@@ -74,45 +91,14 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
 						<InfoForm />
 						<section>
-							<h2 className="font-semibold">Cloud Provider</h2>
-							<hr className="my-2" />
 							<FormField
 								control={form.control}
-								name="type"
+								name="cloudProvider"
 								render={({ field }) => (
-									<FormItem className="space-y-3">
-										<FormLabel>Notify me about...</FormLabel>
+									<FormItem>
+										<FormLabel>Cloud Provider</FormLabel>
 										<FormControl>
-											<RadioGroup
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-												className="flex flex-col space-y-1"
-											>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem value="aws" />
-													</FormControl>
-													<FormLabel className="font-normal">AWS</FormLabel>
-												</FormItem>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem value="linode" />
-													</FormControl>
-													<FormLabel className="font-normal">Linode</FormLabel>
-												</FormItem>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem value="self-hosted" />
-													</FormControl>
-													<FormLabel className="font-normal">Self-Hosted</FormLabel>
-												</FormItem>
-												<FormItem className="flex items-center space-x-3 space-y-0">
-													<FormControl>
-														<RadioGroupItem value="none" />
-													</FormControl>
-													<FormLabel className="font-normal">None</FormLabel>
-												</FormItem>
-											</RadioGroup>
+											<RadioButtonGroup options={typeOptions} control={form.control} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
