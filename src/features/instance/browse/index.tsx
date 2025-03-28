@@ -1,7 +1,29 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/Sidebar';
+import { getRouteApi } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getInstanceInfoQueryOptions } from '../queries/getInstanceInfoQuery';
+import { useRegistrationInfoMutation } from '@/hooks/instance/useRegistrationInfo';
+
+const route = getRouteApi('');
 
 function Browse() {
+	const { instanceId } = route.useParams();
+	const { data: instanceInfo, isSuccess } = useSuspenseQuery(getInstanceInfoQueryOptions(instanceId));
+	const instanceUrl = instanceInfo.fqdns[0];
+
+	const { mutate: registrationInfo } = useRegistrationInfoMutation();
+
+	const clickButton = async () => {
+		console.log('Button clicked');
+		await registrationInfo(instanceUrl);
+	};
+
+	// Set the base URL for the instance client to the first FQDN of the instance
+	// This allows all subsequent API calls to use the correct base URL for the instance
+	if (!isSuccess) {
+		throw new Error('Instance info not found');
+	}
 	return (
 		<>
 			<SidebarProvider>
@@ -10,6 +32,7 @@ function Browse() {
 					<SidebarTrigger />
 					<div>
 						<h1 className="text-2xl text-white">Browse</h1>
+						<button onClick={() => clickButton()}>Get Registration</button>
 					</div>
 					<p>table</p>
 				</main>

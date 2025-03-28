@@ -1,7 +1,7 @@
 import { getRouteApi, Link } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
 import { useMemo } from 'react';
@@ -63,13 +63,13 @@ function ClusterIndex() {
 								instanceId={cell.row.original.id}
 								instanceUrl={instanceURL}
 								instanceName={cell.row.original.name}
+								onInstanceLogin={() => console.log('Instance login successful')} // TODO: Handle instance login success
 							/>
 							<Link
 								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
 								className="text-sm"
 								aria-label={`Go to ${cell.row.original.name} instance`}
 								title={`Go to ${cell.row.original.name} instance`}
-								target="_blank"
 							>
 								<span className="hover:border-b-2 py-2">
 									{instanceURL}

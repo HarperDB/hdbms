@@ -16,7 +16,7 @@ import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/react-query/constants';
+// import { queryKeys } from '@/react-query/constants';
 import { InstanceLoginCredentials, useInstanceLogin } from '@/hooks/instance/useInstanceLogin';
 
 const NewClusterSchema = z.object({
@@ -48,7 +48,7 @@ function InstanceLogInModal({
 	});
 
 	const { mutate: submitInstanceLoginInfo } = useInstanceLogin();
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { username: string; password: string }) => {
 		const updatedFormData = {
@@ -57,7 +57,7 @@ function InstanceLogInModal({
 		} as InstanceLoginCredentials;
 		submitInstanceLoginInfo(updatedFormData, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
+				// queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
 				onInstanceLogin?.();
 			},

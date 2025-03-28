@@ -1,6 +1,6 @@
 import apiClient from '@/config/apiClient';
 import { queryKeys } from '@/react-query/constants';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 
 type Cluster = {
 	id: string;
@@ -8,7 +8,7 @@ type Cluster = {
 	organizationId: string;
 };
 
-export type InstanceType = {
+type InstanceType = {
 	id: string;
 	selfHosted: boolean;
 	useSharedProcess: boolean;
@@ -19,7 +19,7 @@ export type InstanceType = {
 	writeIops: number;
 };
 
-export type Instance = {
+type Instance = {
 	id: string;
 	status: 'PROVISIONING' | 'RUNNING' | 'STOPPED' | 'TERMINATED';
 	instanceTypeId: string;
@@ -40,12 +40,13 @@ const getInstanceInfo = async (instanceId: string) => {
 	return data as Instance;
 };
 
-export function useGetInstanceInfo(instanceId: string) {
-	const { data, isLoading } = useQuery({
+function getInstanceInfoQueryOptions(instanceId: string) {
+	return queryOptions({
 		queryKey: [queryKeys.instance, instanceId],
 		queryFn: () => getInstanceInfo(instanceId),
 		retry: false,
 	});
-
-	return { data, isLoading };
 }
+
+export type { Instance, InstanceType, Cluster };
+export { getInstanceInfoQueryOptions };
