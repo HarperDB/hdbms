@@ -12,14 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus, PlusIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
-// import { RadioButtonGroup } from '@/components/RadioButtonGroup';
-// import awsLogo from '@/assets/aws_logo.svg';
 import {
 	Select,
 	SelectTrigger,
@@ -30,12 +28,103 @@ import {
 	SelectItem,
 } from '@/components/ui/select';
 import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTypeQuery';
+import { Input } from '@/components/ui/input';
 
 // type RegionInfo = {
 // 	region: string;
 // 	cloudProvider: string;
 // 	count: number;
 // };
+
+const RegionFormInputs = ({ control, index, remove }) => {
+	// This component will render the fields for each region in the field array
+	return (
+		<div>
+			<FormField
+				control={control}
+				name={`regions.${index}.region`}
+				render={({ field: regionField }) => (
+					<FormItem>
+						<FormLabel>Region {index + 1}</FormLabel>
+						<FormControl>
+							<Input type="text" placeholder="Region" {...regionField} className="max-w-64" />
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			<FormField
+				control={control}
+				name={`regions.${index}.cloudProvider`}
+				render={({ field: cloudProviderField }) => (
+					<FormItem>
+						<FormLabel>Cloud Provider</FormLabel>
+						<FormControl>
+							<Select onValueChange={cloudProviderField.onChange} {...cloudProviderField}>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Select Cloud Provider" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="linode">Linode</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			<FormField
+				control={control}
+				name={`regions.${index}.count`}
+				render={({ field: countField }) => (
+					<FormItem>
+						<FormLabel>Count</FormLabel>
+						<FormControl>
+							<Input
+								type="number"
+								placeholder="Count"
+								{...countField}
+								className="max-w-64"
+								min={0} // Ensure count is non-negative
+							/>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			{/* remove button */}
+			<Button
+				type="button"
+				variant="destructive"
+				onClick={() => {
+					remove(); // Call the remove function passed from the parent component to remove this region
+				}}
+			>
+				Remove
+			</Button>
+		</div>
+	);
+};
+
+// TODO: consolidate this with the storage size options in the NewInstanceModal
+const storageSizeOptions = [
+	{ value: '1', label: '1GB' },
+	{ value: '10', label: '10GB' },
+	{ value: '100', label: '100GB' },
+	{ value: '250', label: '250GB' },
+	{ value: '500', label: '500GB' },
+	{ value: '1000', label: '1TB' },
+	{ value: '1500', label: '1.5TB' },
+	{ value: '2000', label: '2TB' },
+	{ value: '2500', label: '2.5TB' },
+	{ value: '3000', label: '3TB' },
+	{ value: '3500', label: '3.5TB' },
+	{ value: '4000', label: '4TB' },
+	{ value: '4500', label: '4.5TB' },
+	{ value: '5000', label: '5TB' },
+];
 
 const NewClusterSchema = z.object({
 	clusterName: z.string({
@@ -53,6 +142,15 @@ const NewClusterSchema = z.object({
 	storage: z.string({
 		required_error: 'Please select a storage size.',
 	}),
+	regions: z
+		.array(
+			z.object({
+				region: z.string().nonempty('Region is required.'),
+				cloudProvider: z.string().nonempty('Cloud Provider is required.'),
+				count: z.number().min(0, 'Count must be non-negative.'),
+			})
+		)
+		.optional(),
 });
 
 function NewClusterModal({ orgId }: { orgId: string }) {
@@ -63,7 +161,12 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		defaultValues: {
 			clusterName: '',
 			clusterTag: '',
+			regions: [], // Initialize regions as an empty array
 		},
+	});
+	const fieldArray = useFieldArray({
+		control: form.control,
+		name: 'regions', // This is the name of the field array
 	});
 
 	// const [regionList, setRegionList] = useState<RegionInfo[]>();
@@ -154,6 +257,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 								</FormItem>
 							)}
 						/>
+						{/* TODO: consolidate this with the storage size options in the NewInstanceModal */}
 						<FormField
 							control={form.control}
 							name="storage"
@@ -168,20 +272,11 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 											<SelectContent>
 												<SelectGroup>
 													<SelectLabel>Storage Size</SelectLabel>
-													<SelectItem value="1">1GB</SelectItem>
-													<SelectItem value="10">10GB</SelectItem>
-													<SelectItem value="100">100GB</SelectItem>
-													<SelectItem value="250">250GB</SelectItem>
-													<SelectItem value="500">500GB</SelectItem>
-													<SelectItem value="1000">1TB</SelectItem>
-													<SelectItem value="1500">1.5TB</SelectItem>
-													<SelectItem value="2000">2TB</SelectItem>
-													<SelectItem value="2500">2.5TB</SelectItem>
-													<SelectItem value="3000">3TB</SelectItem>
-													<SelectItem value="3500">3.5TB</SelectItem>
-													<SelectItem value="4000">4TB</SelectItem>
-													<SelectItem value="4500">4.5TB</SelectItem>
-													<SelectItem value="5000">5TB</SelectItem>
+													{storageSizeOptions.map((option, index) => (
+														<SelectItem key={index} value={option.value}>
+															{option.label}
+														</SelectItem>
+													))}
 												</SelectGroup>
 											</SelectContent>
 										</Select>
@@ -192,9 +287,31 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 						/>
 						<section>
 							{/* TODO -  Regions component List component goes here */}
-							<Button type="button" variant="positive" className="rounded-full">
+							{fieldArray.fields.length > 0 ? (
+								fieldArray.fields.map((field, index) => (
+									<RegionFormInputs
+										key={field.id} // Use the unique id provided by fieldArray
+										control={form.control}
+										index={index}
+										remove={() => {
+											// Remove the region from the field array
+											fieldArray.remove(index);
+										}}
+									/>
+								))
+							) : (
+								<p>No regions added yet.</p>
+							)}
+							<Button
+								type="button"
+								variant="positive"
+								className="rounded-full"
+								onClick={() => {
+									fieldArray.append({ region: '', cloudProvider: '', count: 0 });
+								}}
+							>
 								<PlusIcon />
-								Add Instance
+								Add a Region
 							</Button>
 						</section>
 						<DialogFooter>

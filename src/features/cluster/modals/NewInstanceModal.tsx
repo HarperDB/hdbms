@@ -28,6 +28,24 @@ import {
 } from '@/components/ui/select';
 import { NewInstanceInfo, useCreateNewInstanceMutation } from '@/features/cluster/hooks/useCreateNewInstance';
 
+// TODO: consolidate this with the storage size options in the NewClusterModal
+const storageSizeOptions = [
+	{ value: '1', label: '1GB' },
+	{ value: '10', label: '10GB' },
+	{ value: '100', label: '100GB' },
+	{ value: '250', label: '250GB' },
+	{ value: '500', label: '500GB' },
+	{ value: '1000', label: '1TB' },
+	{ value: '1500', label: '1.5TB' },
+	{ value: '2000', label: '2TB' },
+	{ value: '2500', label: '2.5TB' },
+	{ value: '3000', label: '3TB' },
+	{ value: '3500', label: '3.5TB' },
+	{ value: '4000', label: '4TB' },
+	{ value: '4500', label: '4.5TB' },
+	{ value: '5000', label: '5TB' },
+];
+
 const NewInstanceSchema = z.object({
 	name: z.string({
 		message: 'Please enter a instance name.',
@@ -127,6 +145,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 								</FormItem>
 							)}
 						/>
+						{/* TODO: consolidate this with the storage size options in the NewClusterModal */}
 						<FormField
 							control={form.control}
 							name="storage"
@@ -141,20 +160,11 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 											<SelectContent>
 												<SelectGroup>
 													<SelectLabel>Storage Size</SelectLabel>
-													<SelectItem value="1">1GB</SelectItem>
-													<SelectItem value="10">10GB</SelectItem>
-													<SelectItem value="100">100GB</SelectItem>
-													<SelectItem value="250">250GB</SelectItem>
-													<SelectItem value="500">500GB</SelectItem>
-													<SelectItem value="1000">1TB</SelectItem>
-													<SelectItem value="1500">1.5TB</SelectItem>
-													<SelectItem value="2000">2TB</SelectItem>
-													<SelectItem value="2500">2.5TB</SelectItem>
-													<SelectItem value="3000">3TB</SelectItem>
-													<SelectItem value="3500">3.5TB</SelectItem>
-													<SelectItem value="4000">4TB</SelectItem>
-													<SelectItem value="4500">4.5TB</SelectItem>
-													<SelectItem value="5000">5TB</SelectItem>
+													{storageSizeOptions.map((option, index) => (
+														<SelectItem key={index} value={option.value}>
+															{option.label}
+														</SelectItem>
+													))}
 												</SelectGroup>
 											</SelectContent>
 										</Select>
