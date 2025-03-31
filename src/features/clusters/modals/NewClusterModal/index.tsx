@@ -88,6 +88,9 @@ const RegionFormInputs = ({ control, index, remove }) => {
 								{...countField}
 								className="max-w-64"
 								min={0} // Ensure count is non-negative
+								onChange={(e) => {
+									countField.onChange(Number(e.target.value)); // Convert the value to a number
+								}}
 							/>
 						</FormControl>
 						<FormMessage />
@@ -147,7 +150,7 @@ const NewClusterSchema = z.object({
 			z.object({
 				region: z.string().nonempty('Region is required.'),
 				cloudProvider: z.string().nonempty('Cloud Provider is required.'),
-				count: z.number().min(0, 'Count must be non-negative.'),
+				count: z.number().min(0, 'Count must be non-negative.').min(1, 'Count must be at least 1.'),
 			})
 		)
 		.optional(),
