@@ -24,3 +24,4 @@ function getRegionLocationsOptions() {
 }
 
 export { getRegionLocationsOptions };
+export type { RegionLocations };
