@@ -39,15 +39,15 @@ import { Input } from '@/components/ui/input';
 const RegionFormInputs = ({ control, index, remove }) => {
 	// This component will render the fields for each region in the field array
 	return (
-		<div>
+		<div className="grid grid-cols-3 md:grid-cols-12 md:items-end gap-2 mb-4">
 			<FormField
 				control={control}
 				name={`regions.${index}.region`}
 				render={({ field: regionField }) => (
-					<FormItem>
+					<FormItem className="col-span-3 md:col-span-4">
 						<FormLabel>Region {index + 1}</FormLabel>
 						<FormControl>
-							<Input type="text" placeholder="Region" {...regionField} className="max-w-64" />
+							<Input type="text" placeholder="Region" {...regionField} />
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -57,12 +57,12 @@ const RegionFormInputs = ({ control, index, remove }) => {
 				control={control}
 				name={`regions.${index}.cloudProvider`}
 				render={({ field: cloudProviderField }) => (
-					<FormItem>
+					<FormItem className="col-span-2 md:col-span-4">
 						<FormLabel>Cloud Provider</FormLabel>
 						<FormControl>
 							<Select onValueChange={cloudProviderField.onChange} {...cloudProviderField}>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Select Cloud Provider" />
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Choose Provider" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
@@ -79,7 +79,7 @@ const RegionFormInputs = ({ control, index, remove }) => {
 				control={control}
 				name={`regions.${index}.count`}
 				render={({ field: countField }) => (
-					<FormItem>
+					<FormItem className="col-span-1 md:col-span-2">
 						<FormLabel>Count</FormLabel>
 						<FormControl>
 							<Input
@@ -101,6 +101,7 @@ const RegionFormInputs = ({ control, index, remove }) => {
 			<Button
 				type="button"
 				variant="destructive"
+				className="col-span-2 rounded-full"
 				onClick={() => {
 					remove(); // Call the remove function passed from the parent component to remove this region
 				}}
@@ -219,8 +220,34 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 					<DialogDescription>Create a new cluster here.</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(submitForm)} className="grid gap-6 text-white">
-						<InfoForm />
+					<form onSubmit={form.handleSubmit(submitForm)} className="grid grid-cols-1 md:grid-cols-6 gap-6 text-white">
+						{/* <InfoForm /> */}
+						<FormField
+							control={form.control}
+							name="clusterName"
+							render={({ field }) => (
+								<FormItem className="md:col-span-3">
+									<FormLabel className="pb-1">Cluster Name</FormLabel>
+									<FormControl>
+										<Input type="text" placeholder="User Cluster" {...field} className="" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="clusterTag"
+							render={({ field }) => (
+								<FormItem className="md:col-span-3">
+									<FormLabel className="pb-1">Cluster Tag</FormLabel>
+									<FormControl>
+										<Input type="text" placeholder="ex. user-cluster-1" {...field} className="" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						{/* <FormField
 							control={form.control}
 							name="cloudProvider"
@@ -238,11 +265,11 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 							control={form.control}
 							name="instanceTypes"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem className="md:col-span-3">
 									<FormLabel className="pb-1">Instance Type</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} {...field}>
-											<SelectTrigger className="w-[180px]">
+											<SelectTrigger className="">
 												<SelectValue placeholder="Select Instance Type" />
 											</SelectTrigger>
 											<SelectContent>
@@ -265,7 +292,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 							control={form.control}
 							name="storage"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem className="md:col-span-3">
 									<FormLabel className="pb-1">Storage Size</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} {...field}>
@@ -288,7 +315,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 								</FormItem>
 							)}
 						/>
-						<section>
+						<div className="md:col-span-6 bg-accent h-36 overflow-y-auto p-4 rounded-md">
 							{/* TODO -  Regions component List component goes here */}
 							{fieldArray.fields.length > 0 ? (
 								fieldArray.fields.map((field, index) => (
@@ -305,6 +332,8 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 							) : (
 								<p>No regions added yet.</p>
 							)}
+						</div>
+						<div className="md:col-span-6">
 							<Button
 								type="button"
 								variant="positive"
@@ -316,8 +345,8 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 								<PlusIcon />
 								Add a Region
 							</Button>
-						</section>
-						<DialogFooter>
+						</div>
+						<DialogFooter className="md:col-span-6">
 							<Button type="submit" variant="submit" className="rounded-full">
 								Create New Cluster <ArrowRight />
 							</Button>
