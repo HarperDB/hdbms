@@ -12,12 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus, PlusIcon } from 'lucide-react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Control, useFieldArray, useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
-import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
+// import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
 import {
 	Select,
 	SelectTrigger,
@@ -28,16 +28,23 @@ import {
 	SelectItem,
 } from '@/components/ui/select';
 import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTypeQuery';
+import { getRegionLocationsOptions, RegionLocations } from '@/features/clusters/queries/getRegionLocationsQuery';
 import { Input } from '@/components/ui/input';
 
-// type RegionInfo = {
-// 	region: string;
-// 	cloudProvider: string;
-// 	count: number;
-// };
+type RegionFormInputsProps = {
+	control: Control<{
+		clusterName: string;
+		clusterTag: string;
+		instanceTypes: string;
+		storage: string;
+		regions?: { region: string; count: number; cloudProvider: string }[] | undefined;
+	}>;
+	index: number;
+	remove: () => void;
+	regionLocations: RegionLocations;
+};
 
-const RegionFormInputs = ({ control, index, remove }) => {
-	// This component will render the fields for each region in the field array
+const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFormInputsProps) => {
 	return (
 		<div className="grid grid-cols-3 md:grid-cols-12 md:items-end gap-2 mb-4">
 			<FormField
@@ -47,7 +54,21 @@ const RegionFormInputs = ({ control, index, remove }) => {
 					<FormItem className="col-span-3 md:col-span-4">
 						<FormLabel>Region {index + 1}</FormLabel>
 						<FormControl>
-							<Input type="text" placeholder="Region" {...regionField} />
+							<Select onValueChange={regionField.onChange} {...regionField}>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Region" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Region</SelectLabel>
+										{regionLocations?.map((regionLocation) => (
+											<SelectItem key={regionLocation.id} value={regionLocation.id}>
+												{regionLocation.region}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -87,9 +108,9 @@ const RegionFormInputs = ({ control, index, remove }) => {
 								placeholder="Count"
 								{...countField}
 								className="max-w-64"
-								min={0} // Ensure count is non-negative
+								min={0}
 								onChange={(e) => {
-									countField.onChange(Number(e.target.value)); // Convert the value to a number
+									countField.onChange(Number(e.target.value));
 								}}
 							/>
 						</FormControl>
@@ -97,13 +118,12 @@ const RegionFormInputs = ({ control, index, remove }) => {
 					</FormItem>
 				)}
 			/>
-			{/* remove button */}
 			<Button
 				type="button"
 				variant="destructive"
 				className="col-span-2 rounded-full"
 				onClick={() => {
-					remove(); // Call the remove function passed from the parent component to remove this region
+					remove();
 				}}
 			>
 				Remove
@@ -176,6 +196,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	// const [regionList, setRegionList] = useState<RegionInfo[]>();
 
 	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
+	const { data: regionLocations } = useQuery(getRegionLocationsOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 
 	// const typeOptions = [
@@ -269,7 +290,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 									<FormLabel className="pb-1">Instance Type</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} {...field}>
-											<SelectTrigger className="">
+											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select Instance Type" />
 											</SelectTrigger>
 											<SelectContent>
@@ -296,7 +317,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 									<FormLabel className="pb-1">Storage Size</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} {...field}>
-											<SelectTrigger className="w-[180px]">
+											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select Storage Size" />
 											</SelectTrigger>
 											<SelectContent>
@@ -316,15 +337,14 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 							)}
 						/>
 						<div className="md:col-span-6 bg-accent h-36 overflow-y-auto p-4 rounded-md">
-							{/* TODO -  Regions component List component goes here */}
 							{fieldArray.fields.length > 0 ? (
 								fieldArray.fields.map((field, index) => (
 									<RegionFormInputs
 										key={field.id} // Use the unique id provided by fieldArray
 										control={form.control}
 										index={index}
+										regionLocations={regionLocations || []}
 										remove={() => {
-											// Remove the region from the field array
 											fieldArray.remove(index);
 										}}
 									/>
