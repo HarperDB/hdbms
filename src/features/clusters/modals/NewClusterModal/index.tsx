@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -42,9 +43,12 @@ type RegionFormInputsProps = {
 	index: number;
 	remove: () => void;
 	regionLocations: RegionLocations;
+	selectedRegions: RegionLocations;
 };
 
-const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFormInputsProps) => {
+const RegionFormInputs = ({ control, index, remove, regionLocations, selectedRegions }: RegionFormInputsProps) => {
+	const selectedRegionValues = new Set(selectedRegions?.filter((_, idx) => idx !== index).map((x) => x.region) ?? []);
+
 	return (
 		<div className="grid grid-cols-3 md:grid-cols-12 md:items-end gap-2 mb-4">
 			<FormField
@@ -62,7 +66,11 @@ const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFor
 									<SelectGroup>
 										<SelectLabel>Region</SelectLabel>
 										{regionLocations?.map((regionLocation) => (
-											<SelectItem key={regionLocation.id} value={regionLocation.id}>
+											<SelectItem
+												key={regionLocation.id}
+												value={regionLocation.id}
+												disabled={selectedRegionValues.has(regionLocation.id)}
+											>
 												{regionLocation.region}
 											</SelectItem>
 										))}
@@ -70,7 +78,6 @@ const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFor
 								</SelectContent>
 							</Select>
 						</FormControl>
-						<FormMessage />
 					</FormItem>
 				)}
 			/>
@@ -92,7 +99,6 @@ const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFor
 								</SelectContent>
 							</Select>
 						</FormControl>
-						<FormMessage />
 					</FormItem>
 				)}
 			/>
@@ -114,14 +120,13 @@ const RegionFormInputs = ({ control, index, remove, regionLocations }: RegionFor
 								}}
 							/>
 						</FormControl>
-						<FormMessage />
 					</FormItem>
 				)}
 			/>
 			<Button
 				type="button"
 				variant="destructive"
-				className="col-span-2 rounded-full"
+				className="col-span-3 md:col-span-2 rounded-full w-full"
 				onClick={() => {
 					remove();
 				}}
@@ -151,12 +156,8 @@ const storageSizeOptions = [
 ];
 
 const NewClusterSchema = z.object({
-	clusterName: z.string({
-		message: 'Please enter a cluster name.',
-	}),
-	clusterTag: z.string({
-		message: 'Please enter a cluster prefix.',
-	}),
+	clusterName: z.string().min(4, 'Must be at least 4 characters long.').max(25, 'Must be at most 25 characters long.'),
+	clusterTag: z.string().min(4, 'Must be at least 4 characters long.').max(10, 'Must be at most 10 characters long.'),
 	// cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
 	// 	required_error: 'Please select an option.',
 	// }),
@@ -199,6 +200,8 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	const { data: regionLocations } = useQuery(getRegionLocationsOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 
+	const selectedRegions = form.watch('regions');
+
 	// const typeOptions = [
 	// 	{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
 	// 	{
@@ -215,7 +218,6 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 	// ];
 
 	const submitForm = async (formData: { clusterName: string; clusterTag: string }) => {
-		console.log('Form submitted with data:', formData);
 		const updatedFormData = {
 			organizationId: orgId,
 			...formData,
@@ -344,6 +346,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 										control={form.control}
 										index={index}
 										regionLocations={regionLocations || []}
+										selectedRegions={selectedRegions}
 										remove={() => {
 											fieldArray.remove(index);
 										}}
