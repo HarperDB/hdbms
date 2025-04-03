@@ -2,8 +2,9 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/Sidebar';
 import { getRouteApi } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getInstanceInfoQueryOptions } from '../queries/getInstanceInfoQuery';
+import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { useRegistrationInfoMutation } from '@/features/instance/queries/operation/useRegistrationInfo';
+import { useDescribeAllMutation } from '@/features/instance/queries/operation/useDescribeAll';
 
 const route = getRouteApi('');
 
@@ -13,10 +14,12 @@ function Browse() {
 	const instanceUrl = instanceInfo.fqdns[0];
 
 	const { mutate: registrationInfo } = useRegistrationInfoMutation();
+	const { mutate: describeAllInstance } = useDescribeAllMutation();
 
 	const clickButton = async () => {
 		console.log('Button clicked');
 		await registrationInfo(instanceUrl);
+		await describeAllInstance(instanceUrl);
 	};
 
 	// Set the base URL for the instance client to the first FQDN of the instance
