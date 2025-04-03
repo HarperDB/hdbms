@@ -3,7 +3,7 @@ import { AppSidebar } from '@/components/Sidebar';
 import { getRouteApi } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceInfoQueryOptions } from '../queries/getInstanceInfoQuery';
-import { useRegistrationInfoMutation } from '@/hooks/instance/useRegistrationInfo';
+import { useRegistrationInfoMutation } from '@/features/instance/queries/operation/useRegistrationInfo';
 
 const route = getRouteApi('');
 

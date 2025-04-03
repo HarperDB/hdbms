@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 // import { useQueryClient } from '@tanstack/react-query';
 // import { queryKeys } from '@/react-query/constants';
-import { InstanceLoginCredentials, useInstanceLogin } from '@/hooks/instance/useInstanceLogin';
+import { InstanceLoginCredentials, useInstanceLogin } from '@/features/instance/queries/operation/useInstanceLogin';
 
 const NewClusterSchema = z.object({
 	username: z.string({

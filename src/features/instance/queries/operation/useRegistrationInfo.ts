@@ -1,6 +1,5 @@
-// import instanceClient from '@/config/instanceClient';
+import instanceClient from '@/config/instanceClient';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
 
@@ -12,8 +11,8 @@ type RegistrationInfoResponse = {
 };
 
 const onRegistrationInfoSubmit = async (instanceURL: string): Promise<RegistrationInfoResponse> => {
-	const { data } = await axios.post(instanceURL, {
-		operation: { operation: 'registration_info' },
+	const { data } = await instanceClient.post(instanceURL, {
+		operation: 'registration_info',
 	});
 	if (data) {
 		return data;
