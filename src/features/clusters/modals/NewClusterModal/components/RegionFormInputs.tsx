@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RegionLocations } from '@/features/clusters/queries/getRegionLocationsQuery';
 import {
@@ -10,7 +10,7 @@ import {
 	SelectGroup,
 	SelectLabel,
 	SelectItem,
-} from '@radix-ui/react-select';
+} from '@/components/ui/select';
 import { Control } from 'react-hook-form';
 
 type RegionFormInputsProps = {
