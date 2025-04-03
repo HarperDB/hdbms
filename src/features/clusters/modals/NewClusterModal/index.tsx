@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus, PlusIcon } from 'lucide-react';
-import { Control, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters/hooks/useCreateNewCluster';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -27,113 +27,9 @@ import {
 	SelectItem,
 } from '@/components/ui/select';
 import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTypeQuery';
-import { getRegionLocationsOptions, RegionLocations } from '@/features/clusters/queries/getRegionLocationsQuery';
+import { getRegionLocationsOptions } from '@/features/clusters/queries/getRegionLocationsQuery';
 import { Input } from '@/components/ui/input';
-
-type RegionFormInputsProps = {
-	control: Control<{
-		clusterName: string;
-		clusterTag: string;
-		instanceTypes: string;
-		storage: string;
-		regions?: { region: string; count: number; cloudProvider: string }[] | undefined;
-	}>;
-	index: number;
-	remove: () => void;
-	regionLocations: RegionLocations;
-	selectedRegions: { region: string; count: number; cloudProvider: string }[] | undefined;
-};
-
-const RegionFormInputs = ({ control, index, remove, regionLocations, selectedRegions }: RegionFormInputsProps) => {
-	const selectedRegionValues = new Set(selectedRegions?.filter((_, idx) => idx !== index).map((x) => x.region) ?? []);
-
-	return (
-		<div className="grid grid-cols-3 md:grid-cols-12 md:items-end gap-2 mb-4">
-			<FormField
-				control={control}
-				name={`regions.${index}.region`}
-				render={({ field: regionField }) => (
-					<FormItem className="col-span-3 md:col-span-4">
-						<FormLabel>Region {index + 1}</FormLabel>
-						<FormControl>
-							<Select onValueChange={regionField.onChange} {...regionField}>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Region" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel>Region</SelectLabel>
-										{regionLocations?.map((regionLocation) => (
-											<SelectItem
-												key={regionLocation.id}
-												value={regionLocation.id}
-												disabled={selectedRegionValues.has(regionLocation.id)}
-											>
-												{regionLocation.region}
-											</SelectItem>
-										))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</FormControl>
-					</FormItem>
-				)}
-			/>
-			<FormField
-				control={control}
-				name={`regions.${index}.cloudProvider`}
-				render={({ field: cloudProviderField }) => (
-					<FormItem className="col-span-2 md:col-span-4">
-						<FormLabel>Cloud Provider</FormLabel>
-						<FormControl>
-							<Select onValueChange={cloudProviderField.onChange} {...cloudProviderField}>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Choose Provider" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectItem value="linode">Linode</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</FormControl>
-					</FormItem>
-				)}
-			/>
-			<FormField
-				control={control}
-				name={`regions.${index}.count`}
-				render={({ field: countField }) => (
-					<FormItem className="col-span-1 md:col-span-2">
-						<FormLabel>Count</FormLabel>
-						<FormControl>
-							<Input
-								type="number"
-								placeholder="Count"
-								{...countField}
-								className="max-w-64"
-								min={0}
-								onChange={(e) => {
-									countField.onChange(Number(e.target.value));
-								}}
-							/>
-						</FormControl>
-					</FormItem>
-				)}
-			/>
-			<Button
-				type="button"
-				variant="destructive"
-				className="col-span-3 md:col-span-2 rounded-full w-full"
-				onClick={() => {
-					remove();
-				}}
-			>
-				Remove
-			</Button>
-		</div>
-	);
-};
+import RegionFormInputs from '@/features/clusters/modals/NewClusterModal/components/RegionFormInputs';
 
 // TODO: consolidate this with the storage size options in the NewInstanceModal
 const storageSizeOptions = [
@@ -156,9 +52,6 @@ const storageSizeOptions = [
 const NewClusterSchema = z.object({
 	clusterName: z.string().min(4, 'Must be at least 4 characters long.').max(25, 'Must be at most 25 characters long.'),
 	clusterTag: z.string().min(4, 'Must be at least 4 characters long.').max(10, 'Must be at most 10 characters long.'),
-	// cloudProvider: z.enum(['aws', 'linode', 'self-hosted', 'none'], {
-	// 	required_error: 'Please select an option.',
-	// }),
 	instanceTypes: z.string({
 		required_error: 'Please select an instance type.',
 	}),
@@ -192,28 +85,11 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 		name: 'regions', // This is the name of the field array
 	});
 
-	// const [regionList, setRegionList] = useState<RegionInfo[]>();
-
 	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
 	const { data: regionLocations } = useQuery(getRegionLocationsOptions());
 	const { mutate: submitNewClusterData } = useCreateNewClusterMutation();
 
 	const selectedRegions = form.watch('regions');
-
-	// const typeOptions = [
-	// 	{ value: 'aws', label: '', icon: <img src={awsLogo} alt="AWS Logo" className="size-8" /> },
-	// 	{
-	// 		value: 'linode',
-	// 		label: 'Linode',
-	// 		icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
-	// 	},
-	// 	{
-	// 		value: 'self-hosted',
-	// 		label: 'Self-Hosted',
-	// 		icon: <img src="/HDBDogOnly.svg" alt="harper systems logo" className="size-8" />,
-	// 	},
-	// 	{ value: 'none', label: 'None', icon: <MonitorUp className="size-4" /> },
-	// ];
 
 	const submitForm = async (formData: { clusterName: string; clusterTag: string }) => {
 		const updatedFormData = {
@@ -242,7 +118,6 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(submitForm)} className="grid grid-cols-1 md:grid-cols-6 gap-6 text-white">
-						{/* <InfoForm /> */}
 						<FormField
 							control={form.control}
 							name="clusterName"
@@ -269,19 +144,6 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 								</FormItem>
 							)}
 						/>
-						{/* <FormField
-							control={form.control}
-							name="cloudProvider"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Cloud Provider</FormLabel>
-									<FormControl>
-										<RadioButtonGroup options={typeOptions} control={form.control} {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/> */}
 						<FormField
 							control={form.control}
 							name="instanceTypes"
