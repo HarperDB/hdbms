@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -18,7 +17,6 @@ import { NewClusterInfo, useCreateNewClusterMutation } from '@/features/clusters
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
-// import InfoForm from '@/features/clusters/modals/NewClusterModal/InfoForm';
 import {
 	Select,
 	SelectTrigger,
@@ -43,7 +41,7 @@ type RegionFormInputsProps = {
 	index: number;
 	remove: () => void;
 	regionLocations: RegionLocations;
-	selectedRegions: RegionLocations;
+	selectedRegions: { region: string; count: number; cloudProvider: string }[] | undefined;
 };
 
 const RegionFormInputs = ({ control, index, remove, regionLocations, selectedRegions }: RegionFormInputsProps) => {
@@ -346,7 +344,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 										control={form.control}
 										index={index}
 										regionLocations={regionLocations || []}
-										selectedRegions={selectedRegions}
+										selectedRegions={selectedRegions || []}
 										remove={() => {
 											fieldArray.remove(index);
 										}}
