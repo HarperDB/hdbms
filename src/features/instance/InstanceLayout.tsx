@@ -1,7 +1,12 @@
 import { Outlet } from '@tanstack/react-router';
 
 function InstanceLayout() {
-	return <Outlet />;
+	return (
+		<>
+			<nav>Instance Navbar</nav>
+			<Outlet />
+		</>
+	);
 }
 
 export default InstanceLayout;
