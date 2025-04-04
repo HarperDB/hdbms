@@ -1,9 +1,6 @@
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/Sidebar';
 import { getRouteApi } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
-import { useRegistrationInfoMutation } from '@/features/instance/queries/operation/useRegistrationInfo';
 import { useDescribeAllMutation } from '@/features/instance/queries/operation/useDescribeAll';
 
 const route = getRouteApi('');
@@ -13,12 +10,10 @@ function Browse() {
 	const { data: instanceInfo, isSuccess } = useSuspenseQuery(getInstanceInfoQueryOptions(instanceId));
 	const instanceUrl = instanceInfo.fqdns[0];
 
-	const { mutate: registrationInfo } = useRegistrationInfoMutation();
 	const { mutate: describeAllInstance } = useDescribeAllMutation();
 
 	const clickButton = async () => {
 		console.log('Button clicked');
-		await registrationInfo(instanceUrl);
 		await describeAllInstance(instanceUrl);
 	};
 
@@ -28,19 +23,16 @@ function Browse() {
 		throw new Error('Instance info not found');
 	}
 	return (
-		<>
-			<SidebarProvider>
-				<AppSidebar />
-				<main className="w-full">
-					<SidebarTrigger />
-					<div>
-						<h1 className="text-2xl text-white">Browse</h1>
-						<button onClick={() => clickButton()}>Get Registration</button>
-					</div>
-					<p>table</p>
-				</main>
-			</SidebarProvider>
-		</>
+		<main className="w-full">
+			<section>
+				<h1 className="text-2xl text-white">Browse Sidebar</h1>
+			</section>
+			<section>
+				<h2 className="text-lg text-white">Browse Table</h2>
+				<button onClick={() => clickButton()}>Get describe_all</button>
+			</section>
+			<p>table</p>
+		</main>
 	);
 }
 
