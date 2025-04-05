@@ -5,23 +5,23 @@ import Loading from '@/components/Loading';
 import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
 import { useEffect } from 'react';
 
-const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO === 'true';
+// const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO === 'true';
 
 function Dashboard() {
 	const { data: user, isLoading: isUserLoading } = useGetCurrentUser();
-	const { mutate: submitUserInfoData, data: userInfo, isPending: isUserInfoLoading } = useUserInfoMutation();
+	// const { mutate: submitUserInfoData, data: userInfo, isPending: isUserInfoLoading } = useUserInfoMutation();
 
-	useEffect(() => {
-		if (isLocalStudio && !userInfo && !isUserInfoLoading) {
-			submitUserInfoData();
-		}
-	}, [isUserInfoLoading, submitUserInfoData, userInfo]);
+	// useEffect(() => {
+	// 	if (isLocalStudio && !userInfo && !isUserInfoLoading) {
+	// 		submitUserInfoData();
+	// 	}
+	// }, [isUserInfoLoading, submitUserInfoData, userInfo]);
 
-	if (!user && !isUserLoading && !isLocalStudio) {
+	if (!user && !isUserLoading) {
 		return <Navigate to="/" />;
 	}
 
-	if (isUserLoading || isUserInfoLoading) {
+	if (isUserLoading) {
 		return <Loading />;
 	}
 
