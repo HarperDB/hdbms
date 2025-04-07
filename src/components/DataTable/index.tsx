@@ -24,7 +24,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 						<TableRow key={headerGroup.id} className="border-none">
 							{headerGroup.headers.map((header) => {
 								return (
-									<TableHead key={header.id}>
+									<TableHead key={header.id} className="p-4">
 										{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 									</TableHead>
 								);
@@ -41,7 +41,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 								className="hover:bg-muted/10 data-[state=selected]:bg-muted"
 							>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+									<TableCell key={cell.id} className="p-4">
+										{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									</TableCell>
 								))}
 							</TableRow>
 						))

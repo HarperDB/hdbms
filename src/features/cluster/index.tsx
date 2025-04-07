@@ -65,7 +65,7 @@ function ClusterIndex() {
 								instanceName={cell.row.original.name}
 								onInstanceLogin={() => console.log('Instance login successful')} // TODO: Handle instance login success
 							/>
-							<Link
+							{/* <Link
 								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
 								className="text-sm"
 								aria-label={`Go to ${cell.row.original.name} instance`}
@@ -73,9 +73,8 @@ function ClusterIndex() {
 							>
 								<span className="hover:border-b-2 py-2">
 									{instanceURL}
-									{/* <ArrowRight className="inline-block" /> */}
 								</span>
-							</Link>
+							</Link> */}
 						</>
 					);
 				},
@@ -136,7 +135,7 @@ function ClusterIndex() {
 					) : null}
 				</section>
 			</div>
-			<div className="mx-auto max-w-7xl">
+			<div className="mx-auto max-w-7xl px-4 md:px-12 pt-4">
 				<Card className="min-h-96 p-0 mt-4">
 					<CardContent className="min-h-96 p-0">
 						{isLoading ? (
