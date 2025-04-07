@@ -27,7 +27,7 @@ function ClusterCard({
 		<Card className="relative">
 			<CardHeader>
 				<CardDescription className="flex justify-between items-center">
-					<span>CLUSTER ID: {clusterId}</span>
+					<span>CLUSTER ID: {clusterId.slice(0, 15)}....</span>
 					<DropdownMenu>
 						<DropdownMenuTrigger>
 							<Ellipsis aria-label="Cluster options" />
