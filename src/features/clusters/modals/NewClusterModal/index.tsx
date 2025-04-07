@@ -30,6 +30,7 @@ import { getInstanceTypeOptions } from '@/features/cluster/queries/getInstanceTy
 import { getRegionLocationsOptions } from '@/features/clusters/queries/getRegionLocationsQuery';
 import { Input } from '@/components/ui/input';
 import RegionFormInputs from '@/features/clusters/modals/NewClusterModal/components/RegionFormInputs';
+import { renderInstanceTypeOption } from '@/shared/functions/InstanceType';
 
 // TODO: consolidate this with the storage size options in the NewInstanceModal
 const storageSizeOptions = [
@@ -159,7 +160,7 @@ function NewClusterModal({ orgId }: { orgId: string }) {
 												<SelectGroup>
 													{instanceTypes?.map((type) => (
 														<SelectItem key={type.id} value={type.id}>
-															{type.id}
+															{renderInstanceTypeOption(type.id)}
 														</SelectItem>
 													))}
 												</SelectGroup>

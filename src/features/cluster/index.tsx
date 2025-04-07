@@ -11,6 +11,7 @@ import EditInstanceModal from './modals/EditInstanceModal';
 import { BadgeStatus, renderBadgeStatusText, renderBadgeStatusVariant } from '@/components/ui/utils/badgeStatus';
 // import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
 import InstanceLogInModal from './modals/InstanceLoginInModal';
+import { renderInstanceTypeOption, InstanceTypes } from '@/shared/functions/InstanceType';
 
 // 1. Once successfully logging into one instance, we should be able to use the same credentials(cookie) for all instances in the cluster.
 // Essentially looping through and do a query to logging into all the other instances.
@@ -57,31 +58,36 @@ function ClusterIndex() {
 						return <p>N/A</p>;
 					}
 					const instanceURL = dnsURLs[0];
+					let isLoggedIn = false;
 					return (
 						<>
-							<InstanceLogInModal
-								instanceId={cell.row.original.id}
-								instanceUrl={instanceURL}
-								instanceName={cell.row.original.name}
-								onInstanceLogin={() => console.log('Instance login successful')} // TODO: Handle instance login success
-							/>
-							{/* <Link
-								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
-								className="text-sm"
-								aria-label={`Go to ${cell.row.original.name} instance`}
-								title={`Go to ${cell.row.original.name} instance`}
-							>
-								<span className="hover:border-b-2 py-2">
-									{instanceURL}
-								</span>
-							</Link> */}
+							{!isLoggedIn ? (
+								<InstanceLogInModal
+									instanceId={cell.row.original.id}
+									instanceUrl={instanceURL}
+									instanceName={cell.row.original.name}
+									onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
+								/>
+							) : (
+								<Link
+									to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
+									className="text-sm"
+									aria-label={`Go to ${cell.row.original.name} instance`}
+									title={`Go to ${cell.row.original.name} instance`}
+								>
+									<span className="hover:border-b-2 py-2">{instanceURL}</span>
+								</Link>
+							)}
 						</>
 					);
 				},
 			},
 			{
 				accessorKey: 'instanceTypeId',
-				header: 'Instance Type ID',
+				header: 'Instance Type',
+				cell: (cell) => {
+					return renderInstanceTypeOption(cell.getValue() as InstanceTypes);
+				},
 			},
 			{
 				accessorKey: 'status',
