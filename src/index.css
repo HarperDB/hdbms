@@ -66,7 +66,7 @@
   --secondary: hsl(0 0% 96.1%);
   --secondary-foreground: hsl(0 0% 9%);
   --muted: hsl(0 0% 96.1%);
-  --muted-foreground: hsl(0, 0%, 85.1%); /* #D9D9D9 */
+  --muted-foreground: hsl(0 0% 63.9%); /* #D9D9D9 */
   --accent:  hsl(0 0% 14.9%);
   --accent-foreground: hsl(0 0% 9%);
   --destructive: hsl(0 84.2% 60.2%);
@@ -110,7 +110,7 @@
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0 0% 98%);
   --border: hsl(0 0% 14.9%);
-  --input: hsl(0 0% 14.9%);
+  --input: var(--color-grey-700);
   --ring: var(--purple);
   --chart-1: hsl(220 70% 50%);
   --chart-2: hsl(160 60% 45%);

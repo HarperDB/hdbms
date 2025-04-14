@@ -73,6 +73,23 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 		},
 	});
 
+	const isValidUrl = (url: string) => {
+		try {
+			return Boolean(new URL(url));
+		} catch {
+			return false;
+		}
+	};
+
+	const parseUrlInput = (url: string) => {
+		if (isValidUrl(url)) {
+			const parsedUrl = new URL(url);
+			const { protocol, hostname, port } = parsedUrl;
+			return { protocol, hostname, port };
+		}
+	};
+
+	console.log('test url:', parseUrlInput('http://127.0.0.2:9925'));
 	const { mutate: submitNewInstanceData } = useCreateNewInstanceMutation();
 	const queryClient = useQueryClient();
 
@@ -110,7 +127,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							control={form.control}
 							name="name"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem>
 									<FormLabel className="pb-1">Instance Name</FormLabel>
 									<FormControl>
 										<Input type="text" placeholder="ex. test-instance-1" {...field} />
@@ -123,7 +140,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							control={form.control}
 							name="instanceTypeId"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem>
 									<FormLabel className="pb-1">Instance Type ID</FormLabel>
 									<FormControl>
 										<Input type="text" placeholder="ex. typ-2" {...field} />
@@ -136,7 +153,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							control={form.control}
 							name="url"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem>
 									<FormLabel className="pb-1">Url</FormLabel>
 									<FormControl>
 										<Input type="text" placeholder="ex. typ-2" {...field} />
@@ -150,7 +167,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							control={form.control}
 							name="storage"
 							render={({ field }) => (
-								<FormItem className="">
+								<FormItem>
 									<FormLabel className="pb-1">Storage Size</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} {...field}>
