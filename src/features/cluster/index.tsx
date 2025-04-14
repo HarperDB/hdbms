@@ -34,8 +34,13 @@ type ColumnTypes = {
 	memory: string;
 };
 
-function EmptyCluster() {
-	return <p>No instances found.</p>;
+function EmptyCluster({ clusterId }: { clusterId: string }) {
+	return (
+		<div className="flex-col space-y-3 items-center justify-center text-center pt-30 px-16">
+			<p>No instances found.</p>
+			<NewInstanceModal clusterId={clusterId} />
+		</div>
+	);
 }
 
 function ClusterIndex() {
@@ -61,23 +66,23 @@ function ClusterIndex() {
 					let isLoggedIn = false;
 					return (
 						<>
-							{!isLoggedIn ? (
-								<InstanceLogInModal
-									instanceId={cell.row.original.id}
-									instanceUrl={instanceURL}
-									instanceName={cell.row.original.name}
-									onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
-								/>
-							) : (
-								<Link
-									to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
-									className="text-sm"
-									aria-label={`Go to ${cell.row.original.name} instance`}
-									title={`Go to ${cell.row.original.name} instance`}
-								>
-									<span className="hover:border-b-2 py-2">{instanceURL}</span>
-								</Link>
-							)}
+							{/* {!isLoggedIn ? ( */}
+							<InstanceLogInModal
+								instanceId={cell.row.original.id}
+								instanceUrl={instanceURL}
+								instanceName={cell.row.original.name}
+								onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
+							/>
+							{/* ) : ( */}
+							<Link
+								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
+								className="text-sm"
+								aria-label={`Go to ${cell.row.original.name} instance`}
+								title={`Go to ${cell.row.original.name} instance`}
+							>
+								<span className="hover:border-b-2 py-2">{instanceURL}</span>
+							</Link>
+							{/* )} */}
 						</>
 					);
 				},
@@ -149,9 +154,7 @@ function ClusterIndex() {
 						) : cluster?.instances.length ? (
 							<DataTable data={cluster.instances as unknown as ColumnTypes[]} columns={columns} />
 						) : (
-							<div className="text-center">
-								<EmptyCluster />
-							</div>
+							<EmptyCluster clusterId={clusterId} />
 						)}
 					</CardContent>
 				</Card>

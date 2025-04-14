@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import buildInstanceDataStructure from './functions/buildInstanceDataStructure';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 const route = getRouteApi('');
 
@@ -19,8 +22,8 @@ function Browse() {
 
 	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceInfo.fqdns[0]));
 	const { structure } = buildInstanceDataStructure(data.data);
-	const [selectedSchema, setSelectedSchema] = useState<string | null>(structure[0]);
-	console.log('structure', structure);
+	const [selectedSchema, setSelectedSchema] = useState<string | null>(structure);
+	// console.log('structure', structure);
 	const schemas = Object.keys(structure || {});
 	const tables = Object.keys(structure?.[selectedSchema] || {});
 
@@ -40,18 +43,21 @@ function Browse() {
 				<Card>
 					<CardHeader>
 						<h1 className="text-2xl text-white">Browse Sidebar</h1>
-						<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema}>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a Database" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{schemas.map((schema) => (
-										<SelectItem value={schema}>{schema}</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
+						<Label>
+							Databases
+							<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema}>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Select a Database" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										{schemas.map((schema) => (
+											<SelectItem value={schema}>{schema}</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</Label>
 					</CardHeader>
 					<CardContent>
 						{/* {describeAllDataIsPending ? (
@@ -64,14 +70,25 @@ function Browse() {
 								<TabsTrigger value="tables">Tables</TabsTrigger>
 								<TabsTrigger value="queries">Queries</TabsTrigger>
 							</TabsList>
-							<TabsContent value="tables">
-								<ul>
-									{tables.map((table) => (
-										<li key={table}>{table}</li>
-									))}
-								</ul>
-							</TabsContent>
-							<TabsContent value="queries">Create queries</TabsContent>
+							<div className="h-80 overflow-y-scroll">
+								<TabsContent value="tables">
+									<ul>
+										{tables.map((table) => (
+											<li key={table}>
+												<Button className="w-full my-1 flex items-center justify-between">
+													<span>{table}</span>
+													<span>
+														<ArrowRight />
+													</span>
+												</Button>
+											</li>
+										))}
+									</ul>
+								</TabsContent>
+								<TabsContent value="queries">
+									<div>Create queries</div>
+								</TabsContent>
+							</div>
 						</Tabs>
 					</CardContent>
 					{/* Select Database */}
