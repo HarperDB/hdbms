@@ -3,6 +3,7 @@ import { QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { getDescribeAllQueryOptions } from '@/features/instance/queries/operation/useDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
@@ -14,11 +15,11 @@ import { Label } from '@/components/ui/label';
 const route = getRouteApi('');
 
 function Browse() {
-	const queryClient = new QueryClient();
+	// const queryClient = new QueryClient();
 	const { instanceId } = route.useParams();
 	const { data: instanceInfo, isSuccess } = useSuspenseQuery(getInstanceInfoQueryOptions(instanceId));
-	const instanceUrl = instanceInfo.fqdns[0];
-	const [databaseList, setDatabaseList] = useState([]);
+	// const instanceUrl = instanceInfo.fqdns[0];
+	// const [databaseList, setDatabaseList] = useState([]);
 
 	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceInfo.fqdns[0]));
 	const { structure } = buildInstanceDataStructure(data.data);
@@ -42,11 +43,11 @@ function Browse() {
 			<section className="col-span-1 md:col-span-3">
 				<Card>
 					<CardHeader>
-						<h1 className="text-2xl text-white">Browse Sidebar</h1>
+						<h1 className="text-white ">Browse Sidebar</h1>
 						<Label>
 							Databases
-							<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema}>
-								<SelectTrigger className="w-full">
+							<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema || ''}>
+								<SelectTrigger className="w-full text-2xl">
 									<SelectValue placeholder="Select a Database" />
 								</SelectTrigger>
 								<SelectContent>
@@ -59,23 +60,23 @@ function Browse() {
 							</Select>
 						</Label>
 					</CardHeader>
-					<CardContent>
+					<CardContent className="px-0">
 						{/* {describeAllDataIsPending ? (
 							<p className="text-muted-foreground">Loading...</p>
 						) : (
 							<ul>{describeAllData?.data.map(())}</ul>
 						)} */}
 						<Tabs defaultValue="tables">
-							<TabsList>
+							<TabsList className="px-6">
 								<TabsTrigger value="tables">Tables</TabsTrigger>
 								<TabsTrigger value="queries">Queries</TabsTrigger>
 							</TabsList>
-							<div className="h-80 overflow-y-scroll">
+							<ScrollArea className="px-6 h-80">
 								<TabsContent value="tables">
 									<ul>
 										{tables.map((table) => (
 											<li key={table}>
-												<Button className="w-full my-1 flex items-center justify-between">
+												<Button className="w-full my-0.5 flex items-center justify-between">
 													<span>{table}</span>
 													<span>
 														<ArrowRight />
@@ -88,7 +89,7 @@ function Browse() {
 								<TabsContent value="queries">
 									<div>Create queries</div>
 								</TabsContent>
-							</div>
+							</ScrollArea>
 						</Tabs>
 					</CardContent>
 					{/* Select Database */}
