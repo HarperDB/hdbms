@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/react-query/constants';
 import {
 	Select,
@@ -27,6 +27,9 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { NewInstanceInfo, useCreateNewInstanceMutation } from '@/features/cluster/hooks/useCreateNewInstance';
+import { renderInstanceTypeOption } from '@/shared/functions/InstanceType';
+import { getInstanceTypeOptions } from '../queries/getInstanceTypeQuery';
+import { toast } from 'sonner';
 
 // TODO: consolidate this with the storage size options in the NewClusterModal
 const storageSizeOptions = [
@@ -48,10 +51,10 @@ const storageSizeOptions = [
 
 const NewInstanceSchema = z.object({
 	name: z.string({
-		message: 'Please enter a instance name.',
+		message: 'Please enter an instance name.',
 	}),
 	instanceTypeId: z.string({
-		message: 'Please enter a instance type id.',
+		message: 'Please select an instance type.',
 	}),
 	url: z.string({
 		message: 'Please enter a host url.',
@@ -63,11 +66,12 @@ const NewInstanceSchema = z.object({
 
 function NewInstanceModal({ clusterId }: { clusterId: string }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { data: instanceTypes } = useQuery(getInstanceTypeOptions());
 	const form = useForm({
 		resolver: zodResolver(NewInstanceSchema),
 		defaultValues: {
 			name: '',
-			instanceTypeId: '',
+			instanceType: '',
 			url: '',
 			storage: '',
 		},
@@ -89,7 +93,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 		}
 	};
 
-	console.log('test url:', parseUrlInput('http://127.0.0.2:9925'));
+	// console.log('test url:', parseUrlInput('http://127.0.0.2:9925'));
 	const { mutate: submitNewInstanceData } = useCreateNewInstanceMutation();
 	const queryClient = useQueryClient();
 
@@ -105,6 +109,14 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [queryKeys.cluster, clusterId], refetchType: 'active' });
 				setIsModalOpen(false);
+				toast.success('Success', {
+					description: 'Instance created successfully.',
+					action: {
+						label: 'Dismiss',
+						onClick: () => toast.dismiss(),
+					},
+				});
+				form.reset();
 			},
 		});
 	};
@@ -112,7 +124,7 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
-				<Button variant="positive" className="rounded-full w-full md:w-44">
+				<Button variant="positive" className="w-full rounded-full md:w-44">
 					<Plus /> New Instance
 				</Button>
 			</DialogTrigger>
@@ -141,9 +153,22 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 							name="instanceTypeId"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="pb-1">Instance Type ID</FormLabel>
+									<FormLabel className="pb-1">Instance Type</FormLabel>
 									<FormControl>
-										<Input type="text" placeholder="ex. typ-2" {...field} />
+										<Select onValueChange={field.onChange} {...field}>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Select Instance Type" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													{instanceTypes?.map((type) => (
+														<SelectItem key={type.id} value={type.id}>
+															{renderInstanceTypeOption(type.id)}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

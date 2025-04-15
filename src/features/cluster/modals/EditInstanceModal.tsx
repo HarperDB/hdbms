@@ -12,13 +12,15 @@ import {
 import { ArrowLeft, ArrowRight, Edit, Trash, TriangleAlert } from 'lucide-react';
 import { useDeleteInstance } from '../hooks/useDeleteInstance';
 import { toast } from 'sonner';
+import { queryClient } from '@/react-query/queryClient';
+import { queryKeys } from '@/react-query/constants';
 
 function DeleteInstanceContent({
-	setIsDeleteContentDisplayed,
+	onInstanceDelete,
 	instanceId,
 	instanceName,
 }: {
-	setIsDeleteContentDisplayed: (value: boolean) => void;
+	onInstanceDelete: () => void;
 	instanceId: string;
 	instanceName: string;
 }) {
@@ -27,7 +29,7 @@ function DeleteInstanceContent({
 	const handleDeleteInstance = () => {
 		deleteInstance(instanceId, {
 			onSuccess: () => {
-				setIsDeleteContentDisplayed(false);
+				onInstanceDelete();
 				toast.success('Success', {
 					description: `Instance: ${instanceName} successfully deleted.`,
 					action: {
@@ -44,7 +46,7 @@ function DeleteInstanceContent({
 						onClick: () => toast.dismiss(),
 					},
 				});
-				setIsDeleteContentDisplayed(false);
+				onInstanceDelete();
 			},
 		});
 	};
@@ -55,8 +57,8 @@ function DeleteInstanceContent({
 				<DialogTitle>Delete Instance</DialogTitle>
 				<DialogDescription>Are you sure you want to delete this instance?</DialogDescription>
 			</DialogHeader>
-			<div className="p-3 bg-amber-600 rounded-md my-5 text-white">
-				<p className="font-semibold flex align-baseline space-x-1">
+			<div className="p-3 my-5 text-white rounded-md bg-amber-600">
+				<p className="flex space-x-1 font-semibold align-baseline">
 					<TriangleAlert className="inline-block size-5" /> <span>Warning</span>
 				</p>
 				<p className="pt-2 text-base">By deleting this instance you will lose the data stored in it permanently.</p>
@@ -112,6 +114,12 @@ function EditInstanceModal({ instanceId, instanceName }: { instanceId: string; i
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isDeleteContentDisplayed, setIsDeleteContentDisplayed] = useState(false);
 
+	function onInstanceDelete() {
+		setIsModalOpen(false);
+		setIsDeleteContentDisplayed(false);
+		queryClient.invalidateQueries({ queryKey: [queryKeys.cluster] });
+	}
+
 	return (
 		<Dialog
 			open={isModalOpen}
@@ -131,7 +139,7 @@ function EditInstanceModal({ instanceId, instanceName }: { instanceId: string; i
 			<DialogContent className="sm:max-w-[425px]">
 				{isDeleteContentDisplayed ? (
 					<DeleteInstanceContent
-						setIsDeleteContentDisplayed={setIsDeleteContentDisplayed}
+						onInstanceDelete={onInstanceDelete}
 						instanceId={instanceId}
 						instanceName={instanceName}
 					/>
