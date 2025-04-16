@@ -2,8 +2,8 @@ import { Outlet, Navigate } from '@tanstack/react-router';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { NavBar } from '@/components/Navbar';
 import Loading from '@/components/Loading';
-import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
-import { useEffect } from 'react';
+// import { useUserInfoMutation } from '@/hooks/instance/useUserInfo';
+// import { useEffect } from 'react';
 
 // const isLocalStudio = import.meta.env.VITE_LOCAL_STUDIO === 'true';
 

@@ -8,6 +8,8 @@ export type NewInstanceInfo = {
 	clusterId: string;
 	url: string;
 	storage: number;
+	operationsApiPort: number;
+	operationsApiSecure: boolean;
 };
 
 type NewInstanceInfoResponse = {
@@ -30,6 +32,8 @@ export const onNewInstanceSubmit = async ({
 	url,
 	clusterId,
 	storage,
+	operationsApiPort,
+	operationsApiSecure,
 }: NewInstanceInfo): Promise<NewInstanceInfoResponse> => {
 	const { data } = await apiClient.post('/HDBInstance', {
 		name,
@@ -39,6 +43,8 @@ export const onNewInstanceSubmit = async ({
 		fqdns: url,
 		hostId: 'hos-zyknwmtjs3obunoy',
 		gtmFqdn: 'gtmFqdn',
+		operationsApiPort,
+		operationsApiSecure,
 	});
 	if (data) {
 		return data as NewInstanceInfoResponse;

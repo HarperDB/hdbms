@@ -1,7 +1,7 @@
-import { getRouteApi } from '@tanstack/react-router';
-import { QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getRouteApi, Link } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
-import { getDescribeAllQueryOptions } from '@/features/instance/queries/operation/useDescribeAll';
+import { getDescribeAllQueryOptions } from '@/features/instance/queries/operations/useDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -40,65 +40,67 @@ function Browse() {
 	}
 	return (
 		<main className="grid grid-cols-1 gap-4 md:grid-cols-12">
-			<section className="col-span-1 md:col-span-3">
-				<Card>
-					<CardHeader>
-						<h1 className="text-white ">Browse Sidebar</h1>
-						<Label>
-							Databases
-							<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema || ''}>
-								<SelectTrigger className="w-full text-2xl">
-									<SelectValue placeholder="Select a Database" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										{schemas.map((schema) => (
-											<SelectItem value={schema}>{schema}</SelectItem>
-										))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</Label>
-					</CardHeader>
-					<CardContent className="px-0">
-						{/* {describeAllDataIsPending ? (
+			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
+				{/* <Card>
+					<CardHeader> */}
+				<h1 className="pb-6 text-3xl">Browse</h1>
+				<Label>
+					Databases
+					<Select onValueChange={setSelectedSchema} defaultValue={selectedSchema || ''}>
+						<SelectTrigger className="w-full text-2xl">
+							<SelectValue placeholder="Select a Database" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								{schemas.map((schema) => (
+									<SelectItem value={schema}>{schema}</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</Label>
+				{/* </CardHeader>
+					<CardContent className="px-0"> */}
+				{/* {describeAllDataIsPending ? (
 							<p className="text-muted-foreground">Loading...</p>
 						) : (
 							<ul>{describeAllData?.data.map(())}</ul>
 						)} */}
-						<Tabs defaultValue="tables">
-							<TabsList className="px-6">
-								<TabsTrigger value="tables">Tables</TabsTrigger>
-								<TabsTrigger value="queries">Queries</TabsTrigger>
-							</TabsList>
-							<ScrollArea className="px-6 h-80">
-								<TabsContent value="tables">
-									<ul>
-										{tables.map((table) => (
-											<li key={table}>
-												<Button className="w-full my-0.5 flex items-center justify-between">
-													<span>{table}</span>
-													<span>
-														<ArrowRight />
-													</span>
-												</Button>
-											</li>
-										))}
-									</ul>
-								</TabsContent>
-								<TabsContent value="queries">
-									<div>Create queries</div>
-								</TabsContent>
-							</ScrollArea>
-						</Tabs>
-					</CardContent>
-					{/* Select Database */}
-				</Card>
+				<Tabs defaultValue="tables" className="py-6">
+					<TabsList className="px-6">
+						<TabsTrigger value="tables">Tables</TabsTrigger>
+						<TabsTrigger value="queries">Queries</TabsTrigger>
+					</TabsList>
+					<ScrollArea className="px-4 h-80">
+						<TabsContent value="tables">
+							<ul>
+								{tables.map((table) => (
+									<li key={table}>
+										<Link
+											to={undefined}
+											className="w-full my-0.5 flex items-center justify-between p-2 hover:bg-primary rounded-md"
+										>
+											<span>{table}</span>
+											<span>
+												<ArrowRight />
+											</span>
+										</Link>
+									</li>
+								))}
+							</ul>
+						</TabsContent>
+						<TabsContent value="queries">
+							<div>Create queries</div>
+						</TabsContent>
+					</ScrollArea>
+				</Tabs>
+				{/* </CardContent> */}
+				{/* Select Database */}
+				{/* </Card> */}
 			</section>
-			<section className="col-span-1 md:col-span-9">
+			<section className="col-span-1 md:col-span-8 lg:col-span-9">
 				<h2 className="text-lg text-white">Browse Table</h2>
 			</section>
-			<p>table</p>
 		</main>
 	);
 }
