@@ -218,15 +218,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply font-ubuntu bg-linear-(--purple-dark-to-light-gradient) dark:bg-linear-(--black-dark-gradient) text-foreground bg-no-repeat h-full;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    /* @apply font-ubuntu bg-linear-(--purple-dark-to-light-gradient) dark:bg-linear-(--black-dark-gradient) text-foreground bg-no-repeat h-full; */
+    @apply h-full bg-black font-ubuntu text-foreground;
   }
 }

@@ -103,6 +103,8 @@ function NewInstanceModal({ clusterId }: { clusterId: string }) {
 		formData.storage = parseInt(formData.storage);
 		const updatedFormData = {
 			clusterId,
+			operationsApiPort: 9925,
+			operationsApiSecure: false,
 			...formData,
 		} as unknown as NewInstanceInfo;
 		submitNewInstanceData(updatedFormData, {
