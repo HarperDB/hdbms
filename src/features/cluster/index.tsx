@@ -36,7 +36,7 @@ type ColumnTypes = {
 
 function EmptyCluster({ clusterId }: { clusterId: string }) {
 	return (
-		<div className="flex-col space-y-3 items-center justify-center text-center pt-30 px-16">
+		<div className="flex-col items-center justify-center px-16 space-y-3 text-center pt-30">
 			<p>No instances found.</p>
 			<NewInstanceModal clusterId={clusterId} />
 		</div>
@@ -75,12 +75,12 @@ function ClusterIndex() {
 							/>
 							{/* ) : ( */}
 							<Link
-								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}`}
+								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}/browse`}
 								className="text-sm"
 								aria-label={`Go to ${cell.row.original.name} instance`}
 								title={`Go to ${cell.row.original.name} instance`}
 							>
-								<span className="hover:border-b-2 py-2">{instanceURL}</span>
+								<span className="py-2 hover:border-b-2">{instanceURL}</span>
 							</Link>
 							{/* )} */}
 						</>
@@ -136,7 +136,7 @@ function ClusterIndex() {
 			<div>
 				<section className="py-5 bg-muted-foreground/20">
 					{cluster?.instances.length ? (
-						<div className="flex flex-col justify-between items-center gap-4 md:gap-0 md:flex-row px-4 md:px-12">
+						<div className="flex flex-col items-center justify-between gap-4 px-4 md:gap-0 md:flex-row md:px-12">
 							<div className="w-full text-white">
 								<h2 className="text-xl font-semibold">{cluster?.name}</h2>
 								<p className="text-xs md:text-sm">Cluster ID: {clusterId}</p>
@@ -146,9 +146,9 @@ function ClusterIndex() {
 					) : null}
 				</section>
 			</div>
-			<div className="mx-auto max-w-7xl px-4 md:px-12 pt-4">
-				<Card className="min-h-96 p-0 mt-4">
-					<CardContent className="min-h-96 p-0">
+			<div className="px-4 pt-4 mx-auto max-w-7xl md:px-12">
+				<Card className="p-0 mt-4 min-h-96">
+					<CardContent className="p-0 min-h-96">
 						{isLoading ? (
 							<div>Loading...</div> // TODO: Add skeleton component
 						) : cluster?.instances.length ? (

@@ -23,6 +23,8 @@ import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getCluste
 import InstanceLayout from '@/features/instance/InstanceLayout';
 import Browse from '@/features/instance/browse';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
+import BrowseDataTable from '@/features/instance/browse/BrowseDataTable';
+import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -154,6 +156,21 @@ const instanceIndexRoute = createRoute({
 	path: '/',
 	component: Browse, // Placeholder for instance details
 });
+const instanceBrowseRoute = createRoute({
+	getParentRoute: () => instanceLayoutRoute,
+	path: '/browse',
+	component: Browse, // Placeholder for instance details
+});
+const browseDatabaseRoute = createRoute({
+	getParentRoute: () => instanceBrowseRoute,
+	path: '$schemaName',
+	component: BrowseDataTable, // Placeholder for instance details
+});
+const browseTableRoute = createRoute({
+	getParentRoute: () => instanceBrowseRoute,
+	path: '$schemaName/$tableName',
+	component: BrowseDataTable, // Placeholder for instance details
+});
 
 export const cloudRouteTree = rootRoute.addChildren([
 	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute, verifyEmailRoute, resetpasswordRoute]),
@@ -165,7 +182,13 @@ export const cloudRouteTree = rootRoute.addChildren([
 				orgIndexRoute,
 				clustersLayoutRoute.addChildren([
 					clustersIndexRoute,
-					clusterLayoutRoute.addChildren([clusterIndexRoute, instanceLayoutRoute.addChildren([instanceIndexRoute])]),
+					clusterLayoutRoute.addChildren([
+						clusterIndexRoute,
+						instanceLayoutRoute.addChildren([
+							instanceIndexRoute,
+							instanceBrowseRoute.addChildren([browseDatabaseRoute, browseTableRoute]),
+						]),
+					]),
 				]),
 			]),
 		]),
