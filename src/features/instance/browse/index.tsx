@@ -70,8 +70,7 @@ function Browse() {
 					</ScrollArea>
 				</Tabs>
 			</section>
-			<section className="col-span-1 md:col-span-8 lg:col-span-9">
-				<h2 className="text-lg text-white">Browse Table</h2>
+			<section className="col-span-1 md:col-span-8 lg:col-span-9 text-white">
 				<Outlet />
 			</section>
 		</main>
