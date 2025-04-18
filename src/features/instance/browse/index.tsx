@@ -1,6 +1,6 @@
 import { getRouteApi, Link, Outlet } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
+// import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { getDescribeAllQueryOptions } from '@/features/instance/queries/operations/useDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -14,23 +14,14 @@ const route = getRouteApi('');
 
 function Browse() {
 	const { organizationId, clusterId, instanceId } = route.useParams();
-	const { data: instanceInfo, isSuccess } = useSuspenseQuery(getInstanceInfoQueryOptions(instanceId));
 
-	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceInfo.fqdns[0]));
+	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
 	const { structure } = buildInstanceDataStructure(data.data);
 
 	const [selectedSchema, setSelectedSchema] = useState<string | null>(structure);
 	const schemas = Object.keys(structure || {});
 	const tables = Object.keys(structure?.[selectedSchema] || {});
 
-	console.log('tables', tables);
-
-	// describeAllInstance(instanceUrl);
-	// Set the base URL for the instance client to the first FQDN of the instance
-	// This allows all subsequent API calls to use the correct base URL for the instance
-	if (!isSuccess) {
-		throw new Error('Instance info not found');
-	}
 	return (
 		<main className="grid grid-cols-1 gap-4 md:grid-cols-12">
 			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
