@@ -3,18 +3,18 @@ import instanceClient from '@/config/instanceClient';
 import { queryOptions } from '@tanstack/react-query';
 
 function getDescribeTableQueryOptions({
-	instanceUrl,
+	instanceId,
 	schemaName,
 	tableName,
 }: {
-	instanceUrl: string;
+	instanceId: string;
 	schemaName: string;
 	tableName: string;
 }) {
 	return queryOptions({
-		queryKey: [instanceUrl, 'describe_table'] as const,
+		queryKey: [instanceId, 'describe_table'] as const,
 		queryFn: () =>
-			instanceClient.post(instanceUrl, {
+			instanceClient.post('/', {
 				operation: 'describe_table',
 				schema: schemaName,
 				table: tableName,
