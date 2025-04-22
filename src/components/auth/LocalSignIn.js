@@ -50,6 +50,7 @@ function SignIn() {
 	const keyDown = (e) => {
 		if (e.code === 'Enter') {
 			setFormState({ submitted: true });
+			submit();
 		}
 	};
 
