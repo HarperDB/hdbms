@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { getRouteApi, Link, Outlet } from '@tanstack/react-router';
+import { getRouteApi, Link, Outlet, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import CreateNewTableModal from '@/features/instance/modals/CreateNewTableModal';
 // import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { getDescribeAllQueryOptions } from '@/features/instance/queries/operations/useDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -32,6 +33,7 @@ const NewDatabaseSchema = z.object({
 function Browse() {
 	const queryClient = useQueryClient();
 	const { organizationId, clusterId, instanceId } = route.useParams();
+	const navigate = useNavigate();
 
 	const form = useForm({
 		resolver: zodResolver(NewDatabaseSchema),
@@ -67,7 +69,17 @@ function Browse() {
 				<div className="max-w-96">
 					<label htmlFor="databaseSelect">Databases</label>
 					<div className="flex space-x-2">
-						<Select name="databaseSelect" onValueChange={setSelectedDatabase} defaultValue={selectedDatabase || ''}>
+						<Select
+							name="databaseSelect"
+							onValueChange={(value) => {
+								setSelectedDatabase(value);
+								// navigate({
+								// 	to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
+								// 	params: { schemaName: value },
+								// });
+							}}
+							defaultValue={selectedDatabase || ''}
+						>
 							<SelectTrigger className="w-full text-2xl">
 								<SelectValue placeholder="Select a Database" />
 							</SelectTrigger>
@@ -123,6 +135,14 @@ function Browse() {
 					</TabsList>
 					<ScrollArea className="px-4 h-80">
 						<TabsContent value="tables">
+							{tables.length === 0 && selectedDatabase?.length ? (
+								<div className=" w-full h-full">
+									<p className="text-sm text-gray-500">No tables found in this database.</p>
+									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
+								</div>
+							) : (
+								<p className="text-sm text-gray-500">Please select a database.</p>
+							)}
 							<ul>
 								{tables.map((table) => (
 									<li key={table}>
@@ -144,6 +164,7 @@ function Browse() {
 						</TabsContent>
 					</ScrollArea>
 				</Tabs>
+				<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 				<Button className="mt-2 w-full">
 					<Settings /> Settings
 				</Button>

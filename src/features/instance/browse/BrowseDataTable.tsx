@@ -45,10 +45,11 @@ function BrowseDataTable() {
 		})
 	);
 
+	// TODO: fix this. It reloads the table several times unnecessarily
 	useEffect(() => {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
-	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
+	}, [schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
 
 	return <DataTable data={tableData.data} columns={dataTableColumns} />;
 }
