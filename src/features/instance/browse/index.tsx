@@ -140,8 +140,11 @@ function Browse() {
 									<p className="text-sm text-gray-500">No tables found in this database.</p>
 									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 								</div>
-							) : (
+							) : tables.length === 0 && !selectedDatabase?.length ? (
+								// If no database is selected, show a message
 								<p className="text-sm text-gray-500">Please select a database.</p>
+							) : (
+								''
 							)}
 							<ul>
 								{tables.map((table) => (

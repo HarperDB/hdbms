@@ -24,7 +24,6 @@ import InstanceLayout from '@/features/instance/InstanceLayout';
 import Browse from '@/features/instance/browse';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import BrowseDataTable from '@/features/instance/browse/BrowseDataTable';
-import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;

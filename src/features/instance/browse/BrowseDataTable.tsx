@@ -49,7 +49,7 @@ function BrowseDataTable() {
 	useEffect(() => {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
-	}, [schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
+	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
 
 	return <DataTable data={tableData.data} columns={dataTableColumns} />;
 }

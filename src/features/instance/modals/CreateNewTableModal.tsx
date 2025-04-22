@@ -66,6 +66,7 @@ function CreateNewTableModal({ databaseName, instanceId }: { databaseName: strin
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'], refetchType: 'active' });
 				setIsModalOpen(false);
+				form.reset();
 			},
 		});
 	};
