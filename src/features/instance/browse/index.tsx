@@ -71,7 +71,7 @@ function Browse() {
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
-							defaultValue={schemaName ?? databases[0]}
+							defaultValue={schemaName}
 							onValueChange={(value) => {
 								setSelectedDatabase(value);
 								navigate({
