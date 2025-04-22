@@ -50,8 +50,17 @@ function BrowseDataTable() {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
 	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
-
-	return <DataTable data={tableData.data} columns={dataTableColumns} />;
+	return (
+		<>
+			{!tableData.data.length ? (
+				<div className="flex-col items-center justify-center px-16 space-y-3 text-center pt-30">
+					<p className="text-sm text-gray-500">No data found.</p>
+				</div>
+			) : (
+				<DataTable data={tableData.data} columns={dataTableColumns} />
+			)}
+		</>
+	);
 }
 
 export default BrowseDataTable;

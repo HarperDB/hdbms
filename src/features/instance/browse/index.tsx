@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CreateNewTableModal from '@/features/instance/modals/CreateNewTableModal';
-// import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { getDescribeAllQueryOptions } from '@/features/instance/queries/operations/useDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -32,7 +31,7 @@ const NewDatabaseSchema = z.object({
 
 function Browse() {
 	const queryClient = useQueryClient();
-	const { organizationId, clusterId, instanceId } = route.useParams();
+	const { organizationId, clusterId, instanceId, schemaName } = route.useParams();
 	const navigate = useNavigate();
 
 	const form = useForm({
@@ -55,7 +54,7 @@ function Browse() {
 		await createNewDatabase(formData, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [instanceId], refetchType: 'active' });
-				toast.success(`Database $	{formData.newDatabaseName} created successfully`);
+				toast.success(`Database ${formData.newDatabaseName} created successfully`);
 				setIsCreatingDatabase(false);
 				// Refetch the describe all query to get the new database
 			},
@@ -71,14 +70,14 @@ function Browse() {
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
+							defaultValue={schemaName ?? databases[0]}
 							onValueChange={(value) => {
 								setSelectedDatabase(value);
-								// navigate({
-								// 	to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
-								// 	params: { schemaName: value },
-								// });
+								navigate({
+									to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
+									params: { schemaName: value },
+								});
 							}}
-							defaultValue={selectedDatabase || ''}
 						>
 							<SelectTrigger className="w-full text-2xl">
 								<SelectValue placeholder="Select a Database" />
@@ -167,7 +166,9 @@ function Browse() {
 						</TabsContent>
 					</ScrollArea>
 				</Tabs>
-				<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
+				{selectedDatabase?.length && (
+					<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
+				)}
 				<Button className="mt-2 w-full">
 					<Settings /> Settings
 				</Button>
