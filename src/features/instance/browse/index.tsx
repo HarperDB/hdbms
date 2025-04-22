@@ -44,10 +44,11 @@ function Browse() {
 	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
 	const { structure } = buildInstanceDataStructure(data.data);
 
-	const [selectedDatabase, setSelectedDatabase] = useState<string | null>(structure);
+	const [selectedDatabase, setSelectedDatabase] = useState<string | null>(schemaName);
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 	const databases = Object.keys(structure || {});
-	const tables = Object.keys(structure?.[selectedDatabase] || {});
+	const [tables, setTables] = useState<string[]>(Object.keys(structure[selectedDatabase] || []));
+
 	const { mutate: createNewDatabase } = useCreateDatabaseSubmitMutation();
 
 	const submitNewDatabase = async (formData: z.infer<typeof NewDatabaseSchema>) => {
@@ -77,6 +78,7 @@ function Browse() {
 									to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
 									params: { schemaName: value },
 								});
+								setTables(Object.keys(structure?.[value]));
 							}}
 						>
 							<SelectTrigger className="w-full text-2xl">
