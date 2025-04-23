@@ -67,7 +67,9 @@ function Browse() {
 			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
 				<h1 className="pb-6 text-3xl">Browse</h1>
 				<div className="max-w-96">
-					<label htmlFor="databaseSelect">Databases</label>
+					<label htmlFor="databaseSelect" className="block pb-2">
+						Databases
+					</label>
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
@@ -81,7 +83,7 @@ function Browse() {
 								setTables(Object.keys(structure?.[value]));
 							}}
 						>
-							<SelectTrigger className="w-full text-2xl">
+							<SelectTrigger className="w-full text-xl">
 								<SelectValue placeholder="Select a Database" />
 							</SelectTrigger>
 							<SelectContent>
@@ -97,7 +99,7 @@ function Browse() {
 						<Button
 							className="inline-block"
 							aria-label="Add a new database"
-							variant="positive"
+							variant="positiveOutline"
 							onClick={() => setIsCreatingDatabase(!isCreatingDatabase)}
 						>
 							{!isCreatingDatabase ? <Plus /> : <Minus />}
@@ -130,29 +132,29 @@ function Browse() {
 					)}
 				</div>
 				<Tabs defaultValue="tables" className="py-6">
-					<TabsList className="px-6">
+					<TabsList className="w-full">
 						<TabsTrigger value="tables">Tables</TabsTrigger>
 						<TabsTrigger value="queries">Queries</TabsTrigger>
 					</TabsList>
-					<ScrollArea className="px-4 h-80">
+					<ScrollArea className="h-80 border border-grey-700 rounded-md">
 						<TabsContent value="tables">
 							{tables.length === 0 && selectedDatabase?.length ? (
 								<div className=" w-full h-full">
-									<p className="text-sm text-gray-500">No tables found in this database.</p>
+									<p className="text-sm text-grey-500">No tables found in this database.</p>
 									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 								</div>
 							) : tables.length === 0 && !selectedDatabase?.length ? (
 								// If no database is selected, show a message
-								<p className="text-sm text-gray-500">Please select a database.</p>
+								<p className="text-sm text-grey-500">Please select a database.</p>
 							) : (
 								''
 							)}
 							<ul>
 								{tables.map((table) => (
-									<li key={table}>
+									<li key={table} className="hover:bg-grey-700/80 px-8 py-4">
 										<Link
 											to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${selectedDatabase}/${table}`}
-											className="w-full my-0.5 flex items-center justify-between p-2 hover:bg-primary rounded-md"
+											className="w-full flex items-center justify-between"
 										>
 											<span>{table}</span>
 											<span>
@@ -171,7 +173,10 @@ function Browse() {
 				{selectedDatabase?.length && (
 					<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 				)}
-				<Button className="mt-2 w-full">
+				<Button
+					className="mt-2 bg-linear-(--purple-dark-to-light-gradient) hover:bg-linear-(--purple-gradient) rounded-full w-full"
+					size="lg"
+				>
 					<Settings /> Settings
 				</Button>
 			</section>

@@ -74,7 +74,7 @@ function CreateNewTableModal({ databaseName, instanceId }: { databaseName: strin
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
-				<Button variant="positive" className="rounded-full w-full">
+				<Button variant="positiveOutline" className="rounded-full w-full" size="lg">
 					<Plus /> Create a Table
 				</Button>
 			</DialogTrigger>

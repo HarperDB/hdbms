@@ -4,6 +4,8 @@ import { getRouteApi } from '@tanstack/react-router';
 import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import { DataTable } from '@/components/DataTable';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 type AttributesTypes = { attribute: string; is_primary_key: boolean; type: string; indexed: boolean; elements: string };
 
@@ -50,7 +52,17 @@ function BrowseDataTable() {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
 	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
-	return <DataTable data={tableData.data} columns={dataTableColumns} />;
+	return (
+		<>
+			<DataTable data={tableData.data} columns={dataTableColumns} />
+			<div className="flex justify-center">
+				<Button type="button" variant="positiveOutline" className="rounded-full w-32">
+					<Plus />
+					Add Data
+				</Button>
+			</div>
+		</>
+	);
 }
 
 export default BrowseDataTable;
