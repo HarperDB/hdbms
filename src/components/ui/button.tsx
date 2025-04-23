@@ -38,11 +38,13 @@ const buttonVariants = cva(
 				ghost: 'hover:bg-accent hover:text-muted-foreground',
 				link: 'text-primary underline-offset-4 hover:underline',
 				positive: 'bg-green text-white shadow-xs hover:bg-green/90',
+				positiveOutline:
+					'border bg-transparent border-green border-2 text-white shadow-xs hover:-translate-y-1 transition duration-200 hover:bg-grey-700/40',
 			},
 			size: {
 				default: 'h-9 px-4 py-2 has-[>svg]:px-3',
 				sm: 'h-8 rounded-md px-3 has-[>svg]:px-2.5',
-				lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
+				lg: 'h-10 rounded-md px-6 has-[>svg]:px-4 text-md',
 				icon: 'size-9',
 			},
 		},
