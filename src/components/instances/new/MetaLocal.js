@@ -51,21 +51,7 @@ function MetaLocal() {
 				setFormState({ error: 'usernames must have only letters, underscores, and hyphens' });
 			} else if (instance_name.length && user.length && pass.length && host.length && port.length) {
 				try {
-					let currentUser;
-					if (pass) {
-						const loginResult = await login({ auth: { user, pass }, url });
-						if (loginResult.error) {
-							setFormState({ error: 'Login failed. Using instance credentials?' });
-						} else {
-							currentUser = await userInfo({ url });
-							if (currentUser.error) {
-								currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
-							}
-						}
-					} else {
-						currentUser = await userInfo({ url });
-					}
-
+					const currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
 					if (currentUser.error && currentUser.message === 'Login failed') {
 						setFormState({ error: 'The provided credentials cannot log into that instance.' });
 					} else if (currentUser.error && currentUser.type === 'catch') {
