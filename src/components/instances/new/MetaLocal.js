@@ -51,7 +51,6 @@ function MetaLocal() {
 				setFormState({ error: 'usernames must have only letters, underscores, and hyphens' });
 			} else if (instance_name.length && user.length && pass.length && host.length && port.length) {
 				try {
-					let loginNotSupported;
 					let currentUser;
 					if (pass) {
 						const loginResult = await login({ auth: { user, pass }, url });
@@ -60,10 +59,8 @@ function MetaLocal() {
 						} else {
 							currentUser = await userInfo({ url });
 							if (currentUser.error) {
-								loginNotSupported = true;
-							}
-							if (loginNotSupported)
 								currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
+							}
 						}
 					} else {
 						currentUser = await userInfo({ url });
