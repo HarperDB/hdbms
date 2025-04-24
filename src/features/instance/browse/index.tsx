@@ -1,5 +1,5 @@
-import { use, useEffect, useState } from 'react';
-import { getRouteApi, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { Suspense, useState } from 'react';
+import { getRouteApi, Outlet, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +16,7 @@ import { useCreateDatabaseSubmitMutation } from '@/features/instance/operations/
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
+import Loading from '@/components/Loading';
 
 const route = getRouteApi('');
 
@@ -31,7 +32,7 @@ const NewDatabaseSchema = z.object({
 
 function Browse() {
 	const queryClient = useQueryClient();
-	const { organizationId, clusterId, instanceId, schemaName } = route.useParams();
+	const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
 	const navigate = useNavigate();
 
 	const form = useForm({
@@ -45,12 +46,21 @@ function Browse() {
 	const { structure } = buildInstanceDataStructure(describeAllQueryData.data);
 
 	const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(schemaName);
+	const [selectedTable, setSelectedTable] = useState<string | undefined>(tableName);
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 	const databases = Object.keys(structure || {});
 	const [tables, setTables] = useState<string[]>(Object.keys(structure[selectedDatabase] || []));
 
 	const handleUpdatedTables = (tableName: string) => {
 		setTables((tables) => [...tables, tableName]);
+	};
+
+	const handleSelectedTable = (selectedTableName: string) => {
+		if (!selectedTableName) return;
+		setSelectedTable(selectedTableName);
+		navigate({
+			to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${selectedDatabase}/${selectedTableName}`,
+		});
 	};
 
 	const { mutate: createNewDatabase } = useCreateDatabaseSubmitMutation();
@@ -157,16 +167,17 @@ function Browse() {
 							)}
 							<ul>
 								{tables.map((table) => (
-									<li key={table} className="hover:bg-grey-700/80 px-8 py-4">
-										<Link
-											to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${selectedDatabase}/${table}`}
-											className="w-full flex items-center justify-between"
+									<li key={table} className="hover:bg-grey-700/80 px-6 py-4 border-b border-grey-700">
+										<Button
+											onClick={() => handleSelectedTable(table)}
+											size="lg"
+											className="w-full flex items-center justify-between bg-transparent border-none shadow-none hover:bg-transparent"
 										>
 											<span>{table}</span>
 											<span>
 												<ArrowRight />
 											</span>
-										</Link>
+										</Button>
 									</li>
 								))}
 							</ul>
@@ -180,7 +191,6 @@ function Browse() {
 					<CreateNewTableModal
 						databaseName={selectedDatabase || ''}
 						instanceId={instanceId}
-						setTables={setTables}
 						handleUpdatedTables={handleUpdatedTables}
 					/>
 				)}
@@ -192,7 +202,23 @@ function Browse() {
 				</Button>
 			</section>
 			<section className="col-span-1 md:col-span-8 lg:col-span-9 text-white">
-				<Outlet />
+				{!selectedDatabase ? (
+					<div className="flex items-center justify-center h-full">
+						<p className="text-sm text-center pt-2">Please select a database.</p>
+					</div>
+				) : !selectedTable ? (
+					<div className="flex items-center justify-center h-full">
+						<p className="text-sm text-center pt-2">Please select a table.</p>
+					</div>
+				) : (
+					<Suspense
+						fallback={
+							<Loading className="flex flex-col items-center justify-center h-full" text="Loading Data Table" />
+						}
+					>
+						<Outlet />
+					</Suspense>
+				)}
 			</section>
 		</main>
 	);

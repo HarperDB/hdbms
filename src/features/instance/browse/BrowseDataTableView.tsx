@@ -52,11 +52,7 @@ function BrowseDataTableView() {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
 	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
-	return (
-		<>
-			<BrowseDataTable data={tableData.data} columns={dataTableColumns} />
-		</>
-	);
+	return <BrowseDataTable data={tableData.data} columns={dataTableColumns} />;
 }
 
 export default BrowseDataTableView;
