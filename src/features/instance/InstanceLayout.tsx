@@ -2,6 +2,7 @@ import instanceClient from '@/config/instanceClient';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import { Outlet, getRouteApi } from '@tanstack/react-router';
+import InstanceNavBar from '@/features/instance/InstanceNavBar';
 
 const route = getRouteApi('');
 
@@ -17,7 +18,9 @@ function InstanceLayout() {
 	instanceClient.defaults.baseURL = instanceInfo.fqdns[0];
 	return (
 		<>
-			<nav>Instance Navbar</nav>
+			<nav className="sticky top-20">
+				<InstanceNavBar />
+			</nav>
 			<div className="px-4 md:px-8 pt-4">
 				{/* Create an instance context */}
 				<Outlet />

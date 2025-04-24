@@ -22,8 +22,9 @@ import { getOrganizationQueryOptions } from '@/features/organization/queries/get
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import InstanceLayout from '@/features/instance/InstanceLayout';
 import Browse from '@/features/instance/browse';
-import BrowseDataTable from '@/features/instance/browse/BrowseDataTable';
+// import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
+import BrowseDataTableView from '@/features/instance/browse/BrowseDataTableView';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -167,7 +168,7 @@ const browseDatabaseRoute = createRoute({
 const browseTableRoute = createRoute({
 	getParentRoute: () => instanceBrowseRoute,
 	path: '$schemaName/$tableName',
-	component: BrowseDataTable, // Placeholder for instance details
+	component: BrowseDataTableView, // Placeholder for instance details
 });
 
 export const cloudRouteTree = rootRoute.addChildren([

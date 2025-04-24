@@ -16,8 +16,8 @@ import { Plus, Table } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/react-query/constants';
 import { useCreateTableMutation } from '@/features/instance/operations/mutations/createTable';
+import { toast } from 'sonner';
 
 const CreateTableSchema = z.object({
 	tableName: z
@@ -44,7 +44,16 @@ const CreateTableSchema = z.object({
 		}),
 });
 
-function CreateNewTableModal({ databaseName, instanceId }: { databaseName: string; instanceId: string }) {
+function CreateNewTableModal({
+	databaseName,
+	instanceId,
+	handleUpdatedTables,
+}: {
+	databaseName: string;
+	instanceId: string;
+	handleUpdatedTables: (tableName: string) => void;
+}) {
+	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
 		resolver: zodResolver(CreateTableSchema),
@@ -55,7 +64,6 @@ function CreateNewTableModal({ databaseName, instanceId }: { databaseName: strin
 	});
 
 	const { mutate: submitNewTableData } = useCreateTableMutation();
-	const queryClient = useQueryClient();
 
 	const submitForm = async (formData: z.infer<typeof CreateTableSchema>) => {
 		const updatedFormData = {
@@ -63,8 +71,10 @@ function CreateNewTableModal({ databaseName, instanceId }: { databaseName: strin
 			databaseName: databaseName,
 		};
 		submitNewTableData(updatedFormData, {
-			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'], refetchType: 'active' });
+			onSuccess: async () => {
+				await queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
+				handleUpdatedTables(formData.tableName);
+				toast.success(`Table ${formData.tableName} created successfully`);
 				setIsModalOpen(false);
 				form.reset();
 			},

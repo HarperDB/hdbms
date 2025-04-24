@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { getRouteApi, Link, Outlet, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -41,23 +41,26 @@ function Browse() {
 		},
 	});
 
-	const { data } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
-	const { structure } = buildInstanceDataStructure(data.data);
+	const { data: describeAllQueryData } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
+	const { structure } = buildInstanceDataStructure(describeAllQueryData.data);
 
-	const [selectedDatabase, setSelectedDatabase] = useState<string | null>(schemaName);
+	const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(schemaName);
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 	const databases = Object.keys(structure || {});
 	const [tables, setTables] = useState<string[]>(Object.keys(structure[selectedDatabase] || []));
+
+	const handleUpdatedTables = (tableName: string) => {
+		setTables((tables) => [...tables, tableName]);
+	};
 
 	const { mutate: createNewDatabase } = useCreateDatabaseSubmitMutation();
 
 	const submitNewDatabase = async (formData: z.infer<typeof NewDatabaseSchema>) => {
 		await createNewDatabase(formData, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [instanceId], refetchType: 'active' });
+				queryClient.invalidateQueries({ queryKey: [instanceId] });
 				toast.success(`Database ${formData.newDatabaseName} created successfully`);
 				setIsCreatingDatabase(false);
-				// Refetch the describe all query to get the new database
 			},
 		});
 	};
@@ -71,13 +74,13 @@ function Browse() {
 						<Select
 							name="databaseSelect"
 							defaultValue={schemaName}
-							onValueChange={(value) => {
-								setSelectedDatabase(value);
+							onValueChange={(selectedSchema) => {
+								setSelectedDatabase(selectedSchema);
 								navigate({
 									to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
-									params: { schemaName: value },
+									params: { schemaName: selectedSchema },
 								});
-								setTables(Object.keys(structure?.[value]));
+								setTables(Object.keys(structure?.[selectedSchema]));
 							}}
 						>
 							<SelectTrigger className="w-full">
@@ -136,9 +139,15 @@ function Browse() {
 					<ScrollArea className="h-80 border border-grey-700 rounded-md">
 						<TabsContent value="tables" className="h-full">
 							{tables.length === 0 && selectedDatabase?.length ? (
-								<div className=" w-full h-full">
-									<p className="text-sm text-grey-500">No tables found in this database.</p>
-									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
+								<div className="w-full h-full text-center">
+									<p className="py-6">No tables found in this database.</p>
+									<div className="max-w-48 mx-auto">
+										<CreateNewTableModal
+											databaseName={selectedDatabase || ''}
+											instanceId={instanceId}
+											handleUpdatedTables={handleUpdatedTables}
+										/>
+									</div>
 								</div>
 							) : tables.length === 0 && !selectedDatabase?.length ? (
 								// If no database is selected, show a message
@@ -168,7 +177,12 @@ function Browse() {
 					</ScrollArea>
 				</Tabs>
 				{selectedDatabase?.length && (
-					<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
+					<CreateNewTableModal
+						databaseName={selectedDatabase || ''}
+						instanceId={instanceId}
+						setTables={setTables}
+						handleUpdatedTables={handleUpdatedTables}
+					/>
 				)}
 				<Button
 					className="mt-2 bg-linear-(--purple-dark-to-light-gradient) hover:bg-linear-(--purple-gradient) rounded-full w-full"
