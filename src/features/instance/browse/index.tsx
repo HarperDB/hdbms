@@ -67,9 +67,6 @@ function Browse() {
 			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
 				<h1 className="pb-6 text-3xl">Browse</h1>
 				<div className="max-w-96">
-					<label htmlFor="databaseSelect" className="block pb-2">
-						Databases
-					</label>
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
@@ -83,7 +80,7 @@ function Browse() {
 								setTables(Object.keys(structure?.[value]));
 							}}
 						>
-							<SelectTrigger className="w-full text-xl">
+							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select a Database" />
 							</SelectTrigger>
 							<SelectContent>
@@ -107,7 +104,7 @@ function Browse() {
 					</div>
 					{isCreatingDatabase ? (
 						<Form {...form}>
-							<form className="items-center space-x-2 mt-2" onSubmit={form.handleSubmit(submitNewDatabase)}>
+							<form className="items-center space-x-2 mt-2 pl-4" onSubmit={form.handleSubmit(submitNewDatabase)}>
 								<FormField
 									control={form.control}
 									name="newDatabaseName"
@@ -121,7 +118,7 @@ function Browse() {
 										</FormItem>
 									)}
 								/>
-								<Button type="submit" variant="positive" className="w-full">
+								<Button type="submit" variant="positiveOutline" className="w-full">
 									<Check />
 									Create Database
 								</Button>
@@ -137,7 +134,7 @@ function Browse() {
 						<TabsTrigger value="queries">Queries</TabsTrigger>
 					</TabsList>
 					<ScrollArea className="h-80 border border-grey-700 rounded-md">
-						<TabsContent value="tables">
+						<TabsContent value="tables" className="h-full">
 							{tables.length === 0 && selectedDatabase?.length ? (
 								<div className=" w-full h-full">
 									<p className="text-sm text-grey-500">No tables found in this database.</p>
@@ -145,7 +142,7 @@ function Browse() {
 								</div>
 							) : tables.length === 0 && !selectedDatabase?.length ? (
 								// If no database is selected, show a message
-								<p className="text-sm text-grey-500">Please select a database.</p>
+								<p className="text-sm text-center pt-2">Please select a database.</p>
 							) : (
 								''
 							)}
@@ -166,7 +163,7 @@ function Browse() {
 							</ul>
 						</TabsContent>
 						<TabsContent value="queries">
-							<div>Create queries</div>
+							<p className="text-center pt-2">Create queries</p>
 						</TabsContent>
 					</ScrollArea>
 				</Tabs>
