@@ -50,6 +50,7 @@ function TopNav({ isMaintenance, loggedIn = false }) {
 				s.auth = false;
 			});
 			setPersistedUser({ theme });
+			setInstanceAuths({});
 		}
 		navigate('/');
 	};

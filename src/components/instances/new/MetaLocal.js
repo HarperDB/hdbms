@@ -13,6 +13,7 @@ import registrationInfo from '../../../functions/api/instance/registrationInfo';
 import isAlphaUnderscoreHyphen from '../../../functions/util/isAlphaUnderscoreHyphen';
 import isAlphaNumericHyphen from '../../../functions/util/isAlphaNumericHyphen';
 import userInfo from '../../../functions/api/instance/userInfo';
+import login from '../../../functions/api/instance/login';
 
 function MetaLocal() {
 	const navigate = useNavigate();
@@ -51,7 +52,6 @@ function MetaLocal() {
 			} else if (instance_name.length && user.length && pass.length && host.length && port.length) {
 				try {
 					const currentUser = await userInfo({ auth: { user, pass }, url, is_local: true, customer_id });
-
 					if (currentUser.error && currentUser.message === 'Login failed') {
 						setFormState({ error: 'The provided credentials cannot log into that instance.' });
 					} else if (currentUser.error && currentUser.type === 'catch') {
