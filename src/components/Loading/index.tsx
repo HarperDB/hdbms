@@ -1,8 +1,12 @@
-const Loading = () => {
+interface LoadingProps extends React.ComponentProps<'div'> {
+	text?: string;
+}
+
+const Loading = ({ className, text, ...props }: LoadingProps) => {
 	return (
-		<div className={`fixed translate-1/2 h-full w-full z-50 text-white`}>
+		<div className={`text-white h-full w-full ${className}`} {...props}>
 			<img src="/HDBDogOnly.svg" width="100px" height="100px" alt="HDB Dog Logo Loading" />
-			<p>Loading...</p>
+			<p className="pt-4">{!text ? 'Loading...' : text}</p>
 		</div>
 	);
 };
