@@ -18,7 +18,7 @@ function InstanceLayout() {
 	instanceClient.defaults.baseURL = instanceInfo.fqdns[0];
 	return (
 		<>
-			<nav className="sticky top-20">
+			<nav className="sticky top-20 z-40">
 				<InstanceNavBar />
 			</nav>
 			<div className="px-4 md:px-8 pt-4">
