@@ -4,8 +4,6 @@ import { getRouteApi } from '@tanstack/react-router';
 import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 type AttributesTypes = { attribute: string; is_primary_key: boolean; type: string; indexed: boolean; elements: string };
 
