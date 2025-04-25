@@ -80,7 +80,7 @@ function ClusterIndex() {
 								aria-label={`Go to ${cell.row.original.name} instance`}
 								title={`Go to ${cell.row.original.name} instance`}
 							>
-								<span className="py-2 hover:border-b-2">{instanceURL}</span>
+								<span className="py-2 hover:border-b-2">View</span>
 							</Link>
 							{/* )} */}
 						</>
