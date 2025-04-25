@@ -1,26 +1,26 @@
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { X, Menu } from 'lucide-react';
+import { X, Menu, List, User, Package, ChartBarBig, NotepadText } from 'lucide-react';
 
 function DesktopInstanceNavBar() {
 	return (
-		<div className="hidden md:flex flex-row items-center justify-between p-4 bg-grey-700 text-white">
+		<div className="hidden md:flex flex-row items-center justify-between p-3 text-white text-sm">
 			<h1 className="text-xl font-bold">Instance:</h1>
-			<div className="flex space-x-4">
-				<Link to={'#home'} className="hover:text-grey-400">
-					Browse
+			<div className="flex space-x-4 *:hover:text-grey">
+				<Link to={'#home'}>
+					<List className="inline-block" /> Browse
 				</Link>
-				<Link to={'#about'} className="hover:text-grey-400">
-					Users & Roles
+				<Link to={'#about'}>
+					<User className="inline-block" /> Users & Roles
 				</Link>
-				<Link to={'#contact'} className="hover:text-grey-400">
-					Applications
+				<Link to={'#contact'}>
+					<Package className="inline-block" /> Applications
 				</Link>
-				<Link to={'#contact'} className="hover:text-grey-400">
-					Status & Config
+				<Link to={'#contact'}>
+					<ChartBarBig className="inline-block" /> Status & Config
 				</Link>
-				<Link to={'#contact'} className="hover:text-grey-400">
-					Logs
+				<Link to={'#contact'}>
+					<NotepadText className="inline-block" /> Logs
 				</Link>
 			</div>
 		</div>

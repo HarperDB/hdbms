@@ -32,7 +32,7 @@ function BrowseDataTable<TData, TValue>({ columns, data }: BrowseDataTableProps<
 						</TableRow>
 					))}
 				</TableHeader>
-				<TableBody className="bg-black">
+				<TableBody className="bg-black  border-grey-700 border">
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow
@@ -41,7 +41,7 @@ function BrowseDataTable<TData, TValue>({ columns, data }: BrowseDataTableProps<
 								className="hover:bg-muted/10 data-[state=selected]:bg-muted"
 							>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id} className="p-4">
+									<TableCell key={cell.id} className="p-2 max-w-32 overflow-x-hidden text-ellipsis whitespace-nowrap">
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}
