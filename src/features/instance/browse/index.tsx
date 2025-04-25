@@ -167,7 +167,7 @@ function Browse() {
 							)}
 							<ul>
 								{tables.map((table) => (
-									<li key={table} className="hover:bg-grey-700/80 px-6 py-4 border-b border-grey-700">
+									<li key={table} className="hover:bg-grey-700/80 p-2 border-b border-grey-700">
 										<Button
 											onClick={() => handleSelectedTable(table)}
 											size="lg"
