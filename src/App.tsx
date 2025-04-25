@@ -37,7 +37,7 @@ function App() {
 				<RouterProvider router={router} />
 				<ReactQueryDevtools buttonPosition="bottom-left" />
 				<TanStackRouterDevtools router={router} />
-				<button
+				{/* <button
 					className="fixed p-2 text-white bg-blue-400 rounded-md bottom-4 right-4"
 					onClick={() => {
 						document.documentElement.classList.toggle('dark');
@@ -45,7 +45,7 @@ function App() {
 					}}
 				>
 					Toggle Theme
-				</button>
+				</button> */}
 				{/* <button
 					className="fixed p-2 text-white bg-blue-400 rounded-md bottom-20 right-20"
 					onClick={() => {

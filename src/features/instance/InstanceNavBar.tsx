@@ -6,7 +6,7 @@ function DesktopInstanceNavBar() {
 	return (
 		<div className="hidden md:flex flex-row items-center justify-between p-3 text-white text-sm">
 			<h1 className="text-xl font-bold">Instance:</h1>
-			<div className="flex space-x-4 *:hover:text-grey">
+			<div className="flex space-x-6 *:hover:text-grey">
 				<Link to={'#home'}>
 					<List className="inline-block" /> Browse
 				</Link>

@@ -1,15 +1,20 @@
-import { useEffect } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
 import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
+import EditTableRowModal from '@/features/instance/modals/EditTableRowModal';
+import { Row, RowData } from '@tanstack/react-table';
+import { getSearchByHashOptions } from '@/features/instance/queries/operations/useSearchByHash';
+import { hash } from 'crypto';
 
 type AttributesTypes = { attribute: string; is_primary_key: boolean; type: string; indexed: boolean; elements: string };
 
 const route = getRouteApi('');
 
 function BrowseDataTableView() {
+	const [issEditModalOpen, setIsEditModalOpen] = useState(false);
 	const { instanceId, schemaName, tableName } = route.useParams();
 	const { data: describeTableData, refetch: refetchDescribeTableQueryOptions } = useSuspenseQuery(
 		getDescribeTableQueryOptions({
@@ -18,6 +23,13 @@ function BrowseDataTableView() {
 			tableName,
 		})
 	);
+	const [searchByHashParams, setSearchByHashParams] = useState({
+		instanceId,
+		schemaName,
+		tableName,
+		hashAttribute: [''],
+	});
+	const { data: searchByHashData, refetch: refetchSearchByHash } = useQuery(getSearchByHashOptions(searchByHashParams));
 
 	const { hash_attribute, attributes } = describeTableData.data;
 	// console.log('header data:', describeTableData);
@@ -35,7 +47,6 @@ function BrowseDataTableView() {
 		Header: k === 'id' ? 'Primary Key' : k.toString(),
 		accessorKey: k.toString(),
 	}));
-
 	const { data: tableData, refetch: refetchSearchByValueOptions } = useSuspenseQuery(
 		getSearchByValueOptions({
 			instanceId,
@@ -50,7 +61,27 @@ function BrowseDataTableView() {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
 	}, [instanceId, schemaName, tableName, refetchDescribeTableQueryOptions, refetchSearchByValueOptions]);
-	return <BrowseDataTable data={tableData.data} columns={dataTableColumns} />;
+	const onRowClick = async (rowData: Row<RowData>) => {
+		setSearchByHashParams({
+			instanceId,
+			schemaName,
+			tableName,
+			hashAttribute: rowData.original[`${hash_attribute}`],
+		});
+		refetchSearchByHash();
+		setIsEditModalOpen(!issEditModalOpen);
+	};
+
+	return (
+		<>
+			<BrowseDataTable data={tableData.data} columns={dataTableColumns} onRowClick={onRowClick} />
+			<EditTableRowModal
+				setIsModalOpen={setIsEditModalOpen}
+				isModalOpen={issEditModalOpen}
+				data={searchByHashData?.data}
+			/>
+		</>
+	);
 }
 
 export default BrowseDataTableView;

@@ -79,7 +79,7 @@ function Browse() {
 		<main className="grid grid-cols-1 gap-4 md:grid-cols-12">
 			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
 				<h1 className="pb-6 text-3xl">Browse</h1>
-				<div className="max-w-96">
+				<div className="">
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
