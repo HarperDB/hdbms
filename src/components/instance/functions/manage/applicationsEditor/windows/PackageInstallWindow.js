@@ -11,6 +11,22 @@ import UrlInstallField from './UrlInstallField';
 import config from '../../../../../../config';
 import instanceState from '../../../../../../functions/state/instanceState';
 
+function encodeZipToBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+
+		reader.onload = () => {
+			const base64String = reader.result.split(',')[1]; // Remove the data URL prefix
+			resolve(base64String);
+		};
+
+		reader.onerror = (error) => {
+			reject(error);
+		};
+	});
+}
+
 export default function PackageInstallWindow({
 	selectedPackage,
 	onConfirm,
@@ -114,6 +130,10 @@ export default function PackageInstallWindow({
 						label: 'Install a gzipped .tar file from a URL',
 						value: 'url',
 					},
+					{
+						label: 'Upload a gzipped .tar file',
+						value: 'file',
+					},
 				]}
 			/>
 
@@ -152,6 +172,27 @@ export default function PackageInstallWindow({
 							pkg={packageInfo}
 							setPackageSpec={setPackageSpec}
 						/>
+					)}
+					{packageType === 'file' && (
+						<Input
+							type="file"
+							accept="application/gzip, .gz"
+							className="btn btn-block btn-outline-success mt-2"
+							onChange={(e) => {
+								if (e.target.files.length === 0) return;
+								encodeZipToBase64(e.target.files[0])
+									.then((base64String) => {
+										setPackageSpec(base64String);
+										setPackageType('file');
+										setPackageInfo({ name: e.target.files[0].name });
+									})
+									.catch((error) => {
+										console.error('Error encoding file:', error);
+									});
+							}}
+						>
+							Upload Your Project Package
+						</Input>
 					)}
 				</>
 			)}
