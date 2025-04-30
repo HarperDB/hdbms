@@ -12,6 +12,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowUpDown } from 'lucide-react';
 
 interface BrowseDataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -48,16 +49,19 @@ function BrowseDataTable<TData, TValue>({
 							<TableRow key={headerGroup.id} className="border-none">
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead
-											key={header.id}
-											className="p-4"
-											onClick={() => {
-												header.column.toggleSorting(header.column.getIsSorted() === 'asc');
-												// @ts-expect-error accessorKey does exist unsure why ts is complaining
-												onColumnClick?.(header.column.columnDef.accessorKey, header.column.getIsSorted() === 'desc');
-											}}
-										>
-											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+										<TableHead key={header.id} className="p-4">
+											<Button
+												type="button"
+												variant="ghost"
+												onClick={() => {
+													header.column.toggleSorting(header.column.getIsSorted() === 'asc');
+													// @ts-expect-error accessorKey does exist unsure why ts is complaining
+													onColumnClick?.(header.column.columnDef.accessorKey, header.column.getIsSorted() === 'desc');
+												}}
+											>
+												{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+												<ArrowUpDown />
+											</Button>
 										</TableHead>
 									);
 								})}
