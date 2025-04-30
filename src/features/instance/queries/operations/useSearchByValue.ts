@@ -17,18 +17,27 @@ type SearchByValueRequest = {
 	// get_attributes: string[];
 	limit: number;
 	offset: number;
+	sort: {
+		attribute: string;
+		descending: boolean;
+	};
 };
 function getSearchByValueOptions({
 	instanceId,
 	schemaName,
 	tableName,
 	hash_attribute,
+	sortTableDataParams,
 }: // ...options
 {
 	instanceId: string;
 	schemaName: string;
 	tableName: string;
 	hash_attribute: string;
+	sortTableDataParams: {
+		attribute: string;
+		descending: boolean;
+	};
 	// options?: SearchByValueRequest;
 }) {
 	return queryOptions({
@@ -41,7 +50,7 @@ function getSearchByValueOptions({
 				table: tableName,
 				search_attribute: hash_attribute,
 				search_value: '*',
-				// ...options,
+				sort: sortTableDataParams.attribute.length ? sortTableDataParams : undefined,
 			}),
 	});
 }

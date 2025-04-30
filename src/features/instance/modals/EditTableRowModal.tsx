@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -21,13 +22,16 @@ function EditTableRowModal({
 }) {
 	return (
 		<Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
-			<DialogContent>
+			{/* NOTE - Is this okay to do for the aria describedby? */}
+			<DialogContent aria-describedby={undefined}>
 				<DialogHeader>
 					<DialogTitle>Edit Row</DialogTitle>
 				</DialogHeader>
-				<DialogDescription>
+				{data ? (
 					<Editor className="h-96 w-full" language="json" theme="vs-dark" value={JSON.stringify(data, null, 4)} />
-				</DialogDescription>
+				) : (
+					<Loading />
+				)}
 				<DialogFooter>
 					<div className="flex justify-between w-full">
 						<Button variant="destructive" className="rounded-full">
