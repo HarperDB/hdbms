@@ -98,9 +98,9 @@ function BrowseDataTableView() {
 		setIsEditModalOpen(!isEditModalOpen);
 	};
 
-	const onColumnClick = async (columnData: unknown, isDescending: boolean) => {
+	const onColumnClick = async (accessorKey: string, isDescending: boolean) => {
 		await setSortTableDataParams({
-			attribute: columnData.accessorKey,
+			attribute: accessorKey,
 			descending: isDescending,
 		});
 		refetchSearchByValueOptions();
