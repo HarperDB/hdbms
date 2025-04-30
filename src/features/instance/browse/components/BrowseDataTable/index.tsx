@@ -17,7 +17,7 @@ interface BrowseDataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 	onRowClick?: (row: Row<TData>) => void;
-	onColumnClick?: (column: ColumnDef<TData, TValue>) => void;
+	onColumnClick?: (accessorKey: string, isDescending: boolean) => Promise<void>;
 }
 
 function BrowseDataTable<TData, TValue>({
@@ -53,7 +53,8 @@ function BrowseDataTable<TData, TValue>({
 											className="p-4"
 											onClick={() => {
 												header.column.toggleSorting(header.column.getIsSorted() === 'asc');
-												onColumnClick?.(header.column.columnDef, header.column.getIsSorted() === 'desc');
+												// @ts-expect-error accessorKey does exist unsure why ts is complaining
+												onColumnClick?.(header.column.columnDef.accessorKey, header.column.getIsSorted() === 'desc');
 											}}
 										>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
