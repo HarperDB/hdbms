@@ -17,9 +17,15 @@ interface BrowseDataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 	onRowClick?: (row: Row<TData>) => void;
+	onColumnClick?: (column: ColumnDef<TData, TValue>) => void;
 }
 
-function BrowseDataTable<TData, TValue>({ columns, data, onRowClick }: BrowseDataTableProps<TData, TValue>) {
+function BrowseDataTable<TData, TValue>({
+	columns,
+	data,
+	onRowClick,
+	onColumnClick,
+}: BrowseDataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
@@ -42,7 +48,14 @@ function BrowseDataTable<TData, TValue>({ columns, data, onRowClick }: BrowseDat
 							<TableRow key={headerGroup.id} className="border-none">
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead key={header.id} className="p-4">
+										<TableHead
+											key={header.id}
+											className="p-4"
+											onClick={() => {
+												header.column.toggleSorting(header.column.getIsSorted() === 'asc');
+												onColumnClick?.(header.column.columnDef, header.column.getIsSorted() === 'desc');
+											}}
+										>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 										</TableHead>
 									);

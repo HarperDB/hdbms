@@ -87,7 +87,7 @@ function BrowseDataTableView() {
 		refetchSearchByValueOptions();
 	}, [refetchDescribeTableQueryOptions, refetchSearchByValueOptions, instanceId, schemaName, tableName]);
 
-	const onRowClick = async (rowData: Row<RowData>) => {
+	const onRowClick = async (rowData) => {
 		await setSearchByHashParams({
 			instanceId,
 			schemaName,
@@ -98,17 +98,22 @@ function BrowseDataTableView() {
 		setIsEditModalOpen(!isEditModalOpen);
 	};
 
-	// const onHeaderColumnClick = async (columnData: Row<RowData>) => {
-	// 	await setSortTableDataParams({
-	// 		attribute: columnData.id,
-	// 		descending: false,
-	// 	});
-	// 	refetchSearchByValueOptions();
-	// };
+	const onColumnClick = async (columnData: unknown, isDescending: boolean) => {
+		await setSortTableDataParams({
+			attribute: columnData.accessorKey,
+			descending: isDescending,
+		});
+		refetchSearchByValueOptions();
+	};
 
 	return (
 		<>
-			<BrowseDataTable data={tableData.data} columns={dataTableColumns} onRowClick={onRowClick} />
+			<BrowseDataTable
+				data={tableData.data}
+				columns={dataTableColumns}
+				onRowClick={onRowClick}
+				onColumnClick={onColumnClick}
+			/>
 			<EditTableRowModal
 				setIsModalOpen={setIsEditModalOpen}
 				isModalOpen={isEditModalOpen}
