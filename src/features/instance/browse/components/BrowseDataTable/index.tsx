@@ -31,7 +31,6 @@ function BrowseDataTable<TData, TValue>({ columns, data, onRowClick }: BrowseDat
 				pageSize: 20,
 			},
 		},
-		// onPaginationChange:
 	});
 
 	return (
