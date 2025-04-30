@@ -5,17 +5,18 @@ import { getDescribeTableQueryOptions } from '@/features/instance/queries/operat
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import EditTableRowModal from '@/features/instance/modals/EditTableRowModal';
-import { ColumnDef, Row, RowData } from '@tanstack/react-table';
+import { Row, RowData } from '@tanstack/react-table';
 import { getSearchByHashOptions } from '@/features/instance/queries/operations/useSearchByHash';
-import { Button } from '@/components/ui/button';
+import { formatBrowseDataTableHeader } from '@/features/instance/browse/functions/formatBrowseDataTableHeader';
 
-type AttributesTypes = {
-	attribute: string;
-	is_primary_key: boolean;
-	type: string;
-	indexed: boolean;
-	elements: string;
-};
+// TODO: Define on describe table data call
+// type AttributesTypes = {
+// 	attribute: string;
+// 	is_primary_key: boolean;
+// 	type: string;
+// 	indexed: boolean;
+// 	elements: string;
+// };
 
 // type DataTableState = {
 // 	dataTableColumns: ColumnDef<string[]>[];
@@ -52,25 +53,7 @@ function BrowseDataTableView() {
 
 	const { data: searchByHashData, refetch: refetchSearchByHash } = useQuery(getSearchByHashOptions(searchByHashParams));
 
-	const { hash_attribute, attributes } = describeTableData.data;
-	// console.log('header data:', describeTableData);
-	// Build out describe table data types migrate AttributeTypes to it
-	const allAttributes = attributes.map((item: AttributesTypes) => item.attribute);
-
-	const orderedColumns = allAttributes.filter(
-		(attribute) => ![hash_attribute, '__createdtime__', '__updatedtime__'].includes(attribute)
-	);
-
-	if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
-	if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
-
-	const dataTableColumns: ColumnDef<string[]>[] = (
-		hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]
-	).map((columnKey) => ({
-		header: columnKey === 'id' ? 'Primary Key' : columnKey.toString(),
-		accessorKey: columnKey.toString(),
-	}));
-
+	const { dataTableColumns, hash_attribute } = formatBrowseDataTableHeader(describeTableData.data);
 	// const dataTableColumns: ColumnDef<string[]>[] = (
 	// 	hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]
 	// ).map((columnKey) => ({
