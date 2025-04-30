@@ -25,8 +25,12 @@ function formatBrowseDataTableHeader(describeTableData: DescribeTableData) {
 	if (allAttributes.includes('__createdtime__')) orderedColumns.push('__createdtime__');
 	if (allAttributes.includes('__updatedtime__')) orderedColumns.push('__updatedtime__');
 
+	// const dataTableColumns = (hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]).map((k) => ({
+	// 	header: k === 'id' ? 'Primary Key' : k.toString(),
+	// 	accessorKey: k.toString(),
+	// }));
 	const dataTableColumns = (hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]).map((k) => ({
-		Header: k === 'id' ? 'Primary Key' : k.toString(),
+		header: k === 'id' ? 'Primary Key' : k.toString(),
 		accessorKey: k.toString(),
 	}));
 

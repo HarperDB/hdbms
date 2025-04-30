@@ -5,7 +5,6 @@ import { getDescribeTableQueryOptions } from '@/features/instance/queries/operat
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import EditTableRowModal from '@/features/instance/modals/EditTableRowModal';
-import { Row, RowData } from '@tanstack/react-table';
 import { getSearchByHashOptions } from '@/features/instance/queries/operations/useSearchByHash';
 import { formatBrowseDataTableHeader } from '@/features/instance/browse/functions/formatBrowseDataTableHeader';
 
@@ -31,12 +30,8 @@ import { formatBrowseDataTableHeader } from '@/features/instance/browse/function
 const route = getRouteApi('');
 
 function BrowseDataTableView() {
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [sortTableDataParams, setSortTableDataParams] = useState({
-		attribute: '',
-		descending: false,
-	});
 	const { instanceId, schemaName, tableName } = route.useParams();
+
 	const { data: describeTableData, refetch: refetchDescribeTableQueryOptions } = useSuspenseQuery(
 		getDescribeTableQueryOptions({
 			instanceId,
@@ -54,6 +49,11 @@ function BrowseDataTableView() {
 	const { data: searchByHashData, refetch: refetchSearchByHash } = useQuery(getSearchByHashOptions(searchByHashParams));
 
 	const { dataTableColumns, hash_attribute } = formatBrowseDataTableHeader(describeTableData.data);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [sortTableDataParams, setSortTableDataParams] = useState({
+		attribute: '',
+		descending: false,
+	});
 	// const dataTableColumns: ColumnDef<string[]>[] = (
 	// 	hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]
 	// ).map((columnKey) => ({
