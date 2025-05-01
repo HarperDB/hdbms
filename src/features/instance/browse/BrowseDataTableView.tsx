@@ -39,6 +39,7 @@ function BrowseDataTableView() {
 			tableName,
 		})
 	);
+
 	const [searchByHashParams, setSearchByHashParams] = useState({
 		instanceId,
 		schemaName,
@@ -54,22 +55,10 @@ function BrowseDataTableView() {
 		attribute: '',
 		descending: false,
 	});
-	// const dataTableColumns: ColumnDef<string[]>[] = (
-	// 	hash_attribute ? [hash_attribute, ...orderedColumns] : [...orderedColumns]
-	// ).map((columnKey) => ({
-	// 	header: ({ column }) => {
-	// 		return (
-	// 			<Button
-	// 				onClick={() => {
-	// 					onHeaderColumnClick(column.id);
-	// 				}}
-	// 			>
-	// 				{column.id === 'id' ? 'Primary Key' : column.id.toString()}
-	// 			</Button>
-	// 		);
-	// 	},
-	// 	accessorKey: columnKey.toString(),
-	// }));
+	const [totalRecords, setTotalRecords] = useState(describeTableData.data.record_count);
+	const [rowsPerPage, setRowsPerPage] = useState(20);
+	const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / rowsPerPage));
+	const [paginationOffset, setPaginationOffset] = useState(0);
 
 	const { data: tableData, refetch: refetchSearchByValueOptions } = useSuspenseQuery(
 		getSearchByValueOptions({
@@ -78,6 +67,8 @@ function BrowseDataTableView() {
 			tableName,
 			hash_attribute,
 			sortTableDataParams,
+			rowsPerPage,
+			paginationOffset,
 		})
 	);
 
@@ -85,7 +76,18 @@ function BrowseDataTableView() {
 	useEffect(() => {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
-	}, [refetchDescribeTableQueryOptions, refetchSearchByValueOptions, instanceId, schemaName, tableName]);
+		setTotalRecords(describeTableData.data.record_count);
+		setTotalPages(Math.ceil(describeTableData.data.record_count / rowsPerPage));
+	}, [
+		refetchDescribeTableQueryOptions,
+		refetchSearchByValueOptions,
+		instanceId,
+		schemaName,
+		tableName,
+		rowsPerPage,
+		paginationOffset,
+		describeTableData.data.record_count,
+	]);
 
 	const onRowClick = async (rowData) => {
 		await setSearchByHashParams({
@@ -106,6 +108,11 @@ function BrowseDataTableView() {
 		refetchSearchByValueOptions();
 	};
 
+	const onPaginationChange = async (pageNumber: number) => {
+		await setPaginationOffset(pageNumber * rowsPerPage);
+		refetchSearchByValueOptions();
+	};
+
 	return (
 		<>
 			<BrowseDataTable
@@ -113,6 +120,10 @@ function BrowseDataTableView() {
 				columns={dataTableColumns}
 				onRowClick={onRowClick}
 				onColumnClick={onColumnClick}
+				onSetRowsPerPage={setRowsPerPage}
+				setPaginationOffset={onPaginationChange}
+				totalPages={totalPages}
+				totalRecords={totalRecords}
 			/>
 			<EditTableRowModal
 				setIsModalOpen={setIsEditModalOpen}

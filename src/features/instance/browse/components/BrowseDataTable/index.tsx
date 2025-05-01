@@ -17,15 +17,23 @@ import { ArrowUpDown } from 'lucide-react';
 interface BrowseDataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
+	totalPages: number;
+	totalRecords: number;
 	onRowClick?: (row: Row<TData>) => void;
 	onColumnClick?: (accessorKey: string, isDescending: boolean) => Promise<void>;
+	onSetRowsPerPage: (pageSize: number) => void;
+	setPaginationOffset: (pageIndex: number) => void;
 }
 
 function BrowseDataTable<TData, TValue>({
 	columns,
 	data,
+	totalPages,
+	totalRecords,
 	onRowClick,
 	onColumnClick,
+	onSetRowsPerPage,
+	setPaginationOffset,
 }: BrowseDataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
@@ -100,6 +108,7 @@ function BrowseDataTable<TData, TValue>({
 					<Select
 						value={`${table.getState().pagination.pageSize}`}
 						onValueChange={(value) => {
+							onSetRowsPerPage(Number(value));
 							table.setPageSize(Number(value));
 						}}
 					>
@@ -115,10 +124,25 @@ function BrowseDataTable<TData, TValue>({
 						</SelectContent>
 					</Select>
 				</div>
-				<Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+				<span>Total Pages: {totalPages}</span>
+				<span>Total Records: {totalRecords}</span>
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={() => setPaginationOffset()}
+					// disabled={!table.getCanPreviousPage()}
+				>
 					Previous
 				</Button>
-				<Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+				{/* <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+					Next
+				</Button> */}
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={() => setPaginationOffset(page + 1)}
+					// disabled={!table.getCanNextPage()}
+				>
 					Next
 				</Button>
 			</div>
