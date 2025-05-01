@@ -28,10 +28,8 @@ function getSearchByValueOptions({
 	tableName,
 	hash_attribute,
 	sortTableDataParams,
-	rowsPerPage,
-	paginationOffset,
-}: // ...options
-{
+	pagination,
+}: {
 	instanceId: string;
 	schemaName: string;
 	tableName: string;
@@ -40,8 +38,10 @@ function getSearchByValueOptions({
 		attribute: string;
 		descending: boolean;
 	};
-	rowsPerPage: number;
-	paginationOffset: number;
+	pagination: {
+		pageIndex: number;
+		pageSize: number;
+	};
 }) {
 	return queryOptions({
 		queryKey: [instanceId, 'search_by_value'] as const,
@@ -54,8 +54,8 @@ function getSearchByValueOptions({
 				search_attribute: hash_attribute,
 				search_value: '*',
 				sort: sortTableDataParams.attribute.length ? sortTableDataParams : undefined,
-				limit: rowsPerPage,
-				offset: paginationOffset,
+				limit: pagination.pageSize,
+				offset: pagination.pageIndex * pagination.pageSize,
 			}),
 	});
 }

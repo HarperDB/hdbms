@@ -5,6 +5,7 @@ import {
 	flexRender,
 	getCoreRowModel,
 	getPaginationRowModel,
+	PaginationState,
 	Row,
 	useReactTable,
 } from '@tanstack/react-table';
@@ -13,6 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowUpDown } from 'lucide-react';
+import { Dispatch, SetStateAction } from 'react';
 
 interface BrowseDataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -21,8 +23,11 @@ interface BrowseDataTableProps<TData, TValue> {
 	totalRecords: number;
 	onRowClick?: (row: Row<TData>) => void;
 	onColumnClick?: (accessorKey: string, isDescending: boolean) => Promise<void>;
-	onSetRowsPerPage: (pageSize: number) => void;
-	setPaginationOffset: (pageIndex: number) => void;
+	paginationState: {
+		pageIndex: number;
+		pageSize: number;
+	};
+	setPagination: Dispatch<SetStateAction<PaginationState>>;
 }
 
 function BrowseDataTable<TData, TValue>({
@@ -32,20 +37,22 @@ function BrowseDataTable<TData, TValue>({
 	totalRecords,
 	onRowClick,
 	onColumnClick,
-	onSetRowsPerPage,
-	setPaginationOffset,
+	paginationState,
+	setPagination,
 }: BrowseDataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
+		manualPagination: true,
+		pageCount: totalPages,
+		rowCount: totalRecords,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		initialState: {
-			pagination: {
-				pageIndex: 0,
-				pageSize: 20,
-			},
+			pagination: paginationState,
 		},
+		onPaginationChange: setPagination,
+		debugTable: true,
 	});
 
 	return (
@@ -106,14 +113,13 @@ function BrowseDataTable<TData, TValue>({
 				<div className="flex items-center space-x-2">
 					<p className="text-sm font-medium">Rows per page</p>
 					<Select
-						value={`${table.getState().pagination.pageSize}`}
+						defaultValue={table.getState().pagination.pageSize.toString()}
 						onValueChange={(value) => {
-							onSetRowsPerPage(Number(value));
 							table.setPageSize(Number(value));
 						}}
 					>
-						<SelectTrigger className="h-8 w-[70px]">
-							<SelectValue placeholder={table.getState().pagination.pageSize} />
+						<SelectTrigger className="h-8 w-[80px]">
+							<SelectValue />
 						</SelectTrigger>
 						<SelectContent side="top">
 							{[20, 50, 100, 250].map((pageSize) => (
@@ -124,24 +130,20 @@ function BrowseDataTable<TData, TValue>({
 						</SelectContent>
 					</Select>
 				</div>
-				<span>Total Pages: {totalPages}</span>
-				<span>Total Records: {totalRecords}</span>
+				<span>Total Rows: {totalRecords}</span>
 				<Button
 					variant="outline"
 					size="sm"
-					onClick={() => setPaginationOffset()}
-					// disabled={!table.getCanPreviousPage()}
+					onClick={() => table.previousPage()}
+					disabled={paginationState.pageIndex === 0}
 				>
 					Previous
 				</Button>
-				{/* <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-					Next
-				</Button> */}
 				<Button
 					variant="outline"
 					size="sm"
-					onClick={() => setPaginationOffset(page + 1)}
-					// disabled={!table.getCanNextPage()}
+					onClick={() => table.nextPage()}
+					disabled={paginationState.pageIndex === totalPages - 1}
 				>
 					Next
 				</Button>
