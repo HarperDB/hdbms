@@ -52,7 +52,6 @@ function BrowseDataTable<TData, TValue>({
 			pagination: paginationState,
 		},
 		onPaginationChange: setPagination,
-		debugTable: true,
 	});
 
 	return (
