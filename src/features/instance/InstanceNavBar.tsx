@@ -1,13 +1,16 @@
-import { Link } from '@tanstack/react-router';
+import { getRouteApi, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { X, Menu, List, User, Package, ChartBarBig, NotepadText } from 'lucide-react';
 
+const route = getRouteApi('');
+
 function DesktopInstanceNavBar() {
+	const { organizationId, clusterId, instanceId } = route.useParams();
 	return (
 		<div className="hidden md:flex flex-row items-center justify-between p-3 text-white text-sm">
 			<h1 className="text-xl font-bold">Instance:</h1>
 			<div className="flex space-x-6 *:hover:text-grey">
-				<Link to={'#home'}>
+				<Link to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse`}>
 					<List className="inline-block" /> Browse
 				</Link>
 				<Link to={'#about'}>
@@ -19,7 +22,7 @@ function DesktopInstanceNavBar() {
 				<Link to={'#contact'}>
 					<ChartBarBig className="inline-block" /> Status & Config
 				</Link>
-				<Link to={'#contact'}>
+				<Link to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/logs`}>
 					<NotepadText className="inline-block" /> Logs
 				</Link>
 			</div>
