@@ -21,7 +21,7 @@ function InstanceLayout() {
 			<nav className="sticky top-20 z-40 px-4 md:px-12 bg-grey-700">
 				<InstanceNavBar />
 			</nav>
-			<div className="px-4 md:px-8 pt-4">
+			<div className="px-4 md:px-8 pt-4 h-full">
 				<Outlet />
 			</div>
 		</>
