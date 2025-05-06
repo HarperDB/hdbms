@@ -1,13 +1,6 @@
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Editor from '@monaco-editor/react';
 import { Save, Trash } from 'lucide-react';
 
