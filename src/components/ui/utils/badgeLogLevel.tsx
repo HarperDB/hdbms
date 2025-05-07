@@ -34,7 +34,7 @@ const renderBadgeLogLevelVariant = (value: BadgeLogLevelVariant): BadgeStatusVar
 const BADGE_STATUS_TEXT = {
 	notify: 'Notify',
 	error: 'Error',
-	warn: 'Warning',
+	warn: 'Warn',
 	info: 'Info',
 	debug: 'Debug',
 	trace: 'Trace',
