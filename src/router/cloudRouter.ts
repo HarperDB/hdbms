@@ -25,7 +25,7 @@ import Browse from '@/features/instance/browse';
 // import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import BrowseDataTableView from '@/features/instance/browse/BrowseDataTableView';
-import Logs from '@/features/instance/logs';
+import Logs from '@/features/instance/log';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;

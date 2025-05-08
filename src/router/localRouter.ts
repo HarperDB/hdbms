@@ -4,7 +4,7 @@ import LocalSignIn from '../features/auth/LocalSignIn';
 import Dashboard from '../features/layouts/Dashboard';
 import Browse from '@/features/instance/browse';
 import Applications from '@/features/instance/applications';
-import Log from '@/features/instance/logs';
+import Log from '@/features/instance/log';
 import Status from '@/features/instance/status';
 import InstanceLayout from '@/features/instance/InstanceLayout';
 
