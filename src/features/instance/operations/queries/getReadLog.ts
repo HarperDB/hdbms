@@ -2,7 +2,7 @@ import instanceClient from '@/config/instanceClient';
 
 import { queryOptions } from '@tanstack/react-query';
 
-type ReadLogFilters = {
+type LogFilters = {
 	limit: 10 | 100 | 250 | 500 | 1000;
 	level: 'notify' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
 	from: Date;
@@ -10,22 +10,16 @@ type ReadLogFilters = {
 	order: 'desc' | 'asc';
 };
 
-function getReadLogQueryOptions({
-	instanceId,
-	readLogFilters,
-}: {
-	instanceId: string;
-	readLogFilters: ReadLogFilters;
-}) {
+function getReadLogQueryOptions({ instanceId, logFilters }: { instanceId: string; logFilters: LogFilters }) {
 	return queryOptions({
 		queryKey: [instanceId, 'read_log'] as const,
-		queryFn: () =>
-			instanceClient.post('/', {
+		queryFn: () => {
+			return instanceClient.post('/', {
 				operation: 'read_log',
 				start: 0,
-				limit: 100,
-				...readLogFilters,
-			}) as unknown,
+				...logFilters,
+			}) as unknown;
+		},
 		enabled: !!instanceId,
 	});
 }
