@@ -1,19 +1,29 @@
 import instanceClient from '@/config/instanceClient';
 
 import { queryOptions } from '@tanstack/react-query';
+import { z } from 'zod';
 
-type LogFilters = {
-	limit: 10 | 100 | 250 | 500 | 1000;
-	level: 'notify' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
-	from: Date;
-	until: Date;
-	order: 'desc' | 'asc';
-};
-
-function getReadLogQueryOptions({ instanceId, logFilters }: { instanceId: string; logFilters: LogFilters }) {
+const LogFiltersSchema = z.object({
+	limit: z.coerce.number().optional(),
+	level: z.enum(['notify', 'error', 'warn', 'info', 'debug', 'trace', 'undefined']).optional(),
+	from: z.date().or(z.undefined()).optional(),
+	until: z.date().or(z.undefined()).optional(),
+	order: z.enum(['asc', 'desc']).optional(),
+});
+function getReadLogQueryOptions({
+	instanceId,
+	logFilters,
+}: {
+	instanceId: string;
+	logFilters: z.infer<typeof LogFiltersSchema>;
+}) {
 	return queryOptions({
 		queryKey: [instanceId, 'read_log'] as const,
 		queryFn: () => {
+			if (logFilters.level === 'undefined') {
+				logFilters.level = undefined;
+			}
+
 			return instanceClient.post('/', {
 				operation: 'read_log',
 				start: 0,
@@ -24,4 +34,4 @@ function getReadLogQueryOptions({ instanceId, logFilters }: { instanceId: string
 	});
 }
 
-export { getReadLogQueryOptions };
+export { getReadLogQueryOptions, LogFiltersSchema };

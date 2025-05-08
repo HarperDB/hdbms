@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
-import { getReadLogQueryOptions } from '@/features/instance/operations/queries/getReadLog';
+import { getReadLogQueryOptions, LogFiltersSchema } from '@/features/instance/operations/queries/getReadLog';
 import { getRouteApi } from '@tanstack/react-router';
 import { LogsDataTable } from '@/features/instance/log/LogsDataTable';
 import ViewLogModal from '@/features/instance/modals/ViewLogModal';
@@ -12,6 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface LogRow {
 	level: 'notify' | 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'stderr' | 'stdout';
@@ -69,11 +71,27 @@ const columns: ColumnDef<LogRow>[] = [
 	},
 ];
 
+const isValidDateRange = (startDate?: Date, endDate?: Date) => {
+	if (!startDate && !endDate) return true;
+	if (!startDate || !endDate) return true;
+
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	return start <= end;
+};
+
 const route = getRouteApi('');
 
 function Logs() {
 	const { instanceId } = route.useParams();
-	const [logFilters, setLogFilters] = useState();
+	const [logFilters, setLogFilters] = useState({
+		limit: 1000,
+		level: undefined,
+		from: undefined,
+		until: undefined,
+		order: 'desc',
+	});
+
 	const [isViewLogModalOpen, setIsViewLogModalOpen] = useState(false);
 	const [selectedLogData, setSelectedLogData] = useState();
 	const {
@@ -82,20 +100,45 @@ function Logs() {
 		refetch: refetchInstanceLogs,
 	} = useSuspenseQuery(getReadLogQueryOptions({ instanceId, logFilters }));
 
-	const form = useForm();
+	const form = useForm<z.infer<typeof LogFiltersSchema>>({
+		resolver: zodResolver(LogFiltersSchema),
+		defaultValues: {
+			order: 'desc',
+		},
+		mode: 'onChange',
+	});
 
 	const onRowClick = (rowData) => {
 		setSelectedLogData(rowData.original);
 		setIsViewLogModalOpen(true);
 	};
 
-	const submitFilters = async (data) => {
+	const submitFilters = async (data: z.infer<typeof LogFiltersSchema>) => {
+		if (!isValidDateRange(data.from, data.until)) {
+			form.setError('from', {
+				type: 'onChange',
+				message: 'Start date must be before end date',
+			});
+			form.setError('until', {
+				type: 'onChange',
+				message: 'End date must be after start date',
+			});
+			return;
+		}
 		await setLogFilters(data);
 		refetchInstanceLogs();
 	};
 
-	const resetFilters = () => {
+	const resetFilters = async () => {
 		form.reset();
+		await setLogFilters({
+			limit: 1000,
+			level: undefined,
+			from: undefined,
+			until: undefined,
+			order: 'desc',
+		});
+		refetchInstanceLogs();
 	};
 
 	return (
@@ -114,10 +157,10 @@ function Logs() {
 										onValueChange={(value) => {
 											field.onChange(parseInt(value));
 										}}
-										defaultValue={field.value}
+										defaultValue="1000"
 									>
 										<SelectTrigger className="w-full">
-											<SelectValue placeholder="Select log limit" />
+											<SelectValue placeholder="Select log limit" defaultValue="1000" />
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
@@ -150,7 +193,7 @@ function Logs() {
 										defaultValue={field.value}
 									>
 										<SelectTrigger className="w-full">
-											<SelectValue placeholder="Select log level" />
+											<SelectValue placeholder="Select log level" defaultValue={undefined} />
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
@@ -175,7 +218,7 @@ function Logs() {
 								<FormItem>
 									<FormLabel>Start Date:</FormLabel>
 									<FormControl>
-										<Input type="date" {...field} />
+										<Input type="datetime-local" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -188,7 +231,7 @@ function Logs() {
 								<FormItem>
 									<FormLabel>End Date:</FormLabel>
 									<FormControl>
-										<Input type="date" {...field} />
+										<Input type="datetime-local" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -223,7 +266,7 @@ function Logs() {
 						<Button type="submit" variant="positiveOutline" className="w-full mt-4">
 							Apply Filters
 						</Button>
-						<Button type="reset" variant="destructiveOutline" onClick={resetFilters} className="w-full mt-2">
+						<Button type="reset" variant="destructiveOutline" onClick={() => resetFilters()} className="w-full mt-2">
 							Clear Filters
 						</Button>
 					</form>
