@@ -33,6 +33,18 @@ const columns: ColumnDef<LogRow>[] = [
 	{
 		accessorKey: 'timestamp',
 		header: 'Date',
+		cell: ({ row }) => {
+			const { timestamp } = row.original;
+			return <span>{new Date(timestamp).toLocaleDateString()}</span>;
+		},
+	},
+	{
+		accessorKey: 'time',
+		header: 'Time',
+		cell: ({ row }) => {
+			const { timestamp } = row.original;
+			return <span>{new Date(timestamp).toLocaleTimeString()}</span>;
+		},
 	},
 	{
 		accessorKey: 'thread',
