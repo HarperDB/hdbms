@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
+import { toast } from 'sonner';
 import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
 import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
@@ -9,7 +10,7 @@ import { getSearchByHashOptions } from '@/features/instance/queries/operations/u
 import { formatBrowseDataTableHeader } from '@/features/instance/browse/functions/formatBrowseDataTableHeader';
 import { PaginationState } from '@tanstack/react-table';
 import { useUpdateTableRecords } from '@/features/instance/operations/mutations/updateTableRecords';
-import { toast } from 'sonner';
+import { useDeleteTableRecords } from '@/features/instance/operations/mutations/deleteTableRecords';
 
 // TODO: Define on describe table data call
 // type AttributesTypes = {
@@ -76,6 +77,7 @@ function BrowseDataTableView() {
 		})
 	);
 	const { mutate: updateTableRecords, isPending: isUpdateTableRecordsPending } = useUpdateTableRecords();
+	const { mutate: deleteTableRecords, isPending: isDeleteTableRecordsPending } = useDeleteTableRecords();
 
 	const onRecordUpdate = async (data: object[]) => {
 		console.log('onRecordUpdate', data);
@@ -95,6 +97,24 @@ function BrowseDataTableView() {
 		);
 		// await refetchDescribeTableQueryOptions();
 		// await refetchSearchByHash();
+	};
+
+	const onDeleteRecord = async (data: (string | number)[]) => {
+		console.log('onRecordUpdate', data);
+		deleteTableRecords(
+			{
+				databaseName: schemaName,
+				tableName,
+				hash_values: data,
+			},
+			{
+				onSuccess: () => {
+					refetchSearchByValueOptions();
+					setIsEditModalOpen(false);
+					toast.success('Record deleted successfully');
+				},
+			}
+		);
 	};
 
 	// TODO: fix this. It reloads the table several times unnecessarily
@@ -151,6 +171,7 @@ function BrowseDataTableView() {
 				isModalOpen={isEditModalOpen}
 				data={searchByHashData?.data}
 				onSaveChanges={onRecordUpdate}
+				onDeleteRecord={onDeleteRecord}
 				isPending={isUpdateTableRecordsPending}
 			/>
 		</>

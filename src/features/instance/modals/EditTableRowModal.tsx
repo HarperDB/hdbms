@@ -10,12 +10,14 @@ function EditTableRowModal({
 	isModalOpen,
 	data,
 	onSaveChanges,
+	onDeleteRecord,
 	isPending,
 }: {
 	setIsModalOpen: (open: boolean) => void;
 	isModalOpen: boolean;
 	data: object[];
 	onSaveChanges: (data: object[]) => Promise<void>;
+	onDeleteRecord: (data: (string | number)[]) => Promise<void>;
 	isPending: boolean;
 }) {
 	const [isValidJSON, setIsValidJSON] = useState(true);
@@ -30,7 +32,7 @@ function EditTableRowModal({
 				</DialogHeader>
 				{data ? (
 					<Editor
-						className="h-96 w-full"
+						className="w-full h-96"
 						language="json"
 						theme="vs-dark"
 						value={JSON.stringify(data, null, 4)}
@@ -46,7 +48,14 @@ function EditTableRowModal({
 				)}
 				<DialogFooter>
 					<div className="flex justify-between w-full">
-						<Button variant="destructive" className="rounded-full">
+						<Button
+							variant="destructive"
+							className="rounded-full"
+							onClick={() => {
+								console.log('data', data);
+								onDeleteRecord([data[0].id]);
+							}}
+						>
 							<Trash /> Delete Row
 						</Button>
 						<Button
