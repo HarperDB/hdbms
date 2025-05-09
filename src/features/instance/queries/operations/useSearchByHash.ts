@@ -27,7 +27,7 @@ function getSearchByHashOptions({
 	instanceId: string;
 	schemaName: string;
 	tableName: string;
-	hashAttribute: string;
+	hashAttribute: string[];
 	// options?: SearchByValueRequest;
 }) {
 	return queryOptions({
