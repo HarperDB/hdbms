@@ -7,8 +7,8 @@ type UpdateTableRecordsData = {
 	records: object[];
 };
 
-const onUpdateTableRecords = async (formData: UpdateTableRecordsData) => {
-	const { databaseName, tableName, records } = formData;
+const onUpdateTableRecords = async (recordsData: UpdateTableRecordsData) => {
+	const { databaseName, tableName, records } = recordsData;
 	const { data } = await instanceClient.post('/', {
 		operation: 'update',
 		schema: databaseName,
@@ -20,7 +20,7 @@ const onUpdateTableRecords = async (formData: UpdateTableRecordsData) => {
 
 const useUpdateTableRecords = () => {
 	return useMutation({
-		mutationFn: (formData: UpdateTableRecordsData) => onUpdateTableRecords(formData),
+		mutationFn: (recordsData: UpdateTableRecordsData) => onUpdateTableRecords(recordsData),
 	});
 };
 
