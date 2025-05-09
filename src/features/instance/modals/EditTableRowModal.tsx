@@ -11,14 +11,16 @@ function EditTableRowModal({
 	data,
 	onSaveChanges,
 	onDeleteRecord,
-	isPending,
+	isUpdateTableRecordsPending,
+	isDeleteTableRecordsPending,
 }: {
 	setIsModalOpen: (open: boolean) => void;
 	isModalOpen: boolean;
 	data: object[];
 	onSaveChanges: (data: object[]) => Promise<void>;
 	onDeleteRecord: (data: (string | number)[]) => Promise<void>;
-	isPending: boolean;
+	isUpdateTableRecordsPending: boolean;
+	isDeleteTableRecordsPending: boolean;
 }) {
 	const [isValidJSON, setIsValidJSON] = useState(true);
 	const [updatedTableRecordData, setUpdatedTableRecordData] = useState<string>();
@@ -55,6 +57,7 @@ function EditTableRowModal({
 								console.log('data', data);
 								onDeleteRecord([data[0].id]);
 							}}
+							disabled={isDeleteTableRecordsPending}
 						>
 							<Trash /> Delete Row
 						</Button>
@@ -66,7 +69,7 @@ function EditTableRowModal({
 									onSaveChanges(JSON.parse(updatedTableRecordData));
 								}
 							}}
-							disabled={!isValidJSON || isPending}
+							disabled={!isValidJSON || isUpdateTableRecordsPending}
 						>
 							<Save /> Save Changes
 						</Button>

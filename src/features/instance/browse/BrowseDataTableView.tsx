@@ -172,7 +172,8 @@ function BrowseDataTableView() {
 				data={searchByHashData?.data}
 				onSaveChanges={onRecordUpdate}
 				onDeleteRecord={onDeleteRecord}
-				isPending={isUpdateTableRecordsPending}
+				isUpdateTableRecordsPending={isUpdateTableRecordsPending}
+				isDeleteTableRecordsPending={isDeleteTableRecordsPending}
 			/>
 		</>
 	);
