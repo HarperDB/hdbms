@@ -114,6 +114,7 @@ function BrowseDataTableView() {
 		pagination,
 	]);
 
+	// @ts-expect-error Row<TData> should be defined but can't grab TData from tanstack/react-table
 	const onRowClick = async (rowData) => {
 		await setSearchByHashParams({
 			instanceId,
