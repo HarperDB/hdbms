@@ -16,7 +16,7 @@ function EditTableRowModal({
 }: {
 	setIsModalOpen: (open: boolean) => void;
 	isModalOpen: boolean;
-	data: object[];
+	data: { id: string | number }[];
 	onSaveChanges: (data: object[]) => Promise<void>;
 	onDeleteRecord: (data: (string | number)[]) => Promise<void>;
 	isUpdateTableRecordsPending: boolean;
@@ -54,8 +54,7 @@ function EditTableRowModal({
 							variant="destructive"
 							className="rounded-full"
 							onClick={() => {
-								console.log('data', data);
-								onDeleteRecord([data[0].id]);
+								onDeleteRecord([data[0]?.id]);
 							}}
 							disabled={isDeleteTableRecordsPending}
 						>

@@ -11,12 +11,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import buildInstanceDataStructure from './functions/buildInstanceDataStructure';
-import { ArrowRight, Check, Minus, Plus, Settings } from 'lucide-react';
+import { ArrowRight, Check, Minus, Plus, Trash } from 'lucide-react';
 import { useCreateDatabaseSubmitMutation } from '@/features/instance/operations/mutations/createDatabase';
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
 import Loading from '@/components/Loading';
+import { useDeleteDatabaseMutation } from '@/features/instance/operations/mutations/deleteDatabase';
 
 const route = getRouteApi('');
 
@@ -64,6 +65,7 @@ function Browse() {
 	};
 
 	const { mutate: createNewDatabase } = useCreateDatabaseSubmitMutation();
+	const { mutate: deleteDatabase } = useDeleteDatabaseMutation();
 
 	const submitNewDatabase = async (formData: z.infer<typeof NewDatabaseSchema>) => {
 		await createNewDatabase(formData, {
@@ -71,6 +73,21 @@ function Browse() {
 				queryClient.invalidateQueries({ queryKey: [instanceId] });
 				toast.success(`Database ${formData.newDatabaseName} created successfully`);
 				setIsCreatingDatabase(false);
+				form.reset();
+			},
+		});
+	};
+
+	const deleteSelectedDatabase = async (databaseName: string) => {
+		deleteDatabase(databaseName, {
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_table'] });
+				toast.success(`Database ${databaseName} deleted successfully`);
+				setSelectedDatabase(undefined);
+				navigate({
+					to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse`,
+				});
+				setTables([]);
 			},
 		});
 	};
@@ -114,10 +131,22 @@ function Browse() {
 						>
 							{!isCreatingDatabase ? <Plus /> : <Minus />}
 						</Button>
+						<Button
+							className="inline-block"
+							aria-label="Delete selected database"
+							variant="destructiveOutline"
+							disabled={!selectedDatabase}
+							onClick={() => {
+								if (!selectedDatabase) return;
+								deleteSelectedDatabase(selectedDatabase);
+							}}
+						>
+							<Trash />
+						</Button>
 					</div>
 					{isCreatingDatabase ? (
 						<Form {...form}>
-							<form className="items-center space-x-2 mt-2 pl-4" onSubmit={form.handleSubmit(submitNewDatabase)}>
+							<form className="items-center pl-4 mt-2 space-x-2" onSubmit={form.handleSubmit(submitNewDatabase)}>
 								<FormField
 									control={form.control}
 									name="newDatabaseName"
@@ -125,7 +154,7 @@ function Browse() {
 										<FormItem className="my-4">
 											<FormLabel htmlFor="newDatabaseName">New Database</FormLabel>
 											<FormControl>
-												<Input type="" placeholder="Enter new database name" {...field} />
+												<Input type="text" placeholder="Enter new database name" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -144,14 +173,13 @@ function Browse() {
 				<Tabs defaultValue="tables" className="py-6">
 					<TabsList className="w-full">
 						<TabsTrigger value="tables">Tables</TabsTrigger>
-						<TabsTrigger value="queries">Queries</TabsTrigger>
 					</TabsList>
-					<ScrollArea className="h-80 border border-grey-700 rounded-md">
+					<ScrollArea className="border rounded-md h-80 border-grey-700">
 						<TabsContent value="tables" className="h-full">
 							{tables.length === 0 && selectedDatabase?.length ? (
 								<div className="w-full h-full text-center">
 									<p className="py-6">No tables found in this database.</p>
-									<div className="max-w-48 mx-auto">
+									<div className="mx-auto max-w-48">
 										<CreateNewTableModal
 											databaseName={selectedDatabase || ''}
 											instanceId={instanceId}
@@ -161,17 +189,17 @@ function Browse() {
 								</div>
 							) : tables.length === 0 && !selectedDatabase?.length ? (
 								// If no database is selected, show a message
-								<p className="text-sm text-center pt-2">Please select a database.</p>
+								<p className="pt-2 text-sm text-center">Please select a database.</p>
 							) : (
 								''
 							)}
 							<ul>
 								{tables.map((table) => (
-									<li key={table} className="hover:bg-grey-700/80 p-2 border-b border-grey-700">
+									<li key={table} className="p-2 border-b hover:bg-grey-700/80 border-grey-700">
 										<Button
 											onClick={() => handleSelectedTable(table)}
 											size="lg"
-											className="w-full flex items-center justify-between bg-transparent border-none shadow-none hover:bg-transparent"
+											className="flex items-center justify-between w-full bg-transparent border-none shadow-none hover:bg-transparent"
 										>
 											<span>{table}</span>
 											<span>
@@ -182,9 +210,6 @@ function Browse() {
 								))}
 							</ul>
 						</TabsContent>
-						<TabsContent value="queries">
-							<p className="text-center pt-2">Create queries</p>
-						</TabsContent>
 					</ScrollArea>
 				</Tabs>
 				{selectedDatabase?.length && (
@@ -194,21 +219,15 @@ function Browse() {
 						handleUpdatedTables={handleUpdatedTables}
 					/>
 				)}
-				<Button
-					className="mt-2 bg-linear-(--purple-dark-to-light-gradient) hover:bg-linear-(--purple-gradient) rounded-full w-full"
-					size="lg"
-				>
-					<Settings /> Settings
-				</Button>
 			</section>
-			<section className="col-span-1 md:col-span-8 lg:col-span-9 text-white">
+			<section className="col-span-1 text-white md:col-span-8 lg:col-span-9">
 				{!selectedDatabase ? (
 					<div className="flex items-center justify-center h-full">
-						<p className="text-sm text-center pt-2">Please select a database.</p>
+						<p className="pt-2 text-sm text-center">Please select a database.</p>
 					</div>
 				) : !selectedTable ? (
 					<div className="flex items-center justify-center h-full">
-						<p className="text-sm text-center pt-2">Please select a table.</p>
+						<p className="pt-2 text-sm text-center">Please select a table.</p>
 					</div>
 				) : (
 					<Suspense
