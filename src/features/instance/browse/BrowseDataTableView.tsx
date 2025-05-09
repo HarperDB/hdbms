@@ -8,6 +8,8 @@ import EditTableRowModal from '@/features/instance/modals/EditTableRowModal';
 import { getSearchByHashOptions } from '@/features/instance/queries/operations/useSearchByHash';
 import { formatBrowseDataTableHeader } from '@/features/instance/browse/functions/formatBrowseDataTableHeader';
 import { PaginationState } from '@tanstack/react-table';
+import { useUpdateTableRecords } from '@/features/instance/operations/mutations/updateTableRecords';
+import { toast } from 'sonner';
 
 // TODO: Define on describe table data call
 // type AttributesTypes = {
@@ -73,6 +75,27 @@ function BrowseDataTableView() {
 			pagination,
 		})
 	);
+	const { mutate: updateTableRecords, isPending: isUpdateTableRecordsPending } = useUpdateTableRecords();
+
+	const onRecordUpdate = async (data: object[]) => {
+		console.log('onRecordUpdate', data);
+		updateTableRecords(
+			{
+				databaseName: schemaName,
+				tableName,
+				records: data,
+			},
+			{
+				onSuccess: () => {
+					refetchSearchByValueOptions();
+					setIsEditModalOpen(false);
+					toast.success('Record updated successfully');
+				},
+			}
+		);
+		// await refetchDescribeTableQueryOptions();
+		// await refetchSearchByHash();
+	};
 
 	// TODO: fix this. It reloads the table several times unnecessarily
 	useEffect(() => {
@@ -126,6 +149,8 @@ function BrowseDataTableView() {
 				setIsModalOpen={setIsEditModalOpen}
 				isModalOpen={isEditModalOpen}
 				data={searchByHashData?.data}
+				onSaveChanges={onRecordUpdate}
+				isPending={isUpdateTableRecordsPending}
 			/>
 		</>
 	);
