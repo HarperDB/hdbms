@@ -80,7 +80,6 @@ function BrowseDataTableView() {
 	const { mutate: deleteTableRecords, isPending: isDeleteTableRecordsPending } = useDeleteTableRecords();
 
 	const onRecordUpdate = async (data: object[]) => {
-		console.log('onRecordUpdate', data);
 		updateTableRecords(
 			{
 				databaseName: schemaName,
@@ -100,7 +99,6 @@ function BrowseDataTableView() {
 	};
 
 	const onDeleteRecord = async (data: (string | number)[]) => {
-		console.log('onRecordUpdate', data);
 		deleteTableRecords(
 			{
 				databaseName: schemaName,
