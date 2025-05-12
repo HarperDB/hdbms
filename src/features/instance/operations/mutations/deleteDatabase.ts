@@ -11,7 +11,7 @@ const onDeleteDatabase = async (databaseName: string) => {
 
 const useDeleteDatabaseMutation = () => {
 	return useMutation({
-		mutationFn: (recordsData: string) => onDeleteDatabase(recordsData),
+		mutationFn: (databaseName: string) => onDeleteDatabase(databaseName),
 	});
 };
 

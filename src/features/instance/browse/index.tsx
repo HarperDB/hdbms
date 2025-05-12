@@ -11,7 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import buildInstanceDataStructure from './functions/buildInstanceDataStructure';
-import { ArrowRight, Check, Minus, Plus, Trash } from 'lucide-react';
+import { ArrowRight, Check, Edit, Minus, Plus, Trash } from 'lucide-react';
 import { useCreateDatabaseSubmitMutation } from '@/features/instance/operations/mutations/createDatabase';
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -81,9 +81,8 @@ function Browse() {
 	const deleteSelectedDatabase = async (databaseName: string) => {
 		deleteDatabase(databaseName, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_table'] });
+				queryClient.invalidateQueries({ queryKey: [instanceId] });
 				toast.success(`Database ${databaseName} deleted successfully`);
-				setSelectedDatabase(undefined);
 				navigate({
 					to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse`,
 				});
@@ -100,7 +99,6 @@ function Browse() {
 					<div className="flex space-x-2">
 						<Select
 							name="databaseSelect"
-							defaultValue={schemaName}
 							onValueChange={(selectedSchema) => {
 								setSelectedDatabase(selectedSchema);
 								navigate({
@@ -109,6 +107,7 @@ function Browse() {
 								});
 								setTables(Object.keys(structure?.[selectedSchema]));
 							}}
+							value={selectedDatabase}
 						>
 							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select a Database" />
@@ -195,17 +194,34 @@ function Browse() {
 							)}
 							<ul>
 								{tables.map((table) => (
-									<li key={table} className="p-2 border-b hover:bg-grey-700/80 border-grey-700">
+									<li key={table} className="flex items-center p-2 border-b hover:bg-grey-700/80 border-grey-700">
+										<Button
+											variant="defaultOutline"
+											onClick={() => {
+												console.log('Edit table', table);
+											}}
+										>
+											<Edit className="inline-block " />
+										</Button>
 										<Button
 											onClick={() => handleSelectedTable(table)}
 											size="lg"
-											className="flex items-center justify-between w-full bg-transparent border-none shadow-none hover:bg-transparent"
+											className="items-center justify-between w-full bg-transparent border-none shadow-none hover:bg-transparent"
 										>
 											<span>{table}</span>
 											<span>
 												<ArrowRight />
 											</span>
 										</Button>
+										{/* <Button
+											variant="destructiveOutline"
+											onClick={() => {
+												console.log('Delete table', table);
+											}}
+											className="inline-block"
+										>
+											<Trash />
+										</Button> */}
 									</li>
 								))}
 							</ul>
