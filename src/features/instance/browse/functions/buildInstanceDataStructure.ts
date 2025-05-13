@@ -1,17 +1,14 @@
 const buildInstanceDataStructure = (dbResponse) => {
 	const structure = {};
-	const defaultBrowseURL = [];
 
 	if (!dbResponse.error) {
 		Object.keys(dbResponse)
 			.sort()
-			.forEach((schema, index) => {
+			.forEach((schema) => {
 				structure[schema] = {};
-				if (index === 0) defaultBrowseURL.push(schema);
 				Object.keys(dbResponse[schema])
 					.sort()
-					.forEach((table, t) => {
-						if (t === 0 && index === 0) defaultBrowseURL.push(table);
+					.forEach((table) => {
 						structure[schema][table] = {
 							record_count: dbResponse[schema][table].record_count,
 							hashAttribute: dbResponse[schema][table].hash_attribute,
@@ -20,10 +17,7 @@ const buildInstanceDataStructure = (dbResponse) => {
 			});
 	}
 
-	return {
-		structure,
-		defaultBrowseURL: defaultBrowseURL.join('/'),
-	};
+	return structure;
 };
 
 export default buildInstanceDataStructure;
