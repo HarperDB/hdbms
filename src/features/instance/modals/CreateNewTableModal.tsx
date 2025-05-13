@@ -73,7 +73,7 @@ function CreateNewTableModal({
 		submitNewTableData(updatedFormData, {
 			onSuccess: async () => {
 				await queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
-				handleUpdatedTables(formData.tableName);
+				// handleUpdatedTables(formData.tableName);
 				toast.success(`Table ${formData.tableName} created successfully`);
 				setIsModalOpen(false);
 				form.reset();
@@ -84,7 +84,7 @@ function CreateNewTableModal({
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
-				<Button variant="positiveOutline" className="rounded-full w-full" size="lg">
+				<Button variant="positiveOutline" className="w-full rounded-full" size="lg">
 					<Plus /> Create a Table
 				</Button>
 			</DialogTrigger>

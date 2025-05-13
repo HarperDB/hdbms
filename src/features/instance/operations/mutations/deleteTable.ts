@@ -22,3 +22,4 @@ const useDeleteTableMutation = () => {
 };
 
 export { useDeleteTableMutation };
+export type { DeleteTableData };
