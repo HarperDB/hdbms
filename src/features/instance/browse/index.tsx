@@ -41,7 +41,9 @@ function Browse() {
 	// const queryClient = useQueryClient();
 	// const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
 	const { instanceId, schemaName, tableName } = route.useParams();
-	const { data: describeAllQueryData } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
+	const { data: describeAllQueryData, refetch: refetchDescribeAllQueryData } = useSuspenseQuery(
+		getDescribeAllQueryOptions(instanceId)
+	);
 	const structure = buildInstanceDataStructure(describeAllQueryData);
 	// TODO: Figure out how to get structure to update after describeAllQueryData changes and propegate changes to all other data that needs to be updated
 
@@ -65,14 +67,6 @@ function Browse() {
 
 	const handleUpdatedTables = (tableName: string) => {
 		setTables((tables) => [...tables, tableName]);
-	};
-
-	const onUpdateTables = () => {
-		console.log('Updating describeAllQueryData', describeAllQueryData);
-		if (!selectedDatabase) return;
-		setTables(getTableList(structure, selectedDatabase));
-		console.log('Updated tables:', tables);
-		console.log('Updated structure:', structure);
 	};
 
 	// Update structure when describeAllQueryData changes
@@ -160,7 +154,7 @@ function Browse() {
 					selectedDatabase={selectedDatabase}
 					tables={tables}
 					// onSelectTable={onSelectTable}
-					onUpdateTables={onUpdateTables}
+					// onUpdateTables={onUpdateTables}
 					handleUpdatedTables={handleUpdatedTables}
 				/>
 			</section>
