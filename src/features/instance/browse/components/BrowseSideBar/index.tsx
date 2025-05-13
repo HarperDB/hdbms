@@ -25,7 +25,7 @@ type BrowseSidebarProps = {
 	onSelectDatabase: (databaseName: string) => void;
 	selectedDatabase?: string;
 	tables?: string[];
-	onUpdateTables: () => void;
+	// onUpdateTables: () => void;
 	// onSelectTable: (tableName: string) => void;
 	handleUpdatedTables: (tables: string[]) => void;
 };
@@ -49,7 +49,7 @@ function BrowseSidebar({
 	selectedDatabase,
 	tables,
 	// onSelectTable,
-	onUpdateTables,
+	// onUpdateTables,
 	handleUpdatedTables,
 }: BrowseSidebarProps) {
 	const queryClient = useQueryClient();
@@ -62,7 +62,7 @@ function BrowseSidebar({
 			newDatabaseName: '',
 		},
 	});
-	const { structure } = buildInstanceDataStructure(describeAllQueryData);
+	// const { structure } = buildInstanceDataStructure(describeAllQueryData);
 
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 
@@ -97,19 +97,17 @@ function BrowseSidebar({
 				navigate({
 					to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse`,
 				});
-				setTables([]);
 			},
 		});
 	};
 
+	const tablesList = Object.keys(buildInstanceDataStructure(describeAllQueryData)[selectedDatabase]) ?? [];
+
 	const deleteSelectedTable = async (data: DeleteTableData) => {
 		deleteTable(data, {
 			onSuccess: () => {
-				// queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
-				queryClient.refetchQueries({ queryKey: [instanceId, 'describe_all'] });
-				// onSelectTable(undefined);
-				// setTables(Object.keys(structure?.[selectedDatabase]));
-				onUpdateTables();
+				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
+				// onUpdateTables();
 				navigate({
 					to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${schemaName}`,
 				});
@@ -200,7 +198,7 @@ function BrowseSidebar({
 				</TabsList>
 				<ScrollArea className="border rounded-md h-80 border-grey-700">
 					<TabsContent value="tables" className="h-full">
-						{tables.length === 0 && selectedDatabase?.length ? (
+						{tablesList.length === 0 && selectedDatabase?.length ? (
 							<div className="w-full h-full text-center">
 								<p className="py-6">No tables found in this database.</p>
 								<div className="mx-auto max-w-48">
@@ -211,14 +209,14 @@ function BrowseSidebar({
 									/>
 								</div>
 							</div>
-						) : tables.length === 0 && !selectedDatabase?.length ? (
+						) : tablesList.length === 0 && !selectedDatabase?.length ? (
 							// If no database is selected, show a message
 							<p className="pt-2 text-sm text-center">Please select a database.</p>
 						) : (
 							''
 						)}
 						<ul>
-							{tables.map((table) => (
+							{tablesList.map((table) => (
 								<li key={table} className="flex items-center p-2 border-b hover:bg-grey-700/80 border-grey-700">
 									<Button
 										variant="defaultOutline"
