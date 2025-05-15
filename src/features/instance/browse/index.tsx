@@ -46,9 +46,9 @@ function Browse() {
 	const structure = buildInstanceDataStructure(describeAllQueryData);
 	// TODO: Figure out how to get structure to update after describeAllQueryData changes and propagate changes to all other data that needs to be updated
 
-	const [databaseList, setDatabaseList] = useState<string[]>(Object.keys(structure || {}));
 	const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(schemaName);
 	const [selectedTable, setSelectedTable] = useState<string | undefined>(tableName);
+	const databaseList = Object.keys(structure || {});
 	let tables = Object.keys(structure[selectedDatabase] || []);
 
 	const onSelectDatabase = (databaseName: string) => {
@@ -150,14 +150,11 @@ function Browse() {
 		<main className="grid grid-cols-1 gap-4 md:grid-cols-12">
 			<section className='className="col-span-1 text-white md:col-span-4 lg:col-span-3'>
 				<BrowseSideBar
-					describeAllQueryData={describeAllQueryData}
 					databases={databaseList}
 					onSelectDatabase={onSelectDatabase}
 					selectedDatabase={selectedDatabase}
 					tables={tables}
-					// onSelectTable={onSelectTable}
-					// onUpdateTables={onUpdateTables}
-					handleUpdatedTables={handleUpdatedTables}
+					onSelectTable={onSelectTable}
 				/>
 			</section>
 			<section className="col-span-1 text-white md:col-span-8 lg:col-span-9">
