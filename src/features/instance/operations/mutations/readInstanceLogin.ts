@@ -28,11 +28,11 @@ const onInstanceLoginSubmit = async ({
 	throw new Error('Something went wrong');
 };
 
-const useReadInstanceLoginMutation = () => {
+const useCreateInstanceLoginMutation = () => {
 	return useMutation<InstanceLoginResponse, Error, InstanceLoginCredentials>({
 		mutationFn: (instanceData) => onInstanceLoginSubmit(instanceData),
 	});
 };
 
-export { useReadInstanceLoginMutation };
+export { useCreateInstanceLoginMutation };
 export type { InstanceLoginCredentials, InstanceLoginResponse };

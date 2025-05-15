@@ -19,7 +19,7 @@ import { useState } from 'react';
 // import { queryKeys } from '@/react-query/constants';
 import {
 	InstanceLoginCredentials,
-	useReadInstanceLoginMutation,
+	useCreateInstanceLoginMutation,
 } from '@/features/instance/operations/mutations/readInstanceLogin';
 
 const NewClusterSchema = z.object({
@@ -50,7 +50,7 @@ function InstanceLogInModal({
 		},
 	});
 
-	const { mutate: submitInstanceLoginInfo } = useReadInstanceLoginMutation();
+	const { mutate: submitInstanceLoginInfo } = useCreateInstanceLoginMutation();
 	// const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { username: string; password: string }) => {
