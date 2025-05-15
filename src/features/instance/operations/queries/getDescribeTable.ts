@@ -20,6 +20,7 @@ function getDescribeTableQueryOptions({
 				table: tableName,
 			}) as unknown /* custom type */,
 		enabled: !!instanceId && !!schemaName && !!tableName,
+		retry: false,
 	});
 }
 

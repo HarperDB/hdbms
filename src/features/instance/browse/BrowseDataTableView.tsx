@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
-import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
+import { getDescribeTableQueryOptions } from '@/features/instance/operations/queries/getDescribeTable';
+import { getSearchByValueOptions } from '@/features/instance/operations/queries/getSearchByValue';
 import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import EditTableRowModal from '@/features/instance/modals/EditTableRowModal';
-import { getSearchByHashOptions } from '@/features/instance/queries/operations/useSearchByHash';
+import { getSearchByHashOptions } from '@/features/instance/operations/queries/getSearchByHash';
 import { formatBrowseDataTableHeader } from '@/features/instance/browse/functions/formatBrowseDataTableHeader';
 import { PaginationState } from '@tanstack/react-table';
 import { useUpdateTableRecords } from '@/features/instance/operations/mutations/updateTableRecords';
@@ -94,8 +94,6 @@ function BrowseDataTableView() {
 				},
 			}
 		);
-		// await refetchDescribeTableQueryOptions();
-		// await refetchSearchByHash();
 	};
 
 	const onDeleteRecord = async (data: (string | number)[]) => {

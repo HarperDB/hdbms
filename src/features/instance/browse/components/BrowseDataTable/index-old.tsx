@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
-import { getDescribeTableQueryOptions } from '@/features/instance/queries/operations/useDescribeTable';
-import { getSearchByValueOptions } from '@/features/instance/queries/operations/useSearchByValue';
+import { getDescribeTableQueryOptions } from '@/features/instance/operations/queries/getDescribeTable';
+import { getSearchByValueOptions } from '@/features/instance/operations/queries/getSearchByValue';
 import { DataTable } from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';

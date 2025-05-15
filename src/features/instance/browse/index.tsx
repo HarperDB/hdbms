@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CreateNewTableModal from '@/features/instance/modals/CreateNewTableModal';
-import { getDescribeAllQueryOptions } from '@/features/instance/queries/operations/useDescribeAll';
+import { getDescribeAllQueryOptions } from '@/features/instance/operations/queries/getDescribeAll';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

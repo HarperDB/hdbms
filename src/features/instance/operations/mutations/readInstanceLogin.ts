@@ -2,7 +2,7 @@ import instanceClient from '@/config/instanceClient';
 import { useMutation } from '@tanstack/react-query';
 
 // TODO: Consolidate with useOnSignUpSubmitMutation
-export type InstanceLoginCredentials = {
+type InstanceLoginCredentials = {
 	instanceUrl: string;
 	username: string;
 	password: string;
@@ -12,7 +12,7 @@ type InstanceLoginResponse = {
 	message: string;
 };
 
-export const onInstanceLoginSubmit = async ({
+const onInstanceLoginSubmit = async ({
 	instanceUrl,
 	username,
 	password,
@@ -28,8 +28,11 @@ export const onInstanceLoginSubmit = async ({
 	throw new Error('Something went wrong');
 };
 
-export function useInstanceLogin() {
+const useReadInstanceLoginMutation = () => {
 	return useMutation<InstanceLoginResponse, Error, InstanceLoginCredentials>({
 		mutationFn: (instanceData) => onInstanceLoginSubmit(instanceData),
 	});
-}
+};
+
+export { useReadInstanceLoginMutation };
+export type { InstanceLoginCredentials, InstanceLoginResponse };
