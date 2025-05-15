@@ -101,7 +101,7 @@ function BrowseSidebar({
 		});
 	};
 
-	const tablesList = Object.keys(buildInstanceDataStructure(describeAllQueryData)[selectedDatabase]) ?? [];
+	// const tablesList = Object.keys(buildInstanceDataStructure(describeAllQueryData)[selectedDatabase]);
 
 	const deleteSelectedTable = async (data: DeleteTableData) => {
 		deleteTable(data, {
@@ -120,6 +120,7 @@ function BrowseSidebar({
 		if (!tableName) return;
 		deleteSelectedTable({ databaseName: schemaName, tableName });
 	};
+
 	return (
 		<div>
 			<h1 className="pb-6 text-3xl">Browse</h1>
@@ -127,10 +128,10 @@ function BrowseSidebar({
 				<div className="flex space-x-2">
 					<Select
 						name="databaseSelect"
+						defaultValue={selectedDatabase}
 						onValueChange={(selectedDatabaseName) => {
 							onSelectDatabase(selectedDatabaseName);
 						}}
-						value={selectedDatabase}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue placeholder="Select a Database" />
@@ -198,7 +199,7 @@ function BrowseSidebar({
 				</TabsList>
 				<ScrollArea className="border rounded-md h-80 border-grey-700">
 					<TabsContent value="tables" className="h-full">
-						{tablesList.length === 0 && selectedDatabase?.length ? (
+						{tables.length === 0 && selectedDatabase?.length ? (
 							<div className="w-full h-full text-center">
 								<p className="py-6">No tables found in this database.</p>
 								<div className="mx-auto max-w-48">
@@ -209,14 +210,14 @@ function BrowseSidebar({
 									/>
 								</div>
 							</div>
-						) : tablesList.length === 0 && !selectedDatabase?.length ? (
+						) : tables.length === 0 && !selectedDatabase?.length ? (
 							// If no database is selected, show a message
 							<p className="pt-2 text-sm text-center">Please select a database.</p>
 						) : (
 							''
 						)}
 						<ul>
-							{tablesList.map((table) => (
+							{tables.map((table) => (
 								<li key={table} className="flex items-center p-2 border-b hover:bg-grey-700/80 border-grey-700">
 									<Button
 										variant="defaultOutline"

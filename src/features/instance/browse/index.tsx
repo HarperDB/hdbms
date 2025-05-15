@@ -38,27 +38,31 @@ const getTableList = (structure: Record<string, any>, selectedDatabase: string) 
 };
 
 function Browse() {
+	const navigate = useNavigate();
 	// const queryClient = useQueryClient();
-	// const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
-	const { instanceId, schemaName, tableName } = route.useParams();
-	const { data: describeAllQueryData, refetch: refetchDescribeAllQueryData } = useSuspenseQuery(
-		getDescribeAllQueryOptions(instanceId)
-	);
+	const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
+	// const { instanceId, schemaName, tableName } = route.useParams();
+	const { data: describeAllQueryData } = useSuspenseQuery(getDescribeAllQueryOptions(instanceId));
 	const structure = buildInstanceDataStructure(describeAllQueryData);
-	// TODO: Figure out how to get structure to update after describeAllQueryData changes and propegate changes to all other data that needs to be updated
+	// TODO: Figure out how to get structure to update after describeAllQueryData changes and propagate changes to all other data that needs to be updated
 
 	const [databaseList, setDatabaseList] = useState<string[]>(Object.keys(structure || {}));
 	const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(schemaName);
 	const [selectedTable, setSelectedTable] = useState<string | undefined>(tableName);
-	const [tables, setTables] = useState<string[]>(Object.keys(structure[selectedDatabase] || []));
+	let tables = Object.keys(structure[selectedDatabase] || []);
 
 	const onSelectDatabase = (databaseName: string) => {
 		setSelectedDatabase(databaseName);
-		// navigate({
-		// 	to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/$schemaName`,
-		// 	params: { schemaName: selectedSchema },
-		// });
-		setTables(getTableList(structure, databaseName));
+		navigate({
+			to: `/orgs/$organizationId/clusters/$clusterId/instance/$instanceId/browse/$schemaName`,
+			params: {
+				organizationId: organizationId,
+				clusterId: clusterId,
+				instanceId: instanceId,
+				schemaName: databaseName,
+			},
+		});
+		tables = getTableList(structure, databaseName);
 	};
 
 	const onSelectTable = (tableName: string) => {
@@ -66,12 +70,10 @@ function Browse() {
 	};
 
 	const handleUpdatedTables = (tableName: string) => {
-		setTables((tables) => [...tables, tableName]);
+		// setTables((tables) => [...tables, tableName]);
 	};
 
 	// Update structure when describeAllQueryData changes
-
-	// const navigate = useNavigate();
 
 	// const form = useForm({
 	// 	resolver: zodResolver(NewDatabaseSchema),
