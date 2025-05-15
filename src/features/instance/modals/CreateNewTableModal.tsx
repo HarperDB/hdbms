@@ -44,15 +44,7 @@ const CreateTableSchema = z.object({
 		}),
 });
 
-function CreateNewTableModal({
-	databaseName,
-	instanceId,
-	handleUpdatedTables,
-}: {
-	databaseName: string;
-	instanceId: string;
-	handleUpdatedTables: (tableName: string) => void;
-}) {
+function CreateNewTableModal({ databaseName, instanceId }: { databaseName: string; instanceId: string }) {
 	const queryClient = useQueryClient();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
@@ -73,7 +65,6 @@ function CreateNewTableModal({
 		submitNewTableData(updatedFormData, {
 			onSuccess: async () => {
 				await queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
-				// handleUpdatedTables(formData.tableName);
 				toast.success(`Table ${formData.tableName} created successfully`);
 				setIsModalOpen(false);
 				form.reset();

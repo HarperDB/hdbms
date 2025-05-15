@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import buildInstanceDataStructure from '@/features/instance/browse/functions/buildInstanceDataStructure';
 import { ArrowRight, Check, Minus, Plus, Trash } from 'lucide-react';
 import { useCreateDatabaseSubmitMutation } from '@/features/instance/operations/mutations/createDatabase';
 import { Input } from '@/components/ui/input';
@@ -17,17 +16,13 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { toast } from 'sonner';
 import { useDeleteDatabaseMutation } from '@/features/instance/operations/mutations/deleteDatabase';
 import { DeleteTableData, useDeleteTableMutation } from '@/features/instance/operations/mutations/deleteTable';
-import { DescribeAllResponse } from '@/features/instance/queries/operations/useDescribeAll';
 
 type BrowseSidebarProps = {
-	describeAllQueryData: DescribeAllResponse;
 	databases: string[];
 	onSelectDatabase: (databaseName: string) => void;
 	selectedDatabase?: string;
 	tables?: string[];
-	// onUpdateTables: () => void;
-	// onSelectTable: (tableName: string) => void;
-	handleUpdatedTables: (tables: string[]) => void;
+	onSelectTable: (tableName: string) => void;
 };
 
 const route = getRouteApi('');
@@ -42,16 +37,7 @@ const NewDatabaseSchema = z.object({
 		.regex(/^[a-zA-Z0-9_]+$/, { message: 'Database name can only contain letters, numbers, and underscores' }),
 });
 
-function BrowseSidebar({
-	describeAllQueryData,
-	databases,
-	onSelectDatabase,
-	selectedDatabase,
-	tables,
-	// onSelectTable,
-	// onUpdateTables,
-	handleUpdatedTables,
-}: BrowseSidebarProps) {
+function BrowseSidebar({ databases, onSelectDatabase, selectedDatabase, tables, onSelectTable }: BrowseSidebarProps) {
 	const queryClient = useQueryClient();
 	const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
 	const navigate = useNavigate();
@@ -67,8 +53,7 @@ function BrowseSidebar({
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 
 	const handleSelectedTable = (selectedTableName: string) => {
-		if (!selectedTableName) return;
-		// onSelectTable(selectedTableName);
+		onSelectTable(selectedTableName);
 		navigate({
 			to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${selectedDatabase}/${selectedTableName}`,
 		});
@@ -81,7 +66,7 @@ function BrowseSidebar({
 	const submitNewDatabase = async (formData: z.infer<typeof NewDatabaseSchema>) => {
 		await createNewDatabase(formData, {
 			onSuccess: () => {
-				queryClient.invalidateQueries({ queryKey: [instanceId] });
+				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
 				toast.success(`Database ${formData.newDatabaseName} created successfully`);
 				setIsCreatingDatabase(false);
 				form.reset();
@@ -107,7 +92,6 @@ function BrowseSidebar({
 		deleteTable(data, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({ queryKey: [instanceId, 'describe_all'] });
-				// onUpdateTables();
 				navigate({
 					to: `/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/browse/${schemaName}`,
 				});
@@ -203,11 +187,7 @@ function BrowseSidebar({
 							<div className="w-full h-full text-center">
 								<p className="py-6">No tables found in this database.</p>
 								<div className="mx-auto max-w-48">
-									<CreateNewTableModal
-										databaseName={selectedDatabase || ''}
-										instanceId={instanceId}
-										handleUpdatedTables={handleUpdatedTables}
-									/>
+									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 								</div>
 							</div>
 						) : tables.length === 0 && !selectedDatabase?.length ? (
@@ -244,11 +224,7 @@ function BrowseSidebar({
 				</ScrollArea>
 			</Tabs>
 			{selectedDatabase?.length && (
-				<CreateNewTableModal
-					databaseName={selectedDatabase || ''}
-					instanceId={instanceId}
-					handleUpdatedTables={handleUpdatedTables}
-				/>
+				<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 			)}
 		</div>
 	);
