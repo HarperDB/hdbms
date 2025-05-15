@@ -17,7 +17,10 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 // import { useQueryClient } from '@tanstack/react-query';
 // import { queryKeys } from '@/react-query/constants';
-import { InstanceLoginCredentials, useInstanceLogin } from '@/features/instance/queries/operations/useInstanceLogin';
+import {
+	InstanceLoginCredentials,
+	useReadInstanceLoginMutation,
+} from '@/features/instance/operations/mutations/readInstanceLogin';
 
 const NewClusterSchema = z.object({
 	username: z.string({
@@ -47,7 +50,7 @@ function InstanceLogInModal({
 		},
 	});
 
-	const { mutate: submitInstanceLoginInfo } = useInstanceLogin();
+	const { mutate: submitInstanceLoginInfo } = useReadInstanceLoginMutation();
 	// const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { username: string; password: string }) => {

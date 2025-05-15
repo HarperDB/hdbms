@@ -42,15 +42,14 @@ function BrowseSidebar({ databases, onSelectDatabase, selectedDatabase, tables, 
 	const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
 	const navigate = useNavigate();
 
+	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
+
 	const form = useForm({
 		resolver: zodResolver(NewDatabaseSchema),
 		defaultValues: {
 			newDatabaseName: '',
 		},
 	});
-	// const { structure } = buildInstanceDataStructure(describeAllQueryData);
-
-	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);
 
 	const handleSelectedTable = (selectedTableName: string) => {
 		onSelectTable(selectedTableName);
@@ -85,8 +84,6 @@ function BrowseSidebar({ databases, onSelectDatabase, selectedDatabase, tables, 
 			},
 		});
 	};
-
-	// const tablesList = Object.keys(buildInstanceDataStructure(describeAllQueryData)[selectedDatabase]);
 
 	const deleteSelectedTable = async (data: DeleteTableData) => {
 		deleteTable(data, {
