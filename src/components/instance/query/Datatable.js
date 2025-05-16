@@ -25,7 +25,7 @@ const defaultTableState = {
 	totalPages: 1,
 	pageSize: 20,
 	autoRefresh: false,
-	onlyCached: false,
+	onlyCached: true,
 	showFilter: false,
 	lastUpdate: false,
 };
