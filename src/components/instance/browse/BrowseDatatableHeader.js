@@ -64,7 +64,7 @@ function BrowseDatatableHeader({
 					onClick={toggleOnlyCached}
 				>
 					<span className="me-2">only cached</span>
-					<i className={`fa fa-lg fa-toggle-${!onlyCached ? 'on' : 'off'}`} />
+					<i className={`fa fa-lg fa-toggle-${onlyCached ? 'on' : 'off'}`} />
 				</Button>
 				<span className="mx-3 text">|</span>
 				<Button
