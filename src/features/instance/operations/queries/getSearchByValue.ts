@@ -14,7 +14,7 @@ type SearchByValueRequest = {
 	table: string;
 	search_attribute: string;
 	search_value: string;
-	// get_attributes: string[];
+	get_attributes?: string[];
 	limit: number;
 	offset: number;
 	sort: {
@@ -56,7 +56,7 @@ function getSearchByValueOptions({
 				sort: sortTableDataParams.attribute.length ? sortTableDataParams : undefined,
 				limit: pagination.pageSize,
 				offset: pagination.pageIndex * pagination.pageSize,
-			}),
+			} as SearchByValueRequest),
 	});
 }
 
