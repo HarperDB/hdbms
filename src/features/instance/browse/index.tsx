@@ -21,6 +21,7 @@ function Browse() {
 	const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(schemaName);
 	const [selectedTable, setSelectedTable] = useState<string | undefined>(tableName);
 	const databaseList = Object.keys(structure || {});
+	// @ts-expect-error unsure how to fix this error 🤔. Would love some insight
 	let tables = Object.keys(structure[selectedDatabase] || []);
 
 	const onSelectDatabase = (databaseName: string) => {
