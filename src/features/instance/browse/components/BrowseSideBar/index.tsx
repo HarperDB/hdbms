@@ -39,7 +39,7 @@ const NewDatabaseSchema = z.object({
 
 function BrowseSidebar({ databases, onSelectDatabase, selectedDatabase, tables, onSelectTable }: BrowseSidebarProps) {
 	const queryClient = useQueryClient();
-	const { organizationId, clusterId, instanceId, schemaName, tableName } = route.useParams();
+	const { organizationId, clusterId, instanceId, schemaName } = route.useParams();
 	const navigate = useNavigate();
 
 	const [isCreatingDatabase, setIsCreatingDatabase] = useState(false);

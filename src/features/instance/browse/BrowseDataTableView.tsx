@@ -11,6 +11,7 @@ import { formatBrowseDataTableHeader } from '@/features/instance/browse/function
 import { PaginationState } from '@tanstack/react-table';
 import { useUpdateTableRecords } from '@/features/instance/operations/mutations/updateTableRecords';
 import { useDeleteTableRecords } from '@/features/instance/operations/mutations/deleteTableRecords';
+import UploadCSVModal from '@/features/instance/modals/UploadCSVModal';
 
 // TODO: Define on describe table data call
 // type AttributesTypes = {
@@ -152,6 +153,9 @@ function BrowseDataTableView() {
 
 	return (
 		<>
+			<div>
+				<UploadCSVModal />
+			</div>
 			<BrowseDataTable
 				data={tableData.data}
 				columns={dataTableColumns}

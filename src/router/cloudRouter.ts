@@ -26,6 +26,7 @@ import Browse from '@/features/instance/browse';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import BrowseDataTableView from '@/features/instance/browse/BrowseDataTableView';
 import Logs from '@/features/instance/log';
+import Applications from '@/features/instance/applications';
 
 const rootRoute = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -177,6 +178,11 @@ const instanceLogsRoute = createRoute({
 	path: 'logs',
 	component: Logs,
 });
+const instanceApplicationsRoute = createRoute({
+	getParentRoute: () => instanceLayoutRoute,
+	path: 'applications',
+	component: Applications,
+});
 
 export const cloudRouteTree = rootRoute.addChildren([
 	authLayout.addChildren([signInRoute, signUpRoute, forgotPasswordRoute, verifyEmailRoute, resetpasswordRoute]),
@@ -193,6 +199,7 @@ export const cloudRouteTree = rootRoute.addChildren([
 						instanceLayoutRoute.addChildren([
 							instanceIndexRoute,
 							instanceBrowseRoute.addChildren([browseDatabaseRoute, browseTableRoute, instanceLogsRoute]),
+							instanceApplicationsRoute,
 						]),
 					]),
 				]),

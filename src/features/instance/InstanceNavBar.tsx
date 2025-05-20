@@ -16,7 +16,7 @@ function DesktopInstanceNavBar() {
 				<Link to={'#about'}>
 					<User className="inline-block" /> Users & Roles
 				</Link>
-				<Link to={'#contact'}>
+				<Link to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${instanceId}/applications`}>
 					<Package className="inline-block" /> Applications
 				</Link>
 				<Link to={'#contact'}>

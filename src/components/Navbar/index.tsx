@@ -24,7 +24,7 @@ function MobileNav({ signOut }: { signOut: () => void }) {
 				</Link>
 				<button
 					type="button"
-					className="text-grey-400 hover:text-white shadow-xs hover:bg-black-dark"
+					className="shadow-xs text-grey-400 hover:text-white hover:bg-black-dark"
 					onClick={() => {
 						setIsMenuOpen(!isMenuOpen);
 					}}
@@ -38,31 +38,31 @@ function MobileNav({ signOut }: { signOut: () => void }) {
 					isMenuOpen ? 'block' : 'hidden'
 				} md:hidden space-y-1 pb-3 bg-black-dark absolute left-0 top-full w-full rounded-b-md`}
 			>
-				<Link to="/orgs" className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">
+				<Link to="/orgs" className="block px-3 py-2 text-base font-medium text-white bg-gray-900 rounded-md">
 					Organizations
 				</Link>
 				<Link
 					to="/profile"
-					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+					className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
 				>
 					Profile
 				</Link>
 				<Link
 					to="/docs"
-					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+					className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
 				>
 					Resources
 				</Link>
 				<Link
 					to="#"
-					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+					className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
 				>
 					Theme
 				</Link>
 				<Link
 					to={undefined}
 					onClick={signOut}
-					className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+					className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
 				>
 					Sign Out
 				</Link>
@@ -81,31 +81,30 @@ const DesktopNav = ({ signOut }: { signOut: () => void }) => {
 					</Link>
 				</div>
 				<NavigationMenu>
-					<NavigationMenuList>
+					<NavigationMenuList className="text-grey-400">
 						<NavigationMenuItem>
-							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/orgs">Organizations</Link>
+							<NavigationMenuLink asChild>
+								<Link to="/orgs" activeProps={{ className: 'font-bold text-white' }}>
+									Organizations
+								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/profile">Profile</Link>
+							<NavigationMenuLink asChild>
+								<Link to="/profile" activeProps={{ className: 'font-bold text-white' }}>
+									Profile
+								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+							<NavigationMenuLink asChild>
 								<Link to="https://docs.harperdb.io/docs" target="_blank" rel="noreferrer noopener">
 									Resources
 								</Link>
 							</NavigationMenuLink>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-								<Link to="/">Theme</Link>
-							</NavigationMenuLink>
-						</NavigationMenuItem>
-						<NavigationMenuItem>
-							<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+							<NavigationMenuLink asChild>
 								<Link to={undefined} onClick={signOut}>
 									Sign Out
 								</Link>
