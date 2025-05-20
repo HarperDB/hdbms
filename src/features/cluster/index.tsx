@@ -63,6 +63,8 @@ function ClusterIndex() {
 						return <p>N/A</p>;
 					}
 					const instanceURL = dnsURLs[0];
+					// isLoggedIn is being used inside the JSX below
+					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					let isLoggedIn = false;
 					return (
 						<>

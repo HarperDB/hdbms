@@ -180,21 +180,21 @@ function BrowseSidebar({ databases, onSelectDatabase, selectedDatabase, tables, 
 				</TabsList>
 				<ScrollArea className="border rounded-md h-80 border-grey-700">
 					<TabsContent value="tables" className="h-full">
-						{tables.length === 0 && selectedDatabase?.length ? (
+						{(tables ?? []).length === 0 && selectedDatabase?.length ? (
 							<div className="w-full h-full text-center">
 								<p className="py-6">No tables found in this database.</p>
 								<div className="mx-auto max-w-48">
 									<CreateNewTableModal databaseName={selectedDatabase || ''} instanceId={instanceId} />
 								</div>
 							</div>
-						) : tables.length === 0 && !selectedDatabase?.length ? (
+						) : (tables ?? []).length === 0 && !selectedDatabase?.length ? (
 							// If no database is selected, show a message
 							<p className="pt-2 text-sm text-center">Please select a database.</p>
 						) : (
 							''
 						)}
 						<ul>
-							{tables.map((table) => (
+							{(tables ?? []).map((table) => (
 								<li key={table} className="flex items-center p-2 border-b hover:bg-grey-700/80 border-grey-700">
 									<Button
 										variant="defaultOutline"
