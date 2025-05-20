@@ -1,12 +1,7 @@
-import { Outlet } from "@tanstack/react-router"
+import { Outlet } from '@tanstack/react-router';
 
 function StudioCloud() {
-
-  return (
-    <>
-      <Outlet />
-    </>
-  )
+	return <Outlet />;
 }
 
-export default StudioCloud
+export default StudioCloud;

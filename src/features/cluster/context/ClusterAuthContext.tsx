@@ -3,7 +3,7 @@ import {
 	InstanceLoginCredentials,
 	useCreateInstanceLoginMutation,
 } from '@/features/instance/operations/mutations/readInstanceLogin';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { createContext, useState, PropsWithChildren, useCallback, useEffect } from 'react';
 
 type ClusterContextValue = {
@@ -15,17 +15,18 @@ type ClusterContextValue = {
 	checkAuth: () => void;
 	login: (credentials: InstanceLoginCredentials) => Promise<{ success: boolean; message: string }>;
 	logout: () => Promise<boolean>;
+	clusters: Map<string, ClusterWithAuth>;
+	currentCluster: ClusterWithAuth | undefined;
 };
 
 const ClusterAuthContext = createContext<ClusterContextValue | null>(null);
 
 type ClusterWithAuth = Cluster & { isAuthenticated: boolean };
 
-const ClusterProvider = ({ children }: PropsWithChildren<ClusterContextValue>) => {
-	const [isAuth, setIsAuth] = useState(false);
+const ClusterProvider = ({ children }: PropsWithChildren) => {
 	const [clusterId, setClusterId] = useState<string | null>(null);
 	const [clusterData, setClusterData] = useState<Map<string, ClusterWithAuth>>(new Map());
-	const { data: clusterInfoQueryData, isLoading } = useSuspenseQuery(
+	const { data: clusterInfoQueryData, isLoading } = useQuery(
 		getClusterInfoQueryOptions(clusterId ?? '', clusterId != null)
 	);
 
@@ -39,7 +40,11 @@ const ClusterProvider = ({ children }: PropsWithChildren<ClusterContextValue>) =
 
 			setClusterData(newData);
 		}
-	}, [clusterInfoQueryData, isLoading, clusterData]);
+		// Wants to add clusterData but we don't depend on it for changes, just to update our map
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clusterInfoQueryData, isLoading]);
+
+	const currentCluster = clusterData.get(clusterId ?? '');
 
 	const { mutateAsync: submitInstanceLoginInfo } = useCreateInstanceLoginMutation();
 
@@ -48,12 +53,19 @@ const ClusterProvider = ({ children }: PropsWithChildren<ClusterContextValue>) =
 			try {
 				const response = await submitInstanceLoginInfo(credentials);
 
+				// Logged into one instance, therefore should be logged into all for this cluster
+				if (currentCluster) {
+					const newData = new Map(clusterData);
+					newData.set(currentCluster.id, { ...currentCluster, isAuthenticated: true });
+					setClusterData(newData);
+				}
+
 				return { success: true, message: response.message };
 			} catch (e) {
 				return { success: false, message: e instanceof Error ? e?.message : 'An Error Occurred.' };
 			}
 		},
-		[submitInstanceLoginInfo]
+		[submitInstanceLoginInfo, clusterData, currentCluster]
 	);
 
 	const logout = useCallback(async () => {
@@ -66,17 +78,19 @@ const ClusterProvider = ({ children }: PropsWithChildren<ClusterContextValue>) =
 		return false;
 	}, []);
 
-	const setCluster = (clusterId: string) => setClusterId(clusterId);
+	const setCluster = useCallback((clusterId: string) => setClusterId(clusterId), []);
 
 	const contextValue = {
-		isAuth,
+		isAuth: currentCluster?.isAuthenticated ?? false,
 		isLoading,
 		loadCluster: setCluster,
-		instances: clusterData.get(clusterId ?? '')?.instances ?? ([] as Instance[]),
+		instances: currentCluster?.instances ?? ([] as Instance[]),
 		checkAuth,
 		login,
 		logout,
 		clusterId: null,
+		clusters: clusterData,
+		currentCluster,
 	} satisfies ClusterContextValue;
 
 	// All your auth related code goes here

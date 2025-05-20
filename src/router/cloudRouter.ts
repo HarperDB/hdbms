@@ -141,9 +141,9 @@ const clusterIndexRoute = createRoute({
 	getParentRoute: () => clusterLayoutRoute,
 	path: '/',
 	component: ClusterIndex,
-	loader: ({ context }) => {
-		context;
-	},
+	// loader: ({ context, params }) => {
+	// 	context.ClusterAuthContext.checkAuth(params.clusterId);
+	// },
 });
 
 const instanceLayoutRoute = createRoute({

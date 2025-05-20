@@ -4,6 +4,7 @@ import { cloudRouteTree } from './router/cloudRouter';
 // import { localRouteTree } from './router/localRouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/react-query/queryClient';
+import { ClusterAuthContext, ClusterProvider } from '@/features/cluster/context/ClusterAuthContext';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 // import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
@@ -34,7 +35,9 @@ function App() {
 	return (
 		<>
 			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
+				<ClusterProvider>
+					<RouterProvider router={router} />
+				</ClusterProvider>
 				<ReactQueryDevtools buttonPosition="bottom-left" />
 				<TanStackRouterDevtools router={router} />
 				{/* <button

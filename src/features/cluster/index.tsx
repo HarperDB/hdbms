@@ -4,7 +4,7 @@ import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getCluste
 import { Card, CardContent } from '@/components/ui/card';
 import NewInstanceModal from './modals/NewInstanceModal';
 import { DataTable } from '@/components/DataTable';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import EditInstanceModal from './modals/EditInstanceModal';
@@ -12,6 +12,7 @@ import { BadgeStatus, renderBadgeStatusText, renderBadgeStatusVariant } from '@/
 // import { useRegistrationInfo } from '@/hooks/instance/useRegistrationInfo';
 import InstanceLogInModal from './modals/InstanceLoginInModal';
 import { renderInstanceTypeOption, InstanceTypes } from '@/shared/functions/InstanceType';
+import useCluster from '@/features/cluster/hooks/useCluster';
 
 // 1. Once successfully logging into one instance, we should be able to use the same credentials(cookie) for all instances in the cluster.
 // Essentially looping through and do a query to logging into all the other instances.
@@ -45,8 +46,12 @@ function EmptyCluster({ clusterId }: { clusterId: string }) {
 
 function ClusterIndex() {
 	const { organizationId, clusterId } = route.useParams();
-	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId, clusterId != null));
+	const { currentCluster, isAuthenticated, loadCluster, isLoading } = useCluster(); // Assuming currentCluster is the one we need
 	// const { mutate: submitRegistrationData, data: registrationInfo } = useRegistrationInfo();
+
+	useEffect(() => {
+		loadCluster(clusterId);
+	}, [loadCluster, clusterId]);
 
 	const columns: ColumnDef<ColumnTypes, unknown>[] = useMemo(
 		() => [
@@ -64,15 +69,13 @@ function ClusterIndex() {
 					}
 					const instanceURL = dnsURLs[0];
 					// isLoggedIn is being used inside the JSX below
-					let isLoggedIn = false;
 					return (
 						<>
-							{!isLoggedIn ? (
+							{!isAuthenticated ? (
 								<InstanceLogInModal
 									instanceId={cell.row.original.id}
 									instanceUrl={instanceURL}
 									instanceName={cell.row.original.name}
-									onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
 								/>
 							) : (
 								<Link
@@ -136,10 +139,10 @@ function ClusterIndex() {
 		<>
 			<div>
 				<section className="py-5 bg-muted-foreground/20">
-					{cluster?.instances.length ? (
+					{currentCluster?.instances.length ? (
 						<div className="flex flex-col items-center justify-between gap-4 px-4 md:gap-0 md:flex-row md:px-12">
 							<div className="w-full text-white">
-								<h2 className="text-xl font-semibold">{cluster?.name}</h2>
+								<h2 className="text-xl font-semibold">{currentCluster?.name}</h2>
 								<p className="text-xs md:text-sm">Cluster ID: {clusterId}</p>
 							</div>
 							<NewInstanceModal clusterId={clusterId} />
@@ -152,8 +155,8 @@ function ClusterIndex() {
 					<CardContent className="p-0 min-h-96">
 						{isLoading ? (
 							<div>Loading...</div> // TODO: Add skeleton component
-						) : cluster?.instances.length ? (
-							<DataTable data={cluster.instances as unknown as ColumnTypes[]} columns={columns} />
+						) : currentCluster?.instances.length ? (
+							<DataTable data={currentCluster?.instances as unknown as ColumnTypes[]} columns={columns} />
 						) : (
 							<EmptyCluster clusterId={clusterId} />
 						)}

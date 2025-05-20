@@ -22,6 +22,7 @@ import {
 	InstanceLoginCredentials,
 	useCreateInstanceLoginMutation,
 } from '@/features/instance/operations/mutations/readInstanceLogin';
+import useCluster from '../hooks/useCluster';
 
 const NewClusterSchema = z.object({
 	username: z.string({
@@ -35,12 +36,10 @@ const NewClusterSchema = z.object({
 function InstanceLogInModal({
 	instanceUrl,
 	instanceName,
-	onInstanceLogin,
 }: {
 	instanceId: string;
 	instanceUrl: string;
 	instanceName: string;
-	onInstanceLogin?: () => void;
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const form = useForm({
@@ -50,8 +49,8 @@ function InstanceLogInModal({
 			password: '',
 		},
 	});
-
-	const { mutate: submitInstanceLoginInfo } = useCreateInstanceLoginMutation();
+	const clusterAuth = useCluster();
+	// const { mutate: submitInstanceLoginInfo } = useCreateInstanceLoginMutation();
 	// const queryClient = useQueryClient();
 
 	const submitForm = async (formData: { username: string; password: string }) => {
@@ -59,15 +58,24 @@ function InstanceLogInModal({
 			instanceUrl,
 			...formData,
 		} as InstanceLoginCredentials;
-		submitInstanceLoginInfo(updatedFormData, {
-			onSuccess: ({ message }) => {
-				// queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
-				setIsModalOpen(false);
-				onInstanceLogin?.();
-				toast.success(message);
-				form.reset();
-			},
-		});
+		try {
+			await clusterAuth.login(updatedFormData);
+			setIsModalOpen(false);
+			toast.success('Logged in to instance');
+			form.reset();
+		} catch (error) {
+			toast.error('Error logging in to instance');
+			return;
+		}
+		// submitInstanceLoginInfo(updatedFormData, {
+		// 	onSuccess: ({ message }) => {
+		// 		// queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
+		// 		setIsModalOpen(false);
+		// 		onInstanceLogin?.();
+		// 		toast.success(message);
+		// 		form.reset();
+		// 	},
+		// });
 	};
 
 	return (
