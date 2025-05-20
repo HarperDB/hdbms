@@ -54,18 +54,18 @@ function BrowseDataTableView() {
 
 	const { data: searchByHashData, refetch: refetchSearchByHash } = useQuery(getSearchByHashOptions(searchByHashParams));
 
-	const { dataTableColumns, hash_attribute } = formatBrowseDataTableHeader(describeTableData.data);
+	const { dataTableColumns, hash_attribute } = formatBrowseDataTableHeader(describeTableData);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [sortTableDataParams, setSortTableDataParams] = useState({
 		attribute: '',
 		descending: false,
 	});
-	const [totalRecords, setTotalRecords] = useState(describeTableData.data.record_count);
+	const [totalRecords, setTotalRecords] = useState(describeTableData.record_count);
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 20,
 	});
-	const [totalPages, setTotalPages] = useState(Math.ceil(describeTableData.data.record_count / pagination.pageSize));
+	const [totalPages, setTotalPages] = useState(Math.ceil(describeTableData.record_count / pagination.pageSize));
 
 	const { data: tableData, refetch: refetchSearchByValueOptions } = useSuspenseQuery(
 		getSearchByValueOptions({
@@ -118,8 +118,8 @@ function BrowseDataTableView() {
 	useEffect(() => {
 		refetchDescribeTableQueryOptions();
 		refetchSearchByValueOptions();
-		setTotalRecords(describeTableData.data.record_count);
-		setTotalPages(Math.ceil(describeTableData.data.record_count / pagination.pageSize));
+		setTotalRecords(describeTableData.record_count);
+		setTotalPages(Math.ceil(describeTableData.record_count / pagination.pageSize));
 	}, [
 		refetchDescribeTableQueryOptions,
 		refetchSearchByValueOptions,
@@ -127,7 +127,7 @@ function BrowseDataTableView() {
 		schemaName,
 		tableName,
 		pagination.pageSize,
-		describeTableData.data.record_count,
+		describeTableData.record_count,
 		pagination,
 	]);
 
