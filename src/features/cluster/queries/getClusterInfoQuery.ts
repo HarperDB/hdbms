@@ -29,13 +29,14 @@ const getClusterInfo = async (clusterId: string) => {
 	return data as Cluster;
 };
 
-function getClusterInfoQueryOptions(clusterId: string) {
+function getClusterInfoQueryOptions(clusterId: string, enabled = true) {
 	return queryOptions({
 		queryKey: [queryKeys.cluster, clusterId],
 		queryFn: () => getClusterInfo(clusterId),
 		retry: false,
+		enabled,
 	});
 }
 
-export type { Cluster };
+export type { Cluster, Instance };
 export { getClusterInfoQueryOptions };

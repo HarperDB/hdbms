@@ -45,7 +45,7 @@ function EmptyCluster({ clusterId }: { clusterId: string }) {
 
 function ClusterIndex() {
 	const { organizationId, clusterId } = route.useParams();
-	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId));
+	const { data: cluster, isLoading } = useSuspenseQuery(getClusterInfoQueryOptions(clusterId, clusterId != null));
 	// const { mutate: submitRegistrationData, data: registrationInfo } = useRegistrationInfo();
 
 	const columns: ColumnDef<ColumnTypes, unknown>[] = useMemo(
@@ -64,27 +64,26 @@ function ClusterIndex() {
 					}
 					const instanceURL = dnsURLs[0];
 					// isLoggedIn is being used inside the JSX below
-					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					let isLoggedIn = false;
 					return (
 						<>
-							{/* {!isLoggedIn ? ( */}
-							<InstanceLogInModal
-								instanceId={cell.row.original.id}
-								instanceUrl={instanceURL}
-								instanceName={cell.row.original.name}
-								onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
-							/>
-							{/* ) : ( */}
-							<Link
-								to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}/browse`}
-								className="text-sm"
-								aria-label={`Go to ${cell.row.original.name} instance`}
-								title={`Go to ${cell.row.original.name} instance`}
-							>
-								<span className="py-2 hover:border-b-2">View</span>
-							</Link>
-							{/* )} */}
+							{!isLoggedIn ? (
+								<InstanceLogInModal
+									instanceId={cell.row.original.id}
+									instanceUrl={instanceURL}
+									instanceName={cell.row.original.name}
+									onInstanceLogin={() => (isLoggedIn = true)} // TODO: Handle instance login success
+								/>
+							) : (
+								<Link
+									to={`/orgs/${organizationId}/clusters/${clusterId}/instance/${cell.row.original.id}/browse`}
+									className="text-sm"
+									aria-label={`Go to ${cell.row.original.name} instance`}
+									title={`Go to ${cell.row.original.name} instance`}
+								>
+									<span className="py-2 hover:border-b-2">View</span>
+								</Link>
+							)}
 						</>
 					);
 				},
@@ -131,7 +130,7 @@ function ClusterIndex() {
 				},
 			},
 		],
-		[]
+		[clusterId, organizationId]
 	);
 	return (
 		<>

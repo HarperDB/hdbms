@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -59,10 +60,12 @@ function InstanceLogInModal({
 			...formData,
 		} as InstanceLoginCredentials;
 		submitInstanceLoginInfo(updatedFormData, {
-			onSuccess: () => {
+			onSuccess: ({ message }) => {
 				// queryClient.invalidateQueries({ queryKey: [queryKeys.organization], refetchType: 'active' });
 				setIsModalOpen(false);
 				onInstanceLogin?.();
+				toast.success(message);
+				form.reset();
 			},
 		});
 	};

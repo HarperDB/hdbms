@@ -22,7 +22,6 @@ import { getOrganizationQueryOptions } from '@/features/organization/queries/get
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import InstanceLayout from '@/features/instance/InstanceLayout';
 import Browse from '@/features/instance/browse';
-// import BrowseDataTable from '@/features/instance/browse/components/BrowseDataTable';
 import { getInstanceInfoQueryOptions } from '@/features/instance/queries/getInstanceInfoQuery';
 import BrowseDataTableView from '@/features/instance/browse/BrowseDataTableView';
 import Logs from '@/features/instance/log';
@@ -133,8 +132,8 @@ const clusterLayoutRoute = createRoute({
 	getParentRoute: () => clustersLayoutRoute,
 	path: '$clusterId',
 	component: ClusterLayout,
-	loader: (opts) => {
-		opts.context.queryClient.ensureQueryData(getClusterInfoQueryOptions(opts.params.clusterId));
+	loader: ({ context, params }) => {
+		context.queryClient.ensureQueryData(getClusterInfoQueryOptions(params.clusterId));
 	},
 });
 
@@ -142,6 +141,9 @@ const clusterIndexRoute = createRoute({
 	getParentRoute: () => clusterLayoutRoute,
 	path: '/',
 	component: ClusterIndex,
+	loader: ({ context }) => {
+		context;
+	},
 });
 
 const instanceLayoutRoute = createRoute({
@@ -158,6 +160,7 @@ const instanceIndexRoute = createRoute({
 	path: '/',
 	component: Browse,
 });
+
 const instanceBrowseRoute = createRoute({
 	getParentRoute: () => instanceLayoutRoute,
 	path: '/browse',
