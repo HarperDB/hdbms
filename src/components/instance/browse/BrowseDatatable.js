@@ -82,7 +82,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
 				filtered: tableState.filtered,
 				pageSize: parseInt(tableState.pageSize, 10),
 				sorted: tableState.sorted,
-				onlyCached: persistedUser?.onlyCached?.[activeTable],
+				onlyCached: tableState.onlyCached,
 				page: tableState.page,
 				auth,
 				url,
@@ -136,15 +136,13 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
 		tableState.page,
 		tableState.filtered,
 		tableState.pageSize,
-		persistedUser.onlyCached,
+		tableState.onlyCached,
 		lastUpdate,
 		activeTable,
 	]);
 
 	const toggleOnlyCached = () => {
-		const onlyCached = typeof persistedUser.onlyCached === 'object' ? { ...persistedUser.onlyCached } : {};
-		onlyCached[activeTable] = !persistedUser?.onlyCached?.[activeTable];
-		setPersistedUser({ ...persistedUser, onlyCached });
+		setTableState({ ...tableState, onlyCached: !tableState.onlyCached });
 	};
 
 	useInterval(() => tableState.autoRefresh && setLastUpdate(Date.now()), config.refresh_content_interval);
@@ -156,7 +154,7 @@ function BrowseDatatable({ tableState, setTableState, activeTable }) {
 				loading={loading}
 				loadingFilter={loadingFilter}
 				autoRefresh={tableState.autoRefresh}
-				onlyCached={persistedUser?.onlyCached?.[activeTable]}
+				onlyCached={tableState.onlyCached}
 				refresh={() => {
 					clearTableDescriptionCache();
 					setLastUpdate(Date.now());
