@@ -31,6 +31,7 @@ const defaultTableState = {
 	showFilter: false,
 	newEntityAttributes: false,
 	hashAttribute: false,
+	onlyCached: true,
 };
 
 function NoPrimaryKeyMessage({ table }) {
