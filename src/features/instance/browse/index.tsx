@@ -44,7 +44,7 @@ function Browse() {
 
 	return (
 		<main className="grid grid-cols-1 gap-4 md:grid-cols-12">
-			<section className='className="col-span-1 text-white md:col-span-4 lg:col-span-3'>
+			<section className="col-span-1 text-white md:col-span-4 lg:col-span-3">
 				<BrowseSideBar
 					databases={databaseList}
 					onSelectDatabase={onSelectDatabase}

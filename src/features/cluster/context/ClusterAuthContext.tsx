@@ -37,7 +37,6 @@ const ClusterProvider = ({ children }: PropsWithChildren) => {
 				...clusterInfoQueryData,
 				isAuthenticated: newData.get(clusterInfoQueryData.id)?.isAuthenticated ?? false,
 			});
-
 			setClusterData(newData);
 		}
 		// Wants to add clusterData but we don't depend on it for changes, just to update our map
