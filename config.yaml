@@ -1,0 +1,5 @@
+static: # This allows static files to be directly accessible
+  root: dist/
+  files: dist/**
+  # login
+  #path: /

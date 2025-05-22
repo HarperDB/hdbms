@@ -1,76 +1,54 @@
-# HarperDB Studio
+# React + TypeScript + Vite
 
-The comprehensive management suite for HarperDB.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-- [https://studio.harperdb.io](https://studio.harperdb.io)
+Currently, two official plugins are available:
 
-## What’s in the box
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- Third party software (click to review each library's licensing)
-  - [ReactJS](https://reactjs.org/) site scaffold via Create React App
-  - [react-router](https://reacttraining.com/react-router/) for navigation
-  - [pullstate](https://lostpebble.github.io/pullstate/) for global state management
+## Expanding the ESLint configuration
 
-## Magic... how does it work?
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-Follow these steps to run a local version of HarperDB Studio.
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-1. **In your terminal, clone the UI scaffold, enter the directory, and install dependencies.**
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-   ```
-   git clone https://github.com/harperdb/hdbms.git
-   cd hdbms
-   yarn
-   ```
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-1. **Create your local config file.**
-
-   - Create a copy of the file `/src/config/index.example.js`, renaming it `index.js`.
-   - update the `stripe_public_key` and/or other variables in that file as desired
-   - save the file
-   - **Never commit `/src/config/index.js` to GitHub!**
-
-1. **Generate https certificates for local development**
-
-   Install mkcert tool (OS X)
-
-   ```
-   brew install mkcert
-   brew install nss (if you need Firefox)
-   ```
-
-   Install mkcert tool (Windows)
-
-   ```
-   scoop bucket add extras
-   scoop install mkcert
-   ```
-
-   Setup mkcert on your machine (creates a CA)
-
-   ```
-   mkcert -install
-   ```
-
-   Create .cert directory if it doesn't exist
-
-   ```
-   mkdir -p .cert
-   ```
-
-   Generate the certificate (ran from the root of this project)
-
-   ```
-   mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
-   ```
-
-   **NOTE:** If you use Firefox, restart it to get the cert to take effect.
-
-1. Start the project.
-
-   ```
-   yarn start
-   ```
-
-1. Visit the project at https://localhost:3000.
-   - The development web server uses a self-signed certificate, and you may see a warning about the site being insecure. In your local development environment, it is safe to click "Advanced" > "proceed to site anyway."
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
