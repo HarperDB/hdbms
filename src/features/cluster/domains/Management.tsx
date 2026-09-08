@@ -8,11 +8,24 @@ import { FormLabel } from '@/components/ui/form/FormLabel';
 import { FormMessage } from '@/components/ui/form/FormMessage';
 import { Input } from '@/components/ui/input';
 import { isRunning } from '@/components/ui/utils/badgeStatus';
+import {
+	addDomainsSequentially,
+	describeDomainFailures,
+	domainNameCounts,
+	isIndeterminate,
+	MAX_DOMAINS_PER_SUBMIT,
+	MAX_INPUT_LENGTH,
+	namesCreated,
+	parseDomainList,
+	unresolvedFailures,
+	withinReconcileWindow,
+} from '@/features/cluster/domains/addDomainsSequentially';
 import { useDataTableColumns } from '@/features/cluster/domains/constants/tableDefinition';
 import { getClusterInfoQueryOptions } from '@/features/cluster/queries/getClusterInfoQuery';
 import { useSetDomainIdsOnCluster } from '@/features/clusters/mutations/setDomainIdsOnCluster';
 import {
 	AddOrganizationDomainSchema,
+	DOMAIN_REQUIRED_MESSAGE,
 	useAddDomainToOrganization,
 } from '@/features/organization/mutations/addDomainToOrganization';
 import { validateDomainInOrganization } from '@/features/organization/mutations/validateDomainInOrganization';
@@ -24,7 +37,7 @@ import { unique } from '@/lib/arrays/unique';
 import { pluralize } from '@/lib/pluralize';
 import { queryClient } from '@/react-query/queryClient';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { onlineManager, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { ListTodoIcon, PlusIcon, RefreshCwIcon, Save } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
@@ -43,6 +56,7 @@ export function DomainsManagement() {
 		data: organizationDomains,
 		refetch,
 		isFetching,
+		isPending: isDomainListPending,
 		isRefetching,
 	} = useQuery(getOrganizationDomainsQueryOptions(organizationId));
 
@@ -95,7 +109,7 @@ export function DomainsManagement() {
 		});
 	}, [cluster, selectedDomainIds, setDomainIds]);
 
-	const { mutateAsync: addDomain, isPending: isAddPending } = useAddDomainToOrganization();
+	const { mutateAsync: addDomain } = useAddDomainToOrganization();
 	const form = useForm({
 		resolver: zodResolver(AddOrganizationDomainSchema),
 		defaultValues: {
@@ -104,23 +118,70 @@ export function DomainsManagement() {
 		},
 	});
 
+	// Every control the settle path rewrites shares one gate. `isDomainListPending` covers the
+	// first load: without a pre-submit list nothing can be credited, so a POST that commits and
+	// then times out in that window would invite a retry that creates a second PENDING row. A
+	// failed load leaves `isPending` false — crediting stays off, but the form still works.
+	const formLocked = isDomainListPending || form.formState.isSubmitting;
+
 	const onSubmitClick = useCallback(
 		async (formData: z.infer<typeof AddOrganizationDomainSchema>) => {
-			if (formData) {
-				const domains = formData.domain.split(/[,\s]+/).map((d: string) => d.trim()).filter(Boolean);
-				for (const domain of domains) {
-					await addDomain({ ...formData, domain });
-				}
-				form.reset();
-				await refetch();
+			if (formData.domain.length > MAX_INPUT_LENGTH) {
+				form.setError('domain', {
+					type: 'server',
+					message: `That is too much text to be domain names. Paste at most ${MAX_DOMAINS_PER_SUBMIT}.`,
+				});
+				return;
+			}
+			const attempted = parseDomainList(formData.domain);
+			if (attempted.length === 0) {
+				form.setError('domain', { type: 'server', message: DOMAIN_REQUIRED_MESSAGE });
+				return;
+			}
+			if (attempted.length > MAX_DOMAINS_PER_SUBMIT) {
+				form.setError('domain', {
+					type: 'server',
+					message: `That is ${attempted.length} domains. Add at most ${MAX_DOMAINS_PER_SUBMIT} at a time.`,
+				});
+				return;
+			}
+			const before = organizationDomains && domainNameCounts(organizationDomains);
+			const { added, failures } = await addDomainsSequentially(
+				attempted,
+				(domain) => addDomain({ ...formData, domain }),
+			);
+
+			// Only refetch when it can change something: a newly created domain has to reach the
+			// table, and an indeterminate failure needs the list to arbitrate. A submit that only
+			// hit determinate rejections changed nothing, and waiting on the retry backoff would
+			// just delay the inline message and keep the form locked.
+			// `onlineManager`, not `navigator.onLine`: it is the signal React Query itself gates on, so
+			// this is exactly the condition under which the refetch would pause rather than answer.
+			// Asking anyway would burn the whole reconcile window before the inline message appears. A
+			// client timeout is a different thing — the server was reached and may have committed — so
+			// that still reconciles.
+			const needsList = onlineManager.isOnline()
+				&& (added.length > 0 || failures.some(({ error, attempted: sent }) => sent && isIndeterminate(error)));
+			const refreshed = needsList ? await withinReconcileWindow(refetch()) : undefined;
+			const created = refreshed ? namesCreated(before, domainNameCounts(refreshed.data)) : new Set<string>();
+			const unresolved = unresolvedFailures(failures, created);
+			const landed = added.length + failures.length - unresolved.length;
+
+			if (landed > 0) {
 				toast.success(
-					`${
-						pluralize(domains.length, 'Domain', 'Domains')
-					} added! Please add the txt record above to your domain registrar.`,
+					`${pluralize(landed, 'Domain', 'Domains')} added! Please add the txt record above to your domain registrar.`,
 				);
 			}
+
+			if (unresolved.length === 0) {
+				form.reset();
+				return;
+			}
+
+			form.setValue('domain', unresolved.map(({ domain }) => domain).join(', '));
+			form.setError('domain', { type: 'server', message: describeDomainFailures(unresolved) });
 		},
-		[addDomain, form, refetch],
+		[addDomain, form, organizationDomains, refetch],
 	);
 
 	const onValidateClick = useCallback(async () => {
@@ -192,12 +253,23 @@ export function DomainsManagement() {
 									<FormItem className="flex-1">
 										<FormLabel className="pb-1">New Domain Name</FormLabel>
 										<FormControl>
-											<Input type="text" enterKeyHint="done" autoComplete="off" {...field} />
+											<Input
+												type="text"
+												enterKeyHint="done"
+												autoComplete="off"
+												disabled={formLocked}
+												{...field}
+											/>
 										</FormControl>
 										{isApex && (
 											<div className="mt-1 flex gap-4">
 												Adding an apex domain?
-												<Button variant="positiveOutline" type="button" onClick={suggestWww}>
+												<Button
+													variant="positiveOutline"
+													type="button"
+													disabled={formLocked}
+													onClick={suggestWww}
+												>
 													Add www as well
 												</Button>
 											</div>
@@ -215,7 +287,7 @@ export function DomainsManagement() {
 								<Button
 									type="submit"
 									variant="submit"
-									disabled={isAddPending}
+									disabled={formLocked}
 								>
 									<PlusIcon /> Add
 								</Button>

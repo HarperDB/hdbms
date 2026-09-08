@@ -1,16 +1,11 @@
+import { errorStatus } from '@/lib/errorStatus';
+
 /** The only part of React Query's `Query` this wrapper reads. Typed structurally
  *  (rather than as `Query`) because `Query` is invariant in its data type, so a
  *  concrete `Query<StatusResponse, …>` will not accept a `(query: Query) => …`
  *  callback. A supertype parameter accepts every instantiation. */
 interface QueryErrorState {
 	state: { error: unknown };
-}
-
-/** HTTP status off an axios-style error, tolerating both the axios shape
- *  (`error.response.status`) and a bare `{ status }`. */
-function errorStatus(err: unknown): number | undefined {
-	return (err as { response?: { status?: number } })?.response?.status
-		?? (err as { status?: number })?.status;
 }
 
 /** A 403 means the caller is authenticated but not permitted on this resource.
