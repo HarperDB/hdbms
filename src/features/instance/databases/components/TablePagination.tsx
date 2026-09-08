@@ -61,7 +61,7 @@ export function TablePagination(
 	const items = getPaginationItems(currentPage, pageCount);
 
 	return (
-		<div className="@container border-t border-border">
+		<div className="@container shrink-0 border-t border-border">
 			<div className="flex items-center gap-3 px-1 py-4">
 				{/* Summary — record count is the essential, kept at every width */}
 				<div className="flex items-center gap-2 whitespace-nowrap text-sm text-muted-foreground">

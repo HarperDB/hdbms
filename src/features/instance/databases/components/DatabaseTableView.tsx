@@ -520,7 +520,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 
 	return (
 		<>
-			<div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-3 pt-15 pb-4 pr-4">
+			<div className="shrink-0 flex flex-col md:flex-row md:flex-wrap items-center justify-between gap-3 pt-15 pb-4 pr-4">
 				<div className="flex space-x-2">
 					{canAddRecords && (
 						<Button

@@ -8,7 +8,6 @@ import { FormMessage } from '@/components/ui/form/FormMessage';
 import { Input } from '@/components/ui/input';
 import { TableCell, TableHeader, TableRow } from '@/components/ui/table';
 import { RelationshipAttributeInfo } from '@/features/instance/databases/functions/relationshipAttributes';
-import { cn } from '@/lib/cn';
 import { HeaderGroup } from '@/lib/table';
 import { RowData } from '@tanstack/react-table';
 import { ChevronDownIcon } from 'lucide-react';
@@ -45,10 +44,9 @@ export function ColumnFilters<TData extends RowData>({
 								<TableCell
 									key={header.id}
 									style={{ width: `${header.column.getSize()}px` }}
-									className={cn(
-										'sticky z-10 bg-card dark:bg-black-dark border-b border-border',
-										'top-[calc(var(--spacing(32))+var(--spacing(10)))]',
-									)}
+									// Sticks directly under the header row inside the table's own scroll container
+									// (`top-10` = the header's `h-10`).
+									className="sticky top-10 z-10 bg-card dark:bg-black-dark border-b border-border"
 								>
 									{header.column.columnDef.enableColumnFilter && (
 										<FormField

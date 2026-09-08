@@ -80,7 +80,10 @@ export function Databases() {
 						/>
 					</div>
 				</section>
-				<section className="text-foreground w-full md:flex-1 md:min-w-0 flex flex-col min-h-0">
+				<section // Bounded to the viewport (like the sidebar beside it) so the table pane scrolls inside
+				 // itself rather than growing the page: a wide table then scrolls horizontally in its own
+				// container instead of widening the whole window.
+				className="text-foreground w-full md:flex-1 md:min-w-0 flex flex-col min-h-0 h-[calc(100vh-(--spacing(32)))]">
 					{params.databaseName && params.tableName
 						? (
 							<DatabaseTableView
@@ -91,10 +94,13 @@ export function Databases() {
 						)
 						: params.databaseName
 						? (
-							<DatabaseOverview
-								instanceDatabaseMap={instanceDatabaseMap}
-								databaseName={params.databaseName}
-							/>
+							// The pane is viewport-height now, so the overview scrolls inside it.
+							<div className="min-h-0 grow overflow-y-auto">
+								<DatabaseOverview
+									instanceDatabaseMap={instanceDatabaseMap}
+									databaseName={params.databaseName}
+								/>
+							</div>
 						)
 						: null}
 				</section>
