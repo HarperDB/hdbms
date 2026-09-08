@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdownMenu';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdownMenu';
 import { useInstanceClientIdParams } from '@/config/useInstanceClient';
 import { formatBrowseDataTableHeader } from '@/features/instance/databases/functions/formatBrowseDataTableHeader';
 import {
@@ -547,29 +553,6 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 							</span>
 						</Button>
 					)}
-					{canImportData && (
-						<Button
-							variant="positiveOutline"
-							onClick={onImportDataClicked}
-							accessKey="i"
-						>
-							<CloudUploadIcon />
-							<span>
-								<u>I</u>mport Data
-							</span>
-						</Button>
-					)}
-					<Button
-						variant="positiveOutline"
-						onClick={onExportCSVClicked}
-						disabled={isExportingCSV}
-						accessKey="e"
-					>
-						<CloudDownloadIcon />
-						<span>
-							<u>E</u>xport CSV
-						</span>
-					</Button>
 				</div>
 
 				<div className="flex space-x-2">
@@ -626,6 +609,17 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent side="bottom" align="end">
+							{canImportData && (
+								<DropdownMenuItem onClick={onImportDataClicked}>
+									<CloudUploadIcon />
+									Import Data
+								</DropdownMenuItem>
+							)}
+							<DropdownMenuItem onClick={onExportCSVClicked} disabled={isExportingCSV}>
+								<CloudDownloadIcon />
+								Export CSV
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
 							<DropdownMenuItem className="focus:bg-primary/70 focus:text-white" onClick={toggleOnlyCached}>
 								{onlyIfCached ? <CircleCheckBigIcon className="text-green" /> : <CircleIcon />}
 								Only If Cached
@@ -650,6 +644,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 									Cleanup Orphan Blobs
 								</DropdownMenuItem>
 							)}
+							{canManageBrowseInstance && <DropdownMenuSeparator />}
 							{canManageBrowseInstance && !isLastTableInDatabase && (
 								<DropdownMenuItem
 									className="focus:bg-red/70 focus:text-white"
