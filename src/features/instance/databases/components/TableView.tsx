@@ -20,7 +20,7 @@ import {
 	RowData,
 	useTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import { ColumnFilters, ColumnFiltersSchema } from './ColumnFilters';
@@ -98,11 +98,19 @@ export function TableView<TData extends RowData>({
 		},
 	});
 
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
+	const [scrollLeftAtResizeStart, setScrollLeftAtResizeStart] = useState(0);
+
 	// During a column resize, preview where the new right edge will land with a full-height guide line.
 	// columnResizeMode is 'onEnd', so the column width doesn't change until release -- the guide is the
 	// live feedback. Its x is the sum of column widths up to the resizing one, plus the (clamped) drag delta.
 	const columnResizing = table.state.columnResizing;
 	const resizingColumnId = columnResizing.isResizingColumn;
+	useLayoutEffect(() => {
+		if (resizingColumnId) {
+			setScrollLeftAtResizeStart(scrollContainerRef.current?.scrollLeft ?? 0);
+		}
+	}, [resizingColumnId]);
 	let resizeGuideLeft: number | null = null;
 	if (resizingColumnId) {
 		const minSize = table.options.defaultColumn?.minSize ?? 20;
@@ -115,14 +123,24 @@ export function TableView<TData extends RowData>({
 			}
 		}
 		// Clamp to match the handle's own preview: the column can't shrink below minSize.
-		resizeGuideLeft = edge + Math.max(columnResizing.deltaOffset ?? 0, minSize - startSize);
+		// The guide sits outside the scroll container, so convert from table coordinates to container
+		// coordinates using the scroll position captured when resizing started.
+		resizeGuideLeft = edge + Math.max(columnResizing.deltaOffset ?? 0, minSize - startSize)
+			- scrollLeftAtResizeStart;
 	}
 
 	return (
 		<>
-			<div className="relative flex flex-col grow">
+			<div className="relative flex flex-col grow min-h-0">
 				<Table
-					containerClassName="rounded-md bg-card dark:bg-black-dark grow overflow-visible"
+					containerRef={scrollContainerRef}
+					// The container owns BOTH axes of scrolling. `overflow-x-auto` (Table's default) already
+					// makes it a scroll container on both axes -- CSS computes `overflow-y: visible` to `auto`
+					// as soon as the other axis isn't visible -- which also makes it the scrollport the sticky
+					// header resolves against. So it has to actually scroll vertically (min-h-0 + a bounded
+					// parent), otherwise the header would sit at its `top` offset inside a container that
+					// never scrolls, i.e. floating over the first rows.
+					containerClassName="rounded-md bg-card dark:bg-black-dark grow min-h-0 overflow-y-auto"
 					// table-fixed so columns hold their set/resized width exactly (content doesn't stretch
 					// them); the trailing filler column below absorbs any leftover width so the rows still
 					// reach the edge instead of leaving dead space.
@@ -136,13 +154,13 @@ export function TableView<TData extends RowData>({
 										key={header.id}
 										header={header}
 										onColumnClick={onColumnClick}
-										className="sticky top-32 z-10 bg-card dark:bg-black-dark border-b border-border"
+										className="sticky top-0 z-10 bg-card dark:bg-black-dark border-b border-border"
 									/>
 								))}
 								{/* Filler column: takes the remaining width so real columns stay tight. */}
 								<TableHead
 									aria-hidden
-									className="w-full p-0 sticky top-32 z-10 bg-card dark:bg-black-dark border-b border-border"
+									className="w-full p-0 sticky top-0 z-10 bg-card dark:bg-black-dark border-b border-border"
 								/>
 							</TableRow>
 						))}
