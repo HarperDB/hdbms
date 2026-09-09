@@ -9,7 +9,7 @@ on:
       harper_version:
         description: 'Harper major version running on the target CM'
         type: choice
-        default: v4
+        default: v5
         options:
           - v4
           - v5
