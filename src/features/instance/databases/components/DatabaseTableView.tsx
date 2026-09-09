@@ -16,7 +16,7 @@ import {
 } from '@/features/instance/databases/functions/relationshipAttributes';
 import { getSchemaRelationshipsQueryOptions } from '@/features/instance/databases/functions/schemaRelationships';
 import { useExportTableCsv } from '@/features/instance/databases/hooks/useExportTableCsv';
-import { EditTableRowModal } from '@/features/instance/databases/modals/EditTableRowModal';
+import { EditTableRowModal, RecordNavigation } from '@/features/instance/databases/modals/EditTableRowModal';
 import { useStaffPermission } from '@/hooks/useAuth';
 import { useEffectedState } from '@/hooks/useEffectedState';
 import {
@@ -154,6 +154,18 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	// either the row has no value for that key, or it has one but nothing is stored under it (both
 	// happen when a table's primary key was changed after rows existed; see #1199).
 	const [clickedRow, setClickedRow] = useEffectedState<Record<string, unknown> | null>(null, allParams);
+	// Where the open record sits in the page the grid is showing, so the editor can say which record
+	// it is and step to its neighbours. Null when nothing is open.
+	const [openRowIndex, setOpenRowIndex] = useEffectedState<number | null>(null, allParams);
+	// A step off either end of the page can only open its record once the neighbouring page has been
+	// fetched: which end of it to open, plus the page to put the grid back on if that fetch brings
+	// nothing (an empty page, or a failed request -- both list queries are `retry: false`).
+	const [pendingRecordStep, setPendingRecordStep] = useState<{ end: 'first' | 'last'; fromPage: number } | null>(
+		null,
+	);
+	// While that page loads, the open record is the one the user stepped away from -- so the editor
+	// shows nothing rather than a record its own header can no longer name.
+	const isStepPending = pendingRecordStep !== null;
 
 	// Only `describe_all` (`instanceDatabaseMap`) knows how many tables the database has, and an
 	// allowlist can grant `describe_table` + search without it -- so a table can render fine while
@@ -264,6 +276,20 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	const [pageIndex, setPageIndex] = useEffectedState(0, [databaseName, tableName, appliedSearchConditions]);
 	const [pageSize, setPageSize] = useState(20);
 
+	// The index of a page a step has proven to be the last one. A full page can't say whether more
+	// records follow, so the step probes; an empty answer is the only proof, and remembering it
+	// keeps the Next button from offering that same dead probe again.
+	const [knownLastPage, setKnownLastPage] = useEffectedState<number | null>(null, [
+		databaseName,
+		tableName,
+		appliedSearchConditions,
+		// A page index means nothing once the page size changes: page 0 proven terminal at 250 rows
+		// says nothing about page 0 at 20. The cache mode changes which records the list returns at
+		// all, so it retires the proof too.
+		pageSize,
+		onlyIfCached,
+	]);
+
 	// The count comes from whichever describe carries it: the map when the server still returns counts
 	// (older backends), otherwise describe_table's async backfill. The first pass is always the cheap
 	// estimate (a plain describe_table caps the count scan at ~500ms); the server returns an exact value
@@ -321,7 +347,9 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		getAttributes: relationshipGetAttributes,
 	};
 	const searchByValueOptions = getSearchByValueOptions(searchByValueParams);
-	const { data: fullTableData, isFetching: tableDataFetching } = useQuery(searchByValueOptions);
+	const { data: fullTableData, isFetching: tableDataFetching, isError: isFullTableError } = useQuery(
+		searchByValueOptions,
+	);
 
 	// Filtered list
 	const searchByConditionsParams = {
@@ -337,10 +365,20 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		getAttributes: relationshipGetAttributes,
 	};
 	const searchByConditionsOptions = getSearchByConditionsOptions(searchByConditionsParams);
-	const { data: filteredTableData, isFetching: tableConditionsDataFetching } = useQuery(searchByConditionsOptions);
+	const { data: filteredTableData, isFetching: tableConditionsDataFetching, isError: isFilteredTableError } = useQuery(
+		searchByConditionsOptions,
+	);
 
 	const tableData = useFilteredList ? filteredTableData : fullTableData;
 	const isFetching = tableDataFetching || tableConditionsDataFetching;
+	// Whether the page the grid is asking for came back as a failure. Needed by the pending step
+	// below: with `retry: false`, a failed page leaves `pageRows` undefined forever, which is
+	// otherwise indistinguishable from a fetch still in flight.
+	const isPageError = useFilteredList ? isFilteredTableError : isFullTableError;
+	// The page the grid is showing. Undefined while a page is in flight -- neither list query keeps
+	// the previous page's data -- which is what tells a pending record step that its page hasn't
+	// arrived yet.
+	const pageRows = tableData?.data;
 
 	// One by id
 	const { data: searchByIdData, isFetching: isSearchByIdFetching, isError: isSearchByIdError } = useQuery(
@@ -359,9 +397,11 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	//   - recordUnavailable: it has a value, we looked it up, but nothing is stored under that key
 	//     (Harper kept keying rows by the original attribute), so the fetch comes back empty.
 	// In both cases we show the row the list already gave us, read-only, with an explanation.
-	const missingPrimaryKey = isEditModalOpen && !!clickedRow && (primaryKey ? clickedRow[primaryKey] == null : true);
+	const missingPrimaryKey = isEditModalOpen && !isStepPending && !!clickedRow
+		&& (primaryKey ? clickedRow[primaryKey] == null : true);
 	const fetchedRecord = searchByIdData?.data;
 	const recordUnavailable = !missingPrimaryKey
+		&& !isStepPending
 		&& !!selectedIds?.length
 		&& !isSearchByIdFetching
 		&& (isSearchByIdError || (Array.isArray(fetchedRecord) && fetchedRecord.length === 0));
@@ -373,8 +413,13 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 
 	const queryClient = useQueryClient();
 	const refreshTable = useCallback(
-		() => queryClient.invalidateQueries({ queryKey: [instanceParams.entityId, databaseName, tableName] }),
-		[queryClient, instanceParams.entityId, databaseName, tableName],
+		() => {
+			// Records may have been added since a step proved a page terminal, so that proof retires
+			// with the data it was made against.
+			setKnownLastPage(null);
+			return queryClient.invalidateQueries({ queryKey: [instanceParams.entityId, databaseName, tableName] });
+		},
+		[queryClient, instanceParams.entityId, databaseName, tableName, setKnownLastPage],
 	);
 	// `refreshTable`'s prefix does NOT reach the open record: `getSearchById` keys on
 	// `[entityId, 'search_by_id', databaseName, tableName, ids]`, so `'search_by_id'` sits where the
@@ -501,12 +546,79 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		);
 	}, [deleteTableRecords, instanceParams, databaseName, tableName, refreshTable]);
 
-	const onRowClick = (rowData: Row<Record<string, unknown>>) => {
-		const primaryKeyValue = primaryKey ? rowData.original[primaryKey] : undefined;
-		setClickedRow(rowData.original);
+	// Point the editor at a record on the page the grid is showing. The row is kept as well as its
+	// id because the editor falls back to it when the record can't be fetched by that id.
+	const openRecordAt = useCallback((index: number, row: Record<string, unknown>) => {
+		const primaryKeyValue = primaryKey ? row[primaryKey] : undefined;
+		setClickedRow(row);
 		// With no usable primary key there's nothing to look up, so skip the (doomed) fetch; otherwise
 		// fetch the fresh record. Either way the modal can fall back to `clickedRow`.
 		setSelectedIds(primaryKeyValue == null ? null : [primaryKeyValue]);
+		setOpenRowIndex(index);
+	}, [primaryKey, setClickedRow, setSelectedIds, setOpenRowIndex]);
+
+	const stepToRecord = useCallback((offset: -1 | 1) => {
+		if (openRowIndex === null || !pageRows) {
+			return;
+		}
+		const index = openRowIndex + offset;
+		const row = pageRows[index];
+		if (row) {
+			openRecordAt(index, row);
+			return;
+		}
+		// Off the end of the page: turn the page and open its first/last record once it loads.
+		const targetPage = pageIndex + offset;
+		if (targetPage < 0) {
+			return;
+		}
+		setPageIndex(targetPage);
+		setPendingRecordStep({ end: offset === 1 ? 'first' : 'last', fromPage: pageIndex });
+	}, [openRowIndex, pageRows, openRecordAt, pageIndex, setPageIndex]);
+
+	useEffect(function openTheRecordWaitingOnTheNeighbouringPage() {
+		if (!pendingRecordStep) {
+			return;
+		}
+		if (!isEditModalOpen) {
+			setPendingRecordStep(null);
+			return;
+		}
+		const index = pendingRecordStep.end === 'first' ? 0 : (pageRows?.length ?? 0) - 1;
+		const row = index >= 0 ? pageRows?.[index] : undefined;
+		if (row) {
+			setPendingRecordStep(null);
+			openRecordAt(index, row);
+			return;
+		}
+		if (!pageRows && !isPageError) {
+			// Still fetching the page the step moved to. Anything else -- an empty page, or a request
+			// that failed and (with `retry: false`) will never produce one -- has settled with nothing,
+			// so fall through rather than wait for a page that isn't coming.
+			return;
+		}
+		// The step can't complete, so put the grid back where it was and leave the editor on the
+		// record it stepped away from, rather than closing it or stranding the grid on a page that
+		// holds nothing.
+		setPendingRecordStep(null);
+		setPageIndex(pendingRecordStep.fromPage);
+		if (isPageError) {
+			toast.error("Couldn't load the next page of records");
+			return;
+		}
+		if (pendingRecordStep.end === 'first') {
+			// An empty page forward is proof there is nothing past the page we came from -- the only
+			// proof available when that page was full. Backwards it means something else entirely
+			// (records disappeared behind us), so it must not mark that page as the last one.
+			setKnownLastPage(pendingRecordStep.fromPage);
+			toast.info('This is the last record');
+			return;
+		}
+		toast.info('This is the first record');
+	}, [pendingRecordStep, pageRows, isPageError, isEditModalOpen, openRecordAt, setPageIndex, setKnownLastPage]);
+
+	const onRowClick = (rowData: Row<Record<string, unknown>>) => {
+		openRecordAt(rowData.index, rowData.original);
 		setIsEditModalOpen(true);
 	};
 	const onColumnClick = (accessorKey: string, isAscending: boolean) => {
@@ -536,6 +648,25 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		...Object.fromEntries(collapsedForeignKeyNames(relationshipInfoMap).map((name) => [name, false])),
 		...storedColumnVisibility,
 	}), [relationshipInfoMap, storedColumnVisibility]);
+
+	// A step onto another page leaves the open record briefly behind the grid, so the position and
+	// the buttons wait for that page rather than describing the record the user stepped away from.
+	const recordNavigation: RecordNavigation | undefined = openRowIndex === null ? undefined : {
+		position: isStepPending ? undefined : pageIndex * pageSize + openRowIndex + 1,
+		// The count describes the whole table, so it only counts the result set when nothing filters it.
+		total: useFilteredList ? undefined : totalRecords,
+		isTotalEstimated: isEstimatedCount,
+		hasPrevious: !isStepPending && (openRowIndex > 0 || pageIndex > 0),
+		// A page shorter than `pageSize` is the last page: both list queries page by offset/limit, so
+		// a short page means the server had no more rows. That is exact, where `totalRecords` is a
+		// whole-table estimate that says nothing about a filtered result set -- using it offered a
+		// next record that wasn't there and left the grid on an empty page.
+		hasNext: !isStepPending && !!pageRows
+			&& (openRowIndex + 1 < pageRows.length
+				|| (pageRows.length === pageSize && knownLastPage !== pageIndex)),
+		onPrevious: () => stepToRecord(-1),
+		onNext: () => stepToRecord(1),
+	};
 
 	const [columnSizing, setColumnSizing] = useSessionStorage(
 		`ColumnSizing/${databaseName}/${tableName}` as 'ColumnSizing/{database}/{table}',
@@ -699,7 +830,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 
 			<TableView<Record<string, unknown>>
 				primaryKey={primaryKey}
-				data={tableData?.data}
+				data={pageRows}
 				isFetching={isFetching}
 				filtersToggled={filtersToggled}
 				columns={dataTableColumns}
@@ -735,7 +866,10 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 				missingPrimaryKey={missingPrimaryKey}
 				recordUnavailable={recordUnavailable}
 				syntheticAttributes={syntheticAttributes}
-				data={missingPrimaryKey || recordUnavailable
+				recordNavigation={recordNavigation}
+				data={isStepPending
+					? undefined
+					: missingPrimaryKey || recordUnavailable
 					? (clickedRow ? [clickedRow] : undefined)
 					: searchByIdData?.data}
 				onSaveChanges={onRecordUpdate}
