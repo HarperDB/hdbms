@@ -155,10 +155,15 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	// happen when a table's primary key was changed after rows existed; see #1199).
 	const [clickedRow, setClickedRow] = useEffectedState<Record<string, unknown> | null>(null, allParams);
 
-	const isLastTableInDatabase = useMemo(() => {
-		const tableNames = databaseName ? Object.keys(instanceDatabaseMap?.[databaseName] || []).sort() : [];
-		return tableNames.length === 1;
-	}, [instanceDatabaseMap, databaseName]);
+	// Only `describe_all` (`instanceDatabaseMap`) knows how many tables the database has, and an
+	// allowlist can grant `describe_table` + search without it -- so a table can render fine while
+	// this stays unanswered. Phrased as the decision rather than the fact ("is this the last table?"
+	// answers `false` when it simply doesn't know, which would offer an irreversible action on a
+	// guess): dropping a table needs positive evidence that another one remains.
+	const canDropTable = useMemo(
+		() => canManageBrowseInstance && !!databaseTables && Object.keys(databaseTables).length > 1,
+		[canManageBrowseInstance, databaseTables],
+	);
 
 	const { toggled: filtersToggled, toggleOn: showFilters, toggleOff: hideFilters } = useToggler(false);
 	const columnFiltersForm = useForm({
@@ -632,7 +637,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 								</DropdownMenuItem>
 							)}
 							{canManageBrowseInstance && <DropdownMenuSeparator />}
-							{canManageBrowseInstance && !!databaseTables && !isLastTableInDatabase && (
+							{canDropTable && (
 								<DropdownMenuItem
 									className="focus:bg-red/70 focus:text-white"
 									onClick={() => setWatchedValue('ShowDeleteTable', { databaseName, tableName })}
