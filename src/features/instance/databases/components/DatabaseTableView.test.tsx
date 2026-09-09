@@ -107,16 +107,32 @@ function openTableOptions() {
 	fireEvent.pointerDown(screen.getByRole('button', { name: /table options/i }), { button: 0, ctrlKey: false });
 }
 
-const exportCsvItem = () => screen.queryByText('Export CSV');
-const importDataItem = () => screen.queryByText('Import Data');
-const dropTableItem = () => screen.queryByText('Drop Table');
-const dropDatabaseItem = () => screen.queryByText('Drop Database');
+const exportCsvItem = () => screen.queryByRole('menuitem', { name: 'Export CSV' });
+const importDataItem = () => screen.queryByRole('menuitem', { name: 'Import Data' });
+const dropTableItem = () => screen.queryByRole('menuitem', { name: 'Drop Table' });
+const dropDatabaseItem = () => screen.queryByRole('menuitem', { name: 'Drop Database' });
 
 function isDisabled(el: HTMLElement) {
 	return el.getAttribute('aria-disabled') === 'true' || el.hasAttribute('data-disabled');
 }
 
 describe('DatabaseTableView table options menu', () => {
+	it('keeps Import Data and Export CSV discoverable until the toolbar is space-constrained', () => {
+		renderView();
+
+		const importButton = screen.getByRole('button', { name: 'Import Data' });
+		const exportButton = screen.getByRole('button', { name: 'Export CSV' });
+		expect(importButton.className).toContain('border-primary');
+		expect(importButton.className).toContain('hidden xl:inline-flex');
+		expect(exportButton.className).toContain('border-primary');
+		expect(exportButton.className).toContain('hidden xl:inline-flex');
+
+		openTableOptions();
+
+		expect(importDataItem()!.className).toContain('xl:hidden');
+		expect(exportCsvItem()!.className).toContain('xl:hidden');
+	});
+
 	// `describe_all` (the map) can be slower or unreachable for a role whose allowlist grants
 	// describe_table + search but not describe_all -- the trigger must not gate on it, or Export
 	// CSV becomes unreachable for that role.
