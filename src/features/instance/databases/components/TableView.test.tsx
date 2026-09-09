@@ -31,7 +31,13 @@ const columns: ColumnDef<Record<string, unknown>>[] = [
 // which is exactly the condition under which the cell memo used to go stale.
 const data: Record<string, unknown>[] = [{ id: 'abc-123', type: 'demo' }];
 
-function Harness({ columnVisibility }: { columnVisibility: ColumnVisibilityState }) {
+function Harness(
+	{ columnVisibility, resultSetKey = 'page-0', tableIdentity = 'dev.dog' }: {
+		columnVisibility: ColumnVisibilityState;
+		resultSetKey?: string;
+		tableIdentity?: string;
+	},
+) {
 	const columnFiltersForm = useForm<z.infer<typeof ColumnFiltersSchema>>({ defaultValues: {} });
 	const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 	return (
@@ -46,6 +52,8 @@ function Harness({ columnVisibility }: { columnVisibility: ColumnVisibilityState
 			pageIndex={0}
 			pageSize={20}
 			primaryKey="id"
+			resultSetKey={resultSetKey}
+			tableIdentity={tableIdentity}
 			setPageIndex={() => undefined}
 			setPageSize={() => undefined}
 			filtersToggled={false}
@@ -94,6 +102,8 @@ describe('TableView sorting', () => {
 				pageIndex={0}
 				pageSize={20}
 				primaryKey="id"
+				resultSetKey="page-0"
+				tableIdentity="dev.dog"
 				setPageIndex={() => undefined}
 				setPageSize={() => undefined}
 				filtersToggled={false}
@@ -126,5 +136,58 @@ describe('TableView column resizing', () => {
 		const { container } = render(<Harness columnVisibility={{}} />);
 		const handles = container.querySelectorAll('svg.lucide-grip-vertical');
 		expect(handles.length).toBe(columns.length);
+	});
+});
+
+describe('TableView scroll position', () => {
+	function scroller(container: HTMLElement) {
+		const element = container.querySelector<HTMLElement>('[data-slot="table-container"]');
+		if (!element) {
+			throw new Error('scroll container not found');
+		}
+		return element;
+	}
+
+	it('returns to the top of a new result set, keeping the sideways position', () => {
+		// The scroller is the same DOM node across paging/sorting/filtering, so without an explicit
+		// reset page 2 opens wherever page 1 was left. Sideways position survives: the columns are the
+		// same ones, so the column the user scrolled out to is still the one they are reading.
+		const { container, rerender } = render(<Harness columnVisibility={{}} resultSetKey="page-0" />);
+		const element = scroller(container);
+		element.scrollTop = 240;
+		element.scrollLeft = 500;
+
+		rerender(<Harness columnVisibility={{}} resultSetKey="page-1" />);
+
+		expect(element.scrollTop).toBe(0);
+		expect(element.scrollLeft).toBe(500);
+	});
+
+	it('returns to the top-left corner when the table itself changes', () => {
+		// A different table means different columns, so the old sideways offset points at nothing.
+		const { container, rerender } = render(
+			<Harness columnVisibility={{}} resultSetKey="dog-page-0" tableIdentity="dev.dog" />,
+		);
+		const element = scroller(container);
+		element.scrollTop = 240;
+		element.scrollLeft = 500;
+
+		rerender(<Harness columnVisibility={{}} resultSetKey="breed-page-0" tableIdentity="dev.breed" />);
+
+		expect(element.scrollTop).toBe(0);
+		expect(element.scrollLeft).toBe(0);
+	});
+
+	it('leaves the scroll position alone when the same rows re-render', () => {
+		// A background refetch or a column-visibility toggle must not yank the user back to the top.
+		const { container, rerender } = render(<Harness columnVisibility={{}} />);
+		const element = scroller(container);
+		element.scrollTop = 240;
+		element.scrollLeft = 500;
+
+		rerender(<Harness columnVisibility={{ type: false }} />);
+
+		expect(element.scrollTop).toBe(240);
+		expect(element.scrollLeft).toBe(500);
 	});
 });

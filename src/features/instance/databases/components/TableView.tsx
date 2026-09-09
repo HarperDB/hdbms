@@ -41,6 +41,10 @@ interface BrowseDataTableProps<TData extends RowData> {
 	pageIndex: number;
 	pageSize: number;
 	primaryKey: string;
+	// Identifies the rows on screen (table + page + sort + filters). See the reset effect below.
+	resultSetKey: string;
+	// Identifies which table is on screen, so a new set of columns starts scrolled to the left.
+	tableIdentity: string;
 	setPageIndex: Dispatch<SetStateAction<number>>;
 	setPageSize: Dispatch<SetStateAction<number>>;
 	totalPages?: number;
@@ -66,6 +70,8 @@ export function TableView<TData extends RowData>({
 	pageIndex,
 	pageSize,
 	primaryKey,
+	resultSetKey,
+	tableIdentity,
 	setPageIndex,
 	setPageSize,
 	filtersToggled,
@@ -100,6 +106,25 @@ export function TableView<TData extends RowData>({
 
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const [scrollLeftAtResizeStart, setScrollLeftAtResizeStart] = useState(0);
+
+	// The scroll container outlives the rows in it: React keeps this component and its DOM node across
+	// paging, sorting, filtering and even a table switch, so its offsets survive too and the next result
+	// set opens wherever the last one was left. Scroll position belongs to the rows, not to the node, so
+	// it is reset whenever they change -- vertically for a new result set, and sideways as well when the
+	// table itself changes, since those are different columns entirely.
+	useLayoutEffect(() => {
+		const container = scrollContainerRef.current;
+		if (container) {
+			container.scrollTop = 0;
+		}
+	}, [resultSetKey]);
+	useLayoutEffect(() => {
+		const container = scrollContainerRef.current;
+		if (container) {
+			container.scrollTop = 0;
+			container.scrollLeft = 0;
+		}
+	}, [tableIdentity]);
 
 	// During a column resize, preview where the new right edge will land with a full-height guide line.
 	// columnResizeMode is 'onEnd', so the column width doesn't change until release -- the guide is the
