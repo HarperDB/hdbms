@@ -590,8 +590,8 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 					/>
 
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild disabled={!instanceDatabaseMap}>
-							<Button variant="ghost" size="icon" disabled={!instanceDatabaseMap}>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" size="icon">
 								<EllipsisIcon aria-label="Table options" />
 							</Button>
 						</DropdownMenuTrigger>
@@ -632,7 +632,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 								</DropdownMenuItem>
 							)}
 							{canManageBrowseInstance && <DropdownMenuSeparator />}
-							{canManageBrowseInstance && !isLastTableInDatabase && (
+							{canManageBrowseInstance && !!databaseTables && !isLastTableInDatabase && (
 								<DropdownMenuItem
 									className="focus:bg-red/70 focus:text-white"
 									onClick={() => setWatchedValue('ShowDeleteTable', { databaseName, tableName })}
