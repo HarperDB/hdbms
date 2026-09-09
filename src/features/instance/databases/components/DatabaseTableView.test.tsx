@@ -117,20 +117,28 @@ function isDisabled(el: HTMLElement) {
 }
 
 describe('DatabaseTableView table options menu', () => {
-	it('keeps Import Data and Export CSV discoverable until the toolbar is space-constrained', () => {
+	// No Tailwind runs under jsdom, so actual visibility can't be asserted -- what can be pinned is
+	// the complementary pair that produces it, since that's what keeps each action reachable at every
+	// width and duplicated at none. `border-primary` pins the muted purple variant: under
+	// tailwind-merge it can only be there if the button isn't the green `positiveOutline` any more.
+	it('shows Import Data and Export CSV as buttons from xl up, and as menu entries below it', () => {
 		renderView();
 
-		const importButton = screen.getByRole('button', { name: 'Import Data' });
-		const exportButton = screen.getByRole('button', { name: 'Export CSV' });
-		expect(importButton.className).toContain('border-primary');
-		expect(importButton.className).toContain('hidden xl:inline-flex');
-		expect(exportButton.className).toContain('border-primary');
-		expect(exportButton.className).toContain('hidden xl:inline-flex');
+		for (
+			const button of [
+				screen.getByRole('button', { name: 'Import Data' }),
+				screen.getByRole('button', { name: 'Export CSV' }),
+			]
+		) {
+			expect(button.classList.contains('hidden')).toBe(true);
+			expect(button.classList.contains('xl:inline-flex')).toBe(true);
+			expect(button.classList.contains('border-primary')).toBe(true);
+		}
 
 		openTableOptions();
 
-		expect(importDataItem()!.className).toContain('xl:hidden');
-		expect(exportCsvItem()!.className).toContain('xl:hidden');
+		expect(importDataItem()!.classList.contains('xl:hidden')).toBe(true);
+		expect(exportCsvItem()!.classList.contains('xl:hidden')).toBe(true);
 	});
 
 	// `describe_all` (the map) can be slower or unreachable for a role whose allowlist grants
