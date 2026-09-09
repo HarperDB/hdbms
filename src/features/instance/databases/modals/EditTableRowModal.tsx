@@ -12,7 +12,7 @@ import { addCommasToNumbers } from '@/lib/addCommasToNumbers';
 import { Editor } from '@/lib/monaco/MonacoEditor';
 import { WORKER_FREE_JSON_LANGUAGE_ID } from '@/lib/monaco/workerFreeJsonLanguage';
 import { ChevronLeftIcon, ChevronRightIcon, Save, Trash, TriangleAlert } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { describeRecordJsonError, tryParseRecordJson } from './recordEditorJson';
 import { useRecordJsonErrorMarker } from './recordJsonErrorMarker';
@@ -117,15 +117,17 @@ export function EditTableRowModal({
 	// read-only (`setValue` fires the change; the writable path suppresses it), and it arrives at
 	// the PREVIOUS render's handler, because @monaco-editor/react refreshes its change subscription
 	// in an effect declared after the one that pushes the value. So the echo can't be recognised
-	// from props — it is recognised by arming this ref during the render that changes the value,
-	// and disarming it on the first change that matches. Matching on the text alone would be wrong:
+	// from props — it is recognised by arming this ref in a layout effect before Monaco pushes the
+	// value, then disarming it on the first change that matches. Matching on the text alone would be wrong:
 	// a user who undoes an edit back to the stored record types that same text deliberately.
 	const renderedValueRef = useRef(editorValue);
 	const pushedValueRef = useRef<string | null>(null);
-	if (renderedValueRef.current !== editorValue) {
-		renderedValueRef.current = editorValue;
-		pushedValueRef.current = editorValue;
-	}
+	useLayoutEffect(() => {
+		if (renderedValueRef.current !== editorValue) {
+			renderedValueRef.current = editorValue;
+			pushedValueRef.current = editorValue;
+		}
+	}, [editorValue]);
 
 	// This modal instance is reused across rows (it stays mounted; only `open` toggles), so the
 	// draft has to be reset both when a different record is loaded — otherwise a previous row's
