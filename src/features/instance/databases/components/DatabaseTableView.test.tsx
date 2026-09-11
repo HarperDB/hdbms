@@ -117,28 +117,21 @@ function isDisabled(el: HTMLElement) {
 }
 
 describe('DatabaseTableView table options menu', () => {
-	// No Tailwind runs under jsdom, so actual visibility can't be asserted -- what can be pinned is
-	// the complementary pair that produces it, since that's what keeps each action reachable at every
-	// width and duplicated at none. `border-primary` pins the muted purple variant: under
-	// tailwind-merge it can only be there if the button isn't the green `positiveOutline` any more.
-	it('shows Import Data and Export CSV as buttons from xl up, and as menu entries below it', () => {
+	// Both actions live in the menu at every width -- no toolbar button duplicates them, and no
+	// width-conditional class hides either entry. No Tailwind runs under jsdom, so the width classes
+	// are asserted by name rather than by computed visibility.
+	it('offers Import Data and Export CSV only as menu entries, at every width', () => {
 		renderView();
 
-		for (
-			const button of [
-				screen.getByRole('button', { name: 'Import Data' }),
-				screen.getByRole('button', { name: 'Export CSV' }),
-			]
-		) {
-			expect(button.classList.contains('hidden')).toBe(true);
-			expect(button.classList.contains('xl:inline-flex')).toBe(true);
-			expect(button.classList.contains('border-primary')).toBe(true);
-		}
+		expect(screen.queryByRole('button', { name: 'Import Data' })).toBeNull();
+		expect(screen.queryByRole('button', { name: 'Export CSV' })).toBeNull();
 
 		openTableOptions();
 
-		expect(importDataItem()!.classList.contains('xl:hidden')).toBe(true);
-		expect(exportCsvItem()!.classList.contains('xl:hidden')).toBe(true);
+		for (const item of [importDataItem()!, exportCsvItem()!]) {
+			expect(item).not.toBeNull();
+			expect([...item.classList].filter((name) => /(^|:)hidden$/.test(name))).toEqual([]);
+		}
 	});
 
 	// `describe_all` (the map) can be slower or unreachable for a role whose allowlist grants

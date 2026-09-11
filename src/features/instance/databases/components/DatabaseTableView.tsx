@@ -689,25 +689,6 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 							</span>
 						</Button>
 					)}
-					{canImportData && (
-						<Button
-							variant="defaultOutline"
-							className="hidden xl:inline-flex"
-							onClick={onImportDataClicked}
-						>
-							<CloudUploadIcon />
-							<span>Import Data</span>
-						</Button>
-					)}
-					<Button
-						variant="defaultOutline"
-						className="hidden xl:inline-flex"
-						onClick={onExportCSVClicked}
-						disabled={isExportingCSV}
-					>
-						<CloudDownloadIcon />
-						<span>Export CSV</span>
-					</Button>
 				</div>
 
 				<div className="flex space-x-2">
@@ -765,20 +746,16 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 						</DropdownMenuTrigger>
 						<DropdownMenuContent side="bottom" align="end">
 							{canImportData && (
-								<DropdownMenuItem className="xl:hidden" onClick={onImportDataClicked}>
+								<DropdownMenuItem onClick={onImportDataClicked}>
 									<CloudUploadIcon />
 									Import Data
 								</DropdownMenuItem>
 							)}
-							<DropdownMenuItem
-								className="xl:hidden"
-								onClick={onExportCSVClicked}
-								disabled={isExportingCSV}
-							>
+							<DropdownMenuItem onClick={onExportCSVClicked} disabled={isExportingCSV}>
 								<CloudDownloadIcon />
 								Export CSV
 							</DropdownMenuItem>
-							<DropdownMenuSeparator className="xl:hidden" />
+							<DropdownMenuSeparator />
 							<DropdownMenuItem className="focus:bg-primary/70 focus:text-white" onClick={toggleOnlyCached}>
 								{onlyIfCached ? <CircleCheckBigIcon className="text-green" /> : <CircleIcon />}
 								Only If Cached
