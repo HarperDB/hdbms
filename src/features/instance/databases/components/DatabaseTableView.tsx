@@ -130,9 +130,16 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	const canImportFile = canImportData && importCapabilities.methods.file;
 	const canImportUrl = canImportData && importCapabilities.methods.url;
 	const canSeedSample = canImportData && importCapabilities.allowsSource('csv-data');
+	// Read the attributes from the same map the modal's Random Data option reads (NOT the
+	// describe-first `instanceTable`): where the two disagree, offering Seed reopens the empty-dropdown
+	// dead end this gate exists to close.
+	const fillableAttributes = useMemo(
+		() => randomizableAttributes(tableFromMap?.attributes, databaseTables),
+		[tableFromMap, databaseTables],
+	);
 	const canSeedRandom = canImportData
 		&& importCapabilities.allowsSource('json-records')
-		&& randomizableAttributes(instanceTable?.attributes, databaseTables).length > 0;
+		&& fillableAttributes.length > 0;
 	const attributesMap = useMemo(() => keyBy(instanceTable?.attributes ?? [], 'attribute'), [instanceTable]);
 	// Newer Harper servers omit relationship attributes from describe entirely; the component
 	// schema files still declare them (with exact from/to key mappings), so browse reads those too.
@@ -835,7 +842,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 						tableName={tableName}
 						isFiltered={useFilteredList}
 						isPastFirstPage={pageIndex > 0}
-						tableHasRecords={!!totalRecords}
+						recordCount={totalRecords}
 						canImportFile={canImportFile}
 						canImportUrl={canImportUrl}
 						canSeedSample={canSeedSample}

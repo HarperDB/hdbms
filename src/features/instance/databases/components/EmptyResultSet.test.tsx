@@ -12,7 +12,7 @@ function renderEmptyResultSet(overrides: Partial<Parameters<typeof EmptyResultSe
 		tableName: 'users',
 		isFiltered: false,
 		isPastFirstPage: false,
-		tableHasRecords: false,
+		recordCount: 0 as number | undefined,
 		canImportFile: true,
 		canImportUrl: true,
 		canSeedSample: true,
@@ -129,9 +129,22 @@ describe('EmptyResultSet', () => {
 	// `search_by_value` answers a 404 with `{ data: [] }`, which Only If Cached (on by default) can
 	// produce on a cache miss — so a page of nothing against a non-zero count is not an empty table.
 	it('does not claim a table is empty when its own count says otherwise', () => {
-		renderEmptyResultSet({ tableHasRecords: true });
+		renderEmptyResultSet({ recordCount: 12 });
 		expect(screen.getByRole('heading').textContent).toContain('No records came back');
 		expect(importCard()).toBeNull();
 		expect(seedCard()).toBeNull();
+	});
+
+	// describe_all carries no counts, so the count is undefined on first paint and stays undefined if
+	// describe_table failed (retry: false). The invitation still stands; the claim of emptiness does not.
+	it('keeps the invitations but stops asserting emptiness while the count is unknown', () => {
+		renderEmptyResultSet({ recordCount: undefined });
+		expect(screen.getByRole('heading').textContent).toBe('No records in users');
+		expect(importCard()).toBeTruthy();
+		expect(seedCard()).toBeTruthy();
+
+		cleanup();
+		renderEmptyResultSet({ recordCount: 0 });
+		expect(screen.getByRole('heading').textContent).toBe('users has no records yet');
 	});
 });

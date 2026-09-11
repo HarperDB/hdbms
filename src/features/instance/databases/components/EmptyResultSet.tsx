@@ -11,7 +11,7 @@ export function EmptyResultSet({
 	tableName,
 	isFiltered,
 	isPastFirstPage,
-	tableHasRecords,
+	recordCount,
 	canImportFile,
 	canImportUrl,
 	canSeedSample,
@@ -25,8 +25,8 @@ export function EmptyResultSet({
 	readonly tableName: string;
 	readonly isFiltered: boolean;
 	readonly isPastFirstPage: boolean;
-	/** The table's own count says it holds records, whatever this page came back with. */
-	readonly tableHasRecords: boolean;
+	/** The table's own count, `undefined` until describe_table lands (describe_all carries none). */
+	readonly recordCount: number | undefined;
 	readonly canImportFile: boolean;
 	readonly canImportUrl: boolean;
 	/** A bundled sample dataset can be loaded (it arrives in a table of its own). */
@@ -67,7 +67,7 @@ export function EmptyResultSet({
 	// An empty page against a non-zero count is a page that failed to deliver, not an empty table.
 	// `search_by_value` turns a 404 into `{ data: [] }` (getSearchByValue.ts), which Only If Cached --
 	// on by default -- can produce on a cache miss.
-	if (tableHasRecords) {
+	if (recordCount) {
 		return (
 			<EmptyResultSetShell>
 				<Heading>No records came back</Heading>
@@ -82,10 +82,23 @@ export function EmptyResultSet({
 	const canImport = canImportFile || canImportUrl;
 	const canSeed = canSeedSample || canSeedRandom;
 
+	// The count is still unknown on first paint and stays that way if describe_table failed, so the
+	// heading only asserts emptiness once the count has actually said zero. The invitation stands
+	// either way -- withholding it until the count lands would flicker the common case, a new table.
 	return (
 		<EmptyResultSetShell>
 			<Heading>
-				<span className="font-mono">{tableName}</span> has no records yet
+				{recordCount === 0
+					? (
+						<>
+							<span className="font-mono">{tableName}</span> has no records yet
+						</>
+					)
+					: (
+						<>
+							No records in <span className="font-mono">{tableName}</span>
+						</>
+					)}
 			</Heading>
 			{canImport && canSeed && (
 				<p className="text-sm text-muted-foreground">
