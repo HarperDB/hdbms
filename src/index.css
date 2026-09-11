@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @font-face {
 	font-family: RadioGroteskBold;
@@ -196,6 +196,12 @@
 @theme inline {
 	--font-radioGrotesk: "RadioGroteskBold", "sans-serif";
 	--font-ubuntu: "Ubuntu", "sans-serif";
+	/* Overrides tailwind's built-in system stack. JetBrains Mono is 0.600em per glyph against
+	 * Ubuntu's 0.522em, so anything set in it needs ~15% more width at the same px size -- in
+	 * the browse table that means values clip a little sooner than they used to. Its x-height
+	 * is the tallest of the monos on Google Fonts, which is what buys that width back in
+	 * legibility. */
+	--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);

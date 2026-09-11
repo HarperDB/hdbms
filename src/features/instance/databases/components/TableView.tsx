@@ -179,7 +179,9 @@ export function TableView<TData extends RowData>({
 										key={header.id}
 										header={header}
 										onColumnClick={onColumnClick}
-										className="sticky top-0 z-10 bg-card dark:bg-black-dark border-b border-border"
+										// A sortable title renders inside a Button carrying its own text-sm, so the
+										// size has to be restated there or those headers stay larger than the rest.
+										className="sticky top-0 z-10 bg-card dark:bg-black-dark border-b border-border font-mono text-[12px] [&_button]:text-[13px]"
 									/>
 								))}
 								{/* Filler column: takes the remaining width so real columns stay tight. */}
@@ -289,7 +291,7 @@ function TableBodyRowCell<TData extends RowData>({ cell }: { cell: Cell<TData> }
 			// maxWidth pins the cell to the (resizable) column width so wider values truncate instead
 			// of forcing the column open; width keeps narrow columns from collapsing below it.
 			style={{ width: `${size}px`, maxWidth: `${size}px` }}
-			className="px-2 py-2 overflow-hidden text-ellipsis whitespace-nowrap"
+			className="px-2 py-2 font-mono text-[12px] overflow-hidden text-ellipsis whitespace-nowrap"
 		>
 			{/* Object/array stringification lives in the column defs (renderPlainCell / RelationshipCell). */}
 			{flexRender(cell.column.columnDef.cell, cell.getContext())}
