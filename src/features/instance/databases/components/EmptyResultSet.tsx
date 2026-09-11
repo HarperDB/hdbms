@@ -82,9 +82,9 @@ export function EmptyResultSet({
 	const canImport = canImportFile || canImportUrl;
 	const canSeed = canSeedSample || canSeedRandom;
 
-	// The count is still unknown on first paint and stays that way if describe_table failed, so the
-	// heading only asserts emptiness once the count has actually said zero. The invitation stands
-	// either way -- withholding it until the count lands would flicker the common case, a new table.
+	// Unknown count (first paint, or describe_table failed) describes the response instead of the
+	// table. The invitations stand either way: withholding them until the count lands would flicker
+	// the common case, a table that really is new and empty.
 	return (
 		<EmptyResultSetShell>
 			<Heading>
@@ -94,11 +94,7 @@ export function EmptyResultSet({
 							<span className="font-mono">{tableName}</span> has no records yet
 						</>
 					)
-					: (
-						<>
-							No records in <span className="font-mono">{tableName}</span>
-						</>
-					)}
+					: 'No records to show'}
 			</Heading>
 			{canImport && canSeed && (
 				<p className="text-sm text-muted-foreground">
