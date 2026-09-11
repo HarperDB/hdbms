@@ -139,7 +139,7 @@ describe('EmptyResultSet', () => {
 	// describe_table failed (retry: false). The invitation still stands; the claim of emptiness does not.
 	it('keeps the invitations but stops asserting emptiness while the count is unknown', () => {
 		renderEmptyResultSet({ recordCount: undefined });
-		expect(screen.getByRole('heading').textContent).toBe('No records in users');
+		expect(screen.getByRole('heading').textContent).toBe('No records to show');
 		expect(importCard()).toBeTruthy();
 		expect(seedCard()).toBeTruthy();
 
