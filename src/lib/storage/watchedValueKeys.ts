@@ -22,8 +22,8 @@ export interface WatchedValuesTypeMap {
 	ShowDeleteTable: { databaseName: string; tableName: string } | false;
 	ShowCreateTable: { databaseName?: string } | false;
 	ShowAddTableRecords: { databaseName: string; tableName: string } | false;
-	// `method` preselects the Import Data modal's method, so a launcher can say which of the two
-	// ideas the modal holds -- bringing your own data in, or seeding some -- the user asked for.
+	// `method` preselects the Import Data modal's method, so a launcher can say whether the user asked
+	// to bring data in or to seed some.
 	ShowImportData: { databaseName?: string; tableName?: string; method?: ImportMethod } | false;
 	'Session:{key}': unknown;
 	ReloadApplicationRootEntries: true;

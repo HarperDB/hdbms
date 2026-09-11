@@ -103,8 +103,8 @@ export function DatabaseActionModals({ instanceDatabaseMap }: { instanceDatabase
 				/>
 			)}
 			<ImportDataModal
-				// The method is part of the identity: opening Seed after Import targets the same table, so
-				// without it the modal would reuse the mount -- and the form state -- of the last launch.
+				// The method is part of the identity: Seed after Import targets the same table, so without it
+				// the modal would reuse the previous launch's mount, and its form state.
 				key={importTarget
 					? `import-${importTarget.databaseName ?? ''}/${importTarget.tableName ?? ''}/${importTarget.method ?? ''}`
 					: 'import-closed'}

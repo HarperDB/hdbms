@@ -143,10 +143,9 @@ export function ImportDataModal({
 		() => importMethods.filter(({ value }) => importCapabilities.methods[value]),
 		[importCapabilities],
 	);
-	// A launcher that named a method wins -- it asked for one of the two ideas this modal holds by
-	// name. Otherwise: with a table already in context (table toolbar) the likely intent is loading
-	// your own data; without one (sidebar, empty database) lead with samples -- then fall back to
-	// whatever is allowed.
+	// A launcher that named a method wins. Otherwise: with a table already in context (table toolbar)
+	// the likely intent is loading your own data; without one (sidebar, empty database) lead with
+	// samples -- then fall back to whatever is allowed.
 	const preferred: ImportMethod = initialMethod ?? (tableName ? 'file' : 'sample');
 	const defaultMethod = importCapabilities.methods[preferred] ? preferred : (availableMethods[0]?.value ?? preferred);
 

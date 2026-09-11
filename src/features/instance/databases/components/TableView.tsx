@@ -160,8 +160,12 @@ export function TableView<TData extends RowData>({
 	// The empty state sits OUTSIDE the scroll container rather than in a spanning cell, so it centres
 	// on what the user can see: a table wider than the viewport would otherwise centre its message
 	// somewhere off to the right, past the last column.
+	//
+	// `data === undefined` alone, not `isFetching`: neither list query keeps the previous page's rows,
+	// so an empty array is always this result set's own settled answer. Including `isFetching` would
+	// swap a settled empty panel back to the spinner cell on every manual Refresh.
 	const hasRows = table.getRowModel().rows.length > 0;
-	const isAwaitingRows = isFetching || data === undefined;
+	const isAwaitingRows = data === undefined;
 	const showEmptyPanel = !hasRows && !isAwaitingRows && !!emptyState;
 
 	return (
@@ -227,7 +231,7 @@ export function TableView<TData extends RowData>({
 								: (
 									<TableRow>
 										<TableCell colSpan={columns.length + 1} className="h-24 text-center">
-											{isAwaitingRows
+											{isFetching || isAwaitingRows
 												? <LoadingSubtle className="opacity-50 inline-block" />
 												: <span>No results.</span>}
 										</TableCell>

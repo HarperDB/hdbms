@@ -245,12 +245,20 @@ describe('TableView empty state', () => {
 	it('waits for the rows before claiming a table is empty', () => {
 		const { rerender } = render(<EmptyHarness rows={undefined} emptyState={<p>Nothing here yet</p>} />);
 		expect(screen.queryByText('Nothing here yet')).toBeNull();
-
-		// A refetch over rows we already have must not flash it either.
-		rerender(<EmptyHarness rows={[]} isFetching emptyState={<p>Nothing here yet</p>} />);
+		// Not even once a fetch settles into nothing arriving -- undefined is still "no answer yet".
+		rerender(<EmptyHarness rows={undefined} isFetching={false} emptyState={<p>Nothing here yet</p>} />);
 		expect(screen.queryByText('Nothing here yet')).toBeNull();
 
 		rerender(<EmptyHarness rows={[]} emptyState={<p>Nothing here yet</p>} />);
+		expect(screen.getByText('Nothing here yet')).toBeTruthy();
+	});
+
+	// Refreshing a settled empty table must not swap the panel back to the spinner cell and in again.
+	it('keeps a settled empty panel in place while it refetches', () => {
+		const { rerender } = render(<EmptyHarness rows={[]} emptyState={<p>Nothing here yet</p>} />);
+		expect(screen.getByText('Nothing here yet')).toBeTruthy();
+
+		rerender(<EmptyHarness rows={[]} isFetching emptyState={<p>Nothing here yet</p>} />);
 		expect(screen.getByText('Nothing here yet')).toBeTruthy();
 	});
 });
