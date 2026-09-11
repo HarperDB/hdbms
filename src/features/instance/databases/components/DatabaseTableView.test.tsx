@@ -9,7 +9,11 @@ import { DatabaseTableView } from './DatabaseTableView';
 
 // The dropdown's own permission gate is the thing under test; every other permission hook just
 // needs a fixed answer so the toolbar around it renders without pulling in the auth store/router.
-const permissionState = vi.hoisted(() => ({ canManageBrowseInstance: true }));
+const permissionState = vi.hoisted(() => ({
+	canManageBrowseInstance: true,
+	canImportFromFile: true,
+	allowedSources: ['csv-data', 'csv-url', 'json-records'] as string[],
+}));
 
 vi.mock('@tanstack/react-router', () => {
 	// Stable references: the component keys effects off these objects' identity, and the real
@@ -35,13 +39,27 @@ vi.mock('@/hooks/usePermissions', () => ({
 	useInstanceBrowseManagePermission: () => permissionState.canManageBrowseInstance,
 	useInstanceImportDataPermission: () => true,
 	useInstanceImportCapabilities: () => ({
-		methods: { sample: true, file: true, url: true },
-		allowsSource: () => true,
+		methods: { sample: true, file: permissionState.canImportFromFile, url: true },
+		allowsSource: (kind: string) => permissionState.allowedSources.includes(kind),
 		allowsDestination: () => true,
 	}),
 	useInstanceSchemaTablePermission: () => true,
 	useInstanceTablePutPermission: () => true,
 }));
+
+// The empty state fires its launches through the watcher; capture them without replacing the module
+// (`useWatchedValue` is still read elsewhere in this tree).
+const watchedValues = vi.hoisted(() => ({ calls: [] as [string, unknown][] }));
+
+vi.mock('@/lib/events/watcher', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/lib/events/watcher')>();
+	return {
+		...actual,
+		setWatchedValue: (key: string, value: unknown) => {
+			watchedValues.calls.push([key, value]);
+		},
+	};
+});
 
 // The grid and row editor aren't what this file pins -- swap them for stubs so a render doesn't
 // need real table data or a Radix Dialog. TableView's stub keeps its props, so a test can still
@@ -49,9 +67,10 @@ vi.mock('@/hooks/usePermissions', () => ({
 const tableViewColumns = vi.hoisted(() => ({ current: [] as { accessorKey?: string }[] }));
 
 vi.mock('./TableView', () => ({
-	TableView: ({ columns }: { columns: { accessorKey?: string }[] }) => {
+	TableView: ({ columns, emptyState }: { columns: { accessorKey?: string }[]; emptyState?: React.ReactNode }) => {
 		tableViewColumns.current = columns;
-		return null;
+		// Rendering the slot is what lets a test follow a card click through to the launch it fires.
+		return <>{emptyState}</>;
 	},
 }));
 vi.mock('./PickColumnsDropdown', () => ({ PickColumnsDropdown: () => null }));
@@ -88,7 +107,10 @@ beforeAll(() => {
 afterEach(() => {
 	cleanup();
 	permissionState.canManageBrowseInstance = true;
+	permissionState.canImportFromFile = true;
+	permissionState.allowedSources = ['csv-data', 'csv-url', 'json-records'];
 	tableViewColumns.current = [];
+	watchedValues.calls = [];
 });
 
 const dogTable = {
@@ -216,5 +238,39 @@ describe('DatabaseTableView table options menu', () => {
 
 		expect(dropTableItem()).toBeNull();
 		expect(dropDatabaseItem()).not.toBeNull();
+	});
+});
+
+describe('DatabaseTableView empty state', () => {
+	const importCard = () => screen.getByRole('button', { name: /Import your data/ });
+	const seedCard = () => screen.getByRole('button', { name: /Seed some data/ });
+	const launches = () => watchedValues.calls.filter(([key]) => key === 'ShowImportData').map(([, value]) => value);
+
+	it('launches the import modal on a file import from the Import card', () => {
+		renderView();
+		fireEvent.click(importCard());
+		expect(launches()).toEqual([{ databaseName: 'data', tableName: 'dog', method: 'file' }]);
+	});
+
+	it('falls back to the URL method when files are not a granted source', () => {
+		permissionState.canImportFromFile = false;
+		renderView();
+		fireEvent.click(importCard());
+		expect(launches()).toEqual([{ databaseName: 'data', tableName: 'dog', method: 'url' }]);
+	});
+
+	it('launches the same modal on sample data from the Seed card', () => {
+		renderView();
+		fireEvent.click(seedCard());
+		expect(launches()).toEqual([{ databaseName: 'data', tableName: 'dog', method: 'sample' }]);
+	});
+
+	// `dogTable` is primary-key only, so random records have nothing to model. With bundled datasets
+	// denied too, Seed would open a dropdown with nothing in it -- an insert-only role's dead end.
+	it('withholds Seed when no dataset and no random records are available', () => {
+		permissionState.allowedSources = ['json-records'];
+		renderView();
+		expect(screen.queryByRole('button', { name: /Seed some data/ })).toBeNull();
+		expect(screen.getByRole('button', { name: /Import your data/ })).toBeTruthy();
 	});
 });

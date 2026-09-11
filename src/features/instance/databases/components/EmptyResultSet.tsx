@@ -3,25 +3,19 @@ import { CloudUploadIcon, FunnelXIcon, PackageIcon, PlusIcon, TableIcon } from '
 import { ComponentType, ReactNode } from 'react';
 
 /**
- * What the result set shows when it has no rows. Three different situations arrive here looking
- * identical, and only the last one is an invitation to do anything:
- *
- *   - a page past the end (paging, or records removed behind you) -- the table has records,
- *     just not here;
- *   - filters that matched nothing -- likewise, and the way out is the filters;
- *   - a genuinely empty table -- the first thing a new user sees, and the moment to offer the two
- *     separate ways of getting data in.
- *
- * Import and Seed are deliberately two cards rather than one "Import Data" button: they are
- * different intentions (bring the data you already have vs. get *some* data to look at), even
- * though both open the same modal -- each on its own method.
+ * What the result set shows when it has no rows. Only a table that is genuinely, entirely empty is
+ * invited to fill itself -- a page past the end, filters that matched nothing, and a page that came
+ * back empty against a non-zero count are all tables that may well have records already.
  */
 export function EmptyResultSet({
 	tableName,
 	isFiltered,
 	isPastFirstPage,
-	canImport,
-	canSeed,
+	tableHasRecords,
+	canImportFile,
+	canImportUrl,
+	canSeedSample,
+	canSeedRandom,
 	canAddRecords,
 	onImport,
 	onSeed,
@@ -31,8 +25,14 @@ export function EmptyResultSet({
 	readonly tableName: string;
 	readonly isFiltered: boolean;
 	readonly isPastFirstPage: boolean;
-	readonly canImport: boolean;
-	readonly canSeed: boolean;
+	/** The table's own count says it holds records, whatever this page came back with. */
+	readonly tableHasRecords: boolean;
+	readonly canImportFile: boolean;
+	readonly canImportUrl: boolean;
+	/** A bundled sample dataset can be loaded (it arrives in a table of its own). */
+	readonly canSeedSample: boolean;
+	/** Random records can be generated for this table -- it has columns to model them on. */
+	readonly canSeedRandom: boolean;
 	readonly canAddRecords: boolean;
 	readonly onImport: () => void;
 	readonly onSeed: () => void;
@@ -64,41 +64,59 @@ export function EmptyResultSet({
 		);
 	}
 
+	// An empty page against a non-zero count is a page that failed to deliver, not an empty table.
+	// `search_by_value` turns a 404 into `{ data: [] }` (getSearchByValue.ts), which Only If Cached --
+	// on by default -- can produce on a cache miss.
+	if (tableHasRecords) {
+		return (
+			<EmptyResultSetShell>
+				<Heading>No records came back</Heading>
+				<p className="text-sm text-muted-foreground">
+					This table reports records, but the page returned none. Try refreshing, or turn off Only If Cached in the
+					table options menu.
+				</p>
+			</EmptyResultSetShell>
+		);
+	}
+
+	const canImport = canImportFile || canImportUrl;
+	const canSeed = canSeedSample || canSeedRandom;
+
 	return (
 		<EmptyResultSetShell>
 			<Heading>
 				<span className="font-mono">{tableName}</span> has no records yet
 			</Heading>
+			{canImport && canSeed && (
+				<p className="text-sm text-muted-foreground">
+					Two ways to get some in — bring your own, or start from data we provide.
+				</p>
+			)}
 			{(canImport || canSeed) && (
-				<>
-					<p className="text-sm text-muted-foreground">
-						Two ways to get some in — bring your own, or start from data we provide.
-					</p>
-					<div className="flex w-full flex-col gap-3 sm:flex-row">
-						{canImport && (
-							<GuidanceCard
-								Icon={CloudUploadIcon}
-								title="Import your data"
-								description="Upload a CSV or JSON file, or load a CSV from a URL the instance can reach."
-								action="Import data"
-								onClick={onImport}
-							/>
-						)}
-						{canSeed && (
-							<GuidanceCard
-								Icon={PackageIcon}
-								title="Seed some data"
-								description="Load a ready-made sample dataset, or generate random records to experiment with."
-								action="Seed data"
-								onClick={onSeed}
-							/>
-						)}
-					</div>
-				</>
+				<div className="flex w-full flex-col gap-3 sm:flex-row">
+					{canImport && (
+						<GuidanceCard
+							Icon={CloudUploadIcon}
+							title="Import your data"
+							description={importDescription(canImportFile, canImportUrl)}
+							action="Import data"
+							onClick={onImport}
+						/>
+					)}
+					{canSeed && (
+						<GuidanceCard
+							Icon={PackageIcon}
+							title="Seed some data"
+							description={seedDescription(canSeedSample, canSeedRandom)}
+							action="Seed data"
+							onClick={onSeed}
+						/>
+					)}
+				</div>
 			)}
 			{canAddRecords && (
 				<p className="text-sm text-muted-foreground">
-					Or write one yourself:{' '}
+					{canImport || canSeed ? 'Or write one yourself: ' : 'Write one yourself: '}
 					<Button variant="link" className="h-auto p-0 text-sm dark:text-violet-300" onClick={onAddRecords}>
 						<PlusIcon />
 						Add New Record(s)
@@ -109,10 +127,32 @@ export function EmptyResultSet({
 	);
 }
 
+function importDescription(canImportFile: boolean, canImportUrl: boolean) {
+	if (!canImportFile) {
+		return 'Load a CSV from a URL the instance can reach.';
+	}
+	if (!canImportUrl) {
+		return 'Upload a CSV or JSON file.';
+	}
+	return 'Upload a CSV or JSON file, or load a CSV from a URL the instance can reach.';
+}
+
+// A bundled dataset brings its own table name and the modal retargets the import to it, so the copy
+// must not promise it lands in the table the user is looking at. Random records do fill this one.
+function seedDescription(canSeedSample: boolean, canSeedRandom: boolean) {
+	if (!canSeedSample) {
+		return 'Fill this table with random records modelled on its columns.';
+	}
+	if (!canSeedRandom) {
+		return 'Load a ready-made sample dataset. It arrives in a table of its own.';
+	}
+	return 'Fill this table with random records, or load a ready-made sample dataset into a table of its own.';
+}
+
 function EmptyResultSetShell({ children }: { readonly children: ReactNode }) {
-	// Scrolling lives on the outer box and the centring on an inner one with `min-h-full`: centring a
+	// Scrolling on the outer box, centring on an inner one with `min-h-full`: centring a
 	// taller-than-the-box child directly in a scroll container puts its top above the scrollport,
-	// where it can't be scrolled back to. Short panes (a filtered table on a laptop) hit this.
+	// where it can't be scrolled back to.
 	return (
 		<div className="h-full overflow-y-auto p-6">
 			<div className="flex min-h-full items-center justify-center">
@@ -146,8 +186,8 @@ function GuidanceCard({
 		<button
 			type="button"
 			onClick={onClick}
-			// `--primary` is a dark indigo, so every accent here needs the dark-mode violet the rest of
-			// the app pairs it with (see ClusterHome); unqualified it disappears into the table's black.
+			// `--primary` is a dark indigo that disappears into the table's near-black, so every accent
+			// here carries the dark-mode violet the rest of the app pairs it with (see ClusterHome).
 			className="group flex flex-1 cursor-pointer flex-col items-start gap-1.5 rounded-lg border border-border p-4 text-left transition-colors hover:border-primary hover:bg-accent/50 focus-visible:ring-1 focus-visible:ring-purple-200 focus-visible:outline-1 dark:border-grey-700 dark:hover:border-violet-300"
 		>
 			<span className="flex items-center gap-2 font-medium">

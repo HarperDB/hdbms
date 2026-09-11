@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dropdownMenu';
 import { useInstanceClientIdParams } from '@/config/useInstanceClient';
 import { formatBrowseDataTableHeader } from '@/features/instance/databases/functions/formatBrowseDataTableHeader';
+import { randomizableAttributes } from '@/features/instance/databases/functions/generateRandomRecords';
 import {
 	buildRelationshipGetAttributes,
 	collapsedForeignKeyNames,
@@ -102,11 +103,7 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	const isStaffInstanceOperator = useStaffPermission('instance:update');
 	const canAddRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'insert');
 	const canImportData = useInstanceImportDataPermission(instanceId ?? clusterId, databaseName, tableName);
-	// Which of the two invitations the empty state can actually make: a role granted only `csv_url_load`
-	// can import but not seed, and one granted only `insert`/`csv_data_load` the other way round.
 	const importCapabilities = useInstanceImportCapabilities();
-	const canImportOwnData = canImportData && (importCapabilities.methods.file || importCapabilities.methods.url);
-	const canSeedData = canImportData && importCapabilities.methods.sample;
 	const canEditRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'update');
 	const canDeleteRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'delete');
 	const canManageBrowseInstance = useInstanceBrowseManagePermission();
@@ -125,6 +122,17 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	const databaseTables = instanceDatabaseMap?.[databaseName];
 	const tableFromMap = databaseTables?.[tableName];
 	const instanceTable = describeTableData ?? tableFromMap;
+
+	// What the empty state may actually invite, each gated on the source it would use rather than on
+	// `methods.*`: `methods.sample` and `methods.file` share one path (see IMPORT_METHOD_PATHS), so
+	// either is true for a bare `insert` grant -- which offers a dataset dropdown with nothing in it
+	// on a table that has no columns to generate rows for.
+	const canImportFile = canImportData && importCapabilities.methods.file;
+	const canImportUrl = canImportData && importCapabilities.methods.url;
+	const canSeedSample = canImportData && importCapabilities.allowsSource('csv-data');
+	const canSeedRandom = canImportData
+		&& importCapabilities.allowsSource('json-records')
+		&& randomizableAttributes(instanceTable?.attributes, databaseTables).length > 0;
 	const attributesMap = useMemo(() => keyBy(instanceTable?.attributes ?? [], 'attribute'), [instanceTable]);
 	// Newer Harper servers omit relationship attributes from describe entirely; the component
 	// schema files still declare them (with exact from/to key mappings), so browse reads those too.
@@ -644,15 +652,9 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		setWatchedValue('ShowImportData', { databaseName, tableName });
 	}, [databaseName, tableName]);
 
-	// Import and Seed open the same modal on different methods -- see `EmptyResultSet` for why they
-	// are offered as two separate invitations rather than one button.
 	const onImportOwnDataClicked = useCallback(() => {
-		setWatchedValue('ShowImportData', {
-			databaseName,
-			tableName,
-			method: importCapabilities.methods.file ? 'file' : 'url',
-		});
-	}, [databaseName, tableName, importCapabilities]);
+		setWatchedValue('ShowImportData', { databaseName, tableName, method: canImportFile ? 'file' : 'url' });
+	}, [databaseName, tableName, canImportFile]);
 	const onSeedDataClicked = useCallback(() => {
 		setWatchedValue('ShowImportData', { databaseName, tableName, method: 'sample' });
 	}, [databaseName, tableName]);
@@ -856,8 +858,11 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 						tableName={tableName}
 						isFiltered={useFilteredList}
 						isPastFirstPage={pageIndex > 0}
-						canImport={canImportOwnData}
-						canSeed={canSeedData}
+						tableHasRecords={!!totalRecords}
+						canImportFile={canImportFile}
+						canImportUrl={canImportUrl}
+						canSeedSample={canSeedSample}
+						canSeedRandom={canSeedRandom}
 						canAddRecords={canAddRecords}
 						onImport={onImportOwnDataClicked}
 						onSeed={onSeedDataClicked}
