@@ -34,6 +34,11 @@ vi.mock('@/hooks/useAuth', () => ({
 vi.mock('@/hooks/usePermissions', () => ({
 	useInstanceBrowseManagePermission: () => permissionState.canManageBrowseInstance,
 	useInstanceImportDataPermission: () => true,
+	useInstanceImportCapabilities: () => ({
+		methods: { sample: true, file: true, url: true },
+		allowsSource: () => true,
+		allowsDestination: () => true,
+	}),
 	useInstanceSchemaTablePermission: () => true,
 	useInstanceTablePutPermission: () => true,
 }));

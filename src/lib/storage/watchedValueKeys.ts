@@ -1,3 +1,5 @@
+import type { ImportMethod } from '@/hooks/checkOperationPermission';
+
 export interface WatchedValuesTypeMap {
 	RevertChanges: true;
 	SaveFile: true;
@@ -20,7 +22,9 @@ export interface WatchedValuesTypeMap {
 	ShowDeleteTable: { databaseName: string; tableName: string } | false;
 	ShowCreateTable: { databaseName?: string } | false;
 	ShowAddTableRecords: { databaseName: string; tableName: string } | false;
-	ShowImportData: { databaseName?: string; tableName?: string } | false;
+	// `method` preselects the Import Data modal's method, so a launcher can say which of the two
+	// ideas the modal holds -- bringing your own data in, or seeding some -- the user asked for.
+	ShowImportData: { databaseName?: string; tableName?: string; method?: ImportMethod } | false;
 	'Session:{key}': unknown;
 	ReloadApplicationRootEntries: true;
 	FocusEditor: true;

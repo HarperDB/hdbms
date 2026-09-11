@@ -120,6 +120,7 @@ export function ImportDataModal({
 	instanceDatabaseMap,
 	databaseName,
 	tableName,
+	initialMethod,
 	onImported,
 }: {
 	readonly isModalOpen: boolean;
@@ -127,6 +128,8 @@ export function ImportDataModal({
 	readonly instanceDatabaseMap?: InstanceDatabaseMap;
 	readonly databaseName?: string;
 	readonly tableName?: string;
+	/** Method the launcher asked for, e.g. the empty-table state's separate Import and Seed cards. */
+	readonly initialMethod?: ImportMethod;
 	readonly onImported: (databaseName: string, tableName: string) => void;
 }) {
 	const instanceParams = useInstanceClientIdParams();
@@ -140,9 +143,11 @@ export function ImportDataModal({
 		() => importMethods.filter(({ value }) => importCapabilities.methods[value]),
 		[importCapabilities],
 	);
-	// With a table already in context (table toolbar) the likely intent is loading your own data;
-	// without one (sidebar, empty database) lead with samples -- then fall back to whatever is allowed.
-	const preferred: ImportMethod = tableName ? 'file' : 'sample';
+	// A launcher that named a method wins -- it asked for one of the two ideas this modal holds by
+	// name. Otherwise: with a table already in context (table toolbar) the likely intent is loading
+	// your own data; without one (sidebar, empty database) lead with samples -- then fall back to
+	// whatever is allowed.
+	const preferred: ImportMethod = initialMethod ?? (tableName ? 'file' : 'sample');
 	const defaultMethod = importCapabilities.methods[preferred] ? preferred : (availableMethods[0]?.value ?? preferred);
 
 	const form = useForm({

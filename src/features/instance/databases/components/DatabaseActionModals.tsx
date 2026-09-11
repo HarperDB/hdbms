@@ -103,14 +103,17 @@ export function DatabaseActionModals({ instanceDatabaseMap }: { instanceDatabase
 				/>
 			)}
 			<ImportDataModal
+				// The method is part of the identity: opening Seed after Import targets the same table, so
+				// without it the modal would reuse the mount -- and the form state -- of the last launch.
 				key={importTarget
-					? `import-${importTarget.databaseName ?? ''}/${importTarget.tableName ?? ''}`
+					? `import-${importTarget.databaseName ?? ''}/${importTarget.tableName ?? ''}/${importTarget.method ?? ''}`
 					: 'import-closed'}
 				isModalOpen={!!importTarget}
 				setIsModalOpen={open => setWatchedValue('ShowImportData', open ? (importTarget || {}) : false)}
 				instanceDatabaseMap={instanceDatabaseMap}
 				databaseName={importTarget ? importTarget.databaseName : undefined}
 				tableName={importTarget ? importTarget.tableName : undefined}
+				initialMethod={importTarget ? importTarget.method : undefined}
 				onImported={onImported}
 			/>
 			<DeleteTableModal onDeleted={onTableDropped} />

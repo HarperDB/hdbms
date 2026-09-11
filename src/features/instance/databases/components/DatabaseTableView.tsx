@@ -21,6 +21,7 @@ import { useStaffPermission } from '@/hooks/useAuth';
 import { useEffectedState } from '@/hooks/useEffectedState';
 import {
 	useInstanceBrowseManagePermission,
+	useInstanceImportCapabilities,
 	useInstanceImportDataPermission,
 	useInstanceSchemaTablePermission,
 	useInstanceTablePutPermission,
@@ -79,6 +80,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { ColumnFiltersSchema } from './ColumnFilters';
+import { EmptyResultSet } from './EmptyResultSet';
 import { PickColumnsDropdown } from './PickColumnsDropdown';
 import { TableView } from './TableView';
 
@@ -100,6 +102,11 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 	const isStaffInstanceOperator = useStaffPermission('instance:update');
 	const canAddRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'insert');
 	const canImportData = useInstanceImportDataPermission(instanceId ?? clusterId, databaseName, tableName);
+	// Which of the two invitations the empty state can actually make: a role granted only `csv_url_load`
+	// can import but not seed, and one granted only `insert`/`csv_data_load` the other way round.
+	const importCapabilities = useInstanceImportCapabilities();
+	const canImportOwnData = canImportData && (importCapabilities.methods.file || importCapabilities.methods.url);
+	const canSeedData = canImportData && importCapabilities.methods.sample;
 	const canEditRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'update');
 	const canDeleteRecords = useInstanceSchemaTablePermission(instanceId ?? clusterId, databaseName, tableName, 'delete');
 	const canManageBrowseInstance = useInstanceBrowseManagePermission();
@@ -637,6 +644,19 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 		setWatchedValue('ShowImportData', { databaseName, tableName });
 	}, [databaseName, tableName]);
 
+	// Import and Seed open the same modal on different methods -- see `EmptyResultSet` for why they
+	// are offered as two separate invitations rather than one button.
+	const onImportOwnDataClicked = useCallback(() => {
+		setWatchedValue('ShowImportData', {
+			databaseName,
+			tableName,
+			method: importCapabilities.methods.file ? 'file' : 'url',
+		});
+	}, [databaseName, tableName, importCapabilities]);
+	const onSeedDataClicked = useCallback(() => {
+		setWatchedValue('ShowImportData', { databaseName, tableName, method: 'sample' });
+	}, [databaseName, tableName]);
+
 	const [storedColumnVisibility, setColumnVisibility] = useSessionStorage(
 		`ColumnDisplayed/${databaseName}/${tableName}` as 'ColumnDisplayed/{database}/{table}',
 		{} satisfies ColumnVisibilityState,
@@ -831,6 +851,20 @@ export function DatabaseTableView({ instanceDatabaseMap, databaseName, tableName
 			<TableView<Record<string, unknown>>
 				primaryKey={primaryKey}
 				data={pageRows}
+				emptyState={
+					<EmptyResultSet
+						tableName={tableName}
+						isFiltered={useFilteredList}
+						isPastFirstPage={pageIndex > 0}
+						canImport={canImportOwnData}
+						canSeed={canSeedData}
+						canAddRecords={canAddRecords}
+						onImport={onImportOwnDataClicked}
+						onSeed={onSeedDataClicked}
+						onAddRecords={onAddClicked}
+						onClearFilters={clearFilters}
+					/>
+				}
 				isFetching={isFetching}
 				filtersToggled={filtersToggled}
 				columns={dataTableColumns}
