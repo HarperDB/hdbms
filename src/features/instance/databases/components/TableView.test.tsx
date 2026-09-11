@@ -191,3 +191,66 @@ describe('TableView scroll position', () => {
 		expect(element.scrollLeft).toBe(500);
 	});
 });
+
+function EmptyHarness(
+	{ rows, emptyState, isFetching }: {
+		rows?: Record<string, unknown>[];
+		emptyState?: React.ReactNode;
+		isFetching?: boolean;
+	},
+) {
+	const columnFiltersForm = useForm<z.infer<typeof ColumnFiltersSchema>>({ defaultValues: {} });
+	const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
+	return (
+		<TableView<Record<string, unknown>>
+			applyFilters={() => undefined}
+			columnFiltersForm={columnFiltersForm}
+			columns={columns}
+			columnVisibility={{}}
+			columnSizing={columnSizing}
+			setColumnSizing={setColumnSizing}
+			data={rows}
+			emptyState={emptyState}
+			isFetching={isFetching}
+			pageIndex={0}
+			pageSize={20}
+			primaryKey="id"
+			resultSetKey="page-0"
+			tableIdentity="dev.dog"
+			setPageIndex={() => undefined}
+			setPageSize={() => undefined}
+			filtersToggled={false}
+			totalPages={0}
+			totalRecords={0}
+		/>
+	);
+}
+
+describe('TableView empty state', () => {
+	it("renders the caller's empty state outside the table, not in a spanning cell", () => {
+		render(<EmptyHarness rows={[]} emptyState={<p>Nothing here yet</p>} />);
+		const empty = screen.getByText('Nothing here yet');
+		expect(empty).toBeTruthy();
+		// The table scrolls sideways and can be far wider than the viewport, so an empty state
+		// centred inside it would sit off-screen past the last column.
+		expect(empty.closest('table')).toBeNull();
+		expect(screen.queryByText('No results.')).toBeNull();
+	});
+
+	it('keeps the plain "No results." cell when no empty state was given', () => {
+		render(<EmptyHarness rows={[]} />);
+		expect(screen.getByText('No results.')).toBeTruthy();
+	});
+
+	it('waits for the rows before claiming a table is empty', () => {
+		const { rerender } = render(<EmptyHarness rows={undefined} emptyState={<p>Nothing here yet</p>} />);
+		expect(screen.queryByText('Nothing here yet')).toBeNull();
+
+		// A refetch over rows we already have must not flash it either.
+		rerender(<EmptyHarness rows={[]} isFetching emptyState={<p>Nothing here yet</p>} />);
+		expect(screen.queryByText('Nothing here yet')).toBeNull();
+
+		rerender(<EmptyHarness rows={[]} emptyState={<p>Nothing here yet</p>} />);
+		expect(screen.getByText('Nothing here yet')).toBeTruthy();
+	});
+});

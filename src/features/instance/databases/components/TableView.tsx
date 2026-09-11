@@ -20,7 +20,7 @@ import {
 	RowData,
 	useTable,
 } from '@tanstack/react-table';
-import { Dispatch, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import { ColumnFilters, ColumnFiltersSchema } from './ColumnFilters';
@@ -34,6 +34,8 @@ interface BrowseDataTableProps<TData extends RowData> {
 	columnSizing: ColumnSizingState;
 	setColumnSizing: OnChangeFn<ColumnSizingState>;
 	data?: TData[];
+	/** Shown instead of the rows once a result set has arrived empty. See `EmptyResultSet`. */
+	emptyState?: ReactNode;
 	isFetching?: boolean;
 	onColumnClick?: (accessorKey: string, isDescending: boolean) => void;
 	filtersToggled: boolean;
@@ -64,6 +66,7 @@ export function TableView<TData extends RowData>({
 	columnSizing,
 	setColumnSizing,
 	data,
+	emptyState,
 	isFetching,
 	onColumnClick,
 	onRowClick,
@@ -154,6 +157,13 @@ export function TableView<TData extends RowData>({
 			- scrollLeftAtResizeStart;
 	}
 
+	// The empty state sits OUTSIDE the scroll container rather than in a spanning cell, so it centres
+	// on what the user can see: a table wider than the viewport would otherwise centre its message
+	// somewhere off to the right, past the last column.
+	const hasRows = table.getRowModel().rows.length > 0;
+	const isAwaitingRows = isFetching || data === undefined;
+	const showEmptyPanel = !hasRows && !isAwaitingRows && !!emptyState;
+
 	return (
 		<>
 			<div className="relative flex flex-col grow min-h-0">
@@ -165,7 +175,11 @@ export function TableView<TData extends RowData>({
 					// header resolves against. So it has to actually scroll vertically (min-h-0 + a bounded
 					// parent), otherwise the header would sit at its `top` offset inside a container that
 					// never scrolls, i.e. floating over the first rows.
-					containerClassName="rounded-md bg-card dark:bg-black-dark grow min-h-0 overflow-y-auto"
+					containerClassName={cn(
+						'rounded-t-md bg-card dark:bg-black-dark min-h-0 overflow-y-auto',
+						// The empty panel below takes the leftover height instead, so the header shrinks to fit.
+						showEmptyPanel ? 'shrink-0' : 'rounded-b-md grow',
+					)}
 					// table-fixed so columns hold their set/resized width exactly (content doesn't stretch
 					// them); the trailing filler column below absorbs any leftover width so the rows still
 					// reach the edge instead of leaving dead space.
@@ -199,27 +213,34 @@ export function TableView<TData extends RowData>({
 							headerGroups={table.getHeaderGroups()}
 						/>
 					)}
-					<TableBody className="bg-background dark:bg-black border border-border dark:border-grey-700">
-						{table.getRowModel().rows?.length
-							? (table.getRowModel().rows.map((row) => (
-								<TableBodyRow
-									key={row.id}
-									row={row}
-									onRowClick={onRowClick}
-									primaryKey={primaryKey}
-								/>
-							)))
-							: (
-								<TableRow>
-									<TableCell colSpan={columns.length + 1} className="h-24 text-center">
-										{isFetching || data === undefined
-											? <LoadingSubtle className="opacity-50 inline-block" />
-											: <span>No results.</span>}
-									</TableCell>
-								</TableRow>
-							)}
-					</TableBody>
+					{!showEmptyPanel && (
+						<TableBody className="bg-background dark:bg-black border border-border dark:border-grey-700">
+							{hasRows
+								? (table.getRowModel().rows.map((row) => (
+									<TableBodyRow
+										key={row.id}
+										row={row}
+										onRowClick={onRowClick}
+										primaryKey={primaryKey}
+									/>
+								)))
+								: (
+									<TableRow>
+										<TableCell colSpan={columns.length + 1} className="h-24 text-center">
+											{isAwaitingRows
+												? <LoadingSubtle className="opacity-50 inline-block" />
+												: <span>No results.</span>}
+										</TableCell>
+									</TableRow>
+								)}
+						</TableBody>
+					)}
 				</Table>
+				{showEmptyPanel && (
+					<div className="grow min-h-0 rounded-b-md bg-background dark:bg-black border border-t-0 border-border dark:border-grey-700">
+						{emptyState}
+					</div>
+				)}
 				{resizeGuideLeft !== null && (
 					<div
 						aria-hidden
